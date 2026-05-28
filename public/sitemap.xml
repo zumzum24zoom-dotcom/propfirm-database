@@ -1,0 +1,28 @@
+
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://localhost:57295/firms/f77/</loc>
+  </url><url>
+    <loc>http://localhost:57295/categories/</loc>
+  </url><url>
+    <loc>http://localhost:57295/firms/ftmo/</loc>
+  </url><url>
+    <loc>http://localhost:57295/plans/ftmo-10k/</loc>
+  </url><url>
+    <loc>http://localhost:57295/firms/fundedelite/plans/fundedelite-2-1/</loc>
+  </url><url>
+    <loc>http://localhost:57295/firms/fundedelite/plans/fundedelite-2-2/</loc>
+  </url><url>
+    <loc>http://localhost:57295/firms/fundedelite/plans/fundedelite-2-lite-2/</loc>
+  </url><url>
+    <loc>http://localhost:57295/</loc>
+  </url><url>
+    <loc>http://localhost:57295/tags/</loc>
+  </url><url>
+    <loc>http://localhost:57295/plans/</loc>
+  </url><url>
+    <loc>http://localhost:57295/firms/</loc>
+  </url>
+</urlset>

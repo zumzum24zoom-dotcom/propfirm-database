@@ -1,3 +1,6 @@
-baseURL: https://example.org/
-locale: en-us
-title: My New Hugo Project
+baseURL: https://propfirm-database.jp/
+locale: ja
+title: Prop Firm Database
+theme: pfd
+outputs:
+  home: [HTML]

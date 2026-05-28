@@ -1,0 +1,37 @@
+{{ define "main" }}
+<div class="page-heading">
+  <h1>プラン一覧</h1>
+  <p>{{ len (index hugo.Data.plans) }}件のプランを掲載しています</p>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>ファーム</th>
+        <th>プラン名</th>
+        <th>口座サイズ</th>
+        <th>料金</th>
+        <th>利益目標 P1</th>
+        <th>利益目標 P2</th>
+        <th>最大DD</th>
+        <th>日次DD</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range hugo.Data.plans }}
+      <tr>
+        <td><span class="td-firm">{{ .firm | upper }}</span></td>
+        <td>{{ .name }}</td>
+        <td>${{ .account_size | humanize }}</td>
+        <td>${{ .price }}</td>
+        <td><span class="badge badge-blue">{{ .profit_target_phase1 }}%</span></td>
+        <td><span class="badge badge-blue">{{ .profit_target_phase2 }}%</span></td>
+        <td><span class="badge badge-red">{{ .max_drawdown }}%</span></td>
+        <td><span class="badge badge-red">{{ .daily_drawdown }}%</span></td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</div>
+{{ end }}

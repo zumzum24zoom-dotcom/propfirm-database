@@ -1,0 +1,61 @@
+{{ define "main" }}
+{{ $slug := .File.BaseFileName }}
+{{ $plan := index hugo.Data.plans $slug }}
+
+{{ if $plan }}
+<a class="back-link" href="{{ "/plans/" | relURL }}">← プラン一覧へ戻る</a>
+
+<div class="detail-header">
+  <h1>{{ $plan.name }}</h1>
+  <div class="detail-meta">
+    <span>{{ $plan.firm | upper }}</span>
+    <span>{{ $plan.currency }}</span>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <div class="info-block">
+    <h3>プラン概要</h3>
+    <div class="info-row">
+      <span class="label">ファーム</span>
+      <span class="value">{{ $plan.firm | upper }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">口座サイズ</span>
+      <span class="value">${{ $plan.account_size }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">受験料金</span>
+      <span class="value">${{ $plan.price }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">通貨</span>
+      <span class="value">{{ $plan.currency }}</span>
+    </div>
+  </div>
+
+  <div class="info-block">
+    <h3>チャレンジ条件</h3>
+    <div class="info-row">
+      <span class="label">利益目標 フェーズ1</span>
+      <span class="value"><span class="badge badge-blue">{{ $plan.profit_target_phase1 }}%</span></span>
+    </div>
+    <div class="info-row">
+      <span class="label">利益目標 フェーズ2</span>
+      <span class="value"><span class="badge badge-blue">{{ $plan.profit_target_phase2 }}%</span></span>
+    </div>
+    <div class="info-row">
+      <span class="label">最大ドローダウン</span>
+      <span class="value"><span class="badge badge-red">{{ $plan.max_drawdown }}%</span></span>
+    </div>
+    <div class="info-row">
+      <span class="label">日次ドローダウン</span>
+      <span class="value"><span class="badge badge-red">{{ $plan.daily_drawdown }}%</span></span>
+    </div>
+  </div>
+</div>
+
+{{ else }}
+<p>プランが見つかりません。</p>
+{{ end }}
+{{ end }}

@@ -1,0 +1,3216 @@
+<!DOCTYPE html>
+<!--
+Page Maker v0.9
+2026-05-27 ver.33: APIキー直書きを廃止しWorkerプロキシ経由に — api.anthropic.com直叩き＋ハードコードキー（2箇所）を全廃。callAPI/子ウィンドウ翻訳をWorker /api/llm 経由に変更（キーはWorker Secretsのenv.ANTHROPIC_KEYで保持）。callAPIはエラー本文を表示するよう改善（HTTP 400の理由が読める）。要：Worker側 /api/llm デプロイ＋ANTHROPIC_KEY登録＋旧キー失効
+2026-05-27 ver.32: 📄 Plan出力ボタンを追加 — 選択（チェック）した全Firmの全Planを対象に、ソース定義v08のDBP_02セクション（ルール早見表＋ルール詳細リスト）に従った出力プロンプトをコピー。Firmチェックボックスの「コピー」「削除」の並びに配置。Plan項目20件＋表記ルールを辞典から動的注入
+2026-05-27 ver.31: 📤出力ボタンのコピー不能を修正 — getTextが firm.plans を直接参照しplans空で早期return ""していた不具合。getFirmName/getPlanNames経由に統一し、Plan未登録時は「プラン未登録—公式サイトから収集」とフォールバック出力。これで「データなし」alertが出ずプロンプトがコピーできる
+2026-05-27 ver.30: ピン留め機能を追加 — Firm行の📌でリスト上部に固定（ピン済みグループを上、非ピンを下に表示、境界線・黄色ハイライト表示）。pinnedはfirmオブジェクトに保持するため全保存/全読込/バックアップ/マージ/統合に自動で乗る。ドラッグ並べ替えをindex方式→ID方式に変更し、ピングループをまたぐとpinned状態を移動先に追従。reidFirmもpinned引き継ぎ
+2026-05-27 ver.30: 選択Firmコピー＋📤出力のデータ取得を修正 — f.name/f.plans直接参照をやめ、getFirmName/getPlanNames（slotData経由フォールバック）に統一。Plan未登録時もフォールバック出力。コピーが空になる不具合を解消。CopyBtnのデバッグlog除去
+2026-05-27 ver.29: Firmリスト改善 — ①各Firm行にチェックボックス＋全選択。選択Firmを「コピー」（Firm名＋Plan一覧の階層テキストをクリップボードへ）／「削除」（まとめて削除・確認1回）。②ヘッダーのバージョン表記をv0.8→定数APP_VERSION（v0.9）に統一しタイトルと一致、混乱を解消
+2026-05-27 ver.28: Firm統合機能を追加 — 縦タブのFirm行に⤵ボタン。同名（または任意）2Firmを「残す側／吸収側」で選び、Planを名前突合して統合。重複しないPlanは残す側へ移動（ID振り直し・challengeName更新）、同名Planはスロット/アーカイブを項目単位で合成。空欄は吸収側で補完、両方値ありで異なる項目だけ残す/吸収を1件ずつ選択。アーカイブは重複除去結合。吸収側Firmは削除。実行直前に自動バックアップ。mergeSlotData/planFirmConsolidationヘルパ新設
+2026-05-27 ver.27: マージ取込機能を追加 — 別PCで「全保存」したJSONを現在のデータに足し合わせ（上書きしない）。Firm名で突合し、重複しないものは自動追加、同名衝突は「両方残す（複製・名前一意化）/ファイルで上書き/こちらを残す」を1件ずつ選択。ID衝突は自動採番し直し、tabData・用語辞典（新規keyのみ）も統合。実行直前に自動バックアップ。planMerge/reidFirm/maxNumIdヘルパ新設
+2026-05-27 ver.26: バックアップ／復元機能を追加 — ブラウザ内（localStorage）に名前付きスナップショットを最大30件保存、一覧から「復元」可能。復元時は確認ダイアログ＋復元直前の現状を自動退避するため誤操作でも元に戻せる。各バックアップはJSON書き出し（⬇）も可。「全読込」（JSON上書き）は従来どおり残置。読込/復元ロジックをapplyDataに共通化（ID衝突回避・用語辞典正本補完）
+2026-05-27 ver.25: 用語辞典をプロンプト生成に結線（案1）— glossaryRulesBlock/glossaryItemLinesヘルパ新設、3ボタン（📋リサーチ/📤出力/📝攻略）が辞典を単一情報源として参照。ハードコード（F23/半角括弧/v07/DD6分類直書き）を全廃。辞典1箇所の更新で全プロンプトに反映
+2026-05-27 ver.24: 用語辞典に編集機能追加 — 各エントリのインライン編集（term/category/definition/explanation/trivia/type）、＋追加ボタン、保存/キャンセル。63キー全件に定義（意味）を付与済み
+2026-05-27 ver.23: 用語辞典を正本化 — GLOSSARY_SEED 63キー（Firm20/Plan20/表記18/計算結果5）投入、key/typeスキーマ拡張、type別フィルタ、正本保護（削除確認・読込補完・AI登録時key除去）。F21/F22（構造体）・絵文字付き記載なしは辞典対象外として除外
+2026-05-24 ver.22: 掲載予定Firm初期登録（The5ers/FundingPips/FundedNext）
+2026-05-23 ver.21: generateKoryakuPromptから計算ロジック削除 — AIプロンプトは基本項目のみ、計算ロジックはソース定義に保持
+2026-05-23 ver.20: NotebookLM ソース定義v06 統合版 — 「📤 出力」ボタンでFirm名+プラン一覧から自動生成プロンプトをコピー
+2026-05-23 ver.19: BMLテンプレート（F21）をソース定義v03の計算ロジック詳細に差し替え — NotebookLMとPage Makerの出力仕様を統一
+2026-05-23 ver.18: プラン比較テーブルに計算ロジック搭載 — 最短合格/最速出金/トータル日数の算出ロジックを断面レポートと統一
+2026-05-23 ver.17: プラン比較テーブル生成プロンプト刷新 — 2部構成（ルール比較9行＋口座サイズ×価格表）、不要行削除（一貫性/制限時間/最低取引日数）
+2026-05-23 ver.16: dbp02プレビューに価格テーブルを追加 — 価格テーブル＋ルール早見表＋ルール詳細テーブルの3段構成
+2026-05-23 ver.15: 差分判定プロンプトを具体化 — 判定基準と判定例を追加してランダムな判定を防止
+2026-05-23 ver.14: ルール早見表の差分判定ロジック修正 — EASE=F側が緩い、TRAP=F側が厳しい（逆だったのを修正）
+2026-05-23 ver.13: ルール詳細テーブルをMarkdown形式に戻す — ルール早見表と同じ形式でNotionネイティブテーブル化を実現
+2026-05-23 ver.12: TSV形式修正 — 文字列"\t"ではなく実際のタブ文字（U+0009）を使用してNotionネイティブテーブル化を実現
+2026-05-23 ver.11: TSVコピー処理改善 — Clipboard APIでタブ文字を確実に保持、テキストエリアにwhite-space:pre追加
+2026-05-23 ver.10: ルール詳細テーブルをTSV形式に変更 — Notionに貼り付けるだけでネイティブテーブルになる
+2026-05-23 ver.09: ⋮メニュー削除 — 「再調査 / プレビュー / 選択」ボタンを直接配置してアクセスを簡素化
+2026-05-23 ver.08: ルール詳細テーブルをHTML→Markdownに変更 — Notion貼り付け時に正しくレンダリングされるよう修正
+2026-05-23 ver.07: dbp02プレビューをDBP_02公開ページ構成に統一 — ルール早見表＋ルール詳細テーブルの2段構成
+2026-05-23 ver.06: ルール詳細テーブルに補足テキスト（4カラム目）を反映 — 各項目の補足説明を追加行として出力
+2026-05-23 ver.05: ⋮メニュー整理 — 「再調査プロンプト / プレビュー（コピー用） / 出力選択」の3項目に簡素化
+2026-05-23 ver.04: Notion出力を項目選択式に変更 — セクション別チェックボックスで出力項目を選択可能
+2026-05-23 ver.03: 再調査プロンプト機能追加 — 不足スロット自動検出 or 手動選択でプロンプト生成
+2026-05-23 ver.02: syncPlansFromList修正 — Firm名プレフィックス除去処理を追加（challengeName二重登録を防止）
+2026-05-23 ver.01: generateKoryakuPrompt を断面レポート統合記事生成版に更新
+  - 断面レポート_プロンプト一式.md の仕様に準拠
+  - System プロンプト（出力ルール・DD計算基準・最速出金ロジック）を統合
+  - 3断面（DD / 取引ルール / 出金）を1回のAPI呼び出しで生成
+  - テーブル項目・フェーズ列ルール・計算ロジックを詳細化
+  - Markdown table形式を明記
+-->
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Maker v0.9</title>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e17; --surface: #111827; --surface-alt: #1a2332;
+    --border: #1e2d3d; --border-light: #2a3a4d;
+    --accent: #00d4aa; --accent-dim: #00d4aa33;
+    --yellow: #f0b90b; --yellow-dim: #f0b90b22;
+    --red: #ef4444; --red-dim: #ef444422;
+    --blue: #3b82f6; --purple: #a78bfa; --green: #22c55e;
+    --text: #c8d6e5; --text-bright: #e2e8f0; --text-dim: #636e7b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP','Inter',sans-serif; font-size: 13px; line-height: 1.5; }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+  ::selection { background: var(--accent-dim); color: var(--text-bright); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+window.name = "pfm-intake";
+// 小窓HTML
+window.__pfmPasteWindowHTML = [
+'<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">',
+'<title>貼り付け小窓</title><style>',
+'*{margin:0;padding:0;box-sizing:border-box}',
+'body{background:#0a0e17;color:#c8d6e5;font-family:"JetBrains Mono","Fira Code",monospace;font-size:13px}',
+'textarea{width:100%;resize:none;background:#111827;color:#c8d6e5;border:none;padding:10px;font-size:0.82rem;font-family:"JetBrains Mono","Fira Code",monospace;line-height:1.6;outline:none}',
+'#ta{height:calc(100vh - 122px)}',
+'#transResult{height:0;border-top:1px solid #1e2d3d;background:#1a2332;display:none;overflow:auto;padding:0}',
+'.bar{background:#111827;border-bottom:1px solid #1e2d3d;padding:6px 10px;display:flex;align-items:center;gap:5px;height:40px;flex-wrap:wrap}',
+'.url-bar{background:#111827;border-bottom:1px solid #1e2d3d;padding:4px 10px;display:flex;align-items:center;gap:6px;height:32px}',
+'.url-input{flex:1;background:#0a0e17;color:#c8d6e5;border:1px solid #1e2d3d;border-radius:3px;padding:2px 6px;font-size:0.72rem;font-family:"JetBrains Mono","Fira Code",monospace;outline:none}',
+'.url-input:focus{border-color:#00d4aa}',
+'.btn{border:none;border-radius:4px;padding:4px 10px;font-size:0.7rem;font-weight:700;cursor:pointer}',
+'.btn-send{background:#3b82f6;color:#fff}',
+'.btn-trans{background:#a78bfa;color:#fff}',
+'.btn-sm{background:transparent;color:#00d4aa;border:1px solid #00d4aa;border-radius:3px;padding:2px 8px;font-size:0.68rem;cursor:pointer}',
+'.status{font-size:0.7rem;color:#636e7b}',
+'.drop-overlay{position:fixed;inset:0;background:#00d4aa33;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10}',
+'.drop-overlay span{color:#00d4aa;font-size:1rem;font-weight:700}',
+'::selection{background:#00d4aa33;color:#e2e8f0}',
+'</style></head><body style="display:flex;flex-direction:column;height:100vh">',
+'<div class="bar"><span style="color:#00d4aa;font-weight:700;font-size:0.82rem">貼り付け</span>',
+'<button class="btn btn-send" id="sendBtn">送信→</button>',
+'<button class="btn btn-trans" id="transBtn">翻訳</button>',
+'<span class="status" id="status"></span></div>',
+'<div class="url-bar"><span style="color:#636e7b;font-size:0.68rem">URL</span>',
+'<input type="text" class="url-input" id="urlInput" placeholder="ソースURL">',
+'<button class="btn-sm" id="pasteUrlBtn">📋</button></div>',
+'<textarea id="ta" placeholder="テキスト貼り付け or 画像ドロップ/ペースト"></textarea>',
+'<div id="transResult" style="display:none;border-top:1px solid #1e2d3d;background:#1a2332;overflow:auto;padding:0;position:relative"><button id="transClose" style="position:absolute;top:2px;right:4px;background:transparent;color:#ef4444;border:none;cursor:pointer;font-size:0.8rem;z-index:1">×</button><div id="transText" style="padding:8px;font-size:0.8rem;line-height:1.5;white-space:pre-wrap;user-select:text"></div></div>',
+'<div class="drop-overlay" id="dropOverlay" style="display:none"><span>画像をドロップ → OCR</span></div>',
+'<scr'+'ipt>',
+'var LLM_PROXY="https://misty-term-6eac.purple-voice-a554.workers.dev/api/llm";',
+'var ta=document.getElementById("ta"),btn=document.getElementById("sendBtn"),st=document.getElementById("status"),ov=document.getElementById("dropOverlay"),urlIn=document.getElementById("urlInput"),puBtn=document.getElementById("pasteUrlBtn"),transBtn=document.getElementById("transBtn"),transResult=document.getElementById("transResult"),transText=document.getElementById("transText"),transClose=document.getElementById("transClose");',
+'puBtn.onclick=function(){navigator.clipboard.readText().then(function(t){urlIn.value=t}).catch(function(){})};',
+'transClose.onclick=function(){transResult.style.display="none";transResult.style.height="0";transText.textContent="";ta.style.height="calc(100vh - 122px)"};',
+'function getSel(){var s=ta.selectionStart,e=ta.selectionEnd;return ta.value.substring(s,e).trim()||ta.value.trim()}',
+'btn.onclick=function(){var sel=getSel();if(!sel){st.textContent="テキストを選択";return}window.opener.postMessage({type:"pfm-intake-paste",text:sel,url:urlIn.value.trim()||""},"*");st.textContent="✓";setTimeout(function(){st.textContent=""},1500)};',
+'transBtn.onclick=function(){var sel=getSel();if(!sel){st.textContent="テキストを選択";return}st.textContent="翻訳中...";transBtn.disabled=true;fetch(LLM_PROXY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:sel}]})}).then(function(r){return r.json()}).then(function(d){var txt=(d.content||[]).filter(function(b){return b.type==="text"}).map(function(b){return b.text}).join("");transResult.style.display="block";transResult.style.height="30vh";transText.textContent=txt;ta.style.height="calc(100vh - 122px - 30vh)";st.textContent="翻訳完了"}).catch(function(e){st.textContent="翻訳エラー"}).finally(function(){transBtn.disabled=false})};',
+'ta.onpaste=function(e){var items=e.clipboardData&&e.clipboardData.items;if(!items)return;for(var i=0;i<items.length;i++){if(items[i].type.indexOf("image/")===0){e.preventDefault();var f=items[i].getAsFile();var r=new FileReader();r.onload=function(){var b64=r.result.split(",")[1];window.opener.postMessage({type:"pfm-intake-ocr-image",base64:b64,mediaType:f.type,url:urlIn.value.trim()||""},"*");st.textContent="OCR送信中..."};r.readAsDataURL(f);return}}};',
+'document.body.ondragover=function(e){e.preventDefault();ov.style.display="flex"};document.body.ondragleave=function(){ov.style.display="none"};',
+'document.body.ondrop=function(e){e.preventDefault();ov.style.display="none";var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f&&f.type.indexOf("image/")===0){var r=new FileReader();r.onload=function(){var b64=r.result.split(",")[1];window.opener.postMessage({type:"pfm-intake-ocr-image",base64:b64,mediaType:f.type,url:urlIn.value.trim()||""},"*");st.textContent="OCR送信中..."};r.readAsDataURL(f)}};',
+'</scr'+'ipt></body></html>'
+].join("\n");
+</script>
+<script type="text/babel">
+const { useState, useRef, useCallback, useEffect, useMemo } = React;
+
+// ═══════════════════════════════════════════════════
+// CONFIG & TOKENS
+// ═══════════════════════════════════════════════════
+const LLM_PROXY = "https://misty-term-6eac.purple-voice-a554.workers.dev/api/llm";
+const C = {
+  bg:"#0a0e17",surface:"#111827",surfaceAlt:"#1a2332",
+  border:"#1e2d3d",borderLight:"#2a3a4d",
+  accent:"#00d4aa",accentDim:"#00d4aa33",
+  yellow:"#f0b90b",red:"#ef4444",blue:"#3b82f6",purple:"#a78bfa",
+  text:"#c8d6e5",textBright:"#e2e8f0",textDim:"#636e7b",green:"#22c55e",
+};
+const font = "'JetBrains Mono','Fira Code',monospace";
+const APP_VERSION = "v0.9";
+
+// ═══════════════════════════════════════════════════
+// API Helper
+// ═══════════════════════════════════════════════════
+async function callAPI(body) {
+  for (let attempt = 0; attempt <= 3; attempt++) {
+    const resp = await fetch(LLM_PROXY, {
+      method: "POST",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(body),
+    });
+    if (resp.status === 429) { await new Promise(r => setTimeout(r, 5000*(attempt+1))); continue; }
+    if (!resp.ok) {
+      let detail="";
+      try{ const j=await resp.json(); detail=j?.error?.message||j?.error||JSON.stringify(j); }catch(_){ try{detail=await resp.text();}catch(__){} }
+      throw new Error(`HTTP ${resp.status}${detail?" — "+detail:""}`);
+    }
+    return await resp.json();
+  }
+}
+function exText(r) { return (r.content||[]).filter(b=>b.type==="text").map(b=>b.text).join(""); }
+
+// ═══════════════════════════════════════════════════
+// Data I/O
+// ═══════════════════════════════════════════════════
+function exportJSON(data,fn) {
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"})); a.download=fn; a.click();
+}
+function importJSON(cb) {
+  const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
+  inp.style.position="fixed"; inp.style.opacity="0"; inp.style.top="-100px";
+  document.body.appendChild(inp);
+  inp.onchange=e=>{
+    const f=e.target.files?.[0];
+    document.body.removeChild(inp);
+    if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{try{cb(JSON.parse(r.result))}catch(err){alert("JSONパースエラー: "+err.message)}};
+    r.onerror=()=>alert("ファイル読み込みエラー");
+    r.readAsText(f);
+  };
+  inp.click();
+}
+
+// ─── Hugo出力ヘルパー ────────────────────────────────────────────
+function slugify(str){
+  return(str||"").toLowerCase().replace(/\s+/g,"-").replace(/[^\w\-]/g,"").replace(/--+/g,"-").replace(/^-+|-+$/g,"");
+}
+function getSlotText(sd,key){
+  const arr=sd?.[key];
+  if(!arr||arr.length===0)return"";
+  const m=arr.find(f=>f.merged);
+  return(m?m.text:arr.map(f=>f.text||"").join("\n")).trim();
+}
+async function writeHugoFile(dirHandle,pathParts,content){
+  let cur=dirHandle;
+  for(let i=0;i<pathParts.length-1;i++)cur=await cur.getDirectoryHandle(pathParts[i],{create:true});
+  const fh=await cur.getFileHandle(pathParts[pathParts.length-1],{create:true});
+  const w=await fh.createWritable();await w.write(content);await w.close();
+}
+const FIRM_KEY_MAP={
+  firmName:"ファーム名",country:"拠点国",established:"創業年",
+  officialUrl:"公式URL",firmCategory:"カテゴリ",japanChat:"日本対応",
+  firmPitch:"ファームピッチ",rewardProgram:"リワードプログラム",scaleUp:"スケールアップ",
+  broker:"ブローカー",platform:"プラットフォーム",serverTime:"サーバー時間",
+  ddReset:"DDリセット",leverage:"レバレッジ",commission:"手数料",
+  paymentMethods:"入金方法",payoutMethods:"出金方法",payoutPolicy:"出金ポリシー",
+  profitSplit:"利益分配率",profitSplitNote:"利益分配率補足",
+};
+const PLAN_KEY_MAP={
+  challengeName:"プラン名",
+  rd_target:"利益目標",rd_minDays:"最低取引日数",
+  rd_dailyLoss:"日次損失",rd_dailyLossType:"日次損失タイプ",
+  rd_maxLoss:"最大損失",rd_maxLossType:"最大損失タイプ",
+  rd_consistency:"一貫性ルール",rd_profitCap:"利益上限",rd_timeLimit:"制限時間",
+  rd_news:"ニュース取引制限",rd_weekend:"週末保有制限",rd_overnight:"オーバーナイト制限",
+  rd_ea:"EA制限",rd_copyTrade:"コピートレード制約",rd_scalping:"スキャルピング制約",
+  rd_stopLoss:"ストップロス制約",rd_risk:"リスクルール",
+  rd_maxPosition:"最大ポジション制約",rd_prohibited:"禁止行為",
+  priceTable:"価格テーブル",
+};
+
+// ═══════════════════════════════════════════════════
+// localStorage バックアップ（スナップショット）
+// ═══════════════════════════════════════════════════
+const BACKUP_KEY="pfm-intake-backups";
+const BACKUP_MAX=30; // 上限件数（古いものから自動削除）
+function loadBackups(){
+  try{const raw=localStorage.getItem(BACKUP_KEY);if(!raw)return[];const arr=JSON.parse(raw);return Array.isArray(arr)?arr:[]}catch(e){return[]}
+}
+function saveBackups(list){
+  try{localStorage.setItem(BACKUP_KEY,JSON.stringify(list));return true}
+  catch(e){alert("バックアップ保存エラー: "+e.message+"\n（容量超過の可能性。古いバックアップを削除してください）");return false}
+}
+function makeBackupSnapshot(label,payload,auto){
+  return {
+    id:"bk"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+    label:label||"",
+    ts:Date.now(),
+    auto:!!auto,
+    data:payload
+  };
+}
+function fmtBackupTime(ts){
+  const d=new Date(ts);const p=n=>String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes());
+}
+
+// ═══════════════════════════════════════════════════
+// マージ（2台のデータ統合）
+// ═══════════════════════════════════════════════════
+// 現在のIDの最大採番値を求める（f12/p34 → 34）
+function maxNumId(firms){
+  let mx=0;
+  (firms||[]).forEach(f=>{
+    const fn=parseInt(String(f.id).replace(/\D/g,""))||0; if(fn>mx)mx=fn;
+    (f.plans||[]).forEach(p=>{const pn=parseInt(String(p.id).replace(/\D/g,""))||0; if(pn>mx)mx=pn});
+  });
+  return mx;
+}
+// incoming(ファイル側)のFirmを、base(現在)と突き合わせて衝突計画を作る
+// 返り値: { autoAdd:[firm...], conflicts:[{name, base:{firm}, incoming:{firm}}], glossaryAdd:[term...] }
+function planMerge(base, incoming){
+  const baseFirms=base.firms||[];
+  const baseByName=new Map(baseFirms.map(f=>[f.name,f]));
+  const autoAdd=[]; const conflicts=[];
+  (incoming.firms||[]).forEach(inf=>{
+    const hit=baseByName.get(inf.name);
+    if(!hit){ autoAdd.push(inf); }
+    else { conflicts.push({name:inf.name, base:hit, incoming:inf}); }
+  });
+  // 用語辞典: key重複は除外して追加分のみ
+  const baseKeys=new Set((base.glossaryTerms||[]).map(t=>t.key).filter(Boolean));
+  const glossaryAdd=(incoming.glossaryTerms||[]).filter(t=>t.key&&!baseKeys.has(t.key));
+  return {autoAdd, conflicts, glossaryAdd};
+}
+// incoming側Firmを取り込む際、ID衝突を避けて採番し直し、tabDataもキー付け替えして返す
+// 返り値: { firm:{新ID,plans...}, tabEntries:{newId:tabData,...}, nextCounter }
+function reidFirm(inf, incomingTabMap, startCounter){
+  let c=startCounter;
+  const newFid="f"+String(c++);
+  const tabEntries={};
+  const oldFid=inf.id;
+  const newPlans=(inf.plans||[]).map(p=>{
+    const newPid="p"+String(c++);
+    const oldTab=incomingTabMap[p.id];
+    if(oldTab)tabEntries[newPid]=JSON.parse(JSON.stringify(oldTab));
+    return {id:newPid,name:p.name};
+  });
+  const oldFirmTab=incomingTabMap[oldFid];
+  if(oldFirmTab)tabEntries[newFid]=JSON.parse(JSON.stringify(oldFirmTab));
+  const firm={id:newFid,name:inf.name,plans:newPlans};
+  if(inf.pinned)firm.pinned=true;
+  return {firm, tabEntries, nextCounter:c};
+}
+
+// ═══════════════════════════════════════════════════
+// Firm統合（同名2箱を1つに寄せる）
+// ═══════════════════════════════════════════════════
+// slotDataを項目単位でマージ。
+//  - 片方だけ値あり → 値ある方を採用
+//  - 両方値ありで内容同じ → そのまま
+//  - 両方値ありで内容違う → conflictとして記録（既定keep=残す側）
+// 返り値: {merged, conflicts:[{scope,planName,slotKey,keepText,absorbText}]}
+function slotTextOf(arr){
+  if(!Array.isArray(arr))return "";
+  return arr.map(x=>(x&&x.text!=null)?String(x.text):"").join("").trim();
+}
+function mergeSlotData(keepSD, absorbSD, scope, planName){
+  const merged={...(keepSD||{})};
+  const conflicts=[];
+  // 名称系（Firm名/Challenge名）は常に残す側を優先し、競合に出さない
+  const NAME_KEYS=new Set(["firmName","challengeName"]);
+  const allKeys=new Set([...Object.keys(keepSD||{}),...Object.keys(absorbSD||{})]);
+  allKeys.forEach(k=>{
+    const kt=slotTextOf(keepSD?.[k]);
+    const at=slotTextOf(absorbSD?.[k]);
+    if(!kt&&at){ merged[k]=absorbSD[k]; }            // 残す側が空 → 吸収側で埋める
+    else if(kt&&at&&kt!==at){                         // 両方あって違う
+      if(NAME_KEYS.has(k))return;                     // 名称系は残す側のまま（競合扱いしない）
+      conflicts.push({scope,planName,slotKey:k,keepText:kt,absorbText:at,keepVal:keepSD[k],absorbVal:absorbSD[k]});
+    }
+    // それ以外（残す側のみ／同一）は残す側のまま
+  });
+  return {merged,conflicts};
+}
+// keepFirm に absorbFirm を吸収する計画を作る（実適用は別関数）
+// Planは名前で突合。重複しないPlanはkeepへ移動、同名Planはslot/archiveをマージ。
+function planFirmConsolidation(keepFirm, absorbFirm, tabDataMap){
+  const conflicts=[];
+  // Firm本体スロット
+  const keepFirmSD=tabDataMap[keepFirm.id]?.slotData||{};
+  const absorbFirmSD=tabDataMap[absorbFirm.id]?.slotData||{};
+  const firmMerge=mergeSlotData(keepFirmSD,absorbFirmSD,"firm",keepFirm.name);
+  conflicts.push(...firmMerge.conflicts);
+
+  const keepPlansByName=new Map((keepFirm.plans||[]).map(p=>[p.name,p]));
+  const planActions=[]; // {type:'merge'|'move', keepPlan?, absorbPlan, slotConflicts?}
+  (absorbFirm.plans||[]).forEach(ap=>{
+    const kp=keepPlansByName.get(ap.name);
+    if(kp){
+      const kSD=tabDataMap[kp.id]?.slotData||{};
+      const aSD=tabDataMap[ap.id]?.slotData||{};
+      const m=mergeSlotData(kSD,aSD,"plan",ap.name);
+      conflicts.push(...m.conflicts);
+      planActions.push({type:"merge",keepPlan:kp,absorbPlan:ap});
+    }else{
+      planActions.push({type:"move",absorbPlan:ap});
+    }
+  });
+  return {conflicts,planActions,firmMerge};
+}
+
+
+// ═══════════════════════════════════════════════════
+// Prompt Generators
+// ═══════════════════════════════════════════════════
+function getPlanNames(firmId, firms, tabDataMap) {
+  const firm = firms.find(f => f.id === firmId);
+  
+  // A. 既存Planタブから取得
+  if (firm?.plans?.length > 0) {
+    return firm.plans.map(p => p.name).filter(Boolean);
+  }
+  
+  // B. planListスロットから取得
+  const firmData = tabDataMap[firmId];
+  const planListSlot = firmData?.slotData?.planList;
+  if (planListSlot?.length > 0) {
+    const merged = planListSlot.find(f => f.merged);
+    let text = merged ? merged.text : planListSlot[0]?.text || "";
+    
+    // textが配列の場合は最初の要素を取得
+    if (Array.isArray(text)) {
+      text = text[0] || "";
+    }
+    
+    // textが文字列であることを確認
+    if (typeof text === 'string' && text) {
+      return text.split(/[,、\n]/).map(s => s.trim()).filter(Boolean);
+    }
+  }
+  
+  // C. 未登録
+  return null;
+}
+
+function getFirmName(firmId, tabDataMap) {
+  const firmData = tabDataMap[firmId];
+  const firmNameSlot = firmData?.slotData?.firmName;
+  if (firmNameSlot?.length > 0) {
+    const merged = firmNameSlot.find(f => f.merged);
+    return merged ? merged.text : firmNameSlot[0]?.text || "";
+  }
+  return "";
+}
+
+function generateResearchPrompt(firmId, firms, tabDataMap, glossaryTerms) {
+  const firmName = getFirmName(firmId, tabDataMap) || "[ファーム名]";
+  const planNames = getPlanNames(firmId, firms, tabDataMap);
+
+  let prompt = `チェック対象ファーム: ${firmName}\n\n`;
+
+  if (planNames && planNames.length > 0) {
+    prompt += `【対象プラン一覧】\n`;
+    planNames.forEach(name => {
+      prompt += `- ${name}\n`;
+    });
+    prompt += `\n`;
+  }
+
+  const firmLines = glossaryItemLines(glossaryTerms, "Firm項目");
+  const planLines = glossaryItemLines(glossaryTerms, "Plan項目");
+
+  prompt += `--- Firm情報 ---
+${firmLines}
+
+--- Plan情報${planNames ? "・上記全プラン分" : ""} ---
+${planLines}
+
+上記の項目を公式サイトから収集してください。`;
+
+  return prompt;
+}
+
+function generateKoryakuPrompt(firmId, firms, tabDataMap, SLOT_DEFS, glossaryTerms) {
+  const firmName = getFirmName(firmId, tabDataMap) || "[ファーム名]";
+  const planNames = getPlanNames(firmId, firms, tabDataMap);
+  const firm = firms.find(f => f.id === firmId);
+  
+  // 全PlanのルールdetailListを収集
+  let ruleDetailsList = "";
+  if (firm?.plans?.length > 0) {
+    firm.plans.forEach(plan => {
+      const planData = tabDataMap[plan.id];
+      if (!planData) return;
+      
+      ruleDetailsList += `\n**【${plan.name}】**\n\n`;
+      
+      // P01〜P19のスロットから情報を収集
+      const slots = SLOT_DEFS.dbp02.filter(s => s.id.startsWith('rd_'));
+      slots.forEach(slot => {
+        const slotData = planData.slotData?.[slot.id];
+        if (!slotData || slotData.length === 0) return;
+        
+        const merged = slotData.find(f => f.merged);
+        const text = merged ? merged.text : slotData.map(f => f.text).join("\n");
+        if (text.trim()) {
+          ruleDetailsList += `**${slot.label}:** ${text}\n\n`;
+        }
+      });
+    });
+  }
+  
+  // Systemプロンプト（公開ページの構造で項目を位置付けて出力を求める）
+  // 表記ルールは用語辞典（正本）から動的注入
+  const systemPrompt = `あなたはプロップトレーディングファームのルール分析専門AIです。
+3断面（DD / 取引ルール / 出金）を含む攻略記事を1回で生成してください。
+
+■ 出力ルール（厳守）
+- Markdown形式で出力。テーブルはMarkdown table記法
+- 主観形容詞・煽り文句・誘導表現・評価表現は一切禁止（例:「重要」「鍵となる」「注意が必要」「求められる」等はNG）
+- 事実の記述のみ。「〜に注意が必要」→「〜という仕様である」に言い換え
+- 根拠URL・推測・補完禁止。ソースに記載がなければ用語辞典の不在表記に従う
+
+${glossaryRulesBlock(glossaryTerms)}`;
+
+
+  // Userプロンプト
+  let prompt = `【System】
+${systemPrompt}
+
+【User】
+Firm: ${firmName}
+プラン: ${planNames ? planNames.join(', ') : '（未登録）'}
+
+【ルールテキスト】
+${ruleDetailsList || "（ルール詳細リストが未格納です。先にPlanデータを格納してください）"}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■ 出力構成（3断面を含む攻略記事）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 断面① Drawdown
+
+### 構成:
+1. 冒頭説明文（プラン間のDD設計の違いを概説・2〜3文）
+2. DD比較テーブル（Markdown table形式）
+   - 列: プラン名 / 日次損失上限 / 計算基準（日次） / 最大損失上限 / 計算基準（最大）
+   - フェーズ列ルール:
+     * C/FでDD値・計算基準が全て同一のプラン → 1行（フェーズ列不要）
+     * C/Fで差分があるプランのみChallenge/Fundedの2行に分ける
+     * Instant → 常に1行（Fundedのみ）
+     * 全プランがC/F同一 → フェーズ列自体を省略
+3. 補足注記（リセット時刻、Trailing挙動の詳細、Static基準値の説明等・200字以内）
+4. 合格に向けての注意点（事実ベース。誘導表現禁止・150字以内）
+5. 出金に向けての注意点（事実ベース。誘導表現禁止・150字以内）
+6. 特殊ルール（あれば・100字以内）
+
+### テーブル計算基準列の記載ルール:
+- 6分類（Static等）のみ記載。リセット時刻やBalance/Equityの詳細説明はテーブル外の補足注記に記載
+- Gain Limit等のDD計算メカニズムと独立したルールはDD比較テーブルに含めない。特殊ルールセクションに記載
+
+---
+
+## 断面② 取引ルール
+
+### 構成:
+1. 冒頭説明文（1〜2文）
+2. Consistency Rule プラン別適用状況テーブル（Markdown table形式）
+   - 列: プラン / Challenge / Funded / 備考
+3. 第1部. 全プラン共通の取引制限（200字以内）
+4. 第2部. プラン間で差分のあるルール（Markdown table形式・150字以内）
+5. 合格に向けての注意点（事実ベース。誘導表現禁止・150字以内）
+6. 出金に向けての注意点（事実ベース。誘導表現禁止・150字以内）
+
+### 断面②固有の制約:
+- DD値・DD計算基準は断面①の範疇。断面②では触れない（差分テーブルでDD列を含めない）
+- Gain Limit等のDD以外の利益/損失制限ルールは断面②で扱う
+
+---
+
+## 断面③ 出金までの流れ
+
+### 構成:
+1. 冒頭説明文（出金方式・最速/最遅プランの概要・2〜3文）
+2. 出金条件テーブル（Markdown table形式）
+   - 列: プラン名 / 頻度 / 最低取引日数（出金） / 一貫性ルール / 最低利益 / 利益分配 / 備考
+3. 最速出金スケジュール（理論値）テーブル（Markdown table形式）
+   - 列: プラン名 / Steps / 最短合格 / 最速出金 / トータル日数 / 着金目安 / 備考
+4. 補足事項（150字以内）
+
+### 断面③固有の制約:
+- 最短合格日数: 全条件不存在でもフォールバック1日×Step数を適用。「0日」は禁止
+- 1プランで複数の出金頻度がある場合（標準/アドオン/初回特例等）は行を分ける
+- 処理時間・着金目安は提供されたDB_01 payout policyデータを参照
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+【最終チェックリスト】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+出力前に以下を必ず確認:
+□ 「Evaluation」「Master」等の表記が残っていない（すべて「Challenge」「Funded」に変換済み）
+□ すべての数値に単位が付与されている
+□ 主観形容詞・煽り文句・誘導表現が一切ない
+□ テーブルはMarkdown table形式（| 列1 | 列2 |）
+□ DD計算基準は6分類のみ使用
+□ 最速出金スケジュールのロジック適用済み`;
+  
+  return prompt;
+}
+
+
+// ═══════════════════════════════════════════════════
+// Slot Definitions - v0.3
+// ═══════════════════════════════════════════════════
+const SLOT_DEFS = {
+  dbp01: [
+    // 基本情報
+    {id:"firmName",label:"ファーム名",section:"基本情報",hint:"タイトル（必須）"},
+    {id:"country",label:"拠点国",section:"基本情報",hint:""},
+    {id:"established",label:"創業年",section:"基本情報",hint:""},
+    {id:"officialUrl",label:"公式URL",section:"基本情報",hint:"アフィリエイトURL優先、なければ公式URL"},
+    {id:"firmCategory",label:"カテゴリ",section:"基本情報",hint:"CFD/FX（固定）"},
+    {id:"japanChat",label:"日本対応",section:"基本情報",hint:"禁止/可能/日本語HP/日本語チャット"},
+    // 特色
+    {id:"firmPitch",label:"ファームピッチ",section:"特色",hint:"あれば記載"},
+    {id:"rewardProgram",label:"リワードプログラム",section:"特色",hint:"あれば記載"},
+    {id:"scaleUp",label:"スケールアップ",section:"特色",hint:"あれば記載"},
+    // 取引環境
+    {id:"broker",label:"ブローカー",section:"取引環境",hint:""},
+    {id:"platform",label:"プラットフォーム",section:"取引環境",hint:"MT4/MT5/cTrader等"},
+    {id:"serverTime",label:"Server Time",section:"取引環境",hint:"TZ + UTC offset + 日本時間併記必須"},
+    {id:"ddReset",label:"DD Reset",section:"取引環境",hint:"リセット時刻 + 日本時間併記必須"},
+    {id:"leverage",label:"レバレッジ",section:"取引環境",hint:"資産×プラン テーブル"},
+    {id:"commission",label:"手数料",section:"取引環境",hint:"テーブル"},
+    // 入出金
+    {id:"paymentMethods",label:"入金方法",section:"入出金",hint:""},
+    {id:"payoutMethods",label:"出金方法",section:"入出金",hint:""},
+    {id:"payoutPolicy",label:"出金ポリシー",section:"入出金",hint:""},
+    {id:"profitSplit",label:"Profit Split",section:"入出金",hint:"全プランの数値記載、同値はまとめて"},
+    {id:"profitSplitNote",label:"※Profit Split",section:"入出金",hint:"補足テキスト"},
+    // 全プラン
+    {id:"planComparison",label:"プラン比較テーブル",section:"全プラン",hint:"Collectorと同じ項目"},
+    {id:"planList",label:"プラン名リスト",section:"全プラン",hint:"Collectorのフィールド編集タブと同一構造（ナビゲーション強調表示用）"},
+  ],
+  dbp02: [
+    {id:"challengeName",label:"プラン名",section:"タイトル",hint:"必須"},
+    {id:"priceTable",label:"価格テーブル",section:"価格",hint:"全プラン共通、該当プラン強調表示。AI生成可"},
+    {id:"ruleQuickRef",label:"ルール早見表",section:"早見表",hint:"AI生成。テーブル1枚（項目/Challenge/Funded/差分）"},
+    {id:"rd_target",label:"利益目標",section:"詳細",hint:"C=%目標, F=最小出金額(%or金額)。補足付き"},
+    {id:"rd_minDays",label:"最低取引日数",section:"詳細",hint:"日数"},
+    {id:"rd_dailyLoss",label:"日次損失",section:"詳細",hint:"%"},
+    {id:"rd_dailyLossType",label:"日次損失タイプ",section:"詳細",hint:"日本語変換済み"},
+    {id:"rd_maxLoss",label:"最大損失",section:"詳細",hint:"%"},
+    {id:"rd_maxLossType",label:"最大損失タイプ",section:"詳細",hint:"日本語変換済み"},
+    {id:"rd_consistency",label:"一貫性ルール",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_profitCap",label:"利益上限",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_timeLimit",label:"制限時間",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_news",label:"ニュース取引制限",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_weekend",label:"週末保有制限",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_overnight",label:"オーバーナイト制限",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_ea",label:"EA制限",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_copyTrade",label:"コピートレード制約",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_scalping",label:"スキャルピング制約",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_stopLoss",label:"ストップロス制約",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_risk",label:"リスクルール",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_maxPosition",label:"最大ポジション制約",section:"詳細",hint:"補足テキスト付き"},
+    {id:"rd_prohibited",label:"禁止行為",section:"詳細",hint:"補足テキスト付き"},
+  ],
+  koryaku: [
+    {id:"k_dd",label:"断面① Drawdown",section:"断面",hint:"DD比較テーブル・補足注記・合格/出金注意点・特殊ルール"},
+    {id:"k_rules",label:"断面② 取引ルール",section:"断面",hint:"一貫性・共通制限・プラン間差分・合格/出金注意点"},
+    {id:"k_payout",label:"断面③ 出金までの流れ",section:"断面",hint:"出金条件テーブル・スケジュール・補足事項"},
+  ],
+};
+
+// ═══════════════════════════════════════════════════
+// 用語辞典 初期データ（正本・63キー）v1 2026-05-27
+// 国語辞典思想: 結果の語句のみ＋語釈。算出式は載せない。
+// type: label(項目ラベル/計算結果列名) | notation(正規表記)
+// definition: 語句の意味（正本ポリシー根拠）
+// ═══════════════════════════════════════════════════
+const GLOSSARY_SEED = [
+  // ── グループ1: Firm項目ラベル（20）──
+  {key:"F01",term:"ファーム名",type:"label",category:"Firm項目",definition:"プロップファームの正式名称。"},
+  {key:"F02",term:"拠点国",type:"label",category:"Firm項目",definition:"運営会社の本社所在地または法人登記国。"},
+  {key:"F03",term:"創業年",type:"label",category:"Firm項目",definition:"ファームの設立年（西暦4桁）。"},
+  {key:"F04",term:"公式URL",type:"label",category:"Firm項目",definition:"ファームの公式サイトURL。アフィリエイトURLがあれば優先する。"},
+  {key:"F05",term:"カテゴリ",type:"label",category:"Firm項目",definition:"取り扱う商品区分。CFD／FXのいずれか。"},
+  {key:"F06",term:"日本対応",type:"label",category:"Firm項目",definition:"日本居住者への対応状況。禁止／可能／日本語HP／日本語チャットのいずれかで示す。"},
+  {key:"F07",term:"ファームピッチ",type:"label",category:"Firm項目",definition:"ファームが掲げる特徴・差別化ポイント。"},
+  {key:"F08",term:"リワードプログラム",type:"label",category:"Firm項目",definition:"紹介報酬・ロイヤリティ等の還元制度。"},
+  {key:"F09",term:"スケールアップ",type:"label",category:"Firm項目",definition:"口座サイズを段階的に拡大できる条件と上限額。"},
+  {key:"F10",term:"ブローカー",type:"label",category:"Firm項目",definition:"約定を担う接続先ブローカー。"},
+  {key:"F11",term:"プラットフォーム",type:"label",category:"Firm項目",definition:"取引に使う環境。MT4／MT5／cTrader等。"},
+  {key:"F12",term:"Server Time",type:"label",category:"Firm項目",definition:"取引サーバーの基準時刻。タイムゾーン＋UTCオフセット＋日本時間換算を併記する。"},
+  {key:"F13",term:"DD Reset",type:"label",category:"Firm項目",definition:"ドローダウン基準値がリセットされる時刻。日本時間換算を併記する。"},
+  {key:"F14",term:"レバレッジ",type:"label",category:"Firm項目",definition:"資産クラス×プラン別の最大レバレッジ倍率。"},
+  {key:"F15",term:"手数料",type:"label",category:"Firm項目",definition:"資産クラス別の取引手数料。往復／片道の別と通貨単位を明記する。"},
+  {key:"F16",term:"入金方法",type:"label",category:"Firm項目",definition:"チャレンジ費用等の支払手段。カード／銀行／暗号通貨等。"},
+  {key:"F17",term:"出金方法",type:"label",category:"Firm項目",definition:"利益分配金の受取手段。銀行／暗号通貨／PayPal等。"},
+  {key:"F18",term:"出金ポリシー",type:"label",category:"Firm項目",definition:"出金頻度・最低出金額・申請方法・処理期間を定めた規定。"},
+  {key:"F19",term:"Profit Split",type:"label",category:"Firm項目",definition:"Funded口座で得た利益のうちトレーダーに分配される割合。"},
+  {key:"F20",term:"※Profit Split",type:"label",category:"Firm項目",definition:"利益分配率の変動条件やスケールアップ後の比率を補足する注記。"},
+  // ── グループ2: Plan項目ラベル（20）──
+  {key:"P01",term:"利益目標",type:"label",category:"Plan項目",definition:"各フェーズの合格に必要な利益額または利益率。ChallengeとFundedで異なる場合がある。"},
+  {key:"P02",term:"最低取引日数（合格）",type:"label",category:"Plan項目",definition:"チャレンジ合格に必要な最低取引日数。出金要件とは区別する。"},
+  {key:"P02b",term:"最低取引日数（出金）",type:"label",category:"Plan項目",definition:"出金申請に必要な最低取引日数。合格要件とは区別する。"},
+  {key:"P03",term:"日次損失",type:"label",category:"Plan項目",definition:"1日あたりに許容される損失の上限（%または$）。"},
+  {key:"P04",term:"日次損失タイプ",type:"label",category:"Plan項目",definition:"日次損失の計算基準。DD分類6パターンのいずれか。"},
+  {key:"P05",term:"最大損失",type:"label",category:"Plan項目",definition:"口座全体で許容される累積損失の上限（%または$）。"},
+  {key:"P06",term:"最大損失タイプ",type:"label",category:"Plan項目",definition:"最大損失の計算基準。DD分類6パターンのいずれか。"},
+  {key:"P07",term:"一貫性ルール",type:"label",category:"Plan項目",definition:"特定の日の利益が総利益に占める比率を制限するルール（Best Day等）。"},
+  {key:"P08",term:"利益上限",type:"label",category:"Plan項目",definition:"利益または出金額の上限。"},
+  {key:"P09",term:"制限時間",type:"label",category:"Plan項目",definition:"チャレンジ合格までの期限（日数または無制限）。"},
+  {key:"P10",term:"ニュース取引制限",type:"label",category:"Plan項目",definition:"重要経済指標の発表前後における取引の制限。"},
+  {key:"P11",term:"週末保有制限",type:"label",category:"Plan項目",definition:"金曜クローズ前にポジションを決済する義務の有無。"},
+  {key:"P12",term:"オーバーナイト制限",type:"label",category:"Plan項目",definition:"日をまたいでポジションを保有することへの制限。"},
+  {key:"P13",term:"EA制限",type:"label",category:"Plan項目",definition:"自動売買プログラム（EA）の使用可否・条件。"},
+  {key:"P14",term:"コピートレード制約",type:"label",category:"Plan項目",definition:"他口座・他者の取引を複写することへの制約。"},
+  {key:"P15",term:"スキャルピング制約",type:"label",category:"Plan項目",definition:"超短時間売買の可否・条件に関する制約。"},
+  {key:"P16",term:"ストップロス制約",type:"label",category:"Plan項目",definition:"損切り注文の設定義務や推奨に関する制約。"},
+  {key:"P17",term:"リスクルール",type:"label",category:"Plan項目",definition:"含み損（未決済ポジションの評価損）に対する制限。"},
+  {key:"P18",term:"最大ポジション制約",type:"label",category:"Plan項目",definition:"同時に保有できるポジション数やロット数の上限。"},
+  {key:"P19",term:"禁止行為",type:"label",category:"Plan項目",definition:"アカウント失格の対象となる禁止された取引手法・行為。"},
+  // ── グループ3: 正規表記（18）──
+  {key:"DD_STATIC",term:"Static",type:"notation",category:"DD計算基準",definition:"初期残高（口座開設時の残高）を基準に固定するドローダウン方式。判定根拠: initial balance / fixed / starting balance。"},
+  {key:"DD_BAL_EOD",term:"Trailing（Balance EOD）",type:"notation",category:"DD計算基準",definition:"日次終了時点の残高を基準に追従するドローダウン方式。判定根拠: end of day balance / daily reset balance。"},
+  {key:"DD_BAL_HWM",term:"Trailing（Balance HWM）",type:"notation",category:"DD計算基準",definition:"記録した最高残高を基準に追従するドローダウン方式。判定根拠: highest balance / recorded highest balance。"},
+  {key:"DD_EQ_EOD",term:"Trailing（Equity EOD）",type:"notation",category:"DD計算基準",definition:"日次終了時点の有効証拠金を基準に追従するドローダウン方式。判定根拠: end of day equity。"},
+  {key:"DD_EQ_HWM",term:"Trailing（Equity HWM）",type:"notation",category:"DD計算基準",definition:"リアルタイムの最高有効証拠金を基準に追従するドローダウン方式。判定根拠: highest equity / real-time equity。"},
+  {key:"DD_HIGHER",term:"Trailing（Higher B or E EOD）",type:"notation",category:"DD計算基準",definition:"前日終了時点の残高と有効証拠金のうち高い方を基準に追従するドローダウン方式。判定根拠: previous day's balance or equity / higher of balance or equity。"},
+  {key:"PHASE_C",term:"Challenge",type:"notation",category:"フェーズ",definition:"評価フェーズの統一表記。Evaluation／Assessment／Phase／Step／審査段階は全てこれに変換する。"},
+  {key:"PHASE_F",term:"Funded",type:"notation",category:"フェーズ",definition:"資金提供後フェーズの統一表記。Master／Live／Funded Account／Real Accountは全てこれに変換する。"},
+  {key:"ABS_NONE",term:"なし（明示）",type:"notation",category:"不在表記",definition:"ソースに「なし（No／None／0）」と明記されている状態。条件が存在しないと断定できる。"},
+  {key:"ABS_NA",term:"ー",type:"notation",category:"不在表記",definition:"その項目自体が構造上適用されない状態（N/A）。全角ハイフンで表記し、「記載なし」とは区別する。"},
+  {key:"ABS_UNKNOWN",term:"記載なし",type:"notation",category:"不在表記",definition:"一次ソースを調査したが該当情報が見つからない状態。条件不在の「ー」とは区別する。絵文字は付けない。"},
+  {key:"DIFF_EASE",term:"EASE",type:"notation",category:"早見表差分",definition:"早見表でFunded側がChallenge側より緩い（トレーダーに有利な）ことを示す差分判定。"},
+  {key:"DIFF_TRAP",term:"TRAP",type:"notation",category:"早見表差分",definition:"早見表でFunded側がChallenge側より厳しい（トレーダーに不利な）ことを示す差分判定。"},
+  {key:"DIFF_NONE",term:"ー",type:"notation",category:"早見表差分",definition:"早見表でChallenge／Fundedが同値、またはFunded側が「ー」で差分がないことを示す。"},
+  {key:"FREQ_ONDEMAND",term:"随時",type:"notation",category:"出金頻度",definition:"出金申請に頻度制約がない方式。最速出金計算では待機0日として扱う。"},
+  {key:"FREQ_WEEKLY",term:"毎週",type:"notation",category:"出金頻度",definition:"週1回の出金頻度。最速出金計算では待機をMAX(7日, X)とする。"},
+  {key:"FREQ_BIWEEKLY",term:"隔週",type:"notation",category:"出金頻度",definition:"2週に1回の出金頻度。最速出金計算では待機をMAX(14日, X)とする。"},
+  {key:"FREQ_MONTHLY",term:"月次",type:"notation",category:"出金頻度",definition:"月1回の出金頻度。最速出金計算では待機をMAX(30日, X)とする。"},
+  // ── グループ4: 計算結果の列名（5）算出式は載せない ──
+  {key:"CALC_PASS",term:"最短合格",type:"label",category:"計算結果",definition:"チャレンジに合格できる理論上の最短日数。各StepのMAX(最低取引日数, 一貫性達成最速日数)の合計（結果のみ）。"},
+  {key:"CALC_PAYOUT",term:"最速出金",type:"label",category:"計算結果",definition:"Funded到達後に出金申請できる理論上の最短日数。出金頻度による待機を反映した結果（結果のみ）。"},
+  {key:"CALC_TOTAL",term:"トータル日数",type:"label",category:"計算結果",definition:"最短合格と最速出金を合算した、申込から最初の出金申請までの理論最短日数。"},
+  {key:"CALC_STEPS",term:"Steps",type:"label",category:"計算結果",definition:"プランの評価ステップ数。Instant=0／1-Step=1／2-Step=2等。"},
+  {key:"CALC_ARRIVAL",term:"着金目安",type:"label",category:"計算結果",definition:"出金申請から実際の着金までの目安日数。処理時間を反映した値。"},
+];
+
+// ═══════════════════════════════════════════════════
+// 用語辞典 参照ヘルパ（プロンプト生成が辞典を単一情報源として参照）
+// 辞典を直せばプロンプトの表記ルールも自動で変わる
+// ═══════════════════════════════════════════════════
+function glossaryRulesBlock(glossaryTerms) {
+  const T = Array.isArray(glossaryTerms) && glossaryTerms.length ? glossaryTerms : GLOSSARY_SEED;
+  const byKey = {};
+  T.forEach(t => { if (t.key) byKey[t.key] = t; });
+  const term = k => (byKey[k]?.term) || "";
+  const catTerms = cat => T.filter(t => t.category === cat).map(t => t.term);
+
+  const dd = catTerms("DD計算基準").join(" / ");
+  const phase = `${term("PHASE_C")} / ${term("PHASE_F")}`;
+  const diff = catTerms("早見表差分").filter((v,i,a)=>a.indexOf(v)===i).join(" / ");
+  const freq = catTerms("出金頻度").join(" / ");
+
+  return `【用語辞典（厳守・正本）】
+この辞典の表記を唯一の正本とする。出力は必ず下記の表記に統一すること。
+
+■ フェーズ名称（統一変換）
+- ${phase} のみを使用。Evaluation／Assessment／Phase／Step／Master／Live／Funded Account／Real Account 等の表記は全て ${term("PHASE_C")}／${term("PHASE_F")} に変換する。
+
+■ DD計算基準（この6表記のみ）
+- ${dd}
+- 括弧は全角（）。リセット時刻・計算詳細は補足注記に記載しテーブルの基準列には書かない。
+
+■ 不在表記（厳密に区別）
+- ${term("ABS_NONE")}: ソースに「なし」と明記されている（条件が存在しないと断定できる）
+- ${term("ABS_NA")}: 該当項目自体が構造上適用されない（全角ハイフン）
+- ${term("ABS_UNKNOWN")}: 一次ソースに記述がない。絵文字は付けない。「${term("ABS_NA")}」と混同しない。
+
+■ 最低取引日数の表記（全角括弧）
+- 合格要件: ${term("P02")}
+- 出金要件: ${term("P02b")}
+
+■ 早見表の差分判定
+- ${diff}（EASE=Funded側が緩い／TRAP=Funded側が厳しい）
+
+■ 出金頻度
+- ${freq}
+`;
+}
+
+// 辞典のlabelから項目リスト行を動的生成（カテゴリ指定）
+function glossaryItemLines(glossaryTerms, category) {
+  const T = Array.isArray(glossaryTerms) && glossaryTerms.length ? glossaryTerms : GLOSSARY_SEED;
+  return T.filter(t => t.category === category && t.key)
+    .map(t => `${t.key}. ${t.term}${t.definition ? " — " + t.definition : ""}`)
+    .join("\n");
+}
+
+const SEC_COLORS = {
+  "基本情報":C.accent,
+  "特色":C.purple,
+  "取引環境":C.blue,
+  "入出金":C.green,
+  "全プラン":C.yellow,
+  "タイトル":C.accent,
+  "価格":C.green,
+  "早見表":C.blue,
+  "詳細":C.yellow,
+  "冒頭":C.accent,
+  "DD":C.red,
+  "ルール":C.yellow,
+  "出金":C.green,
+  "補助":C.textDim,
+  "断面":C.red
+};
+
+// ═══════════════════════════════════════════════════
+const FUNC_INDEX = [
+  {group:"縦タブ",items:[
+    {id:"vtab-firm",label:"Firm追加（＋）",desc:"新規Firm登録"},
+    {id:"vtab-plan",label:"Plan追加（Firm横＋）",desc:"Firm配下にPlan追加"},
+    {id:"vtab-rename",label:"リネーム（ダブルクリック）",desc:"名前変更→スロット自動反映（Firm名/Firm名-Plan名）"},
+    {id:"vtab-csv",label:"CSV一括登録",desc:"Firm名,Plan名,Plan名,...形式で一括登録（重複スキップ）"},
+    {id:"vtab-delete",label:"削除（×）",desc:"Firm削除時は配下Planも削除"},
+    {id:"vtab-prompt-research",label:"📋 リサーチプロンプト",desc:"NotebookLM Deep Research用プロンプト生成（Firm名・Plan名リスト自動挿入）"},
+    {id:"vtab-prompt-output",label:"📤 出力プロンプト",desc:"NotebookLM出力形式指定プロンプト生成（早見表・ルール詳細リスト）"},
+    {id:"vtab-prompt-koryaku",label:"📝 攻略記事プロンプト",desc:"3断面攻略記事生成プロンプト（全Planルール詳細リスト自動挿入）"},
+    {id:"vtab-notion-export",label:"📋 Notion出力",desc:"Notionページ本文用テキスト生成（プレビュー＋コピー）→Notionに貼り付け"},
+  ]},
+  {group:"貼り付けエリア",items:[
+    {id:"paste-text",label:"テキスト貼り付け",desc:"Ctrl+Vでテキスト投入"},
+    {id:"paste-ocr",label:"画像OCR",desc:"画像ドロップ/ペースト→Claude vision→テキスト化"},
+    {id:"paste-clear",label:"クリア（×）",desc:"エリア内テキスト消去"},
+    {id:"paste-archive",label:"保管",desc:"原本テキストを蓄積（折りたたみリスト、クリックで再投入）"},
+    {id:"paste-translate",label:"翻訳→対象",desc:"選択テキストをClaude API翻訳→取り込み対象エリアへ"},
+    {id:"paste-send",label:"→対象",desc:"選択テキストをそのまま取り込み対象エリアへ"},
+  ]},
+  {group:"取り込み対象エリア",items:[
+    {id:"target-view",label:"表示",desc:"ここに表示されたテキストだけがスロットに入る"},
+    {id:"target-auto",label:"自動振り分け",desc:"Claude APIでスロットに自動格納（プラン名コンテキスト付き、ロック済みスキップ）"},
+    {id:"target-clear",label:"クリア（×）",desc:"取り込み対象テキスト消去"},
+  ]},
+  {group:"スロットパネル",items:[
+    {id:"slot-tab",label:"テンプレート切替",desc:"DBP_01(19項目)/DBP_02(40項目)/攻略(18項目)"},
+    {id:"slot-add",label:"格納（＋）",desc:"取り込み対象エリアで選択→スロットの＋で格納"},
+    {id:"slot-edit",label:"編集（✎）",desc:"テキストクリックで編集モード→保存/取消"},
+    {id:"slot-delete",label:"削除（×）",desc:"断片を個別に削除"},
+    {id:"slot-merge",label:"整形",desc:"複数断片→Claude APIで1つの文章にまとめ"},
+    {id:"slot-lock",label:"ロック（🔒/🔓）",desc:"個別ロック。ロック中は追加/編集/削除不可"},
+    {id:"slot-lockall",label:"全🔒/全解除",desc:"現在テンプレートの全スロット一括ロック/解除"},
+    {id:"slot-md",label:"MDコピー",desc:"テンプレート全体をMarkdownでクリップボードにコピー"},
+    {id:"slot-save",label:"保存/読込",desc:"スロットデータをJSON export/import"},
+    {id:"slot-clear",label:"Clear",desc:"現在テンプレートの全スロットをリセット"},
+  ]},
+  {group:"AI生成",items:[
+    {id:"ai-koryaku",label:"攻略AI生成",desc:"Firm選択→攻略タブ。DBP_01+全DBP_02データから18スロット一括生成"},
+    {id:"ai-comparison",label:"比較表AI生成",desc:"Firm選択→01タブ。全PlanのDBP_02データからプラン比較テーブル生成"},
+    {id:"ai-price-quick",label:"価格/早見AI生成",desc:"Plan選択→02タブ。価格テーブル+早見表を生成"},
+  ]},
+  {group:"用語辞典",items:[
+    {id:"glossary-add",label:"用語登録",desc:"テキスト入力→Claude APIで定義/説明/豆知識/カテゴリ自動生成"},
+    {id:"glossary-csv",label:"CSV出力",desc:"用語名,カテゴリ,定義,説明,豆知識"},
+    {id:"glossary-io",label:"保存/読込",desc:"JSON export/import"},
+  ]},
+  {group:"小窓",items:[
+    {id:"child-paste",label:"貼り付け小窓",desc:"別窓でテキスト入力→メイン窓の貼り付けエリアに送信"},
+    {id:"child-url",label:"URL欄",desc:"ソースURL入力＋📋貼付ボタン（クリップボード）"},
+    {id:"child-ocr",label:"画像OCR",desc:"小窓内で画像ペースト/ドロップ→メイン窓でOCR"},
+  ]},
+  {group:"データ管理",items:[
+    {id:"data-all-save",label:"全保存",desc:"全Firm+Plan+用語辞典をJSON一括保存"},
+    {id:"data-all-load",label:"全読込",desc:"JSON一括読込（ID衝突回避付き）"},
+  ]},
+  {group:"UI",items:[
+    {id:"ui-resize",label:"リサイズハンドル",desc:"縦タブ幅/左右カラム幅/貼り付け高さをドラッグ調整"},
+    {id:"ui-funcindex",label:"機能目次（📋）",desc:"チェック+コメント→コピーでAIと共有"},
+  ]},
+];
+
+// ═══════════════════════════════════════════════════
+// Tiny Components
+// ═══════════════════════════════════════════════════
+function Btn({children,onClick,color,bg,disabled,title,style:sx}) {
+  return <button onClick={onClick} disabled={disabled} title={title} style={{
+    background:bg||"transparent",color:color||C.accent,border:`1px solid ${color||C.accent}`,
+    borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:disabled?"wait":"pointer",opacity:disabled?0.5:1,...sx
+  }}>{children}</button>;
+}
+function CopyBtn({text,label,color,getText,style:sx}) {
+  const [ok,set]=useState(false);
+  const handleCopy=()=>{
+    const t=getText?getText():text;
+    if(!t){alert(label+" : データなし");return;}
+    try{navigator.clipboard.writeText(t).then(()=>{set(true);setTimeout(()=>set(false),1500)}).catch(()=>{
+      // fallback
+      const ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);set(true);setTimeout(()=>set(false),1500);
+    })}catch(e){
+      const ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);set(true);setTimeout(()=>set(false),1500);
+    }
+  };
+  return <Btn color={color} onClick={handleCopy} style={sx}>{ok?"✓":label||"Copy"}</Btn>;
+}
+
+// ── リサイズハンドル ──
+function useResize(initial,dir,min,max) {
+  const [size,setSize]=useState(initial);
+  const dragging=useRef(false);
+  const startPos=useRef(0);
+  const startSize=useRef(0);
+
+  const onMouseDown=useCallback(e=>{
+    e.preventDefault();
+    dragging.current=true;
+    startPos.current=dir==="x"?e.clientX:e.clientY;
+    startSize.current=size;
+    const onMove=ev=>{
+      if(!dragging.current)return;
+      const delta=(dir==="x"?ev.clientX:ev.clientY)-startPos.current;
+      setSize(Math.max(min,Math.min(max,startSize.current+delta)));
+    };
+    const onUp=()=>{dragging.current=false;document.removeEventListener("mousemove",onMove);document.removeEventListener("mouseup",onUp)};
+    document.addEventListener("mousemove",onMove);
+    document.addEventListener("mouseup",onUp);
+  },[size,dir,min,max]);
+
+  return [size,onMouseDown,setSize];
+}
+
+function ResizeHandle({dir,onMouseDown}) {
+  const isH=dir==="x";
+  return (
+    <div onMouseDown={onMouseDown} style={{
+      [isH?"width":"height"]:6,[isH?"height":"width"]:"100%",
+      cursor:isH?"col-resize":"row-resize",background:"transparent",
+      flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",
+      zIndex:10,
+    }}>
+      <div style={{[isH?"width":"height"]:2,[isH?"height":"width"]:"30%",background:C.borderLight,borderRadius:1}} />
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// 縦タブ（Firm→Plan階層）
+// ═══════════════════════════════════════════════════
+function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRename,width,onBulkImport,onReorder,tabDataMap,glossaryTerms,onMergeFirm,onDeleteMany,onTogglePin}) {
+  const [editId,setEditId]=useState(null);
+  const [editName,setEditName]=useState("");
+  const [collapsed,setCollapsed]=useState({});
+  const [showImport,setShowImport]=useState(false);
+  const [csvText,setCsvText]=useState("");
+  const [dragId,setDragId]=useState(null);
+  const [checked,setChecked]=useState({}); // {firmId:true}
+  const [copied,setCopied]=useState(false);
+
+  const checkedIds=firms.filter(f=>checked[f.id]).map(f=>f.id);
+  const checkedCount=checkedIds.length;
+  const allChecked=firms.length>0&&checkedCount===firms.length;
+  const toggleAll=()=>{
+    if(allChecked)setChecked({});
+    else{const n={};firms.forEach(f=>{n[f.id]=true});setChecked(n);}
+  };
+  const clearChecks=()=>setChecked({});
+
+  // ピン済みを上に、非ピンを下に（各グループ内は配列順を保持）
+  const orderedFirms=[...firms.filter(f=>f.pinned),...firms.filter(f=>!f.pinned)];
+  const lastPinnedId=(()=>{const ps=firms.filter(f=>f.pinned);return ps.length?ps[ps.length-1].id:null;})();
+
+  // 選択Firmを階層テキストでコピー
+  const copyChecked=()=>{
+    const targets=firms.filter(f=>checked[f.id]);
+    if(!targets.length)return;
+    const text=targets.map(f=>{
+      const head=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
+      const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
+      const plans=(planNames||[]).filter(Boolean).map(n=>`  - ${n}`);
+      return plans.length?`${head}\n${plans.join("\n")}`:head;
+    }).join("\n\n");
+    const done=()=>{setCopied(true);setTimeout(()=>setCopied(false),1500)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(()=>{
+        const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);done();
+      });
+    }else{
+      const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);done();
+    }
+  };
+
+  // 選択Firmをまとめて削除
+  const deleteChecked=()=>{
+    if(!checkedCount)return;
+    if(!window.confirm(`${checkedCount} 件のFirmを削除しますか？（含まれるPlan・データも削除されます）`))return;
+    onDeleteMany&&onDeleteMany(checkedIds);
+    setChecked({});
+  };
+
+  // 選択Firmの全Planを対象にDBP_02出力プロンプトを生成
+  const [planCopied,setPlanCopied]=useState(false);
+  const copyPlanOutput=()=>{
+    const targets=firms.filter(f=>checked[f.id]);
+    if(!targets.length)return"";
+    const planItems=glossaryItemLines(glossaryTerms,"Plan項目");
+    const blocks=targets.map(f=>{
+      const firmName=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
+      const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
+      const plans=(planNames||[]).filter(Boolean);
+      const planLine=plans.length?plans.map(n=>`- ${n}`).join("\n"):"（プラン未登録 — 公式サイトから全プランを収集すること）";
+      return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
+    }).join("\n\n");
+    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\n- テーブル1: ルール早見表（Challenge / Funded / 差分の3列。差分はEASE/TRAP/ー）\n- テーブル2: ルール詳細リスト（P01〜P18は各200字以内の補足、P19=禁止行為は2列テーブル）\n\n各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。プランごとに上記2テーブルを出力すること。`;
+    const done=()=>{setPlanCopied(true);setTimeout(()=>setPlanCopied(false),1500)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(()=>{
+        const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);done();
+      });
+    }else{
+      const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);done();
+    }
+  };
+
+  const handleImport=()=>{
+    const lines=csvText.trim().split("\n").filter(l=>l.trim());
+    if(!lines.length)return;
+    const data=lines.map(line=>{
+      const parts=line.split(",").map(s=>s.trim().replace(/^"|"$/g,""));
+      return{firmName:parts[0]||"",plans:parts.slice(1).filter(Boolean)};
+    });
+    onBulkImport(data);
+    setCsvText("");setShowImport(false);
+  };
+
+  const renderEdit=(id)=>(
+    <input autoFocus value={editName} onChange={e=>setEditName(e.target.value)}
+      onBlur={()=>{onRename(id,editName);setEditId(null)}}
+      onKeyDown={e=>{if(e.key==="Enter"){onRename(id,editName);setEditId(null)}}}
+      onClick={e=>e.stopPropagation()}
+      style={{width:"100%",background:C.bg,color:C.textBright,border:`1px solid ${C.accent}`,borderRadius:3,padding:"1px 4px",fontSize:"0.72rem",fontFamily:font,outline:"none"}} />
+  );
+
+  return (
+    <div style={{width,flexShrink:0,background:C.surface,overflow:"auto",display:"flex",flexDirection:"column"}}>
+      <div style={{padding:"8px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",gap:3}}>
+        <span style={{fontSize:"0.72rem",fontWeight:700,color:C.accent}}>Firms</span>
+        <div style={{display:"flex",gap:2}}>
+          <Btn color={C.blue} onClick={()=>setShowImport(!showImport)} style={{padding:"1px 5px",fontSize:"0.6rem"}}>CSV</Btn>
+          <Btn color={C.accent} onClick={onAddFirm} style={{padding:"1px 6px",fontSize:"0.75rem"}}>＋</Btn>
+        </div>
+      </div>
+      {/* 選択操作バー */}
+      {firms.length>0&&(
+        <div style={{padding:"4px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:6,background:checkedCount?C.surfaceAlt:"transparent"}}>
+          <label style={{display:"flex",alignItems:"center",gap:4,cursor:"pointer",fontSize:"0.62rem",color:C.textDim}}>
+            <input type="checkbox" checked={allChecked} onChange={toggleAll} style={{cursor:"pointer",accentColor:C.accent}} />
+            {checkedCount?`${checkedCount} 件選択`:"全選択"}
+          </label>
+          <div style={{flex:1}} />
+          {checkedCount>0&&(
+            <React.Fragment>
+              <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 7px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
+              <Btn color={C.blue} onClick={copyPlanOutput} style={{padding:"1px 7px",fontSize:"0.6rem"}}>{planCopied?"✓":"📄 Plan出力"}</Btn>
+              <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 7px",fontSize:"0.6rem"}}>削除</Btn>
+            </React.Fragment>
+          )}
+        </div>
+      )}
+      {/* プロンプト生成ボタン（Firm選択時のみ表示） */}
+      {activeId && firms.some(f => f.id === activeId) && (
+        <div style={{padding:"6px",borderBottom:`1px solid ${C.border}`,background:C.surfaceAlt,display:"flex",gap:3,flexWrap:"wrap"}}>
+          <CopyBtn 
+            getText={() => generateResearchPrompt(activeId, firms, tabDataMap, glossaryTerms)}
+            label="📋 リサーチ"
+            color={C.purple}
+            style={{flex:1,fontSize:"0.6rem",padding:"3px 6px"}}
+          />
+          <CopyBtn 
+            getText={() => {
+              if(!firms||firms.length===0)return"";
+              const firm = firms.find(f => f.id === activeId);
+              if(!firm)return"";
+              const firmName = getFirmName(activeId, tabDataMap) || firm.name || "[ファーム名]";
+              const planNames = getPlanNames(activeId, firms, tabDataMap) || [];
+              const planBlock = planNames.length>0
+                ? `【対象プラン一覧】\n${planNames.map(p=>`- ${p}`).join("\n")}`
+                : `【対象プラン一覧】\n（プラン未登録 — 公式サイトから全プランを収集すること）`;
+              const firmItems = glossaryItemLines(glossaryTerms, "Firm項目");
+              return`【対象ファーム】${firmName}\n\n${planBlock}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_01セクションに従い、以下を出力してください:\n\n--- Firm情報 ---\n${firmItems}\n\n- テーブル1: 価格テーブル（各プランの口座サイズ別価格）\n- テーブル2: Firm基本情報\n- テーブル3: レバレッジ\n- テーブル4: 手数料\n- テーブル5: プラン比較テーブル\n\n各項目・各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。価格テーブルの実体はFirm単位で保持し、各プラン記事はこれを参照する。`;
+            }}
+            label="📤 出力"
+            color={C.blue}
+            style={{flex:1,fontSize:"0.6rem",padding:"3px 6px"}}
+          />
+          <CopyBtn 
+            getText={() => generateKoryakuPrompt(activeId, firms, tabDataMap, SLOT_DEFS, glossaryTerms)}
+            label="📝 攻略"
+            color={C.green}
+            style={{flex:1,fontSize:"0.6rem",padding:"3px 6px"}}
+          />
+        </div>
+      )}
+      {showImport&&(
+        <div style={{padding:"6px",borderBottom:`1px solid ${C.border}`,background:C.surfaceAlt}}>
+          <textarea value={csvText} onChange={e=>setCsvText(e.target.value)}
+            placeholder={"Firm名,Plan名,Plan名,...\nFirm名,Plan名\n..."}
+            style={{width:"100%",height:50,background:C.bg,color:C.text,border:`1px solid ${C.blue}`,borderRadius:3,padding:4,fontSize:"0.65rem",fontFamily:font,resize:"vertical",outline:"none"}} />
+          <Btn color={C.blue} onClick={handleImport} style={{marginTop:3,fontSize:"0.62rem"}}>一括登録</Btn>
+        </div>
+      )}
+      {orderedFirms.map((firm)=>(
+        <div key={firm.id}>
+          {/* ピン境界線 */}
+          {firm.id===lastPinnedId&&(
+            <div style={{height:0,borderBottom:`2px solid ${C.yellow}44`}} />
+          )}
+          {/* Firm行 */}
+          <div onClick={()=>onSelect(firm.id)}
+            onDragOver={e=>{e.preventDefault()}}
+            onDrop={e=>{e.preventDefault();if(dragId!==null&&dragId!==firm.id){onReorder(dragId,firm.id);setDragId(null)}}}
+            style={{
+            padding:"6px 8px",cursor:"pointer",borderBottom:`1px solid ${C.border}`,
+            background:activeId===firm.id?C.accentDim:(dragId===firm.id?C.borderLight:(firm.pinned?`${C.yellow}11`:"transparent")),
+            borderLeft:activeId===firm.id?`3px solid ${C.accent}`:(firm.pinned?`3px solid ${C.yellow}66`:"3px solid transparent"),
+          }}>
+            {editId===firm.id?renderEdit(firm.id):(
+              <div style={{display:"flex",alignItems:"center",gap:7}}>
+                <input type="checkbox" checked={!!checked[firm.id]} onClick={e=>e.stopPropagation()}
+                  onChange={e=>{e.stopPropagation();setChecked(p=>({...p,[firm.id]:e.target.checked}))}}
+                  style={{cursor:"pointer",flexShrink:0,accentColor:C.accent}} />
+                <span draggable onDragStart={e=>{e.stopPropagation();setDragId(firm.id)}} onClick={e=>e.stopPropagation()}
+                  style={{fontSize:"0.7rem",color:C.textDim,cursor:"grab",flexShrink:0,userSelect:"none"}}>≡</span>
+                <span onClick={e=>{e.stopPropagation();setCollapsed(p=>({...p,[firm.id]:!p[firm.id]}))}}
+                  style={{fontSize:"0.6rem",color:C.textDim,cursor:"pointer",flexShrink:0}}>
+                  {collapsed[firm.id]?"▶":"▼"}
+                </span>
+                <span onDoubleClick={e=>{e.stopPropagation();setEditId(firm.id);setEditName(firm.name)}} style={{
+                  fontSize:"0.75rem",fontWeight:activeId===firm.id?700:400,
+                  color:activeId===firm.id?C.accent:C.text,
+                  overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
+                }}>{firm.name||"（未命名）"}</span>
+                <span onClick={e=>{e.stopPropagation();onTogglePin&&onTogglePin(firm.id)}} title={firm.pinned?"ピンを外す":"上に固定"}
+                  style={{fontSize:"0.66rem",cursor:"pointer",flexShrink:0,opacity:firm.pinned?1:0.35}}>📌</span>
+                <span onClick={e=>{e.stopPropagation();onAddPlan(firm.id)}} title="プラン追加"
+                  style={{color:C.blue,fontSize:"0.68rem",cursor:"pointer",flexShrink:0}}>＋</span>
+                <span onClick={e=>{e.stopPropagation();onMergeFirm&&onMergeFirm(firm.id)}} title="他のFirmをこのFirmに統合"
+                  style={{color:C.purple,fontSize:"0.66rem",cursor:"pointer",flexShrink:0}}>⤵</span>
+                <span onClick={e=>{e.stopPropagation();onDelete(firm.id)}}
+                  style={{color:C.red,fontSize:"0.62rem",cursor:"pointer",flexShrink:0}}>×</span>
+              </div>
+            )}
+          </div>
+          {/* Plan行 */}
+          {!collapsed[firm.id]&&firm.plans?.map(plan=>(
+            <div key={plan.id} onClick={()=>onSelect(plan.id)} style={{
+              padding:"4px 8px 4px 24px",cursor:"pointer",borderBottom:`1px solid ${C.border}`,
+              background:activeId===plan.id?`${C.blue}22`:"transparent",
+              borderLeft:activeId===plan.id?`3px solid ${C.blue}`:"3px solid transparent",
+            }}>
+              {editId===plan.id?renderEdit(plan.id):(
+                <div style={{display:"flex",alignItems:"center",gap:12}}>
+                  <span style={{fontSize:"0.58rem",color:C.blue,flexShrink:0}}>└</span>
+                  <span onDoubleClick={e=>{e.stopPropagation();setEditId(plan.id);setEditName(plan.name)}} style={{
+                    fontSize:"0.72rem",fontWeight:activeId===plan.id?700:400,
+                    color:activeId===plan.id?C.blue:C.text,
+                    overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
+                  }}>{plan.name||"（未命名）"}</span>
+                  <span onClick={e=>{e.stopPropagation();onDelete(plan.id)}}
+                    style={{color:C.red,fontSize:"0.62rem",cursor:"pointer",flexShrink:0}}>×</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// 貼り付けエリア（入力＋保管）
+// ═══════════════════════════════════════════════════
+function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,archives,onDeleteArchive,height,onOpenChild,onOpenQuickRef}) {
+  const taRef=useRef(null);
+  const setRefs=useCallback(el=>{taRef.current=el;if(externalRef)externalRef.current=el},[externalRef]);
+  const [dragOver,setDragOver]=useState(false);
+  const [ocrStatus,setOcrStatus]=useState("");
+  const [showArchives,setShowArchives]=useState(false);
+
+  const handleImageOCR=useCallback(async file=>{
+    if(!file||!file.type.startsWith("image/"))return;
+    setOcrStatus("OCR中...");
+    try {
+      const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
+      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:file.type,data:b64}},{type:"text",text:"この画像内のテキストを全て抽出。テーブルはMarkdown形式。抽出テキストのみ出力。"}]}]});
+      if(taRef.current){const ta=taRef.current;ta.value+=(ta.value?"\n\n--- OCR ---\n":"")+exText(data)}
+      setOcrStatus("完了"); setTimeout(()=>setOcrStatus(""),2000);
+    } catch(e){setOcrStatus("エラー: "+e.message)}
+  },[]);
+
+  const getSelected=()=>{const ta=taRef.current;if(!ta)return"";return ta.value.substring(ta.selectionStart,ta.selectionEnd).trim()||ta.value.trim()};
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:4,height,flexShrink:0,borderBottom:`1px solid ${C.border}`,padding:"8px 10px",overflow:"hidden"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
+        <div style={{display:"flex",alignItems:"center",gap:4}}>
+          <span onClick={onOpenChild} style={{cursor:"pointer",fontSize:"0.82rem",color:C.accent}} title="小窓">❏</span>
+          <span style={{fontSize:"0.78rem",fontWeight:700,color:C.accent}}>貼付エリア</span>
+          <span onClick={onOpenQuickRef} style={{cursor:"pointer",fontSize:"0.82rem",color:C.blue}} title="早見表">▦</span>
+          {ocrStatus&&<span style={{fontSize:"0.65rem",color:C.yellow}}>{ocrStatus}</span>}
+        </div>
+        <div style={{display:"flex",gap:3,alignItems:"center"}}>
+          <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onArchive(t)}} style={{background:"transparent",color:C.purple,border:`1px solid ${C.purple}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>保管</button>
+          <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onTranslateToTarget(t)}} style={{background:"transparent",color:C.blue,border:`1px solid ${C.blue}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>翻訳</button>
+          <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onSendToTarget(t)}} style={{background:"transparent",color:C.accent,border:`1px solid ${C.accent}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>反映</button>
+          <Btn color={C.red} onClick={()=>{if(taRef.current)taRef.current.value=""}} style={{padding:"1px 5px"}}>×</Btn>
+        </div>
+      </div>
+      <div style={{flex:1,position:"relative",border:`1px solid ${dragOver?C.accent:C.border}`,borderRadius:6,overflow:"hidden"}}
+        onDragOver={e=>{e.preventDefault();setDragOver(true)}} onDragLeave={()=>setDragOver(false)}
+        onDrop={e=>{e.preventDefault();setDragOver(false);const f=e.dataTransfer?.files?.[0];if(f?.type.startsWith("image/"))handleImageOCR(f)}}>
+        <textarea ref={setRefs} onPaste={e=>{const items=e.clipboardData?.items;if(!items)return;for(const it of items){if(it.type.startsWith("image/")){e.preventDefault();handleImageOCR(it.getAsFile());return}}}}
+          placeholder="テキスト貼り付け / 画像ドロップ・ペースト"
+          style={{width:"100%",height:"100%",resize:"none",background:C.bg,color:C.text,border:"none",padding:8,fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,outline:"none"}} />
+        {dragOver&&<div style={{position:"absolute",inset:0,background:C.accentDim,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none"}}><span style={{color:C.accent,fontWeight:700}}>画像ドロップ → OCR</span></div>}
+      </div>
+      {archives.length>0&&(
+        <div>
+          <div onClick={()=>setShowArchives(!showArchives)} style={{cursor:"pointer",fontSize:"0.68rem",color:C.purple,userSelect:"none"}}>
+            {showArchives?"▼":"▶"} 保管 ({archives.length})
+          </div>
+          {showArchives&&archives.map((a,i)=>(
+            <div key={i} style={{display:"flex",gap:4,alignItems:"start",marginTop:2}}>
+              <div style={{flex:1,fontSize:"0.68rem",color:C.text,background:C.surfaceAlt,borderRadius:3,padding:"2px 6px",borderLeft:`2px solid ${C.purple}40`,whiteSpace:"pre-wrap",maxHeight:60,overflow:"auto",cursor:"pointer"}}
+                onClick={()=>{if(taRef.current){taRef.current.value+=(taRef.current.value?"\n\n":"")+a}}}>
+                {a.length>80?a.slice(0,80)+"…":a}
+              </div>
+              <span onClick={()=>onDeleteArchive(i)} style={{color:C.red,fontSize:"0.62rem",cursor:"pointer",flexShrink:0}}>×</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// 取り込み対象エリア
+// ═══════════════════════════════════════════════════
+function TargetPanel({text,onAutoAssign,autoAssigning,translating,onClear,onAdd,activeSlot}) {
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:4,flex:1,padding:"8px 10px",overflow:"hidden"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
+        <div style={{display:"flex",alignItems:"center",gap:4}}>
+          <span style={{fontSize:"0.78rem",fontWeight:700,color:C.yellow}}>取込エリア</span>
+          {translating&&<span style={{fontSize:"0.65rem",color:C.blue}}>翻訳中...</span>}
+        </div>
+        <div style={{display:"flex",gap:3}}>
+          <Btn color={C.yellow} bg={autoAssigning?C.surface:C.yellow} style={{color:autoAssigning?C.textDim:C.bg}}
+            disabled={autoAssigning||!text} onClick={()=>onAutoAssign(text)}>
+            {autoAssigning?"振り分け中...":"自動"}
+          </Btn>
+          <Btn color={C.accent} disabled={!activeSlot} onClick={onAdd} title={activeSlot?`${activeSlot}に取り込み`:"スロットを選択してください"}>
+            ＋
+          </Btn>
+          <Btn color={C.red} onClick={onClear} style={{padding:"1px 5px"}}>×</Btn>
+        </div>
+      </div>
+      <div style={{flex:1,overflow:"auto",background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:8,
+        fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,color:C.textBright,whiteSpace:"pre-wrap",userSelect:"text"}}>
+        {text||<span style={{color:C.textDim}}>貼り付けエリアから「翻訳→対象」または「→対象」で送る</span>}
+      </div>
+      <div style={{fontSize:"0.62rem",color:C.textDim}}>
+        {activeSlot?`選択中: ${activeSlot}`:"スロットを選択 → テキスト選択 → ＋ボタンで格納"}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// ポップアップ編集モーダル
+// ═══════════════════════════════════════════════════
+function EditModal({show,text,onSave,onClose,label}) {
+  const [val,setVal]=useState(text||"");
+  useEffect(()=>setVal(text||""),[text,show]);
+  if(!show)return null;
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9998,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"70vw",maxWidth:700,maxHeight:"80vh",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:16,display:"flex",flexDirection:"column",gap:8}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <span style={{fontSize:"0.82rem",fontWeight:700,color:C.accent}}>{label||"編集"}</span>
+          <span onClick={onClose} style={{cursor:"pointer",color:C.textDim,fontSize:"1.1rem"}}>✕</span>
+        </div>
+        <textarea value={val} onChange={e=>setVal(e.target.value)} style={{flex:1,minHeight:200,background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:6,padding:10,fontSize:"0.82rem",fontFamily:font,lineHeight:1.6,resize:"vertical",outline:"none"}} />
+        <div style={{display:"flex",gap:6,justifyContent:"flex-end"}}>
+          <Btn color={C.accent} onClick={()=>{onSave(val);onClose()}}>保存</Btn>
+          <Btn color={C.textDim} onClick={onClose}>取消</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// Notion出力プレビューモーダル
+// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// 再調査プロンプトモーダル
+// ═══════════════════════════════════════════════════
+function ReinvestigateModal({show,onClose,currentSlots,slotData,selectedSlots,setSelectedSlots,onGenerate}) {
+  if(!show)return null;
+  
+  const emptySlots=currentSlots.filter(s=>!slotData[s.id]||slotData[s.id].length===0);
+  const toggleSlot=(id)=>setSelectedSlots(p=>p.includes(id)?p.filter(x=>x!==id):[...p,id]);
+  
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"min(90vw,700px)",maxHeight:"85vh",background:C.surface,border:`2px solid ${C.blue}`,borderRadius:8,padding:20,display:"flex",flexDirection:"column",gap:12}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div>
+            <div style={{fontSize:"0.9rem",fontWeight:700,color:C.blue}}>📋 再調査プロンプト生成</div>
+            <div style={{fontSize:"0.65rem",color:C.textDim,marginTop:2}}>調査が必要なスロットを選択してください</div>
+          </div>
+          <span onClick={onClose} style={{cursor:"pointer",color:C.red,fontSize:"1.3rem",lineHeight:1}}>×</span>
+        </div>
+        
+        <div style={{display:"flex",gap:8}}>
+          <Btn onClick={()=>onGenerate("auto")} color={C.accent}>🔍 自動（不足分のみ {emptySlots.length}件）</Btn>
+          <Btn onClick={()=>onGenerate("manual")} color={C.blue}>✏️ 手動選択（{selectedSlots.length}件）</Btn>
+        </div>
+        
+        <div style={{flex:1,overflow:"auto",background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:10}}>
+          <div style={{fontSize:"0.7rem",color:C.textDim,marginBottom:8}}>手動選択用スロット一覧</div>
+          {currentSlots.map(s=>{
+            const filled=slotData[s.id]?.length>0;
+            const selected=selectedSlots.includes(s.id);
+            return (
+              <div key={s.id} onClick={()=>toggleSlot(s.id)} style={{
+                display:"flex",alignItems:"center",gap:6,padding:"4px 8px",marginBottom:4,
+                background:selected?C.accentDim:C.surfaceAlt,border:`1px solid ${selected?C.accent:C.border}`,
+                borderRadius:4,cursor:"pointer"
+              }}>
+                <input type="checkbox" checked={selected} onChange={()=>{}} style={{cursor:"pointer"}}/>
+                <span style={{flex:1,fontSize:"0.7rem",color:filled?C.text:C.textDim}}>{s.label}</span>
+                {filled?<span style={{fontSize:"0.6rem",color:C.green}}>✓</span>:<span style={{fontSize:"0.6rem",color:C.textDim}}>—</span>}
+              </div>
+            );
+          })}
+        </div>
+        
+        <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
+          <Btn onClick={onClose} color={C.textDim}>閉じる</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// Notion項目選択モーダル
+// ═══════════════════════════════════════════════════
+function NotionItemSelectModal({show,onClose,templateMode,currentSlots,slotData,onGenerate}) {
+  const [selectedItems,setSelectedItems]=useState([]);
+  
+  useEffect(()=>{
+    if(show){
+      // 初期状態: データがあるスロットを全選択
+      const filled=currentSlots.filter(s=>slotData[s.id]?.length>0).map(s=>s.id);
+      setSelectedItems(filled);
+    }
+  },[show,currentSlots,slotData]);
+  
+  if(!show)return null;
+  
+  // セクション別にグループ化
+  const sections={};
+  currentSlots.forEach(s=>{
+    const sec=s.section||"その他";
+    if(!sections[sec])sections[sec]=[];
+    sections[sec].push(s);
+  });
+  
+  const toggleItem=(id)=>setSelectedItems(p=>p.includes(id)?p.filter(x=>x!==id):[...p,id]);
+  const selectAll=()=>setSelectedItems(currentSlots.map(s=>s.id));
+  const deselectAll=()=>setSelectedItems([]);
+  const selectFilled=()=>setSelectedItems(currentSlots.filter(s=>slotData[s.id]?.length>0).map(s=>s.id));
+  
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"min(90vw,800px)",maxHeight:"85vh",background:C.surface,border:`2px solid ${C.accent}`,borderRadius:8,padding:20,display:"flex",flexDirection:"column",gap:12}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div>
+            <div style={{fontSize:"0.9rem",fontWeight:700,color:C.accent}}>📋 Notion出力項目選択</div>
+            <div style={{fontSize:"0.65rem",color:C.textDim,marginTop:2}}>出力する項目を選択してください（{selectedItems.length}件選択中）</div>
+          </div>
+          <span onClick={onClose} style={{cursor:"pointer",color:C.red,fontSize:"1.3rem",lineHeight:1}}>×</span>
+        </div>
+        
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          <Btn onClick={selectAll} color={C.accent} style={{fontSize:"0.65rem"}}>全選択</Btn>
+          <Btn onClick={deselectAll} color={C.textDim} style={{fontSize:"0.65rem"}}>全解除</Btn>
+          <Btn onClick={selectFilled} color={C.green} style={{fontSize:"0.65rem"}}>入力済みのみ</Btn>
+        </div>
+        
+        <div style={{flex:1,overflow:"auto",background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:10}}>
+          {Object.entries(sections).map(([secName,slots])=>{
+            const secColor=SEC_COLORS[secName]||C.textDim;
+            return (
+              <div key={secName} style={{marginBottom:12}}>
+                <div style={{fontSize:"0.75rem",fontWeight:700,color:secColor,marginBottom:6,borderBottom:`1px solid ${C.border}`,paddingBottom:4}}>
+                  {secName}
+                </div>
+                {slots.map(s=>{
+                  const filled=slotData[s.id]?.length>0;
+                  const selected=selectedItems.includes(s.id);
+                  return (
+                    <div key={s.id} onClick={()=>toggleItem(s.id)} style={{
+                      display:"flex",alignItems:"center",gap:6,padding:"3px 8px",marginBottom:2,
+                      background:selected?C.accentDim:C.surfaceAlt,border:`1px solid ${selected?C.accent:C.border}`,
+                      borderRadius:4,cursor:"pointer",opacity:filled?1:0.6
+                    }}>
+                      <input type="checkbox" checked={selected} onChange={()=>{}} style={{cursor:"pointer"}}/>
+                      <span style={{flex:1,fontSize:"0.7rem",color:filled?C.text:C.textDim}}>{s.label}</span>
+                      {filled?<span style={{fontSize:"0.6rem",color:C.green}}>✓</span>:<span style={{fontSize:"0.6rem",color:C.textDim}}>—</span>}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+        
+        <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
+          <Btn onClick={onClose} color={C.textDim}>キャンセル</Btn>
+          <Btn onClick={()=>onGenerate(selectedItems)} color={C.accent}>📋 プレビュー生成（{selectedItems.length}件）</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NotionPreviewModal({show,text,onClose}) {
+  const[val,setVal]=useState(text||"");
+  const[copied,setCopied]=useState(false);
+  useEffect(()=>{if(show)setVal(text||"")},[show,text]);
+  
+  const handleCopy=async()=>{
+    try {
+      // Clipboard APIを使ってタブ文字を確実に保持
+      await navigator.clipboard.writeText(val);
+      setCopied(true);
+      setTimeout(()=>setCopied(false),1500);
+    } catch(err) {
+      // フォールバック: 従来の方法
+      const ta=document.createElement("textarea");
+      ta.value=val;
+      ta.style.cssText="position:fixed;opacity:0;white-space:pre"; // white-space:preでタブを保持
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setCopied(true);
+      setTimeout(()=>setCopied(false),1500);
+    }
+  };
+  
+  if(!show)return null;
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"80vw",maxWidth:900,maxHeight:"85vh",background:C.surface,border:`2px solid ${C.accent}`,borderRadius:8,padding:20,display:"flex",flexDirection:"column",gap:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div>
+            <div style={{fontSize:"0.9rem",fontWeight:700,color:C.accent}}>📋 Notion本文プレビュー</div>
+            <div style={{fontSize:"0.65rem",color:C.textDim,marginTop:2}}>このテキストをNotionページ本文に貼り付けてください</div>
+          </div>
+          <span onClick={onClose} style={{cursor:"pointer",color:C.red,fontSize:"1.3rem",lineHeight:1}}>×</span>
+        </div>
+        <textarea value={val} onChange={e=>setVal(e.target.value)} style={{
+          flex:1,minHeight:450,background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:6,padding:14,
+          fontSize:"0.76rem",fontFamily:"'Courier New',monospace",lineHeight:1.7,resize:"none",outline:"none",whiteSpace:"pre"
+        }}/>
+        <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
+          <Btn onClick={onClose} color={C.textDim}>閉じる</Btn>
+          <Btn onClick={handleCopy} color={copied?C.green:C.accent}>{copied?"✓ コピー済み":"📋 クリップボードにコピー"}</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// スロットパネル
+// ═══════════════════════════════════════════════════
+function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans}) {
+  const [mergingSlot,setMergingSlot]=useState(null);
+  const [editModal,setEditModal]=useState(null); // {slotId,idx,text,label}
+
+  const sections=useMemo(()=>{
+    const m={};currentSlots.forEach(s=>{if(!m[s.section])m[s.section]=[];m[s.section].push(s)});return Object.entries(m);
+  },[currentSlots]);
+
+  const isLocked=(id)=>!!locks[id];
+  const toggleLock=(id)=>setLocks(p=>({...p,[id]:!p[id]}));
+
+  const handleDelete=useCallback((slotId,idx)=>{
+    if(isLocked(slotId))return;
+    setSlotData(prev=>{const frags=prev[slotId]||[];return{...prev,[slotId]:frags.filter((_,i)=>i!==idx)}});
+  },[setSlotData,locks]);
+
+  const handleEditSave=(newText)=>{
+    if(!editModal)return;
+    const{slotId,idx}=editModal;
+    if(!newText.trim()){
+      // 空保存→削除
+      setSlotData(prev=>{
+        const frags=[...(prev[slotId]||[])];
+        if(idx==="merged")return{...prev,[slotId]:frags.filter(f=>!f.merged)};
+        return{...prev,[slotId]:frags.filter((_,i)=>i!==idx)};
+      });
+      return;
+    }
+    setSlotData(prev=>{
+      const frags=[...(prev[slotId]||[])];
+      if(idx==="merged"){const mi=frags.findIndex(f=>f.merged);if(mi>=0)frags[mi]={...frags[mi],text:newText}}
+      else if(frags[idx])frags[idx]={...frags[idx],text:newText};
+      return{...prev,[slotId]:frags};
+    });
+    // planList保存時にPlanタブ自動生成
+    if(slotId==="planList"&&onSyncPlans)onSyncPlans(newText);
+  };
+
+  const handleMerge=useCallback(async slotId=>{
+    if(isLocked(slotId))return;
+    const frags=slotData[slotId];if(!frags||frags.length<2)return;
+    setMergingSlot(slotId);
+    try {
+      const slot=currentSlots.find(s=>s.id===slotId);
+      const texts=frags.filter(f=>!f.merged).map(f=>f.text);
+      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,
+        system:`プロップファーム情報ライター。「${slot?.label||slotId}」の断片を1つに整形。重複統合・数値保持。整形結果のみ出力。`,
+        messages:[{role:"user",content:texts.map((t,i)=>`【${i+1}】\n${t}`).join("\n\n")}]});
+      setSlotData(prev=>({...prev,[slotId]:[...frags.filter(f=>!f.merged),{text:exText(data),merged:true}]}));
+    } catch(e){alert("整形エラー")}
+    setMergingSlot(null);
+  },[slotData,currentSlots,setSlotData,locks]);
+
+  const exportMD=useCallback(()=>{
+    const g=id=>{const fr=slotData[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+    const L=[];
+    if(templateMode==="dbp01"){
+      L.push(`${g("firmName")}`,`${g("country")} | ${g("established")} | ${g("japanSupport")}`,"",g("officialUrl"),"",`カテゴリ: ${g("firmCategory")}`);
+      L.push("","## 取引環境","",`ブローカー: ${g("broker")}`,`プラットフォーム: ${g("platform")}`);
+      L.push("","### Server Time","",g("serverTime"),"","### DD Reset","",g("ddReset"));
+      L.push("","### レバレッジ","",g("leverage"),"","### 手数料","",g("commission"));
+      L.push("","## 入出金","",`入金方法: ${g("paymentMethods")}`,`出金方法: ${g("payoutMethods")}`,"",`出金ポリシー: ${g("payoutPolicy")}`);
+      L.push("",`Profit Split: ${g("profitSplit")}`);if(g("profitSplitNote"))L.push(g("profitSplitNote"));
+      L.push("","## プラン","",`スケールアップ: ${g("scaleUp")}`,"","### プラン比較テーブル","",g("planComparison"));
+    } else if(templateMode==="dbp02"){
+      L.push(`# ${g("challengeName")}`,"","## 価格テーブル","",g("priceTable"));
+      L.push("","## ルール早見表","",g("ruleQuickRef"));
+      L.push("","## ルール詳細","","|項目|Challenge|Funded|差分|補足|","|---|---|---|---|---|");
+      L.push("|凡例|Funded列が—の項目はChallengeと同じルール|—|||");
+      SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{const v=g(s.id);if(v)L.push(`|${s.label}|${v}|`)});
+    } else {
+      L.push("## 断面① Drawdown","",g("k_dd"));
+      L.push("","## 断面② 取引ルール","",g("k_rules"));
+      L.push("","## 断面③ 出金までの流れ","",g("k_payout"));
+    }
+    return L.join("\n");
+  },[templateMode,slotData]);
+
+  // Notion出力用：構造化本文生成（選択項目対応）
+  const generateNotionBody=useCallback((selectedIds=[])=>{
+    const g=id=>{const fr=slotData[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+    const isSelected=id=>selectedIds.length===0||selectedIds.includes(id); // 空配列なら全出力
+    const L=[];
+    
+    if(templateMode==="dbp01"){
+      // DBP_01: Firm情報
+      if(isSelected("firmPitch")&&g("firmPitch"))L.push("## ファームピッチ","",g("firmPitch"),"");
+      if(isSelected("rewardProgram")&&g("rewardProgram"))L.push("## リワードプログラム","",g("rewardProgram"),"");
+      if(isSelected("scaleUp")&&g("scaleUp"))L.push("## スケールアップ","",g("scaleUp"),"");
+      
+      L.push("## 取引環境","");
+      if(isSelected("broker")&&g("broker"))L.push("### ブローカー","",g("broker"),"");
+      if(isSelected("platform")&&g("platform"))L.push("### プラットフォーム","",g("platform"),"");
+      if(isSelected("serverTime")&&g("serverTime"))L.push("### Server Time","",g("serverTime"),"");
+      if(isSelected("ddReset")&&g("ddReset"))L.push("### DD Reset","",g("ddReset"),"");
+      if(isSelected("leverage")&&g("leverage"))L.push("### レバレッジ","",g("leverage"),"");
+      if(isSelected("commission")&&g("commission"))L.push("### 手数料","",g("commission"),"");
+      
+      L.push("## 入出金","");
+      if(isSelected("paymentMethods")&&g("paymentMethods"))L.push("### 入金方法","",g("paymentMethods"),"");
+      if(isSelected("payoutMethods")&&g("payoutMethods"))L.push("### 出金方法","",g("payoutMethods"),"");
+      if(isSelected("payoutPolicy")&&g("payoutPolicy"))L.push("### 出金ポリシー","",g("payoutPolicy"),"");
+      if(isSelected("profitSplit")&&g("profitSplit"))L.push("### Profit Split","",g("profitSplit"),"");
+      if(isSelected("profitSplitNote")&&g("profitSplitNote"))L.push("",g("profitSplitNote"),"");
+      
+      if(isSelected("planComparison")&&g("planComparison"))L.push("## プラン比較","",g("planComparison"),"");
+      
+    } else if(templateMode==="dbp02"){
+      // DBP_02: Plan情報
+      
+      // 価格テーブル
+      if(isSelected("priceTable")&&g("priceTable")){
+        L.push("### 価格テーブル","",g("priceTable"),"");
+      }
+      
+      // ルール早見表
+      if(isSelected("ruleQuickRef")&&g("ruleQuickRef")){
+        L.push("### ルール早見表","",g("ruleQuickRef"),"");
+      }
+      
+      // ルール詳細テーブル（Markdownテーブル形式）
+      L.push("### ルール詳細","");
+      L.push("| 項目 | Challenge | Funded |");
+      L.push("|------|-----------|--------|");
+      L.push("| 説明 | Funded列が — の項目はChallengeと同じルールが適用されます | — |");
+      
+      SLOT_DEFS.dbp02.filter(s=>s.section==="詳細"&&isSelected(s.id)).forEach(s=>{
+        const v=g(s.id);
+        if(v){
+          // Challenge|Funded|差分|補足 形式をパース
+          const vStr=typeof v==="string"?v:String(v);
+          const parts=vStr.split("|");
+          const cVal=(parts[0]||"").trim();
+          const fVal=(parts[1]||"").trim();
+          const note=(parts[3]||"").trim();
+          
+          // Markdownテーブル行を生成
+          L.push(`| ${s.label} | ${cVal||"—"} | ${fVal||"—"} |`);
+          
+          // 補足テキストがあれば追加行として出力
+          if(note){
+            L.push(`| | ${note} | |`);
+          }
+        }
+      });
+      
+      L.push(""); // 空行
+      
+    } else if(templateMode==="koryaku"){
+      // 攻略記事
+      if(isSelected("k_dd")&&g("k_dd"))L.push("## 断面① Drawdown","",g("k_dd"),"");
+      if(isSelected("k_rules")&&g("k_rules"))L.push("## 断面② 取引ルール","",g("k_rules"),"");
+      if(isSelected("k_payout")&&g("k_payout"))L.push("## 断面③ 出金までの流れ","",g("k_payout"),"");
+    }
+    
+    return L.filter(l=>l!==undefined).join("\n");
+  },[templateMode,slotData]);
+
+  const [showNotionPreview,setShowNotionPreview]=useState(false);
+  const [notionBodyText,setNotionBodyText]=useState("");
+  const [showNotionItemSelect,setShowNotionItemSelect]=useState(false);
+  const [showReinvestigateModal,setShowReinvestigateModal]=useState(false);
+  const [selectedSlotsForReinvestigate,setSelectedSlotsForReinvestigate]=useState([]);
+
+  const filled=currentSlots.filter(s=>slotData[s.id]?.length>0).length;
+
+  // 再調査プロンプト生成
+  const generateReinvestigatePrompt=useCallback((mode)=>{
+    let targetSlots=[];
+    if(mode==="auto"){
+      // 自動: 空スロットを検出
+      targetSlots=currentSlots.filter(s=>!slotData[s.id]||slotData[s.id].length===0);
+    }else{
+      // 手動: 選択されたスロット
+      targetSlots=currentSlots.filter(s=>selectedSlotsForReinvestigate.includes(s.id));
+    }
+    if(!targetSlots.length){
+      alert(mode==="auto"?"全スロット入力済みです":"スロットを選択してください");
+      return;
+    }
+    
+    // 参照URLを取得
+    const g=id=>{const v=slotData[id];return(v||[]).map(x=>x.text||x).join(", ")||"記載なし"};
+    const urlOfficial=g("fm_url_official");
+    const urlRules=g("fm_url_rules");
+    
+    const slotList=targetSlots.map(s=>`- ${s.id}: ${s.label}`).join("\n");
+    
+    const prompt=`以下のスロットについて、公式ルールページから情報を再調査してください。
+
+【調査対象スロット】
+${slotList}
+
+【参照URL】
+- 公式サイト: ${urlOfficial}
+- ルールページ: ${urlRules}
+
+【指示】
+各スロットについて、正確な定義・条件・計算方法を抽出してください。`;
+    
+    navigator.clipboard.writeText(prompt);
+    alert(`再調査プロンプトをクリップボードにコピーしました（${targetSlots.length}件）`);
+    setShowReinvestigateModal(false);
+    setSelectedSlotsForReinvestigate([]);
+  },[currentSlots,slotData,selectedSlotsForReinvestigate]);
+
+  // AI作成対象スロットID
+  const aiSlotIds={dbp01:"planComparison",dbp02:"priceTable"};
+  const aiSlotId2="ruleQuickRef";
+
+  return (
+    <div style={{flex:1,overflow:"auto",padding:10,display:"flex",flexDirection:"column"}}>
+      <EditModal show={!!editModal} text={editModal?.text} label={editModal?.label}
+        onSave={handleEditSave} onClose={()=>setEditModal(null)} />
+      <NotionPreviewModal show={showNotionPreview} text={notionBodyText} onClose={()=>setShowNotionPreview(false)} />
+      <ReinvestigateModal show={showReinvestigateModal} onClose={()=>{setShowReinvestigateModal(false);setSelectedSlotsForReinvestigate([])}}
+        currentSlots={currentSlots} slotData={slotData}
+        selectedSlots={selectedSlotsForReinvestigate} setSelectedSlots={setSelectedSlotsForReinvestigate}
+        onGenerate={generateReinvestigatePrompt} />
+      <NotionItemSelectModal show={showNotionItemSelect} onClose={()=>setShowNotionItemSelect(false)}
+        templateMode={templateMode} currentSlots={currentSlots} slotData={slotData}
+        onGenerate={(selectedIds)=>{
+          const body=generateNotionBody(selectedIds);
+          setNotionBodyText(body);
+          setShowNotionItemSelect(false);
+          setShowNotionPreview(true);
+        }} />
+
+      {/* ヘッダー: テンプレ切替 + 充填率 + ⋮メニュー + × */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:4}}>
+        <div style={{display:"flex",gap:2,alignItems:"center"}}>
+          {availableTemplates.map(([m,l])=>(
+            <button key={m} onClick={()=>setTemplateMode(m)} style={{
+              background:templateMode===m?C.accent:"transparent",color:templateMode===m?C.bg:C.textDim,
+              border:`1px solid ${templateMode===m?C.accent:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"
+            }}>{l}</button>
+          ))}
+          <span style={{fontSize:"0.62rem",color:filled===currentSlots.length?C.green:C.textDim,marginLeft:4}}>{filled}/{currentSlots.length}</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:4}}>
+          <button onClick={()=>setShowReinvestigateModal(true)} style={{padding:"3px 8px",fontSize:"0.65rem",background:C.blue,color:C.bg,border:"none",borderRadius:4,cursor:"pointer",fontWeight:700}}>📋 再調査</button>
+          <button onClick={()=>{const body=generateNotionBody([]);setNotionBodyText(body);setShowNotionPreview(true)}} style={{padding:"3px 8px",fontSize:"0.65rem",background:C.accent,color:C.bg,border:"none",borderRadius:4,cursor:"pointer",fontWeight:700}}>📋 プレビュー</button>
+          <button onClick={()=>setShowNotionItemSelect(true)} style={{padding:"3px 8px",fontSize:"0.65rem",background:C.accent,color:C.bg,border:"none",borderRadius:4,cursor:"pointer",fontWeight:700}}>📋 選択</button>
+          <span onClick={()=>{if(confirm("全スロットクリア？"))setSlotData({})}} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem",marginLeft:4}}>×</span>
+        </div>
+      </div>
+
+      {/* セクション */}
+      {sections.map(([sec,slots])=>{
+        const fc=slots.filter(s=>slotData[s.id]?.length>0).length;
+        const allSectionLocked=slots.every(s=>locks[s.id]);
+        return (
+          <div key={sec} style={{marginBottom:6}}>
+            <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:3}}>
+              <span onClick={()=>{const next={...locks};slots.forEach(s=>{next[s.id]=!allSectionLocked});setLocks(next)}}
+                style={{cursor:"pointer",fontSize:"0.6rem",color:allSectionLocked?C.yellow:C.textDim}} title={allSectionLocked?"全解除":"全ロック"}>{allSectionLocked?"🔒":"🔓"}</span>
+              <span style={{fontSize:"0.72rem",fontWeight:700,color:SEC_COLORS[sec]||C.text}}>
+                {sec} <span style={{fontSize:"0.58rem",color:C.textDim}}>{fc}/{slots.length}</span>
+              </span>
+            </div>
+
+            {slots.map(slot=>{
+              const frags=slotData[slot.id]||[];
+              const merged=frags.find(f=>f.merged);
+              const locked=isLocked(slot.id);
+              const isActive=activeSlotId===slot.id;
+              const isAiTarget=(templateMode==="dbp01"&&slot.id==="planComparison")||(templateMode==="dbp02"&&(slot.id==="priceTable"||slot.id==="ruleQuickRef"))||(templateMode==="koryaku");
+              return (
+                <div key={slot.id} onClick={()=>setActiveSlotId(slot.id)} style={{
+                  background:isActive?C.accentDim:C.surface,
+                  border:`1px solid ${isActive?C.accent:(locked?C.yellow+"40":C.border)}`,
+                  borderRadius:4,padding:"5px 8px",marginBottom:2,opacity:locked?0.8:1,cursor:"pointer"
+                }}>
+                  <div style={{display:"flex",alignItems:"center",gap:3}}>
+                    {/* 左: 🔒 ✎ 整形 */}
+                    <span onClick={e=>{e.stopPropagation();toggleLock(slot.id)}} style={{cursor:"pointer",fontSize:"0.55rem",lineHeight:1}}>{locked?"🔒":"🔓"}</span>
+                    {!locked&&frags.length>0&&<span onClick={e=>{e.stopPropagation();setEditModal({slotId:slot.id,idx:merged?"merged":0,text:merged?merged.text:frags[0]?.text||"",label:slot.label})}} style={{cursor:"pointer",fontSize:"0.55rem",color:C.textDim,lineHeight:1}}>✎</span>}
+                    {!locked&&frags.length>1&&!merged&&<span onClick={e=>{e.stopPropagation();handleMerge(slot.id)}} style={{cursor:"pointer",fontSize:"0.5rem",color:C.purple,lineHeight:1}}>{mergingSlot===slot.id?"…":"整"}</span>}
+
+                    {/* スロット名 */}
+                    <span style={{fontSize:"0.7rem",fontWeight:700,color:frags.length?C.accent:C.textDim}}>{slot.label}</span>
+                    {slot.hint&&<span style={{fontSize:"0.48rem",color:C.textDim,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{slot.hint}</span>}
+
+                    {/* 右: AI作成 + Planタブ生成 + × */}
+                    <div style={{flex:slot.hint?0:1}} />
+                    {slot.id==="planList"&&!locked&&frags.length>0&&(
+                      <span onClick={e=>{e.stopPropagation();const text=merged?merged.text:frags.map(f=>f.text).join(", ");syncPlansFromList(text)}} style={{cursor:"pointer",fontSize:"0.5rem",color:C.green,border:`1px solid ${C.green}`,borderRadius:2,padding:"0 3px"}}>Planタブ生成</span>
+                    )}
+                    {isAiTarget&&!locked&&(
+                      (templateMode==="koryaku"&&onAIGenKoryaku)?(
+                        <span onClick={e=>{e.stopPropagation();onAIGenKoryaku()}} style={{cursor:aiGenKoryaku?"wait":"pointer",fontSize:"0.5rem",color:C.purple,border:`1px solid ${C.purple}`,borderRadius:2,padding:"0 3px"}}>{aiGenKoryaku?"…":"作成"}</span>
+                      ):onAIGenTable&&(slot.id==="planComparison"||slot.id==="priceTable"||slot.id==="ruleQuickRef")?(
+                        <span onClick={e=>{e.stopPropagation();onAIGenTable(templateMode)}} style={{cursor:aiGenTable?"wait":"pointer",fontSize:"0.5rem",color:C.blue,border:`1px solid ${C.blue}`,borderRadius:2,padding:"0 3px"}}>{aiGenTable?"…":"作成"}</span>
+                      ):null
+                    )}
+                    {!locked&&frags.length>0&&<span onClick={e=>{e.stopPropagation();if(confirm(`${slot.label}をクリア？`))setSlotData(prev=>({...prev,[slot.id]:[]}))}} style={{color:C.red,fontSize:"0.55rem",cursor:"pointer"}}>×</span>}
+                  </div>
+
+                  {merged?(
+                    <div onClick={e=>{e.stopPropagation();!locked&&setEditModal({slotId:slot.id,idx:"merged",text:merged.text,label:slot.label})}}
+                      style={{fontSize:"0.68rem",color:C.textBright,fontFamily:font,whiteSpace:"pre-wrap",background:C.surfaceAlt,borderRadius:3,padding:4,marginTop:3,border:`1px solid ${C.purple}40`,cursor:locked?"default":"pointer",maxHeight:70,overflow:"auto"}}>{merged.text}</div>
+                  ):frags.map((f,i)=>(
+                    <div key={i} style={{display:"flex",alignItems:"flex-start",gap:4,marginTop:2}}>
+                      <div onClick={e=>{e.stopPropagation();!locked&&setEditModal({slotId:slot.id,idx:i,text:f.text,label:slot.label})}}
+                        style={{flex:1,fontSize:"0.65rem",color:C.text,fontFamily:font,whiteSpace:"pre-wrap",background:C.surfaceAlt,borderRadius:3,padding:"2px 5px",borderLeft:`2px solid ${C.accent}40`,cursor:locked?"default":"pointer",maxHeight:50,overflow:"auto"}}>{f.text}</div>
+                      {!locked&&<span onClick={e=>{e.stopPropagation();handleDelete(slot.id,i)}} style={{color:C.red,fontSize:"0.5rem",cursor:"pointer",flexShrink:0,padding:"2px"}}>×</span>}
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// 用語辞典パネル
+// ═══════════════════════════════════════════════════
+function GlossaryPanel({terms,setTerms,generating}) {
+  const [filter,setFilter]=useState("all"); // all | label | notation | custom
+  const [editIdx,setEditIdx]=useState(-1);  // 編集中の実インデックス（-1=なし）
+  const [draft,setDraft]=useState(null);
+  const exportCSV=()=>{
+    const esc=s=>`"${(s||"").replace(/"/g,'""')}"`;
+    return "key,type,用語名,カテゴリ,定義,3行説明,豆知識\n"+terms.map(t=>[esc(t.key),esc(t.type),esc(t.term),esc(t.category),esc(t.definition),esc(t.explanation),esc(t.trivia)].join(",")).join("\n");
+  };
+  const seedCount=terms.filter(t=>t.key).length;
+  const fTerms=terms.map((t,i)=>({t,i})).filter(({t})=>{
+    if(filter==="all")return true;
+    if(filter==="custom")return !t.key;
+    return t.type===filter;
+  });
+  const FBTN=(val,lbl)=>(
+    <button onClick={()=>setFilter(val)} style={{background:filter===val?C.purple:"transparent",color:filter===val?C.bg:C.textDim,border:`1px solid ${filter===val?C.purple:C.border}`,borderRadius:3,padding:"1px 6px",fontSize:"0.6rem",fontWeight:700,cursor:"pointer"}}>{lbl}</button>
+  );
+  const startEdit=(i)=>{setEditIdx(i);setDraft({...terms[i]})};
+  const cancelEdit=()=>{setEditIdx(-1);setDraft(null)};
+  const saveEdit=()=>{
+    if(!draft.term||!draft.term.trim()){alert("用語名は必須です");return}
+    setTerms(p=>p.map((t,j)=>j===editIdx?{...draft}:t));
+    setEditIdx(-1);setDraft(null);
+  };
+  const addNew=()=>{
+    setTerms(p=>[{term:"",type:"notation",category:"",definition:"",explanation:"",trivia:""},...p]);
+    setFilter("all");setEditIdx(0);setDraft({term:"",type:"notation",category:"",definition:"",explanation:"",trivia:""});
+  };
+  const fld=(label,key,ml)=>(
+    <div style={{marginBottom:4}}>
+      <div style={{fontSize:"0.56rem",color:C.textDim,marginBottom:1}}>{label}</div>
+      {ml?
+        <textarea value={draft[key]||""} onChange={e=>setDraft(d=>({...d,[key]:e.target.value}))} rows={2} style={{width:"100%",background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:3,fontSize:"0.66rem",padding:"3px 5px",resize:"vertical",fontFamily:"inherit"}} />
+        :
+        <input value={draft[key]||""} onChange={e=>setDraft(d=>({...d,[key]:e.target.value}))} style={{width:"100%",background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:3,fontSize:"0.66rem",padding:"3px 5px"}} />
+      }
+    </div>
+  );
+  return (
+    <div style={{flex:1,overflow:"auto",padding:10}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+        <span style={{fontSize:"0.78rem",fontWeight:700,color:C.purple}}>用語辞典 <span style={{fontSize:"0.6rem",color:C.textDim,fontWeight:400}}>正本{seedCount}</span></span>
+        <div style={{display:"flex",gap:3}}>
+          <Btn color={C.accent} onClick={addNew} style={{fontSize:"0.6rem"}}>＋追加</Btn>
+          <Btn color={C.purple} onClick={()=>exportJSON(terms,"glossary.json")} style={{fontSize:"0.6rem"}}>保存</Btn>
+          <Btn color={C.purple} onClick={()=>importJSON(d=>{if(Array.isArray(d))setTerms(p=>{const keys=new Set(p.map(x=>x.key).filter(Boolean));return [...p,...d.filter(x=>!(x.key&&keys.has(x.key)))]})})} style={{fontSize:"0.6rem"}}>読込</Btn>
+          {terms.length>0&&<CopyBtn text={exportCSV()} label={`CSV(${terms.length})`} color={C.purple} />}
+        </div>
+      </div>
+      <div style={{display:"flex",gap:3,marginBottom:6}}>
+        {FBTN("all","全")}{FBTN("label","label")}{FBTN("notation","notation")}{FBTN("custom","手動")}
+      </div>
+      {generating&&<div style={{fontSize:"0.72rem",color:C.yellow,marginBottom:4}}>生成中...</div>}
+      {fTerms.map(({t,i})=>(
+        editIdx===i?
+        <div key={i} style={{background:C.surfaceAlt||C.surface,border:`1px solid ${C.accent}`,borderRadius:4,padding:"8px",marginBottom:3}}>
+          <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:5}}>
+            {t.key&&<span style={{fontSize:"0.56rem",color:C.bg,background:C.accent,padding:"1px 5px",borderRadius:3,fontWeight:700}}>{t.key}</span>}
+            <select value={draft.type||"notation"} onChange={e=>setDraft(d=>({...d,type:e.target.value}))} style={{background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:3,fontSize:"0.6rem",padding:"1px 3px"}}>
+              <option value="label">label</option>
+              <option value="notation">notation</option>
+            </select>
+          </div>
+          {fld("用語名（正規表記）","term")}
+          {fld("カテゴリ","category")}
+          {fld("定義（意味）","definition",true)}
+          {fld("説明","explanation",true)}
+          {fld("豆知識","trivia")}
+          <div style={{display:"flex",gap:4,marginTop:4}}>
+            <Btn color={C.accent} onClick={saveEdit} style={{fontSize:"0.62rem"}}>保存</Btn>
+            <Btn color={C.textDim} onClick={cancelEdit} style={{fontSize:"0.62rem"}}>キャンセル</Btn>
+          </div>
+        </div>
+        :
+        <div key={i} style={{background:C.surface,border:`1px solid ${t.key?C.border:C.yellow+"55"}`,borderRadius:4,padding:"6px 8px",marginBottom:3}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <span style={{fontSize:"0.78rem",fontWeight:700,color:C.accent,display:"flex",alignItems:"center",flexWrap:"wrap",gap:4}}>
+              {t.key&&<span style={{fontSize:"0.56rem",color:C.bg,background:C.accent,padding:"1px 5px",borderRadius:3,fontWeight:700}}>{t.key}</span>}
+              {t.type&&<span style={{fontSize:"0.54rem",color:t.type==="notation"?C.green:C.blue,border:`1px solid ${t.type==="notation"?C.green:C.blue}`,padding:"0 4px",borderRadius:3}}>{t.type}</span>}
+              <span>{t.term}</span>
+              {t.category&&<span style={{fontSize:"0.58rem",color:C.purple,background:`${C.purple}22`,padding:"1px 5px",borderRadius:3}}>{t.category}</span>}
+            </span>
+            <span style={{display:"flex",gap:6,alignItems:"center"}}>
+              <span onClick={()=>startEdit(i)} style={{color:C.blue,fontSize:"0.6rem",cursor:"pointer"}}>編集</span>
+              <span onClick={()=>{if(t.key){if(!confirm(`正本キー ${t.key}「${t.term}」を削除しますか？`))return}setTerms(p=>p.filter((_,j)=>j!==i))}} style={{color:C.red,fontSize:"0.62rem",cursor:"pointer"}}>×</span>
+            </span>
+          </div>
+          {t.definition&&<div style={{fontSize:"0.68rem",color:C.textBright,marginTop:2}}>{t.definition}</div>}
+          {t.explanation&&<div style={{fontSize:"0.65rem",color:C.text,marginTop:1,whiteSpace:"pre-wrap"}}>{t.explanation}</div>}
+          {t.trivia&&<div style={{fontSize:"0.62rem",color:C.textDim,marginTop:1,fontStyle:"italic"}}>💡 {t.trivia}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// バックアップ／復元モーダル
+// ═══════════════════════════════════════════════════
+function BackupModal({show,onClose,getCurrentData,onRestore}) {
+  const [backups,setBackups]=useState([]);
+  const [label,setLabel]=useState("");
+  const [busy,setBusy]=useState(false);
+  useEffect(()=>{ if(show){ setBackups(loadBackups()); setLabel(""); } },[show]);
+  if(!show)return null;
+
+  const summary=(data)=>{
+    const fc=(data?.firms||[]).length;
+    const pc=(data?.firms||[]).reduce((a,f)=>a+((f.plans||[]).length),0);
+    const gc=(data?.glossaryTerms||[]).length;
+    return `Firm ${fc} / Plan ${pc} / 用語 ${gc}`;
+  };
+
+  const handleBackup=(auto)=>{
+    setBusy(true);
+    const data=getCurrentData();
+    const list=loadBackups();
+    const snap=makeBackupSnapshot(auto?"(復元前 自動退避)":(label.trim()||""),data,auto);
+    let next=[snap,...list];
+    if(next.length>BACKUP_MAX)next=next.slice(0,BACKUP_MAX);
+    if(saveBackups(next)){ setBackups(next); setLabel(""); }
+    setBusy(false);
+    return snap;
+  };
+
+  const handleRestore=(bk)=>{
+    if(!window.confirm(`このバックアップで現在の状態を置き換えます。\n\n${bk.label||"(無題)"}\n${fmtBackupTime(bk.ts)}\n${summary(bk.data)}\n\n※復元の直前に、いまの状態を自動で退避バックアップとして保存します。\n復元しますか？`))return;
+    // 復元直前に現在状態を自動退避
+    handleBackup(true);
+    onRestore(bk.data);
+    onClose();
+  };
+
+  const handleDelete=(id)=>{
+    if(!window.confirm("このバックアップを削除しますか？"))return;
+    const next=loadBackups().filter(b=>b.id!==id);
+    saveBackups(next); setBackups(next);
+  };
+
+  const handleDownload=(bk)=>{
+    exportJSON(bk.data,`pfm-backup-${fmtBackupTime(bk.ts).replace(/[ :]/g,"-")}.json`);
+  };
+
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:560,maxWidth:"92vw",maxHeight:"86vh",overflow:"auto",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:"14px 16px",boxShadow:"0 4px 24px rgba(0,0,0,0.6)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+          <span style={{fontWeight:700,color:C.accent,fontSize:"0.9rem"}}>💾 バックアップ / 復元</span>
+          <span style={{fontSize:"0.6rem",color:C.textDim}}>ブラウザ内に保存（最大{BACKUP_MAX}件）</span>
+          <div style={{flex:1}} />
+          <span onClick={onClose} style={{cursor:"pointer",color:C.red,fontSize:"1rem",lineHeight:1}}>×</span>
+        </div>
+
+        {/* 新規バックアップ */}
+        <div style={{display:"flex",gap:6,marginBottom:12,alignItems:"center"}}>
+          <input value={label} onChange={e=>setLabel(e.target.value)} placeholder="メモ（任意）例: 用語整理後"
+            onKeyDown={e=>{if(e.key==="Enter")handleBackup(false)}}
+            style={{flex:1,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"4px 8px",fontSize:"0.72rem",outline:"none"}} />
+          <Btn color={C.green} disabled={busy} onClick={()=>handleBackup(false)} style={{fontSize:"0.7rem",padding:"4px 12px"}}>＋ 今すぐバックアップ</Btn>
+        </div>
+
+        {/* 一覧 */}
+        {backups.length===0?(
+          <div style={{color:C.textDim,fontSize:"0.72rem",textAlign:"center",padding:"24px 0"}}>バックアップはまだありません</div>
+        ):(
+          <div style={{display:"flex",flexDirection:"column",gap:5}}>
+            {backups.map(bk=>(
+              <div key={bk.id} style={{display:"flex",alignItems:"center",gap:8,background:C.surfaceAlt,border:`1px solid ${bk.auto?C.yellow:C.border}`,borderRadius:5,padding:"6px 8px"}}>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:"0.74rem",color:C.textBright,fontWeight:700,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                    {bk.auto&&<span style={{color:C.yellow,fontSize:"0.62rem",marginRight:4}}>[自動]</span>}
+                    {bk.label||<span style={{color:C.textDim,fontWeight:400}}>(無題)</span>}
+                  </div>
+                  <div style={{fontSize:"0.62rem",color:C.textDim}}>{fmtBackupTime(bk.ts)}　{summary(bk.data)}</div>
+                </div>
+                <Btn color={C.accent} onClick={()=>handleRestore(bk)} style={{fontSize:"0.64rem"}}>↩️ 復元</Btn>
+                <Btn color={C.blue} onClick={()=>handleDownload(bk)} style={{fontSize:"0.64rem"}} title="JSONファイルとして書き出し">⬇</Btn>
+                <Btn color={C.red} onClick={()=>handleDelete(bk.id)} style={{fontSize:"0.64rem"}}>🗑</Btn>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div style={{marginTop:12,fontSize:"0.6rem",color:C.textDim,lineHeight:1.6,borderTop:`1px solid ${C.border}`,paddingTop:8}}>
+          ・「復元」は現在のデータを<b>置き換え</b>ます（直前の状態は自動で退避保存されるので元に戻せます）。<br/>
+          ・データはこのブラウザの localStorage に保存されます。別端末・キャッシュ削除では消えるため、重要時は⬇でJSONも保存してください。
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// マージ取込モーダル（2台のデータ統合）
+// ═══════════════════════════════════════════════════
+function MergeModal({show,onClose,getCurrentData,onApplyMerge}) {
+  const [incoming,setIncoming]=useState(null);   // 読み込んだファイル
+  const [plan,setPlan]=useState(null);           // planMerge結果
+  const [choices,setChoices]=useState({});       // {firmName: 'file'|'keep'|'both'}
+
+  useEffect(()=>{ if(!show){ setIncoming(null); setPlan(null); setChoices({}); } },[show]);
+  if(!show)return null;
+
+  const summary=(data)=>{
+    const fc=(data?.firms||[]).length;
+    const pc=(data?.firms||[]).reduce((a,f)=>a+((f.plans||[]).length),0);
+    const gc=(data?.glossaryTerms||[]).length;
+    return `Firm ${fc} / Plan ${pc} / 用語 ${gc}`;
+  };
+  const planCount=f=>(f?.plans||[]).length;
+
+  const pickFile=()=>{
+    importJSON(d=>{
+      if(!d||!Array.isArray(d.firms)){alert("このファイルにはfirmsデータがありません");return}
+      const base=getCurrentData();
+      const p=planMerge(base,d);
+      setIncoming(d);
+      setPlan(p);
+      // 衝突の初期選択は「両方残す」（最も安全）
+      const init={};
+      p.conflicts.forEach(c=>{init[c.name]="both"});
+      setChoices(init);
+    });
+  };
+
+  const apply=()=>{
+    if(!plan)return;
+    onApplyMerge(incoming, plan, choices);
+    onClose();
+  };
+
+  const base=getCurrentData();
+
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:620,maxWidth:"94vw",maxHeight:"88vh",overflow:"auto",background:C.surface,border:`1px solid ${C.blue}`,borderRadius:8,padding:"14px 16px",boxShadow:"0 4px 24px rgba(0,0,0,0.6)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+          <span style={{fontWeight:700,color:C.blue,fontSize:"0.9rem"}}>🔀 マージ取込（2台のデータ統合）</span>
+          <div style={{flex:1}} />
+          <span onClick={onClose} style={{cursor:"pointer",color:C.red,fontSize:"1rem",lineHeight:1}}>×</span>
+        </div>
+
+        {!plan?(
+          <div>
+            <div style={{fontSize:"0.72rem",color:C.text,lineHeight:1.7,marginBottom:12}}>
+              もう一方のPCで「全保存」して書き出したJSONファイルを選んでください。<br/>
+              現在のデータ（<b style={{color:C.accent}}>{summary(base)}</b>）に<b>足し合わせ</b>ます。上書きではありません。
+            </div>
+            <Btn color={C.blue} onClick={pickFile} style={{fontSize:"0.74rem",padding:"5px 14px"}}>📂 JSONファイルを選ぶ</Btn>
+          </div>
+        ):(
+          <div>
+            {/* 自動追加分 */}
+            <div style={{marginBottom:10}}>
+              <div style={{fontSize:"0.72rem",fontWeight:700,color:C.green,marginBottom:4}}>そのまま追加：{plan.autoAdd.length} 件</div>
+              {plan.autoAdd.length===0?(
+                <div style={{fontSize:"0.66rem",color:C.textDim}}>（重複しない新規Firmはありません）</div>
+              ):(
+                <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+                  {plan.autoAdd.map(f=>(
+                    <span key={f.id} style={{fontSize:"0.66rem",color:C.text,background:C.surfaceAlt,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 6px"}}>{f.name}（Plan {planCount(f)}）</span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 衝突 */}
+            <div style={{marginBottom:8}}>
+              <div style={{fontSize:"0.72rem",fontWeight:700,color:C.yellow,marginBottom:4}}>同名Firmの衝突：{plan.conflicts.length} 件</div>
+              {plan.conflicts.length===0?(
+                <div style={{fontSize:"0.66rem",color:C.textDim}}>（衝突はありません）</div>
+              ):(
+                <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                  {plan.conflicts.map(c=>(
+                    <div key={c.name} style={{background:C.surfaceAlt,border:`1px solid ${C.yellow}`,borderRadius:5,padding:"7px 9px"}}>
+                      <div style={{fontSize:"0.74rem",fontWeight:700,color:C.textBright,marginBottom:5}}>{c.name}</div>
+                      <div style={{fontSize:"0.62rem",color:C.textDim,marginBottom:6}}>
+                        こちら: Plan {planCount(c.base)} ／ ファイル: Plan {planCount(c.incoming)}
+                      </div>
+                      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+                        {[["both","両方残す（別Firmで複製）",C.green],["file","ファイルで上書き",C.blue],["keep","こちらを残す（スキップ）",C.textDim]].map(([val,labelTxt,col])=>(
+                          <button key={val} onClick={()=>setChoices(p=>({...p,[c.name]:val}))}
+                            style={{background:choices[c.name]===val?col:"transparent",color:choices[c.name]===val?C.bg:col,border:`1px solid ${col}`,borderRadius:3,padding:"3px 8px",fontSize:"0.64rem",fontWeight:700,cursor:"pointer"}}>
+                            {labelTxt}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div style={{fontSize:"0.66rem",color:C.text,marginBottom:10}}>
+              用語辞典：新規 {plan.glossaryAdd.length} 件を追加（既存keyは保持）
+            </div>
+
+            <div style={{display:"flex",gap:6,justifyContent:"flex-end",borderTop:`1px solid ${C.border}`,paddingTop:10}}>
+              <Btn color={C.textDim} onClick={()=>{setPlan(null);setIncoming(null);setChoices({})}} style={{fontSize:"0.7rem"}}>← 戻る</Btn>
+              <Btn color={C.blue} onClick={apply} style={{fontSize:"0.72rem",padding:"4px 14px"}}>この内容でマージ実行</Btn>
+            </div>
+            <div style={{marginTop:8,fontSize:"0.6rem",color:C.textDim,lineHeight:1.6}}>
+              ※ 実行直前に現在の状態を自動バックアップします（💾から復元可能）。
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// Firm統合モーダル（同名2箱を1つに寄せる）
+// ═══════════════════════════════════════════════════
+function ConsolidateModal({show,onClose,firms,tabDataMap,initialKeepId,onApply}) {
+  const [keepId,setKeepId]=useState(initialKeepId||"");
+  const [absorbId,setAbsorbId]=useState("");
+  const [plan,setPlan]=useState(null);
+  const [resolve,setResolve]=useState({}); // {conflictKey: 'keep'|'absorb'}
+
+  useEffect(()=>{ if(show){ setKeepId(initialKeepId||""); setAbsorbId(""); setPlan(null); setResolve({}); } },[show,initialKeepId]);
+  if(!show)return null;
+
+  const keepFirm=firms.find(f=>f.id===keepId);
+  // 吸収候補は「残す側」と同名の別Firm、なければ全Firm（残す側以外）
+  const sameName=keepFirm?firms.filter(f=>f.id!==keepId&&f.name.replace(/\s*\(\d+\)\s*$/,"")===keepFirm.name.replace(/\s*\(\d+\)\s*$/,"")):[];
+  const others=firms.filter(f=>f.id!==keepId);
+  const absorbCandidates=sameName.length?sameName:others;
+
+  const ckey=c=>`${c.scope}|${c.planName}|${c.slotKey}`;
+
+  const buildPlan=()=>{
+    const kf=firms.find(f=>f.id===keepId), af=firms.find(f=>f.id===absorbId);
+    if(!kf||!af){alert("残す側・吸収側の両方を選んでください");return}
+    if(kf.id===af.id){alert("同じFirmは選べません");return}
+    const p=planFirmConsolidation(kf,af,tabDataMap);
+    setPlan(p);
+    const init={}; p.conflicts.forEach(c=>{init[ckey(c)]="keep"}); setResolve(init);
+  };
+
+  const apply=()=>{
+    onApply(keepId,absorbId,plan,resolve);
+    onClose();
+  };
+
+  const slotLabel=k=>k; // slotKeyそのまま表示（短い英字キー）
+
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:640,maxWidth:"94vw",maxHeight:"88vh",overflow:"auto",background:C.surface,border:`1px solid ${C.purple}`,borderRadius:8,padding:"14px 16px",boxShadow:"0 4px 24px rgba(0,0,0,0.6)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+          <span style={{fontWeight:700,color:C.purple,fontSize:"0.9rem"}}>⤵ Firm統合（2箱を1つに）</span>
+          <div style={{flex:1}} />
+          <span onClick={onClose} style={{cursor:"pointer",color:C.red,fontSize:"1rem",lineHeight:1}}>×</span>
+        </div>
+
+        {/* 選択 */}
+        <div style={{display:"flex",gap:8,marginBottom:10,alignItems:"flex-end",flexWrap:"wrap"}}>
+          <div style={{flex:1,minWidth:200}}>
+            <div style={{fontSize:"0.62rem",color:C.green,marginBottom:3,fontWeight:700}}>残す（こちらに寄せる）</div>
+            <select value={keepId} onChange={e=>{setKeepId(e.target.value);setPlan(null)}} style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"4px 6px",fontSize:"0.72rem"}}>
+              <option value="">選択...</option>
+              {firms.map(f=><option key={f.id} value={f.id}>{f.name}（Plan {(f.plans||[]).length}）</option>)}
+            </select>
+          </div>
+          <div style={{fontSize:"0.8rem",color:C.textDim,paddingBottom:5}}>◀</div>
+          <div style={{flex:1,minWidth:200}}>
+            <div style={{fontSize:"0.62rem",color:C.red,marginBottom:3,fontWeight:700}}>吸収して削除する</div>
+            <select value={absorbId} onChange={e=>{setAbsorbId(e.target.value);setPlan(null)}} disabled={!keepId} style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"4px 6px",fontSize:"0.72rem"}}>
+              <option value="">選択...</option>
+              {absorbCandidates.map(f=><option key={f.id} value={f.id}>{f.name}（Plan {(f.plans||[]).length}）</option>)}
+            </select>
+          </div>
+          <Btn color={C.purple} onClick={buildPlan} disabled={!keepId||!absorbId} style={{fontSize:"0.7rem",padding:"5px 12px"}}>突合する</Btn>
+        </div>
+
+        {plan&&(
+          <div>
+            {/* Plan処理サマリ */}
+            <div style={{marginBottom:8,fontSize:"0.68rem",color:C.text}}>
+              <span style={{color:C.green,fontWeight:700}}>移動するPlan：</span>
+              {plan.planActions.filter(a=>a.type==="move").length===0?"なし":
+                plan.planActions.filter(a=>a.type==="move").map(a=>a.absorbPlan.name).join("、")}
+            </div>
+            <div style={{marginBottom:10,fontSize:"0.68rem",color:C.text}}>
+              <span style={{color:C.yellow,fontWeight:700}}>同名Planを合成：</span>
+              {plan.planActions.filter(a=>a.type==="merge").length===0?"なし":
+                plan.planActions.filter(a=>a.type==="merge").map(a=>a.absorbPlan.name).join("、")}
+            </div>
+
+            {/* 競合 */}
+            <div style={{fontSize:"0.72rem",fontWeight:700,color:C.yellow,marginBottom:5}}>値の競合：{plan.conflicts.length} 件</div>
+            {plan.conflicts.length===0?(
+              <div style={{fontSize:"0.66rem",color:C.textDim,marginBottom:8}}>競合なし。空欄は吸収側の値で補完されます。</div>
+            ):(
+              <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:8}}>
+                {plan.conflicts.map(c=>{
+                  const key=ckey(c);
+                  return (
+                    <div key={key} style={{background:C.surfaceAlt,border:`1px solid ${C.yellow}`,borderRadius:5,padding:"7px 9px"}}>
+                      <div style={{fontSize:"0.64rem",color:C.textDim,marginBottom:5}}>
+                        {c.scope==="firm"?"Firm本体":`Plan「${c.planName}」`} ／ 項目: <b style={{color:C.textBright}}>{slotLabel(c.slotKey)}</b>
+                      </div>
+                      <div style={{display:"flex",gap:6}}>
+                        <button onClick={()=>setResolve(p=>({...p,[key]:"keep"}))} style={{flex:1,textAlign:"left",background:resolve[key]==="keep"?C.green:"transparent",color:resolve[key]==="keep"?C.bg:C.text,border:`1px solid ${C.green}`,borderRadius:3,padding:"4px 7px",fontSize:"0.64rem",cursor:"pointer"}}>
+                          <div style={{fontWeight:700,fontSize:"0.6rem",marginBottom:2}}>残す側</div>
+                          <div style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{c.keepText}</div>
+                        </button>
+                        <button onClick={()=>setResolve(p=>({...p,[key]:"absorb"}))} style={{flex:1,textAlign:"left",background:resolve[key]==="absorb"?C.blue:"transparent",color:resolve[key]==="absorb"?C.bg:C.text,border:`1px solid ${C.blue}`,borderRadius:3,padding:"4px 7px",fontSize:"0.64rem",cursor:"pointer"}}>
+                          <div style={{fontWeight:700,fontSize:"0.6rem",marginBottom:2}}>吸収側</div>
+                          <div style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{c.absorbText}</div>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <div style={{display:"flex",gap:6,justifyContent:"flex-end",borderTop:`1px solid ${C.border}`,paddingTop:10}}>
+              <Btn color={C.textDim} onClick={()=>setPlan(null)} style={{fontSize:"0.7rem"}}>← 選び直す</Btn>
+              <Btn color={C.purple} onClick={apply} style={{fontSize:"0.72rem",padding:"4px 14px"}}>統合を実行</Btn>
+            </div>
+            <div style={{marginTop:8,fontSize:"0.6rem",color:C.textDim,lineHeight:1.6}}>
+              ※ 吸収側Firmは統合後に削除されます。実行直前に自動バックアップを取ります（💾から復元可）。<br/>
+              ※ アーカイブ（保管テキスト）は重複を除いて両方ぶんを残します。
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// 機能目次
+// ═══════════════════════════════════════════════════
+function FuncIndex({show,onClose}) {
+  const [chk,setChk]=useState({});
+  const [cmt,setCmt]=useState({});
+  const [collapsed,setCollapsed]=useState({});
+  if(!show)return null;
+  const cnt=Object.keys(chk).length;
+  const allItems=FUNC_INDEX.flatMap(g=>g.items);
+  const copy=()=>{
+    const lines=[];
+    FUNC_INDEX.forEach(g=>{
+      const checked=g.items.filter(f=>chk[f.id]);
+      if(!checked.length)return;
+      lines.push(`[${g.group}]`);
+      checked.forEach(f=>{const c=(cmt[f.id]||"").trim();lines.push(c?`  ${f.label} | ${c}`:`  ${f.label}`)});
+    });
+    return lines.join("\n");
+  };
+  return (
+    <div style={{position:"fixed",top:8,right:8,zIndex:9999,width:340,maxHeight:"85vh",overflow:"auto",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:"10px 12px",boxShadow:"0 4px 20px rgba(0,0,0,0.5)"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+        <span style={{fontSize:"0.78rem",fontWeight:700,color:C.accent}}>📋 機能目次</span>
+        <div style={{display:"flex",gap:4}}>
+          {cnt>0&&<CopyBtn getText={copy} label={`コピー(${cnt})`} color={C.accent} />}
+          {cnt>0&&<Btn color={C.textDim} onClick={()=>{setChk({});setCmt({})}}>クリア</Btn>}
+          <span onClick={onClose} style={{cursor:"pointer",color:C.textDim,fontSize:"1rem"}}>✕</span>
+        </div>
+      </div>
+      {FUNC_INDEX.map(g=>{
+        const gc=collapsed[g.group];
+        const groupChecked=g.items.filter(f=>chk[f.id]).length;
+        return (
+          <div key={g.group} style={{marginBottom:4}}>
+            <div onClick={()=>setCollapsed(p=>({...p,[g.group]:!p[g.group]}))} style={{
+              display:"flex",alignItems:"center",gap:6,cursor:"pointer",padding:"4px 0",
+              borderBottom:`1px solid ${C.border}`,userSelect:"none",
+            }}>
+              <span style={{fontSize:"0.6rem",color:C.textDim}}>{gc?"▶":"▼"}</span>
+              <span style={{fontSize:"0.72rem",fontWeight:700,color:C.yellow}}>{g.group}</span>
+              <span style={{fontSize:"0.58rem",color:C.textDim}}>{g.items.length}</span>
+              {groupChecked>0&&<span style={{fontSize:"0.58rem",color:C.accent}}>✓{groupChecked}</span>}
+            </div>
+            {!gc&&g.items.map(f=>(
+              <div key={f.id} style={{padding:"2px 0 2px 12px"}}>
+                <label style={{display:"flex",alignItems:"center",gap:5,cursor:"pointer"}}>
+                  <input type="checkbox" checked={!!chk[f.id]} onChange={()=>setChk(p=>{const n={...p};n[f.id]?delete n[f.id]:n[f.id]=true;return n})} style={{accentColor:C.accent,margin:0}} />
+                  <span style={{fontSize:"0.68rem",fontWeight:600,color:chk[f.id]?C.accent:C.textBright}}>{f.label}</span>
+                  <span style={{fontSize:"0.55rem",color:C.textDim}}>{f.desc}</span>
+                </label>
+                {chk[f.id]&&<input type="text" value={cmt[f.id]||""} placeholder="コメント" onChange={e=>setCmt(p=>({...p,[f.id]:e.target.value}))}
+                  style={{width:"calc(100% - 24px)",marginLeft:24,marginTop:1,background:C.bg,color:C.textBright,border:`1px solid ${C.accent}44`,borderRadius:3,padding:"1px 6px",fontSize:"0.62rem",fontFamily:font,outline:"none"}} />}
+              </div>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════════════════
+function App() {
+  // 縦タブ（Firm→Plan階層）
+  const [firms,setFirms]=useState([{"id":"f2","name":"The5ers","plans":[{"id":"p2","name":"High Stakes"},{"id":"p3","name":"Hyper-Growth"},{"id":"p4","name":"Bootcamp"},{"id":"p5","name":"Pro-Growth"}]},{"id":"f3","name":"FundingPips","plans":[{"id":"p6","name":"FundingPips Zero"},{"id":"p7","name":"1-Step"},{"id":"p8","name":"2-Step Standard"},{"id":"p9","name":"2-Step Pro"}]},{"id":"f4","name":"FundedNext","plans":[{"id":"p10","name":"Stellar 1-Step"},{"id":"p11","name":"Stellar 2-Step"},{"id":"p12","name":"Stellar Lite"},{"id":"p13","name":"Stellar Instant"}]}]);
+  const [activeTabId,setActiveTabId]=useState("f2");
+  const nextId=useRef(14);
+
+  // アクティブがFirmかPlanか判定
+  const activeType=useMemo(()=>{
+    for(const f of firms){if(f.id===activeTabId)return"firm";for(const p of(f.plans||[]))if(p.id===activeTabId)return"plan"}return"firm";
+  },[firms,activeTabId]);
+
+  // 各タブのデータ { [tabId]: { archives:[], targetText:"", slotData:{} } }
+  // templateModeはactiveTypeで自動決定（firm→dbp01/koryaku, plan→dbp02）
+  const [tabDataMap,setTabDataMap]=useState({"f2":{"archives":[],"targetText":"","slotData":{"firmName":[{"text":"The5ers"}]},"templateMode":"dbp01"},"p2":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - High Stakes"}]},"templateMode":"dbp02"},"p3":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - Hyper-Growth"}]},"templateMode":"dbp02"},"p4":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - Bootcamp"}]},"templateMode":"dbp02"},"p5":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - Pro-Growth"}]},"templateMode":"dbp02"},"f3":{"archives":[],"targetText":"","slotData":{"firmName":[{"text":"FundingPips"}]},"templateMode":"dbp01"},"p6":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - FundingPips Zero"}]},"templateMode":"dbp02"},"p7":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - 1-Step"}]},"templateMode":"dbp02"},"p8":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - 2-Step Standard"}]},"templateMode":"dbp02"},"p9":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - 2-Step Pro"}]},"templateMode":"dbp02"},"f4":{"archives":[],"targetText":"","slotData":{"firmName":[{"text":"FundedNext"}]},"templateMode":"dbp01"},"p10":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar 1-Step"}]},"templateMode":"dbp02"},"p11":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar 2-Step"}]},"templateMode":"dbp02"},"p12":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar Lite"}]},"templateMode":"dbp02"},"p13":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar Instant"}]},"templateMode":"dbp02"}});
+
+  // UI state
+  const [rightMode,setRightMode]=useState("slots"); // slots | glossary
+  const [translating,setTranslating]=useState(false);
+  const [autoAssigning,setAutoAssigning]=useState(false);
+  const [aiGenKoryaku,setAiGenKoryaku]=useState(false);
+  const [slotLocks,setSlotLocks]=useState({});
+  const [showFuncIndex,setShowFuncIndex]=useState(false);
+  const [showBackup,setShowBackup]=useState(false);
+  const [showMerge,setShowMerge]=useState(false);
+  const [consolidateKeepId,setConsolidateKeepId]=useState(null);
+  const [activeSlotId,setActiveSlotId]=useState(null); // 選択中スロット
+  const pasteAreaRef=useRef(null);
+  const selectedTextRef=useRef("");
+
+  // 用語辞典（グローバル）— 正本65キーで初期化
+  const [glossaryTerms,setGlossaryTerms]=useState(()=>GLOSSARY_SEED.map(t=>({...t})));
+  const [glossaryGenerating,setGlossaryGenerating]=useState(false);
+
+  const getTabData=useCallback(id=>tabDataMap[id]||{archives:[],targetText:"",slotData:{},templateMode:activeType==="plan"?"dbp02":"dbp01"},[tabDataMap,activeType]);
+  const setTabField=useCallback((field,value)=>{
+    setTabDataMap(prev=>{
+      const cur=prev[activeTabId]||{archives:[],targetText:"",slotData:{},templateMode:activeType==="plan"?"dbp02":"dbp01"};
+      return {...prev,[activeTabId]:{...cur,[field]:typeof value==="function"?value(cur[field]):value}};
+    });
+  },[activeTabId,activeType]);
+
+  // handleAdd（選択中スロット用）
+  const handleAdd=useCallback(()=>{
+    if(!activeSlotId){alert("格納先スロットを選択してください");return}
+    const sel=window.getSelection()?.toString()?.trim();
+    if(!sel){alert("テキストを選択してから＋ボタンを押してください");return}
+    setTabField("slotData",prev=>{
+      const locked=slotLocks[activeSlotId];
+      if(locked)return prev;
+      return{...prev,[activeSlotId]:[...(prev[activeSlotId]||[]).filter(f=>!f.merged),{text:sel}]};
+    });
+    // planList追加時にPlanタブ自動生成
+    if(activeSlotId==="planList"&&activeType==="firm"){
+      setTimeout(()=>syncPlansFromList(sel),100);
+    }
+  },[activeSlotId,setTabField,slotLocks,activeType,syncPlansFromList]);
+
+  const td=getTabData(activeTabId);
+  // Firm選択時はdbp01/koryaku、Plan選択時はdbp02のみ
+  const availableTemplates=activeType==="firm"?[["dbp01","01"],["koryaku","攻略"]]:[["dbp02","02"]];
+  // templateModeが不一致の場合補正
+  useEffect(()=>{
+    if(activeType==="plan"&&td.templateMode!=="dbp02")setTabField("templateMode","dbp02");
+    if(activeType==="firm"&&td.templateMode==="dbp02")setTabField("templateMode","dbp01");
+  },[activeTabId,activeType]);
+
+  // firmNameスロット → Firmタブ名の自動同期
+  useEffect(()=>{
+    if(activeType!=="firm")return;
+    const firmNameFrags=td.slotData?.firmName;
+    if(!firmNameFrags||firmNameFrags.length===0)return;
+    const merged=firmNameFrags.find(f=>f.merged);
+    const newName=(merged?merged.text:firmNameFrags[0]?.text||"").trim();
+    if(!newName)return;
+    setFirms(prev=>prev.map(f=>f.id===activeTabId?{...f,name:newName}:f));
+  },[activeTabId,activeType,td.slotData?.firmName]);
+
+  // リサイズ
+  const [vtabW,vtabDrag]=useResize(150,"x",80,300);
+  const [leftW,leftDrag]=useResize(450,"x",250,800);
+  const [pasteH,pasteDrag]=useResize(300,"y",100,600);
+
+  const currentSlots=SLOT_DEFS[td.templateMode]||[];
+
+  // postMessage受信
+  useEffect(()=>{
+    const h=e=>{
+      if(e.data?.type==="pfm-intake-paste"&&e.data.text&&pasteAreaRef.current){
+        const ta=pasteAreaRef.current;
+        const urlTag=e.data.url?` [${e.data.url}]`:"";
+        ta.value+=(ta.value?"\n\n":"")+e.data.text+urlTag;
+      }
+      if(e.data?.type==="pfm-intake-ocr-image") handleOCRFromChild(e.data.base64,e.data.mediaType);
+      // 早見表データ返信
+      if(e.data?.type==="pfm-intake-get-quickref"&&e.source){
+        const result=[];
+        firms.forEach(firm=>{
+          (firm.plans||[]).forEach(plan=>{
+            const pd=tabDataMap[plan.id]||{};
+            const sd=pd.slotData||{};
+            const gv=id=>{const fr=sd[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+            const items=SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").map(s=>({label:s.label,value:gv(s.id)}));
+            const qr=gv("ruleQuickRef");
+            const price=gv("priceTable");
+            result.push({firm:firm.name,plan:plan.name,fullName:firm.name+" - "+plan.name,items,quickRef:qr,priceTable:price});
+          });
+        });
+        e.source.postMessage({type:"pfm-intake-quickref-data",plans:result},"*");
+      }
+    };
+    window.addEventListener("message",h);return()=>window.removeEventListener("message",h);
+  },[firms,tabDataMap]);
+
+  const handleOCRFromChild=useCallback(async(b64,mt)=>{
+    try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mt||"image/png",data:b64}},{type:"text",text:"画像テキスト抽出。テーブルはMarkdown。抽出のみ出力。"}]}]});if(pasteAreaRef.current)pasteAreaRef.current.value+=(pasteAreaRef.current.value?"\n\n--- OCR ---\n":"")+exText(data)}catch(e){if(pasteAreaRef.current)pasteAreaRef.current.value+="\nOCRエラー: "+e.message}
+  },[]);
+
+  // 貼り付け→取り込み対象（そのまま）
+  const handleSendToTarget=useCallback(text=>{setTabField("targetText",text)},[setTabField]);
+
+  // 貼り付け→翻訳→取り込み対象
+  const handleTranslateToTarget=useCallback(async text=>{
+    setTranslating(true); setTabField("targetText","翻訳中...");
+    try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:text}]});setTabField("targetText",exText(data))}
+    catch(e){setTabField("targetText","翻訳エラー: "+e.message)}
+    setTranslating(false);
+  },[setTabField]);
+
+  // 保管
+  const handleArchive=useCallback(text=>{setTabField("archives",prev=>[...prev,text])},[setTabField]);
+  const handleDeleteArchive=useCallback(idx=>{setTabField("archives",prev=>prev.filter((_,i)=>i!==idx))},[setTabField]);
+
+  // Planタブ自動生成（planListから）
+  const syncPlansFromList=useCallback((text)=>{
+    if(!text||activeType!=="firm")return;
+    
+    // textが配列の場合は最初の要素を取得
+    if(Array.isArray(text)){
+      text=text[0];
+    }
+    
+    // textが文字列でない場合は終了
+    if(typeof text!=="string"||!text.trim())return;
+    
+    const names=text.split(/[、,\/／\n]/).map(s=>s.trim()).filter(Boolean);
+    if(!names.length)return;
+    const firm=firms.find(f=>f.id===activeTabId);
+    if(!firm)return;
+    
+    // Firm名プレフィックスを除去してPlan名を抽出
+    const prefix=firm.name+" - ";
+    const planNames=names.map(n=>{
+      // "FTMO - 100K Challenge" → "100K Challenge"
+      if(n.startsWith(prefix)){
+        return n.substring(prefix.length).trim();
+      }
+      // 既にPlan名のみの場合はそのまま
+      return n;
+    });
+    
+    const existingNames=(firm.plans||[]).map(p=>p.name);
+    const newNames=planNames.filter(n=>!existingNames.includes(n));
+    if(!newNames.length)return;
+    const newPlans=newNames.map(n=>{
+      const id="p"+String(nextId.current++);
+      const fullName=firm.name+" - "+n;
+      return{id,name:n,fullName};
+    });
+    setFirms(p=>p.map(f=>f.id===activeTabId?{...f,plans:[...(f.plans||[]),...newPlans.map(({id,name})=>({id,name}))]}:f));
+    setTabDataMap(p=>{
+      const next={...p};
+      newPlans.forEach(pl=>{next[pl.id]={archives:[],targetText:"",slotData:{challengeName:[{text:pl.fullName}]},templateMode:"dbp02"}});
+      return next;
+    });
+  },[firms,activeTabId,activeType]);
+
+  // 自動振り分け
+  const handleAutoAssign=useCallback(async text=>{
+    if(!text)return;setAutoAssigning(true);
+    try{
+      // 現在のタブ名を取得
+      let currentName="";
+      let contextInfo="";
+      if(activeType==="firm"){
+        const firm=firms.find(f=>f.id===activeTabId);
+        currentName=firm?.name||"";
+        contextInfo=`対象Firm: ${currentName}\nこのFirmの情報のみ抽出してください。他のFirmやプランの情報が混在している場合は除外。`;
+      } else {
+        const parentFirm=firms.find(f=>(f.plans||[]).some(pl=>pl.id===activeTabId));
+        const plan=parentFirm?.plans?.find(pl=>pl.id===activeTabId);
+        currentName=plan?.name||"";
+        const firmName=parentFirm?.name||"";
+        contextInfo=`対象Firm: ${firmName}\n対象Plan: ${currentName}（${firmName} - ${currentName}）\nこのプランの情報のみ抽出してください。他のプランの情報が混在している場合は除外。複数プランの比較表から該当プランの列だけ抽出。`;
+      }
+      const slotList=currentSlots.map(s=>`"${s.id}": [${s.section}] ${s.label}${s.hint?" — "+s.hint:""}`).join("\n");
+      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,
+        system:`あなたはプロップファーム情報の分類エンジンです。
+${contextInfo}
+
+入力テキストから「${currentName}」に関する情報のみを抽出し、該当するスロットに振り分けてください。
+
+■ スロット一覧（"id": [セクション] ラベル — ヒント）
+${slotList}
+
+■ 入力テキストの形式
+入力はタブ区切りテーブル、パイプ区切りテーブル、箇条書き、自由テキストのいずれかです。
+テーブルの場合、項目名列の値をスロットのラベルとマッチングしてください。
+「項目 Challenge Funded 差分」のヘッダー行がある場合はそれに従って値を抽出。
+
+■ 格納ルール
+1. 入力テキストに該当情報がある項目のみ格納する
+2. 情報がない項目はJSONキーごと省略する（「記載なし」は使わない）
+3. 他のプラン・Firmの情報は絶対に混入させない
+4. 日本語に翻訳してから格納
+5. 数値・%・$はそのまま保持
+
+■ planList（プラン名リスト）の特殊ルール
+入力テキストがカンマ区切りのプラン名リスト（例: "Plan A, Plan B, Plan C"）の場合、必ず"planList"キーに格納してください。
+- 入力例: "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"
+- 出力: {"planList": "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"}
+
+■ 早見表スロット(rc_*)の格納形式
+"Challenge値|Funded値|差分"
+- C/Fが同一の場合 → "値|—|—"
+- C/Fが異なる場合 → "C値|F値|TRAP" または "C値|F値|EASE"
+- Instantプラン → "ー|F値|—"
+- 差分: Fが厳しい=TRAP、Fが緩い=EASE、同一=—
+- Funded列が「—」の入力 → そのまま "値|—|—"
+
+■ 詳細スロット(rd_*)の格納形式
+"Challenge値|Funded値|差分|補足テキスト"
+- C/Fが同一の場合 → "値|—|—|補足"
+
+■ 禁止
+- 差分列に「なし」は使わない。「—」を使う
+- CとFが同じ場合にFunded列にC値をコピーしない。「—」を使う
+- 他のプランのデータを混入させない
+
+■ 出力形式
+JSONのみ出力。該当情報があるスロットのキーのみ含める。Markdownバッククォートや説明文は不要。`,
+        messages:[{role:"user",content:text}]});
+      const raw=exText(data).replace(/```json|```/g,"").trim();
+      console.log("=== 自動振り分けデバッグ ===");
+      console.log("API返却RAW:", raw);
+      const parsed=JSON.parse(raw);
+      console.log("パース後JSON:", parsed);
+      console.log("currentSlots IDs:", currentSlots.map(s=>s.id));
+      console.log("slotLocks:", slotLocks);
+      
+      setTabField("slotData",prev=>{
+        const next={...prev};
+        let planListStored = false;
+        let planListValue = "";
+        
+        for(const[k,v]of Object.entries(parsed)){
+          console.log(`処理中 key=${k}, value=${v}, type=${typeof v}`);
+          console.log(`  - currentSlotsに存在: ${currentSlots.some(s=>s.id===k)}`);
+          console.log(`  - ロック状態: ${slotLocks[k]}`);
+          if(v&&typeof v==="string"&&currentSlots.some(s=>s.id===k)&&!slotLocks[k]){
+            const existing=(next[k]||[]).filter(f=>!f.merged);
+            // 既に同じテキストがあればスキップ
+            if(existing.some(f=>f.text.trim()===v.trim())){
+              console.log(`  → スキップ（既存テキストと重複）`);
+              continue;
+            }
+            next[k]=[...existing,{text:v}];
+            console.log(`  → 格納成功`);
+            
+            // planListが格納されたらフラグを立てる
+            if(k==="planList"){
+              planListStored = true;
+              planListValue = v;
+              console.log("planListフラグON:", v);
+            }
+          } else {
+            console.log(`  → 格納失敗（条件不一致）`);
+          }
+        }
+        
+        // setTabField完了後にPlanタブ生成
+        if(planListStored && activeType==="firm"){
+          console.log("Planタブ自動生成予約:", planListValue);
+          setTimeout(()=>{
+            console.log("Planタブ自動生成実行:", planListValue);
+            syncPlansFromList(planListValue);
+          }, 100);
+        }
+        
+        return next;
+      });
+    }catch(e){alert("振り分けエラー: "+e.message)}
+    setAutoAssigning(false);
+  },[currentSlots,setTabField,slotLocks,activeType,syncPlansFromList]);
+
+  // 攻略AI生成 — DBP_01 + 全PlanのDBP_02データから18スロット一括生成
+  const handleAIGenKoryaku=useCallback(async()=>{
+    if(activeType!=="firm")return;
+    setAiGenKoryaku(true);
+    try {
+      // 現在のFirmのDBP_01データ
+      const firmData=tabDataMap[activeTabId]||{};
+      const firmSlots=firmData.slotData||{};
+      const gf=id=>{const fr=firmSlots[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+      const firmInfo=SLOT_DEFS.dbp01.map(s=>`${s.label}: ${gf(s.id)||"記載なし"}`).join("\n");
+
+      // 配下PlanのDBP_02データ
+      const firm=firms.find(f=>f.id===activeTabId);
+      const planTexts=(firm?.plans||[]).map(plan=>{
+        const pd=tabDataMap[plan.id]||{};
+        const ps=pd.slotData||{};
+        const gp=id=>{const fr=ps[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+        return `【${plan.name||"Plan"}】\n`+SLOT_DEFS.dbp02.map(s=>`${s.label}: ${gp(s.id)||"—"}`).join("\n");
+      }).join("\n\n");
+
+      if(!planTexts){alert("配下プランのデータがありません");setAiGenKoryaku(false);return}
+
+      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:8000,
+        system:`プロップファーム攻略記事ライター。FirmデータとPlanデータから3つの断面ブロックを生成。
+
+■ 出力形式（JSON）
+{
+  "k_dd": "断面①全文（HTML）",
+  "k_rules": "断面②全文（HTML）",
+  "k_payout": "断面③全文（HTML）"
+}
+
+■ 断面①DD: 冒頭説明(2-3文)→DD比較HTMLテーブル→補足注記→合格注意点→出金注意点→特殊ルール
+■ 断面②ルール: 冒頭説明(1-2文)→一貫性適用状況HTMLテーブル→全プラン共通制限→プラン間差分HTMLテーブル(DD値含めない)→合格注意点→出金注意点
+■ 断面③出金: 冒頭説明(2-3文)→出金条件HTMLテーブル(プラン名/頻度/最低取引日数/一貫性/最低利益/利益分配/備考)→最速出金スケジュールHTMLテーブル→補足事項
+
+■ HTMLテーブル形式
+<table header-row="true" header-column="false">
+<tr><td>項目</td><td>プラン1</td><td>プラン2</td></tr>
+<tr><td>データ1</td><td>値1</td><td>値2</td></tr>
+</table>
+
+■ 制約: テーブルは必ずHTML形式。数値正確保持。主観・誘導禁止。事実ベース。JSONのみ出力。`,
+        messages:[{role:"user",content:`【Firmデータ】\n${firmInfo}\n\n【Planデータ】\n${planTexts}`}]});
+
+      const raw=exText(data).replace(/```json|```/g,"").trim();
+      const parsed=JSON.parse(raw);
+      setTabField("slotData",prev=>{
+        const next={...prev};
+        for(const[k,v]of Object.entries(parsed)){
+          if(v&&typeof v==="string"&&SLOT_DEFS.koryaku.some(s=>s.id===k)&&!slotLocks[k]){
+            next[k]=[{text:v}];
+          }
+        }
+        return next;
+      });
+    }catch(e){alert("攻略AI生成エラー: "+e.message)}
+    setAiGenKoryaku(false);
+  },[activeType,activeTabId,tabDataMap,firms,setTabField]);
+
+  // NotebookLM ソース定義v06 用プロンプト生成
+  const generateNotebookLMPrompt=useCallback(()=>{
+    if(!firms||firms.length===0)return"";
+    const firmName=firms[0]?.name||"";
+    const planNames=firms[0]?.plans?.map(p=>p.name)||[];
+    if(!firmName||planNames.length===0)return"";
+    return`【対象ファーム】${firmName}
+
+【対象プラン一覧】
+${planNames.map(p=>`- ${p}`).join("\n")}
+
+「NotebookLM_ソース定義_PFM収集_v06」のツール連携仕様に完全に従い、定義されている全13テーブル（DBP_01用、DBP_02用、攻略記事用）を純粋なMarkdownテーブル形式のみで一括出力してください。AIの挨拶や補足テキストは一切不要です。`;
+  },[firms]);
+
+  // テーブルAI生成（DBP_01:プラン比較 / DBP_02:価格+早見表）
+  const [aiGenTable,setAiGenTable]=useState(false);
+  const handleAIGenTable=useCallback(async(mode)=>{
+    setAiGenTable(true);
+    try {
+      const firm=firms.find(f=>f.id===activeTabId)||(()=>{for(const f of firms)for(const p of(f.plans||[]))if(p.id===activeTabId)return f;return null})();
+      if(!firm||!firm.plans?.length){alert("配下プランがありません");setAiGenTable(false);return}
+
+      // 全PlanのDBP_02データを収集
+      const planDataList=firm.plans.map(plan=>{
+        const pd=tabDataMap[plan.id]||{};const ps=pd.slotData||{};
+        const gp=id=>{const fr=ps[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+        return {name:plan.name||gp("challengeName")||"Plan",slots:ps,get:gp};
+      });
+
+      if(mode==="dbp01"){
+        // プラン比較テーブル生成
+        const planSummary=planDataList.map(p=>{
+          // ルール詳細スロットからデータ取得
+          const ruleItems=SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").map(s=>{
+            const v=p.get(s.id);
+            if(!v)return `${s.label}: —`;
+            const parts=v.split("|");
+            return `${s.label}: C=${(parts[0]||"").trim()} / F=${(parts[1]||"").trim()}`;
+          }).join("\n");
+          // 価格テーブルスロット
+          const priceData=p.get("priceTable")||"価格データなし";
+          return `【${p.name}】\n${ruleItems}\n価格データ:\n${priceData}`;
+        }).join("\n\n");
+
+        const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,
+          system:`プロップファーム プラン比較テーブル生成。Markdownテーブルのみ出力。
+
+列: 項目 | ${planDataList.map(p=>p.name).join(" | ")}
+
+テーブルは2部構成:
+
+【上半分: ルール比較】
+以下の行を順に出力:
+1. ステップ（Challenge段階数）
+2. 利益目標
+3. 日次損失
+4. 最大損失
+5. 利益分配率
+6. 出金頻度
+7. 最短合格
+8. 最速出金
+9. トータル日数
+
+■ 最短合格・最速出金・トータル日数の算出ロジック（厳守）
+
+【最短合格日数】
+- 各StepのMAX(最低取引日数, 一貫性達成最速日数)の合計
+- 一貫性はBest Day系(X%)のみ ceil(100÷X%)で算出。時間制約系・Loss系は除外
+- 「条件として存在しない」項目はinputから除外（0で埋めない）
+- 全条件が不存在の場合 → フォールバック: 1日 × Step数
+- Instant Funding = 0日
+- 「0日」「制限なし」「即日理論値」は禁止。全条件不存在でも最低1日×Step数
+
+【最速出金日数】
+① X = MAX(最低取引日数(出金用), 一貫性(F側))。全不存在→X=0
+② 出金頻度に応じて:
+   - 随時 → X
+   - 毎週 → MAX(7, X)
+   - 隔週 → MAX(14, X)
+   - 月次 → MAX(30, X)
+③ 初回限定特例あれば → 最速出金(初回) = X
+
+【トータル日数】
+トータル = 最短合格 + 最速出金
+
+【下半分: 口座サイズ × 価格表】
+各口座サイズの行に、各プランの価格を記載。
+口座サイズが存在しないプランは「—」。
+
+ルール:
+- 数値には必ず単位を付与（%、$、日）
+- Challenge/Funded値が異なる場合は「C: X / F: Y」形式で表記
+- 同じ場合はC値のみ記載
+- テーブルのみ出力。説明文は書かない`,
+          messages:[{role:"user",content:planSummary}]});
+        setTabField("slotData",prev=>({...prev,planComparison:[{text:exText(data)}]}));
+
+      } else if(mode==="dbp02"){
+        // 価格テーブル + 早見表を生成
+        const currentPlanId=activeTabId;
+        const currentPlan=firm.plans.find(p=>p.id===currentPlanId);
+        const currentName=currentPlan?.name||"";
+
+        // 価格テーブル: 全プランの価格データから該当プラン強調
+        const priceData=planDataList.map(p=>`【${p.name}】\n価格: ${p.get("priceTable")||"—"}`).join("\n\n");
+        const priceResp=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,
+          system:`全プラン共通の価格テーブルをMarkdown形式で生成。列: 口座サイズ | ${planDataList.map(p=>p.name).join(" | ")}。該当プラン「${currentName}」の列を【】で強調。テーブルのみ出力。`,
+          messages:[{role:"user",content:priceData}]});
+
+        // 早見表: 現在のプランのDBP_02データからChallenge/Funded/差分テーブル
+        const currentPd=tabDataMap[currentPlanId]||{};const cs=currentPd.slotData||{};
+        const gc=id=>{const fr=cs[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+        const ruleItems=SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").map(s=>`${s.label}: ${gc(s.id)||"—"}`).join("\n");
+
+        const ruleResp=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:3000,
+          system:`ルール早見表をMarkdown形式で生成。列: 項目 | Challenge | Funded | 差分。
+
+差分列の判定基準:
+- ChallengeとFundedが同じ値、またはFundedが「—」（Challengeルールをそのまま適用）の場合: 差分列は「—」
+- ChallengeとFundedが異なる値の場合:
+  - Funded側のルールが**緩い**（トレーダーに有利）場合: 「EASE」
+  - Funded側のルールが**厳しい**（トレーダーに不利）場合: 「TRAP」
+
+判定例:
+- 利益目標: C=10%, F=5% → F側が緩い（低い目標で合格） → EASE
+- 日次損失: C=5%, F=3% → F側が厳しい（少ない損失で違反） → TRAP
+- 制限時間: C=30日, F=無制限 → F側が緩い → EASE
+
+数値正確保持。テーブルのみ出力。`,
+          messages:[{role:"user",content:`【${currentName}】\n${ruleItems}`}]});
+
+        setTabField("slotData",prev=>({
+          ...prev,
+          priceTable:[{text:exText(priceResp)}],
+          ...Object.fromEntries(
+            SLOT_DEFS.dbp02.filter(s=>s.section==="早見表").map(s=>[s.id,prev[s.id]||[]])
+          ),
+        }));
+        // 早見表は一括で1つのテーブルとして最初のスロットに入れる
+        const quickRefText=exText(ruleResp);
+        if(quickRefText){
+          setTabField("slotData",prev=>({...prev,ruleQuickRef:[{text:quickRefText}]}));
+        }
+      }
+    }catch(e){alert("テーブルAI生成エラー: "+e.message)}
+    setAiGenTable(false);
+  },[activeTabId,firms,tabDataMap,setTabField]);
+
+  // 用語登録
+  const handleGlossaryAdd=useCallback(async text=>{
+    setGlossaryGenerating(true);
+    try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,
+      system:'プロップファーム用語辞典編集者。JSON配列のみ出力。各要素:{term,category,definition,explanation,trivia}',
+      messages:[{role:"user",content:text}]});
+      const arr=JSON.parse(exText(data).replace(/```json|```/g,"").trim());
+      const clean=(Array.isArray(arr)?arr:[arr]).map(({key,type,...rest})=>rest);
+      setGlossaryTerms(p=>[...p,...clean]);
+    }catch(e){alert("用語エラー")}
+    setGlossaryGenerating(false);
+  },[]);
+
+  // 縦タブ操作
+  const addFirm=useCallback(()=>{
+    const id="f"+String(nextId.current++);
+    setFirms(p=>[...p,{id,name:"",plans:[]}]);
+    setTabDataMap(p=>({...p,[id]:{archives:[],targetText:"",slotData:{},templateMode:"dbp01"}}));
+    setActiveTabId(id);
+  },[]);
+  const addPlan=useCallback(firmId=>{
+    const id="p"+String(nextId.current++);
+    setFirms(p=>p.map(f=>f.id===firmId?{...f,plans:[...(f.plans||[]),{id,name:""}]}:f));
+    setTabDataMap(p=>({...p,[id]:{archives:[],targetText:"",slotData:{},templateMode:"dbp02"}}));
+    setActiveTabId(id);
+  },[]);
+  // ID指定でドラッグ並べ替え。ピングループをまたいだら移動先のpinned状態に合わせる
+  const reorderFirms=useCallback((fromId,toId)=>{
+    setFirms(p=>{
+      const arr=[...p];
+      const fromIdx=arr.findIndex(f=>f.id===fromId);
+      const toIdx=arr.findIndex(f=>f.id===toId);
+      if(fromIdx<0||toIdx<0)return p;
+      const targetPinned=!!arr[toIdx].pinned;
+      const [item]=arr.splice(fromIdx,1);
+      const newItem=item.pinned===targetPinned?item:{...item,pinned:targetPinned};
+      const insertIdx=arr.findIndex(f=>f.id===toId);
+      arr.splice(insertIdx,0,newItem);
+      return arr;
+    });
+  },[]);
+  const togglePin=useCallback(firmId=>{
+    setFirms(p=>p.map(f=>f.id===firmId?{...f,pinned:!f.pinned}:f));
+  },[]);
+  const deleteTab=useCallback(id=>{
+    // Firm削除
+    const firmIdx=firms.findIndex(f=>f.id===id);
+    if(firmIdx>=0){
+      if(firms.length<=1&&!firms[0].plans?.length)return;
+      const planIds=(firms[firmIdx].plans||[]).map(p=>p.id);
+      setFirms(p=>p.filter(f=>f.id!==id));
+      setTabDataMap(p=>{const n={...p};delete n[id];planIds.forEach(pid=>delete n[pid]);return n});
+      if(activeTabId===id||planIds.includes(activeTabId)){
+        const remaining=firms.filter(f=>f.id!==id);
+        setActiveTabId(remaining[0]?.id||"");
+      }
+      return;
+    }
+    // Plan削除
+    setFirms(p=>p.map(f=>({...f,plans:(f.plans||[]).filter(pl=>pl.id!==id)})));
+    setTabDataMap(p=>{const n={...p};delete n[id];return n});
+    if(activeTabId===id){
+      // 親Firmに戻る
+      const parent=firms.find(f=>(f.plans||[]).some(pl=>pl.id===id));
+      setActiveTabId(parent?.id||firms[0]?.id||"");
+    }
+  },[firms,activeTabId]);
+  // 複数Firm一括削除（チェック選択用）
+  const deleteManyFirms=useCallback(ids=>{
+    const idSet=new Set(ids);
+    const planIds=new Set();
+    firms.forEach(f=>{ if(idSet.has(f.id))(f.plans||[]).forEach(p=>planIds.add(p.id)); });
+    const remaining=firms.filter(f=>!idSet.has(f.id));
+    setFirms(remaining);
+    setTabDataMap(p=>{const n={...p};idSet.forEach(id=>delete n[id]);planIds.forEach(pid=>delete n[pid]);return n});
+    if(idSet.has(activeTabId)||planIds.has(activeTabId)){
+      setActiveTabId(remaining[0]?.id||"");
+    }
+  },[firms,activeTabId]);
+  const renameTab=useCallback((id,name)=>{
+    // Firmか？
+    if(firms.some(f=>f.id===id)){
+      setFirms(p=>p.map(f=>f.id===id?{...f,name}:f));
+      // firmNameスロットに反映
+      setTabDataMap(prev=>{
+        const cur=prev[id]||{archives:[],targetText:"",slotData:{},templateMode:"dbp01"};
+        return{...prev,[id]:{...cur,slotData:{...cur.slotData,firmName:[{text:name}]}}};
+      });
+      return;
+    }
+    // Plan
+    const parentFirm=firms.find(f=>(f.plans||[]).some(pl=>pl.id===id));
+    const firmName=parentFirm?.name||"";
+    const fullName=firmName?firmName+" - "+name:name;
+    setFirms(p=>p.map(f=>({...f,plans:(f.plans||[]).map(pl=>pl.id===id?{...pl,name}:pl)})));
+    // challengeNameスロットに反映（Firm名 - Plan名）
+    setTabDataMap(prev=>{
+      const cur=prev[id]||{archives:[],targetText:"",slotData:{},templateMode:"dbp02"};
+      return{...prev,[id]:{...cur,slotData:{...cur.slotData,challengeName:[{text:fullName}]}}};
+    });
+  },[firms]);
+
+  // CSV一括登録（同名Firm重複スキップ）
+  const bulkImport=useCallback((data)=>{
+    const newFirms=[];const newTabData={};
+    data.forEach(row=>{
+      // 既存Firmと同名ならスキップ
+      const existingFirm=firms.find(f=>f.name===row.firmName);
+      if(existingFirm)return;
+      const fid="f"+String(nextId.current++);
+      const plans=row.plans.map(pName=>{
+        const pid="p"+String(nextId.current++);
+        const fullName=row.firmName+" - "+pName;
+        newTabData[pid]={archives:[],targetText:"",slotData:{challengeName:[{text:fullName}]},templateMode:"dbp02"};
+        return{id:pid,name:pName};
+      });
+      newFirms.push({id:fid,name:row.firmName,plans});
+      newTabData[fid]={archives:[],targetText:"",slotData:{firmName:[{text:row.firmName}]},templateMode:"dbp01"};
+    });
+    if(!newFirms.length){alert("全て登録済み（重複スキップ）");return}
+    setFirms(p=>[...p,...newFirms]);
+    setTabDataMap(p=>({...p,...newTabData}));
+    if(newFirms.length)setActiveTabId(newFirms[0].id);
+  },[firms]);
+
+  // 小窓
+  const openPasteWindow=useCallback(()=>{
+    const html=window.__pfmPasteWindowHTML;if(!html)return;
+    const blob=new Blob([html],{type:"text/html"});const url=URL.createObjectURL(blob);
+    window.open(url,"pfm-paste","width=500,height=600,left=50,top=50,resizable=yes,scrollbars=yes");
+  },[]);
+
+  // 早見表チェッカー
+  const qrWinRef=useRef(null);
+  const openQuickRef=useCallback(()=>{
+    if(qrWinRef.current&&!qrWinRef.current.closed){qrWinRef.current.focus();return}
+    // 相対パスで同じディレクトリのquickref-checker-v03.htmlを開く
+    const basePath=location.href.substring(0,location.href.lastIndexOf("/")+1);
+    qrWinRef.current=window.open(basePath+"quickref-checker-v03.html","pfm-quickref","width=420,height=700,resizable=yes,scrollbars=yes");
+  },[]);
+
+  // 全データexport/import
+  const exportAll=useCallback(()=>{exportJSON({firms,tabDataMap,glossaryTerms},"pfm-intake-all.json")},[firms,tabDataMap,glossaryTerms]);
+
+  // Hugo出力
+  const [hugoDir,setHugoDir]=useState(null);
+  const [hugoDirName,setHugoDirName]=useState("");
+  const selectHugoDir=useCallback(async()=>{
+    try{
+      const d=await window.showDirectoryPicker({mode:"readwrite"});
+      setHugoDir(d);setHugoDirName(d.name);
+    }catch(e){if(e.name!=="AbortError")alert("フォルダ選択エラー: "+e.message);}
+  },[]);
+  const exportHugo=useCallback(async()=>{
+    if(!hugoDir){alert("まずHugo出力先フォルダを選択してください");return;}
+    let count=0;
+    try{
+      await writeHugoFile(hugoDir,["data","glossary.json"],JSON.stringify(glossaryTerms,null,2));
+      count++;
+      for(const firm of firms){
+        const fd=tabDataMap[firm.id];
+        if(!fd)continue;
+        const sd=fd.slotData||{};
+        const firmName=getSlotText(sd,"firmName")||firm.name||"";
+        const slug=slugify(firmName)||firm.id;
+        const fj={slug};
+        for(const[ek,jk]of Object.entries(FIRM_KEY_MAP))fj[jk]=getSlotText(sd,ek);
+        fj["メールアドレス"]=getSlotText(sd,"メールアドレス")||"";
+        fj["アフィリエイトURL"]=getSlotText(sd,"アフィリエイトURL")||"";
+        fj["クーポン"]=[];
+        fj["プラン一覧"]=(firm.plans||[]).map(p=>p.name);
+        await writeHugoFile(hugoDir,["data","firms",`${slug}.json`],JSON.stringify(fj,null,2));
+        count++;
+        if(fd.targetText){
+          const md=`---\ntitle: "${firmName}"\nslug: "${slug}"\nfirm: "${slug}"\n---\n\n${fd.targetText}`;
+          await writeHugoFile(hugoDir,["content","firms",slug,"index.md"],md);
+          count++;
+        }
+        for(const plan of(firm.plans||[])){
+          const pd=tabDataMap[plan.id];
+          if(!pd)continue;
+          const psd=pd.slotData||{};
+          const planName=getSlotText(psd,"challengeName")||plan.name||"";
+          const cleanName=planName.replace(new RegExp(`^${firmName.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}\\s*[-\u2013]\\s*`),"");
+          const planSlug=slugify(cleanName)||plan.id;
+          const pj={slug:planSlug,"\u30d5\u30a1\u30fc\u30e0":slug};
+          for(const[ek,jk]of Object.entries(PLAN_KEY_MAP))pj[jk]=getSlotText(psd,ek);
+          await writeHugoFile(hugoDir,["data","firms",slug,"plans",`${planSlug}.json`],JSON.stringify(pj,null,2));
+          count++;
+          if(pd.targetText){
+            const mdp=`---\ntitle: "${cleanName}"\nslug: "${planSlug}"\nfirm: "${slug}"\n---\n\n${pd.targetText}`;
+            await writeHugoFile(hugoDir,["content","firms",slug,"plans",planSlug,"index.md"],mdp);
+            count++;
+          }
+        }
+      }
+      alert(`Hugo出力完了: ${count}ファイルを書き込みました`);
+    }catch(e){alert("エラー: "+e.message);}
+  },[hugoDir,firms,tabDataMap,glossaryTerms]);
+
+  // データ適用（読込・復元の共通処理）— ID衝突回避＋glossary正本補完
+  const applyData=useCallback(d=>{
+    if(!d)return;
+    if(d.firms)setFirms(d.firms);
+    if(d.tabDataMap)setTabDataMap(d.tabDataMap);
+    if(d.glossaryTerms){
+      const loaded=d.glossaryTerms;
+      const loadedKeys=new Set(loaded.map(t=>t.key).filter(Boolean));
+      const missingSeed=GLOSSARY_SEED.filter(s=>!loadedKeys.has(s.key)).map(s=>({...s}));
+      setGlossaryTerms([...missingSeed,...loaded]);
+    }
+    if(d.firms?.[0])setActiveTabId(d.firms[0].id);
+    if(d.firms){
+      let maxId=0;
+      d.firms.forEach(f=>{
+        const fn=parseInt(f.id.replace(/\D/g,""))||0; if(fn>maxId)maxId=fn;
+        (f.plans||[]).forEach(p=>{const pn=parseInt(p.id.replace(/\D/g,""))||0; if(pn>maxId)maxId=pn});
+      });
+      nextId.current=maxId+1;
+    }
+  },[]);
+
+  const importAll=useCallback(()=>{importJSON(applyData)},[applyData]);
+
+  // バックアップ用：現在の全状態を取得 / 復元
+  const getCurrentData=useCallback(()=>({firms,tabDataMap,glossaryTerms}),[firms,tabDataMap,glossaryTerms]);
+  const restoreData=useCallback(d=>applyData(d),[applyData]);
+
+  // マージ実行：自動バックアップ → 衝突選択に従って統合
+  const applyMerge=useCallback((incoming, plan, choices)=>{
+    // 1) 実行直前に自動バックアップ
+    try{
+      const cur={firms,tabDataMap,glossaryTerms};
+      const list=loadBackups();
+      let next=[makeBackupSnapshot("(マージ前 自動退避)",cur,true),...list];
+      if(next.length>BACKUP_MAX)next=next.slice(0,BACKUP_MAX);
+      saveBackups(next);
+    }catch(e){/* バックアップ失敗してもマージは続行可。ただし通知 */ alert("自動バックアップに失敗しました（マージは続行します）: "+e.message);}
+
+    const incomingTab=incoming.tabDataMap||{};
+    // 採番カウンタは現在＋取り込み両方の最大値+1から
+    let counter=Math.max(maxNumId(firms), maxNumId(incoming.firms||[]), nextId.current-1)+1;
+
+    // 追加対象（autoAdd + 衝突でfile/both選択分）を集める
+    const toAdd=[...plan.autoAdd];
+    const namesToOverwrite=new Set(); // file選択 → 既存を消す
+    plan.conflicts.forEach(c=>{
+      const ch=choices[c.name]||"both";
+      if(ch==="file"){ toAdd.push(c.incoming); namesToOverwrite.add(c.name); }
+      else if(ch==="both"){ toAdd.push(c.incoming); }
+      // keep → 何もしない（スキップ）
+    });
+
+    // 既存firms：file選択されたものは除去
+    let baseFirms=firms.filter(f=>!namesToOverwrite.has(f.name));
+    let baseTab={...tabDataMap};
+    // 除去されたfirmのtabDataも掃除
+    firms.filter(f=>namesToOverwrite.has(f.name)).forEach(f=>{
+      delete baseTab[f.id];
+      (f.plans||[]).forEach(p=>delete baseTab[p.id]);
+    });
+
+    // 取り込みfirmをID振り直しして追加。bothで同名衝突する場合は名前に (2) を付与
+    const existingNames=new Set(baseFirms.map(f=>f.name));
+    const addedFirms=[];
+    toAdd.forEach(inf=>{
+      const r=reidFirm(inf, incomingTab, counter);
+      counter=r.nextCounter;
+      let nf=r.firm;
+      // 名前衝突（both）なら一意化
+      if(existingNames.has(nf.name)){
+        let n=2, cand;
+        do{ cand=`${nf.name} (${n})`; n++; }while(existingNames.has(cand));
+        // 名前変更をfirm名・firmNameスロットに反映
+        nf={...nf,name:cand};
+        const ft=r.tabEntries[nf.id];
+        if(ft){ ft.slotData={...(ft.slotData||{}),firmName:[{text:cand}]}; }
+      }
+      existingNames.add(nf.name);
+      addedFirms.push(nf);
+      Object.assign(baseTab, r.tabEntries);
+    });
+
+    // glossary統合（新規keyのみ追加）
+    const baseKeys=new Set((glossaryTerms||[]).map(t=>t.key).filter(Boolean));
+    const gAdd=(incoming.glossaryTerms||[]).filter(t=>t.key&&!baseKeys.has(t.key));
+
+    const finalFirms=[...baseFirms,...addedFirms];
+    setFirms(finalFirms);
+    setTabDataMap(baseTab);
+    if(gAdd.length)setGlossaryTerms(p=>[...p,...gAdd]);
+    nextId.current=counter;
+    if(addedFirms[0])setActiveTabId(addedFirms[0].id);
+
+    alert(`マージ完了\n追加Firm: ${addedFirms.length} 件\n用語追加: ${gAdd.length} 件`);
+  },[firms,tabDataMap,glossaryTerms]);
+
+  // Firm統合の実適用
+  const openConsolidate=useCallback(firmId=>{ setConsolidateKeepId(firmId); },[]);
+  const applyConsolidate=useCallback((keepId,absorbId,plan,resolve)=>{
+    if(!plan)return;
+    const keepFirm=firms.find(f=>f.id===keepId);
+    const absorbFirm=firms.find(f=>f.id===absorbId);
+    if(!keepFirm||!absorbFirm)return;
+
+    // 自動バックアップ
+    try{
+      const cur={firms,tabDataMap,glossaryTerms};
+      const list=loadBackups();
+      let next=[makeBackupSnapshot("(統合前 自動退避)",cur,true),...list];
+      if(next.length>BACKUP_MAX)next=next.slice(0,BACKUP_MAX);
+      saveBackups(next);
+    }catch(e){alert("自動バックアップに失敗（統合は続行します）: "+e.message);}
+
+    const ckey=c=>`${c.scope}|${c.planName}|${c.slotKey}`;
+    // conflict解決をslotKey→採用valのmapに（scope/plan別）
+    const pickVal=(c)=>{ const r=resolve[ckey(c)]; return r==="absorb"?c.absorbVal:c.keepVal; };
+
+    // archives結合（重複除去）
+    const mergeArchives=(aArr,bArr)=>{
+      const seen=new Set(); const out=[];
+      [...(aArr||[]),...(bArr||[])].forEach(t=>{const k=String(t); if(!seen.has(k)){seen.add(k);out.push(t)}});
+      return out;
+    };
+    // slotData合成（空補完＋競合は採用値）
+    const buildMergedSlot=(keepSD,absorbSD,scope,planName)=>{
+      const m={...(keepSD||{})};
+      const allKeys=new Set([...Object.keys(keepSD||{}),...Object.keys(absorbSD||{})]);
+      allKeys.forEach(k=>{
+        const kt=slotTextOf(keepSD?.[k]), at=slotTextOf(absorbSD?.[k]);
+        if(!kt&&at){ m[k]=absorbSD[k]; }
+        else if(kt&&at&&kt!==at){
+          const c=plan.conflicts.find(x=>x.scope===scope&&x.planName===planName&&x.slotKey===k);
+          if(c)m[k]=pickVal(c);
+        }
+      });
+      return m;
+    };
+
+    const newTab={...tabDataMap};
+
+    // Firm本体
+    const keepFirmTab=tabDataMap[keepFirm.id]||{archives:[],targetText:"",slotData:{},templateMode:"dbp01"};
+    const absorbFirmTab=tabDataMap[absorbFirm.id]||{archives:[],slotData:{}};
+    newTab[keepFirm.id]={
+      ...keepFirmTab,
+      archives:mergeArchives(keepFirmTab.archives,absorbFirmTab.archives),
+      slotData:buildMergedSlot(keepFirmTab.slotData,absorbFirmTab.slotData,"firm",keepFirm.name),
+    };
+
+    // Plan処理
+    let counter=Math.max(maxNumId(firms),nextId.current-1)+1;
+    const keepPlans=[...(keepFirm.plans||[])];
+    plan.planActions.forEach(a=>{
+      if(a.type==="merge"){
+        const kp=a.keepPlan, ap=a.absorbPlan;
+        const kTab=tabDataMap[kp.id]||{archives:[],slotData:{}};
+        const aTab=tabDataMap[ap.id]||{archives:[],slotData:{}};
+        newTab[kp.id]={
+          ...kTab,
+          archives:mergeArchives(kTab.archives,aTab.archives),
+          slotData:buildMergedSlot(kTab.slotData,aTab.slotData,"plan",ap.name),
+        };
+      }else{ // move: 吸収側Planを新IDでkeepFirmへ
+        const ap=a.absorbPlan;
+        const newPid="p"+String(counter++);
+        const aTab=tabDataMap[ap.id]||{archives:[],targetText:"",slotData:{},templateMode:"dbp02"};
+        newTab[newPid]=JSON.parse(JSON.stringify(aTab));
+        // challengeNameをkeepFirm名に合わせて更新
+        const planNm=ap.name;
+        newTab[newPid].slotData={...(newTab[newPid].slotData||{}),challengeName:[{text:`${keepFirm.name} - ${planNm}`}]};
+        keepPlans.push({id:newPid,name:ap.name});
+      }
+    });
+
+    // 吸収側tabDataを掃除
+    delete newTab[absorbFirm.id];
+    (absorbFirm.plans||[]).forEach(p=>delete newTab[p.id]);
+
+    // firms更新：keepFirmのplans差し替え、absorbFirm除去
+    const newFirms=firms
+      .filter(f=>f.id!==absorbFirm.id)
+      .map(f=>f.id===keepFirm.id?{...f,plans:keepPlans}:f);
+
+    setFirms(newFirms);
+    setTabDataMap(newTab);
+    nextId.current=counter;
+    setActiveTabId(keepFirm.id);
+
+    const moved=plan.planActions.filter(a=>a.type==="move").length;
+    const merged=plan.planActions.filter(a=>a.type==="merge").length;
+    alert(`統合完了\n移動Plan: ${moved} 件 ／ 合成Plan: ${merged} 件\n「${absorbFirm.name}」は削除しました`);
+  },[firms,tabDataMap,glossaryTerms]);
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",height:"100vh",overflow:"hidden"}}>
+      <FuncIndex show={showFuncIndex} onClose={()=>setShowFuncIndex(false)} />
+      <BackupModal show={showBackup} onClose={()=>setShowBackup(false)} getCurrentData={getCurrentData} onRestore={restoreData} />
+      <MergeModal show={showMerge} onClose={()=>setShowMerge(false)} getCurrentData={getCurrentData} onApplyMerge={applyMerge} />
+      <ConsolidateModal show={!!consolidateKeepId} onClose={()=>setConsolidateKeepId(null)} firms={firms} tabDataMap={tabDataMap} initialKeepId={consolidateKeepId} onApply={applyConsolidate} />
+
+      {/* Header */}
+      <div style={{background:C.surface,borderBottom:`1px solid ${C.border}`,padding:"6px 10px",display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+        <span style={{fontWeight:700,color:C.accent,fontFamily:font,fontSize:"0.85rem"}}>Page Maker</span>
+        <span style={{fontSize:"0.6rem",color:C.textDim}}>{APP_VERSION}</span>
+        <div style={{flex:1}} />
+        <div style={{display:"flex",gap:2}}>
+          <button onClick={()=>setRightMode("slots")} style={{background:rightMode==="slots"?C.accent:"transparent",color:rightMode==="slots"?C.bg:C.textDim,border:`1px solid ${rightMode==="slots"?C.accent:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>スロット</button>
+          <button onClick={()=>setRightMode("glossary")} style={{background:rightMode==="glossary"?C.purple:"transparent",color:rightMode==="glossary"?C.bg:C.textDim,border:`1px solid ${rightMode==="glossary"?C.purple:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>用語</button>
+        </div>
+        <Btn color={C.green} onClick={exportAll} style={{fontSize:"0.6rem"}}>全保存</Btn>
+        <Btn color={C.green} onClick={importAll} style={{fontSize:"0.6rem"}} title="JSONファイルを読み込み（現在のデータを上書き）">全読込</Btn>
+        <Btn color={C.accent} onClick={()=>setShowBackup(true)} style={{fontSize:"0.6rem"}} title="ブラウザ内にバックアップ／そこから復元">💾 ﾊﾞｯｸｱｯﾌﾟ</Btn>
+        <Btn color={C.blue} onClick={()=>setShowMerge(true)} style={{fontSize:"0.6rem"}} title="別PCのJSONを足し合わせて統合（上書きしない）">🔀 ﾏｰｼﾞ</Btn>
+        <Btn color="#f0b90b" onClick={selectHugoDir} style={{fontSize:"0.6rem"}} title="Hugo出力先フォルダを選択">📁{hugoDirName?` ${hugoDirName}`:" 出力先"}</Btn>
+        <Btn color="#00d4ff" onClick={exportHugo} style={{fontSize:"0.6rem"}} title="Hugo用JSON/MDを直接書き込み">🚀Hugo</Btn>
+        <span onClick={()=>setShowFuncIndex(!showFuncIndex)} style={{cursor:"pointer",fontSize:"0.82rem"}}>📋</span>
+      </div>
+
+      {/* Main */}
+      <div style={{flex:1,display:"flex",overflow:"hidden"}}>
+        {/* 縦タブ */}
+        <VerticalTabs firms={firms} activeId={activeTabId} onSelect={setActiveTabId}
+          onAddFirm={addFirm} onAddPlan={addPlan} onDelete={deleteTab} onRename={renameTab}
+          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteManyFirms} onTogglePin={togglePin} />
+        <ResizeHandle dir="x" onMouseDown={vtabDrag} />
+
+        {/* 左カラム: 貼り付け + 取り込み対象 */}
+        <div style={{width:leftW,flexShrink:0,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+          <PastePanel externalRef={pasteAreaRef} archives={td.archives}
+            onSendToTarget={handleSendToTarget} onTranslateToTarget={handleTranslateToTarget}
+            onArchive={handleArchive} onDeleteArchive={handleDeleteArchive}
+            height={pasteH} onOpenChild={openPasteWindow} onOpenQuickRef={openQuickRef} />
+          <ResizeHandle dir="y" onMouseDown={pasteDrag} />
+          <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
+            autoAssigning={autoAssigning} translating={translating}
+            onClear={()=>setTabField("targetText","")} onAdd={handleAdd} 
+            activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null} />
+        </div>
+        <ResizeHandle dir="x" onMouseDown={leftDrag} />
+
+        {/* 右カラム */}
+        {rightMode==="slots"?(
+          <SlotPanel templateMode={td.templateMode} setTemplateMode={m=>setTabField("templateMode",m)}
+            slotData={td.slotData} setSlotData={v=>setTabField("slotData",v)} currentSlots={currentSlots}
+            availableTemplates={availableTemplates}
+            onAIGenKoryaku={td.templateMode==="koryaku"?handleAIGenKoryaku:null} aiGenKoryaku={aiGenKoryaku}
+            onAIGenTable={handleAIGenTable} aiGenTable={aiGenTable}
+            locks={slotLocks} setLocks={setSlotLocks} 
+            activeSlotId={activeSlotId} setActiveSlotId={setActiveSlotId}
+            onSyncPlans={syncPlansFromList} />
+        ):(
+          <GlossaryPanel terms={glossaryTerms} setTerms={setGlossaryTerms} generating={glossaryGenerating} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

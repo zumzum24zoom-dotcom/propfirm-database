@@ -1,0 +1,9 @@
+firm: ftmo
+name: FTMO Challenge 10K
+account_size: 10000
+price: 155
+profit_target_phase1: 10
+profit_target_phase2: 5
+max_drawdown: 10
+daily_drawdown: 5
+currency: USD

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Locale }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}プロップファームのデータベース・比較サイト{{ end }}">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="site-title" href="{{ "/" | relURL }}">
+      Prop<span>Firm</span> DB
+    </a>
+    <nav>
+      <a href="{{ "/" | relURL }}" {{ if .IsHome }}class="active"{{ end }}>ホーム</a>
+      <a href="{{ "/firms/" | relURL }}" {{ if hasPrefix .RelPermalink "/firms" }}class="active"{{ end }}>ファーム</a>
+      <a href="{{ "/plans/" | relURL }}" {{ if hasPrefix .RelPermalink "/plans" }}class="active"{{ end }}>プラン</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  {{ block "main" . }}{{ end }}
+</main>
+
+<footer>
+  <p>&copy; {{ now.Year }} Prop Firm Database — 情報は参考目的のみ。投資助言ではありません。</p>
+</footer>
+
+</body>
+</html>
