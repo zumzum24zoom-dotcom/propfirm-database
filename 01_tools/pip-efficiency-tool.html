@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Pip効率計算ツール v05 - エントリータイミング分析</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #131722;
+    --bg-card: #1e222d;
+    --bg-alt: #252931;
+    --border: #2a2e39;
+    --text: #d1d4dc;
+    --text-dim: #787b86;
+    --accent: #2962ff;
+    --green: #26a69a;
+    --red: #ef5350;
+    --yellow: #ffa726;
+    --purple: #ab47bc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1600px; margin: 0 auto; }
+  h1 { font-size: 18px; margin-bottom: 4px; color: var(--text); font-weight: 600; }
+  .subtitle { color: var(--text-dim); font-size: 12px; margin-bottom: 20px; }
+
+  .control-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 4px; }
+  .control-group label {
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .control-group select, .control-group input {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  .action-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .btn-secondary {
+    background: var(--bg-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .status-pill {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    margin-left: auto;
+    max-width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .status-pill.loading { background: rgba(41, 98, 255, 0.15); color: var(--accent); }
+  .status-pill.ok { background: rgba(38, 166, 154, 0.15); color: var(--green); }
+  .status-pill.warn { background: rgba(255, 167, 38, 0.15); color: var(--yellow); }
+  .status-pill.err { background: rgba(239, 83, 80, 0.15); color: var(--red); }
+
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .summary-card .label {
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .summary-card .value {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .summary-card .sub { color: var(--text-dim); font-size: 11px; margin-top: 2px; }
+
+  .pair-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
+    gap: 16px;
+  }
+  .pair-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .pair-block-header {
+    padding: 10px 14px;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pair-block-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .pair-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+  }
+  .pair-stats b { color: var(--text); font-weight: 500; }
+
+  table.timing-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  table.timing-matrix th, table.timing-matrix td {
+    padding: 6px 4px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  table.timing-matrix th {
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    font-weight: 500;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  table.timing-matrix th.first-col, table.timing-matrix td.first-col {
+    text-align: left;
+    padding-left: 10px;
+    font-weight: 500;
+    background: var(--bg-alt);
+    border-right: 2px solid var(--border);
+  }
+
+  .cell-main { font-weight: 600; }
+  .cell-sub { color: var(--text-dim); font-size: 9px; }
+  .cell-ok { background: rgba(38, 166, 154, 0.10); }
+  .cell-warn { background: rgba(255, 167, 38, 0.10); }
+  .cell-bad { background: rgba(239, 83, 80, 0.10); }
+  .cell-dead { background: rgba(239, 83, 80, 0.20); }
+  .cell-invalid { color: var(--text-dim); opacity: 0.4; }
+
+  .footer-note {
+    margin-top: 20px;
+    padding: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .footer-note strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Pip効率計算ツール v05 <span style="color:var(--text-dim);font-size:13px;font-weight:400;">— エントリータイミング × Lot 物理的到達性分析</span></h1>
+  <p class="subtitle">1波中央値（ATR×0.3閾値のZigZag実測）を利確目標とし、反転後のエントリータイミング別にTP/SL到達可能性を過去データで検証</p>
+
+  <div class="control-panel">
+    <div class="control-grid">
+      <div class="control-group">
+        <label>アカウントサイズ</label>
+        <select id="accountSize">
+          <option value="10000">$10,000</option>
+          <option value="25000">$25,000</option>
+          <option value="50000">$50,000</option>
+          <option value="100000" selected>$100,000</option>
+          <option value="200000">$200,000</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>1トレード許容損失率</label>
+        <select id="lossRate">
+          <option value="0.003">0.3%</option>
+          <option value="0.005" selected>0.5%</option>
+          <option value="0.01">1.0%</option>
+          <option value="0.02">2.0%</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>ZigZag閾値係数 (×ATR)</label>
+        <input type="number" id="thresholdRatio" value="0.3" step="0.05" min="0.1" max="2.0">
+      </div>
+      <div class="control-group">
+        <label>分析時間軸</label>
+        <select id="timeframe">
+          <option value="15min">15分足 (3日)</option>
+          <option value="1h" selected>1時間足 (7日)</option>
+          <option value="4h">4時間足 (20日)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>戻りpips刻み (TP逆算用)</label>
+        <input type="text" id="retraceSteps" value="0,10,20,30,40,50" placeholder="0,10,20,30,40,50">
+      </div>
+      <div class="control-group">
+        <label>反転マージン (pips)</label>
+        <input type="range" id="reversalMargin" value="5" min="1" max="20" step="1" style="padding:0;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);">
+          <span>1p</span><span id="marginValue" style="color:var(--text);font-weight:600;">5 pips</span><span>20p</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" id="runBtn">🔄 計算実行</button>
+      <button class="btn-secondary" id="debugBtn">🔬 API疎通テスト</button>
+      <span class="status-pill" id="statusPill">待機中</span>
+    </div>
+  </div>
+
+  <div class="summary-cards" id="summaryCards"></div>
+
+  <div class="pair-grid" id="pairGrid"></div>
+
+  <div class="footer-note">
+    <strong>ロジック (v06):</strong>
+    (1) Twelve Data APIから指定時間軸のOHLC取得 →
+    (2) 日次ATR(14)相当を算出しZigZag閾値=ATR×係数を決定 →
+    (3) ZigZag抽出した全波の中央値=「1波中央値」=TP目標に設定 →
+    (4) 検出された各反転地点から、指定戻りpipsでエントリー仮定 →
+    (5) <b>SL距離 = 戻りpips + 反転マージン</b>（反転地点を割ったら損切）→
+    <b>TP距離 = 1波中央値 − 戻りpips</b> →
+    (6) <b>最大Lot = 許容損失$ / (pip価値 × SL)</b> →
+    (7) 実OHLCを走査しTP/SLどちら先到達か過去データで判定。
+    <br>
+    <strong>セルの読み方:</strong>
+    TP率=TP先到達率、RR=リスクリワード比（SLに対するTP倍率）、最大Lot=許容損失内に収まるLot上限。
+    🎯≥60%、✓=50〜60%、⚠️=30〜50%、🚫=10〜30%、💀<10%または SL&lt;スプレッド×2。
+    戻りpips≥1波中央値の行はエントリー遅すぎで「—」。
+    <br>
+    <strong>⚠️ 注意:</strong> 過去データの後方検証です。将来の値動きを保証しません。記事執筆時の参考データとしてご利用ください。APIキー直書きのため公開禁止。
+  </div>
+
+</div>
+
+<script>
+// ===========================================================================
+// 設定
+// ===========================================================================
+const TD_API_KEY = "e451427e06d1489397eb608130697a76";
+const TD_BASE = "https://api.twelvedata.com";
+
+const PAIRS_META = [
+  { symbol: "USDJPY", apiSymbol: "USD/JPY", pipSize: 0.01,    pipValuePerLot: 6.80,  spreadPips: 1.0, displayName: "USD/JPY" },
+  { symbol: "EURUSD", apiSymbol: "EUR/USD", pipSize: 0.0001,  pipValuePerLot: 10.00, spreadPips: 0.8, displayName: "EUR/USD" },
+  { symbol: "GBPUSD", apiSymbol: "GBP/USD", pipSize: 0.0001,  pipValuePerLot: 10.00, spreadPips: 1.2, displayName: "GBP/USD" },
+  { symbol: "AUDUSD", apiSymbol: "AUD/USD", pipSize: 0.0001,  pipValuePerLot: 10.00, spreadPips: 1.0, displayName: "AUD/USD" },
+  { symbol: "GBPJPY", apiSymbol: "GBP/JPY", pipSize: 0.01,    pipValuePerLot: 6.80,  spreadPips: 1.8, displayName: "GBP/JPY" },
+  { symbol: "EURJPY", apiSymbol: "EUR/JPY", pipSize: 0.01,    pipValuePerLot: 6.80,  spreadPips: 1.5, displayName: "EUR/JPY" },
+  { symbol: "AUDJPY", apiSymbol: "AUD/JPY", pipSize: 0.01,    pipValuePerLot: 6.80,  spreadPips: 1.8, displayName: "AUD/JPY" },
+  { symbol: "EURGBP", apiSymbol: "EUR/GBP", pipSize: 0.0001,  pipValuePerLot: 12.50, spreadPips: 1.2, displayName: "EUR/GBP" },
+  { symbol: "XAUUSD", apiSymbol: "XAU/USD", pipSize: 0.1,     pipValuePerLot: 10.00, spreadPips: 3.0, displayName: "XAU/USD" }
+];
+
+// ===========================================================================
+// API
+// ===========================================================================
+async function fetchOHLCFromAPI(apiSymbol, interval, outputsize) {
+  const url = `${TD_BASE}/time_series?symbol=${encodeURIComponent(apiSymbol)}&interval=${interval}&outputsize=${outputsize}&apikey=${TD_API_KEY}&format=JSON`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  if (data.status === 'error') throw new Error(data.message || 'API error');
+  if (!Array.isArray(data.values)) throw new Error('No values');
+  return data.values.slice().reverse().map((v, i) => ({
+    time: i, datetime: v.datetime,
+    open: parseFloat(v.open), high: parseFloat(v.high),
+    low: parseFloat(v.low), close: parseFloat(v.close)
+  }));
+}
+
+async function fetchAllPairs(interval, outputsize, onProgress) {
+  const results = {};
+  const errors = [];
+  const FIRST_BATCH_SIZE = 8;
+  const WAIT_MS = 60000;
+
+  const firstBatch = PAIRS_META.slice(0, FIRST_BATCH_SIZE);
+  if (onProgress) onProgress(`第1バッチ ${firstBatch.length}ペア送信中...`);
+  await Promise.all(firstBatch.map(p =>
+    fetchOHLCFromAPI(p.apiSymbol, interval, outputsize)
+      .then(ohlc => { results[p.symbol] = ohlc; console.log(`✅ ${p.symbol}: ${ohlc.length}本`); })
+      .catch(err => { errors.push({ symbol: p.symbol, message: err.message }); console.warn(`❌ ${p.symbol}: ${err.message}`); })
+  ));
+
+  if (PAIRS_META.length > FIRST_BATCH_SIZE) {
+    for (let s = WAIT_MS / 1000; s > 0; s--) {
+      if (onProgress) onProgress(`第1バッチ完了 (${Object.keys(results).length}件成功)。次バッチまで ${s}秒...`);
+      await new Promise(r => setTimeout(r, 1000));
+    }
+    const remaining = PAIRS_META.slice(FIRST_BATCH_SIZE);
+    if (onProgress) onProgress(`第2バッチ ${remaining.length}ペア送信中...`);
+    await Promise.all(remaining.map(p =>
+      fetchOHLCFromAPI(p.apiSymbol, interval, outputsize)
+        .then(ohlc => { results[p.symbol] = ohlc; console.log(`✅ ${p.symbol}: ${ohlc.length}本`); })
+        .catch(err => { errors.push({ symbol: p.symbol, message: err.message }); console.warn(`❌ ${p.symbol}: ${err.message}`); })
+    ));
+  }
+  return { results, errors };
+}
+
+// ===========================================================================
+// ATR (True Range の N本平均)
+// ===========================================================================
+function computeATR(ohlc, period = 14) {
+  if (ohlc.length < period + 1) return 0;
+  const trs = [];
+  for (let i = 1; i < ohlc.length; i++) {
+    const tr = Math.max(
+      ohlc[i].high - ohlc[i].low,
+      Math.abs(ohlc[i].high - ohlc[i-1].close),
+      Math.abs(ohlc[i].low - ohlc[i-1].close)
+    );
+    trs.push(tr);
+  }
+  const recent = trs.slice(-period);
+  return recent.reduce((a,b) => a+b, 0) / recent.length;
+}
+
+// ===========================================================================
+// ZigZag
+// ===========================================================================
+function zigzag(ohlc, thresholdPrice) {
+  if (ohlc.length < 2) return { pivots: [], waves: [] };
+  const pivots = [];
+  let direction = 0;
+  let pivotIdx = 0;
+  let pivotPrice = ohlc[0].close;
+
+  for (let i = 1; i < ohlc.length; i++) {
+    const bar = ohlc[i];
+    if (direction === 0) {
+      if (bar.high - pivotPrice >= thresholdPrice) {
+        pivots.push({ idx: 0, price: ohlc[0].low, type: 'low' });
+        direction = 1; pivotIdx = i; pivotPrice = bar.high;
+      } else if (pivotPrice - bar.low >= thresholdPrice) {
+        pivots.push({ idx: 0, price: ohlc[0].high, type: 'high' });
+        direction = -1; pivotIdx = i; pivotPrice = bar.low;
+      }
+      continue;
+    }
+    if (direction === 1) {
+      if (bar.high > pivotPrice) { pivotIdx = i; pivotPrice = bar.high; }
+      else if (pivotPrice - bar.low >= thresholdPrice) {
+        pivots.push({ idx: pivotIdx, price: pivotPrice, type: 'high' });
+        direction = -1; pivotIdx = i; pivotPrice = bar.low;
+      }
+    } else if (direction === -1) {
+      if (bar.low < pivotPrice) { pivotIdx = i; pivotPrice = bar.low; }
+      else if (bar.high - pivotPrice >= thresholdPrice) {
+        pivots.push({ idx: pivotIdx, price: pivotPrice, type: 'low' });
+        direction = 1; pivotIdx = i; pivotPrice = bar.high;
+      }
+    }
+  }
+
+  const waves = [];
+  for (let i = 1; i < pivots.length; i++) {
+    const prev = pivots[i-1], cur = pivots[i];
+    waves.push({
+      startIdx: prev.idx, startPrice: prev.price,
+      endIdx: cur.idx, endPrice: cur.price,
+      direction: cur.type === 'high' ? 'up' : 'down',
+      delta: cur.price - prev.price
+    });
+  }
+  return { pivots, waves };
+}
+
+// ===========================================================================
+// バックテスト: 各反転点からの指定戻りpipsでエントリー、TP/SL先到達を判定
+// ===========================================================================
+function backtestEntry(ohlc, pivotIdx, pivotPrice, pivotType, retracePips, tpPips, slPips, pipSize) {
+  // pivotType='low' → 買い、'high' → 売り
+  const isBuy = (pivotType === 'low');
+  const entryPrice = isBuy
+    ? pivotPrice + retracePips * pipSize
+    : pivotPrice - retracePips * pipSize;
+
+  // 反転後のバーでentryPriceに到達するバーを探す
+  let entryBarIdx = -1;
+  for (let i = pivotIdx + 1; i < ohlc.length; i++) {
+    const bar = ohlc[i];
+    // エントリー前にpivotを割ったらエントリー機会なし
+    if (isBuy && bar.low < pivotPrice) return { result: 'no_entry' };
+    if (!isBuy && bar.high > pivotPrice) return { result: 'no_entry' };
+    // エントリー条件到達
+    if (isBuy && bar.high >= entryPrice) { entryBarIdx = i; break; }
+    if (!isBuy && bar.low <= entryPrice) { entryBarIdx = i; break; }
+  }
+  if (entryBarIdx < 0) return { result: 'no_entry' };
+
+  const tpPrice = isBuy ? entryPrice + tpPips * pipSize : entryPrice - tpPips * pipSize;
+  const slPrice = isBuy ? entryPrice - slPips * pipSize : entryPrice + slPips * pipSize;
+
+  for (let i = entryBarIdx; i < ohlc.length; i++) {
+    const bar = ohlc[i];
+    const slHit = isBuy ? bar.low <= slPrice : bar.high >= slPrice;
+    const tpHit = isBuy ? bar.high >= tpPrice : bar.low <= tpPrice;
+    if (slHit && tpHit) return { result: 'sl', entryBarIdx, exitBarIdx: i }; // 保守的にSL優先
+    if (slHit) return { result: 'sl', entryBarIdx, exitBarIdx: i };
+    if (tpHit) return { result: 'tp', entryBarIdx, exitBarIdx: i };
+  }
+  return { result: 'open', entryBarIdx };
+}
+
+function analyzePair(ohlc, meta, params) {
+  const atr = computeATR(ohlc, 14);
+  const atrPips = atr / meta.pipSize;
+  const thresholdPips = atrPips * params.thresholdRatio;
+  const thresholdPrice = thresholdPips * meta.pipSize;
+
+  const { pivots, waves } = zigzag(ohlc, thresholdPrice);
+  if (waves.length === 0) return { error: '波検出なし', atrPips, thresholdPips };
+
+  const waveSizes = waves.map(w => Math.abs(w.delta / meta.pipSize));
+  waveSizes.sort((a,b) => a-b);
+  const median = waveSizes[Math.floor(waveSizes.length / 2)];
+  const avg = waveSizes.reduce((a,b) => a+b, 0) / waveSizes.length;
+  const max = waveSizes[waveSizes.length - 1];
+
+  // 新ロジック: SL = 戻り + 反転マージン、最大Lot逆算、バックテストはpips単位で実行
+  const rows = params.retraceSteps.map(retracePips => {
+    const tpPips = median - retracePips;
+    const slPips = retracePips + params.reversalMargin;
+
+    if (tpPips <= 0) {
+      return { retracePips, tpPips, slPips, tooLate: true };
+    }
+
+    // 最大Lot: 許容損失$ / (pip価値 × SL距離)
+    const maxLot = params.maxLossUSD / (meta.pipValuePerLot * slPips);
+    const rr = tpPips / slPips;
+    const invalid = slPips < meta.spreadPips * 2;
+
+    // バックテスト
+    let tpCount = 0, slCount = 0, noEntryCount = 0, openCount = 0;
+    pivots.forEach(pv => {
+      const r = backtestEntry(ohlc, pv.idx, pv.price, pv.type, retracePips, tpPips, slPips, meta.pipSize);
+      if (r.result === 'tp') tpCount++;
+      else if (r.result === 'sl') slCount++;
+      else if (r.result === 'no_entry') noEntryCount++;
+      else if (r.result === 'open') openCount++;
+    });
+    const traded = tpCount + slCount;
+    const tpRate = traded > 0 ? tpCount / traded : null;
+
+    return {
+      retracePips, tpPips, slPips, rr, maxLot, invalid, tooLate: false,
+      tpCount, slCount, noEntryCount, openCount, total: pivots.length, tpRate
+    };
+  });
+
+  return {
+    atrPips, thresholdPips, median, avg, max,
+    waveCount: waves.length, pivotCount: pivots.length,
+    rows
+  };
+}
+
+// ===========================================================================
+// UI
+// ===========================================================================
+let ohlcCache = null;
+let lastTimeframe = null;
+
+async function runAnalysis() {
+  const accountSize = parseFloat(document.getElementById('accountSize').value);
+  const lossRate = parseFloat(document.getElementById('lossRate').value);
+  const thresholdRatio = parseFloat(document.getElementById('thresholdRatio').value);
+  const timeframe = document.getElementById('timeframe').value;
+  const retraceSteps = document.getElementById('retraceSteps').value.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+  const reversalMargin = parseFloat(document.getElementById('reversalMargin').value);
+
+  const maxLossUSD = accountSize * lossRate;
+
+  const tfConfig = {
+    '15min': { bars: 288, days: 3, interval: '15min' },
+    '1h':    { bars: 168, days: 7, interval: '1h' },
+    '4h':    { bars: 120, days: 20, interval: '4h' }
+  }[timeframe];
+
+  if (!ohlcCache || lastTimeframe !== timeframe) {
+    setStatus('loading', `📡 ${PAIRS_META.length}ペア取得中...`);
+    const runBtn = document.getElementById('runBtn');
+    runBtn.disabled = true; runBtn.textContent = '⏳ 取得中...';
+    try {
+      const { results, errors } = await fetchAllPairs(tfConfig.interval, tfConfig.bars, msg => setStatus('loading', msg));
+      ohlcCache = results;
+      lastTimeframe = timeframe;
+      if (errors.length > 0) setStatus('warn', `⚠️ ${errors.length}ペア失敗: ${errors.map(e => e.symbol).join(', ')}`);
+      else setStatus('ok', `✅ ${Object.keys(results).length}ペア取得完了`);
+    } catch (e) {
+      setStatus('err', `❌ ${e.message}`);
+      runBtn.disabled = false; runBtn.textContent = '🔄 計算実行';
+      return;
+    }
+    runBtn.disabled = false; runBtn.textContent = '🔄 計算実行';
+  } else {
+    setStatus('ok', '✅ キャッシュから再計算');
+  }
+
+  renderSummary({ accountSize, maxLossUSD, thresholdRatio, timeframe, retraceSteps, reversalMargin });
+
+  const params = { thresholdRatio, maxLossUSD, retraceSteps, reversalMargin };
+  const pairResults = PAIRS_META.map(meta => {
+    const ohlc = ohlcCache[meta.symbol];
+    if (!ohlc || ohlc.length < 20) return { meta, error: 'データ不足' };
+    const analysis = analyzePair(ohlc, meta, params);
+    return { meta, analysis };
+  });
+
+  renderPairBlocks(pairResults);
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('statusPill');
+  el.textContent = msg;
+  el.className = 'status-pill ' + type;
+}
+
+function renderSummary(p) {
+  const el = document.getElementById('summaryCards');
+  el.innerHTML = `
+    <div class="summary-card">
+      <div class="label">アカウント</div>
+      <div class="value">$${p.accountSize.toLocaleString()}</div>
+      <div class="sub">許容損失 $${p.maxLossUSD.toLocaleString()} / trade</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">分析時間軸</div>
+      <div class="value">${p.timeframe}</div>
+      <div class="sub">ZigZag閾値 = ATR × ${p.thresholdRatio}</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">戻りpipsステップ</div>
+      <div class="value" style="font-size:14px;">${p.retraceSteps.join(' / ')}</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">反転マージン</div>
+      <div class="value">${p.reversalMargin} pips</div>
+      <div class="sub">SL = 戻り + マージン</div>
+    </div>
+  `;
+}
+
+function renderPairBlocks(pairResults) {
+  const el = document.getElementById('pairGrid');
+  let html = '';
+  pairResults.forEach(({ meta, analysis, error }) => {
+    if (error || (analysis && analysis.error)) {
+      html += `<div class="pair-block"><div class="pair-block-header"><div class="pair-block-title">${meta.displayName}</div><div class="pair-stats" style="color:var(--red);">${error || analysis.error}</div></div></div>`;
+      return;
+    }
+    const a = analysis;
+    html += `
+      <div class="pair-block">
+        <div class="pair-block-header">
+          <div class="pair-block-title">${meta.displayName}</div>
+          <div class="pair-stats">
+            <span>ATR: <b>${a.atrPips.toFixed(1)}pips</b></span>
+            <span>閾値: <b>${a.thresholdPips.toFixed(1)}</b></span>
+            <span>波数: <b>${a.waveCount}</b></span>
+            <span>1波中央値: <b style="color:var(--green);">${a.median.toFixed(1)}</b></span>
+            <span>最大: <b>${a.max.toFixed(1)}</b></span>
+            <span>spr: ${meta.spreadPips}</span>
+          </div>
+        </div>
+        <table class="timing-matrix">
+          <thead>
+            <tr>
+              <th class="first-col">戻りpips</th>
+              <th>SL</th>
+              <th>TP</th>
+              <th>RR</th>
+              <th>最大Lot</th>
+              <th>TP率</th>
+              <th>備考</th>
+            </tr>
+          </thead>
+          <tbody>`;
+    a.rows.forEach(row => {
+      if (row.tooLate) {
+        html += `<tr><td class="first-col">+${row.retracePips}p</td><td class="cell-invalid" colspan="6">— TP≤0 エントリー遅すぎ</td></tr>`;
+        return;
+      }
+      const rate = row.tpRate;
+      let cls = '', badge = '—';
+      if (row.invalid) { cls = 'cell-dead'; badge = '💀'; }
+      else if (rate === null) { cls = ''; badge = '—'; }
+      else if (rate >= 0.6) { cls = 'cell-ok'; badge = '🎯'; }
+      else if (rate >= 0.5) { cls = 'cell-ok'; badge = '✓'; }
+      else if (rate >= 0.3) { cls = 'cell-warn'; badge = '⚠️'; }
+      else if (rate >= 0.1) { cls = 'cell-bad'; badge = '🚫'; }
+      else { cls = 'cell-dead'; badge = '💀'; }
+      const rateStr = rate === null ? '—' : `${Math.round(rate*100)}%`;
+      const rrStr = row.rr !== undefined && isFinite(row.rr) ? `1:${row.rr.toFixed(1)}` : '—';
+      const note = row.invalid ? 'SL&lt;spr×2' : `${row.tpCount}/${row.tpCount+row.slCount} NE:${row.noEntryCount}`;
+      html += `
+        <tr class="${cls}">
+          <td class="first-col">+${row.retracePips}p</td>
+          <td>${row.slPips.toFixed(1)}p</td>
+          <td>${row.tpPips.toFixed(1)}p</td>
+          <td>${rrStr}</td>
+          <td>${row.maxLot !== undefined ? row.maxLot.toFixed(1) + ' Lot' : '—'}</td>
+          <td><b>${badge} ${rateStr}</b></td>
+          <td><span class="cell-sub">${note}</span></td>
+        </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  });
+  el.innerHTML = html;
+}
+
+// ===========================================================================
+// イベント
+// ===========================================================================
+document.getElementById('runBtn').addEventListener('click', runAnalysis);
+document.getElementById('timeframe').addEventListener('change', () => { ohlcCache = null; });
+['accountSize','lossRate','thresholdRatio','retraceSteps'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => { if (ohlcCache) runAnalysis(); });
+});
+// 反転マージンはスライダーなのでinputで即時反応
+document.getElementById('reversalMargin').addEventListener('input', (e) => {
+  document.getElementById('marginValue').textContent = e.target.value + ' pips';
+  if (ohlcCache) runAnalysis();
+});
+document.getElementById('debugBtn').addEventListener('click', async () => {
+  setStatus('loading', '🔬 USD/JPY テスト中...');
+  try {
+    const ohlc = await fetchOHLCFromAPI('USD/JPY', '1h', 5);
+    setStatus('ok', `✅ 疎通OK: ${ohlc.length}本取得`);
+    console.log('USDJPY OHLC sample:', ohlc);
+  } catch (e) {
+    setStatus('err', `❌ ${e.message}`);
+  }
+});
+
+setStatus('', '「計算実行」でAPI取得を開始');
+renderSummary({
+  accountSize: 100000, maxLossUSD: 500, thresholdRatio: 0.3,
+  timeframe: '1h', retraceSteps: [0,10,20,30,40,50], reversalMargin: 5
+});
+</script>
+</body>
+</html>

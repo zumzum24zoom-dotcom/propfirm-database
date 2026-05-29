@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>SMC Daily Bias 分析ツール v01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #131722;
+    --bg-card: #1e222d;
+    --bg-alt: #252931;
+    --border: #2a2e39;
+    --text: #d1d4dc;
+    --text-dim: #787b86;
+    --accent: #2962ff;
+    --green: #26a69a;
+    --red: #ef5350;
+    --yellow: #ffa726;
+    --purple: #ab47bc;
+    --teal: #5DCAA5;
+    --coral: #F0997B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1600px; margin: 0 auto; }
+  h1 { font-size: 18px; margin-bottom: 4px; font-weight: 600; }
+  h2 { font-size: 14px; margin: 16px 0 8px; font-weight: 600; color: var(--text); }
+  .subtitle { color: var(--text-dim); font-size: 12px; margin-bottom: 20px; }
+
+  .control-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 4px; }
+  .control-group label {
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .control-group select, .control-group input {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+
+  /* ペア選択セクション */
+  .pair-selector {
+    margin: 12px 0;
+    padding: 12px;
+    background: var(--bg-alt);
+    border-radius: 4px;
+  }
+  .pair-category {
+    margin-bottom: 10px;
+  }
+  .pair-category-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .pair-category-title button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 2px 6px;
+    font-size: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .pair-category-title button:hover { color: var(--text); }
+  .pair-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .pair-chip {
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.1s;
+  }
+  .pair-chip.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  .pair-chip:hover { opacity: 0.85; }
+
+  .action-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .btn-secondary {
+    background: var(--bg-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .status-pill {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    margin-left: auto;
+    max-width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .status-pill.loading { background: rgba(41, 98, 255, 0.15); color: var(--accent); }
+  .status-pill.ok { background: rgba(38, 166, 154, 0.15); color: var(--green); }
+  .status-pill.warn { background: rgba(255, 167, 38, 0.15); color: var(--yellow); }
+  .status-pill.err { background: rgba(239, 83, 80, 0.15); color: var(--red); }
+
+  /* 全体サマリー */
+  .overall-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .summary-card .label {
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .summary-card .value {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .summary-card .sub { color: var(--text-dim); font-size: 11px; margin-top: 2px; }
+
+  /* ペア別結果 */
+  .pair-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 16px;
+  }
+  .pair-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .pair-block-header {
+    padding: 10px 14px;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pair-block-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .pair-stats {
+    display: flex;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .pair-stats b { color: var(--text); font-weight: 500; }
+
+  .pair-content {
+    padding: 12px 14px;
+  }
+
+  /* パターン表 */
+  table.pattern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  table.pattern-table th, table.pattern-table td {
+    padding: 5px 6px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  table.pattern-table th {
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    font-weight: 500;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  table.pattern-table td.pname {
+    text-align: left;
+    font-weight: 500;
+    padding-left: 10px;
+  }
+  .bar-cell { min-width: 80px; }
+  .bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-alt);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .bar-text { font-size: 11px; min-width: 32px; text-align: right; }
+
+  .p-bc-color { background: var(--green); }       /* 強気継続 */
+  .p-br-color { background: var(--red); }         /* 弱気継続 */
+  .p-bur-color { background: var(--teal); }       /* 強気反転 */
+  .p-ber-color { background: var(--coral); }      /* 弱気反転 */
+  .p-rg-color { background: var(--text-dim); }    /* レンジ */
+
+  /* 曜日別ヒートマップ */
+  table.dow-heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+    margin-top: 8px;
+  }
+  table.dow-heatmap th, table.dow-heatmap td {
+    padding: 4px 3px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  table.dow-heatmap th {
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    font-size: 9px;
+  }
+  table.dow-heatmap td.label {
+    text-align: left;
+    padding-left: 6px;
+    font-weight: 500;
+    font-size: 10px;
+  }
+  .heat-cell {
+    position: relative;
+    min-width: 40px;
+    font-size: 10px;
+  }
+
+  .footer-note {
+    margin-top: 20px;
+    padding: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .footer-note strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>SMC Daily Bias 分析ツール v01</h1>
+  <p class="subtitle">ICT Smart Money Concept のデイリーバイアス（前日PDH/PDL基準5パターン）の過去出現率・成功率・曜日別分析</p>
+
+  <div class="control-panel">
+    <div class="control-grid">
+      <div class="control-group">
+        <label>参照期間</label>
+        <select id="lookbackDays">
+          <option value="30">30日</option>
+          <option value="60">60日</option>
+          <option value="90" selected>90日</option>
+          <option value="180">180日</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pair-selector" id="pairSelector"></div>
+
+    <div class="action-row">
+      <button class="btn-primary" id="runBtn">🔄 分析実行</button>
+      <button class="btn-secondary" id="selectDefaultBtn">デフォルト選択に戻す</button>
+      <button class="btn-secondary" id="clearAllBtn">全解除</button>
+      <span class="status-pill" id="statusPill">待機中</span>
+    </div>
+  </div>
+
+  <!-- 全体サマリー -->
+  <div class="overall-summary" id="overallSummary"></div>
+
+  <!-- ペア別結果 -->
+  <div class="pair-grid" id="pairGrid"></div>
+
+  <div class="footer-note">
+    <strong>5パターンの判定:</strong>
+    ① 強気継続 = 当日終値 > PDH。
+    ② 弱気継続 = 当日終値 < PDL。
+    ③ 強気反転 = 当日安値 < PDL かつ 終値 ≥ PDL（sell-side sweep & reclaim）。
+    ④ 弱気反転 = 当日高値 > PDH かつ 終値 ≤ PDH（buy-side sweep & reject）。
+    ⑤ レンジ = それ以外（PDH/PDL両方に触れない or 両側タッチ）。
+    <br>
+    <strong>バイアス成功率の定義:</strong>
+    <span style="color:var(--green);">①②継続</span>=翌日に継続方向へ当日レンジを超えて伸びたか。
+    <span style="color:var(--teal);">③強気反転</span>=翌日高値が当日高値を超えたか。
+    <span style="color:var(--coral);">④弱気反転</span>=翌日安値が当日安値を下回ったか。
+    <br>
+    <strong>⚠️ 注意:</strong> 過去データの統計値です。将来を保証しません。APIキー直書きのため公開禁止。
+  </div>
+
+</div>
+
+<script>
+// ===========================================================================
+// 設定
+// ===========================================================================
+const TD_API_KEY = "e451427e06d1489397eb608130697a76";
+const TD_BASE = "https://api.twelvedata.com";
+
+// 全通貨ペア（カテゴリ別）
+const PAIR_CATEGORIES = [
+  {
+    name: "Majors",
+    pairs: [
+      { sym: "USDJPY", api: "USD/JPY", def: true },
+      { sym: "EURUSD", api: "EUR/USD", def: true },
+      { sym: "GBPUSD", api: "GBP/USD", def: true },
+      { sym: "AUDUSD", api: "AUD/USD", def: true },
+      { sym: "USDCAD", api: "USD/CAD", def: true },
+      { sym: "USDCHF", api: "USD/CHF", def: true },
+      { sym: "NZDUSD", api: "NZD/USD", def: true }
+    ]
+  },
+  {
+    name: "円クロス",
+    pairs: [
+      { sym: "EURJPY", api: "EUR/JPY", def: true },
+      { sym: "GBPJPY", api: "GBP/JPY", def: true },
+      { sym: "AUDJPY", api: "AUD/JPY", def: true },
+      { sym: "CADJPY", api: "CAD/JPY", def: false },
+      { sym: "CHFJPY", api: "CHF/JPY", def: false },
+      { sym: "NZDJPY", api: "NZD/JPY", def: false }
+    ]
+  },
+  {
+    name: "ユーロクロス",
+    pairs: [
+      { sym: "EURGBP", api: "EUR/GBP", def: true },
+      { sym: "EURAUD", api: "EUR/AUD", def: false },
+      { sym: "EURCAD", api: "EUR/CAD", def: false },
+      { sym: "EURCHF", api: "EUR/CHF", def: false },
+      { sym: "EURNZD", api: "EUR/NZD", def: false }
+    ]
+  },
+  {
+    name: "ポンドクロス",
+    pairs: [
+      { sym: "GBPAUD", api: "GBP/AUD", def: false },
+      { sym: "GBPCAD", api: "GBP/CAD", def: false },
+      { sym: "GBPCHF", api: "GBP/CHF", def: false },
+      { sym: "GBPNZD", api: "GBP/NZD", def: false }
+    ]
+  },
+  {
+    name: "その他クロス",
+    pairs: [
+      { sym: "AUDCAD", api: "AUD/CAD", def: false },
+      { sym: "AUDCHF", api: "AUD/CHF", def: false },
+      { sym: "AUDNZD", api: "AUD/NZD", def: false },
+      { sym: "NZDCAD", api: "NZD/CAD", def: false },
+      { sym: "NZDCHF", api: "NZD/CHF", def: false },
+      { sym: "CADCHF", api: "CAD/CHF", def: false }
+    ]
+  },
+  {
+    name: "メタル",
+    pairs: [
+      { sym: "XAUUSD", api: "XAU/USD", def: true },
+      { sym: "XAGUSD", api: "XAG/USD", def: false }
+    ]
+  },
+  {
+    name: "Crypto",
+    pairs: [
+      { sym: "BTCUSD", api: "BTC/USD", def: true },
+      { sym: "ETHUSD", api: "ETH/USD", def: false },
+      { sym: "SOLUSD", api: "SOL/USD", def: false }
+    ]
+  },
+  {
+    name: "Index",
+    pairs: [
+      { sym: "SPX500", api: "SPX", def: false },
+      { sym: "NAS100", api: "IXIC", def: false },
+      { sym: "US30", api: "DJI", def: false },
+      { sym: "GER40", api: "DAX", def: false }
+    ]
+  }
+];
+
+// 有効ペアのセット
+let activePairs = new Set();
+
+// ===========================================================================
+// API呼び出し
+// ===========================================================================
+async function fetchDailyOHLC(apiSymbol, days) {
+  const url = `${TD_BASE}/time_series?symbol=${encodeURIComponent(apiSymbol)}&interval=1day&outputsize=${days + 5}&apikey=${TD_API_KEY}&format=JSON`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  if (data.status === 'error') throw new Error(data.message || 'API error');
+  if (!Array.isArray(data.values)) throw new Error('No values');
+  return data.values.slice().reverse().map(v => ({
+    datetime: v.datetime,
+    date: new Date(v.datetime),
+    open: parseFloat(v.open),
+    high: parseFloat(v.high),
+    low: parseFloat(v.low),
+    close: parseFloat(v.close)
+  }));
+}
+
+async function fetchAllActivePairs(days, onProgress) {
+  const results = {};
+  const errors = [];
+  const pairs = Array.from(activePairs);
+  const BATCH_SIZE = 8;
+  const WAIT_MS = 60000;
+
+  for (let i = 0; i < pairs.length; i += BATCH_SIZE) {
+    const batch = pairs.slice(i, i + BATCH_SIZE);
+    const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+    const totalBatches = Math.ceil(pairs.length / BATCH_SIZE);
+
+    if (onProgress) onProgress(`バッチ ${batchNum}/${totalBatches} (${batch.length}ペア) 送信中...`);
+
+    await Promise.all(batch.map(sym => {
+      const meta = findPairMeta(sym);
+      if (!meta) { errors.push({ symbol: sym, message: 'meta not found' }); return null; }
+      return fetchDailyOHLC(meta.api, days)
+        .then(ohlc => { results[sym] = ohlc; console.log(`✅ ${sym}: ${ohlc.length}日分`); })
+        .catch(err => { errors.push({ symbol: sym, message: err.message }); console.warn(`❌ ${sym}: ${err.message}`); });
+    }));
+
+    if (i + BATCH_SIZE < pairs.length) {
+      for (let s = WAIT_MS / 1000; s > 0; s--) {
+        if (onProgress) onProgress(`バッチ ${batchNum} 完了 (${Object.keys(results).length}件成功)。次バッチまで ${s}秒...`);
+        await new Promise(r => setTimeout(r, 1000));
+      }
+    }
+  }
+  return { results, errors };
+}
+
+function findPairMeta(sym) {
+  for (const cat of PAIR_CATEGORIES) {
+    const p = cat.pairs.find(p => p.sym === sym);
+    if (p) return p;
+  }
+  return null;
+}
+
+// ===========================================================================
+// パターン判定
+// ===========================================================================
+// 返り値: 'BC' | 'BR' | 'BuR' | 'BeR' | 'RG'
+function classifyPattern(today, prevDay) {
+  const pdh = prevDay.high, pdl = prevDay.low;
+  const close = today.close, high = today.high, low = today.low;
+
+  if (close > pdh) return 'BC';           // ① 強気継続
+  if (close < pdl) return 'BR';           // ② 弱気継続
+  if (low < pdl && close >= pdl) return 'BuR';   // ③ 強気反転
+  if (high > pdh && close <= pdh) return 'BeR';  // ④ 弱気反転
+  return 'RG';                            // ⑤ レンジ
+}
+
+// 翌日バイアス成功判定
+// today=判定日, tomorrow=翌日
+function classifySuccess(pattern, today, tomorrow) {
+  if (!tomorrow) return null;
+  if (pattern === 'BC') {
+    // 継続方向: 翌日に当日高値を上抜けたか
+    return tomorrow.high > today.high ? 'success' : 'fail';
+  }
+  if (pattern === 'BR') {
+    return tomorrow.low < today.low ? 'success' : 'fail';
+  }
+  if (pattern === 'BuR') {
+    // 強気反転 → 翌日高値が当日高値を超えたか
+    return tomorrow.high > today.high ? 'success' : 'fail';
+  }
+  if (pattern === 'BeR') {
+    return tomorrow.low < today.low ? 'success' : 'fail';
+  }
+  return null; // レンジは判定対象外
+}
+
+// ペア分析メイン
+function analyzePair(ohlc, days) {
+  // 直近days日分を評価対象に（先頭の1本はPDH/PDL参照用に必要）
+  const evalData = ohlc.slice(-days - 1);
+  if (evalData.length < 3) return { error: 'データ不足' };
+
+  const stats = {
+    totalDays: 0,
+    patterns: { BC: 0, BR: 0, BuR: 0, BeR: 0, RG: 0 },
+    success: { BC: { s: 0, f: 0 }, BR: { s: 0, f: 0 }, BuR: { s: 0, f: 0 }, BeR: { s: 0, f: 0 } },
+    dow: {} // 曜日別: dow[dayNum] = { BC: count, BR: count, ... }
+  };
+  for (let d = 0; d < 7; d++) {
+    stats.dow[d] = { BC: 0, BR: 0, BuR: 0, BeR: 0, RG: 0, total: 0 };
+  }
+
+  // evalData[0]は参照用前日、以降を評価
+  for (let i = 1; i < evalData.length; i++) {
+    const today = evalData[i];
+    const prev = evalData[i - 1];
+    const tomorrow = i + 1 < evalData.length ? evalData[i + 1] : null;
+
+    const pattern = classifyPattern(today, prev);
+    stats.totalDays++;
+    stats.patterns[pattern]++;
+
+    const dow = today.date.getDay();
+    stats.dow[dow][pattern]++;
+    stats.dow[dow].total++;
+
+    if (pattern !== 'RG' && tomorrow) {
+      const result = classifySuccess(pattern, today, tomorrow);
+      if (result === 'success') stats.success[pattern].s++;
+      else if (result === 'fail') stats.success[pattern].f++;
+    }
+  }
+
+  return stats;
+}
+
+// ===========================================================================
+// UI
+// ===========================================================================
+let ohlcCache = null;
+let lastDays = null;
+
+async function runAnalysis() {
+  const days = parseInt(document.getElementById('lookbackDays').value);
+
+  if (activePairs.size === 0) {
+    alert('ペアを1つ以上選択してください');
+    return;
+  }
+
+  // キャッシュ判定
+  const cacheValid = ohlcCache &&
+    lastDays === days &&
+    Array.from(activePairs).every(sym => ohlcCache[sym]);
+
+  if (!cacheValid) {
+    setStatus('loading', `📡 ${activePairs.size}ペアの日足${days}日分取得中...`);
+    const runBtn = document.getElementById('runBtn');
+    runBtn.disabled = true; runBtn.textContent = '⏳ 取得中...';
+    try {
+      const { results, errors } = await fetchAllActivePairs(days, msg => setStatus('loading', msg));
+      ohlcCache = results;
+      lastDays = days;
+      if (errors.length > 0) setStatus('warn', `⚠️ ${errors.length}ペア失敗`);
+      else setStatus('ok', `✅ ${Object.keys(results).length}ペア取得完了`);
+    } catch (e) {
+      setStatus('err', `❌ ${e.message}`);
+      runBtn.disabled = false; runBtn.textContent = '🔄 分析実行';
+      return;
+    }
+    runBtn.disabled = false; runBtn.textContent = '🔄 分析実行';
+  } else {
+    setStatus('ok', '✅ キャッシュから再計算');
+  }
+
+  // 各ペア分析
+  const pairResults = Array.from(activePairs).map(sym => {
+    const ohlc = ohlcCache[sym];
+    if (!ohlc) return { sym, error: 'データ取得失敗' };
+    const stats = analyzePair(ohlc, days);
+    return { sym, stats };
+  }).filter(r => !!r);
+
+  // 全体サマリー集計
+  renderOverallSummary(pairResults, days);
+  renderPairBlocks(pairResults, days);
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('statusPill');
+  el.textContent = msg;
+  el.className = 'status-pill ' + type;
+}
+
+function renderOverallSummary(pairResults, days) {
+  // 全ペア合計の出現率
+  const total = { BC: 0, BR: 0, BuR: 0, BeR: 0, RG: 0 };
+  let totalDays = 0;
+  pairResults.forEach(({ stats, error }) => {
+    if (error || !stats) return;
+    for (const k of ['BC','BR','BuR','BeR','RG']) total[k] += stats.patterns[k];
+    totalDays += stats.totalDays;
+  });
+
+  const el = document.getElementById('overallSummary');
+  if (totalDays === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div class="summary-card">
+      <div class="label">集計範囲</div>
+      <div class="value">${pairResults.length}ペア × ${days}日</div>
+      <div class="sub">計 ${totalDays.toLocaleString()} 日分</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">① 強気継続</div>
+      <div class="value" style="color:var(--green);">${(total.BC/totalDays*100).toFixed(1)}%</div>
+      <div class="sub">${total.BC} 日</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">② 弱気継続</div>
+      <div class="value" style="color:var(--red);">${(total.BR/totalDays*100).toFixed(1)}%</div>
+      <div class="sub">${total.BR} 日</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">③ 強気反転</div>
+      <div class="value" style="color:var(--teal);">${(total.BuR/totalDays*100).toFixed(1)}%</div>
+      <div class="sub">${total.BuR} 日</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">④ 弱気反転</div>
+      <div class="value" style="color:var(--coral);">${(total.BeR/totalDays*100).toFixed(1)}%</div>
+      <div class="sub">${total.BeR} 日</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">⑤ レンジ</div>
+      <div class="value" style="color:var(--text-dim);">${(total.RG/totalDays*100).toFixed(1)}%</div>
+      <div class="sub">${total.RG} 日</div>
+    </div>
+  `;
+}
+
+function renderPairBlocks(pairResults, days) {
+  const el = document.getElementById('pairGrid');
+  let html = '';
+  pairResults.forEach(({ sym, stats, error }) => {
+    if (error) {
+      html += `<div class="pair-block"><div class="pair-block-header"><div class="pair-block-title">${sym}</div><div class="pair-stats" style="color:var(--red);">${error}</div></div></div>`;
+      return;
+    }
+    const s = stats;
+    const t = s.totalDays;
+
+    html += `
+      <div class="pair-block">
+        <div class="pair-block-header">
+          <div class="pair-block-title">${sym}</div>
+          <div class="pair-stats">
+            <span>総日数: <b>${t}</b></span>
+            <span>バイアス発生率: <b>${((t - s.patterns.RG)/t*100).toFixed(0)}%</b></span>
+          </div>
+        </div>
+        <div class="pair-content">
+          <h2>出現率 & 成功率</h2>
+          <table class="pattern-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding-left:10px;">パターン</th>
+                <th>出現</th>
+                <th>出現率</th>
+                <th>成功/試行</th>
+                <th>成功率</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${renderPatternRow('① 強気継続', 'BC', s, t, 'p-bc-color', 'var(--green)')}
+              ${renderPatternRow('② 弱気継続', 'BR', s, t, 'p-br-color', 'var(--red)')}
+              ${renderPatternRow('③ 強気反転', 'BuR', s, t, 'p-bur-color', 'var(--teal)')}
+              ${renderPatternRow('④ 弱気反転', 'BeR', s, t, 'p-ber-color', 'var(--coral)')}
+              ${renderPatternRow('⑤ レンジ', 'RG', s, t, 'p-rg-color', 'var(--text-dim)', true)}
+            </tbody>
+          </table>
+          
+          <h2>曜日別出現分布</h2>
+          ${renderDowHeatmap(s)}
+        </div>
+      </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderPatternRow(name, key, s, total, barClass, color, skipSuccess) {
+  const count = s.patterns[key];
+  const rate = count / total;
+  const succ = skipSuccess ? null : s.success[key];
+  const succTotal = succ ? succ.s + succ.f : 0;
+  const succRate = succTotal > 0 ? succ.s / succTotal : null;
+  return `
+    <tr>
+      <td class="pname" style="color:${color};">${name}</td>
+      <td>${count}</td>
+      <td class="bar-cell">
+        <div class="bar-wrap">
+          <div class="bar"><div class="bar-fill ${barClass}" style="width:${rate*100}%;"></div></div>
+          <span class="bar-text">${(rate*100).toFixed(1)}%</span>
+        </div>
+      </td>
+      <td>${skipSuccess ? '—' : `${succ.s}/${succTotal}`}</td>
+      <td>${skipSuccess ? '—' : succRate !== null ? `<span style="color:${succRate >= 0.6 ? 'var(--green)' : succRate >= 0.5 ? 'var(--yellow)' : 'var(--red)'};font-weight:500;">${(succRate*100).toFixed(0)}%</span>` : '—'}</td>
+    </tr>
+  `;
+}
+
+function renderDowHeatmap(s) {
+  const dowLabels = ['日', '月', '火', '水', '木', '金', '土'];
+  const activeDow = [1, 2, 3, 4, 5]; // 月-金のみ（FX実取引日）
+
+  let html = `<table class="dow-heatmap"><thead><tr><th style="text-align:left;padding-left:6px;">曜日</th>`;
+  ['① BC','② BR','③ BuR','④ BeR','⑤ RG','計'].forEach(h => html += `<th>${h}</th>`);
+  html += `</tr></thead><tbody>`;
+  activeDow.forEach(d => {
+    const dd = s.dow[d];
+    if (dd.total === 0) return;
+    html += `<tr><td class="label">${dowLabels[d]}</td>`;
+    ['BC','BR','BuR','BeR','RG'].forEach(k => {
+      const c = dd[k];
+      const r = dd.total > 0 ? c/dd.total : 0;
+      const bg = r >= 0.3 ? `rgba(41,98,255,0.25)` : r >= 0.2 ? `rgba(41,98,255,0.12)` : 'transparent';
+      html += `<td class="heat-cell" style="background:${bg};">${c} <span style="color:var(--text-dim);font-size:9px;">(${(r*100).toFixed(0)}%)</span></td>`;
+    });
+    html += `<td>${dd.total}</td></tr>`;
+  });
+  html += `</tbody></table>`;
+  return html;
+}
+
+// ===========================================================================
+// ペア選択UI
+// ===========================================================================
+function renderPairSelector() {
+  const el = document.getElementById('pairSelector');
+  let html = '';
+  PAIR_CATEGORIES.forEach((cat, idx) => {
+    html += `
+      <div class="pair-category">
+        <div class="pair-category-title">
+          <span>${cat.name}</span>
+          <button onclick="selectCategoryAll(${idx})">全選択</button>
+          <button onclick="selectCategoryNone(${idx})">全解除</button>
+        </div>
+        <div class="pair-chips">
+          ${cat.pairs.map(p => `<div class="pair-chip ${activePairs.has(p.sym) ? 'active' : ''}" data-sym="${p.sym}">${p.sym}</div>`).join('')}
+        </div>
+      </div>`;
+  });
+  el.innerHTML = html;
+
+  // チップクリックでトグル
+  el.querySelectorAll('.pair-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const sym = chip.dataset.sym;
+      if (activePairs.has(sym)) { activePairs.delete(sym); chip.classList.remove('active'); }
+      else { activePairs.add(sym); chip.classList.add('active'); }
+    });
+  });
+}
+
+function selectCategoryAll(catIdx) {
+  PAIR_CATEGORIES[catIdx].pairs.forEach(p => activePairs.add(p.sym));
+  renderPairSelector();
+}
+function selectCategoryNone(catIdx) {
+  PAIR_CATEGORIES[catIdx].pairs.forEach(p => activePairs.delete(p.sym));
+  renderPairSelector();
+}
+
+function applyDefaults() {
+  activePairs.clear();
+  PAIR_CATEGORIES.forEach(cat => cat.pairs.forEach(p => { if (p.def) activePairs.add(p.sym); }));
+  renderPairSelector();
+}
+
+function clearAll() {
+  activePairs.clear();
+  renderPairSelector();
+}
+
+// ===========================================================================
+// イベント
+// ===========================================================================
+document.getElementById('runBtn').addEventListener('click', runAnalysis);
+document.getElementById('selectDefaultBtn').addEventListener('click', applyDefaults);
+document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+document.getElementById('lookbackDays').addEventListener('change', () => { ohlcCache = null; });
+
+// 初期化
+applyDefaults();
+setStatus('', `デフォルト${activePairs.size}ペア選択中。「分析実行」で開始`);
+</script>
+</body>
+</html>

@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗号資産必要証拠金ランキング</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background-color: #2d3748;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #63b3ed;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: #a3bffa;
+        }
+        .description {
+            font-size: 0.875rem;
+            color: #a0aec0;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }        .btn {
+            background-color: #3182ce;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #2b6cb0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .btn:disabled {
+            background-color: #a0aec0;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .btn.btn-green {
+            background-color: #38a169;
+        }
+        .btn.btn-green:hover {
+            background-color: #2f855a;
+        }
+        .btn.btn-red {
+            background-color: #e53e3e;
+        }
+        .btn.btn-red:hover {
+            background-color: #c53030;
+        }
+        .btn.btn-amber {
+            background-color: #d97706;
+        }
+        .btn.btn-amber:hover {
+            background-color: #b45309;
+        }
+        .btn-icon {
+            font-size: 1.25rem;
+        }
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.375rem;
+            border: 1px solid #4a5568;
+            margin-bottom: 1rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead th {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        tbody td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #4a5568;
+            font-size: 0.875rem;
+            color: #cbd5e0;
+            white-space: nowrap;
+        }
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        tbody tr:hover {
+            background-color: #4a556840;
+        }
+        input[type="number"], input[type="text"] {
+            background-color: #2d3748;
+            border: 1px solid #4a5568;
+            color: #e2e8f0;
+            border-radius: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            width: 100%;
+        }
+        input[type="number"] {
+            text-align: right;
+            max-width: 8rem;
+        }
+        input[type="text"] {
+            max-width: 12rem;
+        }
+        input:focus {
+            outline: none;
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 2px rgba(99, 179, 237, 0.3);
+        }
+        .status-message {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #a0aec0;
+        }
+        .error-message {
+            color: #fc8181;
+            margin-top: 0.5rem;
+            text-align: center;
+            max-width: 100%;
+            word-break: break-word;
+        }        .debug-toggle {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #718096;
+            cursor: pointer;
+            user-select: none;
+        }
+        .debug-panel {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #2c2c2c;
+            border-radius: 0.375rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #a0aec0;
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 20rem;
+            overflow-y: auto;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 0.875rem;
+            margin-bottom: 0.375rem;
+            color: #a0aec0;
+        }
+        .form-grid .btn {
+            align-self: end;
+        }
+        .action-cell {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        .action-btn.delete-btn {
+            background-color: #e53e3e;
+            color: white;
+        }
+        .action-btn.delete-btn:hover {
+            background-color: #c53030;
+        }
+        .custom-coin {
+            background-color: rgba(56, 161, 105, 0.2);
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #4a5568;
+            margin-bottom: 1rem;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #a0aec0;
+            transition: all 0.2s ease;
+        }
+        .tab:hover {
+            color: #e2e8f0;
+        }
+        .tab.active {
+            color: #63b3ed;
+            border-bottom-color: #63b3ed;
+        }
+        .bookmark-btn {
+            cursor: pointer;
+            color: #a0aec0;
+            transition: all 0.2s ease;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+        .bookmark-btn:hover {
+            color: #f6e05e;
+            background-color: rgba(246, 224, 94, 0.1);
+        }
+        .bookmark-btn.active {
+            color: #f6e05e;
+        }
+        .rank {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            text-align: center;
+            line-height: 1.5rem;
+            border-radius: 50%;
+            background-color: #4a5568;
+            color: #e2e8f0;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            font-size: 0.75rem;
+        }        .bookmarked-row {
+            background-color: rgba(246, 224, 94, 0.1);
+        }
+        .export-textarea {
+            width: 100%;
+            height: 10rem;
+            background-color: #1a202c;
+            border: 1px solid #4a5568;
+            color: #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            resize: vertical;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #2d3748;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #a0aec0;
+            transition: color 0.2s ease;
+        }
+        .modal-close:hover {
+            color: #e53e3e;
+        }
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #63b3ed;
+            margin-bottom: 1rem;
+        }
+        .format-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .format-option {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            background-color: #4a5568;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .format-option:hover {
+            background-color: #3182ce;
+        }
+        .format-option.active {
+            background-color: #3182ce;
+            color: white;
+        }
+        .symbol-with-rank {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>暗号資産必要証拠金ランキング</h1>
+        <p class="description">リアルタイム価格に基づいて計算した、証拠金が少ない順のランキングです。<br>ブックマークした銘柄はTradingViewなどのマイリストとしてエクスポートできます。</p>
+
+        <div class="tabs">
+            <div class="tab active" id="tabMain">メイン画面</div>
+            <div class="tab" id="tabAddCoin">銘柄追加</div>
+            <div class="tab" id="tabBookmarks">ブックマーク</div>
+        </div>        <div id="mainView">
+            <div class="btn-group">
+                <button id="updateButton" class="btn">
+                    <span class="btn-icon">⟳</span>
+                    <span>リアルタイム更新</span>
+                </button>
+                <button id="toggleViewButton" class="btn">
+                    <span class="btn-icon">↕</span>
+                    <span>全件表示/一部表示</span>
+                </button>
+                <button id="bookmarksButton" class="btn btn-amber">
+                    <span class="btn-icon">★</span>
+                    <span>ブックマークリスト</span>
+                </button>
+            </div>
+            <p id="statusMessage" class="status-message">データをロード中...</p>
+            <p id="errorMessage" class="error-message"></p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>順位</th>
+                            <th>銘柄</th>
+                            <th>現在価格 (USD)</th>
+                            <th>最大注文サイズ</th>
+                            <th>レバレッジ</th>
+                            <th>想定元本価値 (USD)</th>
+                            <th>必要な証拠金 (USD)</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cryptoTableBody">
+                        <!-- Data will be dynamically loaded and updated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="addCoinView" style="display: none;">
+            <h2>新しい銘柄を追加</h2>
+            <p class="description">独自の銘柄を追加できます。Bybitのシンボル名を正確に入力すると、価格情報を自動取得できます。</p>
+            
+            <form id="addCoinForm" class="form-grid">
+                <div class="form-group">
+                    <label for="coinName">銘柄名 (表示用)</label>
+                    <input type="text" id="coinName" placeholder="例: BTCUSD" required>
+                </div>
+                <div class="form-group">
+                    <label for="bybitSymbol">Bybitシンボル名</label>
+                    <input type="text" id="bybitSymbol" placeholder="例: BTCUSDT, BTCUSD" required>
+                </div>
+                <div class="form-group">
+                    <label for="maxOrderSize">最大注文サイズ</label>
+                    <input type="number" id="maxOrderSize" min="1" step="1" placeholder="例: 10" required>
+                </div>
+                <div class="form-group">
+                    <label for="leverage">レバレッジ</label>
+                    <input type="number" id="maxLeverage" min="1" max="100" step="1" value="2" required>
+                </div>
+                <button type="submit" class="btn btn-green">
+                    <span class="btn-icon">+</span>
+                    <span>銘柄を追加</span>
+                </button>
+            </form>
+            
+            <h2>カスタム銘柄リスト</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>銘柄名</th>
+                            <th>Bybitシンボル</th>
+                            <th>最大注文サイズ</th>
+                            <th>レバレッジ</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customCoinsList">
+                        <!-- Custom coins will be listed here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>        <div id="bookmarksView" style="display: none;">
+            <h2>ブックマーク銘柄リスト</h2>
+            <p class="description">ブックマークした銘柄が表示されます。TradingViewなどで使用するためにエクスポートできます。</p>
+            
+            <div class="btn-group">
+                <button id="exportButton" class="btn btn-green">
+                    <span class="btn-icon">↗</span>
+                    <span>エクスポート</span>
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>銘柄</th>
+                            <th>現在価格 (USD)</th>
+                            <th>最大注文サイズ</th>
+                            <th>レバレッジ</th>
+                            <th>想定元本価値 (USD)</th>
+                            <th>必要な証拠金 (USD)</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookmarksTableBody">
+                        <!-- Bookmarked items will be listed here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="debug-toggle" id="debugToggle">デバッグ情報を表示/非表示</div>
+        <div class="debug-panel" id="debugPanel"></div>
+    </div>
+    
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">×</span>
+            <h3 class="modal-title">ブックマーク銘柄リストをエクスポート</h3>
+            <p class="description">以下のリストをコピーして、TradingViewなどのプラットフォームで使用できます。</p>
+            
+            <div class="format-options">
+                <div class="format-option active" data-format="tradingview">TradingView形式</div>
+                <div class="format-option" data-format="bybit">Bybit形式</div>
+                <div class="format-option" data-format="csv">CSV形式</div>
+            </div>
+            
+            <textarea id="exportText" class="export-textarea" readonly></textarea>
+            
+            <div class="btn-group mt-4">
+                <button id="copyButton" class="btn btn-green">
+                    <span class="btn-icon">📋</span>
+                    <span>クリップボードにコピー</span>
+                </button>
+            </div>
+        </div>
+    </div><script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 状態管理
+        const state = {
+            coins: [],
+            bookmarks: [],
+            customCoins: [],
+            showAll: false,
+            apiError: null,
+            lastUpdated: null,
+        };
+
+        // デバッグログ機能
+        const debug = {
+            log: function(message, data = null) {
+                const debugPanel = document.getElementById('debugPanel');
+                const timestamp = new Date().toISOString();
+                let logMessage = `[${timestamp}] ${message}`;
+                
+                if (data) {
+                    if (typeof data === 'object') {
+                        logMessage += '\n' + JSON.stringify(data, null, 2);
+                    } else {
+                        logMessage += '\n' + data;
+                    }
+                }
+                
+                debugPanel.innerHTML = logMessage + '\n\n' + debugPanel.innerHTML;
+            },
+            clear: function() {
+                document.getElementById('debugPanel').innerHTML = '';
+            }
+        };
+
+        // UI 要素
+        const elements = {
+            cryptoTableBody: document.getElementById('cryptoTableBody'),
+            bookmarksTableBody: document.getElementById('bookmarksTableBody'),
+            customCoinsList: document.getElementById('customCoinsList'),
+            statusMessage: document.getElementById('statusMessage'),
+            errorMessage: document.getElementById('errorMessage'),
+            updateButton: document.getElementById('updateButton'),
+            toggleViewButton: document.getElementById('toggleViewButton'),
+            bookmarksButton: document.getElementById('bookmarksButton'),
+            tabMain: document.getElementById('tabMain'),
+            tabAddCoin: document.getElementById('tabAddCoin'),
+            tabBookmarks: document.getElementById('tabBookmarks'),
+            mainView: document.getElementById('mainView'),
+            addCoinView: document.getElementById('addCoinView'),
+            bookmarksView: document.getElementById('bookmarksView'),
+            addCoinForm: document.getElementById('addCoinForm'),
+            debugToggle: document.getElementById('debugToggle'),
+            debugPanel: document.getElementById('debugPanel'),
+            exportButton: document.getElementById('exportButton'),
+            exportModal: document.getElementById('exportModal'),
+            modalClose: document.getElementById('modalClose'),
+            exportText: document.getElementById('exportText'),
+            copyButton: document.getElementById('copyButton'),
+            formatOptions: document.querySelectorAll('.format-option')
+        };
+
+        // デバッグパネルの表示/非表示トグル
+        elements.debugToggle.addEventListener('click', function() {
+            if (elements.debugPanel.style.display === 'block') {
+                elements.debugPanel.style.display = 'none';
+            } else {
+                elements.debugPanel.style.display = 'block';
+            }
+        });
+
+        // タブ切り替え機能
+        function switchTab(tabId) {
+            // すべてのタブとビューを非アクティブにする
+            elements.tabMain.classList.remove('active');
+            elements.tabAddCoin.classList.remove('active');
+            elements.tabBookmarks.classList.remove('active');
+            elements.mainView.style.display = 'none';
+            elements.addCoinView.style.display = 'none';
+            elements.bookmarksView.style.display = 'none';
+            
+            // 選択されたタブとビューをアクティブにする
+            switch(tabId) {
+                case 'tabMain':
+                    elements.tabMain.classList.add('active');
+                    elements.mainView.style.display = 'block';
+                    break;
+                case 'tabAddCoin':
+                    elements.tabAddCoin.classList.add('active');
+                    elements.addCoinView.style.display = 'block';
+                    renderCustomCoins();
+                    break;
+                case 'tabBookmarks':
+                    elements.tabBookmarks.classList.add('active');
+                    elements.bookmarksView.style.display = 'block';
+                    renderBookmarks();
+                    break;
+            }
+        }
+
+        // タブクリックイベント
+        elements.tabMain.addEventListener('click', () => switchTab('tabMain'));
+        elements.tabAddCoin.addEventListener('click', () => switchTab('tabAddCoin'));
+        elements.tabBookmarks.addEventListener('click', () => switchTab('tabBookmarks'));
+        elements.bookmarksButton.addEventListener('click', () => switchTab('tabBookmarks'));        // デフォルトの暗号資産リスト
+        const defaultCoins = [
+            { name: 'BTC', symbol: 'BTCUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'ETH', symbol: 'ETHUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'BNB', symbol: 'BNBUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'XRP', symbol: 'XRPUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'SOL', symbol: 'SOLUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'ADA', symbol: 'ADAUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'AVAX', symbol: 'AVAXUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'DOGE', symbol: 'DOGEUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'DOT', symbol: 'DOTUSDT', maxOrderSize: 1, maxLeverage: 10 },
+            { name: 'MATIC', symbol: 'MATICUSDT', maxOrderSize: 1, maxLeverage: 10 },
+        ];
+
+        // ローカルストレージからデータをロード
+        function loadFromLocalStorage() {
+            try {
+                // カスタムコインの読み込み
+                const customCoinsData = localStorage.getItem('cryptoMarginCustomCoins');
+                if (customCoinsData) {
+                    state.customCoins = JSON.parse(customCoinsData);
+                    debug.log('カスタムコインをロードしました', state.customCoins);
+                }
+                
+                // ブックマークの読み込み
+                const bookmarksData = localStorage.getItem('cryptoMarginBookmarks');
+                if (bookmarksData) {
+                    state.bookmarks = JSON.parse(bookmarksData);
+                    debug.log('ブックマークをロードしました', state.bookmarks);
+                }
+            } catch (error) {
+                debug.log('ローカルストレージからのロードエラー', error);
+                console.error('ローカルストレージからのデータ読み込みに失敗しました:', error);
+            }
+        }
+
+        // ローカルストレージにデータを保存
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('cryptoMarginCustomCoins', JSON.stringify(state.customCoins));
+                localStorage.setItem('cryptoMarginBookmarks', JSON.stringify(state.bookmarks));
+                debug.log('ローカルストレージにデータを保存しました');
+            } catch (error) {
+                debug.log('ローカルストレージ保存エラー', error);
+                console.error('ローカルストレージへのデータ保存に失敗しました:', error);
+            }
+        }
+
+        // Bybit APIからリアルタイム価格を取得
+        async function fetchPricesFromBybit() {
+            elements.statusMessage.textContent = 'Bybit APIから価格情報を取得しています...';
+            elements.updateButton.disabled = true;
+            elements.errorMessage.textContent = '';
+            state.apiError = null;
+            
+            try {
+                debug.log('Bybit API リクエスト開始');
+                const response = await fetch('https://api.bybit.com/v5/market/tickers?category=spot');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                debug.log('Bybit API レスポンス受信', data);
+                
+                if (data.retCode === 0) {
+                    // 価格データの整形と保存
+                    const priceMap = {};
+                    data.result.list.forEach(item => {
+                        priceMap[item.symbol] = parseFloat(item.lastPrice);
+                    });
+                    
+                    // すべての暗号資産リストを作成（デフォルト + カスタム）
+                    const allCoins = [
+                        ...defaultCoins,
+                        ...state.customCoins
+                    ];
+                    
+                    // 価格データを取得した暗号資産リストを作成
+                    state.coins = allCoins.map(coin => {
+                        const price = priceMap[coin.symbol];
+                        const isValid = price && !isNaN(price);
+                        
+                        return {
+                            ...coin,
+                            price: isValid ? price : null,
+                            totalValue: isValid ? price * coin.maxOrderSize : null,
+                            margin: isValid ? (price * coin.maxOrderSize) / coin.maxLeverage : null,
+                            isBookmarked: state.bookmarks.includes(coin.name),
+                            isCustom: state.customCoins.some(c => c.name === coin.name)
+                        };
+                    });
+                    
+                    // 必要な証拠金が少ない順にソート
+                    state.coins.sort((a, b) => {
+                        if (a.margin === null) return 1;
+                        if (b.margin === null) return -1;
+                        return a.margin - b.margin;
+                    });
+                    
+                    state.lastUpdated = new Date();
+                    elements.statusMessage.textContent = `最終更新: ${state.lastUpdated.toLocaleString()}`;
+                    renderCoinTable();
+                } else {
+                    throw new Error(`API Error: ${data.retMsg}`);
+                }
+            } catch (error) {
+                debug.log('API エラー', error);
+                console.error('Bybit API エラー:', error);
+                state.apiError = error.message;
+                elements.errorMessage.textContent = `APIエラー: ${error.message}`;
+                elements.statusMessage.textContent = '価格データの取得に失敗しました。再試行してください。';
+            } finally {
+                elements.updateButton.disabled = false;
+            }
+        }        // メインテーブルの表示
+        function renderCoinTable() {
+            elements.cryptoTableBody.innerHTML = '';
+            
+            // 表示する銘柄を決定（全件またはトップ10）
+            let coinsToDisplay = state.showAll 
+                ? state.coins 
+                : state.coins.slice(0, 10);
+                
+            coinsToDisplay.forEach((coin, index) => {
+                const row = document.createElement('tr');
+                
+                // ブックマークされた行のスタイルを適用
+                if (coin.isBookmarked) {
+                    row.classList.add('bookmarked-row');
+                }
+                
+                // カスタムコインのスタイルを適用
+                if (coin.isCustom) {
+                    row.classList.add('custom-coin');
+                }
+                
+                const rankDisplay = index < 10 
+                    ? `<span class="rank">${index + 1}</span>` 
+                    : (index + 1).toString();
+                    
+                row.innerHTML = `
+                    <td>${rankDisplay}</td>
+                    <td>
+                        <div class="symbol-with-rank">
+                            <span>${coin.name}</span>
+                            <span class="bookmark-btn ${coin.isBookmarked ? 'active' : ''}" data-coin="${coin.name}">★</span>
+                        </div>
+                    </td>
+                    <td>${coin.price ? '$' + coin.price.toLocaleString('ja-JP', {minimumFractionDigits: 2, maximumFractionDigits: 8}) : '取得中...'}</td>
+                    <td>
+                        <input type="number" min="1" step="1" value="${coin.maxOrderSize}" class="order-size" data-coin="${coin.name}">
+                    </td>
+                    <td>
+                        <input type="number" min="1" max="100" step="1" value="${coin.maxLeverage}" class="leverage" data-coin="${coin.name}">
+                    </td>
+                    <td>${coin.totalValue ? '$' + coin.totalValue.toLocaleString('ja-JP', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}</td>
+                    <td>${coin.margin ? '$' + coin.margin.toLocaleString('ja-JP', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}</td>
+                    <td class="action-cell">
+                        <button class="action-btn update-btn" data-coin="${coin.name}">更新</button>
+                    </td>
+                `;
+                
+                elements.cryptoTableBody.appendChild(row);
+            });
+            
+            // ブックマークボタンのイベントリスナーを設定
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const coinName = this.dataset.coin;
+                    toggleBookmark(coinName);
+                });
+            });
+            
+            // 注文サイズとレバレッジの変更イベントリスナーを設定
+            document.querySelectorAll('.order-size, .leverage').forEach(input => {
+                input.addEventListener('change', function() {
+                    const coinName = this.dataset.coin;
+                    const isOrderSize = this.classList.contains('order-size');
+                    const value = parseInt(this.value) || 1;
+                    
+                    updateCoinSettings(coinName, isOrderSize ? value : null, !isOrderSize ? value : null);
+                });
+            });
+            
+            // 更新ボタンのイベントリスナーを設定
+            document.querySelectorAll('.update-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const coinName = this.dataset.coin;
+                    const row = this.closest('tr');
+                    const orderSizeInput = row.querySelector('.order-size');
+                    const leverageInput = row.querySelector('.leverage');
+                    
+                    const orderSize = parseInt(orderSizeInput.value) || 1;
+                    const leverage = parseInt(leverageInput.value) || 1;
+                    
+                    updateCoinSettings(coinName, orderSize, leverage);
+                });
+            });
+        }
+
+        // ブックマークの表示
+        function renderBookmarks() {
+            elements.bookmarksTableBody.innerHTML = '';
+            
+            const bookmarkedCoins = state.coins.filter(coin => 
+                state.bookmarks.includes(coin.name)
+            );
+            
+            if (bookmarkedCoins.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="7" style="text-align: center;">ブックマークした銘柄がありません</td>
+                `;
+                elements.bookmarksTableBody.appendChild(row);
+                return;
+            }
+            
+            bookmarkedCoins.forEach(coin => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${coin.name}</td>
+                    <td>${coin.price ? '$' + coin.price.toLocaleString('ja-JP', {minimumFractionDigits: 2, maximumFractionDigits: 8}) : '取得中...'}</td>
+                    <td>
+                        <input type="number" min="1" step="1" value="${coin.maxOrderSize}" class="bookmark-order-size" data-coin="${coin.name}">
+                    </td>
+                    <td>
+                        <input type="number" min="1" max="100" step="1" value="${coin.maxLeverage}" class="bookmark-leverage" data-coin="${coin.name}">
+                    </td>
+                    <td>${coin.totalValue ? '$' + coin.totalValue.toLocaleString('ja-JP', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}</td>
+                    <td>${coin.margin ? '$' + coin.margin.toLocaleString('ja-JP', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}</td>
+                    <td class="action-cell">
+                        <button class="action-btn delete-btn" data-coin="${coin.name}">削除</button>
+                    </td>
+                `;
+                
+                elements.bookmarksTableBody.appendChild(row);
+            });
+            
+            // ブックマーク画面の入力変更イベントリスナーを設定
+            document.querySelectorAll('.bookmark-order-size, .bookmark-leverage').forEach(input => {
+                input.addEventListener('change', function() {
+                    const coinName = this.dataset.coin;
+                    const isOrderSize = this.classList.contains('bookmark-order-size');
+                    const value = parseInt(this.value) || 1;
+                    
+                    updateCoinSettings(coinName, isOrderSize ? value : null, !isOrderSize ? value : null);
+                });
+            });
+            
+            // ブックマーク削除ボタンのイベントリスナーを設定
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const coinName = this.dataset.coin;
+                    toggleBookmark(coinName);
+                });
+            });
+        }        // カスタムコインの表示
+        function renderCustomCoins() {
+            elements.customCoinsList.innerHTML = '';
+            
+            if (state.customCoins.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="5" style="text-align: center;">カスタム銘柄がありません</td>
+                `;
+                elements.customCoinsList.appendChild(row);
+                return;
+            }
+            
+            state.customCoins.forEach(coin => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${coin.name}</td>
+                    <td>${coin.symbol}</td>
+                    <td>${coin.maxOrderSize}</td>
+                    <td>${coin.maxLeverage}</td>
+                    <td class="action-cell">
+                        <button class="action-btn delete-btn" data-name="${coin.name}">削除</button>
+                    </td>
+                `;
+                elements.customCoinsList.appendChild(row);
+            });
+            
+            // 削除ボタンのイベントリスナーを設定
+            document.querySelectorAll('#customCoinsList .delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const coinName = this.dataset.name;
+                    deleteCustomCoin(coinName);
+                });
+            });
+        }
+        
+        // カスタムコインの追加処理
+        function addCustomCoin(coin) {
+            // 既存のコインと名前が重複していないかチェック
+            const isNameExists = state.coins.some(c => c.name === coin.name);
+            
+            if (isNameExists) {
+                alert(`銘柄名「${coin.name}」は既に存在します。別の名前を使用してください。`);
+                return false;
+            }
+            
+            state.customCoins.push(coin);
+            saveToLocalStorage();
+            renderCustomCoins();
+            fetchPricesFromBybit(); // 価格情報を更新して新しいコインも表示する
+            return true;
+        }
+        
+        // カスタムコインの削除処理
+        function deleteCustomCoin(coinName) {
+            if (confirm(`カスタム銘柄「${coinName}」を削除してもよろしいですか？`)) {
+                // ブックマークからも削除
+                if (state.bookmarks.includes(coinName)) {
+                    const index = state.bookmarks.indexOf(coinName);
+                    if (index !== -1) {
+                        state.bookmarks.splice(index, 1);
+                    }
+                }
+                
+                // カスタムコインリストから削除
+                state.customCoins = state.customCoins.filter(c => c.name !== coinName);
+                saveToLocalStorage();
+                renderCustomCoins();
+                
+                // メイン画面の表示も更新
+                const coinIndex = state.coins.findIndex(c => c.name === coinName);
+                if (coinIndex !== -1) {
+                    state.coins.splice(coinIndex, 1);
+                    renderCoinTable();
+                    renderBookmarks();
+                }
+            }
+        }
+
+        // コイン設定の更新処理
+        function updateCoinSettings(coinName, orderSize, leverage) {
+            const coinIndex = state.coins.findIndex(c => c.name === coinName);
+            
+            if (coinIndex !== -1) {
+                // 注文サイズを更新
+                if (orderSize !== null) {
+                    state.coins[coinIndex].maxOrderSize = orderSize;
+                }
+                
+                // レバレッジを更新
+                if (leverage !== null) {
+                    state.coins[coinIndex].maxLeverage = leverage;
+                }
+                
+                // カスタムコインの場合、ストレージにも保存
+                const customCoinIndex = state.customCoins.findIndex(c => c.name === coinName);
+                if (customCoinIndex !== -1) {
+                    if (orderSize !== null) {
+                        state.customCoins[customCoinIndex].maxOrderSize = orderSize;
+                    }
+                    if (leverage !== null) {
+                        state.customCoins[customCoinIndex].maxLeverage = leverage;
+                    }
+                    saveToLocalStorage();
+                }
+                
+                // デフォルトコインの場合はローカルストレージに設定を保存
+                const defaultCoinIndex = defaultCoins.findIndex(c => c.name === coinName);
+                if (defaultCoinIndex !== -1) {
+                    defaultCoins[defaultCoinIndex].maxOrderSize = orderSize !== null ? 
+                        orderSize : defaultCoins[defaultCoinIndex].maxOrderSize;
+                    
+                    defaultCoins[defaultCoinIndex].maxLeverage = leverage !== null ? 
+                        leverage : defaultCoins[defaultCoinIndex].maxLeverage;
+                    
+                    saveToLocalStorage();
+                }
+                
+                // 価格情報から総額と証拠金を再計算
+                const price = state.coins[coinIndex].price;
+                if (price) {
+                    state.coins[coinIndex].totalValue = price * state.coins[coinIndex].maxOrderSize;
+                    state.coins[coinIndex].margin = state.coins[coinIndex].totalValue / state.coins[coinIndex].maxLeverage;
+                }
+                
+                // テーブル表示を更新
+                renderCoinTable();
+                if (elements.bookmarksView.style.display === 'block') {
+                    renderBookmarks();
+                }
+            }
+        }        // ブックマークの切り替え処理
+        function toggleBookmark(coinName) {
+            const index = state.bookmarks.indexOf(coinName);
+            
+            if (index === -1) {
+                // ブックマークに追加
+                state.bookmarks.push(coinName);
+            } else {
+                // ブックマークから削除
+                state.bookmarks.splice(index, 1);
+            }
+            
+            // コインリストのブックマークステータスを更新
+            state.coins = state.coins.map(coin => ({
+                ...coin,
+                isBookmarked: state.bookmarks.includes(coin.name)
+            }));
+            
+            saveToLocalStorage();
+            renderCoinTable();
+            
+            // ブックマークページを表示中なら更新
+            if (elements.bookmarksView.style.display === 'block') {
+                renderBookmarks();
+            }
+        }
+
+        // エクスポート形式の切り替え
+        elements.formatOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                elements.formatOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                updateExportText(this.dataset.format);
+            });
+        });
+
+        // エクスポートテキストの更新
+        function updateExportText(format = 'tradingview') {
+            const bookmarkedCoins = state.coins.filter(coin => 
+                state.bookmarks.includes(coin.name)
+            );
+            
+            let exportText = '';
+            
+            switch(format) {
+                case 'tradingview':
+                    exportText = bookmarkedCoins.map(coin => {
+                        // TradingViewではBTCUSDTをBINANCE:BTCUSDTのように表記
+                        return `BYBIT:${coin.symbol}`;
+                    }).join(',');
+                    break;
+                    
+                case 'bybit':
+                    exportText = bookmarkedCoins.map(coin => coin.symbol).join(',');
+                    break;
+                    
+                case 'csv':
+                    // CSVヘッダー
+                    exportText = '銘柄,シンボル,現在価格,最大注文サイズ,レバレッジ,想定元本価値,必要な証拠金\n';
+                    // データ行
+                    exportText += bookmarkedCoins.map(coin => {
+                        return [
+                            coin.name,
+                            coin.symbol,
+                            coin.price,
+                            coin.maxOrderSize,
+                            coin.maxLeverage,
+                            coin.totalValue,
+                            coin.margin
+                        ].join(',');
+                    }).join('\n');
+                    break;
+            }
+            
+            elements.exportText.value = exportText;
+        }
+
+        // エクスポートボタンのイベント
+        elements.exportButton.addEventListener('click', function() {
+            elements.exportModal.classList.add('show');
+            updateExportText('tradingview'); // デフォルトはTradingView形式
+        });
+
+        // モーダル閉じるボタン
+        elements.modalClose.addEventListener('click', function() {
+            elements.exportModal.classList.remove('show');
+        });
+
+        // モーダル外クリックで閉じる
+        elements.exportModal.addEventListener('click', function(event) {
+            if (event.target === elements.exportModal) {
+                elements.exportModal.classList.remove('show');
+            }
+        });
+
+        // コピーボタン
+        elements.copyButton.addEventListener('click', function() {
+            elements.exportText.select();
+            document.execCommand('copy');
+            
+            const originalText = this.innerText;
+            this.innerText = 'コピーしました！';
+            
+            setTimeout(() => {
+                this.innerHTML = '<span class="btn-icon">📋</span><span>クリップボードにコピー</span>';
+            }, 2000);
+        });        // 全件表示/一部表示の切り替え
+        elements.toggleViewButton.addEventListener('click', function() {
+            state.showAll = !state.showAll;
+            this.innerHTML = state.showAll ? 
+                '<span class="btn-icon">↕</span><span>一部表示に戻す</span>' : 
+                '<span class="btn-icon">↕</span><span>全件表示</span>';
+            renderCoinTable();
+        });
+        
+        // 更新ボタン
+        elements.updateButton.addEventListener('click', function() {
+            fetchPricesFromBybit();
+        });
+        
+        // 銘柄追加フォーム送信
+        elements.addCoinForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const coinName = document.getElementById('coinName').value.trim();
+            const bybitSymbol = document.getElementById('bybitSymbol').value.trim().toUpperCase();
+            const maxOrderSize = parseInt(document.getElementById('maxOrderSize').value) || 1;
+            const maxLeverage = parseInt(document.getElementById('maxLeverage').value) || 2;
+            
+            if (!coinName || !bybitSymbol) {
+                alert('銘柄名とシンボル名を入力してください');
+                return;
+            }
+            
+            const newCoin = {
+                name: coinName,
+                symbol: bybitSymbol,
+                maxOrderSize: maxOrderSize,
+                maxLeverage: maxLeverage
+            };
+            
+            if (addCustomCoin(newCoin)) {
+                // フォームをリセット
+                document.getElementById('coinName').value = '';
+                document.getElementById('bybitSymbol').value = '';
+                document.getElementById('maxOrderSize').value = '';
+                document.getElementById('maxLeverage').value = '2';
+            }
+        });
+        
+        // 初期化処理
+        function init() {
+            loadFromLocalStorage();
+            fetchPricesFromBybit();
+            
+            // 30秒ごとに自動更新
+            setInterval(() => {
+                fetchPricesFromBybit();
+            }, 30000);
+            
+            debug.log('アプリケーションが初期化されました');
+        }
+        
+        // アプリケーション開始
+        init();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Impact@ATR 貼るだけ完成版（Minimal＋Qmax, Srcなし, gross固定）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <div class="max-w-7xl mx-auto p-4 md:p-6">
+    <h1 class="text-2xl md:text-3xl font-bold mb-2">Impact@ATR ビューア（Minimal＋Qmax, Srcなし, gross固定）</h1>
+    <p class="text-sm text-gray-600 mb-4">
+      列: <b># / Symbol / Qmax (base) / ATR% (Mark) / Impact@ATR / ATR% 推移</b><br/>
+      ソート: <b>Impact@ATR 降順</b>。<br/>
+      定義: \( \mathrm{Impact@ATR}_t = \mathrm{ATR\%}_t \times N_t \)（手数料控除前, gross）
+    </p>
+
+    <!-- Controls -->
+    <div class="bg-white shadow rounded p-4 mb-4">
+      <div class="flex flex-wrap items-center gap-3 mb-3">
+        <button id="loadSample" class="px-3 py-2 bg-gray-700 hover:bg-gray-800 text-white text-sm rounded">サンプルを読み込む</button>
+        <span class="text-sm text-gray-600">または JSON を貼り付けて「プレビューに反映」を押してください。</span>
+      </div>
+      <textarea id="jsonInput" rows="8" class="w-full border rounded p-2 font-mono text-xs" placeholder='[ { "symbol":"BTCUSD", "qmax_base":..., "atrPct":..., "impactAtr":..., "atrPctSeries":[...] }, ... ]'></textarea>
+
+      <div class="mt-3 flex flex-wrap items-center gap-3">
+        <button id="applyBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded">プレビューに反映</button>
+
+        <button id="downloadCsvBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded">CSVをダウンロード</button>
+
+        <span class="text-sm text-gray-600">Sheets Webhook（任意）:</span>
+        <input id="webhookUrl" type="url" placeholder="Webhook URL" class="border rounded px-2 py-1 text-sm w-72" />
+        <input id="webhookSecret" type="text" placeholder="Secret" class="border rounded px-2 py-1 text-sm w-40" />
+        <button id="sendWebhookBtn" class="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded">送信</button>
+
+        <span id="status" class="text-sm text-gray-600"></span>
+      </div>
+
+      <div class="mt-2 text-xs text-gray-500">
+        必須フィールド: <span class="font-mono">symbol, qmax_base, atrPct, impactAtr</span>（任意: <span class="font-mono">atrPctSeries</span>）<br/>
+        注意: CSV/送信では <span class="font-mono">atrPct</span> は「比率（例: 0.0325）」として出力されます。
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white shadow rounded">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-100 text-gray-700">
+            <tr id="theadRow">
+              <th class="px-3 py-2 text-left">#</th>
+              <th class="px-3 py-2 text-left">Symbol</th>
+              <th class="px-3 py-2 text-right">Qmax (base)</th>
+              <th class="px-3 py-2 text-right">ATR% (Mark)</th>
+              <th class="px-3 py-2 text-right">Impact@ATR</th>
+              <th class="px-3 py-2 text-left">ATR% 推移</th>
+            </tr>
+          </thead>
+          <tbody id="tbody" class="divide-y"></tbody>
+        </table>
+      </div>
+      <div id="footer" class="text-sm text-gray-600 px-3 py-2"></div>
+    </div>
+
+    <!-- Help / Apps Script -->
+    <div class="mt-6 bg-white shadow rounded p-4">
+      <h2 class="text-lg font-semibold mb-2">Google Apps Script（任意：Webhook 受け側）</h2>
+      <p class="text-sm text-gray-600 mb-2">以下を Google Apps Script に貼り付け、デプロイ→ウェブアプリにして URL を上の Webhook に設定してください。</p>
+      <pre class="p-3 bg-gray-100 rounded text-xs overflow-auto">
+// Google Apps Script（簡易ログ収集：ヘッダー追従・追記）
+// 1) SPREADSHEET_ID を自分のシートIDに置換
+// 2) SECRET を任意文字列で設定（クライアント側と一致させる）
+// 3) デプロイ → ウェブアプリ（全員アクセス可）
+
+const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
+const SHEET_NAME = 'ATR Logs';
+const SECRET = 'CHANGE_ME_SECRET';
+
+function doOptions(e){ return _cors(200,{ok:true}); }
+function doGet(e){ return _cors(200,{ok:true}); }
+
+function doPost(e){
+  try{
+    const body = JSON.parse(e.postData.contents || '{}');
+    if(body.secret !== SECRET) return _cors(403,{ok:false,error:'forbidden'});
+
+    const header = Array.isArray(body.header) ? body.header : null;
+    const rows = Array.isArray(body.rows) ? body.rows : [];
+    if(!header || !header.length || !rows.length) return _cors(400,{ok:false,error:'invalid payload'});
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
+
+    const lastRow = sh.getLastRow();
+    if(lastRow === 0){
+      sh.getRange(1,1,1,header.length).setValues([header]);
+      sh.getRange(2,1,rows.length,header.length).setValues(rows);
+      return _cors(200,{ok:true, inserted:rows.length, headerWritten:true});
+    }else{
+      const existingHeader = sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0];
+      const same = existingHeader.length===header.length && existingHeader.every((v,i)=>String(v)===String(header[i]));
+      let startRow = sh.getLastRow()+1;
+      if(!same){
+        sh.getRange(startRow,1,1,1).setValue('');
+        startRow += 1;
+        sh.getRange(startRow,1,1,header.length).setValues([header]);
+        startRow += 1;
+      }
+      sh.getRange(startRow,1,rows.length,header.length).setValues(rows);
+      return _cors(200,{ok:true, inserted:rows.length, headerChanged:!same});
+    }
+  }catch(err){
+    return _cors(500,{ok:false,error:String(err)});
+  }
+}
+
+function _cors(status,obj){
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeader('Access-Control-Allow-Origin','*')
+    .setHeader('Access-Control-Allow-Methods','POST, GET, OPTIONS')
+    .setHeader('Access-Control-Allow-Headers','Content-Type');
+}
+      </pre>
+    </div>
+  </div>
+
+  <script>
+    // ---------- State ----------
+    let currentList = [];
+
+    // ---------- Utils (format/display) ----------
+    const fmtUSD = (n) => (n==null||!Number.isFinite(n)) ? '-' : n.toLocaleString(undefined,{ maximumFractionDigits: 6 });
+    const fmtPct = (x) => (x==null||!Number.isFinite(x)) ? '-' : (x*100).toFixed(2) + '%';
+
+    function sparklineSVG(values, width=120, height=26, stroke="#dc2626") {
+      const v = (values||[]).filter(x => Number.isFinite(x));
+      if (!v.length) return "";
+      const n = v.length;
+      const min = Math.min(...v);
+      const max = Math.max(...v);
+      const pad = 2;
+      const W = width, H = height;
+      const sx = (i) => pad + (W - 2*pad) * (i / Math.max(1,(n - 1)));
+      const sy = (val) => {
+        if (max === min) return H / 2;
+        const t = (val - min) / (max - min);
+        return H - pad - (H - 2*pad) * t;
+      };
+      let d = "";
+      for (let i=0;i<n;i++) {
+        const x = sx(i), y = sy(v[i]);
+        d += (i===0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+      }
+      // width/height 属性で固定（Tailwindの任意値クラスは使わない）
+      return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+        <path d="${d}" fill="none" stroke="${stroke}" stroke-width="1.5" vector-effect="non-scaling-stroke" />
+      </svg>`;
+    }
+
+    // ---------- Render ----------
+    function renderTable(list) {
+      const tbody = document.getElementById('tbody');
+      const footer = document.getElementById('footer');
+      tbody.innerHTML = "";
+
+      let rank = 0, ok = 0;
+      for (const r of list) {
+        const has = Number.isFinite(r.impactAtr) && Number.isFinite(r.atrPct);
+        if (has) { rank += 1; ok += 1; }
+
+        const tr = document.createElement('tr');
+        const spark = (r.atrPctSeries && r.atrPctSeries.length) ? sparklineSVG(r.atrPctSeries) : "";
+
+        tr.innerHTML = `
+          <td class="px-3 py-2">${has ? rank : '-'}</td>
+          <td class="px-3 py-2 font-mono">${r.symbol ?? '-'}</td>
+          <td class="px-3 py-2 text-right">${fmtUSD(r.qmax_base)}</td>
+          <td class="px-3 py-2 text-right">${fmtPct(r.atrPct)}</td>
+          <td class="px-3 py-2 text-right">${fmtUSD(r.impactAtr)}</td>
+          <td class="px-3 py-2">${spark}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+      footer.textContent = `計 ${list.length} 行（有効: ${ok}）`;
+    }
+
+    // ---------- Sort & Apply ----------
+    function applyJSON(raw) {
+      try {
+        const arr = JSON.parse(raw);
+        if (!Array.isArray(arr)) throw new Error('JSON は配列ではありません。');
+
+        // 並べ替え: Impact@ATR 降順、欠損は下へ（同点は Symbol 昇順）
+        arr.sort((a,b) => {
+          const A = a?.impactAtr, B = b?.impactAtr;
+          const aValid = Number.isFinite(A);
+          const bValid = Number.isFinite(B);
+          if (aValid && bValid) {
+            if (B !== A) return B - A;
+            return String(a.symbol||'').localeCompare(String(b.symbol||''));
+          }
+          if (aValid && !bValid) return -1;
+          if (!aValid && bValid) return 1;
+          return String(a.symbol||'').localeCompare(String(b.symbol||''));
+        });
+
+        currentList = arr;
+        renderTable(arr);
+        setStatus('プレビュー反映完了', 'ok');
+      } catch (e) {
+        setStatus('エラー: ' + e.message, 'err');
+      }
+    }
+
+    // ---------- CSV ----------
+    function toCSV(list) {
+      const header = ['timestamp','#','Symbol','Qmax (base)','ATR% (Mark)','Impact@ATR'];
+      const ts = new Date().toISOString();
+      const lines = [header.join(',')];
+
+      for (const r of list) {
+        if (!(Number.isFinite(r.impactAtr) && Number.isFinite(r.atrPct))) continue;
+        const row = [
+          ts,
+          '', // rankは連番ではなく空欄にする（見た目の順位はソートに依存、要望に応じて付与可）
+          (r.symbol ?? ''),
+          (r.qmax_base ?? ''),
+          (r.atrPct ?? ''),     // 比率（例: 0.0325）
+          (r.impactAtr ?? '')
+        ];
+        lines.push(row.map(v => String(v)).join(','));
+      }
+      return lines.join('\n');
+    }
+
+    function downloadCSV() {
+      if (!currentList.length) {
+        setStatus('データがありません。サンプル読み込みかJSON貼付後に再実行してください。','warn');
+        return;
+      }
+      const csv = toCSV(currentList);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `impact_atr_${new Date().toISOString().replace(/[:.]/g,'-')}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setStatus('CSVをダウンロードしました。','ok');
+    }
+
+    // ---------- Webhook ----------
+    async function sendToSheetsWebhook(webhookUrl, secret, list) {
+      try {
+        const header = ['timestamp','#','Symbol','Qmax (base)','ATR% (Mark)','Impact@ATR'];
+        const ts = new Date().toISOString();
+
+        const rows = list
+          .filter(r => Number.isFinite(r.impactAtr) && Number.isFinite(r.atrPct))
+          .map(r => [
+            ts,
+            '', // rankは空欄（必要なら付与可）
+            (r.symbol ?? ''),
+            (r.qmax_base ?? ''),
+            (r.atrPct ?? ''),
+            (r.impactAtr ?? '')
+          ]);
+
+        if (!rows.length) {
+          setStatus('送信対象の行がありません。','warn');
+          return;
+        }
+
+        const payload = { secret, header, rows };
+        const res = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(`HTTP ${res.status}: ${t}`);
+        }
+        setStatus('Webhook 送信完了','ok');
+      } catch (err) {
+        setStatus('Webhook エラー: ' + err.message, 'err');
+      }
+    }
+
+    // ---------- Status helper ----------
+    function setStatus(msg, type){
+      const el = document.getElementById('status');
+      el.textContent = msg || '';
+      el.className = 'text-sm ' + (type==='ok' ? 'text-emerald-700' : type==='warn' ? 'text-amber-700' : type==='err' ? 'text-rose-700' : 'text-gray-600');
+    }
+
+    // ---------- Sample ----------
+    const sample = [
+      {
+        "symbol": "BTCUSD", "qmax_base": 2, "atrPct": 0.0325, "impactAtr": 650.25,
+        "atrPctSeries": [0.018,0.019,0.02,0.021,0.023,0.022,0.024,0.025,0.027,0.028,0.029,0.031,0.032,0.0325]
+      },
+      {
+        "symbol": "ETHUSD", "qmax_base": 25, "atrPct": 0.028, "impactAtr": 420.1,
+        "atrPctSeries": [0.015,0.016,0.017,0.018,0.019,0.02,0.021,0.022,0.023,0.024,0.025,0.026,0.027,0.028]
+      },
+      {
+        "symbol": "SOLUSD", "qmax_base": 150, "atrPct": 0.045, "impactAtr": 310.77,
+        "atrPctSeries": [0.022,0.023,0.024,0.026,0.027,0.029,0.03,0.032,0.035,0.037,0.039,0.041,0.043,0.045]
+      }
+    ];
+
+    // ---------- Events ----------
+    document.getElementById('loadSample').addEventListener('click', () => {
+      const ta = document.getElementById('jsonInput');
+      ta.value = JSON.stringify(sample, null, 2);
+      setStatus('サンプルを読み込みました。','ok');
+      applyJSON(ta.value);
+    });
+
+    document.getElementById('applyBtn').addEventListener('click', () => {
+      const raw = document.getElementById('jsonInput').value;
+      applyJSON(raw);
+    });
+
+    document.getElementById('downloadCsvBtn').addEventListener('click', () => {
+      downloadCSV();
+    });
+
+    document.getElementById('sendWebhookBtn').addEventListener('click', () => {
+      const url = document.getElementById('webhookUrl').value.trim();
+      const secret = document.getElementById('webhookSecret').value.trim();
+      if (!url || !secret) {
+        setStatus('Webhook URL と Secret を入力してください。','warn');
+        return;
+      }
+      if (!currentList.length) {
+        setStatus('データがありません。サンプル読み込みかJSON貼付後に再実行してください。','warn');
+        return;
+      }
+      sendToSheetsWebhook(url, secret, currentList);
+    });
+
+    // 初期: 空のテーブル
+    renderTable([]);
+  </script>
+<script>window.parent.postMessage({ action: "ready" }, "*"); 
+ 
+window.console = new Proxy(console, {
+  get(target, prop) {
+    if (['log', 'warn', 'error'].includes(prop)) {
+      return new Proxy(target[prop], {
+        apply(fn, thisArg, args) {
+          fn.apply(thisArg, args);
+          window.parent.postMessage({ action: 'console', 
+            type: prop, 
+            args: args.map((arg) => {
+              try {
+                return JSON.stringify(arg).replace(/^["']|["']$/g, '');
+              } catch (e) {
+                return arg;
+              }
+            }) 
+          }, '*');
+        }
+      });
+    }
+    return target[prop];
+  }
+});
+</script></body>
+</html>

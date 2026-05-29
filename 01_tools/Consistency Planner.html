@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Consistency Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        indigo: {
+                            950: '#1e1b4b',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 text-gray-100 p-4 font-sans flex justify-center items-center min-h-screen">
+
+    <div class="max-w-md w-full bg-slate-800 rounded-xl shadow-2xl overflow-hidden border border-slate-700">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-700 to-indigo-700 p-5 text-center shadow-lg relative">
+            <h2 class="text-xl font-bold tracking-wider text-white">🧭 Master Consistency Planner</h2>
+            <p class="text-blue-200 text-xs mt-1">初期計画 & 途中修正ルート算出</p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="p-5 space-y-4">
+            
+            <!-- 1. Rule & Target (Base Info) -->
+            <div class="grid grid-cols-3 gap-2">
+                <div class="col-span-1">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">ルール %</label>
+                    <div class="relative">
+                        <input type="number" id="rulePercent" oninput="calculate()" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-center text-white font-bold focus:border-blue-500 outline-none" value="30">
+                        <span class="absolute right-1 top-2 text-[10px] text-gray-500">%</span>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">最終目標利益 ($)</label>
+                    <div class="relative">
+                        <span class="absolute left-2 top-2 text-gray-500">$</span>
+                        <input type="number" id="targetAmount" oninput="calculate()" class="w-full bg-slate-900 border border-slate-600 rounded p-2 pl-6 text-white font-bold focus:border-blue-500 outline-none" placeholder="10000">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-700 my-2">
+
+            <!-- 2. Current Status (Progress) -->
+            <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700/50">
+                <p class="text-[10px] text-blue-300 font-bold mb-2 uppercase tracking-wider">▼ 現在の進捗 (途中計算用)</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] text-gray-400 mb-1">現在の総利益</label>
+                        <input type="number" id="currentProfit" oninput="calculate()" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white text-sm focus:border-blue-500 outline-none" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-400 mb-1">これまでの最高利益/日</label>
+                        <input type="number" id="highDay" oninput="calculate()" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white text-sm focus:border-blue-500 outline-none" placeholder="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto Message -->
+            <div id="placeholderMsg" class="text-center text-gray-600 text-xs py-2">
+                目標額を入力すると計算が始まります
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultBox" class="hidden bg-slate-850 border-t border-slate-700 p-5 animate-fade-in relative">
+            
+            <!-- Status Badge -->
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-xs text-gray-400">現在地からのルート:</span>
+                <span id="statusBadge" class="bg-blue-900 text-blue-200 text-[10px] px-2 py-1 rounded border border-blue-700">通常ルート</span>
+            </div>
+
+            <!-- Main Metrics -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- Days Left -->
+                <div class="text-center">
+                    <p class="text-[10px] text-gray-400 uppercase">残り最短日数</p>
+                    <p class="text-3xl font-bold text-white mt-1"><span id="daysLeft">--</span> <span class="text-sm font-normal text-gray-500">days</span></p>
+                </div>
+                <!-- Daily Target -->
+                <div class="text-center">
+                    <p class="text-[10px] text-gray-400 uppercase">残り日割り金額</p>
+                    <p id="dailyNeed" class="text-3xl font-bold text-green-400 mt-1">$0</p>
+                </div>
+            </div>
+
+            <!-- Limit Info -->
+            <div class="bg-slate-900 rounded p-3 mb-4 flex justify-between items-center border border-slate-700">
+                <div>
+                    <p class="text-[10px] text-red-400 font-bold uppercase">絶対厳守のリミット</p>
+                    <p class="text-[10px] text-gray-500">これ以上稼ぐと計算が狂います</p>
+                </div>
+                <p id="limitAmount" class="text-xl font-mono font-bold text-white">$0</p>
+            </div>
+
+            <!-- Analysis / Advice -->
+            <div id="adviceBox" class="bg-blue-900 bg-opacity-20 border border-blue-800/50 p-3 rounded text-sm text-blue-100 leading-relaxed">
+                <!-- Injected via JS -->
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            // Inputs
+            const percent = parseFloat(document.getElementById('rulePercent').value);
+            const targetInput = parseFloat(document.getElementById('targetAmount').value);
+            const currentProfit = parseFloat(document.getElementById('currentProfit').value) || 0;
+            const highDay = parseFloat(document.getElementById('highDay').value) || 0;
+            
+            const resultBox = document.getElementById('resultBox');
+            const placeholder = document.getElementById('placeholderMsg');
+
+            if (!targetInput || isNaN(targetInput) || !percent) {
+                resultBox.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                return;
+            }
+
+            placeholder.classList.add('hidden');
+            resultBox.classList.remove('hidden');
+
+            // 1. Determine the "Effective Target" (修正目標額)
+            // 通常は入力されたTargetAmountだが、もしHighDayが大きすぎて
+            // 「HighDay / (Rate%)」がTargetAmountを超えている場合、
+            // 目標額自体を上方修正しないとルール違反になる。
+            
+            const minRequiredTotalByHighDay = highDay / (percent / 100);
+            let effectiveTarget = Math.max(targetInput, minRequiredTotalByHighDay);
+            
+            // 2. Calculate Remaining
+            let remainingProfit = effectiveTarget - currentProfit;
+            if (remainingProfit < 0) remainingProfit = 0;
+
+            // 3. Calculate Limit per day (Based on Effective Target)
+            const absoluteLimit = effectiveTarget * (percent / 100);
+
+            // 4. Calculate Min Days Left
+            // RemainingProfit / AbsoluteLimit -> Round Up
+            // But if remaining is 0, days is 0.
+            let minDaysLeft = 0;
+            let dailyNeed = 0;
+
+            if (remainingProfit > 0) {
+                // If HighDay is already close to limit, we might be constrained.
+                // Generally, best speed is bounded by AbsoluteLimit.
+                minDaysLeft = Math.ceil(remainingProfit / absoluteLimit);
+                dailyNeed = remainingProfit / minDaysLeft;
+            }
+
+            // --- Rendering ---
+
+            const daysDisplay = document.getElementById('daysLeft');
+            const dailyDisplay = document.getElementById('dailyNeed');
+            const limitDisplay = document.getElementById('limitAmount');
+            const adviceBox = document.getElementById('adviceBox');
+            const badge = document.getElementById('statusBadge');
+
+            daysDisplay.innerText = minDaysLeft;
+            dailyDisplay.innerText = `$${dailyNeed.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+            limitDisplay.innerText = `$${absoluteLimit.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+
+            // Logic for Advice
+            if (remainingProfit <= 0) {
+                // Goal Reached? Check Consistency
+                const finalRatio = (highDay / currentProfit) * 100;
+                if (finalRatio <= percent) {
+                    badge.innerText = "達成済み";
+                    badge.className = "bg-green-900 text-green-200 text-[10px] px-2 py-1 rounded border border-green-700";
+                    adviceBox.innerHTML = `🎉 <strong>目標達成！</strong><br>現在の利益($${currentProfit.toLocaleString()})で、比率は<strong>${finalRatio.toFixed(1)}%</strong>です。ルール(${percent}%)以内なので合格/出金可能です。`;
+                } else {
+                    // Profit reached but consistency failed
+                    const needed = minRequiredTotalByHighDay - currentProfit;
+                    badge.innerText = "利益過多・延長戦";
+                    badge.className = "bg-red-900 text-red-200 text-[10px] px-2 py-1 rounded border border-red-700";
+                    adviceBox.innerHTML = `⚠️ <strong>利益は足りていますが、比率違反です。</strong><br>過去の爆益($${highDay.toLocaleString()})のせいで、総利益を <strong>$${minRequiredTotalByHighDay.toLocaleString()}</strong> まで増やす必要があります。<br>(あと $${needed.toLocaleString()} の積み上げが必要)`;
+                    
+                    // Force update visuals for "Extension Game"
+                    remainingProfit = needed;
+                    minDaysLeft = Math.ceil(remainingProfit / absoluteLimit);
+                    dailyNeed = remainingProfit / minDaysLeft; // Recalc based on new target
+                    
+                    daysDisplay.innerText = minDaysLeft;
+                    dailyDisplay.innerText = `$${dailyNeed.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+                }
+            } else {
+                // In Progress
+                if (effectiveTarget > targetInput) {
+                     // Extension Mode
+                    badge.innerText = "目標強制引き上げ";
+                    badge.className = "bg-orange-900 text-orange-200 text-[10px] px-2 py-1 rounded border border-orange-700";
+                    adviceBox.innerHTML = `⚠️ <strong>過去に稼ぎすぎています！</strong><br>最高利益($${highDay.toLocaleString()})が大きすぎるため、当初の目標($${targetInput.toLocaleString()})では比率違反になります。<br>合格するには総利益を <strong>$${effectiveTarget.toLocaleString()}</strong> まで増やす必要があります。<br>ここから最短<strong>${minDaysLeft}日</strong>かかります。`;
+                } else {
+                    // Normal Mode
+                    badge.innerText = "順調 / 修正ルート";
+                    badge.className = "bg-blue-900 text-blue-200 text-[10px] px-2 py-1 rounded border border-blue-700";
+                    adviceBox.innerHTML = `🧭 <strong>現在地からの修正ルート:</strong><br>残り <strong>$${remainingProfit.toLocaleString()}</strong> を、最短 <strong>${minDaysLeft}日</strong> で割って稼ぎます。<br>1日あたり <strong>$${dailyNeed.toLocaleString(undefined, {maximumFractionDigits: 0})}</strong> を目安にしてください。<br>(上限リミット $${absoluteLimit.toLocaleString()} を超えないよう注意)`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

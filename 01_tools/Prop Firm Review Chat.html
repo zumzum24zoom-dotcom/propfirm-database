@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)file:///D:/01/Download/review_chat_widget.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prop Firm Review Chat</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --text: #e8e8f0;
+    --text-muted: #7a7a9a;
+    --user-bubble: #1e1e2e;
+    --ai-bubble: #14142a;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .widget {
+    width: 100%;
+    max-width: 680px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(108,99,255,0.08), 0 24px 48px rgba(0,0,0,0.4);
+  }
+
+  /* Header */
+  .header {
+    padding: 20px 24px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .header-text h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .header-text p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent2);
+    border-radius: 50%;
+    margin-left: auto;
+    box-shadow: 0 0 8px var(--accent2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Progress */
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  /* Chat area */
+  .chat-area {
+    height: 420px;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-area::-webkit-scrollbar { width: 4px; }
+  .chat-area::-webkit-scrollbar-track { background: transparent; }
+  .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .message {
+    display: flex;
+    gap: 10px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .message.user {
+    flex-direction: row-reverse;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .avatar.ai {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  }
+
+  .avatar.user {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+
+  .bubble {
+    max-width: 78%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .message.ai .bubble {
+    background: var(--ai-bubble);
+    border: 1px solid var(--border);
+    border-top-left-radius: 4px;
+    color: var(--text);
+  }
+
+  .message.user .bubble {
+    background: var(--accent);
+    border-top-right-radius: 4px;
+    color: #fff;
+  }
+
+  /* Rating stars */
+  .star-rating {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .star {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.15s ease;
+    color: var(--text-muted);
+  }
+
+  .star:hover, .star.active {
+    background: rgba(108,99,255,0.2);
+    border-color: var(--accent);
+    transform: scale(1.08);
+    color: #ffd700;
+  }
+
+  /* Typing indicator */
+  .typing {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+    background: var(--ai-bubble);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    border-top-left-radius: 4px;
+    width: fit-content;
+  }
+
+  .typing span {
+    width: 6px;
+    height: 6px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: typing 1.2s infinite;
+  }
+
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* Input area */
+  .input-area {
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  textarea {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 12px 16px;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .send-btn {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+  .send-btn:active { transform: scale(0.96); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .send-btn svg { width: 18px; height: 18px; fill: white; }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-screen h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .success-screen p {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 320px;
+    line-height: 1.6;
+  }
+
+  .restart-btn {
+    margin-top: 8px;
+    padding: 10px 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .restart-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* Quick replies */
+  .quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .qr-btn {
+    padding: 7px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .qr-btn:hover {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+
+  /* Error */
+  .error-notice {
+    font-size: 12px;
+    color: #ff6b6b;
+    text-align: center;
+    padding: 4px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="widget" id="widget">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-icon">💬</div>
+    <div class="header-text">
+      <h2>口コミ・レビューを投稿</h2>
+      <p>あなたの体験をコミュニティに共有</p>
+    </div>
+    <div class="status-dot"></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 10%;"></div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-area" id="chatArea"><div class="message ai"><div class="avatar ai">🤖</div><div class="bubble">こんにちは！👋<br>Prop Firm Challengersの口コミ投稿AIです。<br><br>どのProp Firmの体験談を共有しますか？<div class="quick-replies"><button class="qr-btn">FTMO</button><button class="qr-btn">The Funded Trader</button><button class="qr-btn">MyForexFunds</button><button class="qr-btn">E8 Funding</button><button class="qr-btn">Apex Trader Funding</button><button class="qr-btn">True Forex Funds</button><button class="qr-btn">その他</button></div></div></div></div>
+
+  <!-- Success -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h3>投稿ありがとうございます！</h3>
+    <p>口コミを受け付けました。確認後、掲示板に掲載されます。</p>
+    <button class="restart-btn" onclick="restartChat()">別のFirmを投稿する</button>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area" id="inputArea">
+    <div class="input-row">
+      <textarea id="userInput" placeholder="メッセージを入力..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+      </button>
+    </div>
+    <div class="error-notice" id="errorNotice"></div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// 設定（Wraptasに埋め込む前にここを変更）
+// ============================================================
+const CONFIG = {
+  NOTION_DB_ID: '2a87e810e9a148b7bf7d9e915601c87e',
+  WORKER_URL: 'https://misty-term-6eac.purple-voice-a554.workers.dev/',
+};
+
+// ============================================================
+// 会話状態管理
+// ============================================================
+let state = {
+  phase: 'greeting', // greeting → firm → rating → review → platform → plan → firm_request → site_request → free → email → confirm
+  collected: {
+    firmName: '',
+    rating: null,
+    review: '',
+    platform: [],
+    plan: '',
+    firmRequest: '',
+    siteRequest: '',
+    freeNote: '',
+    email: '',
+  },
+  history: [],
+  isWaiting: false,
+};
+
+const PHASES = [
+  'greeting','firm','rating','review','platform','plan',
+  'firm_request','site_request','free','email','confirm'
+];
+
+const FIRM_LIST = [
+  'FTMO','The Funded Trader','MyForexFunds','E8 Funding',
+  'Apex Trader Funding','True Forex Funds'
+];
+
+const PLATFORM_LIST = ['MT4','MT5','cTrader','TradingView','DXtrade','Match-Trader'];
+
+// ============================================================
+// UI ユーティリティ
+// ============================================================
+function scrollBottom() {
+  const ca = document.getElementById('chatArea');
+  ca.scrollTop = ca.scrollHeight;
+}
+
+function updateProgress() {
+  const idx = PHASES.indexOf(state.phase);
+  const pct = Math.round((idx / (PHASES.length - 1)) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function addMessage(role, content, extras = null) {
+  const ca = document.getElementById('chatArea');
+  const wrap = document.createElement('div');
+  wrap.className = `message ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `avatar ${role}`;
+  avatar.textContent = role === 'ai' ? '🤖' : '👤';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = content.replace(/\n/g, '<br>');
+
+  if (extras) bubble.appendChild(extras);
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(bubble);
+  ca.appendChild(wrap);
+  scrollBottom();
+}
+
+function showTyping() {
+  const ca = document.getElementById('chatArea');
+  const wrap = document.createElement('div');
+  wrap.className = 'message ai';
+  wrap.id = 'typingIndicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar ai';
+  avatar.textContent = '🤖';
+
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(typing);
+  ca.appendChild(wrap);
+  scrollBottom();
+}
+
+function removeTyping() {
+  const t = document.getElementById('typingIndicator');
+  if (t) t.remove();
+}
+
+function setError(msg) {
+  document.getElementById('errorNotice').textContent = msg;
+}
+
+function clearError() {
+  document.getElementById('errorNotice').textContent = '';
+}
+
+// クイックリプライボタン
+function makeQuickReplies(options, onSelect) {
+  const div = document.createElement('div');
+  div.className = 'quick-replies';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'qr-btn';
+    btn.textContent = opt;
+    btn.onclick = () => onSelect(opt);
+    div.appendChild(btn);
+  });
+  return div;
+}
+
+// 星評価
+function makeStarRating(onSelect) {
+  const div = document.createElement('div');
+  div.className = 'star-rating';
+  const stars = ['★','★','★','★','★'];
+  stars.forEach((s, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'star';
+    btn.textContent = s;
+    btn.onclick = () => {
+      document.querySelectorAll('.star').forEach((el, j) => {
+        el.classList.toggle('active', j <= i);
+      });
+      setTimeout(() => onSelect(i + 1), 300);
+    };
+    div.appendChild(btn);
+  });
+  return div;
+}
+
+// ============================================================
+// フェーズ別メッセージ
+// ============================================================
+function startGreeting() {
+  setTimeout(() => {
+    addMessage('ai',
+      'こんにちは！👋\nProp Firm Challengersの口コミ投稿AIです。\n\nどのProp Firmの体験談を共有しますか？',
+      makeQuickReplies([...FIRM_LIST, 'その他'], handleFirmSelect)
+    );
+    state.phase = 'firm';
+    updateProgress();
+    disableInput(false);
+  }, 500);
+}
+
+function handleFirmSelect(firm) {
+  state.collected.firmName = firm;
+  addMessage('user', firm);
+  proceedToRating();
+}
+
+function proceedToRating() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      `**${state.collected.firmName}** の口コミですね！\n\n総合評価を教えてください（1〜5）`,
+      makeStarRating(handleRatingSelect)
+    );
+    state.phase = 'rating';
+    updateProgress();
+  }, 600);
+}
+
+function handleRatingSelect(rating) {
+  state.collected.rating = rating;
+  const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  addMessage('user', `${stars} (${rating}/5)`);
+  proceedToReview();
+}
+
+function proceedToReview() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    const msgs = [
+      '実際に使ってみての感想を自由に教えてください。\nPassできた・できなかった、サポートの対応、スプレッドなど何でもOKです。',
+    ];
+    addMessage('ai', msgs[0]);
+    state.phase = 'review';
+    updateProgress();
+    focusInput();
+  }, 600);
+}
+
+function proceedToPlatform() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      '利用した取引プラットフォームを教えてください。',
+      makeQuickReplies([...PLATFORM_LIST, 'スキップ'], handlePlatformSelect)
+    );
+    state.phase = 'platform';
+    updateProgress();
+  }, 600);
+}
+
+function handlePlatformSelect(pf) {
+  if (pf !== 'スキップ') {
+    state.collected.platform.push(pf);
+    addMessage('user', pf);
+  } else {
+    addMessage('user', 'スキップ');
+  }
+  proceedToPlan();
+}
+
+function proceedToPlan() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      '利用したプラン名を教えてください。\n（例：2ステップ100K、Instant Funding など）\n\nわからなければスキップでOKです。',
+      makeQuickReplies(['スキップ'], (v) => {
+        addMessage('user', v);
+        proceedToFirmRequest();
+      })
+    );
+    state.phase = 'plan';
+    updateProgress();
+    focusInput();
+  }, 600);
+}
+
+function proceedToFirmRequest() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      `**${state.collected.firmName}** にこうしてほしい！という要望はありますか？\n\nなければスキップでOK。`,
+      makeQuickReplies(['スキップ'], (v) => {
+        addMessage('user', v);
+        proceedToSiteRequest();
+      })
+    );
+    state.phase = 'firm_request';
+    updateProgress();
+    focusInput();
+  }, 700);
+}
+
+function proceedToSiteRequest() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      'このサイト（Prop Firm Challengers）への要望・感想はありますか？\n「こんな情報が欲しい」「この機能を追加して」など何でもOK。',
+      makeQuickReplies(['スキップ'], (v) => {
+        addMessage('user', v);
+        proceedToFreeNote();
+      })
+    );
+    state.phase = 'site_request';
+    updateProgress();
+    focusInput();
+  }, 700);
+}
+
+function proceedToFreeNote() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      'その他、どこにも書けなかったけど言いたいことはありますか？\n業界全体への意見、他のトレーダーへのアドバイスなど何でも。',
+      makeQuickReplies(['以上です'], (v) => {
+        addMessage('user', v);
+        proceedToEmail();
+      })
+    );
+    state.phase = 'free';
+    updateProgress();
+    focusInput();
+  }, 700);
+}
+
+function proceedToEmail() {
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      'メールアドレスを登録しておくと、将来的な情報配信や口コミ掲載通知にご利用する場合があります。\n\n**任意です。不要な方はスキップ。**',
+      makeQuickReplies(['スキップ'], (v) => {
+        addMessage('user', v);
+        proceedToConfirm();
+      })
+    );
+    state.phase = 'email';
+    updateProgress();
+    focusInput();
+  }, 700);
+}
+
+function proceedToConfirm() {
+  const c = state.collected;
+  const stars = '★'.repeat(c.rating || 0) + '☆'.repeat(5 - (c.rating || 0));
+  const summary = [
+    `**Firm:** ${c.firmName}`,
+    `**評価:** ${stars}`,
+    c.review ? `**口コミ:** ${c.review.slice(0, 80)}${c.review.length > 80 ? '…' : ''}` : '',
+    c.platform.length ? `**PF:** ${c.platform.join(', ')}` : '',
+    c.plan ? `**プラン:** ${c.plan}` : '',
+    c.email ? `**メール:** ${c.email}` : '',
+  ].filter(Boolean).join('<br>');
+
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addMessage('ai',
+      `以下の内容で送信してよいですか？\n\n${summary}`,
+      makeQuickReplies(['送信する', 'やり直す'], handleConfirm)
+    );
+    state.phase = 'confirm';
+    updateProgress();
+  }, 800);
+}
+
+function handleConfirm(choice) {
+  addMessage('user', choice);
+  if (choice === '送信する') {
+    submitToNotion();
+  } else {
+    restartChat();
+  }
+}
+
+// ============================================================
+// テキスト入力の処理
+// ============================================================
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text || state.isWaiting) return;
+
+  clearError();
+  input.value = '';
+  input.style.height = 'auto';
+  addMessage('user', text);
+
+  // フェーズに応じてデータを格納
+  switch (state.phase) {
+    case 'firm':
+      state.collected.firmName = text;
+      proceedToRating();
+      break;
+    case 'review':
+      state.collected.review = text;
+      proceedToPlatform();
+      break;
+    case 'platform':
+      state.collected.platform.push(text);
+      proceedToPlan();
+      break;
+    case 'plan':
+      state.collected.plan = text;
+      proceedToFirmRequest();
+      break;
+    case 'firm_request':
+      state.collected.firmRequest = text;
+      proceedToSiteRequest();
+      break;
+    case 'site_request':
+      state.collected.siteRequest = text;
+      proceedToFreeNote();
+      break;
+    case 'free':
+      state.collected.freeNote = text;
+      proceedToEmail();
+      break;
+    case 'email':
+      state.collected.email = text;
+      proceedToConfirm();
+      break;
+    default:
+      break;
+  }
+}
+
+// ============================================================
+// Notion API 送信
+// ============================================================
+async function submitToNotion() {
+  state.isWaiting = true;
+  disableInput(true);
+  showTyping();
+
+  const c = state.collected;
+  const now = new Date();
+  const dateStr = now.toISOString().split('T')[0];
+  const titleStr = `${c.firmName}_${dateStr}`;
+
+  const properties = {
+    'Title': { title: [{ text: { content: titleStr } }] },
+    '投稿日時': { date: { start: now.toISOString() } },
+    'ステータス': { select: { name: '未確認' } },
+    '信頼度フラグ': { select: { name: '要確認' } },
+  };
+
+  if (c.firmName) {
+    const validFirms = ['FTMO','The Funded Trader','MyForexFunds','E8 Funding','Apex Trader Funding','True Forex Funds'];
+    properties['Firm名'] = { select: { name: validFirms.includes(c.firmName) ? c.firmName : 'その他' } };
+  }
+  if (c.rating) {
+    properties['総合評価'] = { number: c.rating };
+  }
+  if (c.review) {
+    properties['口コミ本文'] = { rich_text: [{ text: { content: c.review } }] };
+  }
+  if (c.plan) {
+    properties['利用プラン'] = { rich_text: [{ text: { content: c.plan } }] };
+  }
+  if (c.platform.length > 0) {
+    const validPFs = ['MT4','MT5','cTrader','TradingView','DXtrade','Match-Trader'];
+    properties['取引プラットフォーム'] = {
+      multi_select: c.platform
+        .filter(p => validPFs.includes(p))
+        .map(p => ({ name: p }))
+    };
+  }
+  if (c.firmRequest) {
+    properties['Firmへの要望'] = { rich_text: [{ text: { content: c.firmRequest } }] };
+  }
+  if (c.siteRequest) {
+    properties['サイトへの要望'] = { rich_text: [{ text: { content: c.siteRequest } }] };
+  }
+  if (c.freeNote) {
+    properties['自由メモ'] = { rich_text: [{ text: { content: c.freeNote } }] };
+  }
+  if (c.email && c.email !== 'スキップ') {
+    properties['メールアドレス'] = { email: c.email };
+  }
+
+  try {
+    const res = await fetch(CONFIG.WORKER_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        parent: { database_id: CONFIG.NOTION_DB_ID },
+        properties,
+      }),
+    });
+
+    removeTyping();
+
+    if (res.ok) {
+      showSuccess();
+    } else {
+      const err = await res.json();
+      console.error('Notion API error:', err);
+      setError('送信に失敗しました。もう一度お試しください。');
+      addMessage('ai', '申し訳ありません、送信中にエラーが発生しました。\nもう一度「送信する」を押してみてください。',
+        makeQuickReplies(['送信する', 'やめる'], handleConfirm)
+      );
+    }
+  } catch (e) {
+    removeTyping();
+    console.error(e);
+    setError('ネットワークエラーが発生しました。');
+    addMessage('ai', 'ネットワークエラーが発生しました。接続を確認してください。');
+  }
+
+  state.isWaiting = false;
+  disableInput(false);
+}
+
+// ============================================================
+// 成功・リスタート
+// ============================================================
+function showSuccess() {
+  document.getElementById('chatArea').style.display = 'none';
+  document.getElementById('inputArea').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'flex';
+  document.getElementById('progressFill').style.width = '100%';
+}
+
+function restartChat() {
+  state = {
+    phase: 'greeting',
+    collected: { firmName:'', rating:null, review:'', platform:[], plan:'', firmRequest:'', siteRequest:'', freeNote:'', email:'' },
+    history: [],
+    isWaiting: false,
+  };
+  document.getElementById('chatArea').innerHTML = '';
+  document.getElementById('chatArea').style.display = 'flex';
+  document.getElementById('inputArea').style.display = 'block';
+  document.getElementById('successScreen').style.display = 'none';
+  document.getElementById('progressFill').style.width = '0%';
+  clearError();
+  disableInput(true);
+  startGreeting();
+}
+
+function disableInput(disabled) {
+  document.getElementById('userInput').disabled = disabled;
+  document.getElementById('sendBtn').disabled = disabled;
+}
+
+function focusInput() {
+  document.getElementById('userInput').focus();
+}
+
+// ============================================================
+// 初期化
+// ============================================================
+disableInput(true);
+startGreeting();
+</script>
+
+
+</body></html>

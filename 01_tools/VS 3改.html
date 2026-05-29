@@ -1,0 +1,683 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VS 3 v6.35 (Narrow Sidebar)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Roboto:wght@400;500;700;900&display=swap"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body { font-family: 'Roboto', sans-serif; background-color: #000; color: #d1d4dc; transition: background 0.5s; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* ステルスモード中 */
+    body.stealth-active { cursor: none; }
+    body.stealth-active * { cursor: none !important; }
+
+    .tv-bg{
+      background-color:#131722;
+      background-image:
+        linear-gradient(rgba(42, 46, 57, 0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42, 46, 57, 0.4) 1px, transparent 1px);
+      background-size:20px 20px;
+    }
+
+    /* 勝者強調用のスタイル */
+    .winner-frame {
+      border: 3px solid #ffffff !important;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      z-index: 50;
+      transform: scale(1.01);
+    }
+    
+    .loser-dim { opacity: 0.6; filter: grayscale(30%); }
+
+    /* チャート要素のスタイル */
+    .chart-area {
+        position: absolute; inset: 0; padding-top: 5rem; padding-bottom: 2rem; padding-left: 1.5rem; padding-right: 1.5rem;
+        display: flex; align-items: flex-end; justify-content: space-between;
+    }
+
+    .candle-wrapper {
+        flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+        height: 100%; position: relative;
+    }
+
+    .candle-wick{ 
+        width:1px; background:#787b86; position:absolute; bottom: 20px;
+        transition: height 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    }
+    .candle-body{ 
+        width:12px; position:relative; z-index:10; bottom: 20px;
+        transition: height 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s, box-shadow 0.3s;
+    }
+    
+    .db-input-label{ font-size:9px; color:#9ca3af; font-weight:bold; margin-bottom:2px; display:block; }
+    .db-input{ background:#2a2e39; border:1px solid #434651; color:#fff; padding:4px; font-family:'JetBrains Mono'; font-size:11px; border-radius:2px; width:100%; }
+    .db-select{ background:#2a2e39; border:1px solid #434651; color:#fff; padding:4px; font-family:'JetBrains Mono'; font-size:11px; border-radius:2px; width:100%; cursor:pointer; }
+
+    /* Simple Toggle Switch */
+    .row-switch {
+      appearance: none; width: 16px; height: 16px;
+      background: #363a45; border-radius: 3px; cursor: pointer;
+      border: 1px solid #50535e; transition: all 0.2s;
+    }
+    .row-switch:checked { background: #089981; border-color: #089981; }
+    .row-switch:hover { border-color: #787b86; }
+
+    .notion-tag{
+      display:inline-flex; align-items:center; justify-content: center;
+      background: transparent !important; border: none !important;
+      height: auto; padding: 0; margin-right: 8px; 
+      font-size: 10px; font-weight: 700; line-height: 1;
+      font-family:'JetBrains Mono'; white-space:nowrap;
+    }
+
+    .tag-default{ color:#9ca3af; } 
+    .tag-blue{ color:#60a5fa; }    
+    .tag-green{ color:#4ade80; }   
+    .tag-purple{ color:#c084fc; }  
+
+    .tag-label{
+      background: transparent; border: none; font-weight: 800; 
+      font-size: 10px; height: auto; display: inline-flex;
+      align-items: center; padding: 0; margin-right: 8px;
+    }
+    .tag-label-left{ color: rgba(147, 197, 253, 0.9); }
+    .tag-label-right{ color: rgba(252, 165, 165, 0.9); margin-left: 8px; margin-right: 0; }
+
+    .header-row-container { display: flex; align-items: center; height: 24px; gap: 0; }
+    .header-row-container.justify-end .notion-tag { margin-right: 0; margin-left: 8px; }
+
+    .scorebar{
+      background: linear-gradient(90deg, rgba(8,153,129,.18), rgba(42,46,57,.25), rgba(242,54,69,.18));
+      border-top: 1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .score-pill{ border:1px solid rgba(255,255,255,.12); background: rgba(19,23,34,.6); }
+
+    .logo-wrap{
+      position:absolute; top:10px; z-index:30; width:44px; height:44px;
+      border-radius:10px; border:1px solid rgba(255,255,255,.14); background: rgba(19,23,34,.70);
+      display:flex; align-items:center; justify-content:center; overflow:hidden;
+      box-shadow: 0 8px 18px rgba(0,0,0,.38); backdrop-filter: blur(6px); user-select:none;
+    }
+    .logo-wrap.left { left:10px; }
+    .logo-wrap.right { right:10px; }
+
+    .logo-img{ width:100%; height:100%; object-fit: contain; padding:6px; }
+    .logo-empty{ font-family:'JetBrains Mono', monospace; font-size:9px; line-height:1.1; color:#9ca3af; text-align:center; padding:6px; }
+    .logo-empty strong{ color:#d1d4dc; font-size:10px; display:block; margin-bottom:2px; }
+    
+    .title-block-left{ position:absolute; top:10px; left:64px; z-index:20; }
+    .title-block-right{ position:absolute; top:10px; right:64px; z-index:20; text-align:right; display:flex; flex-direction:column; align-items:flex-end; }
+
+    .logo-clear{
+      position:absolute; bottom:-6px; right:-6px; width:18px; height:18px; border-radius:999px;
+      background: rgba(30,30,30,.9); border:1px solid rgba(255,255,255,.18); color:#e5e7eb; font-family:'JetBrains Mono', monospace;
+      font-size:11px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    }
+
+    .vs-text {
+      background: #131722; color: #787b86; font-size: 11px; font-weight: 900;
+      font-family: 'JetBrains Mono', monospace; padding: 4px 0; z-index: 40;
+    }
+
+    #chart-container.cinema-mode {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(1.3);
+      z-index: 9999;
+      box-shadow: 0 0 0 100vmax #000;
+      border: 1px solid #333;
+    }
+    
+    #exit-cinema-btn {
+      display: none; position: fixed; top: 20px; right: 20px; z-index: 10000;
+      background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer;
+      font-size: 12px; font-weight: bold;
+    }
+    #exit-cinema-btn:hover { background: rgba(255,255,255,0.4); }
+
+    /* LABEL STYLES */
+    .lbl-name { display: block; font-size: 9px; margin-bottom: 2px; transition: opacity 0.3s; }
+    .lbl-score { display: block; font-size: 12px; font-family: 'JetBrains Mono'; font-weight: bold; transition: opacity 0.3s; }
+    .lbl-container { width: 20%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+  </style>
+</head>
+
+<body class="p-4 bg-gray-900 min-h-screen">
+
+  <!-- MAIN LAYOUT WRAPPER: 2 Columns -->
+  <div class="flex flex-col lg:flex-row gap-6 max-w-[1400px] mx-auto items-start justify-center">
+
+    <!-- LEFT COLUMN: VS TOOL (Fixed Width 800px for visual consistency) -->
+    <div class="flex-shrink-0 w-[800px] flex flex-col items-center">
+      
+      <!-- CONTROLS -->
+      <div class="bg-gray-800 p-4 rounded mb-6 w-full border border-gray-700 shadow-xl z-50">
+        <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+          <h2 class="text-xs font-bold text-gray-400">⚔️ VS 3 v6.34 (Sidebar Ready)</h2>
+          <div class="flex gap-2">
+            <button onclick="toggleCinema()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded shadow transition-all flex items-center gap-2 border border-purple-400">
+              📺 CINEMA
+            </button>
+            <div class="w-[1px] bg-gray-600 mx-2"></div>
+            <button onclick="downloadImage()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold px-4 py-2 rounded shadow transition-all">
+              ⬇️ PNG
+            </button>
+          </div>
+        </div>
+
+        <!-- INPUTS GRID -->
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-4 space-y-2 bg-gray-900/50 p-3 rounded border border-gray-700/50">
+            <div class="text-xs font-bold text-blue-400 mb-2">🔵 LEFT</div>
+            <div><label class="db-input-label">Firm Name</label><input type="text" id="l-firm-name" value="APEX TRADER" class="db-input" oninput="draw()"></div>
+            <div><label class="db-input-label">Challenge Name</label><input type="text" id="l-chal-name" value="TRADEOVATE" class="db-input" oninput="draw()"></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div><label class="db-input-label">Account Size</label><input type="text" id="l-size" value="50K FULL" class="db-input" oninput="draw()"></div>
+              <div><label class="db-input-label">Steps</label><select id="l-steps" class="db-select" onchange="draw()"><option value="1-Step">1-Step</option><option value="2-Step">2-Step</option><option value="3-Step">3-Step</option><option value="4-Step">4-Step</option><option value="Instant">Instant</option></select></div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div><label class="db-input-label">Phase</label><select id="l-phase" class="db-select" onchange="draw()"><option value="Phase 1">Phase 1</option><option value="Phase 2">Phase 2</option><option value="Phase 3">Phase 3</option><option value="Phase 4">Phase 4</option><option value="Funded">Funded</option></select></div>
+              <div><label class="db-input-label">Status</label><select id="l-status" class="db-select" onchange="draw()"><option value="Challenge">Challenge</option><option value="Funded">Funded</option></select></div>
+            </div>
+          </div>
+
+          <div class="col-span-4 space-y-2 flex flex-col justify-center">
+            <!-- SCORE DISPLAY -->
+            <div class="flex justify-between items-center bg-gray-900 p-2 rounded border border-gray-600 mb-2 shadow-inner">
+              <div class="text-right w-1/3"><span id="input-total-l" class="text-xl font-mono font-bold text-[#089981]">0</span></div>
+              <div class="w-1/3 text-center"><span class="text-[9px] font-bold text-gray-500 block">TOTAL SCORE</span></div>
+              <div class="text-left w-1/3"><span id="input-total-r" class="text-xl font-mono font-bold text-[#f23645]">0</span></div>
+            </div>
+
+            <!-- ROW INPUTS -->
+            <div class="space-y-1.5">
+              <div class="flex gap-2 items-center">
+                 <input type="checkbox" id="sw1" class="row-switch" checked onchange="draw()" title="Toggle Row 1">
+                 <div class="flex-1 flex gap-1 items-center">
+                   <input type="number" id="ls1" value="80" class="w-10 text-right db-input" oninput="draw()">
+                   <input type="text" id="n1" value="RISK" class="flex-1 text-center db-input text-[10px]" oninput="draw()">
+                   <input type="number" id="rs1" value="60" class="w-10 db-input" oninput="draw()">
+                 </div>
+              </div>
+              <div class="flex gap-2 items-center">
+                 <input type="checkbox" id="sw2" class="row-switch" checked onchange="draw()" title="Toggle Row 2">
+                 <div class="flex-1 flex gap-1 items-center">
+                   <input type="number" id="ls2" value="40" class="w-10 text-right db-input" oninput="draw()">
+                   <input type="text" id="n2" value="RULES" class="flex-1 text-center db-input text-[10px]" oninput="draw()">
+                   <input type="number" id="rs2" value="90" class="w-10 db-input" oninput="draw()">
+                 </div>
+              </div>
+              <div class="flex gap-2 items-center">
+                 <input type="checkbox" id="sw3" class="row-switch" checked onchange="draw()" title="Toggle Row 3">
+                 <div class="flex-1 flex gap-1 items-center">
+                   <input type="number" id="ls3" value="75" class="w-10 text-right db-input" oninput="draw()">
+                   <input type="text" id="n3" value="TARGET" class="flex-1 text-center db-input text-[10px]" oninput="draw()">
+                   <input type="number" id="rs3" value="75" class="w-10 db-input" oninput="draw()">
+                 </div>
+              </div>
+              <div class="flex gap-2 items-center">
+                 <input type="checkbox" id="sw4" class="row-switch" checked onchange="draw()" title="Toggle Row 4">
+                 <div class="flex-1 flex gap-1 items-center">
+                   <input type="number" id="ls4" value="90" class="w-10 text-right db-input" oninput="draw()">
+                   <input type="text" id="n4" value="STRAT" class="flex-1 text-center db-input text-[10px]" oninput="draw()">
+                   <input type="number" id="rs4" value="30" class="w-10 db-input" oninput="draw()">
+                 </div>
+              </div>
+            </div>
+            
+             <div class="flex gap-2 justify-center mt-2">
+                <button onclick="setAllSwitches(false)" class="text-[9px] bg-gray-700 text-gray-300 px-4 py-1 rounded hover:bg-gray-600 font-bold">OFF</button>
+                <button onclick="setAllSwitches(true)" class="text-[9px] bg-gray-700 text-gray-300 px-4 py-1 rounded hover:bg-gray-600 font-bold">ON</button>
+            </div>
+          </div>
+
+          <div class="col-span-4 space-y-2 bg-gray-900/50 p-3 rounded border border-gray-700/50 text-right">
+            <div class="text-xs font-bold text-orange-400 mb-2">🔴 RIGHT</div>
+            <div><label class="db-input-label">Firm Name</label><input type="text" id="r-firm-name" value="FTMO" class="db-input text-right" oninput="draw()"></div>
+            <div><label class="db-input-label">Challenge Name</label><input type="text" id="r-chal-name" value="SWING" class="db-input text-right" oninput="draw()"></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div><label class="db-input-label">Steps</label><select id="r-steps" class="db-select" onchange="draw()"><option value="1-Step">1-Step</option><option value="2-Step">2-Step</option><option value="3-Step">3-Step</option><option value="4-Step" selected>4-Step</option><option value="Instant">Instant</option></select></div>
+              <div><label class="db-input-label">Account Size</label><input type="text" id="r-size" value="200K" class="db-input text-right" oninput="draw()"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div><label class="db-input-label">Status</label><select id="r-status" class="db-select" onchange="draw()"><option value="Challenge">Challenge</option><option value="Funded">Funded</option></select></div>
+              <div><label class="db-input-label">Phase</label><select id="r-phase" class="db-select" onchange="draw()"><option value="Phase 1">Phase 1</option><option value="Phase 2">Phase 2</option><option value="Phase 3">Phase 3</option><option value="Phase 4">Phase 4</option><option value="Funded">Funded</option></select></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHART CONTAINER (800px Fixed) -->
+      <div id="chart-container" class="w-[800px] bg-[#131722] border border-[#2a2e39] rounded overflow-hidden shadow-2xl flex flex-col relative transition-all duration-300">
+        
+        <!-- HEADER -->
+        <div class="border-b border-[#2a2e39] bg-[#1e222d] px-4 py-2">
+          <div class="flex items-center gap-2">
+            <span class="text-[#d1d4dc] font-bold font-mono">VS COMPARISON</span>
+          </div>
+          <div class="mt-2 grid grid-cols-12 gap-2">
+            <div class="col-span-6 header-row-container">
+              <span class="notion-tag tag-label tag-label-left">LEFT</span>
+              <span id="h-l-size" class="notion-tag tag-default">50K FULL</span>
+              <span id="h-l-steps" class="notion-tag tag-blue">1-Step</span>
+              <span id="h-l-phase" class="notion-tag tag-default">Phase 1</span>
+              <span id="h-l-status" class="notion-tag tag-default">Challenge</span>
+            </div>
+            <div class="col-span-6 header-row-container justify-end">
+              <span id="h-r-status" class="notion-tag tag-default">Challenge</span>
+              <span id="h-r-phase" class="notion-tag tag-default">Phase 1</span>
+              <span id="h-r-steps" class="notion-tag tag-purple">4-Step</span>
+              <span id="h-r-size" class="notion-tag tag-default">200K</span>
+              <span class="notion-tag tag-label tag-label-right">RIGHT</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAIN CHART AREA -->
+        <div class="flex h-[320px] relative">
+          <!-- LEFT -->
+          <div id="area-left" class="flex-1 border-r border-[#2a2e39] relative tv-bg transition-all duration-500">
+            <div id="logo-left-wrap" class="logo-wrap left">
+              <img id="logo-left" class="logo-img hidden" alt="Left logo" />
+              <div id="logo-left-empty" class="logo-empty"><strong>LOGO</strong>DROP</div>
+              <div id="logo-left-clear" class="logo-clear hidden">×</div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
+              <h1 id="wm-l" class="text-6xl font-black italic">APEX</h1>
+            </div>
+            <div class="title-block-left">
+              <h2 id="disp-l-name" class="text-lg font-black text-[#d1d4dc] leading-none mb-1">APEX TRADER</h2>
+              <p id="disp-l-chal" class="text-sm font-bold text-[#089981]">TRADEOVATE</p>
+            </div>
+            
+            <div class="chart-area" id="chart-l"></div>
+          </div>
+
+          <div class="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#2a2e39] z-30 flex items-center justify-center">
+            <div class="vs-text">VS</div>
+          </div>
+
+          <!-- RIGHT -->
+          <div id="area-right" class="flex-1 relative tv-bg transition-all duration-500">
+            <div id="logo-right-wrap" class="logo-wrap right">
+              <img id="logo-right" class="logo-img hidden" alt="Right logo" />
+              <div id="logo-right-empty" class="logo-empty"><strong>LOGO</strong>DROP</div>
+              <div id="logo-right-clear" class="logo-clear hidden">×</div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
+              <h1 id="wm-r" class="text-6xl font-black italic">FTMO</h1>
+            </div>
+            <div class="title-block-right">
+              <h2 id="disp-r-name" class="text-lg font-black text-[#d1d4dc] leading-none mb-1">FTMO</h2>
+              <p id="disp-r-chal" class="text-sm font-bold text-[#f23645]">SWING</p>
+            </div>
+            
+            <div class="chart-area" id="chart-r"></div>
+          </div>
+        </div>
+
+        <!-- SCORE BAR -->
+        <div class="scorebar">
+          <div class="h-14 flex text-[10px] text-[#787b86] font-mono pb-2">
+            <div class="flex-1 flex justify-between px-6 items-center" id="labels-l"></div>
+            <div class="w-[1px]"></div>
+            <div class="flex-1 flex justify-between px-6 items-center" id="labels-r"></div>
+          </div>
+          <div class="px-4 pb-3">
+            <div class="score-pill rounded-md px-3 py-2 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] text-gray-400 font-bold uppercase">TOTAL</span>
+                <span id="footer-total-l" class="text-lg font-mono font-extrabold text-[#089981]">0</span>
+              </div>
+              <div class="flex-1 px-6 flex items-center justify-center">
+                 <div class="flex items-center w-full max-w-[300px] h-1.5 bg-[#2a2e39] rounded-full overflow-hidden relative">
+                    <div class="flex-1 flex justify-end h-full">
+                        <div id="bar-l" class="h-full bg-[#434651] transition-all duration-500 ease-out" style="width: 0%"></div>
+                    </div>
+                    <div class="w-[2px] h-full bg-gray-600 z-10"></div>
+                    <div class="flex-1 flex justify-start h-full">
+                        <div id="bar-r" class="h-full bg-[#434651] transition-all duration-500 ease-out" style="width: 0%"></div>
+                    </div>
+                 </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="footer-total-r" class="text-lg font-mono font-extrabold text-[#f23645]">0</span>
+                <span class="text-[10px] text-gray-400 font-bold uppercase">TOTAL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: COUPON LOG (NARROW WIDTH) -->
+    <div class="w-[350px] flex-shrink-0">
+        <!-- Coupon Log Sidebar -->
+        <div class="bg-gray-800 rounded border border-gray-700 shadow-xl overflow-hidden h-[700px] flex flex-col">
+            <div class="bg-gray-700 px-3 py-2 border-b border-gray-600">
+                <h3 class="text-xs font-bold text-gray-200">🎫 最新クーポン</h3>
+                <p class="text-[9px] text-gray-400 mt-0.5">リアルタイム更新</p>
+            </div>
+            <div class="p-3 space-y-2 overflow-y-auto flex-1">
+                <!-- Coupon Items -->
+                <div class="bg-gradient-to-br from-blue-900/30 to-blue-800/20 p-2.5 rounded border border-blue-500/30 hover:border-blue-400/50 transition-all">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-blue-300 font-bold text-xs">APEX TRADER</span>
+                        <span class="text-[9px] text-gray-400">2分前</span>
+                    </div>
+                    <div class="bg-black/30 px-2 py-1 rounded font-mono text-[10px] text-green-400 mb-1">SAVE80</div>
+                    <div class="text-[9px] text-gray-300">80% OFF • 全サイズ対象</div>
+                </div>
+                <div class="bg-gradient-to-br from-orange-900/30 to-orange-800/20 p-2.5 rounded border border-orange-500/30 hover:border-orange-400/50 transition-all">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-orange-300 font-bold text-xs">FTMO</span>
+                        <span class="text-[9px] text-gray-400">15分前</span>
+                    </div>
+                    <div class="bg-black/30 px-2 py-1 rounded font-mono text-[10px] text-green-400 mb-1">SPECIAL10</div>
+                    <div class="text-[9px] text-gray-300">10% 追加割引 • 期間限定</div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-900/30 to-purple-800/20 p-2.5 rounded border border-purple-500/30 hover:border-purple-400/50 transition-all">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-purple-300 font-bold text-xs">TOPSTEP</span>
+                        <span class="text-[9px] text-gray-400">1時間前</span>
+                    </div>
+                    <div class="bg-black/30 px-2 py-1 rounded font-mono text-[10px] text-green-400 mb-1">RESET20</div>
+                    <div class="text-[9px] text-gray-300">リセット $20 OFF</div>
+                </div>
+                <div class="bg-gradient-to-br from-green-900/30 to-green-800/20 p-2.5 rounded border border-green-500/30 hover:border-green-400/50 transition-all">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-green-300 font-bold text-xs">FUNDED TRADING PLUS</span>
+                        <span class="text-[9px] text-gray-400">3時間前</span>
+                    </div>
+                    <div class="bg-black/30 px-2 py-1 rounded font-mono text-[10px] text-green-400 mb-1">BONUS50</div>
+                    <div class="text-[9px] text-gray-300">50% ボーナス • 初回限定</div>
+                </div>
+                <div class="bg-gradient-to-br from-red-900/30 to-red-800/20 p-2.5 rounded border border-red-500/30 hover:border-red-400/50 transition-all">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-red-300 font-bold text-xs">ALPHA CAPITAL</span>
+                        <span class="text-[9px] text-gray-400">5時間前</span>
+                    </div>
+                    <div class="bg-black/30 px-2 py-1 rounded font-mono text-[10px] text-green-400 mb-1">ALPHA30</div>
+                    <div class="text-[9px] text-gray-300">30% OFF • 全プラン適用</div>
+                </div>
+                <div class="text-center py-6">
+                    <div class="inline-block">
+                        <div class="animate-pulse text-gray-500 text-[10px] mb-1">● 新着クーポンを監視中...</div>
+                        <div class="text-[9px] text-gray-600">自動更新: 毎分</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+  <!-- CINEMA UI -->
+  <button id="exit-cinema-btn" onclick="toggleCinema()">× CLOSE CINEMA</button>
+
+  <div id="toast" class="fixed bottom-4 right-4 bg-emerald-600 text-white px-4 py-2 rounded shadow-lg transform translate-y-20 transition-transform duration-300 font-bold text-sm flex items-center gap-2 z-50">
+    <span>Processing...</span>
+  </div>
+
+  <script>
+    // --- EXACT SAME LOGIC AS BEFORE ---
+    const logos = { left: null, right: null };
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.querySelector('span').innerText = msg;
+      toast.classList.remove('translate-y-20');
+      setTimeout(() => toast.classList.add('translate-y-20'), 2500);
+    }
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    function toggleCinema() {
+      const container = document.getElementById('chart-container');
+      const body = document.body;
+      if (container.classList.contains('cinema-mode')) {
+        container.classList.remove('cinema-mode');
+        body.classList.remove('cinema-active');
+      } else {
+        container.classList.add('cinema-mode');
+        body.classList.add('cinema-active');
+      }
+    }
+    function applyLogo(side) {
+      const img = document.getElementById(side === 'left' ? 'logo-left' : 'logo-right');
+      const empty = document.getElementById(side === 'left' ? 'logo-left-empty' : 'logo-right-empty');
+      const clear = document.getElementById(side === 'left' ? 'logo-left-clear' : 'logo-right-clear');
+      if (!logos[side]) {
+        img.classList.add('hidden'); img.removeAttribute('src');
+        empty.classList.remove('hidden'); clear.classList.add('hidden');
+        return;
+      }
+      img.src = logos[side]; img.classList.remove('hidden');
+      empty.classList.add('hidden'); clear.classList.remove('hidden');
+    }
+    function clearLogo(side) { logos[side] = null; applyLogo(side); }
+    function handleDrop(side, file) {
+      if (!file) return;
+      const okTypes = ['image/png', 'image/jpeg', 'image/svg+xml', 'image/webp'];
+      if (!okTypes.includes(file.type)) { showToast('PNG/JPG/SVG/WEBPだけ対応'); return; }
+      const reader = new FileReader();
+      reader.onload = () => { logos[side] = reader.result; applyLogo(side); showToast(side.toUpperCase() + ' ロゴセット'); };
+      reader.readAsDataURL(file);
+    }
+    function wireDropzone(side) {
+      const wrap = document.getElementById(side === 'left' ? 'logo-left-wrap' : 'logo-right-wrap');
+      const clearBtn = document.getElementById(side === 'left' ? 'logo-left-clear' : 'logo-right-clear');
+      ['dragenter','dragover'].forEach(e => wrap.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); wrap.classList.add('dragover'); }));
+      ['dragleave','drop'].forEach(e => wrap.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); wrap.classList.remove('dragover'); }));
+      wrap.addEventListener('drop', e => handleDrop(side, e.dataTransfer.files?.[0]));
+      clearBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); clearLogo(side); });
+      wrap.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = 'image/png,image/jpeg,image/svg+xml,image/webp';
+        input.onchange = () => handleDrop(side, input.files?.[0]);
+        input.click();
+      });
+      applyLogo(side);
+    }
+    function setAllSwitches(state) {
+      for(let i=1; i<=4; i++) {
+        document.getElementById('sw' + i).checked = state;
+      }
+      draw();
+    }
+    function initChartDOM(side) {
+        const container = document.getElementById(side === 'left' ? 'chart-l' : 'chart-r');
+        const labelContainer = document.getElementById(side === 'left' ? 'labels-l' : 'labels-r');
+        container.innerHTML = '';
+        labelContainer.innerHTML = '';
+        for (let i = 0; i < 5; i++) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'candle-wrapper group';
+            const wick = document.createElement('div');
+            wick.id = `wick-${side}-${i}`;
+            wick.className = 'candle-wick';
+            wick.style.height = '0px';
+            const body = document.createElement('div');
+            body.id = `body-${side}-${i}`;
+            body.className = 'candle-body';
+            body.style.height = '0px';
+            wrapper.appendChild(wick);
+            wrapper.appendChild(body);
+            container.appendChild(wrapper);
+            const lblBox = document.createElement('div');
+            lblBox.className = 'lbl-container';
+            const name = document.createElement('span');
+            name.id = `lname-${side}-${i}`;
+            name.className = 'lbl-name';
+            const score = document.createElement('span');
+            score.id = `lscore-${side}-${i}`;
+            score.className = 'lbl-score';
+            lblBox.appendChild(name);
+            lblBox.appendChild(score);
+            labelContainer.appendChild(lblBox);
+        }
+    }
+    function draw() {
+      const lFirm = document.getElementById('l-firm-name').value;
+      const lChal = document.getElementById('l-chal-name').value;
+      const lSize = document.getElementById('l-size').value;
+      const lSteps = document.getElementById('l-steps').value;
+      const lPhase = document.getElementById('l-phase').value;
+      const lStatus = document.getElementById('l-status').value;
+      document.getElementById('disp-l-name').innerText = lFirm;
+      document.getElementById('disp-l-chal').innerText = lChal;
+      document.getElementById('wm-l').innerText = (lFirm.trim() || "LEFT").split(' ')[0];
+      document.getElementById('h-l-size').innerText = lSize;
+      const hlSteps = document.getElementById('h-l-steps');
+      hlSteps.innerText = lSteps;
+      hlSteps.className = 'notion-tag ' + (lSteps === '4-Step' ? 'tag-purple' : 'tag-blue');
+      document.getElementById('h-l-phase').innerText = lPhase;
+      const hlStatus = document.getElementById('h-l-status');
+      hlStatus.innerText = lStatus;
+      hlStatus.className = 'notion-tag ' + (lStatus === 'Funded' ? 'tag-green' : 'tag-default');
+      const rFirm = document.getElementById('r-firm-name').value;
+      const rChal = document.getElementById('r-chal-name').value;
+      const rSize = document.getElementById('r-size').value;
+      const rSteps = document.getElementById('r-steps').value;
+      const rPhase = document.getElementById('r-phase').value;
+      const rStatus = document.getElementById('r-status').value;
+      document.getElementById('disp-r-name').innerText = rFirm;
+      document.getElementById('disp-r-chal').innerText = rChal;
+      document.getElementById('wm-r').innerText = (rFirm.trim() || "RIGHT").split(' ')[0];
+      document.getElementById('h-r-size').innerText = rSize;
+      const hrSteps = document.getElementById('h-r-steps');
+      hrSteps.innerText = rSteps;
+      hrSteps.className = 'notion-tag ' + (rSteps === '4-Step' ? 'tag-purple' : 'tag-blue');
+      document.getElementById('h-r-phase').innerText = rPhase;
+      const hrStatus = document.getElementById('h-r-status');
+      hrStatus.innerText = rStatus;
+      hrStatus.className = 'notion-tag ' + (rStatus === 'Funded' ? 'tag-green' : 'tag-default');
+      const data = [];
+      let totalL = 0, totalR = 0;
+      for (let i = 1; i <= 4; i++) {
+        const name = document.getElementById('n' + i).value;
+        const isActive = document.getElementById('sw' + i).checked;
+        let sl = 0, sr = 0;
+        if (isActive) {
+           sl = parseInt(document.getElementById('ls' + i).value) || 0;
+           sr = parseInt(document.getElementById('rs' + i).value) || 0;
+        }
+        totalL += sl; totalR += sr;
+        data.push({ name, l: sl, r: sr });
+      }
+      data.push({ name: 'TOTAL', l: totalL, r: totalR, isTotal: true });
+      document.getElementById('input-total-l').innerText = totalL;
+      document.getElementById('input-total-r').innerText = totalR;
+      document.getElementById('footer-total-l').innerText = totalL;
+      document.getElementById('footer-total-r').innerText = totalR;
+      const barL = document.getElementById('bar-l');
+      const barR = document.getElementById('bar-r');
+      const maxScale = 350; 
+      const pctL = Math.min(100, (totalL / maxScale) * 100);
+      const pctR = Math.min(100, (totalR / maxScale) * 100);
+      barL.style.width = `${pctL}%`;
+      barR.style.width = `${pctR}%`;
+      if (totalL > totalR) {
+        barL.style.backgroundColor = '#089981';
+        barR.style.backgroundColor = '#434651';
+      } else if (totalR > totalL) {
+        barL.style.backgroundColor = '#434651';
+        barR.style.backgroundColor = '#089981';
+      } else {
+        barL.style.backgroundColor = '#434651';
+        barR.style.backgroundColor = '#434651';
+      }
+      const areaLeft = document.getElementById('area-left');
+      const areaRight = document.getElementById('area-right');
+      areaLeft.className = 'flex-1 border-r border-[#2a2e39] relative tv-bg transition-all duration-500';
+      areaRight.className = 'flex-1 relative tv-bg transition-all duration-500';
+      if (totalL === 0 && totalR === 0) {
+      } else {
+        if (totalL > totalR) { 
+            areaLeft.classList.add('winner-frame');
+            areaRight.classList.add('loser-dim');
+        }
+        else if (totalR > totalL) { 
+            areaRight.classList.add('winner-frame');
+            areaLeft.classList.add('loser-dim');
+        }
+      }
+      updateChartUI('left', data);
+      updateChartUI('right', data);
+    }
+    function updateChartUI(side, data) {
+        data.forEach((d, i) => {
+            const rawScore = side === 'left' ? d.l : d.r;
+            let isWin = false;
+            let isDraw = (d.l === d.r);
+            if (side === 'left') { isWin = (d.l > d.r); } else { isWin = (d.r > d.l); }
+            const wick = document.getElementById(`wick-${side}-${i}`);
+            const body = document.getElementById(`body-${side}-${i}`);
+            const lname = document.getElementById(`lname-${side}-${i}`);
+            const lscore = document.getElementById(`lscore-${side}-${i}`);
+            let baseHeight = d.isTotal ? (rawScore / 1.5) : (rawScore * 1.5);
+            if (rawScore === 0 && !d.isTotal) baseHeight = 0; 
+            if (baseHeight > 0) baseHeight = Math.max(2, Math.min(200, baseHeight));
+            const wickHeight = baseHeight > 0 ? baseHeight + 20 : 0;
+            const bodyHeight = baseHeight > 0 ? baseHeight * 0.7 : 0;
+            let colorHex;
+            if (isWin) { colorHex = '#089981'; } else if (isDraw) { colorHex = '#787b86'; } else { colorHex = '#f23645'; }
+            body.style.backgroundColor = colorHex;
+            if(d.isTotal) {
+                body.style.width = '30px';
+                if (rawScore > 0) {
+                    body.style.boxShadow = `0 0 20px ${colorHex}cc`;
+                    body.style.border = `1px solid ${colorHex}`;
+                } else {
+                    body.style.boxShadow = 'none';
+                    body.style.border = '1px solid #434651';
+                }
+            } else {
+                body.style.width = '12px';
+                body.style.boxShadow = 'none';
+                body.style.border = 'none';
+            }
+            if (rawScore === 0) {
+                 body.style.backgroundColor = 'transparent';
+                 body.style.border = 'none';
+                 body.style.boxShadow = 'none';
+            }
+            body.style.height = `${bodyHeight}px`;
+            wick.style.height = `${wickHeight}px`;
+            wick.style.width = d.isTotal ? '2px' : '1px';
+            wick.style.bottom = '20px';
+            body.style.bottom = '20px';
+            const opacity = (rawScore === 0 && !d.isTotal) ? '0' : '1';
+            lname.innerText = d.name;
+            lname.style.opacity = opacity;
+            lname.className = `lbl-name ${d.isTotal ? 'font-bold text-white scale-110' : 'text-[#787b86]'}`;
+            lscore.innerText = rawScore;
+            lscore.style.opacity = opacity;
+            lscore.style.color = (rawScore > 0) ? colorHex : '#787b86';
+            lscore.className = `lbl-score ${d.isTotal ? 'text-sm' : ''}`;
+        });
+    }
+    async function downloadImage() {
+      const canvasOptions = { scale: 2, backgroundColor: "#131722", logging: false, useCORS: true, scrollX: 0, scrollY: -window.scrollY };
+      showToast("Preparing...");
+      try {
+        const canvas = await html2canvas(document.getElementById("chart-container"), canvasOptions);
+        const link = document.createElement('a');
+        link.download = 'vs-3-battle.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        showToast("✓ Downloaded!");
+      } catch { showToast("❌ Download failed"); }
+    }
+    wireDropzone('left');
+    wireDropzone('right');
+    initChartDOM('left');
+    initChartDOM('right');
+    setTimeout(draw, 100); 
+  </script>
+</body>
+</html>
+
