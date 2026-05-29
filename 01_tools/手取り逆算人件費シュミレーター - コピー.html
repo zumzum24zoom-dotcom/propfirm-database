@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>給与シミュレーター | 手取り・会社負担を簡単計算</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        .result-grid { display: grid; grid-template-columns: 1fr auto; align-items: center; }
+        .form-element {
+            background-color: rgba(30, 41, 59, 0.7); border: 1px solid #475569;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-element:focus, .form-element:focus-within {
+            outline: none; border-color: #2dd4bf; box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+        }
+        .toggle-track {
+            cursor: pointer; width: 52px; height: 30px; background: #475569; display: block;
+            border-radius: 100px; position: relative; transition: background-color 0.2s ease-in-out;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+        }
+        .toggle-track:after {
+            content: ''; position: absolute; top: 2px; left: 2px; width: 26px; height: 26px;
+            background: #fff; border-radius: 90px; transition: 0.2s ease-in-out;
+        }
+        .toggle-checkbox:checked + .toggle-track { background-color: #2dd4bf; }
+        .toggle-checkbox:checked + .toggle-track:after {
+            left: calc(100% - 2px); transform: translateX(-100%);
+        }
+        .mode-label { color: #64748b; } /* text-slate-500 */
+        .mode-label.active { color: #2dd4bf; font-weight: bold; } /* text-cyan-400 */
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 to-black py-10 flex items-center justify-center min-h-screen">
+    <div class="bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 p-8 rounded-xl shadow-2xl w-full max-w-4xl mx-4 text-slate-300">
+        <header class="flex items-center justify-center gap-3 mb-8">
+             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <h1 class="text-3xl font-bold text-center text-white">「手取り」と「会社負担」まるわかり給与シミュレーター</h1>
+        </header>
+
+        <!-- Section 1: Inputs -->
+        <section class="mb-10">
+            <h2 class="text-xl font-semibold mb-4 text-cyan-400 border-b border-slate-600 pb-2">1. 計算条件入力</h2>
+            
+            <div class="mb-6 bg-slate-900/50 p-4 rounded-lg flex justify-center items-center gap-4">
+                <span id="label-take-home" class="mode-label transition active">手取りから逆算</span>
+                <div class="relative"><input type="checkbox" id="mode-toggle" class="sr-only toggle-checkbox"><label for="mode-toggle" class="toggle-track"></label></div>
+                <span id="label-gross" class="mode-label transition">額面から計算</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+                <div id="take-home-input-container">
+                    <label for="desired-take-home" class="block text-cyan-400 text-sm font-bold mb-1">希望の手取り月収</label>
+                    <input type="text" id="desired-take-home" value="300000" class="form-element shadow rounded w-full py-2 px-3 text-white leading-tight">
+                </div>
+                <div id="gross-salary-input-container" class="hidden">
+                     <label for="gross-salary" class="block text-cyan-400 text-sm font-bold mb-1">総支給額 (額面)</label>
+                    <input type="text" id="gross-salary" value="400000" class="form-element shadow rounded w-full py-2 px-3 text-white leading-tight">
+                </div>
+                <div>
+                    <label for="prefecture" class="block text-slate-400 text-sm font-bold mb-1">都道府県</label>
+                    <select id="prefecture" class="form-element shadow rounded w-full py-2 px-3 text-white leading-tight">
+                       <option value="13">東京都</option><option value="27">大阪府</option><option value="23">愛知県</option><option value="14">神奈川県</option><option value="12">千葉県</option><option value="11">埼玉県</option><option value="40">福岡県</option><option value="01">北海道</option><option value="00">全国平均</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="age" class="block text-slate-400 text-sm font-bold mb-1">年齢</label>
+                    <select id="age" class="form-element shadow rounded w-full py-2 px-3 text-white leading-tight">
+                        <option value="under40">39歳以下</option><option value="over40" selected>40歳以上</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="dependents" class="block text-slate-400 text-sm font-bold mb-1">扶養親族の人数</label>
+                    <input type="number" id="dependents" value="0" min="0" class="form-element shadow rounded w-full py-2 px-3 text-white leading-tight">
+                </div>
+                <div>
+                    <label for="transportation-cost" class="block text-slate-400 text-sm font-bold mb-1">通勤手当(月額)</label>
+                    <input type="text" id="transportation-cost" value="10000" class="form-element shadow rounded w-full py-2 px-3 text-white leading-tight">
+                </div>
+                <div>
+                     <label for="residence-tax" class="block text-slate-400 text-sm font-bold mb-1">住民税(月額)</label>
+                     <div class="flex items-center space-x-2">
+                        <input type="text" id="residence-tax" class="form-element shadow rounded w-full py-2 px-3 text-white leading-tight transition-all">
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                           <span id="label-auto-tax" class="text-xs mode-label transition">自動</span>
+                           <div class="relative">
+                               <input type="checkbox" id="residence-tax-mode" class="sr-only toggle-checkbox">
+                               <label for="residence-tax-mode" class="toggle-track"></label>
+                           </div>
+                           <span id="label-manual-tax" class="text-xs mode-label transition">手入力</span>
+                       </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section>
+             <h2 class="text-xl font-semibold mb-6 text-cyan-400 border-b border-slate-600 pb-2">2. 計算結果</h2>
+             <div id="results-display" class="bg-slate-900/50 p-6 rounded-lg max-w-3xl mx-auto transition-opacity duration-200">
+                <div class="flex justify-between items-baseline pb-3"><span class="text-lg text-amber-300">会社の人件費総額</span><span id="res-total-cost" class="text-3xl font-bold text-amber-300">---</span></div>
+                <hr class="border-slate-600/50">
+                <div class="mt-4">
+                    <div class="flex justify-between items-baseline font-semibold"><span class="text-red-400">(-) 会社負担の社会保険料</span><span id="res-company-burden-total" class="text-xl text-red-400">---</span></div>
+                    <div class="pl-6 mt-2 space-y-1 text-sm text-slate-400 border-l border-slate-700 ml-4">
+                        <div class="result-grid text-xs">
+                            <span><span class="text-slate-500">健康保険料</span><span id="res-com-health-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                            <span id="res-com-health" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                            <span><span class="text-slate-500">介護保険料</span><span id="res-com-care-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                            <span id="res-com-care" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                           <span><span class="text-slate-500">厚生年金保険料</span><span id="res-com-pension-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                           <span id="res-com-pension" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                            <span><span class="text-slate-500">雇用保険料</span><span id="res-com-employment-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                            <span id="res-com-employment" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                            <span><span class="text-slate-500">労災保険料</span><span id="res-com-work-accident-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                            <span id="res-com-work-accident" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                            <span><span class="text-slate-500">子ども・子育て拠出金</span><span id="res-com-child-support-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                            <span id="res-com-child-support" class="font-mono">---</span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-amber-400 border-2 my-4">
+                <div class="flex justify-between items-center bg-sky-900/30 p-4 rounded-lg"><span class="text-xl font-bold text-sky-300">(=) 総支給額 (額面)</span><span id="res-gross-salary" class="text-4xl font-bold text-sky-300">---</span></div>
+                <hr class="border-dashed border-slate-600 my-8">
+                <div class="mt-4">
+                    <div class="flex justify-between items-baseline font-semibold"><span class="text-red-400">(-) 従業員負担 (控除合計)</span><span id="res-total-deductions" class="text-xl text-red-400">---</span></div>
+                    <div class="pl-6 mt-2 space-y-1 text-sm text-slate-400 border-l border-slate-700 ml-4">
+                        <p class="text-sky-400 font-bold">社会保険料</p>
+                        <div class="result-grid text-xs">
+                            <span><span class="text-slate-400">健康保険料</span><span id="res-emp-health-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                            <span id="res-emp-health" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                            <span><span class="text-slate-400">介護保険料</span><span id="res-emp-care-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                            <span id="res-emp-care" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                           <span><span class="text-slate-400">厚生年金保険料</span><span id="res-emp-pension-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                           <span id="res-emp-pension" class="font-mono">---</span>
+                        </div>
+                        <div class="result-grid text-xs">
+                           <span><span class="text-slate-400">雇用保険料</span><span id="res-emp-employment-rate" class="text-xs text-slate-600 ml-2"></span></span>
+                           <span id="res-emp-employment" class="font-mono">---</span>
+                        </div>
+                        <p class="text-sky-400 font-bold mt-2">税金</p>
+                        <div class="result-grid text-xs"><span class="text-slate-400">所得税</span><span id="res-income-tax" class="font-mono">---</span></div>
+                        <div class="result-grid text-xs"><span class="text-slate-400">住民税</span><span id="res-residence-tax" class="font-mono">---</span></div>
+                    </div>
+                </div>
+                <hr class="border-teal-400 border-2 my-4">
+                <div class="flex justify-between items-center bg-teal-900/30 p-4 rounded-lg"><span class="text-xl font-bold text-teal-300">(=) 差引支給額 (手取り)</span><span id="res-take-home" class="text-4xl font-bold text-teal-300">---</span></div>
+            </div>
+        </section>
+    </div>
+    <script>
+        let currentMode = 'takeHome';
+        let calculationTimeout;
+
+        const ELEMENTS = {
+            inputs: {
+                modeToggle: document.getElementById('mode-toggle'), labelTakeHome: document.getElementById('label-take-home'), labelGross: document.getElementById('label-gross'),
+                takeHomeInputContainer: document.getElementById('take-home-input-container'), grossSalaryInputContainer: document.getElementById('gross-salary-input-container'),
+                desiredTakeHome: document.getElementById('desired-take-home'), grossSalary: document.getElementById('gross-salary'), prefecture: document.getElementById('prefecture'), 
+                age: document.getElementById('age'), dependents: document.getElementById('dependents'), transportationCost: document.getElementById('transportation-cost'),
+                residenceTax: document.getElementById('residence-tax'), residenceTaxMode: document.getElementById('residence-tax-mode'),
+                labelAutoTax: document.getElementById('label-auto-tax'), labelManualTax: document.getElementById('label-manual-tax'),
+            },
+            results: {
+                resultsDisplay: document.getElementById('results-display'), grossSalary: document.getElementById('res-gross-salary'), totalDeductions: document.getElementById('res-total-deductions'),
+                empHealth: document.getElementById('res-emp-health'), empCare: document.getElementById('res-emp-care'), empPension: document.getElementById('res-emp-pension'),
+                empEmployment: document.getElementById('res-emp-employment'), incomeTax: document.getElementById('res-income-tax'), residenceTax: document.getElementById('res-residence-tax'),
+                takeHome: document.getElementById('res-take-home'), companyBurdenTotal: document.getElementById('res-company-burden-total'),
+                comHealth: document.getElementById('res-com-health'), comCare: document.getElementById('res-com-care'), comPension: document.getElementById('res-com-pension'),
+                comEmployment: document.getElementById('res-com-employment'), comWorkAccident: document.getElementById('res-com-work-accident'), comChildSupport: document.getElementById('res-com-child-support'),
+                totalCost: document.getElementById('res-total-cost'),
+                // Rate Spans
+                comHealthRate: document.getElementById('res-com-health-rate'), comCareRate: document.getElementById('res-com-care-rate'), comPensionRate: document.getElementById('res-com-pension-rate'),
+                comEmploymentRate: document.getElementById('res-com-employment-rate'), comWorkAccidentRate: document.getElementById('res-com-work-accident-rate'), comChildSupportRate: document.getElementById('res-com-child-support-rate'),
+                empHealthRate: document.getElementById('res-emp-health-rate'), empCareRate: document.getElementById('res-emp-care-rate'), empPensionRate: document.getElementById('res-emp-pension-rate'),
+                empEmploymentRate: document.getElementById('res-emp-employment-rate'),
+            }
+        };
+
+        const RATES = {
+            pension: 0.183, employment: { employee: 0.006, company: 0.0095 }, workAccident: 0.003, childSupport: 0.0036,
+            health: {
+                '13': { health: 0.1000, care: 0.0160 }, '27': { health: 0.1034, care: 0.0160 }, '23': { health: 0.1006, care: 0.0160 }, '14': { health: 0.1002, care: 0.0160 },
+                '12': { health: 0.0987, care: 0.0160 }, '11': { health: 0.0983, care: 0.0160 }, '40': { health: 0.1043, care: 0.0160 },
+                '01': { health: 0.1026, care: 0.0160 }, '00': { health: 0.1000, care: 0.0160 }
+            }
+        };
+
+        Object.values(ELEMENTS.inputs).forEach(el => {
+            if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
+                 el.addEventListener('input', scheduleCalculation);
+            }
+        });
+        
+        const handleResidenceTaxToggle = () => {
+            const isManual = ELEMENTS.inputs.residenceTaxMode.checked;
+            ELEMENTS.inputs.residenceTax.disabled = !isManual;
+            ELEMENTS.inputs.residenceTax.style.backgroundColor = !isManual ? '#1e293b' : '';
+            ELEMENTS.inputs.residenceTax.style.borderColor = !isManual ? '#334155' : '';
+            ELEMENTS.inputs.labelAutoTax.classList.toggle('active', !isManual);
+            ELEMENTS.inputs.labelManualTax.classList.toggle('active', isManual);
+            if (!isManual) {
+                const value = parseYenFromInput(ELEMENTS.inputs.residenceTax.value);
+                if (value > 0) {
+                    ELEMENTS.inputs.residenceTax.value = formatYenForInput(0);
+                }
+            }
+        };
+        ELEMENTS.inputs.residenceTaxMode.addEventListener('change', () => {
+            handleResidenceTaxToggle();
+            scheduleCalculation();
+        });
+
+        ELEMENTS.inputs.modeToggle.addEventListener('change', (e) => {
+            const isGrossMode = e.target.checked;
+            currentMode = isGrossMode ? 'gross' : 'takeHome';
+            ELEMENTS.inputs.takeHomeInputContainer.classList.toggle('hidden', isGrossMode);
+            ELEMENTS.inputs.grossSalaryInputContainer.classList.toggle('hidden', !isGrossMode);
+            ELEMENTS.inputs.labelTakeHome.classList.toggle('active', !isGrossMode);
+            ELEMENTS.inputs.labelGross.classList.toggle('active', isGrossMode);
+            scheduleCalculation();
+        });
+        
+        function scheduleCalculation() {
+             clearTimeout(calculationTimeout);
+             ELEMENTS.results.resultsDisplay.classList.add('opacity-40');
+             calculationTimeout = setTimeout(runCalculation, 150);
+        }
+
+        function runCalculation() {
+            const inputs = {
+                prefecture: ELEMENTS.inputs.prefecture.value, age: ELEMENTS.inputs.age.value,
+                dependents: parseInt(ELEMENTS.inputs.dependents.value) || 0,
+                transportationCost: parseYenFromInput(ELEMENTS.inputs.transportationCost.value),
+                residenceTaxManual: parseYenFromInput(ELEMENTS.inputs.residenceTax.value),
+                isManualResidenceTax: ELEMENTS.inputs.residenceTaxMode.checked
+            };
+
+            let costs;
+            if (currentMode === 'takeHome') {
+                const desiredTakeHome = parseYenFromInput(ELEMENTS.inputs.desiredTakeHome.value);
+                if (desiredTakeHome <= 0) { ELEMENTS.results.resultsDisplay.classList.remove('opacity-40'); return; }
+                let baseSalary = (desiredTakeHome + inputs.residenceTaxManual) * 1.25;
+                for (let i = 0; i < 20; i++) {
+                    costs = calculateAllCosts(baseSalary, inputs);
+                    const difference = desiredTakeHome - costs.takeHome;
+                    if (Math.abs(difference) < 1) break;
+                    baseSalary += difference;
+                }
+            } else {
+                const grossSalary = parseYenFromInput(ELEMENTS.inputs.grossSalary.value);
+                if (grossSalary <= 0) { ELEMENTS.results.resultsDisplay.classList.remove('opacity-40'); return; }
+                const baseSalary = grossSalary - inputs.transportationCost;
+                costs = calculateAllCosts(baseSalary, inputs);
+            }
+            if (costs) updateUI(costs);
+            ELEMENTS.results.resultsDisplay.classList.remove('opacity-40');
+        }
+
+        function calculateAllCosts(baseSalary, inputs) {
+            const grossSalary = baseSalary;
+            const salaryWithTransport = grossSalary + inputs.transportationCost;
+            const healthRateInfo = RATES.health[inputs.prefecture];
+            const isOver40 = inputs.age === 'over40';
+            const stdHealthSalary = getStandardSalary(salaryWithTransport, 'health');
+            const stdPensionSalary = getStandardSalary(salaryWithTransport, 'pension');
+            const employeeHealth = stdHealthSalary * healthRateInfo.health / 2;
+            const employeeCare = isOver40 ? stdHealthSalary * healthRateInfo.care / 2 : 0;
+            const employeePension = stdPensionSalary * RATES.pension / 2;
+            const employeeEmployment = salaryWithTransport * RATES.employment.employee;
+            const socialInsuranceTotalEmployee = employeeHealth + employeeCare + employeePension + employeeEmployment;
+            const nonTaxableTransportation = Math.min(inputs.transportationCost, 150000);
+            const incomeForTaxes = salaryWithTransport - nonTaxableTransportation - socialInsuranceTotalEmployee;
+            const incomeTax = getIncomeTax(incomeForTaxes, inputs.dependents);
+            let residenceTax;
+            if (inputs.isManualResidenceTax) {
+                residenceTax = inputs.residenceTaxManual;
+            } else {
+                 const residenceTaxDependentDeduction = inputs.dependents * 330000;
+                 const residenceTaxBasicDeduction = 430000;
+                 const annualTaxableIncomeForResidence = Math.max(0, (incomeForTaxes * 12) - residenceTaxDependentDeduction - residenceTaxBasicDeduction);
+                 residenceTax = (annualTaxableIncomeForResidence * 0.1 + 5000) / 12;
+            }
+            const totalDeductions = socialInsuranceTotalEmployee + incomeTax + residenceTax;
+            const companyHealth = employeeHealth;
+            const companyCare = employeeCare;
+            const companyPension = employeePension;
+            const companyEmployment = salaryWithTransport * RATES.employment.company;
+            const companyWorkAccident = salaryWithTransport * RATES.workAccident;
+            const companyChildSupport = stdPensionSalary * RATES.childSupport;
+            const totalCompanyBurden = companyHealth + companyCare + companyPension + companyEmployment + companyWorkAccident + companyChildSupport;
+            const usedRates = {
+                health: healthRateInfo.health / 2, care: isOver40 ? healthRateInfo.care / 2 : 0, pension: RATES.pension / 2,
+                employmentEmployee: RATES.employment.employee, employmentCompany: RATES.employment.company,
+                workAccident: RATES.workAccident, childSupport: RATES.childSupport
+            };
+            return {
+                gross: salaryWithTransport, takeHome: salaryWithTransport - totalDeductions, totalCost: salaryWithTransport + totalCompanyBurden,
+                employeeDeductions: { total: totalDeductions, health: employeeHealth, care: employeeCare, pension: employeePension, employment: employeeEmployment, incomeTax: incomeTax, residenceTax: residenceTax },
+                companyContributions: { total: totalCompanyBurden, health: companyHealth, care: companyCare, pension: companyPension, employment: companyEmployment, workAccident: companyWorkAccident, childSupport: companyChildSupport },
+                rates: usedRates
+            };
+        }
+
+        function getStandardSalary(salary, type) {
+            const levels = type === 'health' 
+                ? [58000, 68000, 78000, 88000, 98000, 104000, 110000, 118000, 126000, 134000, 142000, 150000, 160000, 170000, 180000, 190000, 200000, 220000, 240000, 260000, 280000, 300000, 320000, 340000, 360000, 380000, 410000, 440000, 470000, 500000, 530000, 560000, 590000, 620000, 650000, 680000, 710000, 750000, 790000, 830000, 880000, 930000, 980000, 1030000, 1090000, 1150000, 1210000, 1270000, 1330000, 1390000]
+                : [88000, 98000, 104000, 110000, 118000, 126000, 134000, 142000, 150000, 160000, 170000, 180000, 190000, 200000, 220000, 240000, 260000, 280000, 300000, 320000, 340000, 360000, 380000, 410000, 440000, 470000, 500000, 530000, 560000, 590000, 620000, 650000];
+            const boundaries = type === 'health'
+                ? [63000, 73000, 83000, 93000, 101000, 107000, 114000, 122000, 130000, 138000, 146000, 155000, 165000, 175000, 185000, 195000, 210000, 230000, 250000, 270000, 290000, 310000, 330000, 350000, 370000, 395000, 425000, 455000, 485000, 515000, 545000, 575000, 605000, 635000, 665000, 695000, 730000, 770000, 810000, 855000, 905000, 955000, 1005000, 1060000, 1120000, 1180000, 1240000, 1300000, 1360000]
+                : [93000, 101000, 107000, 114000, 122000, 130000, 138000, 146000, 155000, 165000, 175000, 185000, 195000, 210000, 230000, 250000, 270000, 290000, 310000, 330000, 350000, 370000, 395000, 425000, 455000, 485000, 515000, 545000, 575000, 605000, 635000];
+            if (salary < 58000 && type === 'health') return 58000;
+            if (salary < 88000 && type === 'pension') return 88000;
+            if (salary >= boundaries[boundaries.length-1]) return levels[levels.length-1];
+            for (let i = 0; i < boundaries.length - 1; i++) {
+                if(salary >= boundaries[i] && salary < boundaries[i+1]) return levels[i+1];
+            }
+            return levels[levels.length-1];
+        }
+
+        function getIncomeTax(taxableSalary, dependents) {
+            if (taxableSalary <= 0) return 0;
+            const annualTaxableIncome = Math.max(0, (taxableSalary * 12) - (dependents * 380000) - 480000);
+            const taxBrackets = [
+                { threshold: 40000000, rate: 0.45, deduction: 4796000 }, { threshold: 18000000, rate: 0.40, deduction: 2796000 },
+                { threshold: 9000000, rate: 0.33, deduction: 1536000 }, { threshold: 6950000, rate: 0.23, deduction: 636000 },
+                { threshold: 3300000, rate: 0.20, deduction: 427500 }, { threshold: 1950000, rate: 0.10, deduction: 97500 }, { threshold: 0, rate: 0.05, deduction: 0 } ];
+            let annualTax = 0;
+            for (const bracket of taxBrackets) { if (annualTaxableIncome >= bracket.threshold) { annualTax = (annualTaxableIncome * bracket.rate) - bracket.deduction; break; } }
+            return Math.max(0, (annualTax * 1.021) / 12);
+        }
+        
+        function formatYen(value) { return isNaN(value) ? '---' : `¥${Math.round(value).toLocaleString()}`; }
+        
+        function parseYenFromInput(value) {
+            if (typeof value !== 'string') return value || 0;
+            const num = parseFloat(value.replace(/[¥,]/g, ''));
+            return isNaN(num) ? 0 : num;
+        }
+
+        function formatYenForInput(value) {
+            const num = parseFloat(value);
+            if (isNaN(num) || num === 0) return '';
+            return `¥${Math.round(num).toLocaleString('ja-JP')}`;
+        }
+
+        function formatPercent(rate) {
+            if (!rate || rate === 0) return '';
+            const percentage = rate * 100;
+            return `(${(percentage).toFixed(2).replace(/\.00$/, '')}%)`;
+        }
+        
+        function updateUI(costs) {
+            const R = ELEMENTS.results, E = costs.employeeDeductions, C = costs.companyContributions, D = costs.rates;
+            
+            if (currentMode === 'takeHome') {
+                ELEMENTS.inputs.grossSalary.value = formatYenForInput(costs.gross);
+            } else {
+                ELEMENTS.inputs.desiredTakeHome.value = formatYenForInput(costs.takeHome);
+            }
+            if (!ELEMENTS.inputs.residenceTaxMode.checked) {
+                ELEMENTS.inputs.residenceTax.value = formatYenForInput(E.residenceTax);
+            }
+            
+            R.grossSalary.textContent = formatYen(costs.gross); R.totalDeductions.textContent = formatYen(E.total);
+            R.empHealth.textContent = formatYen(E.health); R.empCare.textContent = formatYen(E.care); R.empPension.textContent = formatYen(E.pension);
+            R.empEmployment.textContent = formatYen(E.employment); R.incomeTax.textContent = formatYen(E.incomeTax); R.residenceTax.textContent = formatYen(E.residenceTax);
+            R.takeHome.textContent = formatYen(costs.takeHome); R.companyBurdenTotal.textContent = formatYen(C.total);
+            R.comHealth.textContent = formatYen(C.health); R.comCare.textContent = formatYen(C.care); R.comPension.textContent = formatYen(C.pension);
+            R.comEmployment.textContent = formatYen(C.employment); R.comWorkAccident.textContent = formatYen(C.workAccident); R.comChildSupport.textContent = formatYen(C.childSupport);
+            R.totalCost.textContent = formatYen(costs.totalCost);
+
+            // Update Rate Texts
+            R.comHealthRate.textContent = formatPercent(D.health);
+            R.comCareRate.textContent = formatPercent(D.care);
+            R.comPensionRate.textContent = formatPercent(D.pension);
+            R.comEmploymentRate.textContent = formatPercent(D.employmentCompany);
+            R.comWorkAccidentRate.textContent = formatPercent(D.workAccident);
+            R.comChildSupportRate.textContent = formatPercent(D.childSupport);
+
+            R.empHealthRate.textContent = formatPercent(D.health);
+            R.empCareRate.textContent = formatPercent(D.care);
+            R.empPensionRate.textContent = formatPercent(D.pension);
+            R.empEmploymentRate.textContent = formatPercent(D.employmentEmployee);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             ELEMENTS.inputs.residenceTaxMode.checked = false; // Default to Auto
+             handleResidenceTaxToggle();
+
+             const currencyInputs = [
+                ELEMENTS.inputs.desiredTakeHome,
+                ELEMENTS.inputs.grossSalary,
+                ELEMENTS.inputs.transportationCost,
+                ELEMENTS.inputs.residenceTax
+             ];
+
+             currencyInputs.forEach(input => {
+                input.type = 'text';
+                const initialValue = parseYenFromInput(input.value);
+                input.value = formatYenForInput(initialValue);
+
+                input.addEventListener('focus', (e) => {
+                    const value = parseYenFromInput(e.target.value);
+                    e.target.type = 'number';
+                    e.target.value = value === 0 ? '' : value;
+                });
+
+                input.addEventListener('blur', (e) => {
+                    e.target.type = 'text';
+                    const value = parseFloat(e.target.value);
+                    e.target.value = formatYenForInput(value);
+                    // scheduleCalculation(); // This call is redundant because of the 'input' event listener
+                });
+             });
+             
+             scheduleCalculation();
+        });
+    </script>
+</body>
+</html>

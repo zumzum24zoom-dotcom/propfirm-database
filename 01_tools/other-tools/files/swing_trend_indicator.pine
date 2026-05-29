@@ -1,0 +1,92 @@
+//@version=5
+indicator("Swing High/Low Trend Reversal", overlay=true, max_bars_back=500)
+
+// ===== パラメータ =====
+swingLength = input(5, "Swing Detection Period", minval=1)
+atrMultiplier = input(1.0, "ATR Multiplier for validation", minval=0.1)
+
+// ===== Swing High/Low 検出 =====
+// Swing High: 左右 swingLength 本のローソク足より高い高値
+isSwingHigh = high[swingLength] > ta.highest(high[swingLength + 1], swingLength) and 
+              high[swingLength] > ta.highest(high[0], swingLength)
+
+// Swing Low: 左右 swingLength 本のローソク足より低い安値
+isSwingLow = low[swingLength] < ta.lowest(low[swingLength + 1], swingLength) and 
+             low[swingLength] < ta.lowest(low[0], swingLength)
+
+// ===== トレンド判定と転換ロジック =====
+var float lastSwingHigh = na
+var float lastSwingHighLow = na
+var float secondLastSwingHigh = na
+var float secondLastSwingHighLow = na
+
+var float lastSwingLow = na
+var float lastSwingLowHigh = na
+var float secondLastSwingLow = na
+var float secondLastSwingLowHigh = na
+
+var bool inUptrend = na
+var bool trendReversal = false
+var string reversalType = na
+
+// Swing High を検出したら記録
+if isSwingHigh
+    secondLastSwingHigh := lastSwingHigh
+    secondLastSwingHighLow := lastSwingHighLow
+    lastSwingHigh := high[swingLength]
+    lastSwingHighLow := low[swingLength]
+    if na(inUptrend) or inUptrend == false
+        inUptrend := true
+
+// Swing Low を検出したら記録
+if isSwingLow
+    secondLastSwingLow := lastSwingLow
+    secondLastSwingLowHigh := lastSwingLowHigh
+    lastSwingLow := low[swingLength]
+    lastSwingLowHigh := high[swingLength]
+    if na(inUptrend) or inUptrend == true
+        inUptrend := false
+
+// ===== 上昇トレンド中の下降転換検出 =====
+// パターン: 最高値① → 安値① → 高値②（最高値①より低い） → 安値①を下回る
+downTrendReversal = false
+upTrendReversal = false
+
+if inUptrend and not na(lastSwingHigh) and not na(lastSwingHighLow)
+    // 直近の Swing High と Swing Low がある
+    // 現在のローソク足が前回 Swing Low を下回ったか確認
+    if low < lastSwingHighLow
+        downTrendReversal := true
+        reversalType := "DOWN"
+
+if not inUptrend and not na(lastSwingLow) and not na(lastSwingLowHigh)
+    // 直近の Swing Low と Swing High がある
+    // 現在のローソク足が前回 Swing High を上回ったか確認
+    if high > lastSwingLowHigh
+        upTrendReversal := true
+        reversalType := "UP"
+
+// ===== 描画 =====
+// Swing High を描画（赤）
+plotshape(isSwingHigh, style=shape.triangledown, location=location.abovebar, 
+          color=color.red, size=size.small, title="Swing High")
+
+// Swing Low を描画（緑）
+plotshape(isSwingLow, style=shape.triangleup, location=location.belowbar, 
+          color=color.green, size=size.small, title="Swing Low")
+
+// トレンド転換シグナル
+plotshape(downTrendReversal, style=shape.circle, location=location.belowbar, 
+          color=color.new(color.orange, 0), size=size.large, title="DOWN Reversal Signal")
+
+plotshape(upTrendReversal, style=shape.circle, location=location.abovebar, 
+          color=color.new(color.blue, 0), size=size.large, title="UP Reversal Signal")
+
+// ===== 関連レベルの描画 =====
+// 直近の Swing High / Low レベルを水平線で表示
+plot(lastSwingHigh, title="Last Swing High Level", color=color.new(color.red, 50), linewidth=2)
+plot(lastSwingLow, title="Last Swing Low Level", color=color.new(color.green, 50), linewidth=2)
+
+// ===== アラート =====
+alertcondition(downTrendReversal, title="Down Trend Reversal", message="DOWN REVERSAL: Price broke below previous swing low")
+alertcondition(upTrendReversal, title="Up Trend Reversal", message="UP REVERSAL: Price broke above previous swing high")

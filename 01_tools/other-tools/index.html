@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TodayBiasTool</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .result { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>TodayBiasTool</h1>
+  <input type="file" id="csvInput" accept=".csv">
+  <div id="result"></div>
+
+  <script type="module">
+    // React と ReactDOM を読み込む
+    import React from 'https://unpkg.com/react@18/umd/react.production.min.js';
+    import ReactDOM from 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js';
+
+    // JSX を JS に変換する Babel
+    import Babel from 'https://unpkg.com/@babel/standalone/babel.min.js';
+
+    // JSX ファイルを読み込む
+    import TodayBiasToolContent from './TodayBiasTool_Complete_Fixed.jsx';
+
+    const root = ReactDOM.createRoot(document.getElementById('result'));
+    root.render(<TodayBiasToolContent />);
+  </script>
+</body>
+</html>
+

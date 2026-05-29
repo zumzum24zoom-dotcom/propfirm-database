@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="ja" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <title>Profit Consistency 計算ツール</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    body { background: linear-gradient(135deg, #0f172a 0%, #111827 100%); }
+    .glass { background: rgba(17, 24, 39, 0.65); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.06); }
+    .card { border-radius: 16px; }
+    .btn { transition: all .2s ease; }
+    .btn:active { transform: translateY(1px); }
+    .progress-track { background: linear-gradient(90deg, #1f2937, #0b1220); }
+    .progress-bar.ok { background: linear-gradient(90deg, #10b981, #22c55e); box-shadow: 0 0 20px rgba(16,185,129,.35); }
+    .progress-bar.ng { background: linear-gradient(90deg, #ef4444, #f97316); box-shadow: 0 0 20px rgba(239,68,68,.35); }
+    .accent {
+      background: radial-gradient(1200px 400px at 10% -10%, rgba(59,130,246,.1), transparent 40%),
+                  radial-gradient(1200px 400px at 90% 110%, rgba(16,185,129,.1), transparent 40%);
+    }
+    .num::-webkit-outer-spin-button,.num::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0;}
+    .num{ -moz-appearance:textfield; }
+    .row-base { background-color: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+    .row-profit { background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.35); }
+    .row-loss   { background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.35); }
+    .kbd { border: 1px solid rgba(255,255,255,.15); padding: 2px 6px; border-radius: 6px; font-size: 12px; }
+  </style>
+</head>
+<body class="min-h-screen accent text-gray-200">
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto px-6 pt-8 pb-2">
+    <div class="flex items-center justify-between gap-4">
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+        Profit Consistency 計算ツール
+      </h1>
+      <div class="flex items-center gap-2">
+        <select id="currency" class="bg-gray-900/40 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
+          <option value="$">$ USD</option>
+          <option value="¥">¥ JPY</option>
+          <option value="€">€ EUR</option>
+        </select>
+        <button id="themeToggle" class="btn px-3 py-2 rounded-lg glass hover:bg-white/10 text-sm"><span id="themeIcon">🌙</span></button>
+      </div>
+    </div>
+    <p class="mt-2 text-sm text-gray-400">
+      最終的な「追加額」は常に <span class="font-semibold text-white">一貫性達成に必要な金額</span> を表示します（損失込みのネット総利益を使用）。
+    </p>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-6 pb-16">
+    <section class="glass card p-6 md:p-7 mt-6">
+      <!-- Firm + Rate + Target toggle -->
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-300 mb-1">Prop Firm / プリセット</label>
+          <div class="flex gap-2">
+            <select id="firmSelect" class="w-full bg-gray-900/40 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"></select>
+            <button id="deletePreset" class="btn px-3 py-2 rounded-lg bg-rose-600/80 hover:bg-rose-500 text-white text-sm">削除</button>
+          </div>
+          <div class="mt-2 grid grid-cols-2 gap-3">
+            <input id="firmNew" type="text" placeholder="カスタム業者名を入力" class="bg-gray-900/40 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            <button id="savePreset" class="btn px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white">現在の目標%を保存</button>
+          </div>
+          <p id="firmMemo" class="text-xs text-gray-400 mt-2"></p>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-300 mb-1">目標一貫性率（%以下）</label>
+          <input id="targetRate" type="number" step="0.1" min="0" max="100" class="w-full bg-gray-900/40 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 num" value="20" />
+          <div class="mt-3 flex items-center justify-between">
+            <label class="text-sm text-gray-300">Target（目標利益）を表示</label>
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="toggleTarget" class="sr-only peer">
+              <span class="w-10 h-6 bg-gray-600 peer-checked:bg-emerald-500 rounded-full relative transition">
+                <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition peer-checked:left-5"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Target (optional) -->
+      <div id="targetBox" class="mt-5 hidden">
+        <label class="block text-sm text-gray-300 mb-1">目標利益額（参考表示のみ）</label>
+        <input id="targetProfit" type="number" step="1" min="0" value="6000"
+               class="w-full bg-gray-900/40 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 num" />
+        <p class="text-xs text-gray-400 mt-1">最終追加額の計算には使用しません（参考表示）。</p>
+      </div>
+
+      <!-- PnL rows -->
+      <div class="mt-8">
+        <div class="flex items-center justify-between mb-2">
+          <label class="block text-sm text-gray-300">各日の損益</label>
+          <div class="flex items-center gap-2">
+            <button id="addRow" class="btn px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm">日を追加</button>
+            <button id="loadSample" class="btn px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm">サンプル</button>
+            <button id="resetInputs" class="btn px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200 text-sm">入力リセット</button>
+          </div>
+        </div>
+        <div id="rows" class="space-y-2"></div>
+        <div class="mt-3 text-xs text-gray-400">
+          操作: <span class="kbd">Enter</span> で次の行を作成して移動 / <span class="kbd">Tab</span> で次の行へ（末尾なら自動で行追加） /
+          <span class="kbd">Del</span> で空行削除（<span class="kbd">Ctrl</span> + <span class="kbd">Del</span> で強制削除） /
+          <span class="kbd">利益</span> / <span class="kbd">損失</span> ボタンで符号確定＆色付け。
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <button id="calc" class="btn flex-1 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium">計算する</button>
+        <button id="resetAll" class="btn px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200">初期化（プリセット含む）</button>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="resultBox" class="hidden glass card p-6 md:p-7 mt-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold">計算結果</h2>
+        <span id="calcTime" class="text-xs text-gray-400"></span>
+      </div>
+
+      <!-- KPI -->
+      <div class="grid md:grid-cols-4 gap-5">
+        <div class="rounded-lg bg-white/5 p-4">
+          <div class="text-sm text-gray-400">ネット総利益</div>
+          <div id="totalProfit" class="text-2xl font-bold mt-1">-</div>
+        </div>
+        <div class="rounded-lg bg-white/5 p-4">
+          <div class="text-sm text-gray-400">最大日の利益</div>
+          <div id="maxProfit" class="text-2xl font-bold mt-1">-</div>
+        </div>
+        <div class="rounded-lg bg-white/5 p-4">
+          <div class="text-sm text-gray-400">一貫性率</div>
+          <div id="consistencyRate" class="text-2xl font-bold mt-1">-</div>
+        </div>
+        <div class="rounded-lg bg-white/5 p-4">
+          <div class="text-sm text-gray-400">Targetまでの追加額（参考）</div>
+          <div id="addToTarget" class="text-2xl font-bold mt-1">-</div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="mt-6">
+        <div class="flex items-end justify-between gap-4 mb-2">
+          <div>
+            <div class="text-sm text-gray-300">進捗（現在の一貫性率 vs 目標%）</div>
+            <div id="progressLabel" class="text-xs text-gray-400">-</div>
+          </div>
+          <div id="status" class="text-sm font-medium"></div>
+        </div>
+        <div class="w-full h-3 rounded-full overflow-hidden progress-track border border-white/10">
+          <div id="progressBar" class="h-full progress-bar ok" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Final Additional -->
+      <div class="mt-6 grid md:grid-cols-2 gap-5">
+        <div class="rounded-lg bg-gradient-to-br from-emerald-600/20 to-emerald-400/10 border border-emerald-400/30 p-4">
+          <div class="text-sm text-emerald-300">最終的な追加額（= 一貫性達成に必要）</div>
+          <div id="finalAdditional" class="text-3xl font-extrabold mt-1">-</div>
+          <div class="text-[12px] text-emerald-300/80 mt-1">計算式: 必要総利益 − 現在の総利益</div>
+        </div>
+        <div class="rounded-lg bg-white/5 p-4">
+          <div class="text-sm text-gray-300">追加プラン（各日 ≤ 現在の最大利益）</div>
+          <div class="mt-1 text-gray-300">
+            必要追加日数: <span id="addDays" class="font-semibold">-</span><br/>
+            各追加日の必要利益: <span id="perDay" class="font-semibold">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Details toggle -->
+      <div class="mt-6">
+        <button id="toggleDetails" class="btn px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm">
+          計算過程を表示
+        </button>
+        <div id="details" class="hidden mt-3 text-sm text-gray-300 bg-black/20 rounded-lg p-4 border border-white/10">
+          <div id="detailText" class="font-mono whitespace-pre-wrap"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-10 text-xs text-gray-400 text-center">
+      一貫性率 = 最大利益日 ÷ ネット総利益 × 100。ネット総利益は利益と損失を合算。<br/>
+      例: 899 + 900 − 1345 + 4888 = 5342。目標20%なら必要総利益 = 4888 ÷ 0.20 = 24440。
+    </footer>
+  </main>
+
+  <script>
+    // ------------------ Utilities ------------------
+    const $ = s => document.querySelector(s);
+    const $all = s => Array.from(document.querySelectorAll(s));
+    const now = () => new Date().toLocaleString();
+
+    const moneyState = { symbol: '$' };
+    function formatMoney(n) {
+      const sign = n < 0 ? '-' : '';
+      const abs = Math.abs(n);
+      const num = abs.toLocaleString(undefined, { maximumFractionDigits: 0 });
+      return `${sign}${moneyState.symbol}${num}`;
+    }
+
+    // ------------------ Theme ------------------
+    const THEME_KEY = 'pct_theme';
+    const applyTheme = (t) => {
+      document.documentElement.classList.toggle('dark', t === 'dark');
+      $('#themeIcon').textContent = (t === 'dark') ? '🌙' : '☀️';
+      localStorage.setItem(THEME_KEY, t);
+    };
+    const initTheme = () => {
+      const saved = localStorage.getItem(THEME_KEY) || 'dark';
+      applyTheme(saved);
+    };
+    initTheme();
+    $('#themeToggle').addEventListener('click', () => {
+      const cur = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      applyTheme(cur === 'dark' ? 'light' : 'dark');
+    });
+
+    // ------------------ Currency ------------------
+    $('#currency').addEventListener('change', (e) => {
+      moneyState.symbol = e.target.value;
+    });
+
+    // ------------------ Presets ------------------
+    const BUILTIN_PRESETS = {
+      "Generic 20%": 20,
+      "Generic 35%": 35,
+      "Lightning Funded": 20,
+      "Advanced / Growth": 35,
+      "WeMasterTrade (例)": 20
+    };
+    const LS_PRESETS_KEY = 'pct_custom_presets';
+    let customPresets = JSON.parse(localStorage.getItem(LS_PRESETS_KEY) || '{}');
+
+    const firmSelect = $('#firmSelect');
+    const firmNew = $('#firmNew');
+    const targetRateInput = $('#targetRate');
+    const firmMemo = $('#firmMemo');
+    const deleteBtn = $('#deletePreset');
+
+    function rebuildFirmOptions(selectName='') {
+      firmSelect.innerHTML = '';
+      const addGroup = (label, obj) => {
+        const groupHeader = document.createElement('option');
+        groupHeader.disabled = true;
+        groupHeader.textContent = `— ${label} —`;
+        firmSelect.appendChild(groupHeader);
+        Object.entries(obj).forEach(([name, rate]) => {
+          const opt = document.createElement('option');
+          opt.value = `${label}:${name}`;
+          opt.textContent = name;
+          if (name === selectName) opt.selected = true;
+          firmSelect.appendChild(opt);
+        });
+      };
+      addGroup('プリセット', BUILTIN_PRESETS);
+      if (Object.keys(customPresets).length) addGroup('保存済み', customPresets);
+      const empty = document.createElement('option');
+      empty.value = '';
+      empty.textContent = '（未選択／カスタム）';
+      firmSelect.appendChild(empty);
+      updateDeleteButtonState();
+    }
+
+    function parseSelection() {
+      const v = firmSelect.value;
+      if (!v) return null;
+      const [group, name] = v.split(':');
+      const src = (group === 'プリセット') ? BUILTIN_PRESETS : customPresets;
+      return { group, name, rate: src[name] };
+    }
+
+    function updateDeleteButtonState() {
+      const sel = parseSelection();
+      if (sel && sel.group === '保存済み') {
+        deleteBtn.disabled = false;
+        deleteBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        deleteBtn.disabled = true;
+        deleteBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    firmSelect.addEventListener('change', () => {
+      const sel = parseSelection();
+      if (sel) {
+        targetRateInput.value = sel.rate;
+        firmMemo.textContent = `選択: ${sel.name}（既定 ${sel.rate}%）`;
+      } else {
+        firmMemo.textContent = '';
+      }
+      updateDeleteButtonState();
+    });
+
+    $('#savePreset').addEventListener('click', () => {
+      const name = firmNew.value.trim();
+      const rate = Number(targetRateInput.value || 0);
+      if (!name) { alert('業者名を入力してください。'); return; }
+      if (!(rate >= 0 && rate <= 100)) { alert('目標一貫性率は0〜100で入力してください。'); return; }
+      customPresets[name] = rate;
+      localStorage.setItem(LS_PRESETS_KEY, JSON.stringify(customPresets));
+      rebuildFirmOptions(name);
+      firmMemo.textContent = `保存: ${name}（${rate}%）`;
+      firmNew.value = '';
+    });
+
+    deleteBtn.addEventListener('click', () => {
+      const sel = parseSelection();
+      if (!sel || sel.group !== '保存済み') {
+        alert('削除できるのは「保存済み」プリセットのみです。');
+        return;
+      }
+      if (!confirm(`「${sel.name}」を削除しますか？`)) return;
+      delete customPresets[sel.name];
+      localStorage.setItem(LS_PRESETS_KEY, JSON.stringify(customPresets));
+      rebuildFirmOptions();
+      firmMemo.textContent = '削除しました。';
+    });
+
+    $('#resetAll').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!confirm('カスタムプリセットを含め初期化しますか？')) return;
+      customPresets = {};
+      localStorage.removeItem(LS_PRESETS_KEY);
+      rebuildFirmOptions();
+      firmMemo.textContent = '初期化しました。';
+    });
+
+    rebuildFirmOptions();
+
+    // ------------------ Target toggle ------------------
+    const toggleTarget = $('#toggleTarget');
+    const targetBox = $('#targetBox');
+    toggleTarget.addEventListener('change', (e) => {
+      targetBox.classList.toggle('hidden', !e.target.checked);
+      // KPIのTargetも切り替え
+      document.querySelector('#addToTarget').parentElement.parentElement.classList.toggle('hidden', !e.target.checked);
+    });
+    // 初期は非表示
+    document.querySelector('#addToTarget').parentElement.parentElement.classList.add('hidden');
+
+    // ------------------ Rows ------------------
+    const rows = $('#rows');
+
+    function setRowStyleByValue(row, value) {
+      row.classList.remove('row-profit', 'row-loss');
+      if (value > 0) row.classList.add('row-profit');
+      else if (value < 0) row.classList.add('row-loss');
+    }
+
+    function focusRowInput(row) {
+      const input = row.querySelector('input[type="number"]');
+      if (input) input.focus();
+    }
+
+    function addRow(value='') {
+      const wrap = document.createElement('div');
+      wrap.className = 'row-base rounded-lg p-2 flex items-center gap-2';
+      wrap.innerHTML = `
+        <input type="number" step="1" class="flex-1 bg-transparent outline-none px-2 py-1 rounded num" placeholder="損益 (例: 800 / -790)" value="${value}" />
+        <div class="flex gap-2">
+          <button class="btn px-2 py-1 rounded bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs profitBtn">利益</button>
+          <button class="btn px-2 py-1 rounded bg-rose-600/80 hover:bg-rose-500 text-white text-xs lossBtn">損失</button>
+          <button class="btn px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-gray-200 text-xs removeBtn">削除</button>
+        </div>
+      `;
+      rows.appendChild(wrap);
+      const input = wrap.querySelector('input');
+      setRowStyleByValue(wrap, Number(input.value || 0));
+
+      // Click handlers
+      wrap.querySelector('.profitBtn').addEventListener('click', () => {
+        const n = Math.abs(Number(input.value || 0));
+        input.value = n || '';
+        setRowStyleByValue(wrap, n);
+        input.blur(); input.focus();
+      });
+      wrap.querySelector('.lossBtn').addEventListener('click', () => {
+        const n = -Math.abs(Number(input.value || 0));
+        input.value = n || (input.value ? -0 : '');
+        setRowStyleByValue(wrap, n);
+        input.blur(); input.focus();
+      });
+      wrap.querySelector('.removeBtn').addEventListener('click', () => {
+        const siblings = Array.from(rows.children);
+        const idx = siblings.indexOf(wrap);
+        wrap.remove();
+        const next = rows.children[idx] || rows.children[idx-1];
+        if (next) focusRowInput(next);
+        if (!rows.children.length) addRow('');
+      });
+
+      // Blur color sync
+      input.addEventListener('blur', () => setRowStyleByValue(wrap, Number(input.value || 0)));
+
+      // Keyboard: Enter, Tab, Del/Backspace
+      input.addEventListener('keydown', (e) => {
+        const siblings = Array.from(rows.children);
+        const idx = siblings.indexOf(wrap);
+
+        // Enter => insert new row below and focus
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const newRow = document.createElement('div');
+          addRow('');
+          const inserted = rows.children[idx+1];
+          if (inserted) focusRowInput(inserted);
+          return;
+        }
+
+        // Tab => move to next row (append new if at last)
+        if (e.key === 'Tab' && !e.shiftKey) {
+          e.preventDefault();
+          const next = rows.children[idx+1];
+          if (next) focusRowInput(next);
+          else {
+            addRow('');
+            focusRowInput(rows.children[rows.children.length-1]);
+          }
+          return;
+        }
+
+        // Shift+Tab => previous row
+        if (e.key === 'Tab' && e.shiftKey) {
+          e.preventDefault();
+          const prev = rows.children[idx-1];
+          if (prev) focusRowInput(prev);
+          return;
+        }
+
+        // Delete key: remove if empty; Ctrl+Delete always remove
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+          const empty = (input.value === '' || Number(input.value) === 0);
+          const force = (e.ctrlKey || e.metaKey) && (e.key === 'Delete' || e.key === 'Backspace');
+          if (empty || force) {
+            e.preventDefault();
+            wrap.querySelector('.removeBtn').click();
+          }
+        }
+      });
+
+      return wrap;
+    }
+
+    function resetInputs() {
+      rows.innerHTML = '';
+      addRow('');
+      $('#resultBox').classList.add('hidden');
+    }
+
+    addRow('');
+    $('#addRow').addEventListener('click', () => addRow(''));
+    $('#loadSample').addEventListener('click', () => {
+      rows.innerHTML = '';
+      [899, 900, -1345, 4888].forEach(v => addRow(v));
+      focusRowInput(rows.children[rows.children.length-1]);
+    });
+    $('#resetInputs').addEventListener('click', resetInputs);
+
+    // ------------------ Calc ------------------
+    function compute() {
+      const profits = $all('#rows input[type="number"]').map(i => Number(i.value || 0));
+      const positives = profits.filter(p => p > 0);
+      const maxProfit = positives.length ? Math.max(...positives) : 0;
+      const totalProfit = profits.reduce((a,b)=>a+b,0);
+      const targetRate = Number(targetRateInput.value || 0);
+      const targetOn = $('#toggleTarget').checked;
+      const targetProfit = Number($('#targetProfit').value || 0);
+
+      if (maxProfit <= 0) {
+        alert('少なくとも1日は正の利益が必要です（最大日の利益が0のため計算不可）。');
+        return null;
+      }
+
+      let consistencyRate = null;
+      if (totalProfit > 0) consistencyRate = (maxProfit / totalProfit) * 100;
+
+      const requiredTotalForConsistency = (targetRate > 0) ? maxProfit / (targetRate / 100) : 0;
+      const addForConsistency = (targetRate > 0) ? Math.max(0, requiredTotalForConsistency - totalProfit) : 0;
+      const finalAdditional = addForConsistency;
+
+      const addToTarget = targetOn ? Math.max(0, targetProfit - totalProfit) : 0;
+
+      // Plan
+      let addDays = 0, perDay = 0;
+      if (finalAdditional > 0) {
+        addDays = Math.max(1, Math.ceil(finalAdditional / maxProfit));
+        perDay = finalAdditional / addDays;
+      }
+
+      return { maxProfit, totalProfit, consistencyRate, targetRate, finalAdditional, addDays, perDay, requiredTotalForConsistency, addToTarget, targetOn, targetProfit };
+    }
+
+    function renderProgress(consistencyRate, targetRate) {
+      const label = $('#progressLabel');
+      const bar = $('#progressBar');
+      const status = $('#status');
+
+      if (consistencyRate === null || targetRate <= 0) {
+        label.textContent = '総利益が0以下、または目標%が0のため進捗は参考外';
+        bar.style.width = '0%';
+        bar.className = 'h-full progress-bar ok';
+        status.textContent = '';
+        return;
+      }
+      const ratio = consistencyRate / targetRate; // <=1 で達成
+      const width = Math.min(100, Math.max(0, ratio * 100));
+      bar.style.width = width + '%';
+      const ok = ratio <= 1;
+      bar.className = 'h-full progress-bar ' + (ok ? 'ok' : 'ng');
+      label.textContent = `現在 ${consistencyRate.toFixed(2)}% / 目標 ${targetRate}% 以下`;
+      status.textContent = ok ? 'OK（一貫性ルール達成）' : '未達（超過）';
+      status.className = 'text-sm font-medium ' + (ok ? 'text-emerald-400' : 'text-rose-400');
+    }
+
+    function renderDetails(d) {
+      const lines = [];
+      lines.push(`最大利益日 = ${d.maxProfit}`);
+      lines.push(`ネット総利益 = ${d.totalProfit}`);
+      if (d.totalProfit > 0) {
+        lines.push(`一貫性率 = 最大利益日 / ネット総利益 × 100`);
+        lines.push(`           = ${d.maxProfit} / ${d.totalProfit} × 100 = ${(d.consistencyRate).toFixed(4)} %`);
+      } else {
+        lines.push(`一貫性率 = 参考外（ネット総利益 ≤ 0）`);
+      }
+      if (d.targetRate > 0) {
+        lines.push(`必要総利益（目標${d.targetRate}%） = 最大利益日 ÷ (目標% / 100)`);
+        lines.push(`                               = ${d.maxProfit} ÷ (${d.targetRate}/100) = ${d.requiredTotalForConsistency.toFixed(4)}`);
+        lines.push(`最終的な追加額 = 必要総利益 − 現在の総利益 = ${d.requiredTotalForConsistency.toFixed(4)} − ${d.totalProfit} = ${d.finalAdditional.toFixed(4)}`);
+      } else {
+        lines.push(`目標% = 0 のため一貫性制約なし → 追加額 0`);
+      }
+      if (d.targetOn) {
+        lines.push(`参考: Targetまでの追加額 = ${d.targetProfit} − ${d.totalProfit} = ${d.addToTarget}`);
+      }
+      $('#detailText').textContent = lines.join('\n');
+    }
+
+    $('#calc').addEventListener('click', () => {
+      const d = compute();
+      if (!d) return;
+
+      $('#resultBox').classList.remove('hidden');
+      $('#calcTime').textContent = now();
+      $('#totalProfit').textContent = formatMoney(d.totalProfit);
+      $('#maxProfit').textContent = formatMoney(d.maxProfit);
+      $('#consistencyRate').textContent = (d.consistencyRate === null) ? '参考外' : d.consistencyRate.toFixed(2) + ' %';
+      $('#finalAdditional').textContent = formatMoney(d.finalAdditional);
+      $('#addDays').textContent = d.addDays ? d.addDays : '-';
+      $('#perDay').textContent = d.addDays ? formatMoney(d.perDay) : '-';
+      $('#addToTarget').textContent = d.targetOn ? formatMoney(d.addToTarget) : '-';
+
+      renderProgress(d.consistencyRate, d.targetRate);
+      renderDetails(d);
+    });
+
+    // Toggle details
+    $('#toggleDetails').addEventListener('click', () => {
+      $('#details').classList.toggle('hidden');
+      $('#toggleDetails').textContent =
+        $('#details').classList.contains('hidden') ? '計算過程を表示' : '計算過程を隠す';
+    });
+  </script>
+</body>
+</html>

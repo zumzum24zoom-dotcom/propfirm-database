@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PiPsマスター (レート自動取得機能付き)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 py-10 flex items-center justify-center min-h-screen">
+    <div class="bg-slate-800 p-8 rounded-xl shadow-2xl w-full max-w-3xl mx-4 text-slate-300">
+        <div class="flex items-center justify-center gap-3 mb-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="12" y1="10" x2="12" y2="18"></line><line x1="8" y1="14" x2="16" y2="14"></line></svg>
+            <h1 class="text-3xl font-bold text-center text-white">PiPsマスター</h1>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-x-12">
+            <!-- Left Column: Calculation Inputs -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4 text-indigo-400 border-b border-slate-600 pb-2">1. 取引設定</h2>
+                <div class="mb-4">
+                    <label for="currency-pair" class="block text-slate-400 text-sm font-bold mb-2">取引商品:</label>
+                    <select id="currency-pair" onchange="resetAll()" class="shadow bg-slate-700 border border-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                         <optgroup label="コモディティ">
+                            <option value="XAU/USD">XAU/USD (Gold)</option>
+                        </optgroup>
+                        <optgroup label="クロス円">
+                            <option value="USD/JPY">USD/JPY</option><option value="EUR/JPY">EUR/JPY</option><option value="GBP/JPY">GBP/JPY</option><option value="AUD/JPY">AUD/JPY</option><option value="NZD/JPY">NZD/JPY</option><option value="CAD/JPY">CAD/JPY</option><option value="CHF/JPY">CHF/JPY</option>
+                        </optgroup>
+                        <optgroup label="ドルストレート">
+                            <option value="EUR/USD" selected>EUR/USD</option><option value="GBP/USD">GBP/USD</option><option value="AUD/USD">AUD/USD</option><option value="NZD/USD">NZD/USD</option><option value="USD/CAD">USD/CAD</option><option value="USD/CHF">USD/CHF</option>
+                        </optgroup>
+                        <optgroup label="その他クロス">
+                            <option value="EUR/GBP">EUR/GBP</option><option value="EUR/AUD">EUR/AUD</option><option value="EUR/CHF">EUR/CHF</option><option value="GBP/AUD">GBP/AUD</option><option value="GBP/CHF">GBP/CHF</option><option value="AUD/NZD">AUD/NZD</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="lots" class="block text-slate-400 text-sm font-bold mb-2">取引数量 (Lot):</label>
+                    <input type="number" id="lots" value="1" min="0.01" step="0.01" onchange="resetAll()" class="shadow appearance-none bg-slate-700 border border-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                 <div class="mb-4">
+                    <label for="account-currency" class="block text-slate-400 text-sm font-bold mb-2">口座通貨 (損益表示):</label>
+                    <select id="account-currency" onchange="resetAll()" class="shadow bg-slate-700 border border-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="JPY">日本円 (JPY)</option><option value="USD">米ドル (USD)</option><option value="EUR">ユーロ (EUR)</option><option value="GBP">英ポンド (GBP)</option><option value="CHF">スイスフラン (CHF)</option><option value="AUD">豪ドル (AUD)</option><option value="NZD">NZドル (NZD)</option><option value="CAD">カナダドル (CAD)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Right Column: Rate Inputs -->
+            <div>
+                <div class="flex justify-between items-center mb-4 border-b border-slate-600 pb-2">
+                     <h2 class="text-xl font-semibold text-indigo-400">2. 通貨レート設定</h2>
+                     <button id="fetch-rates-button" onclick="fetchRates()" class="text-xs bg-slate-600 hover:bg-slate-500 text-white font-bold py-1 px-3 rounded-md transition-all duration-200">
+                        最新レート取得
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-3">
+                    <div><label for="rate-usdjpy" class="text-sm font-medium text-slate-400">USD/JPY</label><input type="number" id="rate-usdjpy" value="157.00" step="0.01" onchange="resetAll()" class="shadow-sm bg-slate-700 border border-slate-600 rounded w-full py-1 px-2 text-white"></div>
+                    <div><label for="rate-eurusd" class="text-sm font-medium text-slate-400">EUR/USD</label><input type="number" id="rate-eurusd" value="1.0700" step="0.0001" onchange="resetAll()" class="shadow-sm bg-slate-700 border border-slate-600 rounded w-full py-1 px-2 text-white"></div>
+                    <div><label for="rate-gbpusd" class="text-sm font-medium text-slate-400">GBP/USD</label><input type="number" id="rate-gbpusd" value="1.2700" step="0.0001" onchange="resetAll()" class="shadow-sm bg-slate-700 border border-slate-600 rounded w-full py-1 px-2 text-white"></div>
+                    <div><label for="rate-audusd" class="text-sm font-medium text-slate-400">AUD/USD</label><input type="number" id="rate-audusd" value="0.6600" step="0.0001" onchange="resetAll()" class="shadow-sm bg-slate-700 border border-slate-600 rounded w-full py-1 px-2 text-white"></div>
+                    <div><label for="rate-nzdusd" class="text-sm font-medium text-slate-400">NZD/USD</label><input type="number" id="rate-nzdusd" value="0.6100" step="0.0001" onchange="resetAll()" class="shadow-sm bg-slate-700 border border-slate-600 rounded w-full py-1 px-2 text-white"></div>
+                    <div><label for="rate-usdcad" class="text-sm font-medium text-slate-400">USD/CAD</label><input type="number" id="rate-usdcad" value="1.3700" step="0.0001" onchange="resetAll()" class="shadow-sm bg-slate-700 border border-slate-600 rounded w-full py-1 px-2 text-white"></div>
+                    <div><label for="rate-usdchf" class="text-sm font-medium text-slate-400">USD/CHF</label><input type="number" id="rate-usdchf" value="0.9000" step="0.0001" onchange="resetAll()" class="shadow-sm bg-slate-700 border border-slate-600 rounded w-full py-1 px-2 text-white"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-center mt-8 mb-6">
+            <button id="calculate-button" onclick="calculate()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-lg focus:ring-4 focus:ring-indigo-500/50 text-lg w-full md:w-auto transition-all duration-300">
+                計算実行
+            </button>
+        </div>
+        
+        <div id="result-container" class="hidden mt-6 p-6 rounded-lg">
+            <h2 id="result-title" class="text-xl font-semibold text-center"></h2>
+            <p id="result" class="mt-2 text-4xl font-bold text-center"></p>
+            <p id="calculation-detail" class="mt-3 text-sm text-center font-mono"></p>
+            <div id="simulator" class="hidden mt-6 pt-5 border-t border-slate-600">
+                <div class="flex items-center justify-center gap-4">
+                     <label for="pips-multiplier" class="text-slate-300">想定獲得pips:</label>
+                    <input type="number" id="pips-multiplier" oninput="updateProjectedPl()" placeholder="e.g. 30" class="w-28 text-center bg-slate-700 border border-slate-600 rounded py-1 px-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <p id="total-profit-loss" class="text-xl font-bold text-white"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const calculateButton = document.getElementById('calculate-button');
+        const resultContainer = document.getElementById('result-container');
+        const resultTitle = document.getElementById('result-title');
+        const resultElement = document.getElementById('result');
+        const detailElement = document.getElementById('calculation-detail');
+        const simulator = document.getElementById('simulator');
+        const pipsMultiplier = document.getElementById('pips-multiplier');
+        const totalProfitLoss = document.getElementById('total-profit-loss');
+        const fetchButton = document.getElementById('fetch-rates-button');
+
+        let perPipValue = 0;
+        let accountCurrencyForSim = 'USD';
+
+        async function fetchRates() {
+            fetchButton.textContent = '取得中...';
+            fetchButton.disabled = true;
+            fetchButton.classList.add('bg-indigo-500');
+
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/USD');
+                if (!response.ok) throw new Error('Network response was not ok.');
+                const data = await response.json();
+                
+                if (data.result === 'success') {
+                    const rates = data.rates;
+                    document.getElementById('rate-usdjpy').value = rates.JPY.toFixed(3);
+                    document.getElementById('rate-eurusd').value = (1 / rates.EUR).toFixed(5);
+                    document.getElementById('rate-gbpusd').value = (1 / rates.GBP).toFixed(5);
+                    document.getElementById('rate-audusd').value = (1 / rates.AUD).toFixed(5);
+                    document.getElementById('rate-nzdusd').value = (1 / rates.NZD).toFixed(5);
+                    document.getElementById('rate-usdcad').value = rates.CAD.toFixed(5);
+                    document.getElementById('rate-usdchf').value = rates.CHF.toFixed(5);
+                    
+                    fetchButton.textContent = '取得成功';
+                    fetchButton.classList.remove('bg-indigo-500');
+                    fetchButton.classList.add('bg-emerald-600');
+                    resetAll(); 
+                } else {
+                    throw new Error('API returned an error.');
+                }
+            } catch (error) {
+                console.error('Failed to fetch rates:', error);
+                fetchButton.textContent = '取得失敗';
+                fetchButton.classList.remove('bg-indigo-500');
+                fetchButton.classList.add('bg-red-600');
+            } finally {
+                setTimeout(() => {
+                    fetchButton.textContent = '最新レート取得';
+                    fetchButton.disabled = false;
+                    fetchButton.classList.remove('bg-emerald-600', 'bg-red-600');
+                }, 2500);
+            }
+        }
+
+        function resetAll() {
+            calculateButton.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+            calculateButton.classList.add('bg-indigo-600', 'hover:bg-indigo-500');
+            resultContainer.classList.add('hidden');
+            simulator.classList.add('hidden');
+            pipsMultiplier.value = '';
+            totalProfitLoss.textContent = '';
+        }
+
+        function updateProjectedPl() {
+            const pips = parseFloat(pipsMultiplier.value);
+            if (isNaN(pips)) {
+                totalProfitLoss.textContent = '';
+                return;
+            }
+            const totalPl = pips * perPipValue;
+            
+            const formattingOptions = accountCurrencyForSim === 'JPY' 
+                ? { minimumFractionDigits: 0, maximumFractionDigits: 0 } 
+                : { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+            totalProfitLoss.textContent = `= ${totalPl.toLocaleString(undefined, formattingOptions)} ${accountCurrencyForSim}`;
+
+            if (totalPl >= 0) {
+                 totalProfitLoss.classList.remove('text-red-400');
+                 totalProfitLoss.classList.add('text-emerald-400');
+            } else {
+                 totalProfitLoss.classList.remove('text-emerald-400');
+                 totalProfitLoss.classList.add('text-red-400');
+            }
+        }
+
+        function calculate() {
+            resetAll();
+            const rates = {
+                usdjpy: parseFloat(document.getElementById('rate-usdjpy').value) || 0,
+                eurusd: parseFloat(document.getElementById('rate-eurusd').value) || 0,
+                gbpusd: parseFloat(document.getElementById('rate-gbpusd').value) || 0,
+                audusd: parseFloat(document.getElementById('rate-audusd').value) || 0,
+                nzdusd: parseFloat(document.getElementById('rate-nzdusd').value) || 0,
+                usdcad: parseFloat(document.getElementById('rate-usdcad').value) || 0,
+                usdchf: parseFloat(document.getElementById('rate-usdchf').value) || 0,
+            };
+            const pair = document.getElementById('currency-pair').value;
+            const lots = parseFloat(document.getElementById('lots').value);
+            accountCurrencyForSim = document.getElementById('account-currency').value;
+
+            if (isNaN(lots) || lots <= 0 || Object.values(rates).some(r => r <= 0)) {
+                resultContainer.className = 'mt-6 p-6 rounded-lg bg-red-900/50 border-2 border-red-500';
+                resultTitle.textContent = '入力エラー';
+                resultTitle.className = 'text-xl font-semibold text-center text-red-300';
+                resultElement.textContent = '有効な数値をすべて入力してください。';
+                resultElement.className = 'mt-2 text-2xl font-bold text-center text-red-300';
+                detailElement.textContent = '';
+                resultContainer.classList.remove('hidden');
+                return;
+            }
+
+            let pipValueInQuoteCurrency, quoteCurrency, valueName = '1pips';
+
+            if (pair === 'XAU/USD') {
+                quoteCurrency = 'USD'; valueName = '0.01ドル変動';
+                pipValueInQuoteCurrency = 0.01 * 100 * lots;
+            } else {
+                quoteCurrency = pair.slice(4);
+                const pipSize = quoteCurrency === 'JPY' ? 0.01 : 0.0001;
+                pipValueInQuoteCurrency = pipSize * 100000 * lots;
+            }
+
+            let pipValueInUsd;
+            switch (quoteCurrency) {
+                case 'USD': pipValueInUsd = pipValueInQuoteCurrency; break;
+                case 'EUR': pipValueInUsd = pipValueInQuoteCurrency * rates.eurusd; break;
+                case 'GBP': pipValueInUsd = pipValueInQuoteCurrency * rates.gbpusd; break;
+                case 'AUD': pipValueInUsd = pipValueInQuoteCurrency * rates.audusd; break;
+                case 'NZD': pipValueInUsd = pipValueInQuoteCurrency * rates.nzdusd; break;
+                case 'JPY': pipValueInUsd = pipValueInQuoteCurrency / rates.usdjpy; break;
+                case 'CAD': pipValueInUsd = pipValueInQuoteCurrency / rates.usdcad; break;
+                case 'CHF': pipValueInUsd = pipValueInQuoteCurrency / rates.usdchf; break;
+                default: pipValueInUsd = NaN;
+            }
+
+            let finalProfitLoss;
+            switch (accountCurrencyForSim) {
+                case 'USD': finalProfitLoss = pipValueInUsd; break;
+                case 'EUR': finalProfitLoss = pipValueInUsd / rates.eurusd; break;
+                case 'GBP': finalProfitLoss = pipValueInUsd / rates.gbpusd; break;
+                case 'AUD': finalProfitLoss = pipValueInUsd / rates.audusd; break;
+                case 'NZD': finalProfitLoss = pipValueInUsd / rates.nzdusd; break;
+                case 'JPY': finalProfitLoss = pipValueInUsd * rates.usdjpy; break;
+                case 'CAD': finalProfitLoss = pipValueInUsd * rates.usdcad; break;
+                case 'CHF': finalProfitLoss = pipValueInUsd * rates.usdchf; break;
+                default: finalProfitLoss = NaN;
+            }
+            
+            perPipValue = finalProfitLoss;
+            
+            const resultFormattingOptions = accountCurrencyForSim === 'JPY' 
+                ? { minimumFractionDigits: 0, maximumFractionDigits: 0 } 
+                : { minimumFractionDigits: 4, maximumFractionDigits: 4 };
+            
+            resultContainer.className = 'mt-6 p-6 rounded-lg bg-emerald-900/50 border-2 border-emerald-500';
+            resultTitle.textContent = `${valueName}あたりの損益額`;
+            resultTitle.className = 'text-xl font-semibold text-center text-emerald-300';
+            resultElement.className = 'mt-2 text-4xl font-bold text-center text-white';
+            resultElement.textContent = `${finalProfitLoss.toLocaleString(undefined, resultFormattingOptions)} ${accountCurrencyForSim}`;
+            
+            const effectiveRate = finalProfitLoss / pipValueInQuoteCurrency;
+            detailElement.className = 'mt-3 text-sm text-center font-mono text-slate-400';
+            const quoteFormattingOptions = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+            detailElement.textContent = `(${lots} Lot) ${valueName} = ${pipValueInQuoteCurrency.toLocaleString(undefined, quoteFormattingOptions)} ${quoteCurrency}. | 換算レート: 1 ${quoteCurrency} ≈ ${effectiveRate.toFixed(6)} ${accountCurrencyForSim}.`;
+            
+            resultContainer.classList.remove('hidden');
+            simulator.classList.remove('hidden');
+            
+            calculateButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-500');
+            calculateButton.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+        }
+
+        // 初期読み込み時にレートを取得
+        document.addEventListener('DOMContentLoaded', () => {
+             fetchRates();
+        });
+    </script>
+</body>
+</html>
