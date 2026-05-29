@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!--
+Widget Maker v0.1  (2026-05-29)
+役割: Page Maker出力JSON → 計算 → 完成SVG/HTMLウィジェット（Hugoに貼るだけ）
+方針: Workerをページ描写に使わない完全静的化(方法A)。データは1本道(Page Maker→計算機→Hugo)。
+構造: WIDGETS配列にプラグイン方式で追加（{id,name,defaultData,calc,render}）。
+現状: 試作。最速出金スケジュール(payout-timeline)のみ。入力は仮データ（後でPage Maker出力取込に差替）。
+-->
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Widget Maker v0.1</title>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0e17;--surface:#111827;--surface-alt:#1a2332;
+    --border:#1e2d3d;--border-light:#2a3a4d;
+    --accent:#00d4aa;--blue:#3b82f6;--yellow:#f0b90b;--red:#ef4444;--purple:#a78bfa;--green:#22c55e;
+    --text:#c8d6e5;--text-bright:#e2e8f0;--text-dim:#636e7b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP','Inter',sans-serif;font-size:13px;line-height:1.5;}
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:3px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useMemo, useCallback } = React;
+
+// ═══════════════════════════════════════════════════
+// テーマ（Page Maker / PFC ウィジェットと共通）
+// ═══════════════════════════════════════════════════
+const C = {
+  bg:"#0a0e17",surface:"#111827",surfaceAlt:"#1a2332",
+  border:"#1e2d3d",borderLight:"#2a3a4d",
+  accent:"#00d4aa",blue:"#3b82f6",yellow:"#f0b90b",red:"#ef4444",purple:"#a78bfa",green:"#22c55e",
+  text:"#c8d6e5",textBright:"#e2e8f0",textDim:"#636e7b",
+};
+const font = "'JetBrains Mono','Fira Code',monospace";
+const APP_VERSION = "v0.1";
+
+// ═══════════════════════════════════════════════════
+// 共通ヘルパ
+// ═══════════════════════════════════════════════════
+// 出金頻度 → 待機日数
+const FREQ_WAIT = { ondemand:0, weekly:7, biweekly:14, monthly:30 };
+const FREQ_LABEL = { ondemand:"随時", weekly:"毎週", biweekly:"隔週", monthly:"月次" };
+
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+// ═══════════════════════════════════════════════════
+// ウィジェット① 最速出金スケジュール（PROFIT TIMELINE）
+// ═══════════════════════════════════════════════════
+const PAYOUT_TIMELINE = {
+  id: "payout-timeline",
+  name: "最速出金スケジュール",
+
+  // 仮データ（画像再現） — 後でPage Maker出力JSONに差替
+  defaultData: {
+    title: "最速出金スケジュール（理論値）",
+    subtitle: "PROFIT TIMELINE",
+    arrivalNote: "着金目安: 48時間以内",
+    // plan: プラン名 / stepDays: 各Stepの最低取引日数(合格) / payoutFreq / minPayoutDays: 出金最低取引日数
+    plans: [
+      { plan:"FAST account",        stepDays:[3],     payoutFreq:"biweekly", minPayoutDays:0 },
+      { plan:"FAST STATIC account", stepDays:[3],     payoutFreq:"biweekly", minPayoutDays:0 },
+      { plan:"CLASSIC account",     stepDays:[3,3],   payoutFreq:"biweekly", minPayoutDays:0 },
+      { plan:"STRIKE account",      stepDays:[3,3,3], payoutFreq:"biweekly", minPayoutDays:0 },
+      { plan:"INSTANT account",     stepDays:[],      payoutFreq:"biweekly", minPayoutDays:0 },
+      { plan:"INSTANT PRO account", stepDays:[],      payoutFreq:"biweekly", minPayoutDays:0 },
+    ],
+  },
+
+  // ── 計算（素データ → 結果） ──
+  //  最短合格 = Σ各Stepの最低取引日数
+  //  最速出金 = MAX(出金頻度待機, 出金最低取引日数)
+  //  トータル = 最短合格 + 最速出金
+  calc(data){
+    const plans = (data.plans||[]).map(p=>{
+      const stepDays = Array.isArray(p.stepDays)?p.stepDays:[];
+      const stepCount = stepDays.length;
+      const minQualify = stepDays.reduce((s,d)=>s+(Number(d)||0),0);
+      const freqWait = FREQ_WAIT[p.payoutFreq] ?? 0;
+      const minPayout = Math.max(freqWait, Number(p.minPayoutDays)||0);
+      const total = minQualify + minPayout;
+      const stepsLabel = stepCount===0 ? "Instant" : stepCount+"-Step";
+      return {
+        plan:p.plan, stepsLabel, stepCount,
+        challengeSegs: stepDays.map(d=>Number(d)||0),
+        minQualify, minPayout, total,
+        payoutFreq:p.payoutFreq,
+      };
+    });
+    const maxTotal = plans.reduce((m,p)=>Math.max(m,p.total),0);
+    // スケール上限を5刻みに切り上げ（最低20）
+    const scaleMax = Math.max(20, Math.ceil(maxTotal/5)*5);
+    return { ...data, plans, scaleMax };
+  },
+
+  // ── 描画（結果 → 完成HTML。<style>込み・自己完結） ──
+  render(r){
+    const scaleMax = r.scaleMax;
+    const pct = d => (d/scaleMax*100);
+    // 目盛
+    const ticks = [0,1,5,10,15,20];
+    let t=25; while(t<=scaleMax){ ticks.push(t); t+=5; }
+    const tickMarks = ticks.filter(v=>v<=scaleMax).map(v=>
+      `<div class="pfc-tl-tick" style="left:${pct(v)}%"><span>${v}</span></div>`).join("");
+    const gridLines = ticks.filter(v=>v<=scaleMax).map(v=>
+      `<div class="pfc-tl-grid" style="left:${pct(v)}%"></div>`).join("");
+
+    const rows = r.plans.map(p=>{
+      // Challengeセグメント（青）
+      const cSegs = p.challengeSegs.map(d=>
+        `<div class="pfc-tl-seg pfc-tl-c" style="width:${pct(d)}%" title="${d}日">${d}日</div>`).join("");
+      // Fundedセグメント（オレンジ）
+      const fSeg = p.minPayout>0
+        ? `<div class="pfc-tl-seg pfc-tl-f" style="width:${pct(p.minPayout)}%" title="${p.minPayout}日">${p.minPayout}日</div>`
+        : "";
+      return `<div class="pfc-tl-row">
+  <div class="pfc-tl-name">${esc(p.plan)}</div>
+  <div class="pfc-tl-steps">${esc(p.stepsLabel)}</div>
+  <div class="pfc-tl-total">${p.total}日</div>
+  <div class="pfc-tl-bar">${gridLines}<div class="pfc-tl-track">${cSegs}${fSeg}</div></div>
+</div>`;
+    }).join("\n");
+
+    return `<style>
+.pfc-tl{--bg:#0a0e17;--surface:#131722;--surface2:#1a1e2e;--border:#1e2d3d;--c:#3b82f6;--c-bg:rgba(59,130,246,.16);--c-tx:#7da7ff;--f:#e0930f;--f-bg:#161a28;--f-tx:#e2e8f0;--text:#c8d6e5;--text-bright:#e2e8f0;--text-dim:#7c8aa0;
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px 22px;font-family:'Noto Sans JP','Inter',sans-serif;color:var(--text);max-width:920px;}
+.pfc-tl *{box-sizing:border-box;}
+.pfc-tl-title{font-size:1.05rem;font-weight:800;color:var(--text-bright);margin-bottom:14px;}
+.pfc-tl-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
+.pfc-tl-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.pfc-tl-sub{font-size:.8rem;font-weight:800;letter-spacing:.08em;color:var(--text-bright);}
+.pfc-tl-legend{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--text);}
+.pfc-tl-chip{width:16px;height:12px;border-radius:2px;border:2px solid;}
+.pfc-tl-chip.c{border-color:var(--c);background:var(--c-bg);}
+.pfc-tl-chip.f{border-color:var(--f);background:var(--f-bg);}
+.pfc-tl-note{margin-left:auto;font-size:.7rem;color:var(--text-dim);}
+.pfc-tl-colhead,.pfc-tl-row{display:grid;grid-template-columns:150px 64px 48px 1fr;align-items:center;gap:10px;}
+.pfc-tl-colhead{padding:0 0 8px;font-size:.66rem;color:var(--text-dim);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.04em;}
+.pfc-tl-row{padding:9px 0;border-bottom:1px solid var(--border);}
+.pfc-tl-row:last-child{border-bottom:none;}
+.pfc-tl-name{font-size:.82rem;font-weight:700;color:var(--text-bright);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pfc-tl-steps{font-size:.72rem;color:var(--text-dim);}
+.pfc-tl-total{font-size:.82rem;font-weight:800;color:var(--text-bright);font-variant-numeric:tabular-nums;}
+.pfc-tl-bar{position:relative;height:26px;}
+.pfc-tl-grid{position:absolute;top:0;bottom:0;width:1px;background:var(--border);opacity:.6;}
+.pfc-tl-track{position:absolute;top:0;left:0;height:100%;display:flex;gap:3px;}
+.pfc-tl-seg{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;overflow:hidden;white-space:nowrap;min-width:14px;}
+.pfc-tl-c{border:1.5px solid var(--c);background:var(--c-bg);color:var(--c-tx);}
+.pfc-tl-f{border:1.5px solid var(--f);background:var(--f-bg);color:var(--f-tx);}
+.pfc-tl-scale{position:relative;height:16px;margin-top:6px;grid-column:4;}
+.pfc-tl-axis{display:grid;grid-template-columns:150px 64px 48px 1fr;gap:10px;margin-top:4px;}
+.pfc-tl-axis-pad{grid-column:1 / 4;}
+.pfc-tl-ticks{position:relative;height:14px;}
+.pfc-tl-tick{position:absolute;top:0;transform:translateX(-50%);font-size:.6rem;color:var(--text-dim);}
+@media(max-width:600px){.pfc-tl-colhead,.pfc-tl-row{grid-template-columns:96px 44px 38px 1fr;gap:6px;}.pfc-tl-name{font-size:.72rem;}.pfc-tl-seg{font-size:.58rem;}}
+</style>
+<div class="pfc-tl">
+<div class="pfc-tl-title">${esc(r.title||"")}</div>
+<div class="pfc-tl-panel">
+  <div class="pfc-tl-head">
+    <span class="pfc-tl-sub">${esc(r.subtitle||"")}</span>
+    <span class="pfc-tl-legend"><span class="pfc-tl-chip c"></span>チャレンジ期間（合格まで）</span>
+    <span class="pfc-tl-legend"><span class="pfc-tl-chip f"></span>Funded期間（出金条件クリアまで）</span>
+    ${r.arrivalNote?`<span class="pfc-tl-note">※ ${esc(r.arrivalNote)}</span>`:""}
+  </div>
+  <div class="pfc-tl-colhead"><div>プラン</div><div>Steps</div><div>合計</div><div>タイムライン（日数）</div></div>
+  <div class="pfc-tl-axis"><div class="pfc-tl-axis-pad"></div><div class="pfc-tl-ticks">${tickMarks}</div></div>
+${rows}
+</div>
+</div>`;
+  },
+};
+
+// ═══════════════════════════════════════════════════
+// ウィジェット・レジストリ（ここに追加するだけで増える）
+// ═══════════════════════════════════════════════════
+const WIDGETS = [
+  PAYOUT_TIMELINE,
+  // 今後: スコアチャート / ルール表 / 価格カード …
+];
+
+// ═══════════════════════════════════════════════════
+// 小物
+// ═══════════════════════════════════════════════════
+function Btn({children,onClick,color,disabled,title,style:sx}){
+  return <button onClick={onClick} disabled={disabled} title={title} style={{
+    background:"transparent",color:color||C.accent,border:`1px solid ${color||C.accent}`,
+    borderRadius:4,padding:"5px 12px",fontSize:"0.72rem",fontWeight:700,
+    cursor:disabled?"not-allowed":"pointer",opacity:disabled?0.45:1,...sx
+  }}>{children}</button>;
+}
+
+// ═══════════════════════════════════════════════════
+// App
+// ═══════════════════════════════════════════════════
+function App(){
+  const [activeId,setActiveId]=useState(WIDGETS[0].id);
+  const widget = WIDGETS.find(w=>w.id===activeId)||WIDGETS[0];
+
+  const [rawText,setRawText]=useState(JSON.stringify(widget.defaultData,null,2));
+  const [parseErr,setParseErr]=useState("");
+  const [copied,setCopied]=useState(false);
+
+  // ウィジェット切替時にそのデフォルトデータを読み込む
+  const switchWidget=(id)=>{
+    const w=WIDGETS.find(x=>x.id===id);
+    setActiveId(id);
+    setRawText(JSON.stringify(w.defaultData,null,2));
+    setParseErr("");
+  };
+
+  // パース → 計算 → 描画
+  const { html, error } = useMemo(()=>{
+    let data;
+    try{ data=JSON.parse(rawText); }
+    catch(e){ return { html:"", error:"JSONパースエラー: "+e.message }; }
+    try{
+      const result = widget.calc(data);
+      return { html: widget.render(result), error:"" };
+    }catch(e){ return { html:"", error:"計算/描画エラー: "+e.message }; }
+  },[rawText,widget]);
+
+  const copyHTML=useCallback(()=>{
+    if(!html)return;
+    navigator.clipboard.writeText(html).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1500);})
+      .catch(()=>{ const ta=document.createElement("textarea");ta.value=html;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setCopied(true);setTimeout(()=>setCopied(false),1500); });
+  },[html]);
+
+  const downloadHTML=useCallback(()=>{
+    if(!html)return;
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([html],{type:"text/html"}));
+    a.download=widget.id+".html"; a.click();
+  },[html,widget]);
+
+  // 後でPage Maker出力JSON取込（現状はプレースホルダ）
+  const loadPageMakerJSON=()=>{
+    const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
+    inp.onchange=e=>{
+      const f=e.target.files?.[0]; if(!f)return;
+      const reader=new FileReader();
+      reader.onload=()=>{ setRawText(reader.result); };
+      reader.readAsText(f);
+    };
+    inp.click();
+  };
+
+  return (
+    <div style={{height:"100vh",display:"flex",flexDirection:"column"}}>
+      {/* ヘッダー */}
+      <div style={{display:"flex",alignItems:"center",gap:12,padding:"10px 16px",borderBottom:`1px solid ${C.border}`,background:C.surface}}>
+        <span style={{fontWeight:800,color:C.accent,fontSize:"0.95rem"}}>Widget Maker</span>
+        <span style={{fontSize:"0.66rem",color:C.textDim,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 6px"}}>{APP_VERSION}</span>
+        <span style={{fontSize:"0.66rem",color:C.textDim}}>Page Maker出力 → 計算 → 完成ウィジェット（Hugoに貼るだけ）</span>
+        <div style={{flex:1}}/>
+        {/* ウィジェット選択（プラグイン） */}
+        <div style={{display:"flex",gap:4}}>
+          {WIDGETS.map(w=>(
+            <Btn key={w.id} color={w.id===activeId?C.accent:C.textDim}
+              onClick={()=>switchWidget(w.id)}
+              style={{background:w.id===activeId?C.surfaceAlt:"transparent"}}>{w.name}</Btn>
+          ))}
+        </div>
+      </div>
+
+      {/* 本体: 左=データ / 右=プレビュー */}
+      <div style={{flex:1,display:"flex",minHeight:0}}>
+        {/* 左: データ */}
+        <div style={{width:380,flexShrink:0,display:"flex",flexDirection:"column",borderRight:`1px solid ${C.border}`,background:C.surface}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,padding:"8px 12px",borderBottom:`1px solid ${C.border}`}}>
+            <span style={{fontSize:"0.75rem",fontWeight:700,color:C.yellow}}>入力データ（仮）</span>
+            <div style={{flex:1}}/>
+            <Btn color={C.blue} onClick={loadPageMakerJSON} style={{padding:"3px 8px",fontSize:"0.66rem"}} title="Page Maker出力JSONを読み込み">📂 JSON</Btn>
+          </div>
+          <textarea value={rawText} onChange={e=>setRawText(e.target.value)} spellCheck={false}
+            style={{flex:1,background:C.bg,color:C.textBright,border:"none",padding:12,fontSize:"0.74rem",fontFamily:font,lineHeight:1.6,resize:"none",outline:"none"}}/>
+          {error && <div style={{padding:"6px 12px",fontSize:"0.68rem",color:C.red,borderTop:`1px solid ${C.border}`,background:`${C.red}11`}}>{error}</div>}
+          <div style={{padding:"6px 12px",fontSize:"0.62rem",color:C.textDim,borderTop:`1px solid ${C.border}`}}>
+            ※ 試作: 入力は仮データ。最終はPage Maker出力JSONを1本道で取込。
+          </div>
+        </div>
+
+        {/* 右: プレビュー＋出力 */}
+        <div style={{flex:1,display:"flex",flexDirection:"column",minWidth:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px",borderBottom:`1px solid ${C.border}`,background:C.surface}}>
+            <span style={{fontSize:"0.75rem",fontWeight:700,color:C.accent}}>プレビュー</span>
+            <div style={{flex:1}}/>
+            <Btn color={copied?C.green:C.accent} onClick={copyHTML} disabled={!html}>{copied?"✓ コピー済み":"📋 HTMLコピー"}</Btn>
+            <Btn color={C.blue} onClick={downloadHTML} disabled={!html}>⬇ HTML保存</Btn>
+          </div>
+          <div style={{flex:1,overflow:"auto",padding:20,background:C.bg}}>
+            {html
+              ? <iframe title="preview" srcDoc={`<body style="margin:0;background:#0a0e17;padding:16px">${html}</body>`}
+                  style={{width:"100%",height:"100%",minHeight:480,border:"none",background:C.bg}}/>
+              : <div style={{color:C.textDim,fontSize:"0.8rem"}}>データを入力するとここにウィジェットが表示されます。</div>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
