@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>URL Picker — Bookmarklet Generator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080910;--bg2:#0d0e14;--border:#1a1d28;--border2:#252836;--text:#c8ccd4;--text2:#888;--text3:#555;--green:#00ff88;--green2:#00cc66;--green-dim:#00ff881a}
+body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;min-height:100vh;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:40px}
+h1{font-size:15px;font-weight:700;color:#e1e4ea;letter-spacing:.5px}
+.desc{font-size:11px;color:var(--text2);line-height:1.7;max-width:560px;text-align:center}
+.box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px;width:100%;max-width:560px}
+.label{font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.code{background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:14px;color:var(--green);font-size:11px;word-break:break-all;line-height:1.5;cursor:pointer;transition:border-color .15s}
+.code:hover{border-color:#333}
+.copy-btn{width:100%;margin-top:12px;padding:11px;background:linear-gradient(135deg,var(--green),var(--green2));color:#000;border:none;border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px}
+.copy-btn:hover{opacity:.85}
+.copy-btn.copied{background:var(--border);color:var(--green)}
+.hint{font-size:10px;color:var(--text3);text-align:center}
+.drag-link{display:block;padding:14px 24px;background:linear-gradient(135deg,var(--green),var(--green2));color:#000;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;text-align:center;cursor:grab;user-select:none;border:2px dashed transparent}
+.drag-link:hover{border-color:#000a;opacity:.9}
+.or{color:var(--text3);font-size:11px;text-align:center}
+textarea.bm-text{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:6px;color:#888;font-family:inherit;font-size:10px;padding:10px;resize:none;outline:none;height:60px}
+</style>
+</head>
+<body>
+<h1>⬡ URL PICKER</h1>
+<p class="desc">ページ上の全リンクをタイトル付きで一覧表示し、選択したURLだけをコピーするブックマークレット。</p>
+
+<div class="box">
+  <div class="label">① ブックマークバーにドラッグ（推奨）</div>
+  <a id="bmLink" href="#" class="drag-link">⬡ URL Picker — ここをブックマークバーへドラッグ</a>
+</div>
+
+<p class="or">― または ―</p>
+
+<div class="box">
+  <div class="label">② 手動コピー → ブックマークのURL欄に貼り付け</div>
+  <textarea class="bm-text" id="bmCode" readonly onclick="this.select()">読込中...</textarea>
+  <button class="copy-btn" id="copyBtn" onclick="copyBm()">COPY</button>
+</div>
+
+<p class="hint">任意のページでブックマークをクリックすると起動</p>
+
+<script>
+var BM = "javascript:void((function(){'use strict';" +
+  "if(document.getElementById('_urlpicker'))return document.getElementById('_urlpicker').remove();" +
+  "var links=Array.from(document.querySelectorAll('a[href]')).reduce(function(acc,a){" +
+    "var href=a.href;if(!href||href.startsWith('javascript')||href.startsWith('mailto')||href.startsWith('tel'))return acc;" +
+    "try{var u=new URL(href);if(u.hash&&!u.pathname.replace('/',''))return acc;}catch(e){return acc;}" +
+    "var text=(a.textContent||'').trim().replace(/\\s+/g,' ').substring(0,80)||a.title||href;" +
+    "if(!acc.find(function(x){return x.url===href;}))acc.push({text:text,url:href});" +
+    "return acc;" +
+  "},[]);" +
+  "var overlay=document.createElement('div');overlay.id='_urlpicker';" +
+  "overlay.style.cssText='position:fixed;inset:0;background:#000a;z-index:2147483647;display:flex;align-items:center;justify-content:center;font-family:monospace';" +
+  "var panel=document.createElement('div');" +
+  "panel.style.cssText='background:#0d0e14;border:1px solid #252836;border-radius:10px;width:min(700px,92vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden';" +
+  "var head=document.createElement('div');" +
+  "head.style.cssText='padding:14px 18px;border-bottom:1px solid #1a1d28;display:flex;align-items:center;justify-content:space-between;flex-shrink:0';" +
+  "head.innerHTML='<span style=\"font-size:13px;font-weight:700;color:#e1e4ea\">URL PICKER &nbsp;<span style=\"color:#888;font-size:11px\">'+links.length+' links</span></span>" +
+    "<div style=\"display:flex;gap:8px\">" +
+    "<button id=\"_up_all\" style=\"background:#1a1d28;border:1px solid #252836;border-radius:4px;color:#c8ccd4;font-family:monospace;font-size:10px;padding:4px 10px;cursor:pointer\">全選択</button>" +
+    "<button id=\"_up_none\" style=\"background:#1a1d28;border:1px solid #252836;border-radius:4px;color:#c8ccd4;font-family:monospace;font-size:10px;padding:4px 10px;cursor:pointer\">全解除</button>" +
+    "<button id=\"_up_close\" style=\"background:none;border:none;color:#555;font-size:18px;cursor:pointer;line-height:1\">×</button>" +
+    "</div>';" +
+  "var list=document.createElement('div');list.style.cssText='flex:1;overflow-y:auto;padding:8px';" +
+  "var checks=[];"+
+  "links.forEach(function(link,i){" +
+    "var row=document.createElement('label');" +
+    "row.style.cssText='display:flex;align-items:flex-start;gap:10px;padding:7px 10px;border-radius:6px;cursor:pointer;border:1px solid transparent';" +
+    "row.onmouseover=function(){this.style.background='#12131c';};" +
+    "row.onmouseout=function(){if(!this.querySelector('input').checked)this.style.background='';};"+
+    "var cb=document.createElement('input');cb.type='checkbox';cb.style.cssText='accent-color:#00ff88;margin-top:2px;flex-shrink:0';cb.dataset.url=link.url;" +
+    "cb.addEventListener('change',function(){row.style.background=this.checked?'#00ff881a':'';row.style.borderColor=this.checked?'#00ff882a':'transparent';updateCount();});" +
+    "var txt=document.createElement('div');" +
+    "txt.innerHTML='<div style=\"font-size:11px;color:#c8ccd4;line-height:1.4\">'+link.text.replace(/</g,'&lt;')+'</div><div style=\"font-size:10px;color:#555;margin-top:2px\">'+link.url+'</div>';" +
+    "row.appendChild(cb);row.appendChild(txt);list.appendChild(row);checks.push(cb);" +
+  "});" +
+  "var foot=document.createElement('div');" +
+  "foot.style.cssText='padding:12px 18px;border-top:1px solid #1a1d28;display:flex;align-items:center;gap:10px;flex-shrink:0';" +
+  "var cnt=document.createElement('span');cnt.id='_up_cnt';cnt.style.cssText='font-size:11px;color:#888;flex:1';" +
+  "cnt.textContent='0件選択';" +
+  "var cpBtn=document.createElement('button');" +
+  "cpBtn.textContent='COPY URLs';cpBtn.style.cssText='background:linear-gradient(135deg,#00ff88,#00cc66);color:#000;border:none;border-radius:6px;font-family:monospace;font-size:12px;font-weight:700;padding:9px 22px;cursor:pointer';" +
+  "cpBtn.onclick=function(){" +
+    "var urls=checks.filter(function(c){return c.checked;}).map(function(c){return c.dataset.url;}).join('\\n');" +
+    "if(!urls){cpBtn.textContent='選択なし';setTimeout(function(){cpBtn.textContent='COPY URLs';},1500);return;}" +
+    "navigator.clipboard.writeText(urls).then(function(){cpBtn.textContent='✓ COPIED';setTimeout(function(){cpBtn.textContent='COPY URLs';},2000);}).catch(function(){var ta=document.createElement('textarea');ta.value=urls;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);cpBtn.textContent='✓ COPIED';setTimeout(function(){cpBtn.textContent='COPY URLs';},2000);});" +
+  "};" +
+  "foot.appendChild(cnt);foot.appendChild(cpBtn);" +
+  "panel.appendChild(head);panel.appendChild(list);panel.appendChild(foot);" +
+  "overlay.appendChild(panel);" +
+  "overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});" +
+  "document.getElementById('_up_close').onclick=function(){overlay.remove();};" +
+  "document.getElementById('_up_all').onclick=function(){checks.forEach(function(c){c.checked=true;c.closest('label').style.background='#00ff881a';c.closest('label').style.borderColor='#00ff882a';});updateCount();};" +
+  "document.getElementById('_up_none').onclick=function(){checks.forEach(function(c){c.checked=false;c.closest('label').style.background='';c.closest('label').style.borderColor='transparent';});updateCount();};" +
+  "function updateCount(){var n=checks.filter(function(c){return c.checked;}).length;document.getElementById('_up_cnt').textContent=n+'件選択';}" +
+  "document.body.appendChild(overlay);" +
+"})())";
+
+document.getElementById('bmCode').value = BM;
+document.getElementById('bmLink').href = BM;
+document.getElementById('bmLink').setAttribute('draggable', 'true');
+
+function copyBm() {
+  var ta = document.getElementById('bmCode');
+  ta.select();
+  document.execCommand('copy');
+  var btn = document.getElementById('copyBtn');
+  btn.textContent = '✓ COPIED'; btn.className = 'copy-btn copied';
+  setTimeout(function() { btn.textContent = 'COPY'; btn.className = 'copy-btn'; }, 2000);
+}
+</script>
+</body>
+</html>

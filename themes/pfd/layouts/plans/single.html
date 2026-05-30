@@ -1,6 +1,6 @@
 {{ define "main" }}
 {{ $firmSlug := .Params.firm | default "" }}
-{{ $planSlug := .File.BaseFileName }}
+{{ $planSlug := .Params.slug | default .File.Dir | path.Base }}
 
 {{/* プランデータ取得: ネスト構造 → フラット構造 の順で試行 */}}
 {{ $plan := dict }}

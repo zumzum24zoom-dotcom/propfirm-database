@@ -1,0 +1,285 @@
+{
+  "main": {
+    "id": "8497d0facd173268",
+    "type": "split",
+    "children": [
+      {
+        "id": "cb58170fcb2abb4e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d69299d7244ad399",
+            "type": "leaf",
+            "state": {
+              "type": "bases",
+              "state": {
+                "file": "無題のファイル.base",
+                "viewName": "表"
+              },
+              "icon": "lucide-table",
+              "title": "無題のファイル"
+            }
+          },
+          {
+            "id": "bcc494ea211fc3d5",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "file:///D:/vs%20code/propfirm-database/01_tools/page-maker-v11.html",
+                "title": "Page Maker v0.9",
+                "mode": "webview"
+              },
+              "pinned": true,
+              "icon": "globe-2",
+              "title": "Page Maker v0.9"
+            }
+          },
+          {
+            "id": "5a68edde342eb590",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://notebooklm.google.com/notebook/79cbc8b0-0bf1-4801-bc0a-8c4e88875f3f",
+                "title": "Top One Trader - NotebookLM",
+                "mode": "webview"
+              },
+              "pinned": true,
+              "icon": "globe-2",
+              "title": "Top One Trader - NotebookLM"
+            }
+          },
+          {
+            "id": "e73419bf852c2b30",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://notebooklm.google.com/notebook/9afa6de7-f881-42a7-a007-7a4b27f701af?authuser=1",
+                "title": "FundedNext - NotebookLM",
+                "mode": "webview"
+              },
+              "pinned": true,
+              "icon": "globe-2",
+              "title": "FundedNext - NotebookLM"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "e0ff06da65865f14",
+    "type": "split",
+    "children": [
+      {
+        "id": "8e2a35f09db86a1c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "364f7b5c46a7845b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "ファイルエクスプローラ"
+            }
+          },
+          {
+            "id": "0c80d4a124886181",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "検索"
+            }
+          },
+          {
+            "id": "51a265ef6f8e8e12",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "ブックマーク"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "533185f226360e64",
+    "type": "split",
+    "children": [
+      {
+        "id": "a5fa75e7afc9fafd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "abf4d21067633ae6",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "無題のファイル.base",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "無題のファイルへのバックリンク"
+            }
+          },
+          {
+            "id": "262d18d16ce19f55",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "無題のファイル.base",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "無題のファイルからのアウトゴーイングリンク"
+            }
+          },
+          {
+            "id": "ba06898c21079af8",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "タグ"
+            }
+          },
+          {
+            "id": "9e6b27599d509009",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "すべてのプロパティ"
+            }
+          },
+          {
+            "id": "4df41878df0a28a9",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "無題のファイル.base",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "無題のファイルのアウトライン"
+            }
+          },
+          {
+            "id": "0b29796d278a27d9",
+            "type": "leaf",
+            "state": {
+              "type": "claudian-view",
+              "state": {},
+              "icon": "bot",
+              "title": "Claudian"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 394.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:クイックスイッチャーを開く": false,
+      "graph:グラフビューを開く": false,
+      "canvas:新規キャンバスを作成": false,
+      "daily-notes:今日のデイリーノートを開く": false,
+      "templates:テンプレートを挿入": false,
+      "command-palette:コマンドパレットを開く": false,
+      "bases:新規ベースを作成": false,
+      "realclaudian:Open Claudian": false
+    }
+  },
+  "active": "5a68edde342eb590",
+  "lastOpenFiles": [
+    "無題のファイル.base",
+    "01_tools/url-picker.html.tmp.35020.2a3de621fdf9",
+    "01_tools/url-picker.html.tmp.35020.fee26fd4bbd0",
+    "01_tools/url-picker.html.tmp.35020.965b42c5528b",
+    "public/tools/url-picker.html",
+    "static/tools/url-picker.html",
+    "public/tools",
+    "static/tools",
+    "01_tools/url-picker.html",
+    "01_tools/url-picker.html.tmp.35020.4a6be99c2e12",
+    "01_tools/BLT/section-extractor-builder.html",
+    "Untitled 1.md",
+    "Untitled.md",
+    "content/firms/fundedelite/plans/fundedelite-2/index.md",
+    "content/firms/fundedelite/plans/fundedelite-2-lite-1/index.md",
+    "content/firms/fundingpips/plans/2-step-pro/index.md",
+    "content/firms/fundingpips/plans/2-step-standard/index.md",
+    "content/firms/fundingpips/plans/1-step/index.md",
+    "content/firms/fundingpips/plans/fundingpips-zero/index.md",
+    "content/firms/the5ers/plans/pro-growth/index.md",
+    "content/firms/the5ers/plans/bootcamp/index.md",
+    "content/firms/the5ers/plans/high-stakes/index.md",
+    "content/firms/the5ers/plans/hyper-growth/index.md",
+    "content/firms/hantec-trader/index.md",
+    "content/firms/hola-prime/index.md",
+    "content/firms/ment-funding/index.md",
+    "content/firms/the-trading-pit/index.md",
+    "content/firms/brightfunded/index.md",
+    "content/firms/bem-funding/index.md",
+    "content/firms/maven/index.md",
+    "content/firms/e8-markets/index.md",
+    "content/firms/alpha-capital/index.md",
+    "content/firms/fundednext/index.md",
+    "content/firms/fundingpips/index.md",
+    "content/firms/the5ers/index.md",
+    "CLAUDE.md"
+  ]
+}
