@@ -1,12 +1,14 @@
 {
-  "_note": "ブックマークレットで初回スキャン後にセレクターを登録。以降はGitHub Actionsが自動巡回。",
+  "_note": "スキーマ: {firmSlug: {coupon: {...}, rules: {...}}}。typeキーを追加するだけで拡張可能。",
   "fundednext": {
-    "url": "https://fundednext.com/ja",
-    "selector": "div.fixed.top-0.left-0[role='region']",
-    "pattern": "CODE\\s*[:\\s]+([A-Z0-9_-]{3,16})",
-    "notes": "トップ固定バナー（紫グラデーション）",
-    "verified": "2026-05-29",
-    "lastCode": "FLEX",
-    "lastScanned": "2026-05-29"
+    "coupon": {
+      "url": "https://fundednext.com/ja",
+      "selector": "div.fixed.top-0.left-0[role='region']",
+      "pattern": "CODE\\s*[:\\s]+([A-Z0-9_-]{3,16})",
+      "notes": "トップ固定バナー（紫グラデーション）",
+      "verified": "2026-05-29",
+      "lastCode": "FLEX",
+      "lastScanned": "2026-05-29"
+    }
   }
 }
