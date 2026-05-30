@@ -1,5 +1,12 @@
 [
   {
+    "key": "P20",
+    "term": "Steps",
+    "type": "label",
+    "category": "Plan項目",
+    "definition": "チャレンジのステップ数。Instant=0 / 1-Step=1 / 2-Step=2 等。"
+  },
+  {
     "key": "F01",
     "term": "ファーム名",
     "type": "label",
@@ -123,7 +130,7 @@
     "term": "出金ポリシー",
     "type": "label",
     "category": "Firm項目",
-    "definition": "出金頻度・最低出金額・申請方法・処理期間を定めた規定。※着金目安(処理期間)のデータはここしかないため優先"
+    "definition": "出金頻度・最低出金額・申請方法・処理期間を定めた規定。"
   },
   {
     "key": "F19",
@@ -137,7 +144,7 @@
     "term": "※Profit Split",
     "type": "label",
     "category": "Firm項目",
-    "definition": "利益分配率の変動条件やランクアップやランクダウン等ペナルティの比率を補足する注記。"
+    "definition": "利益分配率の変動条件やスケールアップ後の比率を補足する注記。"
   },
   {
     "key": "P01",

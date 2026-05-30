@@ -887,15 +887,17 @@ function ResizeHandle({dir,onMouseDown}) {
 // ═══════════════════════════════════════════════════
 // 縦タブ（Firm→Plan階層）
 // ═══════════════════════════════════════════════════
-function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRename,width,onBulkImport,onReorder,tabDataMap,glossaryTerms,onMergeFirm,onDeleteMany,onTogglePin}) {
+function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRename,width,onBulkImport,onReorder,tabDataMap,glossaryTerms,onMergeFirm,onDeleteMany,onTogglePin,onScannerPasted}) {
   const [editId,setEditId]=useState(null);
   const [editName,setEditName]=useState("");
   const [collapsed,setCollapsed]=useState({});
   const [showImport,setShowImport]=useState(false);
+  useEffect(()=>{const h=()=>setShowImport(true);document.addEventListener("pfd-csv-open",h);return()=>document.removeEventListener("pfd-csv-open",h)},[]);
   const [csvText,setCsvText]=useState("");
   const [dragId,setDragId]=useState(null);
   const [checked,setChecked]=useState({}); // {firmId:true}
   const [copied,setCopied]=useState(false);
+  const [showPromptMenu,setShowPromptMenu]=useState(false);
 
   const checkedCount=Object.values(checked).filter(Boolean).length;
   const allChecked=firms.length>0&&firms.every(f=>checked[f.id]&&(f.plans||[]).every(p=>checked[p.id]));
@@ -909,26 +911,16 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   const orderedFirms=[...firms.filter(f=>f.pinned),...firms.filter(f=>!f.pinned)];
   const lastPinnedId=(()=>{const ps=firms.filter(f=>f.pinned);return ps.length?ps[ps.length-1].id:null;})();
 
-  // 選択Firm/Planを階層テキストでコピー
+  // 選択アイテム名を単純リストでコピー（種別問わず）
   const copyChecked=()=>{
     const lines=[];
     firms.forEach(f=>{
-      if(checked[f.id]){
-        const head=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
-        const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
-        const plans=(planNames||[]).filter(Boolean).map(n=>`  - ${n}`);
-        lines.push(plans.length?`${head}\n${plans.join("\n")}`:head);
-      }else{
-        const cp=(f.plans||[]).filter(p=>checked[p.id]);
-        if(cp.length){
-          const head=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
-          lines.push(`${head}\n${cp.map(p=>`  - ${p.name}`).join("\n")}`);
-        }
-      }
+      if(checked[f.id])lines.push(getFirmName(f.id,tabDataMap)||f.name||"（未命名）");
+      (f.plans||[]).forEach(p=>{if(checked[p.id])lines.push(p.name)});
     });
     if(!lines.length)return;
-    const text=lines.join("\n\n");
-    const done=()=>{setCopied(true);setTimeout(()=>setCopied(false),1500)};
+    const text=lines.join("\n");
+    const done=()=>{setCopied(true);setTimeout(()=>{setCopied(false);setChecked({})},1500)};
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>{
         const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);done();
@@ -1004,10 +996,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
     <div style={{width,flexShrink:0,background:C.surface,overflow:"auto",display:"flex",flexDirection:"column"}}>
       <div style={{padding:"8px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",gap:3}}>
         <span style={{fontSize:"0.72rem",fontWeight:700,color:C.accent}}>Firms</span>
-        <div style={{display:"flex",gap:2}}>
-          <Btn color={C.blue} onClick={()=>setShowImport(!showImport)} style={{padding:"1px 5px",fontSize:"0.6rem"}}>CSV</Btn>
-          <Btn color={C.accent} onClick={onAddFirm} style={{padding:"1px 6px",fontSize:"0.75rem"}}>＋</Btn>
-        </div>
+        <Btn color={C.accent} onClick={onAddFirm} style={{padding:"1px 6px",fontSize:"0.75rem"}}>＋</Btn>
       </div>
       {/* 統合アクションバー: 選択時→操作 / 未選択+Firm選択中→プロンプト */}
       {firms.length>0&&(
@@ -1018,35 +1007,58 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
           <div style={{flex:1}}/>
           {checkedCount>0?(
             <React.Fragment>
+              <span style={{fontSize:"0.6rem",color:C.textDim,cursor:"pointer"}} onClick={clearChecks} title="選択解除">×</span>
               <span style={{fontSize:"0.6rem",color:C.textDim}}>{checkedCount}件</span>
               <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
-              <Btn color={C.blue} onClick={copyPlanOutput} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{planCopied?"✓":"📄"}</Btn>
               <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>削除</Btn>
             </React.Fragment>
-          ):activeId&&firms.some(f=>f.id===activeId)?(
-            <React.Fragment>
-              <CopyBtn
-                getText={()=>generateResearchPrompt(activeId,firms,tabDataMap,glossaryTerms)}
-                label="📋" color={C.purple} style={{padding:"2px 5px",fontSize:"0.6rem"}}
-              />
-              <CopyBtn
-                getText={()=>{
-                  if(!firms||firms.length===0)return"";
-                  const firm=firms.find(f=>f.id===activeId);
-                  if(!firm)return"";
-                  const firmName=getFirmName(activeId,tabDataMap)||firm.name||"[ファーム名]";
-                  const planNames=getPlanNames(activeId,firms,tabDataMap)||[];
-                  const planBlock=planNames.length>0?`【対象プラン一覧】\n${planNames.map(p=>`- ${p}`).join("\n")}`:`【対象プラン一覧】\n（プラン未登録 — 公式サイトから全プランを収集すること）`;
-                  const firmItems=glossaryItemLines(glossaryTerms,"Firm項目");
-                  return`【対象ファーム】${firmName}\n\n${planBlock}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_01セクションに従い、以下を出力してください:\n\n--- Firm情報 ---\n${firmItems}\n\n- テーブル1: 価格テーブル（各プランの口座サイズ別価格）\n- テーブル2: Firm基本情報\n- テーブル3: レバレッジ\n- テーブル4: 手数料\n- テーブル5: プラン比較テーブル\n\n各項目・各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。価格テーブルの実体はFirm単位で保持し、各プラン記事はこれを参照する。`;
-                }}
-                label="📤" color={C.blue} style={{padding:"2px 5px",fontSize:"0.6rem"}}
-              />
-              <CopyBtn
-                getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
-                label="📝" color={C.green} style={{padding:"2px 5px",fontSize:"0.6rem"}}
-              />
-            </React.Fragment>
+          ):activeId&&firms.some(f=>f.id===activeId||(f.plans||[]).some(p=>p.id===activeId))?(
+            <div style={{position:"relative"}}>
+              {showPromptMenu&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowPromptMenu(false)}/>}
+              <Btn color={C.purple} onClick={()=>setShowPromptMenu(v=>!v)}
+                style={{padding:"1px 7px",fontSize:"0.6rem"}}>プロンプト▾</Btn>
+              {showPromptMenu&&(
+                <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,
+                  background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,
+                  padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:110,
+                  boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+                  <div onClick={()=>setShowPromptMenu(false)}>
+                    <CopyBtn getText={()=>generateResearchPrompt(activeId,firms,tabDataMap,glossaryTerms)}
+                      label="リサーチ" color={C.purple} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
+                  </div>
+                  <div onClick={()=>setShowPromptMenu(false)}><CopyBtn getText={()=>{
+                    const firm=firms.find(f=>f.id===activeId);if(!firm)return"";
+                    const firmName=getFirmName(activeId,tabDataMap)||firm.name||"[ファーム名]";
+                    const planNames=getPlanNames(activeId,firms,tabDataMap)||[];
+                    const planBlock=planNames.length>0?`【対象プラン一覧】\n${planNames.map(p=>`- ${p}`).join("\n")}`:`【対象プラン一覧】\n（プラン未登録）`;
+                    const firmItems=glossaryItemLines(glossaryTerms,"Firm項目");
+                    return`【対象ファーム】${firmName}\n\n${planBlock}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_01セクションに従い、以下を出力してください:\n\n--- Firm情報 ---\n${firmItems}\n\n- テーブル1: 価格テーブル（各プランの口座サイズ別価格）\n- テーブル2: Firm基本情報\n- テーブル3: レバレッジ\n- テーブル4: 手数料\n- テーブル5: プラン比較テーブル\n\n各項目・各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。価格テーブルの実体はFirm単位で保持し、各プラン記事はこれを参照する。`;
+                  }} label="ファーム" color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
+                  <div onClick={()=>setShowPromptMenu(false)}><CopyBtn getText={()=>{
+                    const targetIds=new Set();
+                    firms.forEach(f=>{if(checked[f.id])targetIds.add(f.id);else if((f.plans||[]).some(p=>checked[p.id]))targetIds.add(f.id);});
+                    if(!targetIds.size){const af=firms.find(f=>f.id===activeId||(f.plans||[]).some(p=>p.id===activeId));if(af)targetIds.add(af.id);}
+                    const targets=firms.filter(f=>targetIds.has(f.id));
+                    if(!targets.length)return"（Firmを選択してください）";
+                    const planItems=glossaryItemLines(glossaryTerms,"Plan項目");
+                    const blocks=targets.map(f=>{
+                      const firmName=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
+                      const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
+                      const planLine=(planNames||[]).filter(Boolean).length?(planNames||[]).filter(Boolean).map(n=>`- ${n}`).join("\n"):"（プラン未登録）";
+                      return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
+                    }).join("\n\n");
+                    return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\n- テーブル1: ルール早見表（Challenge / Funded / 差分の3列。差分はEASE/TRAP/ー）\n- テーブル2: ルール詳細リスト（P01〜P18は各200字以内の補足、P19=禁止行為は2列テーブル）`;
+                  }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
+                  <div onClick={()=>setShowPromptMenu(false)}>
+                    <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
+                      label="攻略" color={C.green} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
+                  </div>
+                  <div onClick={()=>{setShowPromptMenu(false);document.dispatchEvent(new CustomEvent("pfd-reinvestigate"))}}>
+                    <Btn color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>再調査</Btn>
+                  </div>
+                </div>
+              )}
+            </div>
           ):null}
         </div>
       )}
@@ -1075,7 +1087,17 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
           }}>
             {editId===firm.id?renderEdit(firm.id):(
               <div style={{display:"flex",alignItems:"center",gap:7}}>
-                <input type="checkbox" checked={!!checked[firm.id]} onClick={e=>e.stopPropagation()}
+                <span onClick={e=>{e.stopPropagation();
+                  const plans=firm.plans||[];
+                  const allSel=checked[firm.id]&&plans.every(p=>checked[p.id]);
+                  setChecked(p=>({...p,[firm.id]:!allSel,...Object.fromEntries(plans.map(pl=>[pl.id,!allSel]))}));
+                }} title="Firm＋全プランを選択"
+                  style={{fontSize:"0.55rem",color:C.textDim,cursor:"pointer",flexShrink:0,
+                    border:`1px solid ${C.textDim}`,borderRadius:2,padding:"0 2px",lineHeight:"1.4",userSelect:"none"}}>グ</span>
+                <input type="checkbox"
+                  ref={el=>{if(el){const plans=firm.plans||[];el.indeterminate=!checked[firm.id]&&plans.some(p=>checked[p.id]);}}}
+                  checked={!!checked[firm.id]}
+                  onClick={e=>e.stopPropagation()}
                   onChange={e=>{e.stopPropagation();setChecked(p=>({...p,[firm.id]:e.target.checked}))}}
                   style={{cursor:"pointer",flexShrink:0,accentColor:C.accent}} />
                 <span draggable onDragStart={e=>{e.stopPropagation();setDragId(firm.id)}} onClick={e=>e.stopPropagation()}
@@ -1147,30 +1169,66 @@ function extractCouponConfig(scanData) {
 }
 // ─── クーポン設定モーダル ──────────────────────────────────────────────────
 function CouponConfigModal({show,config,slug,onClose,onSaveToDir,hugoDir}) {
+  const [editSlug,setEditSlug]=useState(slug||"");
+  const [editSelector,setEditSelector]=useState(config?.selector||"");
+  const [codeCopied,setCodeCopied]=useState(false);
+  useEffect(()=>{if(show){setEditSlug(slug||"");setEditSelector(config?.selector||"")}},[show,slug,config]);
   if(!show)return null;
-  const entry = config ? {[slug||"firm-slug"]:config} : null;
-  const json = entry ? JSON.stringify(entry, null, 2) : "クーポンコードが見つかりませんでした";
-  const [copied,setCopied]=useState(false);
-  const copy=()=>{navigator.clipboard.writeText(json).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1500)})};
+
+  const code=config?.lastCode||"";
+  const copyCode=()=>{navigator.clipboard.writeText(code).then(()=>{setCodeCopied(true);setTimeout(()=>setCodeCopied(false),1500)})};
+  const save=()=>{
+    if(!editSlug.trim()){alert("Firm slug を入力してください");return;}
+    const entry={...config,selector:editSelector};
+    onSaveToDir(editSlug.trim(),entry);
+  };
+
   return (
-    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
-      <div onClick={e=>e.stopPropagation()} style={{width:"min(90vw,560px)",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:16,display:"flex",flexDirection:"column",gap:10}}>
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.65)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"min(90vw,440px)",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:10,padding:20,display:"flex",flexDirection:"column",gap:14}}>
+
+        {/* ヘッダー */}
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span style={{fontSize:"0.82rem",fontWeight:700,color:C.accent}}>🔍 クーポン設定 — coupon-config.json エントリ</span>
-          <span onClick={onClose} style={{cursor:"pointer",color:C.textDim}}>✕</span>
+          <span style={{fontSize:"0.85rem",fontWeight:700,color:C.accent}}>🔍 クーポン検出</span>
+          <span onClick={onClose} style={{cursor:"pointer",color:C.textDim,fontSize:"1.1rem"}}>✕</span>
         </div>
-        {config?(
+
+        {code?(
           <>
-            <div style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:10,fontSize:"0.72rem",fontFamily:font,color:C.textBright,whiteSpace:"pre-wrap"}}>{json}</div>
-            <div style={{fontSize:"0.65rem",color:C.textDim}}>slug（左列のキー）を正しいFirm名に変更してから coupon-config.json に追記してください。</div>
-            <div style={{display:"flex",gap:6,justifyContent:"flex-end"}}>
-              <Btn color={C.accent} onClick={copy}>{copied?"✓":"📋 コピー"}</Btn>
-              {hugoDir&&<Btn color={C.green} onClick={()=>onSaveToDir(slug||"firm-slug",config)}>💾 ファイルに追記</Btn>}
-              <Btn color={C.textDim} onClick={onClose}>閉じる</Btn>
+            {/* 検出コード */}
+            <div style={{textAlign:"center"}}>
+              <div style={{fontSize:"0.65rem",color:C.textDim,marginBottom:6}}>検出されたコード</div>
+              <div style={{display:"inline-flex",alignItems:"center",gap:8,background:C.bg,border:`1px dashed ${C.blue}`,borderRadius:6,padding:"10px 16px"}}>
+                <span style={{fontSize:"1.4rem",fontWeight:900,color:C.textBright,fontFamily:font,letterSpacing:"0.1em"}}>{code}</span>
+                <Btn color={C.blue} onClick={copyCode} style={{padding:"2px 8px",fontSize:"0.65rem"}}>{codeCopied?"コピー完了":"コードをコピー"}</Btn>
+              </div>
+            </div>
+
+            {/* Firm slug */}
+            <div style={{display:"flex",flexDirection:"column",gap:4}}>
+              <label style={{fontSize:"0.65rem",color:C.textDim}}>Firm slug（coupon-config.json のキー）</label>
+              <input value={editSlug} onChange={e=>setEditSlug(e.target.value)}
+                placeholder="例: fundednext"
+                style={{background:C.bg,color:C.textBright,border:`1px solid ${editSlug?C.accent:C.red}`,borderRadius:4,padding:"6px 8px",fontSize:"0.8rem",fontFamily:font,outline:"none"}} />
+            </div>
+
+            {/* セレクター（折りたたみ） */}
+            <details style={{fontSize:"0.65rem",color:C.textDim}}>
+              <summary style={{cursor:"pointer",userSelect:"none"}}>セレクター（高度な設定）</summary>
+              <input value={editSelector} onChange={e=>setEditSelector(e.target.value)}
+                style={{marginTop:4,width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:4,padding:"4px 6px",fontSize:"0.65rem",fontFamily:font,outline:"none",boxSizing:"border-box"}} />
+            </details>
+
+            {/* ボタン */}
+            <div style={{display:"flex",gap:6}}>
+              <Btn color={C.green} onClick={save} style={{flex:1,padding:"6px",fontSize:"0.75rem",fontWeight:700}}>coupon-config.json に保存</Btn>
+              <Btn color={C.textDim} onClick={onClose} style={{padding:"6px 12px",fontSize:"0.72rem"}}>キャンセル</Btn>
             </div>
           </>
         ):(
-          <div style={{fontSize:"0.72rem",color:C.yellow}}>interactive 要素からクーポンコードが検出できませんでした。</div>
+          <div style={{textAlign:"center",padding:"1rem",color:C.yellow,fontSize:"0.8rem"}}>
+            このページにクーポンコードが見つかりませんでした
+          </div>
         )}
       </div>
     </div>
@@ -1180,7 +1238,7 @@ function CouponConfigModal({show,config,slug,onClose,onSaveToDir,hugoDir}) {
 // ═══════════════════════════════════════════════════
 // 貼り付けエリア（入力＋保管）
 // ═══════════════════════════════════════════════════
-function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,archives,onDeleteArchive,height,onOpenChild,onOpenQuickRef,onScannerPasted,onTextPasted}) {
+function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,archives,onDeleteArchive,height,onOpenChild,onScannerPasted,onTextPasted}) {
   const taRef=useRef(null);
   const setRefs=useCallback(el=>{taRef.current=el;if(externalRef)externalRef.current=el},[externalRef]);
   const [dragOver,setDragOver]=useState(false);
@@ -1205,9 +1263,8 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
     <div style={{display:"flex",flexDirection:"column",gap:4,height,flexShrink:0,borderBottom:`1px solid ${C.border}`,padding:"8px 10px",overflow:"hidden"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
-          <span onClick={onOpenChild} style={{cursor:"pointer",fontSize:"0.82rem",color:C.accent}} title="小窓">❏</span>
           <span style={{fontSize:"0.78rem",fontWeight:700,color:C.accent}}>貼付エリア</span>
-          <span onClick={onOpenQuickRef} style={{cursor:"pointer",fontSize:"0.82rem",color:C.blue}} title="早見表">▦</span>
+          <span onClick={onOpenChild} style={{cursor:"pointer",fontSize:"0.82rem",color:C.accent}} title="小窓">❏</span>
           {ocrStatus&&<span style={{fontSize:"0.65rem",color:C.yellow}}>{ocrStatus}</span>}
           {scannerDetected&&<span style={{fontSize:"0.62rem",color:C.accent,cursor:"pointer",border:`1px solid ${C.accent}`,borderRadius:3,padding:"1px 5px"}} onClick={()=>onScannerPasted&&onScannerPasted("show")}>🔍 クーポン設定</span>}
         </div>
@@ -1260,7 +1317,9 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
 // ═══════════════════════════════════════════════════
 // 取り込み対象エリア
 // ═══════════════════════════════════════════════════
-function TargetPanel({text,onAutoAssign,autoAssigning,translating,onClear,onAdd,activeSlot}) {
+function TargetPanel({text,onAutoAssign,autoAssigning,translating,onClear,onAdd,activeSlot,onScannerPasted}) {
+  const [showDom,setShowDom]=useState(false);
+  const domTaRef=useRef(null);
   return (
     <div style={{display:"flex",flexDirection:"column",gap:4,flex:1,padding:"8px 10px",overflow:"hidden"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
@@ -1269,16 +1328,30 @@ function TargetPanel({text,onAutoAssign,autoAssigning,translating,onClear,onAdd,
           {translating&&<span style={{fontSize:"0.65rem",color:C.blue}}>翻訳中...</span>}
         </div>
         <div style={{display:"flex",gap:3}}>
+          <Btn color={C.blue} onClick={()=>{setShowDom(v=>!v);setTimeout(()=>domTaRef.current?.focus(),50)}}
+            style={{padding:"1px 8px",fontSize:"0.68rem"}}>Dom</Btn>
           <Btn color={C.yellow} bg={autoAssigning?C.surface:C.yellow} style={{color:autoAssigning?C.textDim:C.bg}}
             disabled={autoAssigning||!text} onClick={()=>onAutoAssign(text)}>
             {autoAssigning?"振り分け中...":"自動"}
           </Btn>
           <Btn color={C.accent} disabled={!activeSlot} onClick={onAdd} title={activeSlot?`${activeSlot}に取り込み`:"スロットを選択してください"}>
-            ＋
+            ⇨
           </Btn>
           <Btn color={C.red} onClick={onClear} style={{padding:"1px 5px"}}>×</Btn>
         </div>
       </div>
+      {showDom&&(
+        <textarea ref={domTaRef}
+          placeholder='DOM scanner JSON をここに貼る（自動でクーポン抽出）'
+          onPaste={e=>{
+            const t=e.clipboardData?.getData("text/plain")||"";
+            if(t.includes('"_tool":"site-scanner"')){
+              try{onScannerPasted&&onScannerPasted(JSON.parse(t));setShowDom(false);}catch(err){}
+            }
+          }}
+          style={{height:44,resize:"none",background:C.bg,color:C.text,border:`1px solid ${C.blue}`,borderRadius:4,
+            padding:"4px 6px",fontSize:"0.65rem",fontFamily:font,outline:"none",flexShrink:0}} />
+      )}
       <div style={{flex:1,overflow:"auto",background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:8,
         fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,color:C.textBright,whiteSpace:"pre-wrap",userSelect:"text"}}>
         {text||<span style={{color:C.textDim}}>貼り付けエリアから「翻訳→対象」または「→対象」で送る</span>}
@@ -1744,7 +1817,7 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
     return L.join("\n");
   },[templateMode,slotData]);
 
-  // Notion出力用：構造化本文生成（選択項目対応）
+  // (削除: Notion出力) generateNotionBody は不要
   const generateNotionBody=useCallback((selectedIds=[])=>{
     const g=id=>{const fr=slotData[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
     const isSelected=id=>selectedIds.length===0||selectedIds.includes(id); // 空配列なら全出力
@@ -1824,10 +1897,9 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
     return L.filter(l=>l!==undefined).join("\n");
   },[templateMode,slotData]);
 
-  const [showNotionPreview,setShowNotionPreview]=useState(false);
-  const [notionBodyText,setNotionBodyText]=useState("");
-  const [showNotionItemSelect,setShowNotionItemSelect]=useState(false);
+  const [showMdPreview,setShowMdPreview]=useState(false);
   const [showReinvestigateModal,setShowReinvestigateModal]=useState(false);
+  useEffect(()=>{const h=()=>setShowReinvestigateModal(true);document.addEventListener("pfd-reinvestigate",h);return()=>document.removeEventListener("pfd-reinvestigate",h)},[]);
   const [selectedSlotsForReinvestigate,setSelectedSlotsForReinvestigate]=useState([]);
 
   const filled=currentSlots.filter(s=>slotData[s.id]?.length>0).length;
@@ -1880,20 +1952,10 @@ ${slotList}
     <div style={{flex:1,overflow:"auto",padding:10,display:"flex",flexDirection:"column"}}>
       <EditModal show={!!editModal} text={editModal?.text} label={editModal?.label}
         onSave={handleEditSave} onClose={()=>setEditModal(null)} />
-      <NotionPreviewModal show={showNotionPreview} text={notionBodyText} onClose={()=>setShowNotionPreview(false)} />
       <ReinvestigateModal show={showReinvestigateModal} onClose={()=>{setShowReinvestigateModal(false);setSelectedSlotsForReinvestigate([])}}
         currentSlots={currentSlots} slotData={slotData}
         selectedSlots={selectedSlotsForReinvestigate} setSelectedSlots={setSelectedSlotsForReinvestigate}
         onGenerate={generateReinvestigatePrompt} />
-      <NotionItemSelectModal show={showNotionItemSelect} onClose={()=>setShowNotionItemSelect(false)}
-        templateMode={templateMode} currentSlots={currentSlots} slotData={slotData}
-        onGenerate={(selectedIds)=>{
-          const body=generateNotionBody(selectedIds);
-          setNotionBodyText(body);
-          setShowNotionItemSelect(false);
-          setShowNotionPreview(true);
-        }} />
-
       {/* ヘッダー: テンプレ切替 + 充填率 + ⋮メニュー + × */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:4}}>
         <div style={{display:"flex",gap:2,alignItems:"center"}}>
@@ -1914,12 +1976,24 @@ ${slotList}
           )}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
-          <button onClick={()=>setShowReinvestigateModal(true)} style={{padding:"3px 8px",fontSize:"0.65rem",background:C.blue,color:C.bg,border:"none",borderRadius:4,cursor:"pointer",fontWeight:700}}>📋 再調査</button>
-          <button onClick={()=>{const body=generateNotionBody([]);setNotionBodyText(body);setShowNotionPreview(true)}} style={{padding:"3px 8px",fontSize:"0.65rem",background:C.accent,color:C.bg,border:"none",borderRadius:4,cursor:"pointer",fontWeight:700}}>📋 プレビュー</button>
-          <button onClick={()=>setShowNotionItemSelect(true)} style={{padding:"3px 8px",fontSize:"0.65rem",background:C.accent,color:C.bg,border:"none",borderRadius:4,cursor:"pointer",fontWeight:700}}>📋 選択</button>
+          <Btn color={C.accent} onClick={()=>setShowMdPreview(true)} style={{fontSize:"0.65rem",padding:"2px 8px"}}>プレビュー</Btn>
           <span onClick={()=>{if(confirm("全スロットクリア？"))setSlotData({})}} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem",marginLeft:4}}>×</span>
         </div>
       </div>
+      {showMdPreview&&(
+        <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>setShowMdPreview(false)}>
+          <div onClick={e=>e.stopPropagation()} style={{width:"min(90vw,700px)",maxHeight:"85vh",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+            <div style={{padding:"10px 14px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
+              <span style={{fontSize:"0.82rem",fontWeight:700,color:C.accent}}>Markdown プレビュー</span>
+              <div style={{display:"flex",gap:6}}>
+                <CopyBtn getText={exportMD} label="コピー" color={C.accent} style={{fontSize:"0.65rem"}} />
+                <Btn color={C.textDim} onClick={()=>setShowMdPreview(false)} style={{fontSize:"0.65rem"}}>閉じる</Btn>
+              </div>
+            </div>
+            <pre style={{flex:1,overflow:"auto",padding:14,fontSize:"0.72rem",fontFamily:font,color:C.textBright,lineHeight:1.7,whiteSpace:"pre-wrap",margin:0}}>{exportMD()}</pre>
+          </div>
+        </div>
+      )}
 
       {/* ルールテーブル or セクション */}
       {templateMode==="dbp02"&&showRuleTable
@@ -2521,7 +2595,9 @@ function App() {
   const [showFuncIndex,setShowFuncIndex]=useState(false);
   const [showBackup,setShowBackup]=useState(false);
   const [showMerge,setShowMerge]=useState(false);
-  const [showDataMenu,setShowDataMenu]=useState(false);
+  const [showDataMenu,setShowDataMenu]=useState(false); // false | "save" | "load"
+  const [domToast,setDomToast]=useState("");
+  const showToast=useCallback((msg)=>{setDomToast(msg);setTimeout(()=>setDomToast(""),2500)},[]);
   const [couponModal,setCouponModal]=useState({show:false,config:null,slug:""});
   const lastScanRef=useRef(null);
   const [consolidateKeepId,setConsolidateKeepId]=useState(null);
@@ -2617,33 +2693,43 @@ function App() {
     try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mt||"image/png",data:b64}},{type:"text",text:"画像テキスト抽出。テーブルはMarkdown。抽出のみ出力。"}]}]});if(pasteAreaRef.current)pasteAreaRef.current.value+=(pasteAreaRef.current.value?"\n\n--- OCR ---\n":"")+exText(data)}catch(e){if(pasteAreaRef.current)pasteAreaRef.current.value+="\nOCRエラー: "+e.message}
   },[]);
 
+  // coupon-config.json に追記（Hugo出力先フォルダ経由）
+  const saveCouponConfig=useCallback(async(slug,entry)=>{
+    try{
+      let dir=hugoDir;
+      if(!dir){
+        dir=await window.showDirectoryPicker({mode:"readwrite"});
+        setHugoDir(dir);setHugoDirName(dir.name);
+      }
+      let existing={};
+      try{
+        const dataDir=await dir.getDirectoryHandle("data",{create:false});
+        const cfgHandle=await dataDir.getFileHandle("coupon-config.json",{create:false});
+        existing=JSON.parse(await (await cfgHandle.getFile()).text());
+      }catch(e){}
+      if(!existing[slug])existing[slug]={};
+      existing[slug].coupon=entry;
+      await writeHugoFile(dir,["data","coupon-config.json"],JSON.stringify(existing,null,2));
+      setCouponModal(p=>({...p,show:false}));
+      showToast(`✓ ${slug} — ${entry.lastCode||"セレクター"} を保存`);
+    }catch(e){if(e.name!=="AbortError")showToast("✗ 保存エラー: "+e.message);}
+  },[hugoDir,showToast]);
+
   // スキャナーJSON処理
-  const handleScannerPasted=useCallback(data=>{
+  const handleScannerPasted=useCallback(async data=>{
     if(data==="show"){setCouponModal(p=>({...p,show:true}));return;}
     lastScanRef.current=data;
     const cfg=extractCouponConfig(data);
-    // 現在のFirmのslugを推定
-    const activeFirm=firms.find(f=>f.id===activeTabId);
-    const slug=activeFirm?(getFirmName(activeFirm.id,tabDataMap)||activeFirm.name||"").toLowerCase().replace(/\s+/g,"-"):"firm-slug";
-    setCouponModal({show:true,config:cfg,slug});
-  },[firms,activeTabId,tabDataMap]);
-
-  // coupon-config.json に追記（Hugo出力先フォルダ経由）
-  const saveCouponConfig=useCallback(async(slug,entry)=>{
-    if(!hugoDir){alert("Hugo出力先フォルダを選択してください");return;}
-    try{
-      const path=["data","coupon-config.json"];
-      let existing={};
-      try{
-        const fh=await hugoDir.getFileHandle("data").then(d=>d.getDirectoryHandle&&d.getDirectoryHandle("data")).catch(()=>hugoDir);
-        // 簡易: writeHugoFile を使って上書き
-      }catch(e){}
-      existing[slug]=entry;
-      await writeHugoFile(hugoDir,path,JSON.stringify(existing,null,2));
-      alert(`coupon-config.json に "${slug}" を保存しました`);
-      setCouponModal(p=>({...p,show:false}));
-    }catch(e){alert("保存エラー: "+e.message);}
-  },[hugoDir]);
+    const activeFirm=firms.find(f=>f.id===activeTabId||(f.plans||[]).some(p=>p.id===activeTabId));
+    const slug=activeFirm
+      ?(getFirmName(activeFirm.id,tabDataMap)||activeFirm.name||"").toLowerCase().replace(/[\s/]+/g,"-").replace(/[^\w-]/g,"")
+      :"";
+    if(slug&&cfg){
+      await saveCouponConfig(slug,cfg);
+    }else{
+      setCouponModal({show:true,config:cfg,slug:slug||"firm-slug"});
+    }
+  },[firms,activeTabId,tabDataMap,saveCouponConfig]);
 
   // 貼り付けエリア展開（テキスト貼り付け時）
   const handlePasteExpand=useCallback(()=>setPasteH(520),[setPasteH]);
@@ -3171,8 +3257,10 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   // 小窓
   const openPasteWindow=useCallback(()=>{
     const html=window.__pfmPasteWindowHTML;if(!html)return;
-    const blob=new Blob([html],{type:"text/html"});const url=URL.createObjectURL(blob);
-    window.open(url,"pfm-paste","width=500,height=600,left=50,top=50,resizable=yes,scrollbars=yes");
+    const htmlStr=Array.isArray(html)?html.join(""):html;
+    const w=window.open("","pfm-paste","width=500,height=600,left=50,top=50,resizable=yes,scrollbars=yes");
+    if(!w){alert("ポップアップがブロックされています。ブラウザの設定で許可してください。");return;}
+    w.document.open();w.document.write(htmlStr);w.document.close();
   },[]);
 
   // 早見表チェッカー
@@ -3185,19 +3273,98 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   },[]);
 
   // 全データexport/import
-  const exportAll=useCallback(()=>{exportJSON({firms,tabDataMap,glossaryTerms},"pfm-intake-all.json")},[firms,tabDataMap,glossaryTerms]);
+  // _pm_data/pfm-data.json への直接書き込み・読み込みヘルパー
+  const PM_DIR="_pm_data", PM_FILE="pfm-data.json";
+  const getPmFile=useCallback(async(create=false)=>{
+    const dir=hugoDir;if(!dir)return null;
+    const pmDir=await dir.getDirectoryHandle(PM_DIR,{create});
+    return pmDir.getFileHandle(PM_FILE,{create});
+  },[hugoDir]);
+
+  const exportAll=useCallback(async()=>{
+    const data={firms,tabDataMap,glossaryTerms};
+    if(hugoDir){
+      try{
+        const fh=await getPmFile(true);
+        const w=await fh.createWritable();
+        await w.write(JSON.stringify(data,null,2));
+        await w.close();
+        showToast(`✓ 保存完了 (${PM_DIR}/${PM_FILE})`);
+        return;
+      }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
+    }
+    exportJSON(data,"pfm-intake-all.json"); // フォールバック
+  },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
+
+  // 保存>追加: 既存ファイルに現在のデータをマージして保存
+  const exportMergeAll=useCallback(async()=>{
+    let base={firms:[],tabDataMap:{},glossaryTerms:[]};
+    // 既存ファイル読込（_pm_data優先、なければファイルダイアログ）
+    if(hugoDir){
+      try{
+        const fh=await getPmFile(false);
+        base=JSON.parse(await (await fh.getFile()).text());
+      }catch(e){}
+    }
+    const existNames=new Set((base.firms||[]).map(f=>f.name));
+    const newFirms=firms.filter(f=>!existNames.has(f.name));
+    const merged={
+      firms:[...(base.firms||[]),...newFirms],
+      tabDataMap:{...(base.tabDataMap||{}),...tabDataMap},
+      glossaryTerms:base.glossaryTerms||glossaryTerms
+    };
+    if(hugoDir){
+      try{
+        const fh=await getPmFile(true);
+        const w=await fh.createWritable();
+        await w.write(JSON.stringify(merged,null,2));
+        await w.close();
+        showToast(`✓ 追加保存完了 (+${newFirms.length}件)`);
+        return;
+      }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
+    }
+    exportJSON(merged,"pfm-intake-all.json");
+  },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
 
   // Hugo出力
   const [hugoDir,setHugoDir]=useState(null);
   const [hugoDirName,setHugoDirName]=useState("");
+
+  // IndexedDB でフォルダハンドルを永続化
+  const IDB_NAME="pfd-settings",IDB_STORE="handles",IDB_KEY="hugoDir";
+  const openIDB=()=>new Promise((res,rej)=>{const r=indexedDB.open(IDB_NAME,1);r.onupgradeneeded=e=>e.target.result.createObjectStore(IDB_STORE);r.onsuccess=e=>res(e.target.result);r.onerror=e=>rej(e);});
+  const saveHandle=async h=>{try{const db=await openIDB();const tx=db.transaction(IDB_STORE,"readwrite");tx.objectStore(IDB_STORE).put(h,IDB_KEY);}catch(e){}};
+  const loadHandle=async()=>{try{const db=await openIDB();return new Promise((res,rej)=>{const r=db.transaction(IDB_STORE).objectStore(IDB_STORE).get(IDB_KEY);r.onsuccess=e=>res(e.target.result);r.onerror=rej;});}catch(e){return null;}};
+
+  // 起動時にフォルダハンドルを復元
+  useEffect(()=>{
+    loadHandle().then(async h=>{
+      if(!h)return;
+      try{
+        const perm=await h.queryPermission({mode:"readwrite"});
+        setHugoDirName(h.name+(perm==="granted"?"":"（要確認）"));
+        if(perm==="granted")setHugoDir(h);
+      }catch(e){}
+    });
+  },[]);
+
   const selectHugoDir=useCallback(async()=>{
     try{
       const d=await window.showDirectoryPicker({mode:"readwrite"});
       setHugoDir(d);setHugoDirName(d.name);
+      await saveHandle(d);
     }catch(e){if(e.name!=="AbortError")alert("フォルダ選択エラー: "+e.message);}
   },[]);
   const exportHugo=useCallback(async()=>{
-    if(!hugoDir){alert("まずHugo出力先フォルダを選択してください");return;}
+    let dir=hugoDir;
+    if(!dir){
+      // 未選択なら IndexedDB から復元して再確認
+      const h=await loadHandle();
+      if(h){const p=await h.requestPermission({mode:"readwrite"});if(p==="granted"){setHugoDir(h);setHugoDirName(h.name);dir=h;}}
+      if(!dir){alert("まずHugo出力先フォルダを選択してください");return;}
+    }
+    // dir を hugoDir の代わりに使う（以降 hugoDir を dir に変更）
+    const hugoDir=dir;
     let count=0;
     try{
       await writeHugoFile(hugoDir,["data","glossary.json"],JSON.stringify(glossaryTerms,null,2));
@@ -3265,7 +3432,24 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     }
   },[]);
 
-  const importAll=useCallback(()=>{importJSON(applyData)},[applyData]);
+  const importAll=useCallback(async()=>{
+    if(hugoDir){
+      try{
+        const fh=await getPmFile(false);
+        const file=await fh.getFile();
+        const data=JSON.parse(await file.text());
+        applyData(data);
+        showToast(`✓ 読込完了 (${PM_DIR}/${PM_FILE})`);
+        return;
+      }catch(e){
+        // ファイルなければダウンロード版にフォールバック
+        if(e.name!=="NotFoundError")showToast("✗ 読込エラー: "+e.message);
+        else importJSON(applyData);
+        return;
+      }
+    }
+    importJSON(applyData);
+  },[applyData,hugoDir,getPmFile,showToast]);
 
   // バックアップ用：現在の全状態を取得 / 復元
   const getCurrentData=useCallback(()=>({firms,tabDataMap,glossaryTerms}),[firms,tabDataMap,glossaryTerms]);
@@ -3441,6 +3625,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     <div style={{display:"flex",flexDirection:"column",height:"100vh",overflow:"hidden"}}>
       <FuncIndex show={showFuncIndex} onClose={()=>setShowFuncIndex(false)} />
       <CouponConfigModal show={couponModal.show} config={couponModal.config} slug={couponModal.slug} onClose={()=>setCouponModal(p=>({...p,show:false}))} onSaveToDir={saveCouponConfig} hugoDir={hugoDir} />
+      {domToast&&<div style={{position:"fixed",bottom:28,right:28,zIndex:99999,background:domToast.startsWith("✓")?C.green:C.red,color:C.bg,padding:"8px 16px",borderRadius:6,fontSize:"0.8rem",fontWeight:700,boxShadow:"0 4px 12px rgba(0,0,0,0.4)"}}>{domToast}</div>}
       <BackupModal show={showBackup} onClose={()=>setShowBackup(false)} getCurrentData={getCurrentData} onRestore={restoreData} />
       <MergeModal show={showMerge} onClose={()=>setShowMerge(false)} getCurrentData={getCurrentData} onApplyMerge={applyMerge} />
       <ConsolidateModal show={!!consolidateKeepId} onClose={()=>setConsolidateKeepId(null)} firms={firms} tabDataMap={tabDataMap} initialKeepId={consolidateKeepId} onApply={applyConsolidate} />
@@ -3448,33 +3633,42 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       {/* Header */}
       <div style={{background:C.surface,borderBottom:`1px solid ${C.border}`,padding:"6px 10px",display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
         <span style={{fontWeight:700,color:C.accent,fontFamily:font,fontSize:"0.85rem"}}>Page Maker</span>
-        <span style={{fontSize:"0.6rem",color:C.textDim}}>{APP_VERSION}</span>
-        <div style={{flex:1}} />
-        <div style={{display:"flex",gap:2}}>
-          <button onClick={()=>setRightMode("slots")} style={{background:rightMode==="slots"?C.accent:"transparent",color:rightMode==="slots"?C.bg:C.textDim,border:`1px solid ${rightMode==="slots"?C.accent:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>スロット</button>
-          <button onClick={()=>setRightMode("glossary")} style={{background:rightMode==="glossary"?C.purple:"transparent",color:rightMode==="glossary"?C.bg:C.textDim,border:`1px solid ${rightMode==="glossary"?C.purple:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>用語</button>
+        {/* スロット↔用語 トグルスイッチ */}
+        <div onClick={()=>setRightMode(rightMode==="slots"?"glossary":"slots")}
+          title={rightMode==="slots"?"用語辞典に切替":"スロットに切替"}
+          style={{width:36,height:20,borderRadius:10,background:rightMode==="glossary"?C.purple:C.accent,
+            position:"relative",cursor:"pointer",flexShrink:0,transition:"background 0.2s"}}>
+          <div style={{position:"absolute",top:2,left:rightMode==="glossary"?18:2,
+            width:16,height:16,borderRadius:8,background:"#fff",
+            transition:"left 0.2s",boxShadow:"0 1px 3px rgba(0,0,0,0.3)"}} />
         </div>
-        {/* データ管理ドロップダウン */}
-        <div style={{position:"relative"}} onMouseLeave={()=>setShowDataMenu(false)}>
-          <Btn color={C.green} onClick={()=>setShowDataMenu(v=>!v)} style={{fontSize:"0.6rem"}}>💾 データ ▾</Btn>
-          {showDataMenu&&(
-            <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:100,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
-              <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>全保存</Btn>
-              <Btn color={C.green} onClick={()=>{importAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>全読込</Btn>
-              <div style={{borderTop:`1px solid ${C.border}`,margin:"2px 0"}}/>
-              <Btn color={C.accent} onClick={()=>{setShowBackup(true);setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>💾 バックアップ</Btn>
-              <Btn color={C.blue} onClick={()=>{setShowMerge(true);setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>🔀 マージ</Btn>
+        <div style={{flex:1}} />
+        {/* 保存ドロップダウン */}
+        <div style={{position:"relative"}}>
+          {showDataMenu==="save"&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowDataMenu(false)}/>}
+          <Btn color={C.green} onClick={()=>setShowDataMenu(v=>v==="save"?false:"save")} style={{fontSize:"0.6rem"}}>保存 ▾</Btn>
+          {showDataMenu==="save"&&(
+            <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:90,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+              <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>保存</Btn>
+              <Btn color={C.green} onClick={()=>{exportMergeAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>追加</Btn>
             </div>
           )}
         </div>
-        {/* Hugo出力グループ */}
-        <div style={{display:"flex",gap:1,alignItems:"center",background:C.surfaceAlt,border:`1px solid ${C.borderLight}`,borderRadius:4,padding:"1px 4px"}}>
-          <span onClick={selectHugoDir} title="Hugo出力先フォルダを選択"
-            style={{fontSize:"0.6rem",color:hugoDirName?C.yellow:C.textDim,cursor:"pointer",padding:"1px 3px",whiteSpace:"nowrap",maxWidth:80,overflow:"hidden",textOverflow:"ellipsis"}}>
-            📁{hugoDirName?` ${hugoDirName}`:""}
-          </span>
-          <Btn color={C.yellow} onClick={exportHugo} style={{fontSize:"0.6rem",padding:"1px 5px"}} title="Hugo用JSON/MDを直接書き込み">🚀</Btn>
+        {/* 読込ドロップダウン */}
+        <div style={{position:"relative"}}>
+          {showDataMenu==="load"&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowDataMenu(false)}/>}
+          <Btn color={C.blue} onClick={()=>setShowDataMenu(v=>v==="load"?false:"load")} style={{fontSize:"0.6rem"}}>読込 ▾</Btn>
+          {showDataMenu==="load"&&(
+            <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:100,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+              <Btn color={C.blue} onClick={()=>{importAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>全件</Btn>
+              <div style={{borderTop:`1px solid ${C.border}`,margin:"2px 0"}}/>
+              <Btn color={C.blue} onClick={()=>{setShowDataMenu(false);document.dispatchEvent(new CustomEvent("pfd-csv-open"))}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>追加 CSV</Btn>
+              <Btn color={C.blue} onClick={()=>{setShowMerge(true);setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>追加 JSON</Btn>
+            </div>
+          )}
         </div>
+        {/* Hugo出力 */}
+        <Btn color={C.yellow} onClick={async()=>{if(!hugoDir)await selectHugoDir();exportHugo();}} style={{fontSize:"0.6rem"}} title={hugoDirName||"フォルダ未選択"}>🚀 Hugo</Btn>
         <span onClick={()=>setShowFuncIndex(!showFuncIndex)} style={{cursor:"pointer",fontSize:"0.82rem"}}>📋</span>
       </div>
 
@@ -3483,7 +3677,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         {/* 縦タブ */}
         <VerticalTabs firms={firms} activeId={activeTabId} onSelect={setActiveTabId}
           onAddFirm={addFirm} onAddPlan={addPlan} onDelete={deleteTab} onRename={renameTab}
-          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin} />
+          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin} onScannerPasted={handleScannerPasted} />
         <ResizeHandle dir="x" onMouseDown={vtabDrag} />
 
         {/* 左カラム: 貼り付け + 取り込み対象 */}
@@ -3496,8 +3690,9 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <ResizeHandle dir="y" onMouseDown={pasteDrag} />
           <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
             autoAssigning={autoAssigning} translating={translating}
-            onClear={()=>setTabField("targetText","")} onAdd={handleAdd} 
-            activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null} />
+            onClear={()=>setTabField("targetText","")} onAdd={handleAdd}
+            activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
+            onScannerPasted={handleScannerPasted} />
         </div>
         <ResizeHandle dir="x" onMouseDown={leftDrag} />
 
