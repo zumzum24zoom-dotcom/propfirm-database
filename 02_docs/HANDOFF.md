@@ -1,7 +1,7 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-05-30
+> **最終更新**: 2026-05-30（セッション2）
 
 ---
 
@@ -60,23 +60,47 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 
 ## 3. 進捗（いま どこまで）
 
-### ✅ 完了
-- 設計方針の確定（上記①〜⑤）
-- Widget Maker v0.1 試作（単一HTML + React + Babel、Page Makerテーマ流用）
-- **第1ウィジェット「最速出金スケジュール（PROFIT TIMELINE）」** の計算＋描画を実装
-  - 計算: 最短合格 = Σ各Step最低取引日数 / 最速出金 = MAX(頻度待機, 出金最低日数) / トータル = 合算
-  - 頻度待機: 随時0 / 毎週7 / 隔週14 / 月次30
-  - 描画: ダークテーマのガント横棒（青=Challenge各Step、オレンジ=Funded）、目盛0〜20+
+### ✅ 完了（〜2026-05-30）
 
-### 🔄 確認中
-- 最速出金スケジュールの**見た目が画像（マスター提示）と一致するか**のレビュー待ち
+**Page Maker v34（`01_tools/page-maker-v11.html`）**
+- `steps` スロット追加（DBP_02 P20）
+- ボタン整理: ヘッダーデータ管理ドロップダウン化・縦タブ選択/プロンプトバー統合・個別削除ボタン廃止→選択削除に統一・Plan行チェックボックス追加
+- ルールテーブルエディタ（📊テーブル）: DBP-02のrd_*を有無バッジ+プルダウン+数値入力でインライン編集
+- クーポン設定生成: DOMスキャナーJSON貼り付け→クーポンセレクター自動抽出
+- 貼り付け/取り込みエリア自動開閉
 
-### ⬜ 次にやること
-1. **見た目OK確認後** → 作業4: Page Maker に素データ項目を追加（**1本道の実配線**）
-   - 追加項目: Steps / 最低取引日数(出金) / 出金頻度 / 着金目安
-   - 追加先: `SLOT_DEFS.dbp02` ＋ `PLAN_KEY_MAP`（Hugo出力スキーマ）
-2. 作業5: 生成SVGを Hugo の partial/content に配置
-3. 以降: 第2第3ウィジェット（スコアチャート / ルール表 / 価格カード）を Widget Maker に追加
+**Hugo サイト実装**
+- クーポンサイドバー全ページ組み込み（`baseof.html`）
+- FirmカードロゴにGoogle Favicon API適用（トップ・一覧）
+- `plans/single.html` を日本語スキーマに全面修正（`.Content`優先・rd_*テーブル対応）
+- `plans/single.html` ルーティング修正（`type: plans`追加）
+- `/api/index.json` 生成（Hugo→Netlify→クーポンサイドバー）
+- `couponPage` URLを `hugo.yaml` params で管理
+
+**クーポン自動化パイプライン**
+- DOM Scanner ブックマークレット（`01_tools/Dom scanner BMT`）
+- GitHub Actions cron（毎月3日・18日）: Playwright → `data/firms/*.json` 更新 → Netlifyデプロイ
+- `data/coupon-config.json`: FundedNext FLEX 設定済み
+- `scripts/extract-coupons.mjs`: Playwright実行スクリプト
+
+**Notion MCP接続**
+- `.mcp.json` + `@notionhq/notion-mcp-server` で接続確立
+- DB_100_Impl から移設・転用タスクを自動取得 → `HANDOFF.md` に整理
+
+**CLAUDE.md 更新**
+- 起動時アクションに `02_docs/HANDOFF.md` 必読を追加
+
+**git コミット（2件）**
+- `27f1f5c`: Page Maker強化・Hugo実装・クーポン自動化システム構築（26ファイル）
+- `3bf064f`: データ更新・不要ファイル削除
+
+### ⬜ 次にやること（優先順）
+→ 詳細は「セクション5 サイト照合タスク」を参照
+
+1. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— データ入力後すぐ表示可
+2. ❷ DBP_01 プランナビゲーション（firms/single.html）
+3. ❸ 実質最短日数タイムライン（Widget Maker 移植）
+4. Page Maker でデータ入力継続 → exportHugo
 
 ---
 
