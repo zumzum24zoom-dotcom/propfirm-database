@@ -891,6 +891,23 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   const [editId,setEditId]=useState(null);
   const [editName,setEditName]=useState("");
   const [collapsed,setCollapsed]=useState({});
+  // 起動時/新規Firm出現時：選択中Firm以外は折りたたみ。選択中Firmは常に自動展開（既存の手動開閉は尊重）
+  const knownFirmsRef=useRef(null);
+  useEffect(()=>{
+    setCollapsed(prev=>{
+      const next={...prev};
+      const known=knownFirmsRef.current; // 初回は null
+      (firms||[]).forEach(f=>{
+        const active=f.id===activeId||(f.plans||[]).some(p=>p.id===activeId);
+        const isNew=!known||!known.has(f.id);
+        if(active)next[f.id]=false;        // 選択中Firmは常に展開（クリック自動展開）
+        else if(isNew)next[f.id]=true;     // 新規/起動時の非選択Firmは折りたたみ
+        // 既存の非選択Firmは手動状態を維持
+      });
+      return next;
+    });
+    knownFirmsRef.current=new Set((firms||[]).map(f=>f.id));
+  },[firms,activeId]);
   const [showImport,setShowImport]=useState(false);
   useEffect(()=>{const h=()=>setShowImport(true);document.addEventListener("pfd-csv-open",h);return()=>document.removeEventListener("pfd-csv-open",h)},[]);
   const [csvText,setCsvText]=useState("");
@@ -2591,7 +2608,7 @@ function App() {
   const [translating,setTranslating]=useState(false);
   const [autoAssigning,setAutoAssigning]=useState(false);
   const [aiGenKoryaku,setAiGenKoryaku]=useState(false);
-  const [slotLocks,setSlotLocks]=useState({});
+  const [slotLocks,setSlotLocks]=useState({firmName:true,challengeName:true}); // 名前スロットは既定ロック（貼付/自動割当/AIによる上書き防止）
   const [showFuncIndex,setShowFuncIndex]=useState(false);
   const [showBackup,setShowBackup]=useState(false);
   const [showMerge,setShowMerge]=useState(false);
@@ -2604,6 +2621,12 @@ function App() {
   const [activeSlotId,setActiveSlotId]=useState(null); // 選択中スロット
   const pasteAreaRef=useRef(null);
   const selectedTextRef=useRef("");
+
+  // ── 自動保存（ドラフト）用 ──
+  const DRAFT_KEY="pfm-intake-draft";
+  const dirtyRef=useRef(false);          // ファイル出力後に変更があるか（離脱警告用）
+  const draftBaselineRef=useRef(null);   // 直近ドラフトのシリアライズ値（実変更検出用）
+  const draftRestoredRef=useRef(false);  // 起動時復元の二重実行防止
 
   // 用語辞典（グローバル）— 正本65キーで初期化
   const [glossaryTerms,setGlossaryTerms]=useState(()=>GLOSSARY_SEED.map(t=>({...t})));
@@ -3289,11 +3312,13 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         const w=await fh.createWritable();
         await w.write(JSON.stringify(data,null,2));
         await w.close();
+        dirtyRef.current=false;
         showToast(`✓ 保存完了 (${PM_DIR}/${PM_FILE})`);
         return;
       }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
     }
     exportJSON(data,"pfm-intake-all.json"); // フォールバック
+    dirtyRef.current=false;
   },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
 
   // 保存>追加: 既存ファイルに現在のデータをマージして保存
@@ -3319,11 +3344,13 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         const w=await fh.createWritable();
         await w.write(JSON.stringify(merged,null,2));
         await w.close();
+        dirtyRef.current=false;
         showToast(`✓ 追加保存完了 (+${newFirms.length}件)`);
         return;
       }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
     }
     exportJSON(merged,"pfm-intake-all.json");
+    dirtyRef.current=false;
   },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
 
   // Hugo出力
@@ -3406,6 +3433,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           }
         }
       }
+      dirtyRef.current=false;
       alert(`Hugo出力完了: ${count}ファイルを書き込みました`);
     }catch(e){alert("エラー: "+e.message);}
   },[hugoDir,firms,tabDataMap,glossaryTerms]);
@@ -3454,6 +3482,48 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   // バックアップ用：現在の全状態を取得 / 復元
   const getCurrentData=useCallback(()=>({firms,tabDataMap,glossaryTerms}),[firms,tabDataMap,glossaryTerms]);
   const restoreData=useCallback(d=>applyData(d),[applyData]);
+
+  // ═══════════════════════════════════════════════════
+  // 自動保存（ドラフト）＋ 起動時復元 ＋ 離脱警告
+  // ═══════════════════════════════════════════════════
+  // ① 起動時：前回ドラフトがあれば確認のうえ復元（確認方式）
+  useEffect(()=>{
+    if(draftRestoredRef.current)return;
+    draftRestoredRef.current=true;
+    try{
+      const raw=localStorage.getItem(DRAFT_KEY);
+      if(!raw)return;
+      const obj=JSON.parse(raw);
+      if(!obj||!obj.data)return;
+      const m=Math.round((Date.now()-(obj.ts||0))/60000);
+      const when=m<1?"1分未満前":m<60?`${m}分前`:`${Math.round(m/60)}時間前`;
+      if(window.confirm(`前回の自動保存データ（${when}）を復元しますか？\n\nOK＝復元 ／ キャンセル＝初期状態で開始（ドラフトは保持されます）`)){
+        applyData(obj.data);
+      }
+    }catch(e){}
+  },[applyData]);
+
+  // ② 編集監視：変更をデバウンス（約800ms）で localStorage ドラフトへ退避
+  useEffect(()=>{
+    const json=JSON.stringify({firms,tabDataMap,glossaryTerms});
+    if(draftBaselineRef.current===null){draftBaselineRef.current=json;return;} // 初回はベースライン記録のみ
+    if(json===draftBaselineRef.current)return; // 実変更なし
+    dirtyRef.current=true;
+    const t=setTimeout(()=>{
+      try{
+        localStorage.setItem(DRAFT_KEY,JSON.stringify({ts:Date.now(),data:JSON.parse(json)}));
+        draftBaselineRef.current=json;
+      }catch(e){/* 容量超過等はファイル保存で担保するため無視 */}
+    },800);
+    return ()=>clearTimeout(t);
+  },[firms,tabDataMap,glossaryTerms]);
+
+  // ③ 離脱警告：ファイル未出力（全保存/Hugo）の変更があるとき
+  useEffect(()=>{
+    const h=e=>{if(dirtyRef.current){e.preventDefault();e.returnValue="";}};
+    window.addEventListener("beforeunload",h);
+    return ()=>window.removeEventListener("beforeunload",h);
+  },[]);
 
   // マージ実行：自動バックアップ → 衝突選択に従って統合
   const applyMerge=useCallback((incoming, plan, choices)=>{
