@@ -1,0 +1,24 @@
+{
+  "id": "conv-1780153529273-ceo9urnfg",
+  "providerId": "claude",
+  "title": "Initiate conversation",
+  "titleGenerationStatus": "success",
+  "createdAt": 1780153529274,
+  "updatedAt": 1780163272251,
+  "lastResponseAt": 1780163272251,
+  "sessionId": "331a8ce3-0951-4285-94ca-9387c52fc428",
+  "providerState": {
+    "providerSessionId": "331a8ce3-0951-4285-94ca-9387c52fc428"
+  },
+  "currentNote": "無題のファイル.base",
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 10,
+    "cacheCreationInputTokens": 831,
+    "cacheReadInputTokens": 56649,
+    "contextWindow": 200000,
+    "contextTokens": 57490,
+    "percentage": 29,
+    "contextWindowIsAuthoritative": true
+  }
+}

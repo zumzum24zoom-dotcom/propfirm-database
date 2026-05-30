@@ -50,8 +50,10 @@
     {{ range hugo.Data.plans }}
       {{ if eq (index . "ファーム") $firmSlug }}
         {{ $hasPlans = true }}
+        {{ $planSlug := index . "slug" }}
+        {{ $planUrl := printf "/firms/%s/plans/%s/" $firmSlug $planSlug | relURL }}
         <div class="info-row">
-          <span class="label">{{ index . "プラン名" }}</span>
+          <a href="{{ $planUrl }}" style="color:var(--accent);text-decoration:none;">{{ index . "プラン名" }}</a>
         </div>
       {{ end }}
     {{ end }}
