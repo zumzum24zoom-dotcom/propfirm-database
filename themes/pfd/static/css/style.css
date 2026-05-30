@@ -226,9 +226,19 @@ footer {
 
 .card-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.6rem;
   justify-content: space-between;
   margin-bottom: 0.75rem;
+}
+.card-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: #fff;
+  padding: 2px;
+  flex-shrink: 0;
 }
 .card-name {
   font-size: 1.15rem;
@@ -418,6 +428,74 @@ tbody td {
   color: var(--accent);
   text-decoration: none;
 }
+
+/* ── Rule table (plans/single) ── */
+.rule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+.rule-table th {
+  background: var(--bg-header);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+.rule-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+.rule-table td.label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  width: 30%;
+}
+.diff-ease { color: var(--accent); font-weight: 700; }
+.diff-trap { color: var(--red);    font-weight: 700; }
+
+/* ── Markdown content (rule tables from .Content) ── */
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 1rem 0 1.5rem;
+}
+.markdown-content th {
+  background: var(--bg-header);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+.markdown-content td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+.markdown-content h2, .markdown-content h3 {
+  margin: 2rem 0 0.75rem;
+  color: var(--text);
+}
+.markdown-content p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+.markdown-content strong { color: var(--text); }
+.rule-content { margin-top: 1.5rem; }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {

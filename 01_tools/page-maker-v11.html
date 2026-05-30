@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
 Page Maker v0.9
+2026-05-30 ver.34: Stepsスロット追加（DBP_02 P20）・ボタン整理（ヘッダーデータ管理ドロップダウン化・縦タブ選択/プロンプトバー統合・個別削除ボタン廃止→選択削除に統一・Plan行チェックボックス追加）
 2026-05-27 ver.33: APIキー直書きを廃止しWorkerプロキシ経由に — api.anthropic.com直叩き＋ハードコードキー（2箇所）を全廃。callAPI/子ウィンドウ翻訳をWorker /api/llm 経由に変更（キーはWorker Secretsのenv.ANTHROPIC_KEYで保持）。callAPIはエラー本文を表示するよう改善（HTTP 400の理由が読める）。要：Worker側 /api/llm デプロイ＋ANTHROPIC_KEY登録＋旧キー失効
 2026-05-27 ver.32: 📄 Plan出力ボタンを追加 — 選択（チェック）した全Firmの全Planを対象に、ソース定義v08のDBP_02セクション（ルール早見表＋ルール詳細リスト）に従った出力プロンプトをコピー。Firmチェックボックスの「コピー」「削除」の並びに配置。Plan項目20件＋表記ルールを辞典から動的注入
 2026-05-27 ver.31: 📤出力ボタンのコピー不能を修正 — getTextが firm.plans を直接参照しplans空で早期return ""していた不具合。getFirmName/getPlanNames経由に統一し、Plan未登録時は「プラン未登録—公式サイトから収集」とフォールバック出力。これで「データなし」alertが出ずプロンプトがコピーできる
@@ -203,7 +204,7 @@ const FIRM_KEY_MAP={
   profitSplit:"利益分配率",profitSplitNote:"利益分配率補足",
 };
 const PLAN_KEY_MAP={
-  challengeName:"プラン名",
+  challengeName:"プラン名",steps:"Steps",
   rd_target:"利益目標",rd_minDays:"最低取引日数",
   rd_dailyLoss:"日次損失",rd_dailyLossType:"日次損失タイプ",
   rd_maxLoss:"最大損失",rd_maxLossType:"最大損失タイプ",
@@ -581,6 +582,7 @@ const SLOT_DEFS = {
   ],
   dbp02: [
     {id:"challengeName",label:"プラン名",section:"タイトル",hint:"必須"},
+    {id:"steps",label:"Steps",section:"タイトル",hint:"1=1-Step / 2=2-Step / 0=Instant"},
     {id:"priceTable",label:"価格テーブル",section:"価格",hint:"全プラン共通、該当プラン強調表示。AI生成可"},
     {id:"ruleQuickRef",label:"ルール早見表",section:"早見表",hint:"AI生成。テーブル1枚（項目/Challenge/Funded/差分）"},
     {id:"rd_target",label:"利益目標",section:"詳細",hint:"C=%目標, F=最小出金額(%or金額)。補足付き"},
@@ -611,7 +613,7 @@ const SLOT_DEFS = {
 };
 
 // ═══════════════════════════════════════════════════
-// 用語辞典 初期データ（正本・63キー）v1 2026-05-27
+// 用語辞典 初期データ（正本・64キー）v1 2026-05-27
 // 国語辞典思想: 結果の語句のみ＋語釈。算出式は載せない。
 // type: label(項目ラベル/計算結果列名) | notation(正規表記)
 // definition: 語句の意味（正本ポリシー根拠）
@@ -638,7 +640,7 @@ const GLOSSARY_SEED = [
   {key:"F18",term:"出金ポリシー",type:"label",category:"Firm項目",definition:"出金頻度・最低出金額・申請方法・処理期間を定めた規定。"},
   {key:"F19",term:"Profit Split",type:"label",category:"Firm項目",definition:"Funded口座で得た利益のうちトレーダーに分配される割合。"},
   {key:"F20",term:"※Profit Split",type:"label",category:"Firm項目",definition:"利益分配率の変動条件やスケールアップ後の比率を補足する注記。"},
-  // ── グループ2: Plan項目ラベル（20）──
+  // ── グループ2: Plan項目ラベル（21）──
   {key:"P01",term:"利益目標",type:"label",category:"Plan項目",definition:"各フェーズの合格に必要な利益額または利益率。ChallengeとFundedで異なる場合がある。"},
   {key:"P02",term:"最低取引日数（合格）",type:"label",category:"Plan項目",definition:"チャレンジ合格に必要な最低取引日数。出金要件とは区別する。"},
   {key:"P02b",term:"最低取引日数（出金）",type:"label",category:"Plan項目",definition:"出金申請に必要な最低取引日数。合格要件とは区別する。"},
@@ -659,6 +661,7 @@ const GLOSSARY_SEED = [
   {key:"P17",term:"リスクルール",type:"label",category:"Plan項目",definition:"含み損（未決済ポジションの評価損）に対する制限。"},
   {key:"P18",term:"最大ポジション制約",type:"label",category:"Plan項目",definition:"同時に保有できるポジション数やロット数の上限。"},
   {key:"P19",term:"禁止行為",type:"label",category:"Plan項目",definition:"アカウント失格の対象となる禁止された取引手法・行為。"},
+  {key:"P20",term:"Steps",type:"label",category:"Plan項目",definition:"チャレンジのステップ数。Instant=0 / 1-Step=1 / 2-Step=2 等。"},
   // ── グループ3: 正規表記（18）──
   {key:"DD_STATIC",term:"Static",type:"notation",category:"DD計算基準",definition:"初期残高（口座開設時の残高）を基準に固定するドローダウン方式。判定根拠: initial balance / fixed / starting balance。"},
   {key:"DD_BAL_EOD",term:"Trailing（Balance EOD）",type:"notation",category:"DD計算基準",definition:"日次終了時点の残高を基準に追従するドローダウン方式。判定根拠: end of day balance / daily reset balance。"},
@@ -894,12 +897,11 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   const [checked,setChecked]=useState({}); // {firmId:true}
   const [copied,setCopied]=useState(false);
 
-  const checkedIds=firms.filter(f=>checked[f.id]).map(f=>f.id);
-  const checkedCount=checkedIds.length;
-  const allChecked=firms.length>0&&checkedCount===firms.length;
+  const checkedCount=Object.values(checked).filter(Boolean).length;
+  const allChecked=firms.length>0&&firms.every(f=>checked[f.id]&&(f.plans||[]).every(p=>checked[p.id]));
   const toggleAll=()=>{
     if(allChecked)setChecked({});
-    else{const n={};firms.forEach(f=>{n[f.id]=true});setChecked(n);}
+    else{const n={};firms.forEach(f=>{n[f.id]=true;(f.plans||[]).forEach(p=>{n[p.id]=true})});setChecked(n);}
   };
   const clearChecks=()=>setChecked({});
 
@@ -907,16 +909,25 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   const orderedFirms=[...firms.filter(f=>f.pinned),...firms.filter(f=>!f.pinned)];
   const lastPinnedId=(()=>{const ps=firms.filter(f=>f.pinned);return ps.length?ps[ps.length-1].id:null;})();
 
-  // 選択Firmを階層テキストでコピー
+  // 選択Firm/Planを階層テキストでコピー
   const copyChecked=()=>{
-    const targets=firms.filter(f=>checked[f.id]);
-    if(!targets.length)return;
-    const text=targets.map(f=>{
-      const head=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
-      const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
-      const plans=(planNames||[]).filter(Boolean).map(n=>`  - ${n}`);
-      return plans.length?`${head}\n${plans.join("\n")}`:head;
-    }).join("\n\n");
+    const lines=[];
+    firms.forEach(f=>{
+      if(checked[f.id]){
+        const head=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
+        const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
+        const plans=(planNames||[]).filter(Boolean).map(n=>`  - ${n}`);
+        lines.push(plans.length?`${head}\n${plans.join("\n")}`:head);
+      }else{
+        const cp=(f.plans||[]).filter(p=>checked[p.id]);
+        if(cp.length){
+          const head=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
+          lines.push(`${head}\n${cp.map(p=>`  - ${p.name}`).join("\n")}`);
+        }
+      }
+    });
+    if(!lines.length)return;
+    const text=lines.join("\n\n");
     const done=()=>{setCopied(true);setTimeout(()=>setCopied(false),1500)};
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>{
@@ -927,18 +938,29 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
     }
   };
 
-  // 選択Firmをまとめて削除
+  // 選択Firm/Planをまとめて削除
   const deleteChecked=()=>{
-    if(!checkedCount)return;
-    if(!window.confirm(`${checkedCount} 件のFirmを削除しますか？（含まれるPlan・データも削除されます）`))return;
-    onDeleteMany&&onDeleteMany(checkedIds);
+    const ids=Object.keys(checked).filter(id=>checked[id]);
+    if(!ids.length)return;
+    const firmIds=ids.filter(id=>firms.some(f=>f.id===id));
+    const planIds=ids.filter(id=>!firms.some(f=>f.id===id));
+    const parts=[];
+    if(firmIds.length)parts.push(`Firm ${firmIds.length}件（配下Plan含む）`);
+    if(planIds.length)parts.push(`Plan ${planIds.length}件`);
+    if(!window.confirm(parts.join("・")+"を削除しますか？"))return;
+    onDeleteMany&&onDeleteMany(firmIds,planIds);
     setChecked({});
   };
 
   // 選択Firmの全Planを対象にDBP_02出力プロンプトを生成
   const [planCopied,setPlanCopied]=useState(false);
   const copyPlanOutput=()=>{
-    const targets=firms.filter(f=>checked[f.id]);
+    const targetIds=new Set();
+    firms.forEach(f=>{
+      if(checked[f.id])targetIds.add(f.id);
+      else if((f.plans||[]).some(p=>checked[p.id]))targetIds.add(f.id);
+    });
+    const targets=firms.filter(f=>targetIds.has(f.id));
     if(!targets.length)return"";
     const planItems=glossaryItemLines(glossaryTerms,"Plan項目");
     const blocks=targets.map(f=>{
@@ -987,55 +1009,45 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
           <Btn color={C.accent} onClick={onAddFirm} style={{padding:"1px 6px",fontSize:"0.75rem"}}>＋</Btn>
         </div>
       </div>
-      {/* 選択操作バー */}
+      {/* 統合アクションバー: 選択時→操作 / 未選択+Firm選択中→プロンプト */}
       {firms.length>0&&(
-        <div style={{padding:"4px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:6,background:checkedCount?C.surfaceAlt:"transparent"}}>
-          <label style={{display:"flex",alignItems:"center",gap:4,cursor:"pointer",fontSize:"0.62rem",color:C.textDim}}>
+        <div style={{padding:"4px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:4,background:checkedCount?C.surfaceAlt:"transparent",minHeight:28}}>
+          <label style={{display:"flex",alignItems:"center",cursor:"pointer"}}>
             <input type="checkbox" checked={allChecked} onChange={toggleAll} style={{cursor:"pointer",accentColor:C.accent}} />
-            {checkedCount?`${checkedCount} 件選択`:"全選択"}
           </label>
-          <div style={{flex:1}} />
-          {checkedCount>0&&(
+          <div style={{flex:1}}/>
+          {checkedCount>0?(
             <React.Fragment>
-              <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 7px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
-              <Btn color={C.blue} onClick={copyPlanOutput} style={{padding:"1px 7px",fontSize:"0.6rem"}}>{planCopied?"✓":"📄 Plan出力"}</Btn>
-              <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 7px",fontSize:"0.6rem"}}>削除</Btn>
+              <span style={{fontSize:"0.6rem",color:C.textDim}}>{checkedCount}件</span>
+              <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
+              <Btn color={C.blue} onClick={copyPlanOutput} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{planCopied?"✓":"📄"}</Btn>
+              <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>削除</Btn>
             </React.Fragment>
-          )}
-        </div>
-      )}
-      {/* プロンプト生成ボタン（Firm選択時のみ表示） */}
-      {activeId && firms.some(f => f.id === activeId) && (
-        <div style={{padding:"6px",borderBottom:`1px solid ${C.border}`,background:C.surfaceAlt,display:"flex",gap:3,flexWrap:"wrap"}}>
-          <CopyBtn 
-            getText={() => generateResearchPrompt(activeId, firms, tabDataMap, glossaryTerms)}
-            label="📋 リサーチ"
-            color={C.purple}
-            style={{flex:1,fontSize:"0.6rem",padding:"3px 6px"}}
-          />
-          <CopyBtn 
-            getText={() => {
-              if(!firms||firms.length===0)return"";
-              const firm = firms.find(f => f.id === activeId);
-              if(!firm)return"";
-              const firmName = getFirmName(activeId, tabDataMap) || firm.name || "[ファーム名]";
-              const planNames = getPlanNames(activeId, firms, tabDataMap) || [];
-              const planBlock = planNames.length>0
-                ? `【対象プラン一覧】\n${planNames.map(p=>`- ${p}`).join("\n")}`
-                : `【対象プラン一覧】\n（プラン未登録 — 公式サイトから全プランを収集すること）`;
-              const firmItems = glossaryItemLines(glossaryTerms, "Firm項目");
-              return`【対象ファーム】${firmName}\n\n${planBlock}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_01セクションに従い、以下を出力してください:\n\n--- Firm情報 ---\n${firmItems}\n\n- テーブル1: 価格テーブル（各プランの口座サイズ別価格）\n- テーブル2: Firm基本情報\n- テーブル3: レバレッジ\n- テーブル4: 手数料\n- テーブル5: プラン比較テーブル\n\n各項目・各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。価格テーブルの実体はFirm単位で保持し、各プラン記事はこれを参照する。`;
-            }}
-            label="📤 出力"
-            color={C.blue}
-            style={{flex:1,fontSize:"0.6rem",padding:"3px 6px"}}
-          />
-          <CopyBtn 
-            getText={() => generateKoryakuPrompt(activeId, firms, tabDataMap, SLOT_DEFS, glossaryTerms)}
-            label="📝 攻略"
-            color={C.green}
-            style={{flex:1,fontSize:"0.6rem",padding:"3px 6px"}}
-          />
+          ):activeId&&firms.some(f=>f.id===activeId)?(
+            <React.Fragment>
+              <CopyBtn
+                getText={()=>generateResearchPrompt(activeId,firms,tabDataMap,glossaryTerms)}
+                label="📋" color={C.purple} style={{padding:"2px 5px",fontSize:"0.6rem"}}
+              />
+              <CopyBtn
+                getText={()=>{
+                  if(!firms||firms.length===0)return"";
+                  const firm=firms.find(f=>f.id===activeId);
+                  if(!firm)return"";
+                  const firmName=getFirmName(activeId,tabDataMap)||firm.name||"[ファーム名]";
+                  const planNames=getPlanNames(activeId,firms,tabDataMap)||[];
+                  const planBlock=planNames.length>0?`【対象プラン一覧】\n${planNames.map(p=>`- ${p}`).join("\n")}`:`【対象プラン一覧】\n（プラン未登録 — 公式サイトから全プランを収集すること）`;
+                  const firmItems=glossaryItemLines(glossaryTerms,"Firm項目");
+                  return`【対象ファーム】${firmName}\n\n${planBlock}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_01セクションに従い、以下を出力してください:\n\n--- Firm情報 ---\n${firmItems}\n\n- テーブル1: 価格テーブル（各プランの口座サイズ別価格）\n- テーブル2: Firm基本情報\n- テーブル3: レバレッジ\n- テーブル4: 手数料\n- テーブル5: プラン比較テーブル\n\n各項目・各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。価格テーブルの実体はFirm単位で保持し、各プラン記事はこれを参照する。`;
+                }}
+                label="📤" color={C.blue} style={{padding:"2px 5px",fontSize:"0.6rem"}}
+              />
+              <CopyBtn
+                getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
+                label="📝" color={C.green} style={{padding:"2px 5px",fontSize:"0.6rem"}}
+              />
+            </React.Fragment>
+          ):null}
         </div>
       )}
       {showImport&&(
@@ -1083,28 +1095,27 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                   style={{color:C.blue,fontSize:"0.68rem",cursor:"pointer",flexShrink:0}}>＋</span>
                 <span onClick={e=>{e.stopPropagation();onMergeFirm&&onMergeFirm(firm.id)}} title="他のFirmをこのFirmに統合"
                   style={{color:C.purple,fontSize:"0.66rem",cursor:"pointer",flexShrink:0}}>⤵</span>
-                <span onClick={e=>{e.stopPropagation();onDelete(firm.id)}}
-                  style={{color:C.red,fontSize:"0.62rem",cursor:"pointer",flexShrink:0}}>×</span>
               </div>
             )}
           </div>
           {/* Plan行 */}
           {!collapsed[firm.id]&&firm.plans?.map(plan=>(
             <div key={plan.id} onClick={()=>onSelect(plan.id)} style={{
-              padding:"4px 8px 4px 24px",cursor:"pointer",borderBottom:`1px solid ${C.border}`,
+              padding:"4px 8px 4px 20px",cursor:"pointer",borderBottom:`1px solid ${C.border}`,
               background:activeId===plan.id?`${C.blue}22`:"transparent",
               borderLeft:activeId===plan.id?`3px solid ${C.blue}`:"3px solid transparent",
             }}>
               {editId===plan.id?renderEdit(plan.id):(
-                <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <div style={{display:"flex",alignItems:"center",gap:7}}>
+                  <input type="checkbox" checked={!!checked[plan.id]} onClick={e=>e.stopPropagation()}
+                    onChange={e=>{e.stopPropagation();setChecked(p=>({...p,[plan.id]:e.target.checked}))}}
+                    style={{cursor:"pointer",flexShrink:0,accentColor:C.blue}} />
                   <span style={{fontSize:"0.58rem",color:C.blue,flexShrink:0}}>└</span>
                   <span onDoubleClick={e=>{e.stopPropagation();setEditId(plan.id);setEditName(plan.name)}} style={{
                     fontSize:"0.72rem",fontWeight:activeId===plan.id?700:400,
                     color:activeId===plan.id?C.blue:C.text,
                     overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
                   }}>{plan.name||"（未命名）"}</span>
-                  <span onClick={e=>{e.stopPropagation();onDelete(plan.id)}}
-                    style={{color:C.red,fontSize:"0.62rem",cursor:"pointer",flexShrink:0}}>×</span>
                 </div>
               )}
             </div>
@@ -1115,15 +1126,67 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   );
 }
 
+// ─── スキャナーJSONからクーポン設定を抽出 ───────────────────────────────────
+function extractCouponConfig(scanData) {
+  const url = scanData?.meta?.url || "";
+  const interactive = scanData?.interactive || [];
+  for (const el of interactive) {
+    const t = el.text || "";
+    const m = t.match(/(?:code|coupon|promo)[^\w]*([A-Z0-9_-]{3,16})/i)
+           || t.match(/^CODE\s*[:\s]+([A-Z0-9_-]{3,16})$/i);
+    if (!m) continue;
+    const code = m[1].toUpperCase();
+    // コンテナセレクタ（末尾要素を1つ上げる）
+    const parts = (el.selector||"").split(" > ");
+    const selector = parts.slice(0, -1).join(" > ") || el.selector || "";
+    const today = new Date().toISOString().split("T")[0];
+    return { url, selector, pattern:"CODE\\\\s*[:\\\\s]+([A-Z0-9_-]{3,16})",
+      notes:`"${t.slice(0,40)}" から抽出`, verified:today, lastCode:code, lastScanned:today };
+  }
+  return null;
+}
+// ─── クーポン設定モーダル ──────────────────────────────────────────────────
+function CouponConfigModal({show,config,slug,onClose,onSaveToDir,hugoDir}) {
+  if(!show)return null;
+  const entry = config ? {[slug||"firm-slug"]:config} : null;
+  const json = entry ? JSON.stringify(entry, null, 2) : "クーポンコードが見つかりませんでした";
+  const [copied,setCopied]=useState(false);
+  const copy=()=>{navigator.clipboard.writeText(json).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1500)})};
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"min(90vw,560px)",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:16,display:"flex",flexDirection:"column",gap:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <span style={{fontSize:"0.82rem",fontWeight:700,color:C.accent}}>🔍 クーポン設定 — coupon-config.json エントリ</span>
+          <span onClick={onClose} style={{cursor:"pointer",color:C.textDim}}>✕</span>
+        </div>
+        {config?(
+          <>
+            <div style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:10,fontSize:"0.72rem",fontFamily:font,color:C.textBright,whiteSpace:"pre-wrap"}}>{json}</div>
+            <div style={{fontSize:"0.65rem",color:C.textDim}}>slug（左列のキー）を正しいFirm名に変更してから coupon-config.json に追記してください。</div>
+            <div style={{display:"flex",gap:6,justifyContent:"flex-end"}}>
+              <Btn color={C.accent} onClick={copy}>{copied?"✓":"📋 コピー"}</Btn>
+              {hugoDir&&<Btn color={C.green} onClick={()=>onSaveToDir(slug||"firm-slug",config)}>💾 ファイルに追記</Btn>}
+              <Btn color={C.textDim} onClick={onClose}>閉じる</Btn>
+            </div>
+          </>
+        ):(
+          <div style={{fontSize:"0.72rem",color:C.yellow}}>interactive 要素からクーポンコードが検出できませんでした。</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════
 // 貼り付けエリア（入力＋保管）
 // ═══════════════════════════════════════════════════
-function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,archives,onDeleteArchive,height,onOpenChild,onOpenQuickRef}) {
+function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,archives,onDeleteArchive,height,onOpenChild,onOpenQuickRef,onScannerPasted,onTextPasted}) {
   const taRef=useRef(null);
   const setRefs=useCallback(el=>{taRef.current=el;if(externalRef)externalRef.current=el},[externalRef]);
   const [dragOver,setDragOver]=useState(false);
   const [ocrStatus,setOcrStatus]=useState("");
   const [showArchives,setShowArchives]=useState(false);
+  const [scannerDetected,setScannerDetected]=useState(false);
 
   const handleImageOCR=useCallback(async file=>{
     if(!file||!file.type.startsWith("image/"))return;
@@ -1146,6 +1209,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
           <span style={{fontSize:"0.78rem",fontWeight:700,color:C.accent}}>貼付エリア</span>
           <span onClick={onOpenQuickRef} style={{cursor:"pointer",fontSize:"0.82rem",color:C.blue}} title="早見表">▦</span>
           {ocrStatus&&<span style={{fontSize:"0.65rem",color:C.yellow}}>{ocrStatus}</span>}
+          {scannerDetected&&<span style={{fontSize:"0.62rem",color:C.accent,cursor:"pointer",border:`1px solid ${C.accent}`,borderRadius:3,padding:"1px 5px"}} onClick={()=>onScannerPasted&&onScannerPasted("show")}>🔍 クーポン設定</span>}
         </div>
         <div style={{display:"flex",gap:3,alignItems:"center"}}>
           <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onArchive(t)}} style={{background:"transparent",color:C.purple,border:`1px solid ${C.purple}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>保管</button>
@@ -1157,7 +1221,18 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
       <div style={{flex:1,position:"relative",border:`1px solid ${dragOver?C.accent:C.border}`,borderRadius:6,overflow:"hidden"}}
         onDragOver={e=>{e.preventDefault();setDragOver(true)}} onDragLeave={()=>setDragOver(false)}
         onDrop={e=>{e.preventDefault();setDragOver(false);const f=e.dataTransfer?.files?.[0];if(f?.type.startsWith("image/"))handleImageOCR(f)}}>
-        <textarea ref={setRefs} onPaste={e=>{const items=e.clipboardData?.items;if(!items)return;for(const it of items){if(it.type.startsWith("image/")){e.preventDefault();handleImageOCR(it.getAsFile());return}}}}
+        <textarea ref={setRefs} onPaste={e=>{
+          const items=e.clipboardData?.items;if(!items)return;
+          for(const it of items){if(it.type.startsWith("image/")){e.preventDefault();handleImageOCR(it.getAsFile());return}}
+          // テキスト貼り付け → 貼り付けエリア展開
+          const txt=e.clipboardData.getData("text/plain")||"";
+          if(txt.trim())onTextPasted&&onTextPasted();
+          // スキャナーJSON検出
+          if(txt.includes('"_tool":"site-scanner"')){
+            setScannerDetected(true);
+            try{const parsed=JSON.parse(txt);onScannerPasted&&onScannerPasted(parsed);}catch(e){}
+          }else{setScannerDetected(false);}
+        }}
           placeholder="テキスト貼り付け / 画像ドロップ・ペースト"
           style={{width:"100%",height:"100%",resize:"none",background:C.bg,color:C.text,border:"none",padding:8,fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,outline:"none"}} />
         {dragOver&&<div style={{position:"absolute",inset:0,background:C.accentDim,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none"}}><span style={{color:C.accent,fontWeight:700}}>画像ドロップ → OCR</span></div>}
@@ -1427,11 +1502,173 @@ function NotionPreviewModal({show,text,onClose}) {
 }
 
 // ═══════════════════════════════════════════════════
+// ルールテーブルエディタ（DBP-02専用）
+// ═══════════════════════════════════════════════════
+const YESNO_IDS=new Set(["rd_news","rd_weekend","rd_overnight","rd_ea","rd_copyTrade","rd_scalping","rd_stopLoss"]);
+const DAYS_IDS=new Set(["rd_minDays","rd_timeLimit"]);
+const PERCENT_IDS=new Set(["rd_target","rd_dailyLoss","rd_maxLoss","rd_profitCap"]);
+const YESNO_OPTS=["制限あり","なし（明示）","ー","記載なし"];
+const DIFF_OPTS=["ー","EASE","TRAP"];
+
+function parseRd(val){
+  const p=(val||"").split("|");
+  return{c:(p[0]||"").trim(),f:(p[1]||"").trim(),diff:(p[2]||"").trim(),note:(p[3]||"").trim()};
+}
+function serializeRd({c,f,diff,note}){
+  const parts=[c||"",f||"",diff||"",note||""];
+  while(parts.length&&!parts[parts.length-1])parts.pop();
+  return parts.join("|");
+}
+function rdBadge(v,yesno){
+  if(!v||v==="記載なし"||v==="ー")return{color:C.textDim,bg:"transparent",text:v||"—"};
+  if(yesno){
+    if(v.includes("なし"))return{color:C.green,bg:`${C.green}20`,text:v};
+    if(v.includes("制限")||v.includes("あり"))return{color:C.red,bg:`${C.red}20`,text:v};
+  }
+  if(/\d/.test(v))return{color:C.yellow,bg:"transparent",text:v};
+  return{color:C.text,bg:"transparent",text:v};
+}
+function diffStyle(d){
+  if(d==="EASE")return{color:C.blue,fontWeight:700};
+  if(d==="TRAP")return{color:C.red,fontWeight:700};
+  return{color:C.textDim,fontWeight:400};
+}
+
+function RuleTableEditor({slotData,setSlotData,locks}){
+  const [open,setOpen]=useState(null); // 編集中のslotId
+  const [draft,setDraft]=useState({c:"",f:"",diff:"ー",note:""});
+
+  const slots=SLOT_DEFS.dbp02.filter(s=>s.id.startsWith("rd_"));
+  const getVal=id=>{
+    const fr=slotData[id];if(!fr?.length)return"";
+    const m=fr.find(f=>f.merged);return m?m.text:fr[0]?.text||"";
+  };
+  const openRow=(slot)=>{
+    if(locks[slot.id])return;
+    const p=parseRd(getVal(slot.id));
+    setDraft(p);setOpen(slot.id);
+  };
+  const save=()=>{
+    if(!open)return;
+    const text=serializeRd(draft);
+    setSlotData(prev=>({...prev,[open]:[{text}]}));
+    setOpen(null);
+  };
+  const cancel=()=>setOpen(null);
+
+  const CellBadge=({v,yesno})=>{
+    const b=rdBadge(v,yesno);
+    return<span style={{fontSize:"0.7rem",color:b.color,background:b.bg,borderRadius:3,
+      padding:b.bg!=="transparent"?"1px 5px":"0",whiteSpace:"nowrap"}}>{b.text||"—"}</span>;
+  };
+
+  const FieldInput=({label,valKey,isYesno,isDays,isPercent})=>{
+    const hint=isDays?"日":isPercent?"%":"";
+    return(
+      <div style={{display:"flex",flexDirection:"column",gap:2,flex:1}}>
+        <span style={{fontSize:"0.6rem",color:C.textDim}}>{label}</span>
+        {isYesno?(
+          <select value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
+            style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
+            {(valKey==="f"?["ー（同）",...YESNO_OPTS]:YESNO_OPTS).map(o=>(
+              <option key={o} value={o==="ー（同）"?"ー":o}>{o}</option>
+            ))}
+          </select>
+        ):(
+          <div style={{display:"flex",alignItems:"center",gap:3}}>
+            <input value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
+              placeholder={valKey==="f"?"ー（同）":hint||"値"}
+              style={{flex:1,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,
+                padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
+            {hint&&<span style={{fontSize:"0.65rem",color:C.textDim}}>{hint}</span>}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return(
+    <div style={{overflow:"auto"}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:"0.68rem"}}>
+        <thead>
+          <tr style={{borderBottom:`2px solid ${C.border}`}}>
+            {["項目","Challenge","Funded","差分"].map(h=>(
+              <th key={h} style={{padding:"5px 6px",textAlign:"left",color:C.textDim,
+                fontWeight:700,fontSize:"0.6rem",letterSpacing:"0.05em",whiteSpace:"nowrap"}}>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {slots.map(slot=>{
+            const val=getVal(slot.id);
+            const p=parseRd(val);
+            const yesno=YESNO_IDS.has(slot.id);
+            const days=DAYS_IDS.has(slot.id);
+            const pct=PERCENT_IDS.has(slot.id);
+            const isEmpty=!val;
+            const isOpen=open===slot.id;
+            const locked=!!locks[slot.id];
+            return(
+              <React.Fragment key={slot.id}>
+                <tr onClick={()=>isOpen?cancel():openRow(slot)}
+                  style={{borderBottom:`1px solid ${C.border}`,cursor:locked?"default":"pointer",
+                    background:isOpen?C.accentDim:isEmpty?"transparent":"transparent"}}
+                  onMouseEnter={e=>{if(!isOpen&&!locked)e.currentTarget.style.background=C.surfaceAlt}}
+                  onMouseLeave={e=>{if(!isOpen)e.currentTarget.style.background=isOpen?C.accentDim:"transparent"}}>
+                  <td style={{padding:"6px 6px",color:isEmpty?C.textDim:C.textBright,fontWeight:isEmpty?400:500,whiteSpace:"nowrap"}}>
+                    {locked&&<span style={{fontSize:"0.55rem",marginRight:3}}>🔒</span>}
+                    {slot.label}
+                  </td>
+                  <td style={{padding:"6px 6px"}}><CellBadge v={p.c} yesno={yesno}/></td>
+                  <td style={{padding:"6px 6px"}}><CellBadge v={p.f||"ー"} yesno={yesno}/></td>
+                  <td style={{padding:"6px 6px"}}><span style={diffStyle(p.diff)}>{p.diff||"—"}</span></td>
+                </tr>
+                {isOpen&&(
+                  <tr style={{background:C.surfaceAlt}}>
+                    <td colSpan={4} style={{padding:"10px 8px"}}>
+                      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+                        <FieldInput label="Challenge" valKey="c" isYesno={yesno} isDays={days} isPercent={pct}/>
+                        <FieldInput label="Funded" valKey="f" isYesno={yesno} isDays={days} isPercent={pct}/>
+                        <div style={{display:"flex",flexDirection:"column",gap:2}}>
+                          <span style={{fontSize:"0.6rem",color:C.textDim}}>差分</span>
+                          <select value={draft.diff} onChange={e=>setDraft(p=>({...p,diff:e.target.value}))}
+                            style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
+                            {DIFF_OPTS.map(o=><option key={o}>{o}</option>)}
+                          </select>
+                        </div>
+                      </div>
+                      <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
+                        <span style={{fontSize:"0.6rem",color:C.textDim}}>補足テキスト</span>
+                        <input value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
+                          placeholder="補足・注記（省略可）"
+                          style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
+                            borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
+                      </div>
+                      <div style={{display:"flex",gap:4}}>
+                        <Btn color={C.accent} onClick={save} style={{padding:"2px 10px",fontSize:"0.65rem"}}>保存</Btn>
+                        <Btn color={C.textDim} onClick={cancel} style={{padding:"2px 10px",fontSize:"0.65rem"}}>取消</Btn>
+                        {val&&<Btn color={C.red} onClick={()=>{setSlotData(p=>({...p,[slot.id]:[]}));cancel();}}
+                          style={{padding:"2px 8px",fontSize:"0.65rem"}}>クリア</Btn>}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
 // スロットパネル
 // ═══════════════════════════════════════════════════
 function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans}) {
   const [mergingSlot,setMergingSlot]=useState(null);
-  const [editModal,setEditModal]=useState(null); // {slotId,idx,text,label}
+  const [editModal,setEditModal]=useState(null);
+  const [showRuleTable,setShowRuleTable]=useState(false);
 
   const sections=useMemo(()=>{
     const m={};currentSlots.forEach(s=>{if(!m[s.section])m[s.section]=[];m[s.section].push(s)});return Object.entries(m);
@@ -1667,6 +1904,14 @@ ${slotList}
             }}>{l}</button>
           ))}
           <span style={{fontSize:"0.62rem",color:filled===currentSlots.length?C.green:C.textDim,marginLeft:4}}>{filled}/{currentSlots.length}</span>
+          {templateMode==="dbp02"&&(
+            <button onClick={()=>setShowRuleTable(v=>!v)} style={{
+              padding:"2px 7px",fontSize:"0.65rem",fontWeight:700,cursor:"pointer",borderRadius:3,
+              background:showRuleTable?C.yellow:"transparent",
+              color:showRuleTable?C.bg:C.yellow,
+              border:`1px solid ${C.yellow}`
+            }}>📊 テーブル</button>
+          )}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
           <button onClick={()=>setShowReinvestigateModal(true)} style={{padding:"3px 8px",fontSize:"0.65rem",background:C.blue,color:C.bg,border:"none",borderRadius:4,cursor:"pointer",fontWeight:700}}>📋 再調査</button>
@@ -1676,8 +1921,10 @@ ${slotList}
         </div>
       </div>
 
-      {/* セクション */}
-      {sections.map(([sec,slots])=>{
+      {/* ルールテーブル or セクション */}
+      {templateMode==="dbp02"&&showRuleTable
+        ?<RuleTableEditor slotData={slotData} setSlotData={setSlotData} locks={locks} />
+        :sections.map(([sec,slots])=>{
         const fc=slots.filter(s=>slotData[s.id]?.length>0).length;
         const allSectionLocked=slots.every(s=>locks[s.id]);
         return (
@@ -1749,6 +1996,7 @@ ${slotList}
 
 // ═══════════════════════════════════════════════════
 // 用語辞典パネル
+// ═══════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════
 function GlossaryPanel({terms,setTerms,generating}) {
   const [filter,setFilter]=useState("all"); // all | label | notation | custom
@@ -2273,6 +2521,9 @@ function App() {
   const [showFuncIndex,setShowFuncIndex]=useState(false);
   const [showBackup,setShowBackup]=useState(false);
   const [showMerge,setShowMerge]=useState(false);
+  const [showDataMenu,setShowDataMenu]=useState(false);
+  const [couponModal,setCouponModal]=useState({show:false,config:null,slug:""});
+  const lastScanRef=useRef(null);
   const [consolidateKeepId,setConsolidateKeepId]=useState(null);
   const [activeSlotId,setActiveSlotId]=useState(null); // 選択中スロット
   const pasteAreaRef=useRef(null);
@@ -2329,7 +2580,7 @@ function App() {
   // リサイズ
   const [vtabW,vtabDrag]=useResize(150,"x",80,300);
   const [leftW,leftDrag]=useResize(450,"x",250,800);
-  const [pasteH,pasteDrag]=useResize(300,"y",100,600);
+  const [pasteH,pasteDrag,setPasteH]=useResize(220,"y",100,580);
 
   const currentSlots=SLOT_DEFS[td.templateMode]||[];
 
@@ -2366,12 +2617,45 @@ function App() {
     try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mt||"image/png",data:b64}},{type:"text",text:"画像テキスト抽出。テーブルはMarkdown。抽出のみ出力。"}]}]});if(pasteAreaRef.current)pasteAreaRef.current.value+=(pasteAreaRef.current.value?"\n\n--- OCR ---\n":"")+exText(data)}catch(e){if(pasteAreaRef.current)pasteAreaRef.current.value+="\nOCRエラー: "+e.message}
   },[]);
 
+  // スキャナーJSON処理
+  const handleScannerPasted=useCallback(data=>{
+    if(data==="show"){setCouponModal(p=>({...p,show:true}));return;}
+    lastScanRef.current=data;
+    const cfg=extractCouponConfig(data);
+    // 現在のFirmのslugを推定
+    const activeFirm=firms.find(f=>f.id===activeTabId);
+    const slug=activeFirm?(getFirmName(activeFirm.id,tabDataMap)||activeFirm.name||"").toLowerCase().replace(/\s+/g,"-"):"firm-slug";
+    setCouponModal({show:true,config:cfg,slug});
+  },[firms,activeTabId,tabDataMap]);
+
+  // coupon-config.json に追記（Hugo出力先フォルダ経由）
+  const saveCouponConfig=useCallback(async(slug,entry)=>{
+    if(!hugoDir){alert("Hugo出力先フォルダを選択してください");return;}
+    try{
+      const path=["data","coupon-config.json"];
+      let existing={};
+      try{
+        const fh=await hugoDir.getFileHandle("data").then(d=>d.getDirectoryHandle&&d.getDirectoryHandle("data")).catch(()=>hugoDir);
+        // 簡易: writeHugoFile を使って上書き
+      }catch(e){}
+      existing[slug]=entry;
+      await writeHugoFile(hugoDir,path,JSON.stringify(existing,null,2));
+      alert(`coupon-config.json に "${slug}" を保存しました`);
+      setCouponModal(p=>({...p,show:false}));
+    }catch(e){alert("保存エラー: "+e.message);}
+  },[hugoDir]);
+
+  // 貼り付けエリア展開（テキスト貼り付け時）
+  const handlePasteExpand=useCallback(()=>setPasteH(520),[setPasteH]);
+  // 取り込みエリア展開（反映・翻訳時）
+  const handleTargetFocus=useCallback(()=>setPasteH(100),[setPasteH]);
+
   // 貼り付け→取り込み対象（そのまま）
-  const handleSendToTarget=useCallback(text=>{setTabField("targetText",text)},[setTabField]);
+  const handleSendToTarget=useCallback(text=>{setTabField("targetText",text);setPasteH(100)},[setTabField,setPasteH]);
 
   // 貼り付け→翻訳→取り込み対象
   const handleTranslateToTarget=useCallback(async text=>{
-    setTranslating(true); setTabField("targetText","翻訳中...");
+    setTranslating(true); setTabField("targetText","翻訳中..."); setPasteH(100);
     try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:text}]});setTabField("targetText",exText(data))}
     catch(e){setTabField("targetText","翻訳エラー: "+e.message)}
     setTranslating(false);
@@ -2819,16 +3103,24 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     }
   },[firms,activeTabId]);
   // 複数Firm一括削除（チェック選択用）
-  const deleteManyFirms=useCallback(ids=>{
-    const idSet=new Set(ids);
-    const planIds=new Set();
-    firms.forEach(f=>{ if(idSet.has(f.id))(f.plans||[]).forEach(p=>planIds.add(p.id)); });
-    const remaining=firms.filter(f=>!idSet.has(f.id));
+  const deleteMany=useCallback((firmIds,planIds)=>{
+    const firmIdSet=new Set(firmIds||[]);
+    const planIdSet=new Set(planIds||[]);
+    const firmPlanIds=new Set();
+    firms.forEach(f=>{if(firmIdSet.has(f.id))(f.plans||[]).forEach(p=>firmPlanIds.add(p.id))});
+    const remaining=firms
+      .filter(f=>!firmIdSet.has(f.id))
+      .map(f=>({...f,plans:(f.plans||[]).filter(p=>!planIdSet.has(p.id))}));
     setFirms(remaining);
-    setTabDataMap(p=>{const n={...p};idSet.forEach(id=>delete n[id]);planIds.forEach(pid=>delete n[pid]);return n});
-    if(idSet.has(activeTabId)||planIds.has(activeTabId)){
-      setActiveTabId(remaining[0]?.id||"");
-    }
+    setTabDataMap(p=>{
+      const n={...p};
+      firmIdSet.forEach(id=>delete n[id]);
+      firmPlanIds.forEach(pid=>delete n[pid]);
+      planIdSet.forEach(pid=>delete n[pid]);
+      return n;
+    });
+    const allDeleted=new Set([...firmIdSet,...firmPlanIds,...planIdSet]);
+    if(allDeleted.has(activeTabId)){setActiveTabId(remaining[0]?.id||"")}
   },[firms,activeTabId]);
   const renameTab=useCallback((id,name)=>{
     // Firmか？
@@ -3148,6 +3440,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   return (
     <div style={{display:"flex",flexDirection:"column",height:"100vh",overflow:"hidden"}}>
       <FuncIndex show={showFuncIndex} onClose={()=>setShowFuncIndex(false)} />
+      <CouponConfigModal show={couponModal.show} config={couponModal.config} slug={couponModal.slug} onClose={()=>setCouponModal(p=>({...p,show:false}))} onSaveToDir={saveCouponConfig} hugoDir={hugoDir} />
       <BackupModal show={showBackup} onClose={()=>setShowBackup(false)} getCurrentData={getCurrentData} onRestore={restoreData} />
       <MergeModal show={showMerge} onClose={()=>setShowMerge(false)} getCurrentData={getCurrentData} onApplyMerge={applyMerge} />
       <ConsolidateModal show={!!consolidateKeepId} onClose={()=>setConsolidateKeepId(null)} firms={firms} tabDataMap={tabDataMap} initialKeepId={consolidateKeepId} onApply={applyConsolidate} />
@@ -3161,12 +3454,27 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <button onClick={()=>setRightMode("slots")} style={{background:rightMode==="slots"?C.accent:"transparent",color:rightMode==="slots"?C.bg:C.textDim,border:`1px solid ${rightMode==="slots"?C.accent:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>スロット</button>
           <button onClick={()=>setRightMode("glossary")} style={{background:rightMode==="glossary"?C.purple:"transparent",color:rightMode==="glossary"?C.bg:C.textDim,border:`1px solid ${rightMode==="glossary"?C.purple:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>用語</button>
         </div>
-        <Btn color={C.green} onClick={exportAll} style={{fontSize:"0.6rem"}}>全保存</Btn>
-        <Btn color={C.green} onClick={importAll} style={{fontSize:"0.6rem"}} title="JSONファイルを読み込み（現在のデータを上書き）">全読込</Btn>
-        <Btn color={C.accent} onClick={()=>setShowBackup(true)} style={{fontSize:"0.6rem"}} title="ブラウザ内にバックアップ／そこから復元">💾 ﾊﾞｯｸｱｯﾌﾟ</Btn>
-        <Btn color={C.blue} onClick={()=>setShowMerge(true)} style={{fontSize:"0.6rem"}} title="別PCのJSONを足し合わせて統合（上書きしない）">🔀 ﾏｰｼﾞ</Btn>
-        <Btn color="#f0b90b" onClick={selectHugoDir} style={{fontSize:"0.6rem"}} title="Hugo出力先フォルダを選択">📁{hugoDirName?` ${hugoDirName}`:" 出力先"}</Btn>
-        <Btn color="#00d4ff" onClick={exportHugo} style={{fontSize:"0.6rem"}} title="Hugo用JSON/MDを直接書き込み">🚀Hugo</Btn>
+        {/* データ管理ドロップダウン */}
+        <div style={{position:"relative"}} onMouseLeave={()=>setShowDataMenu(false)}>
+          <Btn color={C.green} onClick={()=>setShowDataMenu(v=>!v)} style={{fontSize:"0.6rem"}}>💾 データ ▾</Btn>
+          {showDataMenu&&(
+            <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:100,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+              <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>全保存</Btn>
+              <Btn color={C.green} onClick={()=>{importAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>全読込</Btn>
+              <div style={{borderTop:`1px solid ${C.border}`,margin:"2px 0"}}/>
+              <Btn color={C.accent} onClick={()=>{setShowBackup(true);setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>💾 バックアップ</Btn>
+              <Btn color={C.blue} onClick={()=>{setShowMerge(true);setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>🔀 マージ</Btn>
+            </div>
+          )}
+        </div>
+        {/* Hugo出力グループ */}
+        <div style={{display:"flex",gap:1,alignItems:"center",background:C.surfaceAlt,border:`1px solid ${C.borderLight}`,borderRadius:4,padding:"1px 4px"}}>
+          <span onClick={selectHugoDir} title="Hugo出力先フォルダを選択"
+            style={{fontSize:"0.6rem",color:hugoDirName?C.yellow:C.textDim,cursor:"pointer",padding:"1px 3px",whiteSpace:"nowrap",maxWidth:80,overflow:"hidden",textOverflow:"ellipsis"}}>
+            📁{hugoDirName?` ${hugoDirName}`:""}
+          </span>
+          <Btn color={C.yellow} onClick={exportHugo} style={{fontSize:"0.6rem",padding:"1px 5px"}} title="Hugo用JSON/MDを直接書き込み">🚀</Btn>
+        </div>
         <span onClick={()=>setShowFuncIndex(!showFuncIndex)} style={{cursor:"pointer",fontSize:"0.82rem"}}>📋</span>
       </div>
 
@@ -3175,7 +3483,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         {/* 縦タブ */}
         <VerticalTabs firms={firms} activeId={activeTabId} onSelect={setActiveTabId}
           onAddFirm={addFirm} onAddPlan={addPlan} onDelete={deleteTab} onRename={renameTab}
-          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteManyFirms} onTogglePin={togglePin} />
+          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin} />
         <ResizeHandle dir="x" onMouseDown={vtabDrag} />
 
         {/* 左カラム: 貼り付け + 取り込み対象 */}
@@ -3183,7 +3491,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <PastePanel externalRef={pasteAreaRef} archives={td.archives}
             onSendToTarget={handleSendToTarget} onTranslateToTarget={handleTranslateToTarget}
             onArchive={handleArchive} onDeleteArchive={handleDeleteArchive}
-            height={pasteH} onOpenChild={openPasteWindow} onOpenQuickRef={openQuickRef} />
+            height={pasteH} onOpenChild={openPasteWindow} onOpenQuickRef={openQuickRef}
+            onScannerPasted={handleScannerPasted} onTextPasted={handlePasteExpand} />
           <ResizeHandle dir="y" onMouseDown={pasteDrag} />
           <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
             autoAssigning={autoAssigning} translating={translating}

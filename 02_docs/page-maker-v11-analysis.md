@@ -12,7 +12,7 @@
 
 | 領域 | コンポーネント | 役割 |
 |---|---|---|
-| 左カラム | `VerticalTabs` | Firm→Plan階層タブ。＋追加 / CSV一括 / リネーム(ダブルクリック) / 📌ピン留め / ⤵Firm統合 / チェックボックス選択→コピー・削除・📄Plan出力。Firm選択時に 📋リサーチ・📤出力・📝攻略 プロンプト生成ボタン表示 |
+| 左カラム | `VerticalTabs` | Firm→Plan階層タブ。＋追加 / CSV一括 / リネーム(ダブルクリック) / 📌ピン留め / ⤵Firm統合 / Firm・Plan両方にチェックボックス。統合アクションバー（未選択+Firm選択中→📋📤📝プロンプト / 選択時→コピー・📄Plan出力・削除）。個別×削除ボタンなし（選択→削除のみ） |
 | 中央上 | `PastePanel` | 貼付エリア。テキスト/画像OCR(Claude vision)・保管(アーカイブ)・翻訳・反映。小窓(❏)・早見表(▦)起動 |
 | 中央下 | `TargetPanel` | 取込エリア。「自動」=Claude APIでスロット自動振り分け / ＋でスロット格納 |
 | 右カラム | `SlotPanel` | テンプレ切替(DBP_01/DBP_02/攻略)。スロット格納・編集・整形(merge)・🔒ロック・MDコピー |
@@ -35,11 +35,11 @@
 | 入出金 | paymentMethods / payoutMethods / payoutPolicy / profitSplit / profitSplitNote |
 | 全プラン | planComparison / planList |
 
-### Plan用（DBP_02 / 22スロット）— `SLOT_DEFS.dbp02`
+### Plan用（DBP_02 / 23スロット）— `SLOT_DEFS.dbp02`
 
 | セクション | フィールド |
 |---|---|
-| タイトル/価格/早見表 | challengeName / priceTable / ruleQuickRef |
+| タイトル/価格/早見表 | challengeName / **steps** / priceTable / ruleQuickRef |
 | 詳細(rd_*) | rd_target, rd_minDays, rd_dailyLoss(+Type), rd_maxLoss(+Type), rd_consistency, rd_profitCap, rd_timeLimit, rd_news, rd_weekend, rd_overnight, rd_ea, rd_copyTrade, rd_scalping, rd_stopLoss, rd_risk, rd_maxPosition, rd_prohibited |
 
 ### 攻略（koryaku / 3スロット）
@@ -94,5 +94,5 @@
 
 - ファイル名 **v11** と内部 **v0.9** 表記が不一致（管理上の混乱要因）
 - LLMキーはWorker Secrets（`env.ANTHROPIC_KEY`）に隔離済み（v33でハードコード全廃）
-- 用語辞典63キー（Firm20 / Plan20 / 表記18 / 計算結果5）が表記ルールの正本として全プロンプトに動的注入される設計
+- 用語辞典64キー（Firm20 / Plan21 / 表記18 / 計算結果5）が表記ルールの正本として全プロンプトに動的注入される設計
 - Hugo出力は File System Access API 依存のため Chromium系ブラウザが必要

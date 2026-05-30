@@ -6,8 +6,15 @@
 
 <div class="cards-grid">
   {{ range hugo.Data.firms }}
+  {{ $url := index . "アフィリエイトURL" | default (index . "公式URL") }}
+  {{ $domain := replaceRE "^https?://(www\\.)?" "" $url | replaceRE "/.*" "" }}
   <div class="card">
     <div class="card-header">
+      {{ if $domain }}
+      <img class="card-logo" src="https://www.google.com/s2/favicons?domain={{ $domain }}&sz=64"
+           onerror="this.style.display='none'"
+           alt="{{ index . "ファーム名" }}" loading="lazy">
+      {{ end }}
       <span class="card-name">{{ index . "ファーム名" }}</span>
       <span class="card-country">{{ index . "拠点国" }}</span>
     </div>
