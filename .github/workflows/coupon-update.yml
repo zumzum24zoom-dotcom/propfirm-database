@@ -1,0 +1,42 @@
+name: クーポン自動更新
+
+on:
+  schedule:
+    - cron: '0 0 3,18 * *'  # 毎月3日・18日 00:00 UTC
+  workflow_dispatch:        # GitHub UI から手動実行も可
+
+jobs:
+  update-coupons:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # コミット & プッシュに必要
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Playwright インストール
+        run: |
+          npm install playwright
+          npx playwright install chromium --with-deps
+
+      - name: クーポン抽出
+        run: node scripts/extract-coupons.mjs
+
+      - name: 変更をコミット
+        run: |
+          git config user.name  "coupon-bot"
+          git config user.email "coupon-bot@noreply.github.com"
+          git diff --quiet && echo "変更なし — スキップ" || (
+            git add data/firms/ data/coupon-config.json
+            git commit -m "[auto] クーポン更新 $(date +%Y-%m-%d)"
+            git push
+          )
+
+      # セレクター壊れ / エラーがあれば Issues で通知（任意）
+      - name: 失敗サマリー
+        if: failure()
+        run: echo "::warning::セレクター消失またはエラーあり。coupon-config.json を確認してください。"

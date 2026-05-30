@@ -1,41 +1,9 @@
-<!DOCTYPE html>
-<html lang="{{ .Site.Language.Locale }}">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
-  <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}プロップファームのデータベース・比較サイト{{ end }}">
-  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
-</head>
-<body>
-
-<header>
-  <div class="header-inner">
-    <a class="site-title" href="{{ "/" | relURL }}">
-      Prop<span>Firm</span> DB
-    </a>
-    <nav>
-      <a href="{{ "/" | relURL }}" {{ if .IsHome }}class="active"{{ end }}>ホーム</a>
-      <a href="{{ "/firms/" | relURL }}" {{ if hasPrefix .RelPermalink "/firms" }}class="active"{{ end }}>ファーム</a>
-      <a href="{{ "/plans/" | relURL }}" {{ if hasPrefix .RelPermalink "/plans" }}class="active"{{ end }}>プラン</a>
-    </nav>
-  </div>
-</header>
-
-<main>
-  {{ block "main" . }}{{ end }}
-</main>
-
-<footer>
-  <p>&copy; {{ now.Year }} Prop Firm Database — 情報は参考目的のみ。投資助言ではありません。</p>
-</footer>
-
 <div id="pfc-coupon-root"></div>
 <script>
 (function() {
   const API_URL = '/api/index.json';
   const ROOT_ID = 'pfc-coupon-root';
-  const COUPON_PAGE = '{{ .Site.Params.couponPage }}';
+  const COUPON_PAGE = 'https://www.propfirm-challengers.jp/336660a529e281d0a7f5cb77fce3447b';
 
   const host = document.getElementById(ROOT_ID);
   if (!host) return;
@@ -49,7 +17,7 @@
     #pfc-sidebar {
       position: fixed;
       right: 0; top: 0; bottom: 0;
-      width: 120px;
+      width: 160px;
       background: #131722;
       border-left: 1px solid #2a2e39;
       z-index: 2147483647;
@@ -58,7 +26,7 @@
       transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
       color: #d1d4dc;
     }
-    #pfc-sidebar.hidden { transform: translateX(120px); }
+    #pfc-sidebar.hidden { transform: translateX(160px); }
 
     #pfc-open-btn {
       position: fixed;
@@ -176,9 +144,13 @@
       box-sizing: border-box; cursor: pointer;
       border: none;
     }
-    .pfc-btn-page { background: #2962ff; color: #fff; }
+    .pfc-btn-page {
+      background: #2962ff; color: #fff;
+    }
     .pfc-btn-page:hover { background: #1a4fd6; }
-    .pfc-btn-close { background: #2a2e39; color: #787b86; }
+    .pfc-btn-close {
+      background: #2a2e39; color: #787b86;
+    }
     .pfc-btn-close:hover { background: #3a3e49; color: #d1d4dc; }
 
     @media (max-width: 768px) {
@@ -229,13 +201,18 @@
 
   function copyCode(btn, code) {
     navigator.clipboard.writeText(code).then(() => {
-      btn.textContent = 'COPIED!'; btn.classList.add('copied');
+      btn.textContent = 'COPIED!';
+      btn.classList.add('copied');
       setTimeout(() => { btn.textContent = code; btn.classList.remove('copied'); }, 1800);
     }).catch(() => {
       const el = document.createElement('textarea');
-      el.value = code; document.body.appendChild(el); el.select();
-      document.execCommand('copy'); document.body.removeChild(el);
-      btn.textContent = 'COPIED!'; btn.classList.add('copied');
+      el.value = code;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      btn.textContent = 'COPIED!';
+      btn.classList.add('copied');
       setTimeout(() => { btn.textContent = code; btn.classList.remove('copied'); }, 1800);
     });
   }
@@ -250,43 +227,68 @@
   function buildCard(coupon) {
     const expInfo = expiryLabel(coupon.expiry);
     if (coupon.expiry && !expInfo) return null;
+
     const div = document.createElement('div');
     div.className = 'pfc-card';
+
     const domain = (coupon.site_url || '').replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
-    const faviconUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=64` : '';
+    const faviconUrl = domain ? `https://icons.duckduckgo.com/ip3/${domain}.ico` : '';
     const initial = (coupon.firm || '?').charAt(0).toUpperCase();
+
     const logoHTML = faviconUrl
       ? `<div class="pfc-logo"><img src="${faviconUrl}" onerror="this.style.display='none';this.parentElement.innerHTML='<span class=\'pfc-logo-init\'>${initial}</span>'"></div>`
       : `<div class="pfc-logo"><span class="pfc-logo-init">${initial}</span></div>`;
-    const discountHTML = coupon.discount ? `<div class="pfc-discount${coupon.coupon_code ? '' : ' no-code'}">${coupon.discount}</div>` : '';
-    const codeHTML = coupon.coupon_code ? `<div class="pfc-code" data-code="${coupon.coupon_code}">${coupon.coupon_code}</div>` : '';
-    const ctaHTML = coupon.site_url ? `<a href="${coupon.site_url}" target="_blank" class="pfc-cta">公式サイトへ</a>` : '';
-    const expiryHTML = expInfo ? `<div class="pfc-expiry${expInfo.soon ? ' soon' : ''}">${expInfo.label}</div>` : '';
+
+    const discountHTML = coupon.discount
+      ? `<div class="pfc-discount${coupon.coupon_code ? '' : ' no-code'}">${coupon.discount}</div>`
+      : '';
+
+    const codeHTML = coupon.coupon_code
+      ? `<div class="pfc-code" data-code="${coupon.coupon_code}">${coupon.coupon_code}</div>`
+      : '';
+
+    const ctaHTML = coupon.site_url
+      ? `<a href="${coupon.site_url}" target="_blank" class="pfc-cta">公式サイトへ</a>`
+      : '';
+
+    const expiryHTML = expInfo
+      ? `<div class="pfc-expiry${expInfo.soon ? ' soon' : ''}">${expInfo.label}</div>`
+      : '';
+
     div.innerHTML = `${logoHTML}<div class="pfc-firm">${coupon.firm || ''}</div>${discountHTML}${codeHTML}${ctaHTML}${expiryHTML}`;
+
     if (coupon.coupon_code) {
-      div.querySelector('.pfc-code').addEventListener('click', function() { copyCode(this, coupon.coupon_code); });
+      div.querySelector('.pfc-code').addEventListener('click', function() {
+        copyCode(this, coupon.coupon_code);
+      });
     }
     return div;
   }
 
   async function loadCoupons() {
     try {
-      const res = await fetch(API_URL);
+      const res  = await fetch(API_URL);
       const data = await res.json();
       const coupons = data.coupons || [];
       if (coupons.length === 0) { sidebar.classList.add('hidden'); return; }
+
       const cards = coupons.map(buildCard).filter(Boolean);
       if (cards.length === 0) { sidebar.classList.add('hidden'); return; }
+
       [...cards, ...cards.map(c => c.cloneNode(true))].forEach(c => {
         const codeEl = c.querySelector('.pfc-code');
-        if (codeEl) { const code = codeEl.dataset.code; codeEl.addEventListener('click', function() { copyCode(this, code); }); }
+        if (codeEl) {
+          const code = codeEl.dataset.code;
+          codeEl.addEventListener('click', function() { copyCode(this, code); });
+        }
         track.appendChild(c);
       });
+
       const duration = Math.max(20, cards.length * 15);
       track.style.animationDuration = duration + 's';
       track.classList.add('running');
     } catch(e) {
-      console.warn('PFC Coupon Sidebar:', e);
+      console.warn('PFC Coupon Sidebar: API error', e);
       sidebar.classList.add('hidden');
     }
   }
@@ -294,6 +296,3 @@
   loadCoupons();
 })();
 </script>
-
-</body>
-</html>

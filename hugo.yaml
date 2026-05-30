@@ -2,5 +2,10 @@ baseURL: https://propfirm-database.jp/
 locale: ja
 title: Prop Firm Database
 theme: pfd
+params:
+  couponPage: "https://www.propfirm-challengers.jp/336660a529e281d0a7f5cb77fce3447b"
+
 outputs:
   home: [HTML]
+  section: [HTML]
+  page: [HTML]

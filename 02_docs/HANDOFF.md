@@ -1,7 +1,7 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-05-29
+> **最終更新**: 2026-05-30
 
 ---
 
@@ -91,7 +91,88 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 
 ---
 
-## 5. 留意点・補足
+## 5. サイト照合タスク（移設・転用リストをHugo実装に落とし込み）
+
+> DB_100_Impl の移設・転用リストを現在の Hugo サイト実装と照合してタスク化。
+
+### ❶ 緊急修正（データ不整合）
+
+- [ ] **`plans/single.html` スキーマ修正** — 旧英語キー（`$plan.account_size` 等）を Page Maker 出力の日本語キー（`利益目標`・`rd_*` 等）に全面差し替え。現状でプランページは何も表示されない
+
+### ❷ データ入力が揃えば実装できるもの
+
+- [ ] **DBP_02 ルール詳細テーブル** — plans/single.html に `rd_*` スロットを Challenge / Funded / 差分の3列テーブルで表示（転用: 旧ルール表ウィジェットのロジック）
+- [ ] **DBP_01 プランナビゲーション** — firms/single.html に配下プランへのリンク一覧を追加
+- [ ] **ルール早見表** — plans/single.html に `ruleQuickRef` スロットを表示
+- [ ] **About Us / フッター整理** — baseof.html のフッターに情報追加、About ページ作成
+
+### ❸ Widget Maker と連携（計算が必要）
+
+- [ ] **実質最短日数タイムラインwidget** — Widget Maker で生成した SVG を plans/single.html の partial として埋め込む（Widget Maker 移植中）
+- [ ] **プラン別難易度スコアwidget** — C_Score / F_Score の算出ロジック確立後、firms/single.html に埋め込み
+- [ ] **DBP_02 実質最短日数 再計算** — Widget Maker の計算ロジックと PLAN_KEY_MAP の Steps / 出金頻度を結線
+
+### ❹ データ設計が必要（後回し可）
+
+- [ ] **マトリクス図_Challenge難易度スコア** — C_Score × F_Score のデータ算出が前提
+- [ ] **難易度チャート（TradingView型 GC/DC）** — 4ベクトル×21項目のスキーマ設計が必要
+- [ ] **難易度スキャナー レーダースイープ演出** — スコアデータ確立後
+- [ ] **Trailing Drawdown 4Type比較シミュレーター** — 01_tools/ にスタンドアロン追加
+
+### ❺ 01_tools に移設（サイトと独立）
+
+- [ ] **今日のバイアス 暗号資産SMC分析ツール** — 01_tools/ に格納（完成品をそのまま移動）
+- [ ] **CryptoCompare API 105銘柄対応** — `01_tools/smc-bias-analyzer.html` を拡張
+
+### ✅ 完了済み
+
+- クーポンログ_右固定サイドバー（baseof.html + GitHub Actions）
+- パーマリンク / slug ルーティング（Hugo 標準）
+- 用語辞典の表記統一（GLOSSARY_SEED P02/P02b/P20 等）
+- SMC Daily Bias 分析ツール（`01_tools/smc-bias-analyzer.html` 存在）
+
+---
+
+## 6. 移設タスク（旧Wraptas/Worker → Hugo）
+
+> 移設 = 旧環境の**具体的ツール・ウィジェット**を Hugo 新環境に移す作業。DB_100_Impl 状態=移設 より自動取得。
+
+- [ ] DBP_01 プランナビゲーション ウィジェット
+- [ ] ルール早見表テンプレート＋攻略_本文フロー設計
+- [ ] 攻略記事 プラン別難易度スコアwidget v1.0.2 — C_Score/F_Score/Easy-Hardランク表示
+- [ ] 攻略記事 タイムラインwidget v1.3.1 — 出金タイムライン棒グラフ
+- [ ] 実質最短日数タイムラインwidget（攻略_Firm用） — Widget Maker に移植中
+- [ ] 難易度スキャナー レーダースイープ演出
+- [ ] DBP_02 ルール詳細テーブル化＋差分強調連動 ver.03
+- [ ] DBP_01 スコアチャートwidget（C_Score/F_Score）
+- [ ] Trailing Drawdown 4Type比較シミュレーター
+- [ ] マトリクス図_Challenge難易度スコア — C_Score × F_Score 2軸マトリクス
+- [ ] 難易度チャート（TradingView型 GC/DC） — 4ベクトル×21項目のC/F比較
+- [ ] サイト全体デザイン_TradingView風ダークテーマ
+- [ ] About Us / 情報提供フォーム / フッター整理
+- [ ] クーポンログ_右固定サイドバー ✅ 済（Hugo baseof + GitHub Actions）
+- [ ] SMC Daily Bias 分析ツール ver.01 — 01_tools/ に移設
+- [ ] CryptoCompare API 105銘柄対応（SMC Daily Bias）
+- [ ] 今日のバイアス - 暗号資産SMC分析ツール — 01_tools/ に移設
+- [ ] GAS_DB05メール自動登録_Claude API統合版
+
+---
+
+## 6. 転用タスク（考え方・アプローチの流用）
+
+> 転用 = 旧環境のロジック・設計思想を**新しい文脈に応用**する。DB_100_Impl 状態=転用 より自動取得。
+
+- [ ] 縦タブプロンプトボタン修正（DBP_01/DBP_02）— Page Maker の UI設計をHugo側スロット構造に転用
+- [ ] 最低取引日数 表記統一 ver.01 — C系「最低取引日数（合格）」/F系「最低取引日数（出金）」→ 用語辞典正本に転用済み
+- [ ] 統制語彙統一・P1-P3クリーンアップ ver.01 — 不在表記ルール → `GLOSSARY_SEED` の notation に転用
+- [ ] 汎用デザインエディタ（スタンドアロンHTMLツール）→ Page Maker / Widget Maker のテーマ設計に転用
+- [ ] パーマリンク実装（slugプロパティ追加）→ Hugo の slug ルーティング設計に転用済み
+- [ ] DBP_02 ルール詳細静的化（SEO対策）→ Hugo テンプレートでのルール表静的生成に転用
+- [ ] DBP_02 実質最短日数 再計算・Worker v7対応 → Widget Maker の計算ロジックに転用中
+
+---
+
+## 7. 留意点・補足
 
 - Page Maker はファイル名「v11」だが内部表記は `APP_VERSION="v0.9"`（不一致・混乱注意）
 - LLM呼び出しは Cloudflare Worker プロキシ `/api/llm` 経由（APIキーは Worker Secrets に隔離）

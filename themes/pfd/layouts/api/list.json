@@ -1,0 +1,19 @@
+{{- $coupons := slice -}}
+{{- range $slug, $firm := hugo.Data.firms -}}
+  {{- $list := index $firm "クーポン" | default slice -}}
+  {{- range $list -}}
+    {{- if .code -}}
+      {{- $entry := dict
+        "firm"        (index $firm "ファーム名" | default $slug)
+        "slug"        $slug
+        "coupon_code" .code
+        "discount"    (.discount | default "")
+        "expiry"      (.expires  | default "")
+        "site_url"    (index $firm "アフィリエイトURL" | default (index $firm "公式URL" | default ""))
+        "updated"     (.updated  | default "")
+      -}}
+      {{- $coupons = $coupons | append $entry -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- dict "coupons" $coupons "generated" (now.Format "2006-01-02T15:04:05Z") | jsonify -}}
