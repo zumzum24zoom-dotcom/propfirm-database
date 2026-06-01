@@ -419,7 +419,32 @@ ${firmLines}
 --- Plan情報${planNames ? "・上記全プラン分" : ""} ---
 ${planLines}
 
-上記の項目を公式サイトから収集してください。`;
+上記の項目を公式サイトから収集し、以下の形式で出力してください。
+
+【出力形式（厳守）】必ず Markdown テーブル（| 区切り）で出力すること。行区切り・箇条書き・スペース区切りは禁止。
+
+■ Firm基本情報テーブル（F01〜F22）
+| F01 | ファーム名 | 内容 |
+| F02 | 拠点国 | 内容 |
+（F01〜F22 を各1行。3列構成: Fキー | 項目名 | 内容）
+
+■ 価格テーブル
+| 口座サイズ | プラン名1 | プラン名2 | … |
+| $5,000 | $XX | $XX | … |
+（口座サイズ×プラン のマトリクス。該当なしは「—」）
+
+■ レバレッジテーブル（F14）
+| 資産クラス | プラン名1 | プラン名2 | … |
+| FX | 1:100 | 1:50 | … |
+
+■ 手数料テーブル（F15）
+| 資産クラス | 手数料 |
+| FX | $X/lot（往復） |
+
+■ プラン比較テーブル（F21）
+| 項目 | プラン名1 | プラン名2 | … |
+| ステップ | 1 | 2 | … |
+（ルール比較9行 + 口座サイズ別価格の2部構成）`;
 
   return prompt;
 }
@@ -645,7 +670,7 @@ const GLOSSARY_SEED = [
   {key:"F19",term:"Profit Split",type:"label",category:"Firm項目",definition:"Funded口座で得た利益のうちトレーダーに分配される割合。"},
   {key:"F20",term:"※Profit Split",type:"label",category:"Firm項目",definition:"利益分配率の変動条件やスケールアップ後の比率を補足する注記。"},
   // ── グループ2: Plan項目ラベル（21）──
-  {key:"P01",term:"利益目標",type:"label",category:"Plan項目",definition:"各フェーズの合格に必要な利益額または利益率。ChallengeとFundedで異なる場合がある。"},
+  {key:"P01",term:"利益目標",type:"label",category:"Plan項目",definition:"C列=Challengeフェーズの合格利益目標(%)。F列=Funded最低出金額（初期残高に対する%または固定額。ファームにより設定がない場合は—）。"},
   {key:"P02",term:"最低取引日数（合格）",type:"label",category:"Plan項目",definition:"チャレンジ合格に必要な最低取引日数。出金要件とは区別する。"},
   {key:"P02b",term:"最低取引日数（出金）",type:"label",category:"Plan項目",definition:"出金申請に必要な最低取引日数。合格要件とは区別する。"},
   {key:"P03",term:"日次損失",type:"label",category:"Plan項目",definition:"1日あたりに許容される損失の上限（%または$）。"},
@@ -1068,7 +1093,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                       const planLine=(planNames||[]).filter(Boolean).length?(planNames||[]).filter(Boolean).map(n=>`- ${n}`).join("\n"):"（プラン未登録）";
                       return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
                     }).join("\n\n");
-                    return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記19項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= Static / Trailing系の6分類のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身は詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: F側が緩い=EASE / F側が厳しい=TRAP / 同一=ー\n- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載`;
+                    return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記19項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= Static / Trailing系の6分類のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身は詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: F側が緩い=EASE / F側が厳しい=TRAP / 同一=ー\n- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載`;
                   }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
                   <div onClick={()=>setShowPromptMenu(false)}>
                     <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
@@ -1767,9 +1792,9 @@ function RuleTableEditor({slotData,setSlotData,locks}){
                         </div>
                       )}
                       <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
-                        <span style={{fontSize:"0.6rem",color:C.textDim}}>{isProhibit?"詳細（各行「名称：説明」で全件）":"詳細（この項目だけで理解できる本文）"}</span>
+                        <span style={{fontSize:"0.6rem",color:C.textDim}}>{isProhibit?"詳細（各行「名称：説明」で全件）":"詳細（書き出し固定: 差分=ー→「Challenge・Funded共に～。」/ EASE|TRAP→「Challengeでは～。Fundedでは～。」）"}</span>
                         <textarea value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
-                          placeholder={isProhibit?"両建て：同一銘柄の反対売買で…":"ルール詳細の本文"} rows={4}
+                          placeholder={isProhibit?"両建て：同一銘柄の反対売買で…":"Challenge・Funded共に…"} rows={4}
                           style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
                             borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none",resize:"vertical"}} />
                       </div>
@@ -2954,7 +2979,10 @@ ${slotList}
 - 差分: Fが厳しい=TRAP / Fが緩い=EASE / 同一=ー
 - C/Fが同一またはF非該当 → F列・差分は "—"（例 "値|—|—|詳細本文"）
 - Instantプラン → "ー|F値|—|詳細本文"
-- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）
+- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）。書き出しは固定形式:
+  ・差分=ー（C/F同一またはF非該当）→「Challenge・Funded共に～。」
+  ・差分=EASE/TRAP（C/Fが異なる）→「Challengeでは～。Fundedでは～。」
+  ※ 禁止行為（rd_prohibited）はこのルール対象外
 
 ■ 禁止
 - 差分列に「なし」は使わない。「—」を使う
@@ -3017,39 +3045,170 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
     setAutoAssigning(false);
   },[currentSlots,setTabField,slotLocks,activeType,syncPlansFromList]);
 
-  // 表取込（決定的パーサ）— NotebookLM出力の「項目|C|F|差分|詳細」1テーブルを解析し rd_* に格納
+  // 表取込（決定的パーサ）— 「口座サイズ」表→priceTable / 「項目|C|F|差分|詳細」→rd_* に格納
   const handleTableParse=useCallback(text=>{
     if(typeof text!=="string"||!text.trim()){alert("取込エリアが空です");return;}
-    // 詳細セクションのラベル→slot id
+    const parseRow=line=>{const c=line.split("|").map(c=>c.trim());if(c[0]==="")c.shift();if(c[c.length-1]==="")c.pop();return c;};
+    const allLines=text.split("\n").map(l=>l.trim()).filter(l=>l);
+    const tableLines=allLines.filter(l=>l.startsWith("|"));
+
+    // ── 行区切りフォーマット（|なし）: 「Steps\n2\nー\nー\n詳細」形式 ──
+    if(!tableLines.length){
+      const hasPKey=allLines.some(l=>/^P\d+[a-z]*[:.：.]/.test(l)||l==="Steps");
+      if(!hasPKey){alert("表形式（|区切り）が見つかりませんでした");return;}
+      // labelToId 構築（|形式と共通）
+      const ltId={};
+      SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{ltId[s.label]=s.id;});
+      ltId["Steps"]="steps";
+      ltId["最低取引日数（合格）"]="rd_minDays";
+      ltId["最低取引日数（出金）"]="rd_minDays";
+      const skipSet=new Set(["項目","C","F","差分","詳細","Challenge","Funded","項目名"]);
+      const stripP=s=>s.replace(/^P\d+[a-z]*[:.．]\s*/,"").trim();
+      const updates={};let stored=0;const skipped=[];
+      let i=0;
+      while(i<allLines.length){
+        const line=allLines[i];
+        // アイテム行の判定: "Steps" or "P01: 利益目標" 形式
+        const isItem=line==="Steps"||/^P\d+[a-z]*[:.：]/.test(line);
+        if(!isItem){i++;continue;}
+        const label=line==="Steps"?"Steps":stripP(line.includes(":")?line.split(":").slice(1).join(":").trim():line);
+        const C=(allLines[i+1]||"—").trim();
+        const F=(allLines[i+2]||"—").trim();
+        const diff=(allLines[i+3]||"—").trim();
+        const detail=(allLines[i+4]||"").trim();
+        const id=ltId[label];
+        if(!id){skipped.push(label);i+=5;continue;}
+        if(slotLocks[id]){i+=5;continue;}
+        if(id==="steps"){
+          updates[id]=C;
+        } else if(label==="最低取引日数（出金）"&&updates["rd_minDays"]){
+          const prev=updates["rd_minDays"].split("|");
+          const prevDetail=prev.slice(3).join("|").trim();
+          updates["rd_minDays"]=`${prev[0]||"—"}|${F}|${diff}|${prevDetail&&detail?prevDetail+" / "+detail:prevDetail||detail}`;
+        } else {
+          updates[id]=`${C}|${F}|${diff}|${detail}`;
+        }
+        stored++;i+=5;
+      }
+      if(!stored){alert("P01: 〜 形式の行が見つかりませんでした");return;}
+      let locked=0;
+      setTabField("slotData",prev=>{
+        const next={...prev};
+        for(const[id,val]of Object.entries(updates)){
+          if(slotLocks[id]){locked++;continue;}
+          next[id]=[...(prev[id]||[]),{text:val}];
+        }
+        return next;
+      });
+      alert(`表取込（行区切り）: ${stored}項目を格納`+(locked?`（ロック${locked}件スキップ）`:"")+(skipped.length?`\n未照合: ${skipped.join(", ")}`:""));
+      return;
+    }
+    // 全|行から「口座サイズ」ヘッダ行を探す
+    const headerIdx=tableLines.findIndex(l=>{const h=parseRow(l);return h[0]==="口座サイズ"||h[0]==="口座サイズ（USD）";});
+    if(headerIdx>=0){
+      if(slotLocks["priceTable"]){alert("priceTable がロックされています");return;}
+      const planCols=parseRow(tableLines[headerIdx]).slice(1);
+      const rows=[];
+      // ヘッダ行の次の行から、価格行（先頭セルが$または¥で始まる）のみ取込
+      for(let i=headerIdx+1;i<tableLines.length;i++){
+        const cells=parseRow(tableLines[i]);
+        if(!cells.length)break;
+        const size=cells[0];
+        if(!size||/^[-:\s]+$/.test(size))continue; // 区切り行スキップ
+        // 先頭セルが$/$5,000 形式か確認（価格行の判定）
+        if(!/^\$|^¥|^\d/.test(size))break; // 非価格行に到達したら終了
+        const prices={};
+        planCols.forEach((col,i)=>{
+          const v=(cells[i+1]||"").trim();
+          prices[col]=(!v||v==="ー"||v==="-"||v==="―")?"—":v;
+        });
+        rows.push({size,tier:"",prices});
+      }
+      if(!rows.length){alert("価格行が見つかりませんでした");return;}
+      setTabField("slotData",prev=>({...prev,priceTable:[{text:JSON.stringify({rows})}]}));
+      alert(`価格テーブル取込: ${rows.length}行 × ${planCols.length}プランを格納`);
+      return;
+    }
+    // F01〜F22 キー → DBP-01 slot id マップ
+    const F_KEY_MAP={
+      F01:"firmName",F02:"country",F03:"established",F04:"officialUrl",
+      F05:"firmCategory",F06:"japanChat",F07:"firmPitch",F08:"rewardProgram",
+      F09:"scaleUp",F10:"broker",F11:"platform",F12:"serverTime",
+      F13:"ddReset",F14:"leverage",F15:"commission",F16:"paymentMethods",
+      F17:"payoutMethods",F18:"payoutPolicy",F19:"profitSplit",F20:"profitSplitNote",
+      F21:"planComparison",F22:"planList"
+    };
+    // F-key形式（F01〜F22）の行があれば → DBP-01スロット取込
+    const hasFKey=tableLines.some(l=>/^[|\s]*F\d{1,2}[|\s]/.test(l));
+    if(hasFKey){
+      const updates={};let stored=0;const skipped=[];
+      tableLines.forEach(line=>{
+        const cells=parseRow(line);
+        if(!cells.length)return;
+        const fkey=cells[0].replace(/\*/g,"").trim(); // **F01** のような太字も対応
+        if(!/^F\d{1,2}$/.test(fkey))return; // F01〜F99 のみ
+        const id=F_KEY_MAP[fkey];
+        if(!id){skipped.push(fkey);return;}
+        if(slotLocks[fkey]||slotLocks[id])return;
+        const val=(cells[2]||cells[1]||"").trim(); // 3列目（内容）優先、2列目フォールバック
+        if(!val||val==="記載なし"||val==="—")return; // 空・記載なしはスキップ
+        updates[id]=val;stored++;
+      });
+      if(!stored){alert("F01〜F22 形式の行が見つかりませんでした");return;}
+      let locked=0;
+      setTabField("slotData",prev=>{
+        const next={...prev};
+        for(const[id,val]of Object.entries(updates)){
+          if(slotLocks[id]){locked++;continue;}
+          next[id]=[...(prev[id]||[]),{text:val}]; // 追記（置換ではなく）
+        }
+        return next;
+      });
+      alert(`Firm取込: ${stored}項目を格納`+(locked?`（ロック${locked}件スキップ）`:"")+(skipped.length?`\n未対応キー: ${skipped.join(", ")}`:""));
+      return;
+    }
+    // 通常の rd_* 取込（「項目|C|F|差分|詳細」形式）
     const labelToId={};
     SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{labelToId[s.label]=s.id;});
-    labelToId["Steps"]="steps"; // タイトルのStepsも取込対象（単一値）
+    labelToId["Steps"]="steps";
+    // P02/P02b の括弧バリアント（合格）（出金）も rd_minDays にマップ
+    labelToId["最低取引日数（合格）"]="rd_minDays";
+    labelToId["最低取引日数（出金）"]="rd_minDays";
+    // P-key プレフィックスを除去: "P01. 利益目標" → "利益目標"
+    const stripPKey=s=>s.replace(/^P\d+[a-z]*[.．]\s*/,"").trim();
     const updates={};let stored=0;const skipped=[];
-    text.split("\n").map(l=>l.trim()).filter(l=>l.startsWith("|")).forEach(line=>{
-      const cells=line.split("|").map(c=>c.trim());
-      if(cells.length&&cells[0]==="")cells.shift();
-      if(cells.length&&cells[cells.length-1]==="")cells.pop();
+    tableLines.forEach(line=>{
+      const cells=parseRow(line);
       if(cells.length<2)return;
-      const item=cells[0];
-      if(item==="項目"||/^[-:\s]+$/.test(item))return; // ヘッダ/区切り行
+      const item=stripPKey(cells[0]);
+      if(item==="項目"||item==="項目名"||/^[-:\s]+$/.test(item))return;
       const id=labelToId[item];
       if(!id){if(item)skipped.push(item);return;}
       if(id==="steps"){
-        updates[id]=(cells[1]||"").trim(); // Steps は C列の単一値（0/1/2）
+        updates[id]=(cells[1]||"").trim();
+      } else if(item==="最低取引日数（出金）"&&updates["rd_minDays"]){
+        // P02b: P02 の F 列を上書き補完してマージ
+        const prev=updates["rd_minDays"].split("|");
+        const newF=(cells[2]||"—").trim();
+        const newDiff=(cells[3]||"—").trim();
+        const newDetail=cells.slice(4).join("|").trim();
+        const prevDetail=prev.slice(3).join("|").trim();
+        const mergedDetail=prevDetail&&newDetail?`${prevDetail} / ${newDetail}`:prevDetail||newDetail;
+        updates["rd_minDays"]=`${prev[0]||"—"}|${newF}|${newDiff}|${mergedDetail}`;
       } else {
         const C=cells[1]||"—",F=cells[2]||"—",diff=cells[3]||"—";
-        const detail=cells.slice(4).join("|").trim(); // 詳細に | が含まれてもOK（先頭3列固定）
+        const detail=cells.slice(4).join("|").trim();
         updates[id]=`${C}|${F}|${diff}|${detail}`;
       }
       stored++;
     });
-    if(!stored){alert("「項目 | C | F | 差分 | 詳細」形式の表が見つかりませんでした");return;}
+    if(!stored){alert("「項目 | C | F | 差分 | 詳細」形式または「口座サイズ」価格表が見つかりませんでした");return;}
     let locked=0;
     setTabField("slotData",prev=>{
       const next={...prev};
       for(const[id,val]of Object.entries(updates)){
         if(slotLocks[id]){locked++;continue;}
-        next[id]=[{text:val}]; // 決定的取込は当該スロットを置換
+        next[id]=[...(prev[id]||[]),{text:val}];
       }
       return next;
     });
@@ -3448,9 +3607,14 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     });
   },[]);
 
+  const HUGO_FORBIDDEN_DIRS=["data","content","themes","static","layouts","assets","public"];
   const selectHugoDir=useCallback(async()=>{
     try{
       const d=await window.showDirectoryPicker({mode:"readwrite"});
+      if(HUGO_FORBIDDEN_DIRS.includes(d.name)){
+        alert(`⚠️ 選択フォルダ「${d.name}」は Hugo プロジェクトルートではありません。\n\npropfirm-database フォルダ（ルート）を選択してください。`);
+        return;
+      }
       setHugoDir(d);setHugoDirName(d.name);
       await saveHandle(d);
     }catch(e){if(e.name!=="AbortError")alert("フォルダ選択エラー: "+e.message);}
@@ -3465,6 +3629,10 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     }
     // dir を hugoDir の代わりに使う（以降 hugoDir を dir に変更）
     const hugoDir=dir;
+    if(HUGO_FORBIDDEN_DIRS.includes(hugoDir.name)){
+      alert(`⚠️ 出力先「${hugoDir.name}」は Hugo プロジェクトルートではありません。\n\n🔄 Hugo ボタン横の「▾」からフォルダを再選択してください（propfirm-database フォルダを選択）。`);
+      return;
+    }
     let count=0;
     try{
       await writeHugoFile(hugoDir,["data","glossary.json"],JSON.stringify(glossaryTerms,null,2));
@@ -3843,7 +4011,10 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           )}
         </div>
         {/* Hugo出力 */}
-        <Btn color={C.yellow} onClick={async()=>{if(!hugoDir)await selectHugoDir();exportHugo();}} style={{fontSize:"0.6rem"}} title={hugoDirName||"フォルダ未選択"}>🚀 Hugo</Btn>
+        <div style={{position:"relative",display:"flex",gap:1}}>
+          <Btn color={C.yellow} onClick={async()=>{if(!hugoDir)await selectHugoDir();else exportHugo();}} style={{fontSize:"0.6rem",borderRadius:"4px 0 0 4px"}} title={hugoDirName||"フォルダ未選択"}>🚀 Hugo</Btn>
+          <Btn color={C.yellow} onClick={selectHugoDir} style={{fontSize:"0.6rem",padding:"1px 5px",borderRadius:"0 4px 4px 0",borderLeft:`1px solid rgba(0,0,0,0.3)`}} title="出力フォルダを再選択">▾</Btn>
+        </div>
         <span onClick={()=>setShowFuncIndex(!showFuncIndex)} style={{cursor:"pointer",fontSize:"0.82rem"}}>📋</span>
       </div>
 
