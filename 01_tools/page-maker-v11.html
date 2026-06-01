@@ -213,7 +213,6 @@ const PLAN_KEY_MAP={
   rd_ea:"EA制限",rd_copyTrade:"コピートレード制約",rd_scalping:"スキャルピング制約",
   rd_stopLoss:"ストップロス制約",rd_risk:"リスクルール",
   rd_maxPosition:"最大ポジション制約",rd_prohibited:"禁止行為",
-  priceTable:"価格テーブル",
 };
 
 // ═══════════════════════════════════════════════════
@@ -577,14 +576,13 @@ const SLOT_DEFS = {
     {id:"profitSplit",label:"Profit Split",section:"入出金",hint:"全プランの数値記載、同値はまとめて"},
     {id:"profitSplitNote",label:"※Profit Split",section:"入出金",hint:"補足テキスト"},
     // 全プラン
+    {id:"priceTable",label:"価格テーブル",section:"全プラン",hint:"口座サイズ×プラン マトリクス（構造化）"},
     {id:"planComparison",label:"プラン比較テーブル",section:"全プラン",hint:"Collectorと同じ項目"},
     {id:"planList",label:"プラン名リスト",section:"全プラン",hint:"Collectorのフィールド編集タブと同一構造（ナビゲーション強調表示用）"},
   ],
   dbp02: [
     {id:"challengeName",label:"プラン名",section:"タイトル",hint:"必須"},
     {id:"steps",label:"Steps",section:"タイトル",hint:"1=1-Step / 2=2-Step / 0=Instant"},
-    {id:"priceTable",label:"価格テーブル",section:"価格",hint:"全プラン共通、該当プラン強調表示。AI生成可"},
-    {id:"ruleQuickRef",label:"ルール早見表",section:"早見表",hint:"AI生成。テーブル1枚（項目/Challenge/Funded/差分）"},
     {id:"rd_target",label:"利益目標",section:"詳細",hint:"C=%目標, F=最小出金額(%or金額)。補足付き"},
     {id:"rd_minDays",label:"最低取引日数",section:"詳細",hint:"日数"},
     {id:"rd_dailyLoss",label:"日次損失",section:"詳細",hint:"%"},
@@ -979,7 +977,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
       const planLine=plans.length?plans.map(n=>`- ${n}`).join("\n"):"（プラン未登録 — 公式サイトから全プランを収集すること）";
       return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
     }).join("\n\n");
-    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\n- テーブル1: ルール早見表（Challenge / Funded / 差分の3列。差分はEASE/TRAP/ー）\n- テーブル2: ルール詳細リスト（P01〜P18は各200字以内の補足、P19=禁止行為は2列テーブル）\n\n各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。プランごとに上記2テーブルを出力すること。`;
+    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記19項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= Static / Trailing系の6分類のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身は詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: F側が緩い=EASE / F側が厳しい=TRAP / 同一=ー\n- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載\n\nテーブルのみ・プランごとに1枚ずつ出力。表記は用語辞典に厳密準拠。`;
     const done=()=>{setPlanCopied(true);setTimeout(()=>setPlanCopied(false),1500)};
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>{
@@ -1064,7 +1062,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                       const planLine=(planNames||[]).filter(Boolean).length?(planNames||[]).filter(Boolean).map(n=>`- ${n}`).join("\n"):"（プラン未登録）";
                       return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
                     }).join("\n\n");
-                    return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\n- テーブル1: ルール早見表（Challenge / Funded / 差分の3列。差分はEASE/TRAP/ー）\n- テーブル2: ルール詳細リスト（P01〜P18は各200字以内の補足、P19=禁止行為は2列テーブル）`;
+                    return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記19項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= Static / Trailing系の6分類のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身は詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: F側が緩い=EASE / F側が厳しい=TRAP / 同一=ー\n- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載`;
                   }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
                   <div onClick={()=>setShowPromptMenu(false)}>
                     <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
@@ -1334,7 +1332,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
 // ═══════════════════════════════════════════════════
 // 取り込み対象エリア
 // ═══════════════════════════════════════════════════
-function TargetPanel({text,onAutoAssign,autoAssigning,translating,onClear,onAdd,activeSlot,onScannerPasted}) {
+function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,onClear,onAdd,activeSlot,onScannerPasted}) {
   const [showDom,setShowDom]=useState(false);
   const domTaRef=useRef(null);
   return (
@@ -1351,6 +1349,8 @@ function TargetPanel({text,onAutoAssign,autoAssigning,translating,onClear,onAdd,
             disabled={autoAssigning||!text} onClick={()=>onAutoAssign(text)}>
             {autoAssigning?"振り分け中...":"自動"}
           </Btn>
+          <Btn color={C.green} disabled={!text} onClick={()=>onTableParse&&onTableParse(text)}
+            style={{padding:"1px 8px",fontSize:"0.68rem"}} title="項目|C|F|差分|詳細 の表を決定的に取込（AI不使用）">表取込</Btn>
           <Btn color={C.accent} disabled={!activeSlot} onClick={onAdd} title={activeSlot?`${activeSlot}に取り込み`:"スロットを選択してください"}>
             ⇨
           </Btn>
@@ -1602,7 +1602,7 @@ const DIFF_OPTS=["ー","EASE","TRAP"];
 
 function parseRd(val){
   const p=(val||"").split("|");
-  return{c:(p[0]||"").trim(),f:(p[1]||"").trim(),diff:(p[2]||"").trim(),note:(p[3]||"").trim()};
+  return{c:(p[0]||"").trim(),f:(p[1]||"").trim(),diff:(p[2]||"").trim(),note:p.slice(3).join("|").trim()};
 }
 function serializeRd({c,f,diff,note}){
   const parts=[c||"",f||"",diff||"",note||""];
@@ -1728,11 +1728,11 @@ function RuleTableEditor({slotData,setSlotData,locks}){
                         </div>
                       </div>
                       <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
-                        <span style={{fontSize:"0.6rem",color:C.textDim}}>補足テキスト</span>
-                        <input value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
-                          placeholder="補足・注記（省略可）"
+                        <span style={{fontSize:"0.6rem",color:C.textDim}}>詳細（この項目だけで理解できる本文）</span>
+                        <textarea value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
+                          placeholder="ルール詳細の本文" rows={4}
                           style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
-                            borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
+                            borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none",resize:"vertical"}} />
                       </div>
                       <div style={{display:"flex",gap:4}}>
                         <Btn color={C.accent} onClick={save} style={{padding:"2px 10px",fontSize:"0.65rem"}}>保存</Btn>
@@ -1755,10 +1755,57 @@ function RuleTableEditor({slotData,setSlotData,locks}){
 // ═══════════════════════════════════════════════════
 // スロットパネル
 // ═══════════════════════════════════════════════════
-function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans}) {
+// 価格マトリクスエディタ（DBP_01・口座サイズ×プラン）
+const PRICE_TIERS=["$5k","$10k","$25k","$50k","$100k","$200k"];
+function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
+  const cols=planNames||[];
+  const locked=!!(locks&&locks.priceTable);
+  const raw=(()=>{const fr=slotData.priceTable;if(!fr||!fr.length)return"";const m=fr.find(f=>f.merged);return m?m.text:(fr[0]&&fr[0].text)||"";})();
+  let matrix={rows:[]};
+  try{if(raw){const o=JSON.parse(raw);if(o&&Array.isArray(o.rows))matrix=o;}}catch(e){matrix={rows:[]};}
+  const commit=next=>setSlotData(prev=>({...prev,priceTable:[{text:JSON.stringify(next)}]}));
+  const setRow=(i,patch)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,...patch}:r)});
+  const setCell=(i,col,val)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,prices:{...(r.prices||{}),[col]:val}}:r)});
+  const addRow=()=>commit({...matrix,rows:[...matrix.rows,{size:"",tier:"$10k",prices:{}}]});
+  const delRow=i=>commit({...matrix,rows:matrix.rows.filter((_,idx)=>idx!==i)});
+  const th={padding:"5px 6px",textAlign:"left",color:C.textDim,fontWeight:700,fontSize:"0.6rem",whiteSpace:"nowrap",borderBottom:`2px solid ${C.border}`};
+  const td={padding:"3px 4px",borderBottom:`1px solid ${C.border}`};
+  const inp={width:"100%",minWidth:70,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 5px",fontSize:"0.66rem",fontFamily:font,outline:"none"};
+  return(
+    <div style={{overflow:"auto"}}>
+      <table style={{borderCollapse:"collapse",fontSize:"0.68rem"}}>
+        <thead><tr>
+          <th style={th}>口座サイズ</th><th style={th}>ティア</th>
+          {cols.map(c=><th key={c} style={th}>{c}</th>)}
+          <th style={th}></th>
+        </tr></thead>
+        <tbody>
+          {matrix.rows.map((r,i)=>(
+            <tr key={i}>
+              <td style={td}><input disabled={locked} value={r.size||""} onChange={e=>setRow(i,{size:e.target.value})} placeholder="¥1,300,000 / $10,000" style={inp}/></td>
+              <td style={td}>
+                <select disabled={locked} value={r.tier||""} onChange={e=>setRow(i,{tier:e.target.value})} style={{...inp,minWidth:60}}>
+                  <option value="">—</option>
+                  {PRICE_TIERS.map(t=><option key={t} value={t}>{t}</option>)}
+                </select>
+              </td>
+              {cols.map(c=><td key={c} style={td}><input disabled={locked} value={(r.prices||{})[c]||""} onChange={e=>setCell(i,c,e.target.value)} placeholder="—" style={inp}/></td>)}
+              <td style={td}>{!locked&&<span onClick={()=>delRow(i)} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem"}}>×</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {cols.length===0&&<p style={{color:C.textDim,fontSize:"0.65rem",marginTop:6}}>※ プランがありません（列はプランから自動生成）</p>}
+      {!locked&&<Btn color={C.accent} onClick={addRow} style={{marginTop:6,padding:"2px 10px",fontSize:"0.65rem"}}>＋ 口座サイズ行</Btn>}
+    </div>
+  );
+}
+
+function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans,planNames}) {
   const [mergingSlot,setMergingSlot]=useState(null);
   const [editModal,setEditModal]=useState(null);
   const [showRuleTable,setShowRuleTable]=useState(false);
+  const [showPriceMatrix,setShowPriceMatrix]=useState(false);
 
   const sections=useMemo(()=>{
     const m={};currentSlots.forEach(s=>{if(!m[s.section])m[s.section]=[];m[s.section].push(s)});return Object.entries(m);
@@ -1820,10 +1867,12 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
       L.push("","## 入出金","",`入金方法: ${g("paymentMethods")}`,`出金方法: ${g("payoutMethods")}`,"",`出金ポリシー: ${g("payoutPolicy")}`);
       L.push("",`Profit Split: ${g("profitSplit")}`);if(g("profitSplitNote"))L.push(g("profitSplitNote"));
       L.push("","## プラン","",`スケールアップ: ${g("scaleUp")}`,"","### プラン比較テーブル","",g("planComparison"));
+      // 価格表（構造化マトリクス→Markdown表。列=プラン名、prices は名前キー）
+      try{const pt=JSON.parse(g("priceTable")||"null");if(pt&&Array.isArray(pt.rows)&&pt.rows.length){const cols=planNames||[];L.push("","### 価格表","","|口座サイズ|ティア|"+cols.join("|")+"|","|"+Array(cols.length+2).fill("---").join("|")+"|");pt.rows.forEach(r=>{const cs=cols.map(c=>(r.prices&&r.prices[c])||"—");L.push(`|${r.size||""}|${r.tier||""}|${cs.join("|")}|`)});}}catch(e){}
     } else if(templateMode==="dbp02"){
-      L.push(`# ${g("challengeName")}`,"","## 価格テーブル","",g("priceTable"));
-      L.push("","## ルール早見表","",g("ruleQuickRef"));
-      L.push("","## ルール詳細","","|項目|Challenge|Funded|差分|補足|","|---|---|---|---|---|");
+      L.push(`# ${g("challengeName")}`);
+      if(g("steps"))L.push("",`Steps: ${g("steps")}`);
+      L.push("","## ルール詳細","","|項目|Challenge|Funded|差分|詳細|","|---|---|---|---|---|");
       L.push("|凡例|Funded列が—の項目はChallengeと同じルール|—|||");
       SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{const v=g(s.id);if(v)L.push(`|${s.label}|${v}|`)});
     } else {
@@ -1832,7 +1881,7 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
       L.push("","## 断面③ 出金までの流れ","",g("k_payout"));
     }
     return L.join("\n");
-  },[templateMode,slotData]);
+  },[templateMode,slotData,planNames]);
 
   // (削除: Notion出力) generateNotionBody は不要
   const generateNotionBody=useCallback((selectedIds=[])=>{
@@ -1866,16 +1915,6 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
     } else if(templateMode==="dbp02"){
       // DBP_02: Plan情報
       
-      // 価格テーブル
-      if(isSelected("priceTable")&&g("priceTable")){
-        L.push("### 価格テーブル","",g("priceTable"),"");
-      }
-      
-      // ルール早見表
-      if(isSelected("ruleQuickRef")&&g("ruleQuickRef")){
-        L.push("### ルール早見表","",g("ruleQuickRef"),"");
-      }
-      
       // ルール詳細テーブル（Markdownテーブル形式）
       L.push("### ルール詳細","");
       L.push("| 項目 | Challenge | Funded |");
@@ -1885,19 +1924,19 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
       SLOT_DEFS.dbp02.filter(s=>s.section==="詳細"&&isSelected(s.id)).forEach(s=>{
         const v=g(s.id);
         if(v){
-          // Challenge|Funded|差分|補足 形式をパース
+          // Challenge|Funded|差分|詳細 形式をパース（詳細は残り全部）
           const vStr=typeof v==="string"?v:String(v);
           const parts=vStr.split("|");
           const cVal=(parts[0]||"").trim();
           const fVal=(parts[1]||"").trim();
-          const note=(parts[3]||"").trim();
-          
+          const detail=parts.slice(3).join("|").trim();
+
           // Markdownテーブル行を生成
           L.push(`| ${s.label} | ${cVal||"—"} | ${fVal||"—"} |`);
-          
-          // 補足テキストがあれば追加行として出力
-          if(note){
-            L.push(`| | ${note} | |`);
+
+          // 詳細本文があれば追加行として出力
+          if(detail){
+            L.push(`| | ${detail} | |`);
           }
         }
       });
@@ -1963,7 +2002,6 @@ ${slotList}
 
   // AI作成対象スロットID
   const aiSlotIds={dbp01:"planComparison",dbp02:"priceTable"};
-  const aiSlotId2="ruleQuickRef";
 
   return (
     <div style={{flex:1,overflow:"auto",padding:10,display:"flex",flexDirection:"column"}}>
@@ -1991,6 +2029,14 @@ ${slotList}
               border:`1px solid ${C.yellow}`
             }}>📊 テーブル</button>
           )}
+          {templateMode==="dbp01"&&(
+            <button onClick={()=>setShowPriceMatrix(v=>!v)} style={{
+              padding:"2px 7px",fontSize:"0.65rem",fontWeight:700,cursor:"pointer",borderRadius:3,
+              background:showPriceMatrix?C.yellow:"transparent",
+              color:showPriceMatrix?C.bg:C.yellow,
+              border:`1px solid ${C.yellow}`
+            }}>📊 価格表</button>
+          )}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
           <Btn color={C.accent} onClick={()=>setShowMdPreview(true)} style={{fontSize:"0.65rem",padding:"2px 8px"}}>プレビュー</Btn>
@@ -2012,9 +2058,11 @@ ${slotList}
         </div>
       )}
 
-      {/* ルールテーブル or セクション */}
+      {/* ルールテーブル / 価格マトリクス / セクション */}
       {templateMode==="dbp02"&&showRuleTable
         ?<RuleTableEditor slotData={slotData} setSlotData={setSlotData} locks={locks} />
+        :templateMode==="dbp01"&&showPriceMatrix
+        ?<PriceMatrixEditor slotData={slotData} setSlotData={setSlotData} locks={locks} planNames={planNames} />
         :sections.map(([sec,slots])=>{
         const fc=slots.filter(s=>slotData[s.id]?.length>0).length;
         const allSectionLocked=slots.every(s=>locks[s.id]);
@@ -2033,7 +2081,7 @@ ${slotList}
               const merged=frags.find(f=>f.merged);
               const locked=isLocked(slot.id);
               const isActive=activeSlotId===slot.id;
-              const isAiTarget=(templateMode==="dbp01"&&slot.id==="planComparison")||(templateMode==="dbp02"&&(slot.id==="priceTable"||slot.id==="ruleQuickRef"))||(templateMode==="koryaku");
+              const isAiTarget=(templateMode==="dbp01"&&slot.id==="planComparison")||(templateMode==="koryaku");
               return (
                 <div key={slot.id} onClick={()=>setActiveSlotId(slot.id)} style={{
                   background:isActive?C.accentDim:C.surface,
@@ -2058,7 +2106,7 @@ ${slotList}
                     {isAiTarget&&!locked&&(
                       (templateMode==="koryaku"&&onAIGenKoryaku)?(
                         <span onClick={e=>{e.stopPropagation();onAIGenKoryaku()}} style={{cursor:aiGenKoryaku?"wait":"pointer",fontSize:"0.5rem",color:C.purple,border:`1px solid ${C.purple}`,borderRadius:2,padding:"0 3px"}}>{aiGenKoryaku?"…":"作成"}</span>
-                      ):onAIGenTable&&(slot.id==="planComparison"||slot.id==="priceTable"||slot.id==="ruleQuickRef")?(
+                      ):onAIGenTable&&slot.id==="planComparison"?(
                         <span onClick={e=>{e.stopPropagation();onAIGenTable(templateMode)}} style={{cursor:aiGenTable?"wait":"pointer",fontSize:"0.5rem",color:C.blue,border:`1px solid ${C.blue}`,borderRadius:2,padding:"0 3px"}}>{aiGenTable?"…":"作成"}</span>
                       ):null
                     )}
@@ -2701,9 +2749,8 @@ function App() {
             const sd=pd.slotData||{};
             const gv=id=>{const fr=sd[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
             const items=SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").map(s=>({label:s.label,value:gv(s.id)}));
-            const qr=gv("ruleQuickRef");
             const price=gv("priceTable");
-            result.push({firm:firm.name,plan:plan.name,fullName:firm.name+" - "+plan.name,items,quickRef:qr,priceTable:price});
+            result.push({firm:firm.name,plan:plan.name,fullName:firm.name+" - "+plan.name,items,priceTable:price});
           });
         });
         e.source.postMessage({type:"pfm-intake-quickref-data",plans:result},"*");
@@ -2863,17 +2910,12 @@ ${slotList}
 - 入力例: "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"
 - 出力: {"planList": "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"}
 
-■ 早見表スロット(rc_*)の格納形式
-"Challenge値|Funded値|差分"
-- C/Fが同一の場合 → "値|—|—"
-- C/Fが異なる場合 → "C値|F値|TRAP" または "C値|F値|EASE"
-- Instantプラン → "ー|F値|—"
-- 差分: Fが厳しい=TRAP、Fが緩い=EASE、同一=—
-- Funded列が「—」の入力 → そのまま "値|—|—"
-
-■ 詳細スロット(rd_*)の格納形式
-"Challenge値|Funded値|差分|補足テキスト"
-- C/Fが同一の場合 → "値|—|—|補足"
+■ ルールスロット(rd_*)の格納形式
+"Challenge値|Funded値|差分|詳細"
+- 差分: Fが厳しい=TRAP / Fが緩い=EASE / 同一=ー
+- C/Fが同一またはF非該当 → F列・差分は "—"（例 "値|—|—|詳細本文"）
+- Instantプラン → "ー|F値|—|詳細本文"
+- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）
 
 ■ 禁止
 - 差分列に「なし」は使わない。「—」を使う
@@ -2935,6 +2977,45 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
     }catch(e){alert("振り分けエラー: "+e.message)}
     setAutoAssigning(false);
   },[currentSlots,setTabField,slotLocks,activeType,syncPlansFromList]);
+
+  // 表取込（決定的パーサ）— NotebookLM出力の「項目|C|F|差分|詳細」1テーブルを解析し rd_* に格納
+  const handleTableParse=useCallback(text=>{
+    if(typeof text!=="string"||!text.trim()){alert("取込エリアが空です");return;}
+    // 詳細セクションのラベル→slot id
+    const labelToId={};
+    SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{labelToId[s.label]=s.id;});
+    labelToId["Steps"]="steps"; // タイトルのStepsも取込対象（単一値）
+    const updates={};let stored=0;const skipped=[];
+    text.split("\n").map(l=>l.trim()).filter(l=>l.startsWith("|")).forEach(line=>{
+      const cells=line.split("|").map(c=>c.trim());
+      if(cells.length&&cells[0]==="")cells.shift();
+      if(cells.length&&cells[cells.length-1]==="")cells.pop();
+      if(cells.length<2)return;
+      const item=cells[0];
+      if(item==="項目"||/^[-:\s]+$/.test(item))return; // ヘッダ/区切り行
+      const id=labelToId[item];
+      if(!id){if(item)skipped.push(item);return;}
+      if(id==="steps"){
+        updates[id]=(cells[1]||"").trim(); // Steps は C列の単一値（0/1/2）
+      } else {
+        const C=cells[1]||"—",F=cells[2]||"—",diff=cells[3]||"—";
+        const detail=cells.slice(4).join("|").trim(); // 詳細に | が含まれてもOK（先頭3列固定）
+        updates[id]=`${C}|${F}|${diff}|${detail}`;
+      }
+      stored++;
+    });
+    if(!stored){alert("「項目 | C | F | 差分 | 詳細」形式の表が見つかりませんでした");return;}
+    let locked=0;
+    setTabField("slotData",prev=>{
+      const next={...prev};
+      for(const[id,val]of Object.entries(updates)){
+        if(slotLocks[id]){locked++;continue;}
+        next[id]=[{text:val}]; // 決定的取込は当該スロットを置換
+      }
+      return next;
+    });
+    alert(`表取込: ${stored}項目を格納`+(locked?`（ロック${locked}件スキップ）`:"")+(skipped.length?`\n未照合の項目: ${skipped.join(", ")}`:""));
+  },[setTabField,slotLocks]);
 
   // 攻略AI生成 — DBP_01 + 全PlanのDBP_02データから18スロット一括生成
   const handleAIGenKoryaku=useCallback(async()=>{
@@ -3092,53 +3173,6 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
 - テーブルのみ出力。説明文は書かない`,
           messages:[{role:"user",content:planSummary}]});
         setTabField("slotData",prev=>({...prev,planComparison:[{text:exText(data)}]}));
-
-      } else if(mode==="dbp02"){
-        // 価格テーブル + 早見表を生成
-        const currentPlanId=activeTabId;
-        const currentPlan=firm.plans.find(p=>p.id===currentPlanId);
-        const currentName=currentPlan?.name||"";
-
-        // 価格テーブル: 全プランの価格データから該当プラン強調
-        const priceData=planDataList.map(p=>`【${p.name}】\n価格: ${p.get("priceTable")||"—"}`).join("\n\n");
-        const priceResp=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,
-          system:`全プラン共通の価格テーブルをMarkdown形式で生成。列: 口座サイズ | ${planDataList.map(p=>p.name).join(" | ")}。該当プラン「${currentName}」の列を【】で強調。テーブルのみ出力。`,
-          messages:[{role:"user",content:priceData}]});
-
-        // 早見表: 現在のプランのDBP_02データからChallenge/Funded/差分テーブル
-        const currentPd=tabDataMap[currentPlanId]||{};const cs=currentPd.slotData||{};
-        const gc=id=>{const fr=cs[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
-        const ruleItems=SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").map(s=>`${s.label}: ${gc(s.id)||"—"}`).join("\n");
-
-        const ruleResp=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:3000,
-          system:`ルール早見表をMarkdown形式で生成。列: 項目 | Challenge | Funded | 差分。
-
-差分列の判定基準:
-- ChallengeとFundedが同じ値、またはFundedが「—」（Challengeルールをそのまま適用）の場合: 差分列は「—」
-- ChallengeとFundedが異なる値の場合:
-  - Funded側のルールが**緩い**（トレーダーに有利）場合: 「EASE」
-  - Funded側のルールが**厳しい**（トレーダーに不利）場合: 「TRAP」
-
-判定例:
-- 利益目標: C=10%, F=5% → F側が緩い（低い目標で合格） → EASE
-- 日次損失: C=5%, F=3% → F側が厳しい（少ない損失で違反） → TRAP
-- 制限時間: C=30日, F=無制限 → F側が緩い → EASE
-
-数値正確保持。テーブルのみ出力。`,
-          messages:[{role:"user",content:`【${currentName}】\n${ruleItems}`}]});
-
-        setTabField("slotData",prev=>({
-          ...prev,
-          priceTable:[{text:exText(priceResp)}],
-          ...Object.fromEntries(
-            SLOT_DEFS.dbp02.filter(s=>s.section==="早見表").map(s=>[s.id,prev[s.id]||[]])
-          ),
-        }));
-        // 早見表は一括で1つのテーブルとして最初のスロットに入れる
-        const quickRefText=exText(ruleResp);
-        if(quickRefText){
-          setTabField("slotData",prev=>({...prev,ruleQuickRef:[{text:quickRefText}]}));
-        }
       }
     }catch(e){alert("テーブルAI生成エラー: "+e.message)}
     setAiGenTable(false);
@@ -3408,6 +3442,26 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         fj["アフィリエイトURL"]=getSlotText(sd,"アフィリエイトURL")||"";
         fj["クーポン"]=[];
         fj["プラン一覧"]=(firm.plans||[]).map(p=>p.name);
+        // 価格マトリクス（構造化JSON）。prices のキーをプラン名→slug に変換して出力
+        const ptRaw=getSlotText(sd,"priceTable");
+        if(ptRaw){try{
+          const pt=JSON.parse(ptRaw);
+          if(pt&&Array.isArray(pt.rows)){
+            const nameToSlug={};
+            (firm.plans||[]).forEach(pl=>{
+              const ppsd=(tabDataMap[pl.id]||{}).slotData||{};
+              const pn=getSlotText(ppsd,"challengeName")||pl.name||"";
+              const cn=pn.replace(new RegExp(`^${firmName.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}\\s*[-–]\\s*`),"");
+              nameToSlug[pl.name]=slugify(cn)||pl.id;
+            });
+            const rows=pt.rows.map(r=>{
+              const np={};
+              Object.entries(r.prices||{}).forEach(([k,v])=>{np[nameToSlug[k]||slugify(k)]=v;});
+              return {...r,prices:np};
+            });
+            fj["価格テーブル"]={...pt,rows};
+          }
+        }catch(e){}}
         await writeHugoFile(hugoDir,["data","firms",`${slug}.json`],JSON.stringify(fj,null,2));
         count++;
         if(fd.targetText){
@@ -3423,7 +3477,19 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           const cleanName=planName.replace(new RegExp(`^${firmName.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}\\s*[-\u2013]\\s*`),"");
           const planSlug=slugify(cleanName)||plan.id;
           const pj={slug:planSlug,"\u30d5\u30a1\u30fc\u30e0":slug};
-          for(const[ek,jk]of Object.entries(PLAN_KEY_MAP))pj[jk]=getSlotText(psd,ek);
+          for(const[ek,jk]of Object.entries(PLAN_KEY_MAP)){
+            const raw=getSlotText(psd,ek);
+            if(ek.startsWith("rd_")){
+              // \u65e9\u898b\u8868+\u8a73\u7d30\u306e\u7d71\u5408\u30ec\u30b3\u30fc\u30c9: "C|F|\u5dee\u5206|\u8a73\u7d30" \u2192 {C,F,\u5dee\u5206,\u8a73\u7d30}\uff08\u5148\u982d3\u5217\u56fa\u5b9a\u30fb\u6b8b\u308a\u3092\u8a73\u7d30\uff09
+              if(raw&&raw.trim()){
+                const p=raw.split("|");
+                pj[jk]={C:(p[0]||"").trim(),F:(p[1]||"").trim(),"\u5dee\u5206":(p[2]||"").trim(),"\u8a73\u7d30":p.slice(3).join("|").trim()};
+              }
+              // \u7a7a\u306erd_\u306f\u30ad\u30fc\u3054\u3068\u7701\u7565
+            } else {
+              pj[jk]=raw;
+            }
+          }
           await writeHugoFile(hugoDir,["data","plans",`${slug}--${planSlug}.json`],JSON.stringify(pj,null,2));
           count++;
           if(pd.targetText){
@@ -3759,7 +3825,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
             onScannerPasted={handleScannerPasted} onTextPasted={handlePasteExpand} />
           <ResizeHandle dir="y" onMouseDown={pasteDrag} />
           <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
-            autoAssigning={autoAssigning} translating={translating}
+            autoAssigning={autoAssigning} onTableParse={handleTableParse} translating={translating}
             onClear={()=>setTabField("targetText","")} onAdd={handleAdd}
             activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
             onScannerPasted={handleScannerPasted} />
@@ -3775,7 +3841,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
             onAIGenTable={handleAIGenTable} aiGenTable={aiGenTable}
             locks={slotLocks} setLocks={setSlotLocks} 
             activeSlotId={activeSlotId} setActiveSlotId={setActiveSlotId}
-            onSyncPlans={syncPlansFromList} />
+            onSyncPlans={syncPlansFromList}
+            planNames={(firms.find(f=>f.id===activeTabId)?.plans||[]).map(p=>p.name)} />
         ):(
           <GlossaryPanel terms={glossaryTerms} setTerms={setGlossaryTerms} generating={glossaryGenerating} />
         )}

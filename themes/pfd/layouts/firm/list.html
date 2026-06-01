@@ -70,6 +70,37 @@
   </div>
 </div>
 
+{{/* 価格表（口座サイズ × プラン マトリクス。列はslugキー） */}}
+{{ with index $firm "価格テーブル" }}
+  {{ $rows := index . "rows" }}
+  {{ if $rows }}
+  {{ $cols := slice }}
+  {{ range hugo.Data.plans }}
+    {{ if eq (index . "ファーム") $slug }}
+      {{ $cols = $cols | append (dict "slug" (index . "slug") "name" (index . "プラン名")) }}
+    {{ end }}
+  {{ end }}
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>価格表</h3>
+    <div class="table-wrapper">
+    <table class="rule-table">
+      <thead><tr><th>口座サイズ</th><th>ティア</th>{{ range $cols }}<th>{{ .name }}</th>{{ end }}</tr></thead>
+      <tbody>
+      {{ range $rows }}
+        {{ $prices := index . "prices" }}
+        <tr>
+          <td class="label">{{ index . "size" }}</td>
+          <td>{{ index . "tier" }}</td>
+          {{ range $cols }}<td>{{ with index $prices .slug }}{{ . }}{{ else }}—{{ end }}</td>{{ end }}
+        </tr>
+      {{ end }}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  {{ end }}
+{{ end }}
+
 {{ with .Content }}
 <div class="plan-body">{{ . }}</div>
 {{ end }}

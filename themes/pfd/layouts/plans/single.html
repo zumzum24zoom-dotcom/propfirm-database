@@ -12,21 +12,87 @@
   </div>
 </div>
 
-{{ with index $plan "価格テーブル" }}
-<div class="detail-desc">{{ . }}</div>
+{{ $labels := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "制限時間" "ニュース取引制限" "週末保有制限" "オーバーナイト制限" "EA制限" "コピートレード制約" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" "禁止行為" }}
+
+{{/* 価格（ファームの価格マトリクスからこのプラン(slug)の口座サイズ別価格を抽出） */}}
+{{ $firmData := index hugo.Data.firms .Params.firm }}
+{{ $planSlug := .Params.slug }}
+{{ with index $firmData "価格テーブル" }}
+  {{ $rows := index . "rows" }}
+  {{ if $rows }}
+  {{ $hasPrice := false }}
+  {{ range $rows }}{{ if index (index . "prices") $planSlug }}{{ $hasPrice = true }}{{ end }}{{ end }}
+  {{ if $hasPrice }}
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>価格</h3>
+    <div class="table-wrapper">
+    <table class="rule-table">
+      <thead><tr><th>口座サイズ</th><th>ティア</th><th>価格</th></tr></thead>
+      <tbody>
+      {{ range $rows }}
+        {{ $row := . }}
+        {{ with index (index $row "prices") $planSlug }}
+        <tr>
+          <td class="label">{{ index $row "size" }}</td>
+          <td>{{ index $row "tier" }}</td>
+          <td>{{ . }}</td>
+        </tr>
+        {{ end }}
+      {{ end }}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  {{ end }}
+  {{ end }}
 {{ end }}
 
+{{/* ルール早見表（統合レコード {C,F,差分,詳細} を持つ項目のみ） */}}
+{{ $hasQuick := false }}
+{{ range $labels }}{{ if reflect.IsMap (index $plan .) }}{{ $hasQuick = true }}{{ end }}{{ end }}
+{{ if $hasQuick }}
+<div class="info-block" style="margin-bottom:1.5rem">
+  <h3>ルール早見表</h3>
+  <table class="rule-table">
+    <thead><tr><th>項目</th><th>Challenge</th><th>Funded</th><th>差分</th></tr></thead>
+    <tbody>
+    {{ range $labels }}
+      {{ $label := . }}
+      {{ $rec := index $plan $label }}
+      {{ if reflect.IsMap $rec }}
+      {{ $diff := index $rec "差分" }}
+      <tr>
+        <td class="label">{{ $label }}</td>
+        <td>{{ with index $rec "C" }}{{ . }}{{ else }}—{{ end }}</td>
+        <td>{{ with index $rec "F" }}{{ . }}{{ else }}—{{ end }}</td>
+        <td class="{{ if eq $diff "EASE" }}diff-ease{{ else if eq $diff "TRAP" }}diff-trap{{ end }}">{{ with $diff }}{{ . }}{{ else }}—{{ end }}</td>
+      </tr>
+      {{ end }}
+    {{ end }}
+    </tbody>
+  </table>
+</div>
+{{ end }}
+
+{{/* ルール詳細（新: rec.詳細 / 旧: 文字列値） */}}
 <div class="info-block stacked">
   <h3>ルール詳細</h3>
-  {{ $labels := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "制限時間" "ニュース取引制限" "週末保有制限" "オーバーナイト制限" "EA制限" "コピートレード制約" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" "禁止行為" }}
+  {{ $hasDetail := false }}
   {{ range $labels }}
     {{ $label := . }}
-    {{ with index $plan $label }}
+    {{ $rec := index $plan $label }}
+    {{ $detail := "" }}
+    {{ if reflect.IsMap $rec }}{{ $detail = index $rec "詳細" }}{{ else }}{{ $detail = $rec }}{{ end }}
+    {{ with $detail }}
+    {{ $hasDetail = true }}
     <div class="info-row">
       <span class="label">{{ $label }}</span>
       <span class="value">{{ . }}</span>
     </div>
     {{ end }}
+  {{ end }}
+  {{ if not $hasDetail }}
+  <p style="color: var(--text-muted); font-size: 0.88rem;">ルールデータ収集中</p>
   {{ end }}
 </div>
 
