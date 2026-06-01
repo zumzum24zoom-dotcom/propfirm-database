@@ -188,6 +188,12 @@ function getSlotText(sd,key){
   const m=arr.find(f=>f.merged);
   return(m?m.text:arr.map(f=>f.text||"").join("\n")).trim();
 }
+// 名前スロットは「値が入ったら自動ロック」（＝作成後ロック / 方式b）。空なら編集可、埋まれば上書き保護。
+const NAME_SLOTS=new Set(["firmName","challengeName"]);
+function isSlotLocked(locks,sd,id){
+  if(locks&&Object.prototype.hasOwnProperty.call(locks,id))return !!locks[id]; // 明示トグルが最優先（🔒/🔓）
+  return NAME_SLOTS.has(id)&&getSlotText(sd,id)!==""; // 名前スロット: 値があれば自動ロック
+}
 async function writeHugoFile(dirHandle,pathParts,content){
   let cur=dirHandle;
   for(let i=0;i<pathParts.length-1;i++)cur=await cur.getDirectoryHandle(pathParts[i],{create:true});
@@ -1594,10 +1600,14 @@ function NotionPreviewModal({show,text,onClose}) {
 // ═══════════════════════════════════════════════════
 // ルールテーブルエディタ（DBP-02専用）
 // ═══════════════════════════════════════════════════
-const YESNO_IDS=new Set(["rd_news","rd_weekend","rd_overnight","rd_ea","rd_copyTrade","rd_scalping","rd_stopLoss"]);
-const DAYS_IDS=new Set(["rd_minDays","rd_timeLimit"]);
-const PERCENT_IDS=new Set(["rd_target","rd_dailyLoss","rd_maxLoss","rd_profitCap"]);
-const YESNO_OPTS=["制限あり","なし（明示）","ー","記載なし"];
+// ルールテーブル 入力型分類（2026-06 型指定）
+const NUM_IDS=new Set(["rd_target","rd_minDays","rd_dailyLoss","rd_maxLoss","rd_consistency"]); // 数値型（数字＋単位／無・記載なし可）
+const UNIT_MAP={rd_target:"%",rd_minDays:"日",rd_dailyLoss:"%",rd_maxLoss:"%",rd_consistency:"%"};
+const LOSSTYPE_IDS=new Set(["rd_dailyLossType","rd_maxLossType"]); // 損失タイプ選択（DD6分類）
+const PROHIBIT_ID="rd_prohibited"; // 禁止行為＝行為名列挙
+const LOSSTYPE_OPTS=["Static","Trailing（Balance EOD）","Trailing（Balance HWM）","Trailing（Equity EOD）","Trailing（Equity HWM）","Trailing（Higher B or E EOD）","記載なし"];
+const YESNO3_OPTS=["有","無","※有","記載なし"]; // その他の制約
+const NUM_SPECIAL=["無","記載なし"]; // 数値型でも選べる特殊値
 const DIFF_OPTS=["ー","EASE","TRAP"];
 
 function parseRd(val){
@@ -1633,45 +1643,60 @@ function RuleTableEditor({slotData,setSlotData,locks}){
     const fr=slotData[id];if(!fr?.length)return"";
     const m=fr.find(f=>f.merged);return m?m.text:fr[0]?.text||"";
   };
+  const typeOf=id=>NUM_IDS.has(id)?"num":LOSSTYPE_IDS.has(id)?"loss":id===PROHIBIT_ID?"prohibit":"yn3";
+  const withUnit=(raw,unit)=>{
+    const v=(raw||"").trim();
+    if(!v||NUM_SPECIAL.includes(v)||v==="ー"||v==="—")return v;
+    return unit&&!v.endsWith(unit)?v+unit:v;
+  };
   const openRow=(slot)=>{
     if(locks[slot.id])return;
-    const p=parseRd(getVal(slot.id));
-    setDraft(p);setOpen(slot.id);
+    setDraft(parseRd(getVal(slot.id)));setOpen(slot.id);
   };
   const save=()=>{
     if(!open)return;
-    const text=serializeRd(draft);
-    setSlotData(prev=>({...prev,[open]:[{text}]}));
+    const d={...draft};
+    if(typeOf(open)==="num"){const u=UNIT_MAP[open]||"";d.c=withUnit(d.c,u);d.f=withUnit(d.f,u);}
+    if(open===PROHIBIT_ID){d.f="";d.diff="ー";}
+    setSlotData(prev=>({...prev,[open]:[{text:serializeRd(d)}]}));
     setOpen(null);
   };
   const cancel=()=>setOpen(null);
 
-  const CellBadge=({v,yesno})=>{
-    const b=rdBadge(v,yesno);
-    return<span style={{fontSize:"0.7rem",color:b.color,background:b.bg,borderRadius:3,
-      padding:b.bg!=="transparent"?"1px 5px":"0",whiteSpace:"nowrap"}}>{b.text||"—"}</span>;
+  const cellColor=(t,v)=>{
+    if(!v||v==="記載なし"||v==="ー"||v==="—")return C.textDim;
+    if(t==="yn3"){if(v==="無")return C.green;if(v==="有")return C.red;if(v==="※有")return C.yellow;}
+    if(t==="num")return C.yellow;
+    return C.text;
   };
+  const Cell=({t,v})=>(
+    <span style={{fontSize:"0.7rem",color:cellColor(t,v),whiteSpace:"nowrap",overflow:"hidden",
+      textOverflow:"ellipsis",maxWidth:170,display:"inline-block",verticalAlign:"bottom"}}>{v||"—"}</span>
+  );
 
-  const FieldInput=({label,valKey,isYesno,isDays,isPercent})=>{
-    const hint=isDays?"日":isPercent?"%":"";
+  const ValueField=({label,valKey,t,unit})=>{
+    const isF=valKey==="f";
     return(
-      <div style={{display:"flex",flexDirection:"column",gap:2,flex:1}}>
+      <div style={{display:"flex",flexDirection:"column",gap:2,flex:1,minWidth:120}}>
         <span style={{fontSize:"0.6rem",color:C.textDim}}>{label}</span>
-        {isYesno?(
+        {t==="num"?(
+          <div style={{display:"flex",alignItems:"center",gap:3,flexWrap:"wrap"}}>
+            <input value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
+              inputMode="decimal" placeholder={isF?"ー（同）":"数値"}
+              style={{width:64,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,
+                padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
+            {unit&&<span style={{fontSize:"0.65rem",color:C.textDim}}>{unit}</span>}
+            {NUM_SPECIAL.map(s=>(
+              <span key={s} onClick={()=>setDraft(p=>({...p,[valKey]:s}))}
+                style={{cursor:"pointer",fontSize:"0.58rem",color:C.textDim,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 5px"}}>{s}</span>
+            ))}
+          </div>
+        ):(
           <select value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
             style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
-            {(valKey==="f"?["ー（同）",...YESNO_OPTS]:YESNO_OPTS).map(o=>(
-              <option key={o} value={o==="ー（同）"?"ー":o}>{o}</option>
-            ))}
+            <option value="">{isF?"ー（同）":"—"}</option>
+            {(t==="loss"?LOSSTYPE_OPTS:YESNO3_OPTS).map(o=><option key={o} value={o}>{o}</option>)}
           </select>
-        ):(
-          <div style={{display:"flex",alignItems:"center",gap:3}}>
-            <input value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
-              placeholder={valKey==="f"?"ー（同）":hint||"値"}
-              style={{flex:1,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,
-                padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
-            {hint&&<span style={{fontSize:"0.65rem",color:C.textDim}}>{hint}</span>}
-          </div>
         )}
       </div>
     );
@@ -1690,11 +1715,11 @@ function RuleTableEditor({slotData,setSlotData,locks}){
         </thead>
         <tbody>
           {slots.map(slot=>{
+            const t=typeOf(slot.id);
+            const unit=UNIT_MAP[slot.id]||"";
+            const isProhibit=slot.id===PROHIBIT_ID;
             const val=getVal(slot.id);
             const p=parseRd(val);
-            const yesno=YESNO_IDS.has(slot.id);
-            const days=DAYS_IDS.has(slot.id);
-            const pct=PERCENT_IDS.has(slot.id);
             const isEmpty=!val;
             const isOpen=open===slot.id;
             const locked=!!locks[slot.id];
@@ -1702,35 +1727,49 @@ function RuleTableEditor({slotData,setSlotData,locks}){
               <React.Fragment key={slot.id}>
                 <tr onClick={()=>isOpen?cancel():openRow(slot)}
                   style={{borderBottom:`1px solid ${C.border}`,cursor:locked?"default":"pointer",
-                    background:isOpen?C.accentDim:isEmpty?"transparent":"transparent"}}
+                    background:isOpen?C.accentDim:"transparent"}}
                   onMouseEnter={e=>{if(!isOpen&&!locked)e.currentTarget.style.background=C.surfaceAlt}}
-                  onMouseLeave={e=>{if(!isOpen)e.currentTarget.style.background=isOpen?C.accentDim:"transparent"}}>
+                  onMouseLeave={e=>{if(!isOpen)e.currentTarget.style.background="transparent"}}>
                   <td style={{padding:"6px 6px",color:isEmpty?C.textDim:C.textBright,fontWeight:isEmpty?400:500,whiteSpace:"nowrap"}}>
                     {locked&&<span style={{fontSize:"0.55rem",marginRight:3}}>🔒</span>}
                     {slot.label}
                   </td>
-                  <td style={{padding:"6px 6px"}}><CellBadge v={p.c} yesno={yesno}/></td>
-                  <td style={{padding:"6px 6px"}}><CellBadge v={p.f||"ー"} yesno={yesno}/></td>
-                  <td style={{padding:"6px 6px"}}><span style={diffStyle(p.diff)}>{p.diff||"—"}</span></td>
+                  {isProhibit?(
+                    <td colSpan={3} style={{padding:"6px 6px"}}><Cell t="prohibit" v={p.c}/></td>
+                  ):(<React.Fragment>
+                    <td style={{padding:"6px 6px"}}><Cell t={t} v={p.c}/></td>
+                    <td style={{padding:"6px 6px"}}><Cell t={t} v={p.f||"ー"}/></td>
+                    <td style={{padding:"6px 6px"}}><span style={diffStyle(p.diff)}>{p.diff||"—"}</span></td>
+                  </React.Fragment>)}
                 </tr>
                 {isOpen&&(
                   <tr style={{background:C.surfaceAlt}}>
                     <td colSpan={4} style={{padding:"10px 8px"}}>
-                      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
-                        <FieldInput label="Challenge" valKey="c" isYesno={yesno} isDays={days} isPercent={pct}/>
-                        <FieldInput label="Funded" valKey="f" isYesno={yesno} isDays={days} isPercent={pct}/>
-                        <div style={{display:"flex",flexDirection:"column",gap:2}}>
-                          <span style={{fontSize:"0.6rem",color:C.textDim}}>差分</span>
-                          <select value={draft.diff} onChange={e=>setDraft(p=>({...p,diff:e.target.value}))}
-                            style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
-                            {DIFF_OPTS.map(o=><option key={o}>{o}</option>)}
-                          </select>
+                      {isProhibit?(
+                        <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
+                          <span style={{fontSize:"0.6rem",color:C.textDim}}>禁止行為（名称を「/」または改行で列挙）</span>
+                          <textarea value={draft.c} onChange={e=>setDraft(p=>({...p,c:e.target.value}))}
+                            placeholder="両建て / アービトラージ / 指標一発 …" rows={2}
+                            style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
+                              borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none",resize:"vertical"}} />
                         </div>
-                      </div>
+                      ):(
+                        <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+                          <ValueField label="Challenge" valKey="c" t={t} unit={unit}/>
+                          <ValueField label="Funded" valKey="f" t={t} unit={unit}/>
+                          <div style={{display:"flex",flexDirection:"column",gap:2}}>
+                            <span style={{fontSize:"0.6rem",color:C.textDim}}>差分</span>
+                            <select value={draft.diff} onChange={e=>setDraft(p=>({...p,diff:e.target.value}))}
+                              style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
+                              {DIFF_OPTS.map(o=><option key={o}>{o}</option>)}
+                            </select>
+                          </div>
+                        </div>
+                      )}
                       <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
-                        <span style={{fontSize:"0.6rem",color:C.textDim}}>詳細（この項目だけで理解できる本文）</span>
+                        <span style={{fontSize:"0.6rem",color:C.textDim}}>{isProhibit?"詳細（各行「名称：説明」で全件）":"詳細（この項目だけで理解できる本文）"}</span>
                         <textarea value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
-                          placeholder="ルール詳細の本文" rows={4}
+                          placeholder={isProhibit?"両建て：同一銘柄の反対売買で…":"ルール詳細の本文"} rows={4}
                           style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
                             borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none",resize:"vertical"}} />
                       </div>
@@ -1811,8 +1850,8 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
     const m={};currentSlots.forEach(s=>{if(!m[s.section])m[s.section]=[];m[s.section].push(s)});return Object.entries(m);
   },[currentSlots]);
 
-  const isLocked=(id)=>!!locks[id];
-  const toggleLock=(id)=>setLocks(p=>({...p,[id]:!p[id]}));
+  const isLocked=(id)=>isSlotLocked(locks,slotData,id);
+  const toggleLock=(id)=>setLocks(p=>({...p,[id]:!isSlotLocked(p,slotData,id)})); // 実効ロック状態を反転（自動ロックも解除可）
 
   const handleDelete=useCallback((slotId,idx)=>{
     if(isLocked(slotId))return;
@@ -2065,7 +2104,7 @@ ${slotList}
         ?<PriceMatrixEditor slotData={slotData} setSlotData={setSlotData} locks={locks} planNames={planNames} />
         :sections.map(([sec,slots])=>{
         const fc=slots.filter(s=>slotData[s.id]?.length>0).length;
-        const allSectionLocked=slots.every(s=>locks[s.id]);
+        const allSectionLocked=slots.every(s=>isLocked(s.id));
         return (
           <div key={sec} style={{marginBottom:6}}>
             <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:3}}>
@@ -2656,7 +2695,7 @@ function App() {
   const [translating,setTranslating]=useState(false);
   const [autoAssigning,setAutoAssigning]=useState(false);
   const [aiGenKoryaku,setAiGenKoryaku]=useState(false);
-  const [slotLocks,setSlotLocks]=useState({firmName:true,challengeName:true}); // 名前スロットは既定ロック（貼付/自動割当/AIによる上書き防止）
+  const [slotLocks,setSlotLocks]=useState({}); // 明示ロックのみ保持。名前スロットは値が入った時点で自動ロック（isSlotLocked）
   const [showFuncIndex,setShowFuncIndex]=useState(false);
   const [showBackup,setShowBackup]=useState(false);
   const [showMerge,setShowMerge]=useState(false);
@@ -2694,7 +2733,7 @@ function App() {
     const sel=window.getSelection()?.toString()?.trim();
     if(!sel){alert("テキストを選択してから＋ボタンを押してください");return}
     setTabField("slotData",prev=>{
-      const locked=slotLocks[activeSlotId];
+      const locked=isSlotLocked(slotLocks,prev,activeSlotId);
       if(locked)return prev;
       return{...prev,[activeSlotId]:[...(prev[activeSlotId]||[]).filter(f=>!f.merged),{text:sel}]};
     });
@@ -2942,7 +2981,7 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
           console.log(`処理中 key=${k}, value=${v}, type=${typeof v}`);
           console.log(`  - currentSlotsに存在: ${currentSlots.some(s=>s.id===k)}`);
           console.log(`  - ロック状態: ${slotLocks[k]}`);
-          if(v&&typeof v==="string"&&currentSlots.some(s=>s.id===k)&&!slotLocks[k]){
+          if(v&&typeof v==="string"&&currentSlots.some(s=>s.id===k)&&!isSlotLocked(slotLocks,next,k)){
             const existing=(next[k]||[]).filter(f=>!f.merged);
             // 既に同じテキストがあればスキップ
             if(existing.some(f=>f.text.trim()===v.trim())){
