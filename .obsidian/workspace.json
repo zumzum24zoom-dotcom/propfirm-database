@@ -8,19 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "d69299d7244ad399",
-            "type": "leaf",
-            "state": {
-              "type": "bases",
-              "state": {
-                "file": "無題のファイル.base",
-                "viewName": "表"
-              },
-              "icon": "lucide-table",
-              "title": "無題のファイル"
-            }
-          },
-          {
             "id": "bcc494ea211fc3d5",
             "type": "leaf",
             "pinned": true,
@@ -59,17 +46,16 @@
             "state": {
               "type": "webviewer",
               "state": {
-                "url": "https://notebooklm.google.com/notebook/9afa6de7-f881-42a7-a007-7a4b27f701af?authuser=1",
-                "title": "FundedNext - NotebookLM",
+                "url": "https://notebooklm.google.com/notebook/59cd8da7-c8f2-4603-b992-700824404383?authuser=1",
+                "title": "済Funded Trading Plus - NotebookLM",
                 "mode": "webview"
               },
               "pinned": true,
               "icon": "globe-2",
-              "title": "FundedNext - NotebookLM"
+              "title": "済Funded Trading Plus - NotebookLM"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -126,8 +112,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "533185f226360e64",
@@ -205,13 +190,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "無題のファイル.base",
-                "followCursor": false,
-                "showSearch": false,
+                "followCursor": true,
+                "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "無題のファイルのアウトライン"
+              "title": "アウトライン"
             }
           },
           {
@@ -229,7 +213,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 394.5
+    "width": 296.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -243,43 +227,43 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "5a68edde342eb590",
+  "active": "0b29796d278a27d9",
   "lastOpenFiles": [
-    "無題のファイル.base",
-    "01_tools/url-picker.html.tmp.35020.2a3de621fdf9",
-    "01_tools/url-picker.html.tmp.35020.fee26fd4bbd0",
-    "01_tools/url-picker.html.tmp.35020.965b42c5528b",
-    "public/tools/url-picker.html",
-    "static/tools/url-picker.html",
-    "public/tools",
-    "static/tools",
-    "01_tools/url-picker.html",
-    "01_tools/url-picker.html.tmp.35020.4a6be99c2e12",
-    "01_tools/BLT/section-extractor-builder.html",
-    "Untitled 1.md",
-    "Untitled.md",
-    "content/firms/fundedelite/plans/fundedelite-2/index.md",
-    "content/firms/fundedelite/plans/fundedelite-2-lite-1/index.md",
-    "content/firms/fundingpips/plans/2-step-pro/index.md",
-    "content/firms/fundingpips/plans/2-step-standard/index.md",
-    "content/firms/fundingpips/plans/1-step/index.md",
-    "content/firms/fundingpips/plans/fundingpips-zero/index.md",
-    "content/firms/the5ers/plans/pro-growth/index.md",
-    "content/firms/the5ers/plans/bootcamp/index.md",
-    "content/firms/the5ers/plans/high-stakes/index.md",
-    "content/firms/the5ers/plans/hyper-growth/index.md",
-    "content/firms/hantec-trader/index.md",
-    "content/firms/hola-prime/index.md",
-    "content/firms/ment-funding/index.md",
-    "content/firms/the-trading-pit/index.md",
-    "content/firms/brightfunded/index.md",
-    "content/firms/bem-funding/index.md",
-    "content/firms/maven/index.md",
-    "content/firms/e8-markets/index.md",
-    "content/firms/alpha-capital/index.md",
-    "content/firms/fundednext/index.md",
-    "content/firms/fundingpips/index.md",
-    "content/firms/the5ers/index.md",
-    "CLAUDE.md"
+    "zz_notes/DB_Policy.base",
+    "zz_notes/DB_Policy.base.tmp.25504.9c58e2c83571",
+    "zz_notes/policy/P025-スコア計算_方式B採用.md",
+    "zz_notes/policy/P025-スコア計算_方式B採用.md.tmp.25504.38a9ce2c1d80",
+    "zz_notes/policy/P024-DB09_BrokerRank_設計方針.md",
+    "zz_notes/policy/P024-DB09_BrokerRank_設計方針.md.tmp.25504.11d40d4c812d",
+    "zz_notes/policy/P023-最速出金スケジュール_攻略記事化方針.md",
+    "zz_notes/policy/P023-最速出金スケジュール_攻略記事化方針.md.tmp.25504.4325dac6de2f",
+    "zz_notes/policy/P022-攻略コンテンツ_2層構造方針.md",
+    "zz_notes/policy/P022-攻略コンテンツ_2層構造方針.md.tmp.25504.93175c4c82e8",
+    "zz_notes/policy/P021-DBP01本文テーブル_語彙表示方針.md",
+    "zz_notes/policy/P021-DBP01本文テーブル_語彙表示方針.md.tmp.25504.fe26e6816b9f",
+    "zz_notes/policy/P020-用語統一_DB02_11項目.md",
+    "zz_notes/policy/P020-用語統一_DB02_11項目.md.tmp.25504.e7c474dc0878",
+    "zz_notes/policy/P019-DB運用フロー_調査から公開.md",
+    "zz_notes/policy/P019-DB運用フロー_調査から公開.md.tmp.25504.f22865675a24",
+    "zz_notes/policy/P018-運用ハブ種別定義.md",
+    "zz_notes/policy/P018-運用ハブ種別定義.md.tmp.25504.04f8e02a5d9b",
+    "zz_notes/policy/P017-運用フロー_Claude一本化.md",
+    "zz_notes/policy/P017-運用フロー_Claude一本化.md.tmp.25504.4efa2040227c",
+    "zz_notes/policy/P016-サイト構造とObsidianの役割分担.md",
+    "zz_notes/policy/P015-GitHubActions_定期更新アーキテクチャ.md",
+    "zz_notes/policy/P014-Hugo仕様の正本_旧Wraptas概念転換.md",
+    "zz_notes/policy/P013-widgetアーキテクチャ転換_DOMScrape方式.md",
+    "zz_notes/policy/P012-パーマリンク設定仕様_確定.md",
+    "zz_notes/policy/P011-スコア計算方針_戦術S.md",
+    "zz_notes/policy/P010-難易度ランク_ハイブリッド方式.md",
+    "zz_notes/policy/P009-難易度チャート仕様_TradingView型GCDC.md",
+    "zz_notes/policy/P008-出金条件テーブル7列仕様.md",
+    "zz_notes/policy/P007-実質最短日数_算出ロジックv2仕様.md",
+    "zz_notes/policy/P006-攻略記事_個社ページ構成方針.md",
+    "zz_notes/policy/P005-サイト構築方針_2層構造.md",
+    "zz_notes/policy/P004-秘密情報_APIキー管理方針.md",
+    "zz_notes/policy/P003-掲載ポリシー_記載なしとなしの区別.md",
+    "zz_notes/policy/P002-公開サイトに根拠URL記載しない方針.md",
+    "zz_notes/policy/P001-掲載ポリシー_情報ソース方針.md"
   ]
 }

@@ -21,7 +21,7 @@
           "name": "Pro-Growth"
         }
       ],
-      "pinned": true
+      "pinned": false
     },
     {
       "id": "f3",
@@ -44,30 +44,7 @@
           "name": "2-Step Pro"
         }
       ],
-      "pinned": true
-    },
-    {
-      "id": "f4",
-      "name": "FundedNext",
-      "plans": [
-        {
-          "id": "p10",
-          "name": "Stellar 1-Step"
-        },
-        {
-          "id": "p11",
-          "name": "Stellar 2-Step"
-        },
-        {
-          "id": "p12",
-          "name": "Stellar Lite"
-        },
-        {
-          "id": "p13",
-          "name": "Stellar Instant"
-        }
-      ],
-      "pinned": true
+      "pinned": false
     },
     {
       "id": "f41",
@@ -93,6 +70,35 @@
       "id": "f45",
       "name": "BrightFunded",
       "plans": []
+    },
+    {
+      "id": "f53",
+      "name": "Top One Trader",
+      "plans": [],
+      "pinned": true
+    },
+    {
+      "id": "f4",
+      "name": "FundedNext",
+      "plans": [
+        {
+          "id": "p10",
+          "name": "Stellar 1-Step"
+        },
+        {
+          "id": "p11",
+          "name": "Stellar 2-Step"
+        },
+        {
+          "id": "p12",
+          "name": "Stellar Lite"
+        },
+        {
+          "id": "p13",
+          "name": "Stellar Instant"
+        }
+      ],
+      "pinned": true
     },
     {
       "id": "f46",
@@ -155,12 +161,6 @@
       "id": "f52",
       "name": "QT Funded",
       "plans": []
-    },
-    {
-      "id": "f53",
-      "name": "Top One Trader",
-      "plans": [],
-      "pinned": true
     },
     {
       "id": "f54",
@@ -762,7 +762,8 @@
           {
             "text": "https://toponetrader.com/"
           }
-        ]
+        ],
+        "established": []
       },
       "templateMode": "dbp01"
     },
@@ -1063,7 +1064,7 @@
       "slotData": {
         "challengeName": [
           {
-            "text": "FundedElite (2) - 2ステップ + 無料リトライ"
+            "text": "FundedElite - 2ステップ + 無料リトライ"
           }
         ],
         "ruleQuickRef": [
@@ -1301,7 +1302,7 @@
       "slotData": {
         "challengeName": [
           {
-            "text": "FundedElite (2) - 1ステップ + 無料リトライ"
+            "text": "FundedElite - 1ステップ + 無料リトライ"
           }
         ],
         "ruleQuickRef": [
@@ -1415,7 +1416,7 @@
       "slotData": {
         "challengeName": [
           {
-            "text": "FundedElite (2) - LITE 2ステップ"
+            "text": "FundedElite - LITE 2ステップ"
           }
         ],
         "ruleQuickRef": [
@@ -1457,7 +1458,7 @@
       "slotData": {
         "challengeName": [
           {
-            "text": "FundedElite (2) - LITE 1ステップ"
+            "text": "FundedElite - LITE 1ステップ"
           }
         ]
       },
@@ -1469,7 +1470,7 @@
       "slotData": {
         "challengeName": [
           {
-            "text": "FundedElite (2) - インスタント"
+            "text": "FundedElite - インスタント"
           }
         ]
       },
@@ -1481,7 +1482,7 @@
       "slotData": {
         "challengeName": [
           {
-            "text": "FundedElite (2) - フラッシュ・アクティベーション"
+            "text": "FundedElite - フラッシュ・アクティベーション"
           }
         ]
       },
