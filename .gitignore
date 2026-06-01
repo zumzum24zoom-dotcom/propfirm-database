@@ -2,5 +2,8 @@
 .netlify
 public/
 
+# Claude Code ローカル作業領域（skills等・コミット不要）
+.claude/
+
 # MCP設定（トークンを含むためコミットしない）
 .mcp.json

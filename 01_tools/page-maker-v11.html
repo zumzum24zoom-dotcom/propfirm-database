@@ -3411,8 +3411,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         await writeHugoFile(hugoDir,["data","firms",`${slug}.json`],JSON.stringify(fj,null,2));
         count++;
         if(fd.targetText){
-          const md=`---\ntitle: "${firmName}"\nslug: "${slug}"\nfirm: "${slug}"\n---\n\n${fd.targetText}`;
-          await writeHugoFile(hugoDir,["content","firms",slug,"index.md"],md);
+          const md=`---\ntype: firm\ntitle: "${firmName}"\nslug: "${slug}"\nfirm: "${slug}"\n---\n\n${fd.targetText}`;
+          await writeHugoFile(hugoDir,["content","firms",slug,"_index.md"],md);
           count++;
         }
         for(const plan of(firm.plans||[])){
@@ -3424,10 +3424,10 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           const planSlug=slugify(cleanName)||plan.id;
           const pj={slug:planSlug,"\u30d5\u30a1\u30fc\u30e0":slug};
           for(const[ek,jk]of Object.entries(PLAN_KEY_MAP))pj[jk]=getSlotText(psd,ek);
-          await writeHugoFile(hugoDir,["data","firms",slug,"plans",`${planSlug}.json`],JSON.stringify(pj,null,2));
+          await writeHugoFile(hugoDir,["data","plans",`${slug}--${planSlug}.json`],JSON.stringify(pj,null,2));
           count++;
           if(pd.targetText){
-            const mdp=`---\ntitle: "${cleanName}"\nslug: "${planSlug}"\nfirm: "${slug}"\n---\n\n${pd.targetText}`;
+            const mdp=`---\ntype: plans\ntitle: "${cleanName}"\nslug: "${planSlug}"\nfirm: "${slug}"\n---\n\n${pd.targetText}`;
             await writeHugoFile(hugoDir,["content","firms",slug,"plans",planSlug,"index.md"],mdp);
             count++;
           }

@@ -1,4 +1,0 @@
----
-title: "FundedNext"
-slug: "fundednext"
----

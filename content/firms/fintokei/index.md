@@ -1,4 +1,0 @@
----
-title: "Fintokei"
-slug: "fintokei"
----

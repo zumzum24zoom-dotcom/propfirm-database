@@ -1,89 +1,40 @@
 {{ define "main" }}
-{{ $firmSlug := .Params.firm | default "" }}
-{{ $planSlug := .Params.slug | default .File.Dir | path.Base }}
+{{ $key := printf "%s--%s" .Params.firm .Params.slug }}
+{{ $plan := index hugo.Data.plans $key }}
 
-{{/* プランデータ取得: ネスト構造 → フラット構造 の順で試行 */}}
-{{ $plan := dict }}
-{{ with index hugo.Data.firms $firmSlug }}
-  {{ with index . "plans" }}
-    {{ with index . $planSlug }}
-      {{ $plan = . }}
-    {{ end }}
-  {{ end }}
-{{ end }}
-{{ if not $plan }}
-  {{ $key := printf "%s--%s" $firmSlug $planSlug }}
-  {{ with index hugo.Data.plans $key }}{{ $plan = . }}{{ end }}
-{{ end }}
-
-{{ $planName := index $plan "プラン名" | default .Title }}
-{{ $firmData := index hugo.Data.firms $firmSlug | default dict }}
-{{ $firmName := index $firmData "ファーム名" | default ($firmSlug | title) }}
-
-<a class="back-link" href="{{ printf "/firms/%s/" $firmSlug | relURL }}">← {{ $firmName }}</a>
+{{ if $plan }}
+<a class="back-link" href="{{ printf "/firms/%s/" .Params.firm | relURL }}">← {{ .Params.firm | upper }} へ戻る</a>
 
 <div class="detail-header">
-  <h1>{{ $planName }}</h1>
+  <h1>{{ index $plan "プラン名" }}</h1>
   <div class="detail-meta">
-    <span>{{ $firmName }}</span>
-    {{ with index $plan "Steps" }}
-    <span class="badge badge-blue">{{ . }}-Step</span>
-    {{ end }}
+    <span>{{ .Params.firm | upper }}</span>
   </div>
 </div>
 
-{{/* 価格テーブル（データあれば） */}}
 {{ with index $plan "価格テーブル" }}
-{{ if . }}
-<div class="info-block" style="margin-bottom:2rem">
-  <h3>価格テーブル</h3>
-  <div class="markdown-content">{{ . | markdownify }}</div>
-</div>
-{{ end }}
+<div class="detail-desc">{{ . }}</div>
 {{ end }}
 
-{{/* コンテンツ本文（NotebookLM生成のルール表Markdownを優先表示） */}}
-{{ if .Content }}
-<div class="rule-content markdown-content">
-  {{ .Content }}
-</div>
-{{ else }}
-{{/* コンテンツなし → JSONデータからルール概要テーブルを生成 */}}
-{{ $hasSomeData := false }}
-{{ range slice "利益目標" "最低取引日数" "日次損失" "最大損失" "一貫性ルール" "ニュース取引制限" "EA制限" }}
-  {{ if index $plan . }}{{ $hasSomeData = true }}{{ end }}
-{{ end }}
-
-{{ if $hasSomeData }}
-<div class="info-block">
-  <h3>ルール概要</h3>
-  <table class="rule-table">
-    <thead>
-      <tr><th>項目</th><th>Challenge</th><th>Funded</th><th>差分</th></tr>
-    </thead>
-    <tbody>
-    {{ $ruleKeys := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "制限時間" "ニュース取引制限" "週末保有制限" "オーバーナイト制限" "EA制限" "コピートレード制約" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" }}
-    {{ range $ruleKeys }}
-    {{ $key := . }}
-    {{ $val := index $plan $key }}
-    {{ if $val }}
-    {{ $parts := split $val "|" }}
-    <tr>
-      <td class="label">{{ $key }}</td>
-      <td>{{ index $parts 0 }}</td>
-      <td>{{ if gt (len $parts) 1 }}{{ index $parts 1 }}{{ else }}—{{ end }}</td>
-      <td class="{{ if gt (len $parts) 2 }}diff-{{ index $parts 2 | lower }}{{ end }}">
-        {{ if gt (len $parts) 2 }}{{ index $parts 2 }}{{ else }}—{{ end }}
-      </td>
-    </tr>
+<div class="info-block stacked">
+  <h3>ルール詳細</h3>
+  {{ $labels := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "制限時間" "ニュース取引制限" "週末保有制限" "オーバーナイト制限" "EA制限" "コピートレード制約" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" "禁止行為" }}
+  {{ range $labels }}
+    {{ $label := . }}
+    {{ with index $plan $label }}
+    <div class="info-row">
+      <span class="label">{{ $label }}</span>
+      <span class="value">{{ . }}</span>
+    </div>
     {{ end }}
-    {{ end }}
-    </tbody>
-  </table>
+  {{ end }}
 </div>
-{{ else }}
-<p style="color:var(--text-muted);padding:2rem 0">ルールデータ収集中 — Page Maker でデータ入力後に表示されます</p>
-{{ end }}
+
+{{ with .Content }}
+<div class="plan-body">{{ . }}</div>
 {{ end }}
 
+{{ else }}
+<p>プランが見つかりません。（キー: {{ $key }}）</p>
+{{ end }}
 {{ end }}

@@ -1,4 +1,0 @@
----
-title: "FundingPips"
-slug: "fundingpips"
----

@@ -1,4 +1,0 @@
----
-title: "AquaFunded"
-slug: "aquafunded"
----

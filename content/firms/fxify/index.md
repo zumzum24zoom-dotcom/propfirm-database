@@ -1,4 +1,0 @@
----
-title: "FXIFY"
-slug: "fxify"
----
