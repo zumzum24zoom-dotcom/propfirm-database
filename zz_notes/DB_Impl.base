@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "type": "folder",
+      "path": "zz_notes/impl"
+    }
+  ],
+  "views": [
+    {
+      "id": "view-table",
+      "name": "テーブル",
+      "type": "table",
+      "order": [
+        { "field": "priority", "direction": "ascending" }
+      ]
+    },
+    {
+      "id": "view-board",
+      "name": "カンバン",
+      "type": "board",
+      "groupBy": "state",
+      "order": [
+        { "field": "priority", "direction": "ascending" }
+      ]
+    }
+  ],
+  "filters": []
+}

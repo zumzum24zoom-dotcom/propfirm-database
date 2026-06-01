@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "type": "folder",
+      "path": "zz_notes/policy"
+    }
+  ],
+  "views": [
+    {
+      "id": "view-table",
+      "name": "テーブル",
+      "type": "table",
+      "order": [
+        { "field": "must_read", "direction": "descending" },
+        { "field": "type", "direction": "ascending" }
+      ]
+    },
+    {
+      "id": "view-board",
+      "name": "カンバン",
+      "type": "board",
+      "groupBy": "type",
+      "order": [
+        { "field": "must_read", "direction": "descending" }
+      ]
+    }
+  ],
+  "filters": []
+}
