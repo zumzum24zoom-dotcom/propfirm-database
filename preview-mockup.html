@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>確定モック：◀▶最下部固定＋クライアント切替（スクロール維持）</title>
+<link rel="stylesheet" href="themes/pfd/static/css/style.css">
+<style>
+  main{max-width:920px;margin:0 auto;padding:2rem 2rem 6rem;}
+  .mock-note{color:var(--text-muted);font-size:.8rem;margin:.2rem 0 1.5rem;padding:.4rem .8rem;background:var(--bg-header);border-left:3px solid var(--accent);border-radius:4px;}
+  .plat-logos{display:flex;gap:.4rem;flex-wrap:wrap;}
+  .plat-logo{display:inline-flex;align-items:center;gap:.3rem;background:#fff;color:#111;border-radius:5px;padding:2px 8px;font-size:.78rem;font-weight:700;}
+  .plat-logo .dot{width:14px;height:14px;border-radius:3px;display:inline-block;}
+  .row-ease{background:rgba(79,142,247,.12);}
+  .row-trap{background:rgba(239,68,68,.12);}
+  .badge-ease{background:var(--accent);color:#fff;border-radius:4px;padding:1px 7px;font-size:.72rem;font-weight:700;}
+  .badge-trap{background:var(--red);color:#fff;border-radius:4px;padding:1px 7px;font-size:.72rem;font-weight:700;}
+  .col-current{background:rgba(79,142,247,.18);font-weight:700;color:var(--text);}
+  th.col-current{background:rgba(79,142,247,.3);}
+  .legend{font-size:.75rem;color:var(--text-muted);margin:.2rem 0 .6rem;}
+  /* ◀▶ 最下部固定・常時表示 */
+  .plan-switcher{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--bg-header);border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;gap:1.5rem;padding:.7rem;box-shadow:0 -2px 12px rgba(0,0,0,.4);}
+  .plan-switcher button{background:none;border:1px solid var(--accent);color:var(--accent);border-radius:6px;
+    font-size:1.1rem;font-weight:700;cursor:pointer;padding:2px 14px;}
+  .plan-switcher .cur{font-size:1.05rem;font-weight:700;color:var(--text);min-width:200px;text-align:center;}
+  .ph2{font-size:.7rem;color:var(--text-muted);font-weight:700;letter-spacing:.05em;margin:2rem 0 .4rem;text-transform:uppercase;}
+  /* CとAの間：大きなプラン名バナー */
+  .plan-banner{margin:2.5rem 0 1rem;padding:1rem 1.4rem;background:linear-gradient(90deg,rgba(79,142,247,.18),transparent);
+    border-left:5px solid var(--accent);border-radius:8px;}
+  .plan-banner .lbl{display:block;font-size:.72rem;color:var(--text-muted);font-weight:700;letter-spacing:.05em;}
+  .plan-banner .nm{font-size:1.8rem;font-weight:800;color:var(--text);line-height:1.2;}
+</style>
+</head>
+<body>
+<main>
+  <p class="mock-note">確定モック：◀▶は<b>最下部に常時固定</b>。押すと<b>リロードせず・スクロール位置を保ったまま</b>比較表/価格表の強調列が動きます（実装はHugo＋JS）。下までスクロールして◀▶を試してください。</p>
+
+  <div class="detail-header">
+    <h1>FundedNext</h1>
+    <div class="detail-meta"><span>UAE</span><span>設立: 2022年</span><a href="#" target="_blank" rel="noopener">公式サイト →</a></div>
+  </div>
+  <div class="detail-desc">業界最大級のリワード制度と柔軟なプラン構成が特徴のプロップファーム。</div>
+
+  <div class="detail-grid">
+    <div class="info-block">
+      <h3>基本情報</h3>
+      <div class="info-row"><span class="label">拠点国</span><span class="value">UAE</span></div>
+      <div class="info-row"><span class="label">創業年</span><span class="value">2022年</span></div>
+      <div class="info-row"><span class="label">カテゴリ</span><span class="value">CFD/FX</span></div>
+      <div class="info-row"><span class="label">日本対応</span><span class="value">日本語HP</span></div>
+    </div>
+    <div class="info-block">
+      <h3>取引環境</h3>
+      <div class="info-row"><span class="label">ブローカー</span><span class="value">提携ブローカー</span></div>
+      <div class="info-row"><span class="label">プラットフォーム</span>
+        <span class="value"><span class="plat-logos">
+          <span class="plat-logo"><span class="dot" style="background:#e74c3c"></span>MT5</span>
+          <span class="plat-logo"><span class="dot" style="background:#2980b9"></span>cTrader</span>
+          <span class="plat-logo"><span class="dot" style="background:#16a085"></span>Match-Trader</span>
+        </span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>レバレッジ</h3>
+    <div class="table-wrapper"><table class="rule-table">
+      <thead><tr><th>資産クラス</th><th>レバレッジ</th></tr></thead>
+      <tbody><tr><td class="label">FX</td><td>1:100</td></tr><tr><td class="label">指数</td><td>1:50</td></tr><tr><td class="label">金</td><td>1:50</td></tr><tr><td class="label">暗号資産</td><td>1:2</td></tr></tbody>
+    </table></div>
+  </div>
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>手数料</h3>
+    <div class="table-wrapper"><table class="rule-table">
+      <thead><tr><th>商品</th><th>手数料</th></tr></thead>
+      <tbody><tr><td class="label">FX</td><td>$3 / lot（往復$6）</td></tr><tr><td class="label">指数・商品</td><td>なし</td></tr></tbody>
+    </table></div>
+  </div>
+
+  <div class="ph2">B ▼ 提供プラン比較（現在プラン列を強調・◀▶連動）</div>
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>提供プラン比較表</h3>
+    <div class="table-wrapper"><table class="rule-table" id="cmpTable">
+      <thead><tr><th>項目</th><th>Stellar 1-Step</th><th>Stellar 2-Step</th><th>Stellar Lite</th><th>Stellar Instant</th></tr></thead>
+      <tbody>
+        <tr><td class="label">ステップ</td><td>1-Step</td><td>2-Step</td><td>2-Step</td><td>Instant</td></tr>
+        <tr><td class="label">利益目標</td><td>8%</td><td>8% / 5%</td><td>8%</td><td>—</td></tr>
+        <tr><td class="label">日次損失</td><td>5%</td><td>5%</td><td>5%</td><td>5%</td></tr>
+        <tr><td class="label">最大損失</td><td>10% / 6%</td><td>10%</td><td>8%</td><td>5%</td></tr>
+        <tr><td class="label">利益分配率</td><td>80%</td><td>80%</td><td>80%</td><td>70〜90%</td></tr>
+        <tr><td class="label">支払い周期</td><td>14日</td><td>14日</td><td>14日</td><td>14日</td></tr>
+        <tr><td class="label">最短合格 <span style="font-size:.65rem;color:var(--text-muted)">(算出)</span></td><td>3日</td><td>6日</td><td>6日</td><td>—</td></tr>
+        <tr><td class="label">最速出金 <span style="font-size:.65rem;color:var(--text-muted)">(算出)</span></td><td>14日</td><td>14日</td><td>14日</td><td>14日</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="ph2">C ▼ 価格表（全プラン共通・現在列強調・ティアなし）</div>
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>価格表</h3>
+    <div class="table-wrapper"><table class="rule-table" id="priceTable">
+      <thead><tr><th>口座サイズ</th><th>Stellar 1-Step</th><th>Stellar 2-Step</th><th>Stellar Lite</th><th>Stellar Instant</th></tr></thead>
+      <tbody>
+        <tr><td class="label">$6,000</td><td>$59</td><td>$49</td><td>$39</td><td>—</td></tr>
+        <tr><td class="label">$15,000</td><td>$119</td><td>$99</td><td>—</td><td>$199</td></tr>
+        <tr><td class="label">$25,000</td><td>$199</td><td>$179</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- CとAの間：大きなプラン名バナー（◀▶連動） -->
+  <div class="plan-banner">
+    <span class="lbl">以下はこのプランの詳細 ▼</span>
+    <span class="nm" id="bannerName">Stellar 1-Step</span>
+  </div>
+
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>ルール早見表</h3>
+    <p class="legend">差分: <span class="badge-ease">EASE</span>=Funded側が緩い / <span class="badge-trap">TRAP</span>=Funded側が厳しい。同じ場合は「ー」。差分のある行のみ色付き。</p>
+    <table class="rule-table">
+      <thead><tr><th>項目</th><th>Challenge</th><th>Funded</th><th>差分</th></tr></thead>
+      <tbody>
+        <tr class="row-ease"><td class="label">利益目標</td><td>8%</td><td>なし</td><td><span class="badge-ease">EASE</span></td></tr>
+        <tr><td class="label">最低取引日数</td><td>5日</td><td>—</td><td>ー</td></tr>
+        <tr><td class="label">日次損失</td><td>5%</td><td>5%</td><td>ー</td></tr>
+        <tr class="row-trap"><td class="label">最大損失</td><td>10%</td><td>6%</td><td><span class="badge-trap">TRAP</span></td></tr>
+        <tr><td class="label">EA制限</td><td>※有</td><td>—</td><td>ー</td></tr>
+        <tr><td class="label">禁止行為</td><td>ヘッジング / HFT / 口座管理代行</td><td>—</td><td>ー</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="info-block stacked">
+    <h3>ルール詳細</h3>
+    <div class="info-row row-ease"><span class="label">利益目標 <span class="badge-ease">EASE</span></span><span class="value">Challengeは口座残高に対し8%の利益達成が合格条件。Funded口座では利益目標は設定されない。</span></div>
+    <div class="info-row row-trap"><span class="label">最大損失 <span class="badge-trap">TRAP</span></span><span class="value">Challengeは初期残高基準で10%（Static）。Funded移行後は6%に引き下げられ、超過時は口座失効。</span></div>
+    <div class="info-row"><span class="label">EA制限</span><span class="value">リスク管理・分析補助の裁量EAのみ使用可。完全自動ボット・HFT・レイテンシーアービトラージは禁止。</span></div>
+    <div class="info-row"><span class="label">禁止行為：ヘッジング</span><span class="value">複数口座間の両建ては禁止。</span></div>
+    <div class="info-row"><span class="label">禁止行為：HFT</span><span class="value">超高速売買は禁止。</span></div>
+    <div class="info-row"><span class="label">禁止行為：口座管理代行</span><span class="value">第三者による運用代行は禁止。</span></div>
+  </div>
+
+</main>
+
+<div class="plan-switcher">
+  <button id="prevBtn" title="前のプラン">◀</button>
+  <span class="cur" id="switcherCur">Stellar 1-Step</span>
+  <button id="nextBtn" title="次のプラン">▶</button>
+</div>
+
+<script>
+// ◀▶ クライアント切替デモ：リロードせず・スクロール維持で強調列を移動
+(function(){
+  var plans=["Stellar 1-Step","Stellar 2-Step","Stellar Lite","Stellar Instant"];
+  var idx=0;
+  function paint(){
+    var col=idx+1; // 0列目はラベル列
+    ["cmpTable","priceTable"].forEach(function(id){
+      var t=document.getElementById(id);
+      t.querySelectorAll("th,td").forEach(function(c){c.classList.remove("col-current");});
+      t.querySelectorAll("tr").forEach(function(tr){
+        var cells=tr.children; if(cells[col]) cells[col].classList.add("col-current");
+      });
+    });
+    document.getElementById("switcherCur").textContent=plans[idx];
+    document.getElementById("bannerName").textContent=plans[idx];
+    // ※実装版ではここでプラン詳細(早見表/ルール詳細)も差し替え＋history.pushStateでURL更新
+  }
+  document.getElementById("prevBtn").onclick=function(){idx=(idx+plans.length-1)%plans.length;paint();};
+  document.getElementById("nextBtn").onclick=function(){idx=(idx+1)%plans.length;paint();};
+  paint();
+})();
+</script>
+</body>
+</html>

@@ -1,4 +1,0 @@
----
-title: "ATFunded"
-slug: "atfunded"
----

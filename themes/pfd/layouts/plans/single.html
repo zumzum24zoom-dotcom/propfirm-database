@@ -1,89 +1,106 @@
 {{ define "main" }}
-{{ $firmSlug := .Params.firm | default "" }}
-{{ $planSlug := .Params.slug | default .File.Dir | path.Base }}
+{{ $key := printf "%s--%s" .Params.firm .Params.slug }}
+{{ $plan := index hugo.Data.plans $key }}
 
-{{/* プランデータ取得: ネスト構造 → フラット構造 の順で試行 */}}
-{{ $plan := dict }}
-{{ with index hugo.Data.firms $firmSlug }}
-  {{ with index . "plans" }}
-    {{ with index . $planSlug }}
-      {{ $plan = . }}
-    {{ end }}
-  {{ end }}
-{{ end }}
-{{ if not $plan }}
-  {{ $key := printf "%s--%s" $firmSlug $planSlug }}
-  {{ with index hugo.Data.plans $key }}{{ $plan = . }}{{ end }}
-{{ end }}
-
-{{ $planName := index $plan "プラン名" | default .Title }}
-{{ $firmData := index hugo.Data.firms $firmSlug | default dict }}
-{{ $firmName := index $firmData "ファーム名" | default ($firmSlug | title) }}
-
-<a class="back-link" href="{{ printf "/firms/%s/" $firmSlug | relURL }}">← {{ $firmName }}</a>
+{{ if $plan }}
+<a class="back-link" href="{{ printf "/firms/%s/" .Params.firm | relURL }}">← {{ .Params.firm | upper }} へ戻る</a>
 
 <div class="detail-header">
-  <h1>{{ $planName }}</h1>
+  <h1>{{ index $plan "プラン名" }}</h1>
   <div class="detail-meta">
-    <span>{{ $firmName }}</span>
-    {{ with index $plan "Steps" }}
-    <span class="badge badge-blue">{{ . }}-Step</span>
-    {{ end }}
+    <span>{{ .Params.firm | upper }}</span>
   </div>
 </div>
 
-{{/* 価格テーブル（データあれば） */}}
-{{ with index $plan "価格テーブル" }}
-{{ if . }}
-<div class="info-block" style="margin-bottom:2rem">
-  <h3>価格テーブル</h3>
-  <div class="markdown-content">{{ . | markdownify }}</div>
-</div>
-{{ end }}
+{{ $labels := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "制限時間" "ニュース取引制限" "週末保有制限" "オーバーナイト制限" "EA制限" "コピートレード制約" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" "禁止行為" }}
+
+{{/* 価格（ファームの価格マトリクスからこのプラン(slug)の口座サイズ別価格を抽出） */}}
+{{ $firmData := index hugo.Data.firms .Params.firm }}
+{{ $planSlug := .Params.slug }}
+{{ with index $firmData "価格テーブル" }}
+  {{ $rows := index . "rows" }}
+  {{ if $rows }}
+  {{ $hasPrice := false }}
+  {{ range $rows }}{{ if index (index . "prices") $planSlug }}{{ $hasPrice = true }}{{ end }}{{ end }}
+  {{ if $hasPrice }}
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>価格</h3>
+    <div class="table-wrapper">
+    <table class="rule-table">
+      <thead><tr><th>口座サイズ</th><th>ティア</th><th>価格</th></tr></thead>
+      <tbody>
+      {{ range $rows }}
+        {{ $row := . }}
+        {{ with index (index $row "prices") $planSlug }}
+        <tr>
+          <td class="label">{{ index $row "size" }}</td>
+          <td>{{ index $row "tier" }}</td>
+          <td>{{ . }}</td>
+        </tr>
+        {{ end }}
+      {{ end }}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  {{ end }}
+  {{ end }}
 {{ end }}
 
-{{/* コンテンツ本文（NotebookLM生成のルール表Markdownを優先表示） */}}
-{{ if .Content }}
-<div class="rule-content markdown-content">
-  {{ .Content }}
-</div>
-{{ else }}
-{{/* コンテンツなし → JSONデータからルール概要テーブルを生成 */}}
-{{ $hasSomeData := false }}
-{{ range slice "利益目標" "最低取引日数" "日次損失" "最大損失" "一貫性ルール" "ニュース取引制限" "EA制限" }}
-  {{ if index $plan . }}{{ $hasSomeData = true }}{{ end }}
-{{ end }}
-
-{{ if $hasSomeData }}
-<div class="info-block">
-  <h3>ルール概要</h3>
+{{/* ルール早見表（統合レコード {C,F,差分,詳細} を持つ項目のみ） */}}
+{{ $hasQuick := false }}
+{{ range $labels }}{{ if reflect.IsMap (index $plan .) }}{{ $hasQuick = true }}{{ end }}{{ end }}
+{{ if $hasQuick }}
+<div class="info-block" style="margin-bottom:1.5rem">
+  <h3>ルール早見表</h3>
   <table class="rule-table">
-    <thead>
-      <tr><th>項目</th><th>Challenge</th><th>Funded</th><th>差分</th></tr>
-    </thead>
+    <thead><tr><th>項目</th><th>Challenge</th><th>Funded</th><th>差分</th></tr></thead>
     <tbody>
-    {{ $ruleKeys := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "制限時間" "ニュース取引制限" "週末保有制限" "オーバーナイト制限" "EA制限" "コピートレード制約" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" }}
-    {{ range $ruleKeys }}
-    {{ $key := . }}
-    {{ $val := index $plan $key }}
-    {{ if $val }}
-    {{ $parts := split $val "|" }}
-    <tr>
-      <td class="label">{{ $key }}</td>
-      <td>{{ index $parts 0 }}</td>
-      <td>{{ if gt (len $parts) 1 }}{{ index $parts 1 }}{{ else }}—{{ end }}</td>
-      <td class="{{ if gt (len $parts) 2 }}diff-{{ index $parts 2 | lower }}{{ end }}">
-        {{ if gt (len $parts) 2 }}{{ index $parts 2 }}{{ else }}—{{ end }}
-      </td>
-    </tr>
-    {{ end }}
+    {{ range $labels }}
+      {{ $label := . }}
+      {{ $rec := index $plan $label }}
+      {{ if reflect.IsMap $rec }}
+      {{ $diff := index $rec "差分" }}
+      <tr>
+        <td class="label">{{ $label }}</td>
+        <td>{{ with index $rec "C" }}{{ . }}{{ else }}—{{ end }}</td>
+        <td>{{ with index $rec "F" }}{{ . }}{{ else }}—{{ end }}</td>
+        <td class="{{ if eq $diff "EASE" }}diff-ease{{ else if eq $diff "TRAP" }}diff-trap{{ end }}">{{ with $diff }}{{ . }}{{ else }}—{{ end }}</td>
+      </tr>
+      {{ end }}
     {{ end }}
     </tbody>
   </table>
 </div>
-{{ else }}
-<p style="color:var(--text-muted);padding:2rem 0">ルールデータ収集中 — Page Maker でデータ入力後に表示されます</p>
-{{ end }}
 {{ end }}
 
+{{/* ルール詳細（新: rec.詳細 / 旧: 文字列値） */}}
+<div class="info-block stacked">
+  <h3>ルール詳細</h3>
+  {{ $hasDetail := false }}
+  {{ range $labels }}
+    {{ $label := . }}
+    {{ $rec := index $plan $label }}
+    {{ $detail := "" }}
+    {{ if reflect.IsMap $rec }}{{ $detail = index $rec "詳細" }}{{ else }}{{ $detail = $rec }}{{ end }}
+    {{ with $detail }}
+    {{ $hasDetail = true }}
+    <div class="info-row">
+      <span class="label">{{ $label }}</span>
+      <span class="value">{{ . }}</span>
+    </div>
+    {{ end }}
+  {{ end }}
+  {{ if not $hasDetail }}
+  <p style="color: var(--text-muted); font-size: 0.88rem;">ルールデータ収集中</p>
+  {{ end }}
+</div>
+
+{{ with .Content }}
+<div class="plan-body">{{ . }}</div>
+{{ end }}
+
+{{ else }}
+<p>プランが見つかりません。（キー: {{ $key }}）</p>
+{{ end }}
 {{ end }}

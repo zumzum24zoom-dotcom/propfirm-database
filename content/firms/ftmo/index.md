@@ -1,4 +1,0 @@
----
-title: "FTMO"
-slug: "ftmo"
----

@@ -1,4 +1,0 @@
----
-title: "BrightFunded"
-slug: "brightfunded"
----
