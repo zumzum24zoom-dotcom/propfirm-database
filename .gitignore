@@ -10,3 +10,10 @@ public/
 
 # スキル（GoogleDrive管理・Git対象外）
 .claude/skills/
+
+# 一時ファイル
+__pycache__/
+*.pyc
+
+# Claudian セッション一時ファイル
+.claudian/sessions/
