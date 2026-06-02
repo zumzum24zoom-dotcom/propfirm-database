@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汎用デザインエディタ v4</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f0f; --surface: #181818; --surface2: #222;
+  --border: #2a2a2a; --border2: #383838;
+  --text: #e8e8e8; --text2: #999; --text3: #555;
+  --accent: #7c6af7; --accent2: #a89cf7;
+  --success: #34d399; --warn: #fbbf24; --danger: #f87171;
+  --radius: 8px; --radius-sm: 5px;
+}
+html, body { height: 100%; overflow: hidden; font-family: 'SF Mono','Fira Code',monospace; background: var(--bg); color: var(--text); font-size: 13px; }
+.app { display: grid; grid-template-rows: 44px 1fr; height: 100vh; }
+.topbar { display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.topbar-title { font-size: 13px; font-weight: 600; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; }
+.topbar-title span { color: var(--accent2); }
+.topbar-sep { flex: 1; }
+.main { display: grid; grid-template-columns: 320px 1fr; overflow: hidden; }
+.left { display: flex; flex-direction: column; border-right: 1px solid var(--border); overflow: hidden; background: var(--surface); }
+.panel-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.ptab { flex: 1; padding: 9px 0; text-align: center; font-size: 11px; font-weight: 600; color: var(--text3); cursor: pointer; border: none; background: none; text-transform: uppercase; border-bottom: 2px solid transparent; font-family: inherit; transition: color 0.15s; }
+.ptab:hover { color: var(--text2); }
+.ptab.active { color: var(--accent2); border-bottom-color: var(--accent); }
+.panel-body { flex: 1; overflow-y: auto; overflow-x: hidden; }
+.panel-body::-webkit-scrollbar { width: 4px; }
+.panel-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.tab-pane { display: none; padding: 12px; }
+.tab-pane.active { display: block; }
+.code-area { width: 100%; height: 200px; background: var(--bg); border: 1px solid var(--border2); color: #c9d1d9; font-family: 'SF Mono','Fira Code',monospace; font-size: 11px; line-height: 1.6; padding: 10px; resize: none; outline: none; border-radius: var(--radius-sm); transition: border-color 0.2s; }
+.code-area:focus { border-color: var(--accent); }
+.code-area::placeholder { color: var(--text3); }
+.action-row { display: flex; gap: 6px; margin-top: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; font-size: 11px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid var(--border2); cursor: pointer; font-family: inherit; transition: all 0.15s; text-transform: uppercase; white-space: nowrap; }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent2); }
+.btn-ghost { background: transparent; color: var(--text2); }
+.btn-ghost:hover { background: var(--surface2); color: var(--text); }
+.btn-success { background: transparent; color: var(--success); border-color: var(--success); }
+.btn-success:hover { background: rgba(52,211,153,0.1); }
+.btn-full { width: 100%; justify-content: center; }
+.section-label { font-size: 9px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; margin-top: 16px; padding-bottom: 4px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.section-label:first-child { margin-top: 0; }
+.info-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 11px; color: var(--text2); line-height: 1.6; }
+.info-box b { color: var(--text); }
+.detected-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 20px; font-size: 10px; border: 1px solid var(--border2); color: var(--text2); }
+.chip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.15); }
+.snap-save-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px; font-size: 11px; font-weight: 600; border: 1px dashed var(--border2); color: var(--text3); background: transparent; border-radius: var(--radius-sm); cursor: pointer; font-family: inherit; transition: all 0.2s; margin-bottom: 10px; }
+.snap-save-btn:hover { border-color: var(--accent); color: var(--accent2); background: rgba(124,106,247,0.06); }
+.snap-save-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.snap-empty { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 20px 12px; font-size: 11px; color: var(--text3); text-align: center; line-height: 1.7; }
+.snap-list { display: flex; flex-direction: column; gap: 8px; }
+.snap-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; transition: border-color 0.15s; }
+.snap-card:hover { border-color: var(--border2); }
+.snap-card.previewing { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.snap-header { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.snap-num { font-size: 9px; font-weight: 700; color: var(--accent2); background: rgba(124,106,247,0.12); padding: 2px 7px; border-radius: 10px; flex-shrink: 0; }
+.snap-label { flex: 1; font-size: 11px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.snap-label input { width: 100%; background: transparent; border: none; color: var(--text2); font-size: 11px; font-family: inherit; outline: none; }
+.snap-label input:focus { color: var(--text); }
+.snap-time { font-size: 9px; color: var(--text3); flex-shrink: 0; }
+.snap-preview-thumb { width: 100%; height: 80px; background: var(--surface2); border: none; display: block; pointer-events: none; }
+.snap-actions { display: grid; grid-template-columns: 1fr 1fr 36px; gap: 0; border-top: 1px solid var(--border); }
+.snap-btn { padding: 7px 0; font-size: 10px; font-weight: 600; text-align: center; cursor: pointer; border: none; background: transparent; font-family: inherit; transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.5px; }
+.snap-btn-preview { color: var(--text3); border-right: 1px solid var(--border); }
+.snap-btn-preview:hover { background: rgba(124,106,247,0.1); color: var(--accent2); }
+.snap-btn-preview.active { color: var(--accent2); background: rgba(124,106,247,0.1); }
+.snap-btn-restore { color: var(--success); border-right: 1px solid var(--border); }
+.snap-btn-restore:hover { background: rgba(52,211,153,0.08); }
+.snap-btn-delete { color: var(--text3); }
+.snap-btn-delete:hover { background: rgba(248,113,113,0.1); color: var(--danger); }
+.ctrl-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.ctrl-row label { font-size: 11px; color: var(--text2); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ctrl-row input[type=range] { width: 76px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+.ctrl-row select { font-size: 11px; background: var(--bg); color: var(--text2); border: 1px solid var(--border2); padding: 4px 6px; border-radius: var(--radius-sm); font-family: inherit; outline: none; flex: 1; }
+.ctrl-row select:focus { border-color: var(--accent); }
+.val-badge { font-size: 10px; font-weight: 600; color: var(--text); min-width: 38px; text-align: right; font-family: monospace; }
+.color-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; padding: 5px 7px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: default; transition: border-color 0.15s, background 0.15s; position: relative; }
+.color-row:hover { border-color: var(--warn); background: rgba(251,191,36,0.06); }
+.color-row-dot { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.15); transition: transform 0.15s; }
+.color-row:hover .color-row-dot { transform: scale(1.2); }
+.color-row-label { font-family: monospace; font-size: 10px; color: var(--text2); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.color-row input[type=color] { width: 30px; height: 26px; border: 1px solid var(--border2); border-radius: 4px; padding: 1px; cursor: pointer; background: var(--bg); flex-shrink: 0; }
+.blink-badge { position: absolute; right: 36px; top: 50%; transform: translateY(-50%); font-size: 9px; font-weight: 700; color: var(--warn); background: rgba(251,191,36,0.12); padding: 2px 6px; border-radius: 3px; opacity: 0; transition: opacity 0.15s; pointer-events: none; white-space: nowrap; }
+.color-row:hover .blink-badge { opacity: 1; }
+.replace-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.replace-row { display: grid; grid-template-columns: 1fr 1fr 28px; gap: 4px; align-items: center; }
+.replace-input { width: 100%; background: var(--bg); border: 1px solid var(--border2); color: var(--text); font-size: 11px; font-family: inherit; padding: 6px 8px; border-radius: var(--radius-sm); outline: none; transition: border-color 0.15s; min-width: 0; }
+.replace-input:focus { border-color: var(--accent); }
+.replace-input::placeholder { color: var(--text3); }
+.replace-input.found { border-color: var(--success); }
+.replace-input.notfound { border-color: var(--danger); }
+.replace-del { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; color: var(--text3); cursor: pointer; border-radius: var(--radius-sm); font-size: 14px; transition: all 0.15s; flex-shrink: 0; }
+.replace-del:hover { background: rgba(248,113,113,0.15); color: var(--danger); }
+.replace-header { display: grid; grid-template-columns: 1fr 1fr 28px; gap: 4px; margin-bottom: 4px; }
+.replace-header span { font-size: 9px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; padding: 0 2px; }
+.add-replace-btn { display: flex; align-items: center; gap: 6px; padding: 6px 10px; font-size: 11px; font-weight: 600; border: 1px dashed var(--border2); color: var(--text3); background: transparent; border-radius: var(--radius-sm); cursor: pointer; font-family: inherit; transition: all 0.15s; width: 100%; justify-content: center; }
+.add-replace-btn:hover { border-color: var(--accent); color: var(--accent2); }
+.output-area { width: 100%; height: 260px; background: var(--bg); border: 1px solid var(--border2); color: #c9d1d9; font-family: 'SF Mono','Fira Code',monospace; font-size: 10px; line-height: 1.6; padding: 10px; resize: none; outline: none; border-radius: var(--radius-sm); }
+.right { display: flex; flex-direction: column; background: #0a0a0a; overflow: hidden; }
+.preview-bar { display: flex; align-items: center; gap: 10px; padding: 0 14px; height: 38px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--surface); }
+.preview-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px; }
+.preview-sep { flex: 1; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); transition: background 0.3s; }
+.status-dot.ok { background: var(--success); box-shadow: 0 0 6px var(--success); }
+.status-dot.blink { background: var(--warn); animation: sdP 0.5s infinite; }
+@keyframes sdP { 0%,100%{opacity:1}50%{opacity:0.3} }
+.status-text { font-size: 10px; color: var(--text3); transition: color 0.2s; }
+.zoom-btns { display: flex; gap: 2px; }
+.zoom-btn { padding: 3px 8px; font-size: 10px; font-weight: 600; border: 1px solid var(--border2); background: transparent; color: var(--text3); cursor: pointer; border-radius: 3px; font-family: inherit; transition: all 0.15s; }
+.zoom-btn:hover, .zoom-btn.active { background: var(--surface2); color: var(--text2); }
+.preview-wrap { flex: 1; overflow: auto; display: flex; align-items: flex-start; justify-content: center; padding: 20px; }
+.preview-frame-wrap { position: relative; transition: width 0.2s; }
+.preview-frame { width: 100%; border: none; display: block; border-radius: 4px; }
+.preview-overlay { position: absolute; inset: 0; pointer-events: none; border: 2px solid transparent; border-radius: 4px; transition: border-color 0.2s, box-shadow 0.2s; }
+.preview-overlay.updating { border-color: var(--accent); }
+.preview-overlay.blinking { border-color: var(--warn); box-shadow: 0 0 24px rgba(251,191,36,0.35); }
+.tb-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; font-size: 11px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid var(--border2); cursor: pointer; font-family: inherit; transition: all 0.15s; background: transparent; color: var(--text2); text-transform: uppercase; }
+.tb-btn:hover { background: var(--surface2); color: var(--text); }
+.tb-btn.accent { color: var(--accent2); border-color: var(--accent); }
+.tb-btn.accent:hover { background: rgba(124,106,247,0.15); }
+.toast { position: fixed; bottom: 20px; right: 20px; padding: 10px 16px; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); font-size: 12px; color: var(--text); z-index: 9999; transform: translateY(60px); opacity: 0; transition: all 0.25s; pointer-events: none; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--success); color: var(--success); }
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 12px; padding: 40px; text-align: center; }
+.empty-icon { font-size: 40px; opacity: 0.15; }
+.empty-title { font-size: 14px; font-weight: 600; color: var(--text3); }
+.empty-sub { font-size: 11px; color: var(--text3); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-title">汎用<span>デザインエディタ</span> v4</div>
+    <div class="topbar-sep"></div>
+    <button class="tb-btn" id="tbCopy">⧉ コピー</button>
+    <button class="tb-btn" id="tbDownload">↓ HTML</button>
+    <button class="tb-btn accent" id="tbApply">▶ 適用</button>
+  </div>
+  <div class="main">
+    <div class="left">
+      <div class="panel-tabs">
+        <button class="ptab active" data-tab="code">Code</button>
+        <button class="ptab" data-tab="style">Style</button>
+        <button class="ptab" data-tab="replace">Replace</button>
+        <button class="ptab" data-tab="snap">Snap</button>
+      </div>
+      <div class="panel-body">
+
+        <!-- ===== CODE ===== -->
+        <div class="tab-pane active" data-pane="code">
+          <div class="section-label">HTML 入力</div>
+          <textarea class="code-area" id="codeInput" placeholder="ここに HTML を丸ごと貼り付け…"></textarea>
+          <div class="action-row">
+            <button class="btn btn-primary btn-full" id="btnRender">▶ プレビュー</button>
+            <button class="btn btn-ghost" id="btnClear">クリア</button>
+          </div>
+          <div class="section-label">出力 HTML</div>
+          <textarea class="output-area" id="outputArea" readonly placeholder="（編集後の HTML がここへ反映されます）"></textarea>
+          <div class="action-row">
+            <button class="btn btn-success btn-full" id="btnCopyOut">⧉ コピー</button>
+            <button class="btn btn-ghost" id="btnDownOut">↓ 保存</button>
+          </div>
+        </div>
+
+        <!-- ===== STYLE ===== -->
+        <div class="tab-pane" data-pane="style">
+          <div class="section-label">検出カラー <span class="snap-time" id="colorCount"></span></div>
+          <div class="info-box" id="colorEmpty">HTML を読み込むとコード内の色（#hex）を抽出して並べます。色を変えると全箇所へ即反映します。</div>
+          <div id="colorList"></div>
+          <div class="detected-chips" id="colorChips"></div>
+          <div class="section-label">プレビュー調整</div>
+          <div class="ctrl-row"><label>明るさ</label><input type="range" id="fxBright" min="50" max="150" value="100"><span class="val-badge" id="fxBrightV">100%</span></div>
+          <div class="ctrl-row"><label>コントラスト</label><input type="range" id="fxContrast" min="50" max="150" value="100"><span class="val-badge" id="fxContrastV">100%</span></div>
+          <div class="ctrl-row"><label>彩度</label><input type="range" id="fxSat" min="0" max="200" value="100"><span class="val-badge" id="fxSatV">100%</span></div>
+          <div class="ctrl-row"><label>背景</label><select id="fxBg"><option value="#0a0a0a">ダーク</option><option value="#ffffff">ホワイト</option><option value="#888888">グレー</option><option value="transparent">透明（市松）</option></select></div>
+          <div class="action-row"><button class="btn btn-ghost btn-full" id="fxReset">調整をリセット</button></div>
+        </div>
+
+        <!-- ===== REPLACE ===== -->
+        <div class="tab-pane" data-pane="replace">
+          <div class="section-label">文字置換</div>
+          <div class="replace-header"><span>検索</span><span>置換後</span><span></span></div>
+          <div class="replace-list" id="replaceList"></div>
+          <button class="add-replace-btn" id="addReplace">＋ 行を追加</button>
+          <div class="action-row" style="margin-top:10px"><button class="btn btn-primary btn-full" id="btnReplace">置換を実行</button></div>
+          <div class="info-box" style="margin-top:12px">検索語がコード内に<b>あれば緑枠</b>、<b>無ければ赤枠</b>で表示します。</div>
+        </div>
+
+        <!-- ===== SNAP ===== -->
+        <div class="tab-pane" data-pane="snap">
+          <div class="section-label">スナップショット</div>
+          <button class="snap-save-btn" id="snapSave">＋ 現在の状態を保存</button>
+          <div class="snap-empty" id="snapEmpty">まだ保存はありません。<br>編集途中の状態をいつでも残せます。</div>
+          <div class="snap-list" id="snapList"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="preview-bar">
+        <div class="preview-label">Preview</div>
+        <div class="status-dot" id="statusDot"></div>
+        <div class="status-text" id="statusText">待機中</div>
+        <div class="preview-sep"></div>
+        <div class="zoom-btns">
+          <button class="zoom-btn" data-zoom="50">50%</button>
+          <button class="zoom-btn" data-zoom="75">75%</button>
+          <button class="zoom-btn active" data-zoom="100">100%</button>
+          <button class="zoom-btn" data-zoom="fit">Fit</button>
+        </div>
+      </div>
+      <div class="preview-wrap" id="previewWrap">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">🎨</div>
+          <div class="empty-title">プレビューなし</div>
+          <div class="empty-sub">左の Code タブに HTML を貼り付けて<br>「プレビュー」を押してください。</div>
+        </div>
+        <div class="preview-frame-wrap" id="frameWrap" style="display:none; width:100%;">
+          <iframe class="preview-frame" id="previewFrame"></iframe>
+          <div class="preview-overlay" id="overlay"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+let code  = localStorage.getItem('dt_code_v4') || '';
+let snaps = JSON.parse(localStorage.getItem('dt_snaps_v4') || '[]');
+let zoom  = '100';
+let previewingId = null;
+let renderTimer = null;
+
+const codeInput=$('codeInput'), outputArea=$('outputArea'), frame=$('previewFrame'),
+      frameWrap=$('frameWrap'), emptyState=$('emptyState'), overlay=$('overlay'),
+      statusDot=$('statusDot'), statusText=$('statusText'), previewWrap=$('previewWrap');
+
+function toast(msg, ok){
+  const t=$('toast'); t.textContent=msg;
+  t.className='toast show'+(ok?' success':'');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.className='toast',1800);
+}
+function setStatus(state){
+  statusDot.className='status-dot'+(state==='ok'?' ok':state==='blink'?' blink':'');
+  statusText.textContent = state==='ok'?'反映済み':state==='blink'?'更新中…':'待機中';
+}
+function switchTab(name){ document.querySelector('.ptab[data-tab="'+name+'"]').click(); }
+
+/* ---- tabs ---- */
+document.querySelectorAll('.ptab').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.ptab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  document.querySelector('.tab-pane[data-pane="'+b.dataset.tab+'"]').classList.add('active');
+});
+
+/* ---- render ---- */
+function renderTo(srcCode){
+  if(!srcCode || !srcCode.trim()){ frameWrap.style.display='none'; emptyState.style.display=''; setStatus('idle'); return; }
+  emptyState.style.display='none'; frameWrap.style.display='';
+  frame.srcdoc = srcCode;
+  overlay.classList.add('updating');
+  setTimeout(()=>overlay.classList.remove('updating'),350);
+  setStatus('ok');
+}
+frame.addEventListener('load',()=>{
+  try{
+    const d=frame.contentDocument;
+    if(d && d.documentElement){
+      const h=Math.max(d.documentElement.scrollHeight, d.body?d.body.scrollHeight:0, 300);
+      frame.style.height=h+'px';
+    }
+  }catch(e){ frame.style.height='600px'; }
+});
+function render(){
+  code = codeInput.value;
+  localStorage.setItem('dt_code_v4', code);
+  outputArea.value = code;
+  previewingId=null;
+  document.querySelectorAll('.snap-card').forEach(c=>c.classList.remove('previewing'));
+  renderTo(code);
+  refreshColors();
+  validateReplace();
+  applyZoom(); applyFx();
+}
+codeInput.addEventListener('input',()=>{
+  setStatus('blink');
+  clearTimeout(renderTimer);
+  renderTimer=setTimeout(render,450);
+});
+$('btnRender').onclick=render;
+$('tbApply').onclick=render;
+$('btnClear').onclick=()=>{ codeInput.value=''; render(); toast('クリアしました'); };
+
+/* ---- colors ---- */
+function detectColors(src){
+  const map=new Map();
+  const hexRe=/#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})\b/g;
+  const rgbRe=/rgba?\([^)]*\)/g;
+  let m;
+  while((m=hexRe.exec(src))) map.set(m[0].toLowerCase(), m[0]);
+  while((m=rgbRe.exec(src))) map.set(m[0].toLowerCase().replace(/\s+/g,''), m[0]);
+  return [...map.values()];
+}
+function toHex6(c){
+  let h=c.replace('#','');
+  if(h.length===3) h=h.split('').map(x=>x+x).join('');
+  else if(h.length===4) h=h.slice(0,3).split('').map(x=>x+x).join('');
+  else if(h.length===8) h=h.slice(0,6);
+  return '#'+h.toLowerCase();
+}
+function refreshColors(){
+  const colors=detectColors(code);
+  const hexes=colors.filter(c=>c[0]==='#');
+  const list=$('colorList'), chips=$('colorChips');
+  list.innerHTML=''; chips.innerHTML='';
+  $('colorCount').textContent = colors.length? colors.length+' 色':'';
+  $('colorEmpty').style.display = colors.length? 'none':'';
+  hexes.forEach(orig=>{
+    let cur=orig;
+    const row=document.createElement('div'); row.className='color-row';
+    row.innerHTML='<div class="color-row-dot"></div>'
+      +'<div class="color-row-label"></div>'
+      +'<span class="blink-badge">置換</span>'
+      +'<input type="color">';
+    const dot=row.querySelector('.color-row-dot'),
+          lab=row.querySelector('.color-row-label'),
+          inp=row.querySelector('input');
+    dot.style.background=cur; lab.textContent=cur; inp.value=toHex6(cur);
+    inp.addEventListener('input',()=>{
+      code=code.replace(new RegExp(esc(cur)+'\\b','gi'), inp.value);
+      codeInput.value=code; outputArea.value=code;
+      localStorage.setItem('dt_code_v4',code);
+      renderTo(code);
+      cur=inp.value; dot.style.background=cur; lab.textContent=cur;
+    });
+    list.appendChild(row);
+  });
+  colors.forEach(c=>{
+    const chip=document.createElement('span'); chip.className='chip';
+    const d=document.createElement('span'); d.className='chip-dot'; d.style.background=c;
+    chip.appendChild(d); chip.appendChild(document.createTextNode(c));
+    chips.appendChild(chip);
+  });
+}
+
+/* ---- replace ---- */
+const replaceList=$('replaceList');
+function validateRow(fi){
+  fi.classList.remove('found','notfound');
+  if(!fi.value) return;
+  fi.classList.add(code.includes(fi.value)?'found':'notfound');
+}
+function validateReplace(){ replaceList.querySelectorAll('.replace-row').forEach(r=>validateRow(r.querySelector('input'))); }
+function addReplaceRow(){
+  const row=document.createElement('div'); row.className='replace-row';
+  row.innerHTML='<input class="replace-input" placeholder="検索">'
+    +'<input class="replace-input" placeholder="置換後">'
+    +'<button class="replace-del">×</button>';
+  const fi=row.querySelectorAll('input')[0];
+  fi.addEventListener('input',()=>validateRow(fi));
+  row.querySelector('.replace-del').onclick=()=>row.remove();
+  replaceList.appendChild(row);
+}
+$('addReplace').onclick=addReplaceRow;
+$('btnReplace').onclick=()=>{
+  let n=0;
+  replaceList.querySelectorAll('.replace-row').forEach(r=>{
+    const [fi,ri]=r.querySelectorAll('input');
+    if(fi.value && code.includes(fi.value)){ code=code.split(fi.value).join(ri.value); n++; }
+  });
+  if(n){ codeInput.value=code; render(); toast(n+' 件の検索語を置換しました',true); }
+  else toast('一致する検索語がありません');
+};
+
+/* ---- snapshots ---- */
+function saveSnaps(){ localStorage.setItem('dt_snaps_v4', JSON.stringify(snaps)); }
+function nowStr(){ const d=new Date(); return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+function renderSnaps(){
+  const list=$('snapList'); list.innerHTML='';
+  $('snapEmpty').style.display = snaps.length? 'none':'';
+  snaps.forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.className='snap-card'+(previewingId===s.id?' previewing':'');
+    card.innerHTML='<div class="snap-header">'
+      +'<span class="snap-num">'+(i+1)+'</span>'
+      +'<span class="snap-label"><input></span>'
+      +'<span class="snap-time">'+s.time+'</span></div>'
+      +'<iframe class="snap-preview-thumb" sandbox="allow-same-origin"></iframe>'
+      +'<div class="snap-actions">'
+      +'<button class="snap-btn snap-btn-preview">表示</button>'
+      +'<button class="snap-btn snap-btn-restore">復元</button>'
+      +'<button class="snap-btn snap-btn-delete">×</button></div>';
+    card.querySelector('.snap-label input').value=s.name;
+    card.querySelector('.snap-preview-thumb').srcdoc=s.code;
+    card.querySelector('.snap-label input').addEventListener('change',e=>{ s.name=e.target.value; saveSnaps(); });
+    const pv=card.querySelector('.snap-btn-preview');
+    if(previewingId===s.id) pv.classList.add('active');
+    pv.onclick=()=>{
+      if(previewingId===s.id){ previewingId=null; renderTo(code); }
+      else { previewingId=s.id; renderTo(s.code); }
+      renderSnaps();
+    };
+    card.querySelector('.snap-btn-restore').onclick=()=>{ code=s.code; codeInput.value=code; render(); switchTab('code'); toast('復元しました',true); };
+    card.querySelector('.snap-btn-delete').onclick=()=>{ snaps=snaps.filter(x=>x.id!==s.id); saveSnaps(); renderSnaps(); };
+    list.appendChild(card);
+  });
+}
+$('snapSave').onclick=()=>{
+  if(!code.trim()){ toast('保存する内容がありません'); return; }
+  snaps.unshift({ id:'s'+Date.now()+Math.floor(Math.random()*9999), name:'スナップ '+(snaps.length+1), time:nowStr(), code });
+  saveSnaps(); renderSnaps(); toast('保存しました',true);
+};
+
+/* ---- zoom ---- */
+document.querySelectorAll('.zoom-btn').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.zoom-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); zoom=b.dataset.zoom; applyZoom();
+});
+function applyZoom(){
+  frameWrap.style.width = (zoom==='fit'||zoom==='100') ? '100%' : (zoom+'%');
+}
+
+/* ---- fx ---- */
+function applyFx(){
+  const b=$('fxBright').value, c=$('fxContrast').value, s=$('fxSat').value;
+  $('fxBrightV').textContent=b+'%'; $('fxContrastV').textContent=c+'%'; $('fxSatV').textContent=s+'%';
+  frame.style.filter='brightness('+b+'%) contrast('+c+'%) saturate('+s+'%)';
+  const bg=$('fxBg').value;
+  previewWrap.style.background = bg==='transparent'
+    ? 'repeating-conic-gradient(#1a1a1a 0% 25%, #0a0a0a 0% 50%) 0 / 20px 20px'
+    : bg;
+}
+['fxBright','fxContrast','fxSat','fxBg'].forEach(id=>$(id).addEventListener('input',applyFx));
+$('fxReset').onclick=()=>{ $('fxBright').value=100; $('fxContrast').value=100; $('fxSat').value=100; $('fxBg').value='#0a0a0a'; applyFx(); };
+
+/* ---- export ---- */
+function doCopy(){ navigator.clipboard.writeText(outputArea.value||code).then(()=>toast('コピーしました',true),()=>toast('コピーに失敗しました')); }
+function doDownload(){
+  const blob=new Blob([outputArea.value||code],{type:'text/html'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='design.html'; a.click();
+  URL.revokeObjectURL(a.href); toast('保存しました',true);
+}
+$('btnCopyOut').onclick=doCopy; $('tbCopy').onclick=doCopy;
+$('btnDownOut').onclick=doDownload; $('tbDownload').onclick=doDownload;
+
+/* ---- init ---- */
+codeInput.value=code;
+addReplaceRow(); addReplaceRow();
+renderSnaps();
+if(code.trim()) render(); else { setStatus('idle'); applyFx(); }
+</script>
+</body>
+</html>
