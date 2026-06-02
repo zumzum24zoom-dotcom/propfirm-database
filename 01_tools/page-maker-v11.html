@@ -3461,7 +3461,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         return;
       }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
     }
-    exportJSON(data,"pfm-intake-all.json"); // フォールバック
+    exportJSON(data,"pfdb-all.json"); // フォールバック
     dirtyRef.current=false;
   },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
 
@@ -3493,7 +3493,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         return;
       }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
     }
-    exportJSON(merged,"pfm-intake-all.json");
+    exportJSON(merged,"pfdb-all.json");
     dirtyRef.current=false;
   },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
 
