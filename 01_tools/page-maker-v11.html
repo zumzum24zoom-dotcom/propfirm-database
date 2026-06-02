@@ -788,69 +788,6 @@ const SEC_COLORS = {
 };
 
 // ═══════════════════════════════════════════════════
-const FUNC_INDEX = [
-  {group:"縦タブ",items:[
-    {id:"vtab-firm",label:"Firm追加（＋）",desc:"新規Firm登録"},
-    {id:"vtab-plan",label:"Plan追加（Firm横＋）",desc:"Firm配下にPlan追加"},
-    {id:"vtab-rename",label:"リネーム（ダブルクリック）",desc:"名前変更→スロット自動反映（Firm名/Firm名-Plan名）"},
-    {id:"vtab-csv",label:"CSV一括登録",desc:"Firm名,Plan名,Plan名,...形式で一括登録（重複スキップ）"},
-    {id:"vtab-delete",label:"削除（×）",desc:"Firm削除時は配下Planも削除"},
-    {id:"vtab-prompt-research",label:"📋 リサーチプロンプト",desc:"NotebookLM Deep Research用プロンプト生成（Firm名・Plan名リスト自動挿入）"},
-    {id:"vtab-prompt-output",label:"📤 出力プロンプト",desc:"NotebookLM出力形式指定プロンプト生成（早見表・ルール詳細リスト）"},
-    {id:"vtab-prompt-koryaku",label:"📝 攻略記事プロンプト",desc:"3断面攻略記事生成プロンプト（全Planルール詳細リスト自動挿入）"},
-    {id:"vtab-notion-export",label:"📋 Notion出力",desc:"Notionページ本文用テキスト生成（プレビュー＋コピー）→Notionに貼り付け"},
-  ]},
-  {group:"貼り付けエリア",items:[
-    {id:"paste-text",label:"テキスト貼り付け",desc:"Ctrl+Vでテキスト投入"},
-    {id:"paste-ocr",label:"画像OCR",desc:"画像ドロップ/ペースト→Claude vision→テキスト化"},
-    {id:"paste-clear",label:"クリア（×）",desc:"エリア内テキスト消去"},
-    {id:"paste-archive",label:"保管",desc:"原本テキストを蓄積（折りたたみリスト、クリックで再投入）"},
-    {id:"paste-translate",label:"翻訳→対象",desc:"選択テキストをClaude API翻訳→取り込み対象エリアへ"},
-    {id:"paste-send",label:"→対象",desc:"選択テキストをそのまま取り込み対象エリアへ"},
-  ]},
-  {group:"取り込み対象エリア",items:[
-    {id:"target-view",label:"表示",desc:"ここに表示されたテキストだけがスロットに入る"},
-    {id:"target-auto",label:"自動振り分け",desc:"Claude APIでスロットに自動格納（プラン名コンテキスト付き、ロック済みスキップ）"},
-    {id:"target-clear",label:"クリア（×）",desc:"取り込み対象テキスト消去"},
-  ]},
-  {group:"スロットパネル",items:[
-    {id:"slot-tab",label:"テンプレート切替",desc:"DBP_01(19項目)/DBP_02(40項目)/攻略(18項目)"},
-    {id:"slot-add",label:"格納（＋）",desc:"取り込み対象エリアで選択→スロットの＋で格納"},
-    {id:"slot-edit",label:"編集（✎）",desc:"テキストクリックで編集モード→保存/取消"},
-    {id:"slot-delete",label:"削除（×）",desc:"断片を個別に削除"},
-    {id:"slot-merge",label:"整形",desc:"複数断片→Claude APIで1つの文章にまとめ"},
-    {id:"slot-lock",label:"ロック（🔒/🔓）",desc:"個別ロック。ロック中は追加/編集/削除不可"},
-    {id:"slot-lockall",label:"全🔒/全解除",desc:"現在テンプレートの全スロット一括ロック/解除"},
-    {id:"slot-md",label:"MDコピー",desc:"テンプレート全体をMarkdownでクリップボードにコピー"},
-    {id:"slot-save",label:"保存/読込",desc:"スロットデータをJSON export/import"},
-    {id:"slot-clear",label:"Clear",desc:"現在テンプレートの全スロットをリセット"},
-  ]},
-  {group:"AI生成",items:[
-    {id:"ai-koryaku",label:"攻略AI生成",desc:"Firm選択→攻略タブ。DBP_01+全DBP_02データから18スロット一括生成"},
-    {id:"ai-comparison",label:"比較表AI生成",desc:"Firm選択→01タブ。全PlanのDBP_02データからプラン比較テーブル生成"},
-    {id:"ai-price-quick",label:"価格/早見AI生成",desc:"Plan選択→02タブ。価格テーブル+早見表を生成"},
-  ]},
-  {group:"用語辞典",items:[
-    {id:"glossary-add",label:"用語登録",desc:"テキスト入力→Claude APIで定義/説明/豆知識/カテゴリ自動生成"},
-    {id:"glossary-csv",label:"CSV出力",desc:"用語名,カテゴリ,定義,説明,豆知識"},
-    {id:"glossary-io",label:"保存/読込",desc:"JSON export/import"},
-  ]},
-  {group:"小窓",items:[
-    {id:"child-paste",label:"貼り付け小窓",desc:"別窓でテキスト入力→メイン窓の貼り付けエリアに送信"},
-    {id:"child-url",label:"URL欄",desc:"ソースURL入力＋📋貼付ボタン（クリップボード）"},
-    {id:"child-ocr",label:"画像OCR",desc:"小窓内で画像ペースト/ドロップ→メイン窓でOCR"},
-  ]},
-  {group:"データ管理",items:[
-    {id:"data-all-save",label:"全保存",desc:"全Firm+Plan+用語辞典をJSON一括保存"},
-    {id:"data-all-load",label:"全読込",desc:"JSON一括読込（ID衝突回避付き）"},
-  ]},
-  {group:"UI",items:[
-    {id:"ui-resize",label:"リサイズハンドル",desc:"縦タブ幅/左右カラム幅/貼り付け高さをドラッグ調整"},
-    {id:"ui-funcindex",label:"機能目次（📋）",desc:"チェック+コメント→コピーでAIと共有"},
-  ]},
-];
-
-// ═══════════════════════════════════════════════════
 // Tiny Components
 // ═══════════════════════════════════════════════════
 function Btn({children,onClick,color,bg,disabled,title,style:sx}) {
@@ -1821,6 +1758,9 @@ function RuleTableEditor({slotData,setSlotData,locks}){
 // ═══════════════════════════════════════════════════
 // 価格マトリクスエディタ（DBP_01・口座サイズ×プラン）
 const PRICE_TIERS=["$5k","$10k","$25k","$50k","$100k","$200k"];
+const CURRENCIES=["$","¥","€"];
+// 価格セル文字列を {cur,num} に分解（通貨記号のみ／ダッシュは num=""=値なし扱い）
+function parsePrice(v){v=(v||"").trim();if(/^[—ー―\-]+$/.test(v))return{cur:"$",num:""};const c=CURRENCIES.find(x=>v.startsWith(x));return c?{cur:c,num:v.slice(c.length)}:{cur:"$",num:v};}
 function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
   const cols=planNames||[];
   const locked=!!(locks&&locks.priceTable);
@@ -1830,16 +1770,17 @@ function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
   const commit=next=>setSlotData(prev=>({...prev,priceTable:[{text:JSON.stringify(next)}]}));
   const setRow=(i,patch)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,...patch}:r)});
   const setCell=(i,col,val)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,prices:{...(r.prices||{}),[col]:val}}:r)});
-  const addRow=()=>commit({...matrix,rows:[...matrix.rows,{size:"",tier:"$10k",prices:{}}]});
+  const addRow=()=>commit({...matrix,rows:[...matrix.rows,{size:"",prices:{}}]});
   const delRow=i=>commit({...matrix,rows:matrix.rows.filter((_,idx)=>idx!==i)});
   const th={padding:"5px 6px",textAlign:"left",color:C.textDim,fontWeight:700,fontSize:"0.6rem",whiteSpace:"nowrap",borderBottom:`2px solid ${C.border}`};
   const td={padding:"3px 4px",borderBottom:`1px solid ${C.border}`};
   const inp={width:"100%",minWidth:70,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 5px",fontSize:"0.66rem",fontFamily:font,outline:"none"};
+  const curSel={background:C.surface,color:C.accent,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 2px",fontSize:"0.66rem",fontFamily:font,outline:"none",cursor:"pointer",width:34,minWidth:34};
   return(
     <div style={{overflow:"auto"}}>
       <table style={{borderCollapse:"collapse",fontSize:"0.68rem"}}>
         <thead><tr>
-          <th style={th}>口座サイズ</th><th style={th}>ティア</th>
+          <th style={th}>口座サイズ</th>
           {cols.map(c=><th key={c} style={th}>{c}</th>)}
           <th style={th}></th>
         </tr></thead>
@@ -1847,13 +1788,16 @@ function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
           {matrix.rows.map((r,i)=>(
             <tr key={i}>
               <td style={td}><input disabled={locked} value={r.size||""} onChange={e=>setRow(i,{size:e.target.value})} placeholder="¥1,300,000 / $10,000" style={inp}/></td>
-              <td style={td}>
-                <select disabled={locked} value={r.tier||""} onChange={e=>setRow(i,{tier:e.target.value})} style={{...inp,minWidth:60}}>
-                  <option value="">—</option>
-                  {PRICE_TIERS.map(t=><option key={t} value={t}>{t}</option>)}
-                </select>
-              </td>
-              {cols.map(c=><td key={c} style={td}><input disabled={locked} value={(r.prices||{})[c]||""} onChange={e=>setCell(i,c,e.target.value)} placeholder="—" style={inp}/></td>)}
+              {cols.map(c=>{const {cur,num}=parsePrice((r.prices||{})[c]||"");return(
+                <td key={c} style={td}>
+                  <div style={{display:"flex",gap:2}}>
+                    <select disabled={locked} value={cur} onChange={e=>setCell(i,c,e.target.value+num)} style={curSel}>
+                      {CURRENCIES.map(x=><option key={x} value={x}>{x}</option>)}
+                    </select>
+                    <input disabled={locked} value={num} onChange={e=>setCell(i,c,e.target.value?cur+e.target.value:"")} placeholder="—" inputMode="decimal" style={{...inp,minWidth:54}}/>
+                  </div>
+                </td>
+              );})}
               <td style={td}>{!locked&&<span onClick={()=>delRow(i)} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem"}}>×</span>}</td>
             </tr>
           ))}
@@ -1932,7 +1876,7 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
       L.push("",`Profit Split: ${g("profitSplit")}`);if(g("profitSplitNote"))L.push(g("profitSplitNote"));
       L.push("","## プラン","",`スケールアップ: ${g("scaleUp")}`,"","### プラン比較テーブル","",g("planComparison"));
       // 価格表（構造化マトリクス→Markdown表。列=プラン名、prices は名前キー）
-      try{const pt=JSON.parse(g("priceTable")||"null");if(pt&&Array.isArray(pt.rows)&&pt.rows.length){const cols=planNames||[];L.push("","### 価格表","","|口座サイズ|ティア|"+cols.join("|")+"|","|"+Array(cols.length+2).fill("---").join("|")+"|");pt.rows.forEach(r=>{const cs=cols.map(c=>(r.prices&&r.prices[c])||"—");L.push(`|${r.size||""}|${r.tier||""}|${cs.join("|")}|`)});}}catch(e){}
+      try{const pt=JSON.parse(g("priceTable")||"null");if(pt&&Array.isArray(pt.rows)&&pt.rows.length){const cols=planNames||[];L.push("","### 価格表","","|口座サイズ|"+cols.join("|")+"|","|"+Array(cols.length+1).fill("---").join("|")+"|");pt.rows.forEach(r=>{const cs=cols.map(c=>{const v=(r.prices&&r.prices[c])||"";return(v&&!CURRENCIES.includes(v))?v:"—";});L.push(`|${r.size||""}|${cs.join("|")}|`)});}}catch(e){}
     } else if(templateMode==="dbp02"){
       L.push(`# ${g("challengeName")}`);
       if(g("steps"))L.push("",`Steps: ${g("steps")}`);
@@ -2636,68 +2580,6 @@ function ConsolidateModal({show,onClose,firms,tabDataMap,initialKeepId,onApply})
 }
 
 // ═══════════════════════════════════════════════════
-// 機能目次
-// ═══════════════════════════════════════════════════
-function FuncIndex({show,onClose}) {
-  const [chk,setChk]=useState({});
-  const [cmt,setCmt]=useState({});
-  const [collapsed,setCollapsed]=useState({});
-  if(!show)return null;
-  const cnt=Object.keys(chk).length;
-  const allItems=FUNC_INDEX.flatMap(g=>g.items);
-  const copy=()=>{
-    const lines=[];
-    FUNC_INDEX.forEach(g=>{
-      const checked=g.items.filter(f=>chk[f.id]);
-      if(!checked.length)return;
-      lines.push(`[${g.group}]`);
-      checked.forEach(f=>{const c=(cmt[f.id]||"").trim();lines.push(c?`  ${f.label} | ${c}`:`  ${f.label}`)});
-    });
-    return lines.join("\n");
-  };
-  return (
-    <div style={{position:"fixed",top:8,right:8,zIndex:9999,width:340,maxHeight:"85vh",overflow:"auto",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:"10px 12px",boxShadow:"0 4px 20px rgba(0,0,0,0.5)"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-        <span style={{fontSize:"0.78rem",fontWeight:700,color:C.accent}}>📋 機能目次</span>
-        <div style={{display:"flex",gap:4}}>
-          {cnt>0&&<CopyBtn getText={copy} label={`コピー(${cnt})`} color={C.accent} />}
-          {cnt>0&&<Btn color={C.textDim} onClick={()=>{setChk({});setCmt({})}}>クリア</Btn>}
-          <span onClick={onClose} style={{cursor:"pointer",color:C.textDim,fontSize:"1rem"}}>✕</span>
-        </div>
-      </div>
-      {FUNC_INDEX.map(g=>{
-        const gc=collapsed[g.group];
-        const groupChecked=g.items.filter(f=>chk[f.id]).length;
-        return (
-          <div key={g.group} style={{marginBottom:4}}>
-            <div onClick={()=>setCollapsed(p=>({...p,[g.group]:!p[g.group]}))} style={{
-              display:"flex",alignItems:"center",gap:6,cursor:"pointer",padding:"4px 0",
-              borderBottom:`1px solid ${C.border}`,userSelect:"none",
-            }}>
-              <span style={{fontSize:"0.6rem",color:C.textDim}}>{gc?"▶":"▼"}</span>
-              <span style={{fontSize:"0.72rem",fontWeight:700,color:C.yellow}}>{g.group}</span>
-              <span style={{fontSize:"0.58rem",color:C.textDim}}>{g.items.length}</span>
-              {groupChecked>0&&<span style={{fontSize:"0.58rem",color:C.accent}}>✓{groupChecked}</span>}
-            </div>
-            {!gc&&g.items.map(f=>(
-              <div key={f.id} style={{padding:"2px 0 2px 12px"}}>
-                <label style={{display:"flex",alignItems:"center",gap:5,cursor:"pointer"}}>
-                  <input type="checkbox" checked={!!chk[f.id]} onChange={()=>setChk(p=>{const n={...p};n[f.id]?delete n[f.id]:n[f.id]=true;return n})} style={{accentColor:C.accent,margin:0}} />
-                  <span style={{fontSize:"0.68rem",fontWeight:600,color:chk[f.id]?C.accent:C.textBright}}>{f.label}</span>
-                  <span style={{fontSize:"0.55rem",color:C.textDim}}>{f.desc}</span>
-                </label>
-                {chk[f.id]&&<input type="text" value={cmt[f.id]||""} placeholder="コメント" onChange={e=>setCmt(p=>({...p,[f.id]:e.target.value}))}
-                  style={{width:"calc(100% - 24px)",marginLeft:24,marginTop:1,background:C.bg,color:C.textBright,border:`1px solid ${C.accent}44`,borderRadius:3,padding:"1px 6px",fontSize:"0.62rem",fontFamily:font,outline:"none"}} />}
-              </div>
-            ))}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════════
 function App() {
@@ -2721,7 +2603,6 @@ function App() {
   const [autoAssigning,setAutoAssigning]=useState(false);
   const [aiGenKoryaku,setAiGenKoryaku]=useState(false);
   const [slotLocks,setSlotLocks]=useState({}); // 明示ロックのみ保持。名前スロットは値が入った時点で自動ロック（isSlotLocked）
-  const [showFuncIndex,setShowFuncIndex]=useState(false);
   const [showBackup,setShowBackup]=useState(false);
   const [showMerge,setShowMerge]=useState(false);
   const [showDataMenu,setShowDataMenu]=useState(false); // false | "save" | "load"
@@ -3045,7 +2926,7 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
     setAutoAssigning(false);
   },[currentSlots,setTabField,slotLocks,activeType,syncPlansFromList]);
 
-  // 表取込（決定的パーサ）— 「口座サイズ」表→priceTable / 「項目|C|F|差分|詳細」→rd_* に格納
+  // 表取込（決定的パーサ）— 価格表（独立「口座サイズ」表 or プラン比較内「下半分」埋込）→priceTable / F01〜F22→Firmスロット / 「項目|C|F|差分|詳細」→rd_* に格納
   const handleTableParse=useCallback(text=>{
     if(typeof text!=="string"||!text.trim()){alert("取込エリアが空です");return;}
     const parseRow=line=>{const c=line.split("|").map(c=>c.trim());if(c[0]==="")c.shift();if(c[c.length-1]==="")c.pop();return c;};
@@ -3103,32 +2984,44 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
       alert(`表取込（行区切り）: ${stored}項目を格納`+(locked?`（ロック${locked}件スキップ）`:"")+(skipped.length?`\n未照合: ${skipped.join(", ")}`:""));
       return;
     }
-    // 全|行から「口座サイズ」ヘッダ行を探す
-    const headerIdx=tableLines.findIndex(l=>{const h=parseRow(l);return h[0]==="口座サイズ"||h[0]==="口座サイズ（USD）";});
-    if(headerIdx>=0){
-      if(slotLocks["priceTable"]){alert("priceTable がロックされています");return;}
-      const planCols=parseRow(tableLines[headerIdx]).slice(1);
+    // ── 価格テーブル抽出 ──
+    // 標準形式: 先頭セル「口座サイズ」の独立表
+    // 埋込形式: プラン比較テーブル内の「下半分: 口座サイズ × 価格表」マーカー以降
+    const extractPriceRows=()=>{
+      let planCols=null,startIdx=-1;
+      const stdIdx=tableLines.findIndex(l=>{const h=parseRow(l);return h[0]==="口座サイズ"||h[0]==="口座サイズ（USD）";});
+      if(stdIdx>=0){
+        planCols=parseRow(tableLines[stdIdx]).slice(1);
+        startIdx=stdIdx+1;
+      } else {
+        // 埋込: 「口座サイズ × 価格表」マーカー行 → 直前の「項目」ヘッダ行からプラン列取得
+        const markerIdx=tableLines.findIndex(l=>/口座サイズ\s*[×x]\s*価格表/.test(l.replace(/\*/g,"")));
+        if(markerIdx<0)return null;
+        let hi=-1;
+        for(let i=markerIdx;i>=0;i--){const h=parseRow(tableLines[i]);if(h[0]&&h[0].replace(/\*/g,"").trim()==="項目"){hi=i;break;}}
+        if(hi<0)return null;
+        planCols=parseRow(tableLines[hi]).slice(1);
+        startIdx=markerIdx+1;
+      }
       const rows=[];
-      // ヘッダ行の次の行から、価格行（先頭セルが$または¥で始まる）のみ取込
-      for(let i=headerIdx+1;i<tableLines.length;i++){
+      for(let i=startIdx;i<tableLines.length;i++){
         const cells=parseRow(tableLines[i]);
-        if(!cells.length)break;
-        const size=cells[0];
-        if(!size||/^[-:\s]+$/.test(size))continue; // 区切り行スキップ
-        // 先頭セルが$/$5,000 形式か確認（価格行の判定）
-        if(!/^\$|^¥|^\d/.test(size))break; // 非価格行に到達したら終了
+        if(!cells.length)continue;
+        const size=cells[0].replace(/\*/g,"").trim();
+        if(!size||/^[-:\s]+$/.test(size))continue; // 区切り行
+        if(/^【|】/.test(size)||/上半分|下半分/.test(size))continue; // セクション見出し行
+        if(!/^\$|^¥|^€|^\d/.test(size))continue; // 口座サイズ（価格行）以外スキップ
         const prices={};
-        planCols.forEach((col,i)=>{
-          const v=(cells[i+1]||"").trim();
+        planCols.forEach((col,idx)=>{
+          const v=(cells[idx+1]||"").trim();
           prices[col]=(!v||v==="ー"||v==="-"||v==="―")?"—":v;
         });
-        rows.push({size,tier:"",prices});
+        rows.push({size,prices});
       }
-      if(!rows.length){alert("価格行が見つかりませんでした");return;}
-      setTabField("slotData",prev=>({...prev,priceTable:[{text:JSON.stringify({rows})}]}));
-      alert(`価格テーブル取込: ${rows.length}行 × ${planCols.length}プランを格納`);
-      return;
-    }
+      return rows.length?{rows,planCols}:null;
+    };
+    const priceTable=extractPriceRows();
+
     // F01〜F22 キー → DBP-01 slot id マップ
     const F_KEY_MAP={
       F01:"firmName",F02:"country",F03:"established",F04:"officialUrl",
@@ -3138,8 +3031,17 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
       F17:"payoutMethods",F18:"payoutPolicy",F19:"profitSplit",F20:"profitSplitNote",
       F21:"planComparison",F22:"planList"
     };
-    // F-key形式（F01〜F22）の行があれば → DBP-01スロット取込
-    const hasFKey=tableLines.some(l=>/^[|\s]*F\d{1,2}[|\s]/.test(l));
+    const hasFKey=tableLines.some(l=>/^[|\s]*\**F\d{1,2}\**[|\s]/.test(l));
+
+    // 価格テーブル単体（F-keyなし）→ priceTable のみ格納
+    if(priceTable&&!hasFKey){
+      if(slotLocks["priceTable"]){alert("priceTable がロックされています");return;}
+      setTabField("slotData",prev=>({...prev,priceTable:[{text:JSON.stringify({rows:priceTable.rows})}]}));
+      alert(`価格テーブル取込: ${priceTable.rows.length}行 × ${priceTable.planCols.length}プランを格納`);
+      return;
+    }
+
+    // F-key形式（F01〜F22）→ DBP-01スロット取込（同梱の価格テーブルがあれば併せて格納）
     if(hasFKey){
       const updates={};let stored=0;const skipped=[];
       tableLines.forEach(line=>{
@@ -3154,7 +3056,8 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
         if(!val||val==="記載なし"||val==="—")return; // 空・記載なしはスキップ
         updates[id]=val;stored++;
       });
-      if(!stored){alert("F01〜F22 形式の行が見つかりませんでした");return;}
+      const priceOK=priceTable&&!slotLocks["priceTable"];
+      if(!stored&&!priceOK){alert("F01〜F22 形式の行が見つかりませんでした");return;}
       let locked=0;
       setTabField("slotData",prev=>{
         const next={...prev};
@@ -3162,9 +3065,10 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
           if(slotLocks[id]){locked++;continue;}
           next[id]=[...(prev[id]||[]),{text:val}]; // 追記（置換ではなく）
         }
+        if(priceOK)next.priceTable=[{text:JSON.stringify({rows:priceTable.rows})}];
         return next;
       });
-      alert(`Firm取込: ${stored}項目を格納`+(locked?`（ロック${locked}件スキップ）`:"")+(skipped.length?`\n未対応キー: ${skipped.join(", ")}`:""));
+      alert(`Firm取込: ${stored}項目を格納`+(priceOK?` ／ 価格テーブル: ${priceTable.rows.length}行×${priceTable.planCols.length}プラン`:"")+(locked?`（ロック${locked}件スキップ）`:"")+(skipped.length?`\n未対応キー: ${skipped.join(", ")}`:""));
       return;
     }
     // 通常の rd_* 取込（「項目|C|F|差分|詳細」形式）
@@ -3966,7 +3870,6 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
 
   return (
     <div style={{display:"flex",flexDirection:"column",height:"100vh",overflow:"hidden"}}>
-      <FuncIndex show={showFuncIndex} onClose={()=>setShowFuncIndex(false)} />
       <CouponConfigModal show={couponModal.show} config={couponModal.config} slug={couponModal.slug} onClose={()=>setCouponModal(p=>({...p,show:false}))} onSaveToDir={saveCouponConfig} hugoDir={hugoDir} />
       {domToast&&<div style={{position:"fixed",bottom:28,right:28,zIndex:99999,background:domToast.startsWith("✓")?C.green:C.red,color:C.bg,padding:"8px 16px",borderRadius:6,fontSize:"0.8rem",fontWeight:700,boxShadow:"0 4px 12px rgba(0,0,0,0.4)"}}>{domToast}</div>}
       <BackupModal show={showBackup} onClose={()=>setShowBackup(false)} getCurrentData={getCurrentData} onRestore={restoreData} />
@@ -4015,7 +3918,6 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <Btn color={C.yellow} onClick={async()=>{if(!hugoDir)await selectHugoDir();else exportHugo();}} style={{fontSize:"0.6rem",borderRadius:"4px 0 0 4px"}} title={hugoDirName||"フォルダ未選択"}>🚀 Hugo</Btn>
           <Btn color={C.yellow} onClick={selectHugoDir} style={{fontSize:"0.6rem",padding:"1px 5px",borderRadius:"0 4px 4px 0",borderLeft:`1px solid rgba(0,0,0,0.3)`}} title="出力フォルダを再選択">▾</Btn>
         </div>
-        <span onClick={()=>setShowFuncIndex(!showFuncIndex)} style={{cursor:"pointer",fontSize:"0.82rem"}}>📋</span>
       </div>
 
       {/* Main */}
