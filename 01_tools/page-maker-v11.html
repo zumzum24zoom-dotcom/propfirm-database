@@ -1300,7 +1300,9 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
 // ═══════════════════════════════════════════════════
 // 取り込み対象エリア
 // ═══════════════════════════════════════════════════
-function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,onClear,onAdd,activeSlot,onScannerPasted}) {
+function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,onClear,onAdd,activeSlot,onScannerPasted,onSelectText}) {
+  // 取込エリア内で選択し終えた瞬間に文字を記憶（スロットclickで選択が消えても保持される）
+  const captureSel=()=>{const s=window.getSelection()?.toString();if(s&&s.trim())onSelectText&&onSelectText(s);};
   const [showDom,setShowDom]=useState(false);
   const domTaRef=useRef(null);
   return (
@@ -1337,12 +1339,12 @@ function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,o
           style={{height:44,resize:"none",background:C.bg,color:C.text,border:`1px solid ${C.blue}`,borderRadius:4,
             padding:"4px 6px",fontSize:"0.65rem",fontFamily:font,outline:"none",flexShrink:0}} />
       )}
-      <div style={{flex:1,overflow:"auto",background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:8,
+      <div onMouseUp={captureSel} onKeyUp={captureSel} style={{flex:1,overflow:"auto",background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:8,
         fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,color:C.textBright,whiteSpace:"pre-wrap",userSelect:"text"}}>
         {text||<span style={{color:C.textDim}}>貼り付けエリアから「翻訳→対象」または「→対象」で送る</span>}
       </div>
       <div style={{fontSize:"0.62rem",color:C.textDim}}>
-        {activeSlot?`選択中: ${activeSlot}`:"スロットを選択 → テキスト選択 → ＋ボタンで格納"}
+        {activeSlot?`選択中: ${activeSlot}`:"テキスト選択 ⇄ スロット選択（順不同）→ ⇨ で格納"}
       </div>
     </div>
   );
@@ -2639,13 +2641,16 @@ function App() {
   // handleAdd（選択中スロット用）
   const handleAdd=useCallback(()=>{
     if(!activeSlotId){alert("格納先スロットを選択してください");return}
-    const sel=window.getSelection()?.toString()?.trim();
-    if(!sel){alert("テキストを選択してから＋ボタンを押してください");return}
+    // 現在の生の選択を優先。スロットclick等で解除済みなら記憶した選択(selectedTextRef)を使う
+    const live=window.getSelection()?.toString()?.trim();
+    const sel=live||(selectedTextRef.current||"").trim();
+    if(!sel){alert("取込エリアでテキストを選択してから ⇨ を押してください");return}
     setTabField("slotData",prev=>{
       const locked=isSlotLocked(slotLocks,prev,activeSlotId);
       if(locked)return prev;
       return{...prev,[activeSlotId]:[...(prev[activeSlotId]||[]).filter(f=>!f.merged),{text:sel}]};
     });
+    selectedTextRef.current=""; // 連続誤格納防止：使ったら記憶をクリア
     // planList追加時にPlanタブ自動生成
     if(activeSlotId==="planList"&&activeType==="firm"){
       setTimeout(()=>syncPlansFromList(sel),100);
@@ -3941,9 +3946,9 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <ResizeHandle dir="y" onMouseDown={pasteDrag} />
           <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
             autoAssigning={autoAssigning} onTableParse={handleTableParse} translating={translating}
-            onClear={()=>setTabField("targetText","")} onAdd={handleAdd}
+            onClear={()=>{setTabField("targetText","");selectedTextRef.current=""}} onAdd={handleAdd}
             activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
-            onScannerPasted={handleScannerPasted} />
+            onScannerPasted={handleScannerPasted} onSelectText={t=>{selectedTextRef.current=t}} />
         </div>
         <ResizeHandle dir="x" onMouseDown={leftDrag} />
 
