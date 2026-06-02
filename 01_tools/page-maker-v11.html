@@ -1567,7 +1567,7 @@ const NUM_IDS=new Set(["rd_target","rd_minDays","rd_dailyLoss","rd_maxLoss","rd_
 const UNIT_MAP={rd_target:"%",rd_minDays:"日",rd_dailyLoss:"%",rd_maxLoss:"%",rd_consistency:"%"};
 const LOSSTYPE_IDS=new Set(["rd_dailyLossType","rd_maxLossType"]); // 損失タイプ選択（DD6分類）
 const PROHIBIT_ID="rd_prohibited"; // 禁止行為＝行為名列挙
-const LOSSTYPE_OPTS=["Static","Trailing（Balance EOD）","Trailing（Balance HWM）","Trailing（Equity EOD）","Trailing（Equity HWM）","Trailing（Higher B or E EOD）","記載なし"];
+const LOSSTYPE_OPTS=["Static","Trailing（Balance EOD）","Trailing（Balance HWM）","Trailing（Equity EOD）","Trailing（Equity HWM）","Trailing（Higher B or E EOD）","無","記載なし"];
 const YESNO3_OPTS=["有","無","※有","記載なし"]; // その他の制約
 const NUM_SPECIAL=["無","記載なし"]; // 数値型でも選べる特殊値
 const DIFF_OPTS=["ー","EASE","TRAP"];
@@ -1627,8 +1627,11 @@ function RuleTableEditor({slotData,setSlotData,locks}){
 
   const cellColor=(t,v)=>{
     if(!v||v==="記載なし"||v==="ー"||v==="—")return C.textDim;
-    if(t==="yn3"){if(v==="無")return C.green;if(v==="有")return C.red;if(v==="※有")return C.yellow;}
-    if(t==="num")return C.yellow;
+    // 無/有/※有 は型に依らず共通配色（無=緑=制約なし / 有=赤=制約あり / ※有=オレンジ=条件付き）
+    if(v==="無")return C.green;
+    if(v==="有")return C.red;
+    if(v==="※有")return C.yellow;
+    if(t==="num")return C.yellow; // 数値（閾値）= オレンジ（良し悪しの向きが項目で逆なので中立色）
     return C.text;
   };
   const Cell=({t,v})=>(
