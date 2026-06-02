@@ -1,7 +1,7 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-05-30（セッション3）
+> **最終更新**: 2026-06-03（セッション4）
 
 ---
 
@@ -113,13 +113,36 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 - coupon-config.json スキーマ拡張: `{firmSlug: {coupon: {...}, rules: {...}}}` 構造に変更（将来のルール変更検知等に対応）
 - extract-coupons.mjs: 新スキーマ対応（`firmEntry.coupon` のみ処理）
 
+### ✅ 完了（2026-06-03 セッション4）
+
+**site-scanner → Worker → GitHub パイプライン構築**
+
+- `01_tools/coupon-fetcher/worker.js` — `/scan` POST エンドポイント追加・CORS ヘッダー追加・`ghPutFile` ヘルパー追加
+- `pfd-coupon-fetcher` Worker を Cloudflare にデプロイ済み
+  - URL: `https://pfd-coupon-fetcher.purple-voice-a554.workers.dev`
+  - Secrets 登録済み: `ANTHROPIC_KEY` / `GITHUB_TOKEN` / `TRIGGER_SECRET=pfd-secret-2026`
+- `01_tools/site-scanner.js` — bookmarklet ソース管理ファイル作成（POST直行版）
+- Page Maker `SCAN_ENDPOINT` 設定済み
+- Page Maker スキャナー検知バグ修正（`"_tool": "site-scanner"` スペースあり対応）
+- Page Maker スキャナーペースト処理変更: クーポン抽出→ページ構造保存（`data/scans/{slug}.json`）
+
+**保存フロー（設計済み・動作未確認）**
+```
+bookmarklet実行 → firmSlug確認 → Worker POST → GitHub data/scans/{slug}.json
+```
+
+**未解決: ブックマークレットが無反応**
+- Chrome の `allow pasting` セキュリティが邪魔でコンソールテスト未完
+- CORS fix 適用後のデプロイは完了済み → 次回セッションでブックマークレット更新して動作確認
+
 ### ⬜ 次にやること（優先順）
 → 詳細は「セクション5 サイト照合タスク」を参照
 
-1. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— データ入力後すぐ表示可
-2. ❷ DBP_01 プランナビゲーション（firms/single.html）
-3. ❸ 実質最短日数タイムライン（Widget Maker 移植）
-4. Page Maker でデータ入力継続 → exportHugo
+1. **ブックマークレット動作確認** — ブックマーク更新（`01_tools/site-scanner.js` 行13〜35）→ 対象サイトで実行 → `data/scans/` に JSON が届くか確認
+2. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— データ入力後すぐ表示可
+3. ❷ DBP_01 プランナビゲーション（firms/single.html）
+4. ❸ 実質最短日数タイムライン（Widget Maker 移植）
+5. Page Maker でデータ入力継続 → exportHugo
 
 ---
 

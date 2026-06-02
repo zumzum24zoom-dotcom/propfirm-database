@@ -125,6 +125,7 @@ const { useState, useRef, useCallback, useEffect, useMemo } = React;
 // CONFIG & TOKENS
 // ═══════════════════════════════════════════════════
 const LLM_PROXY = "https://misty-term-6eac.purple-voice-a554.workers.dev/api/llm";
+const SCAN_ENDPOINT = "https://pfd-coupon-fetcher.purple-voice-a554.workers.dev/scan?secret=pfd-secret-2026";
 const C = {
   bg:"#0a0e17",surface:"#111827",surfaceAlt:"#1a2332",
   border:"#1e2d3d",borderLight:"#2a3a4d",
@@ -470,7 +471,8 @@ function generateKoryakuPrompt(firmId, firms, tabDataMap, SLOT_DEFS, glossaryTer
         if (!slotData || slotData.length === 0) return;
         
         const merged = slotData.find(f => f.merged);
-        const text = merged ? merged.text : slotData.map(f => f.text).join("\n");
+        // マージ済み優先 → なければ最後の断片（最新データ）を使用。全連結はゴミデータになるため禁止
+        const text = merged ? merged.text : (slotData[slotData.length - 1]?.text || "");
         if (text.trim()) {
           ruleDetailsList += `**${slot.label}:** ${text}\n\n`;
         }
@@ -1227,7 +1229,6 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
   const [dragOver,setDragOver]=useState(false);
   const [ocrStatus,setOcrStatus]=useState("");
   const [showArchives,setShowArchives]=useState(false);
-  const [scannerDetected,setScannerDetected]=useState(false);
 
   const handleImageOCR=useCallback(async file=>{
     if(!file||!file.type.startsWith("image/"))return;
@@ -1249,7 +1250,6 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
           <span style={{fontSize:"0.78rem",fontWeight:700,color:C.accent}}>貼付エリア</span>
           <span onClick={onOpenChild} style={{cursor:"pointer",fontSize:"0.82rem",color:C.accent}} title="小窓">❏</span>
           {ocrStatus&&<span style={{fontSize:"0.65rem",color:C.yellow}}>{ocrStatus}</span>}
-          {scannerDetected&&<span style={{fontSize:"0.62rem",color:C.accent,cursor:"pointer",border:`1px solid ${C.accent}`,borderRadius:3,padding:"1px 5px"}} onClick={()=>onScannerPasted&&onScannerPasted("show")}>🔍 クーポン設定</span>}
         </div>
         <div style={{display:"flex",gap:3,alignItems:"center"}}>
           <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onArchive(t)}} style={{background:"transparent",color:C.purple,border:`1px solid ${C.purple}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>保管</button>
@@ -1268,10 +1268,9 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
           const txt=e.clipboardData.getData("text/plain")||"";
           if(txt.trim())onTextPasted&&onTextPasted();
           // スキャナーJSON検出
-          if(txt.includes('"_tool":"site-scanner"')){
-            setScannerDetected(true);
+          if(txt.includes('"_tool":"site-scanner"')||txt.includes('"_tool": "site-scanner"')){
             try{const parsed=JSON.parse(txt);onScannerPasted&&onScannerPasted(parsed);}catch(e){}
-          }else{setScannerDetected(false);}
+          }
         }}
           placeholder="テキスト貼り付け / 画像ドロップ・ペースト"
           style={{width:"100%",height:"100%",resize:"none",background:C.bg,color:C.text,border:"none",padding:8,fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,outline:"none"}} />
@@ -1332,7 +1331,7 @@ function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,o
           placeholder='DOM scanner JSON をここに貼る（自動でクーポン抽出）'
           onPaste={e=>{
             const t=e.clipboardData?.getData("text/plain")||"";
-            if(t.includes('"_tool":"site-scanner"')){
+            if(t.includes('"_tool":"site-scanner"')||t.includes('"_tool": "site-scanner"')){
               try{onScannerPasted&&onScannerPasted(JSON.parse(t));setShowDom(false);}catch(err){}
             }
           }}
@@ -2740,19 +2739,22 @@ function App() {
 
   // スキャナーJSON処理
   const handleScannerPasted=useCallback(async data=>{
-    if(data==="show"){setCouponModal(p=>({...p,show:true}));return;}
     lastScanRef.current=data;
-    const cfg=extractCouponConfig(data);
     const activeFirm=firms.find(f=>f.id===activeTabId||(f.plans||[]).some(p=>p.id===activeTabId));
     const slug=activeFirm
       ?(getFirmName(activeFirm.id,tabDataMap)||activeFirm.name||"").toLowerCase().replace(/[\s/]+/g,"-").replace(/[^\w-]/g,"")
-      :"";
-    if(slug&&cfg){
-      await saveCouponConfig(slug,cfg);
+      :"unknown";
+    if(!hugoDir){showToast("Hugo フォルダ未選択 — 🚀Hugo ボタンでフォルダを選択してください");return;}
+    await writeHugoFile(hugoDir,["data","scans",`${slug}.json`],JSON.stringify(data,null,2));
+    if(SCAN_ENDPOINT){
+      try{
+        await fetch(SCAN_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({firmSlug:slug,data})});
+        showToast(`data/scans/${slug}.json を保存 + GitHub 送信完了`);
+      }catch(e){showToast(`ローカル保存済み（GitHub送信失敗: ${e.message}）`);}
     }else{
-      setCouponModal({show:true,config:cfg,slug:slug||"firm-slug"});
+      showToast(`data/scans/${slug}.json を保存しました`);
     }
-  },[firms,activeTabId,tabDataMap,saveCouponConfig]);
+  },[firms,activeTabId,tabDataMap,hugoDir,showToast]);
 
   // 貼り付けエリア展開（テキスト貼り付け時）
   const handlePasteExpand=useCallback(()=>setPasteH(520),[setPasteH]);
@@ -3135,7 +3137,7 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
       // 現在のFirmのDBP_01データ
       const firmData=tabDataMap[activeTabId]||{};
       const firmSlots=firmData.slotData||{};
-      const gf=id=>{const fr=firmSlots[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+      const gf=id=>{const fr=firmSlots[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:(fr[fr.length-1]?.text||"")};
       const firmInfo=SLOT_DEFS.dbp01.map(s=>`${s.label}: ${gf(s.id)||"記載なし"}`).join("\n");
 
       // 配下PlanのDBP_02データ
@@ -3143,7 +3145,7 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
       const planTexts=(firm?.plans||[]).map(plan=>{
         const pd=tabDataMap[plan.id]||{};
         const ps=pd.slotData||{};
-        const gp=id=>{const fr=ps[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+        const gp=id=>{const fr=ps[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:(fr[fr.length-1]?.text||"")};
         return `【${plan.name||"Plan"}】\n`+SLOT_DEFS.dbp02.map(s=>`${s.label}: ${gp(s.id)||"—"}`).join("\n");
       }).join("\n\n");
 
@@ -3212,7 +3214,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       // 全PlanのDBP_02データを収集
       const planDataList=firm.plans.map(plan=>{
         const pd=tabDataMap[plan.id]||{};const ps=pd.slotData||{};
-        const gp=id=>{const fr=ps[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n")};
+        const gp=id=>{const fr=ps[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:(fr[fr.length-1]?.text||"")};
         return {name:plan.name||gp("challengeName")||"Plan",slots:ps,get:gp};
       });
 

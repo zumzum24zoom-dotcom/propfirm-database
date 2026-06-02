@@ -23,14 +23,35 @@ export default {
     ctx.waitUntil(run(env));
   },
 
-  // 手動トリガー: GET /?secret=YOUR_TRIGGER_SECRET
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    if (url.searchParams.get("secret") === env.TRIGGER_SECRET) {
-      ctx.waitUntil(run(env));
-      return json({ status: "started", message: "バックグラウンドで実行中" }, 202);
+
+    // CORS preflight
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: corsHeaders() });
     }
-    return json({ status: "ok", worker: "pfd-coupon-fetcher" });
+
+    if (url.searchParams.get("secret") !== env.TRIGGER_SECRET) {
+      return cors(json({ error: "unauthorized" }, 401));
+    }
+
+    // POST /scan — ブックマークレット / Page Maker からのページ構造保存
+    if (request.method === "POST" && url.pathname === "/scan") {
+      const body = await request.json();
+      const { firmSlug, data } = body;
+      if (!firmSlug) return cors(json({ error: "firmSlug required" }, 400));
+      const [owner, repo] = env.GITHUB_REPO.split("/");
+      await ghPutFile(owner, repo, env.GITHUB_BRANCH || "master",
+        `data/scans/${firmSlug}.json`,
+        JSON.stringify(data, null, 2),
+        env.GITHUB_TOKEN
+      );
+      return cors(json({ status: "saved", path: `data/scans/${firmSlug}.json` }));
+    }
+
+    // GET /?secret=... — 手動クーポン取得トリガー
+    ctx.waitUntil(run(env));
+    return cors(json({ status: "started", message: "バックグラウンドで実行中" }, 202));
   }
 };
 
@@ -189,6 +210,22 @@ function ghFetch(url, token, options = {}) {
   });
 }
 
+async function ghPutFile(owner, repo, branch, path, content, token) {
+  const base = `https://api.github.com/repos/${owner}/${repo}`;
+  const existing = await ghFetch(`${base}/contents/${path}`, token);
+  const sha = existing.ok ? (await existing.json()).sha : undefined;
+  await ghFetch(`${base}/contents/${path}`, token, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: `[scan] ${path}`,
+      content: btoa(unescape(encodeURIComponent(content))),
+      branch,
+      ...(sha ? { sha } : {})
+    })
+  });
+}
+
 async function batchCommit(owner, repo, branch, updates, token) {
   const base = `https://api.github.com/repos/${owner}/${repo}`;
 
@@ -239,6 +276,20 @@ async function batchCommit(owner, repo, branch, updates, token) {
 }
 
 // ── utils ─────────────────────────────────────────────────────────────────
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  };
+}
+
+function cors(response) {
+  const r = new Response(response.body, response);
+  Object.entries(corsHeaders()).forEach(([k, v]) => r.headers.set(k, v));
+  return r;
+}
 
 function sleep(ms) {
   return new Promise(r => setTimeout(r, ms));

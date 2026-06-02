@@ -1,6 +1,7 @@
 name = "pfd-coupon-fetcher"
 main = "worker.js"
 compatibility_date = "2024-09-23"
+account_id = "566a9e7712671782977c2467ae33bae6"
 
 [triggers]
 crons = ["0 0 1 * *"]   # 毎月1日 00:00 UTC
