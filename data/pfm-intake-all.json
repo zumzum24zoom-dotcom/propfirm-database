@@ -1,0 +1,790 @@
+{
+  "firms": [
+    {
+      "id": "f2",
+      "name": "The5ers",
+      "plans": [
+        {
+          "id": "p2",
+          "name": "High Stakes"
+        },
+        {
+          "id": "p3",
+          "name": "Hyper-Growth"
+        },
+        {
+          "id": "p4",
+          "name": "Bootcamp"
+        },
+        {
+          "id": "p5",
+          "name": "Pro-Growth"
+        }
+      ],
+      "pinned": true
+    },
+    {
+      "id": "f3",
+      "name": "FundingPips",
+      "plans": [
+        {
+          "id": "p6",
+          "name": "FundingPips Zero"
+        },
+        {
+          "id": "p7",
+          "name": "1-Step"
+        },
+        {
+          "id": "p8",
+          "name": "2-Step Standard"
+        },
+        {
+          "id": "p9",
+          "name": "2-Step Pro"
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "name": "FundedNext",
+      "plans": [
+        {
+          "id": "p10",
+          "name": "Stellar 1-Step"
+        },
+        {
+          "id": "p11",
+          "name": "Stellar 2-Step"
+        },
+        {
+          "id": "p12",
+          "name": "Stellar Lite"
+        },
+        {
+          "id": "p13",
+          "name": "Stellar Instant"
+        }
+      ]
+    }
+  ],
+  "tabDataMap": {
+    "f2": {
+      "archives": [
+        "## 断面① Drawdown\n\nThe5ersの各プランにおけるドローダウンは、日次損失と最大損失で構成される。Bootcampプランのみ、ChallengeとFundedで日次および最大損失の設定が異なる仕様である。\n\n### DD比較テーブル\n| プラン名 | 日次損失上限 | 計算基準（日次） | 最大損失上限 | 計算基準（最大） |\n|---|---|---|---|---|\n| High Stakes | 5% | Trailing（Higher B or E EOD） | 10% | Static |\n| Hyper-Growth | 3% | Trailing（Higher B or E EOD） | 6% | Static |\n| Bootcamp (Challenge) | ー | ー | 5% | Static |\n| Bootcamp (Funded) | 3% | Trailing（Higher B or E EOD） | 4% | Static |\n| Pro-Growth | 3% | Trailing（Higher B or E EOD） | 6% | Static |\n\n日次損失の計算基準となるリセット時刻は、全プラン共通で00:00 MT5 Server Time（日本時間換算: 冬11:00 / 夏06:00）である。Trailing（Higher B or E EOD）は、前日のサーバー時間0時時点の残高または有効証拠金の高い方を基準として算出される仕様である。\n\n### 合格に向けての注意点\n日次損失は残高または有効証拠金の高い方を基準とするため、日を跨いで含み益がある場合は翌日の許容損失額が変動する仕様である。BootcampのChallengeでは日次損失上限が設定されていない。\n\n### 出金に向けての注意点\nFunded口座到達後もDD計算基準はChallengeと同様の仕様が適用される（Bootcampを除く）。日々の残高と有効証拠金の推移に基づく資金管理となる。\n\n### 特殊ルール\nHyper-GrowthおよびBootcamp（Funded）の日次損失制限は、失格ではなく当日の取引が一時停止（Daily Pause）される保護仕様である。\n\n---\n\n## 断面② 取引ルール\n\n取引における一貫性ルールの設定は存在せず、プランごとにニュース時の取引制限やEA制限などの仕様が分かれている。\n\n### Consistency Rule プラン別適用状況\n| プラン | Challenge | Funded | 備考 |\n|---|---|---|---|\n| High Stakes | なし（明示） | なし（明示） | ー |\n| Hyper-Growth | なし（明示） | なし（明示） | ー |\n| Bootcamp | 記載なし | 記載なし | ー |\n| Pro-Growth | 記載なし | 記載なし | ー |\n\n### 第1部. 全プラン共通の取引制限\n週末およびオーバーナイトのポジション持ち越しは全プランで許可されている。自動売買（EA）の使用は可能であるが、プラットフォーム上でストップロスが可視化されない「ステルスモード」の使用は全プランで禁止されている。アービトラージや高頻度取引（HFT）、他者と同じ取引になるサードパーティ製EAの使用等は禁止行為である。\n\n### 第2部. プラン間で差分のあるルール\n| ルール項目 | プラン別の違い |\n|---|---|\n| ニュース取引制限 | High Stakes: 発表前後2分間新規注文禁止 / Hyper-Growth・Bootcamp: ブラケット戦略禁止 / Pro-Growth: 記載なし |\n| コピートレード | High Stakes・Bootcamp: 他者コピー禁止 / Hyper-Growth: 自己口座間のみ総資金$500Kまで許可 / Pro-Growth: 記載なし |\n| ストップロス | High Stakes・Hyper-Growth・Pro-Growth: 任意（推奨） / Bootcamp: 必須（リスク2%以下） |\n| 最低取引日数（合格） | High Stakes: 3日 / Hyper-Growth: 0日 / Bootcamp: 記載なし / Pro-Growth: 3日 |\n\n### 合格に向けての注意点\nBootcampでは全ポジションに対するストップロスの設定が必須要件である。High Stakesでは重要指標発表時の前後2分間の新規注文が禁止されているため、経済指標カレンダーの確認を伴う仕様である。\n\n### 出金に向けての注意点\nFunded口座においても、Challengeと同様の取引ルールおよび禁止行為の制約が適用される仕様である。各プラン特有のコピートレード制限やニュース時の注文制約への準拠が求められる。\n\n---\n\n## 断面③ 出金までの流れ\n\n出金は隔週の頻度で実施され、暗号通貨や銀行送金等の受取手段が提供される。プランにより最低出金額の有無や初期の利益分配率が異なる仕様である。\n\n### 出金条件テーブル\n| プラン名 | 頻度 | 最低取引日数（出金） | 一貫性ルール | 最低利益 | 利益分配 | 備考 |\n|---|---|---|---|---|---|---|\n| High Stakes | 隔週 | 記載なし | なし（明示） | $150 | 80% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Hyper-Growth | 隔週 | 記載なし | なし（明示） | ー | 75% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Bootcamp | 隔週 | 記載なし | 記載なし | ー | 50% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Pro-Growth | 隔週 | 記載なし | 記載なし | ー | 75% | 出金手段: Crypto, Rise, Bank Transfer等 |\n\n### 最速出金スケジュール（理論値）\n| プラン名 | Steps | 最短合格 | 最速出金 | トータル日数 | 着金目安 | 備考 |\n|---|---|---|---|---|---|---|\n| High Stakes | 2 | 6日 | 14日 | 20日 | 記載なし | 最短合格は各Step3日で算出 |\n| Hyper-Growth | 1 | 1日 | 14日 | 15日 | 記載なし | 合格条件0日は1日で算出 |\n| Bootcamp | 3 | 3日 | 14日 | 17日 | 記載なし | 合格条件なしは1日×3Stepで算出 |\n| Pro-Growth | 1 | 3日 | 14日 | 17日 | 記載なし | 最短合格は3日で算出 |\n\n### 補足事項\n最速出金はFunded口座受領から14日目に可能となり、以降は2週間ごと（隔週）のサイクルで出金申請が可能である。スケールアップに伴い、利益分配率は全プランで最大100%まで上昇する仕様である。"
+      ],
+      "targetText": "## 断面① Drawdown\n\nThe5ersの各プランにおけるドローダウンは、日次損失と最大損失で構成される。Bootcampプランのみ、ChallengeとFundedで日次および最大損失の設定が異なる仕様である。\n\n### DD比較テーブル\n| プラン名 | 日次損失上限 | 計算基準（日次） | 最大損失上限 | 計算基準（最大） |\n|---|---|---|---|---|\n| High Stakes | 5% | Trailing（Higher B or E EOD） | 10% | Static |\n| Hyper-Growth | 3% | Trailing（Higher B or E EOD） | 6% | Static |\n| Bootcamp (Challenge) | ー | ー | 5% | Static |\n| Bootcamp (Funded) | 3% | Trailing（Higher B or E EOD） | 4% | Static |\n| Pro-Growth | 3% | Trailing（Higher B or E EOD） | 6% | Static |\n\n日次損失の計算基準となるリセット時刻は、全プラン共通で00:00 MT5 Server Time（日本時間換算: 冬11:00 / 夏06:00）である。Trailing（Higher B or E EOD）は、前日のサーバー時間0時時点の残高または有効証拠金の高い方を基準として算出される仕様である。\n\n### 合格に向けての注意点\n日次損失は残高または有効証拠金の高い方を基準とするため、日を跨いで含み益がある場合は翌日の許容損失額が変動する仕様である。BootcampのChallengeでは日次損失上限が設定されていない。\n\n### 出金に向けての注意点\nFunded口座到達後もDD計算基準はChallengeと同様の仕様が適用される（Bootcampを除く）。日々の残高と有効証拠金の推移に基づく資金管理となる。\n\n### 特殊ルール\nHyper-GrowthおよびBootcamp（Funded）の日次損失制限は、失格ではなく当日の取引が一時停止（Daily Pause）される保護仕様である。\n\n---\n\n## 断面② 取引ルール\n\n取引における一貫性ルールの設定は存在せず、プランごとにニュース時の取引制限やEA制限などの仕様が分かれている。\n\n### Consistency Rule プラン別適用状況\n| プラン | Challenge | Funded | 備考 |\n|---|---|---|---|\n| High Stakes | なし（明示） | なし（明示） | ー |\n| Hyper-Growth | なし（明示） | なし（明示） | ー |\n| Bootcamp | 記載なし | 記載なし | ー |\n| Pro-Growth | 記載なし | 記載なし | ー |\n\n### 第1部. 全プラン共通の取引制限\n週末およびオーバーナイトのポジション持ち越しは全プランで許可されている。自動売買（EA）の使用は可能であるが、プラットフォーム上でストップロスが可視化されない「ステルスモード」の使用は全プランで禁止されている。アービトラージや高頻度取引（HFT）、他者と同じ取引になるサードパーティ製EAの使用等は禁止行為である。\n\n### 第2部. プラン間で差分のあるルール\n| ルール項目 | プラン別の違い |\n|---|---|\n| ニュース取引制限 | High Stakes: 発表前後2分間新規注文禁止 / Hyper-Growth・Bootcamp: ブラケット戦略禁止 / Pro-Growth: 記載なし |\n| コピートレード | High Stakes・Bootcamp: 他者コピー禁止 / Hyper-Growth: 自己口座間のみ総資金$500Kまで許可 / Pro-Growth: 記載なし |\n| ストップロス | High Stakes・Hyper-Growth・Pro-Growth: 任意（推奨） / Bootcamp: 必須（リスク2%以下） |\n| 最低取引日数（合格） | High Stakes: 3日 / Hyper-Growth: 0日 / Bootcamp: 記載なし / Pro-Growth: 3日 |\n\n### 合格に向けての注意点\nBootcampでは全ポジションに対するストップロスの設定が必須要件である。High Stakesでは重要指標発表時の前後2分間の新規注文が禁止されているため、経済指標カレンダーの確認を伴う仕様である。\n\n### 出金に向けての注意点\nFunded口座においても、Challengeと同様の取引ルールおよび禁止行為の制約が適用される仕様である。各プラン特有のコピートレード制限やニュース時の注文制約への準拠が求められる。\n\n---\n\n## 断面③ 出金までの流れ\n\n出金は隔週の頻度で実施され、暗号通貨や銀行送金等の受取手段が提供される。プランにより最低出金額の有無や初期の利益分配率が異なる仕様である。\n\n### 出金条件テーブル\n| プラン名 | 頻度 | 最低取引日数（出金） | 一貫性ルール | 最低利益 | 利益分配 | 備考 |\n|---|---|---|---|---|---|---|\n| High Stakes | 隔週 | 記載なし | なし（明示） | $150 | 80% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Hyper-Growth | 隔週 | 記載なし | なし（明示） | ー | 75% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Bootcamp | 隔週 | 記載なし | 記載なし | ー | 50% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Pro-Growth | 隔週 | 記載なし | 記載なし | ー | 75% | 出金手段: Crypto, Rise, Bank Transfer等 |\n\n### 最速出金スケジュール（理論値）\n| プラン名 | Steps | 最短合格 | 最速出金 | トータル日数 | 着金目安 | 備考 |\n|---|---|---|---|---|---|---|\n| High Stakes | 2 | 6日 | 14日 | 20日 | 記載なし | 最短合格は各Step3日で算出 |\n| Hyper-Growth | 1 | 1日 | 14日 | 15日 | 記載なし | 合格条件0日は1日で算出 |\n| Bootcamp | 3 | 3日 | 14日 | 17日 | 記載なし | 合格条件なしは1日×3Stepで算出 |\n| Pro-Growth | 1 | 3日 | 14日 | 17日 | 記載なし | 最短合格は3日で算出 |\n\n### 補足事項\n最速出金はFunded口座受領から14日目に可能となり、以降は2週間ごと（隔週）のサイクルで出金申請が可能である。スケールアップに伴い、利益分配率は全プランで最大100%まで上昇する仕様である。",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "The5ers"
+          },
+          {
+            "text": "The5%ers"
+          }
+        ],
+        "priceTable": [
+          {
+            "text": "{\"rows\":[{\"size\":\"$2,500\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"$19/22\",\"Hyper-Growth\":\"—\",\"Bootcamp\":\"—\",\"Pro-Growth\":\"—\"}},{\"size\":\"$5,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"$35/39\",\"Hyper-Growth\":\"$260\",\"Bootcamp\":\"—\",\"Pro-Growth\":\"$74\"}},{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"$69/78\",\"Hyper-Growth\":\"$450\",\"Bootcamp\":\"—\",\"Pro-Growth\":\"$140\"}},{\"size\":\"$20,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"$176/195\",\"Hyper-Growth\":\"$850\",\"Bootcamp\":\"$22\",\"Pro-Growth\":\"$270\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"\",\"Hyper-Growth\":\"—\",\"Bootcamp\":\"—\",\"Pro-Growth\":\"\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"\",\"Hyper-Growth\":\"—\",\"Bootcamp\":\"—\",\"Pro-Growth\":\"$470\"}},{\"size\":\"$60,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"$278/309\",\"Hyper-Growth\":\"—\",\"Bootcamp\":\"—\",\"Pro-Growth\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"$491/545\",\"Hyper-Growth\":\"—\",\"Bootcamp\":\"$95\",\"Pro-Growth\":\"\"}},{\"size\":\"$250,000\",\"tier\":\"\",\"prices\":{\"High Stakes\":\"$—\",\"Hyper-Growth\":\"—\",\"Bootcamp\":\"$225\",\"Pro-Growth\":\"—\"}}]}"
+          }
+        ],
+        "country": [
+          {
+            "text": "イスラエル / イギリス"
+          }
+        ],
+        "established": [
+          {
+            "text": "2016年"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://www.the5ers.com"
+          }
+        ],
+        "firmCategory": [
+          {
+            "text": "FX / CFD / Crypto"
+          }
+        ],
+        "japanChat": [
+          {
+            "text": "日本語HP"
+          }
+        ],
+        "firmPitch": [
+          {
+            "text": "リアル資金提供、最大400万ドルへのスケーリング、時間制限なしの柔軟な評価プロセス"
+          }
+        ],
+        "rewardProgram": [
+          {
+            "text": "ハブクレジット還元制度（評価フェーズ完了ごとに付与）、アフィリエイトプログラム"
+          }
+        ],
+        "scaleUp": [
+          {
+            "text": "最大$500,000（High Stakes） / 最大$4,000,000（Hyper-Growth、Bootcamp） / 100%利益配分まで（Pro-Growth）"
+          }
+        ],
+        "broker": [
+          {
+            "text": "商業LP直結（自社プール口座）"
+          }
+        ],
+        "platform": [
+          {
+            "text": "MT5 / cTrader"
+          }
+        ],
+        "serverTime": [
+          {
+            "text": "GMT+2（冬時間）/ GMT+3（夏時間）。日本時間換算: 冬=+11時間（午前0時=日本11:00）、夏=+6時間（午前0時=日本06:00）"
+          }
+        ],
+        "ddReset": [
+          {
+            "text": "00:00 MT5 Server Time（日本時間換算: 冬 11:00 / 夏 06:00）"
+          }
+        ],
+        "leverage": [
+          {
+            "text": "最大1:100（プラン・資産クラスにより異なる。詳細はレバレッジテーブル参照）"
+          }
+        ],
+        "commission": [
+          {
+            "text": "FX: $4/lot（往復）。詳細は手数料テーブル参照"
+          }
+        ],
+        "paymentMethods": [
+          {
+            "text": "クレジットカード、銀行振込、暗号通貨（USDT, USDC, TRX等）、Apple Pay、Google Pay、PayPal"
+          }
+        ],
+        "payoutMethods": [
+          {
+            "text": "Crypto（USDT, USDC, ETH, LTC）、Rise、Bank Transfer、Hub Credits"
+          }
+        ],
+        "payoutPolicy": [
+          {
+            "text": "頻度: 隔週、最低出金額: $150（High Stakesの場合）、申請: ダッシュボードから"
+          }
+        ],
+        "profitSplit": [
+          {
+            "text": "50% 〜 80%（初期）、最大100%"
+          }
+        ],
+        "profitSplitNote": [
+          {
+            "text": "全プランで最大100%までスケールアップ可能。Hyper-GrowthはFunded到達時に75%へ増加、BootcampはFundedの第2ステージから75%に増加。"
+          }
+        ],
+        "rd_news": [
+          {
+            "text": "High Stakes: 発表前後2分間新規注文禁止 / Hyper-Growth・Bootcamp: ブラケット戦略禁止 / Pro-Growth: 記載なし|—|—|"
+          }
+        ],
+        "rd_minDays": [
+          {
+            "text": "High Stakes: 3日 / Hyper-Growth: 0日 / Bootcamp: 記載なし / Pro-Growth: 3日|—|—|"
+          }
+        ],
+        "k_dd": [
+          {
+            "text": "## 断面① Drawdown\n\nThe5ersの各プランにおけるドローダウンは、日次損失と最大損失で構成される。Bootcampプランのみ、ChallengeとFundedで日次および最大損失の設定が異なる仕様である。\n\n### DD比較テーブル\n| プラン名 | 日次損失上限 | 計算基準（日次） | 最大損失上限 | 計算基準（最大） |\n|---|---|---|---|---|\n| High Stakes | 5% | Trailing（Higher B or E EOD） | 10% | Static |\n| Hyper-Growth | 3% | Trailing（Higher B or E EOD） | 6% | Static |\n| Bootcamp (Challenge) | ー | ー | 5% | Static |\n| Bootcamp (Funded) | 3% | Trailing（Higher B or E EOD） | 4% | Static |\n| Pro-Growth | 3% | Trailing（Higher B or E EOD） | 6% | Static |\n\n日次損失の計算基準となるリセット時刻は、全プラン共通で00:00 MT5 Server Time（日本時間換算: 冬11:00 / 夏06:00）である。Trailing（Higher B or E EOD）は、前日のサーバー時間0時時点の残高または有効証拠金の高い方を基準として算出される仕様である。\n\n### 合格に向けての注意点\n日次損失は残高または有効証拠金の高い方を基準とするため、日を跨いで含み益がある場合は翌日の許容損失額が変動する仕様である。BootcampのChallengeでは日次損失上限が設定されていない。\n\n### 出金に向けての注意点\nFunded口座到達後もDD計算基準はChallengeと同様の仕様が適用される（Bootcampを除く）。日々の残高と有効証拠金の推移に基づく資金管理となる。\n\n### 特殊ルール\nHyper-GrowthおよびBootcamp（Funded）の日次損失制限は、失格ではなく当日の取引が一時停止（Daily Pause）される保護仕様である。\n\n---"
+          }
+        ],
+        "k_rules": [
+          {
+            "text": "## 断面② 取引ルール\n\n取引における一貫性ルールの設定は存在せず、プランごとにニュース時の取引制限やEA制限などの仕様が分かれている。\n\n### Consistency Rule プラン別適用状況\n| プラン | Challenge | Funded | 備考 |\n|---|---|---|---|\n| High Stakes | なし（明示） | なし（明示） | ー |\n| Hyper-Growth | なし（明示） | なし（明示） | ー |\n| Bootcamp | 記載なし | 記載なし | ー |\n| Pro-Growth | 記載なし | 記載なし | ー |\n\n### 第1部. 全プラン共通の取引制限\n週末およびオーバーナイトのポジション持ち越しは全プランで許可されている。自動売買（EA）の使用は可能であるが、プラットフォーム上でストップロスが可視化されない「ステルスモード」の使用は全プランで禁止されている。アービトラージや高頻度取引（HFT）、他者と同じ取引になるサードパーティ製EAの使用等は禁止行為である。\n\n### 第2部. プラン間で差分のあるルール\n| ルール項目 | プラン別の違い |\n|---|---|\n| ニュース取引制限 | High Stakes: 発表前後2分間新規注文禁止 / Hyper-Growth・Bootcamp: ブラケット戦略禁止 / Pro-Growth: 記載なし |\n| コピートレード | High Stakes・Bootcamp: 他者コピー禁止 / Hyper-Growth: 自己口座間のみ総資金$500Kまで許可 / Pro-Growth: 記載なし |\n| ストップロス | High Stakes・Hyper-Growth・Pro-Growth: 任意（推奨） / Bootcamp: 必須（リスク2%以下） |\n| 最低取引日数（合格） | High Stakes: 3日 / Hyper-Growth: 0日 / Bootcamp: 記載なし / Pro-Growth: 3日 |\n\n### 合格に向けての注意点\nBootcampでは全ポジションに対するストップロスの設定が必須要件である。High Stakesでは重要指標発表時の前後2分間の新規注文が禁止されているため、経済指標カレンダーの確認を伴う仕様である。\n\n### 出金に向けての注意点\nFunded口座においても、Challengeと同様の取引ルールおよび禁止行為の制約が適用される仕様である。各プラン特有のコピートレード制限やニュース時の注文制約への準拠が求められる。"
+          }
+        ],
+        "k_payout": [
+          {
+            "text": "# 断面③ 出金までの流れ\n\n出金は隔週の頻度で実施され、暗号通貨や銀行送金等の受取手段が提供される。プランにより最低出金額の有無や初期の利益分配率が異なる仕様である。\n\n### 出金条件テーブル\n| プラン名 | 頻度 | 最低取引日数（出金） | 一貫性ルール | 最低利益 | 利益分配 | 備考 |\n|---|---|---|---|---|---|---|\n| High Stakes | 隔週 | 記載なし | なし（明示） | $150 | 80% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Hyper-Growth | 隔週 | 記載なし | なし（明示） | ー | 75% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Bootcamp | 隔週 | 記載なし | 記載なし | ー | 50% | 出金手段: Crypto, Rise, Bank Transfer等 |\n| Pro-Growth | 隔週 | 記載なし | 記載なし | ー | 75% | 出金手段: Crypto, Rise, Bank Transfer等 |\n\n### 最速出金スケジュール（理論値）\n| プラン名 | Steps | 最短合格 | 最速出金 | トータル日数 | 着金目安 | 備考 |\n|---|---|---|---|---|---|---|\n| High Stakes | 2 | 6日 | 14日 | 20日 | 記載なし | 最短合格は各Step3日で算出 |\n| Hyper-Growth | 1 | 1日 | 14日 | 15日 | 記載なし | 合格条件0日は1日で算出 |\n| Bootcamp | 3 | 3日 | 14日 | 17日 | 記載なし | 合格条件なしは1日×3Stepで算出 |\n| Pro-Growth | 1 | 3日 | 14日 | 17日 | 記載なし | 最短合格は3日で算出 |\n\n### 補足事項\n最速出金はFunded口座受領から14日目に可能となり、以降は2週間ごと（隔週）のサイクルで出金申請が可能である。スケールアップに伴い、利益分配率は全プランで最大100%まで上昇する仕様である。"
+          }
+        ]
+      },
+      "templateMode": "koryaku"
+    },
+    "p2": {
+      "archives": [
+        "NotebookLMのソース定義（DBP_02セクション）および用語辞典の指定に従い、The5ersの4プランについてルール早見表・詳細リストを出力します。\n\n### High Stakes\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 2 | ー | ー | 2ステップの評価フェーズを経てFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 10% / 5% | $150 | EASE | ChallengeではPhase 1で10%、Phase 2で5%の利益目標が必要。Fundedでは目標はないが、出金には最低$150の利益が必要。 |\n| P02. 最低取引日数（合格） | 3日 | ー | EASE | Challengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | 5% | ー | ー | Challenge・Funded共に1日あたり5%の損失が上限となる。 |\n| P04. 日次損失タイプ | Trailing（Higher B or E EOD） | ー | ー | Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 10% | ー | ー | Challenge・Funded共に初期残高から10%の損失が上限となる。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期残高を基準とした固定（Absolute）のドローダウン方式。 |\n| P07. 一貫性ルール | なし（明示） | ー | ー | Challenge・Funded共に一貫性ルールは適用されない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に合格や目標達成にかかる期限はない（ただし30日間の非アクティブで失効）。 |\n| P10. ニュース取引制限 | ※有 | ー | ー | Challenge・Funded共に重要指標発表の前後2分間における新規注文（成行・待機注文）の実行が禁止されている。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | ※有 | ー | ー | Challenge・Funded共に利用可能だが、ステルスモードのストップロスや禁止手法に該当するEAの使用は不可。 |\n| P14. コピートレード制約 | ※有 | ー | ー | Challenge・Funded共に他者のコピートレードは禁止。自身の別口座からのコピーは特定の条件下で許可。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止行為に指定されている。 |\n| P16. ストップロス制約 | ※有 | ー | ー | Challenge・Funded共に設定は必須ではないが、1ポジションのリスクを1%以下に抑える適切な設定が推奨される。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |\n\n---\n\n### Hyper-Growth\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 1 | ー | ー | 1ステップの評価フェーズで目標を達成すればFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 10% | ー | EASE | Challengeでは10%の利益目標が必要。Fundedでは目標はない。 |\n| P02. 最低取引日数（合格） | 0日 | ー | ー | Challenge・Funded共に最低取引日数の制約はなく、即日合格も可能。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | 3% | ー | ー | Challenge・Funded共に1日あたり3%の損失で当日の取引が一時停止（Daily Pause）となる。 |\n| P04. 日次損失タイプ | Trailing（Higher B or E EOD） | ー | ー | Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 6% | ー | ー | Challenge・Funded共に口座サイズから6%の損失で失格となる。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期残高を基準とした固定のドローダウン方式。 |\n| P07. 一貫性ルール | なし（明示） | ー | ー | Challenge・Funded共に一貫性ルールは適用されない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。 |\n| P10. ニュース取引制限 | ※有 | ー | ー | Challenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | ※有 | ー | ー | Challenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。 |\n| P14. コピートレード制約 | ※有 | ー | ー | Challenge・Funded共に自身の口座間コピーは総運用資金$500Kまで許可される。他者のコピーは禁止。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止行為。 |\n| P16. ストップロス制約 | ※有 | ー | ー | Challenge・Funded共に必須ではないが、適切なストップロスの設定が推奨される。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |\n\n---\n\n### Bootcamp\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 3 | ー | ー | 3段階の評価フェーズ（デモ口座）を経てFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 6% | ー | EASE | Challengeでは各ステージ6%の利益目標が必要。Fundedでは次のスケールアップ目標は5%だが合格要件としての目標はない。 |\n| P02. 最低取引日数（合格） | 記載なし | ー | ー | Challenge・Funded共に合格に必要な最低取引日数の明記はない。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | ー | 3% | TRAP | Challengeでは日次損失上限はない。Fundedでは1日あたり3%の損失で当日の取引が一時停止となる。 |\n| P04. 日次損失タイプ | ー | Trailing（Higher B or E EOD） | TRAP | Challengeでは該当しない。Fundedでは前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 5% | 4% | TRAP | Challengeでは5%の損失が上限となる。Fundedでは4%に制限が強化される。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期またはスケーリング後の残高を基準とした固定のドローダウン方式。 |\n| P07. 一貫性ルール | 記載なし | ー | ー | Challenge・Funded共に一貫性ルールの記載はない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。 |\n| P10. ニュース取引制限 | ※有 | ー | ー | Challenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | ※有 | ー | ー | Challenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。 |\n| P14. コピートレード制約 | ※有 | ー | ー | Challenge・Funded共に他者のコピーは禁止。またBootcampアカウント間のコピートレードも禁止されている。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止。 |\n| P16. ストップロス制約 | 有 | ー | ー | Challenge・Funded共にすべてのポジションにストップロス設定が必須で、1ポジションあたり残高の2%以下のリスクに抑える必要がある。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |\n\n---\n\n### Pro-Growth\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 1 | ー | ー | 1ステップの評価フェーズで目標を達成すればFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 10% | ー | EASE | Challengeでは10%の利益目標が必要。Fundedでは目標はない。 |\n| P02. 最低取引日数（合格） | 3日 | ー | EASE | Challengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | 3% | ー | ー | Challenge・Funded共に1日あたり3%の損失が上限となる。 |\n| P04. 日次損失タイプ | Trailing（Higher B or E EOD） | ー | ー | Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 6% | ー | ー | Challenge・Funded共に初期残高から6%の損失が上限となる。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期残高を基準とした固定のドローダウン方式。 |\n| P07. 一貫性ルール | 記載なし | ー | ー | Challenge・Funded共に一貫性ルールの記載はない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に制限時間はなく自分のペースで進められる。 |\n| P10. ニュース取引制限 | 記載なし | ー | ー | Challenge・Funded共にソースに明示的な記載はない。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | 記載なし | ー | ー | Challenge・Funded共に特定の制約の記載はない。 |\n| P14. コピートレード制約 | 記載なし | ー | ー | Challenge・Funded共に特定の制約の記載はない。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピングに関する制約の記載はない。 |\n| P16. ストップロス制約 | ※有 | ー | ー | Challenge・Funded共にストップロスの設定は必須ではないが強く推奨される。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |",
+        "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス"
+      ],
+      "targetText": "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "The5ers - High Stakes"
+          }
+        ],
+        "steps": [
+          {
+            "text": "2"
+          }
+        ],
+        "rd_target": [
+          {
+            "text": "10% / 5%|$150|EASE|ChallengeではPhase 1で10%、Phase 2で5%の利益目標が必要。Fundedでは目標はないが、出金には最低$150の利益が必要。"
+          }
+        ],
+        "rd_minDays": [
+          {
+            "text": "3日|無|EASE|Challengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。 / Challenge・Funded共に出金に必要な最低取引日数の明記はない。"
+          }
+        ],
+        "rd_dailyLoss": [
+          {
+            "text": "5%|ー|ー|Challenge・Funded共に1日あたり5%の損失が上限となる。"
+          }
+        ],
+        "rd_dailyLossType": [
+          {
+            "text": "Trailing（Higher B or E EOD）|ー|ー|Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。"
+          }
+        ],
+        "rd_maxLoss": [
+          {
+            "text": "10%|ー|ー|Challenge・Funded共に初期残高から10%の損失が上限となる。"
+          }
+        ],
+        "rd_maxLossType": [
+          {
+            "text": "Static|ー|ー|Challenge・Funded共に初期残高を基準とした固定（Absolute）のドローダウン方式。"
+          }
+        ],
+        "rd_consistency": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に一貫性ルールは適用されない。"
+          }
+        ],
+        "rd_profitCap": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。"
+          }
+        ],
+        "rd_timeLimit": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に合格や目標達成にかかる期限はない（ただし30日間の非アクティブで失効）。"
+          }
+        ],
+        "rd_news": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に重要指標発表の前後2分間における新規注文（成行・待機注文）の実行が禁止されている。"
+          }
+        ],
+        "rd_weekend": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に週末をまたぐポジションの保有が許可されている。"
+          }
+        ],
+        "rd_overnight": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。"
+          }
+        ],
+        "rd_ea": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に利用可能だが、ステルスモードのストップロスや禁止手法に該当するEAの使用は不可。"
+          }
+        ],
+        "rd_copyTrade": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に他者のコピートレードは禁止。自身の別口座からのコピーは特定の条件下で許可。"
+          }
+        ],
+        "rd_scalping": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止行為に指定されている。"
+          }
+        ],
+        "rd_stopLoss": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に設定は必須ではないが、1ポジションのリスクを1%以下に抑える適切な設定が推奨される。"
+          }
+        ],
+        "rd_risk": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に含み損に対する特有の制限の記載はない。"
+          }
+        ],
+        "rd_maxPosition": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。"
+          }
+        ],
+        "rd_prohibited": [
+          {
+            "text": "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p3": {
+      "archives": [
+        "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス"
+      ],
+      "targetText": "Hyper-Growth\n項目\nC\nF\n差分\n詳細\nSteps\n1\nー\nー\n1ステップの評価フェーズで目標を達成すればFundedアカウントを獲得するプログラム。\nP01. 利益目標\n10%\nー\nEASE\nChallengeでは10%の利益目標が必要。Fundedでは目標はない。\nP02. 最低取引日数（合格）\n0日\nー\nー\nChallenge・Funded共に最低取引日数の制約はなく、即日合格も可能。\nP02b. 最低取引日数（出金）\nー\n記載なし\nー\nChallenge・Funded共に出金に必要な最低取引日数の明記はない。\nP03. 日次損失\n3%\nー\nー\nChallenge・Funded共に1日あたり3%の損失で当日の取引が一時停止（Daily Pause）となる。\nP04. 日次損失タイプ\nTrailing（Higher B or E EOD）\nー\nー\nChallenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。\nP05. 最大損失\n6%\nー\nー\nChallenge・Funded共に口座サイズから6%の損失で失格となる。\nP06. 最大損失タイプ\nStatic\nー\nー\nChallenge・Funded共に初期残高を基準とした固定のドローダウン方式。\nP07. 一貫性ルール\nなし（明示）\nー\nー\nChallenge・Funded共に一貫性ルールは適用されない。\nP08. 利益上限\n記載なし\nー\nー\nChallenge・Funded共に利益の獲得や出金額に対する上限の記載はない。\nP09. 制限時間\n無制限\nー\nー\nChallenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。\nP10. ニュース取引制限\n※有\nー\nー\nChallenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。\nP11. 週末保有制限\n無\nー\nー\nChallenge・Funded共に週末をまたぐポジションの保有が許可されている。\nP12. オーバーナイト制限\n無\nー\nー\nChallenge・Funded共に日をまたぐポジションの持ち越しが許可されている。\nP13. EA制限\n※有\nー\nー\nChallenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。\nP14. コピートレード制約\n※有\nー\nー\nChallenge・Funded共に自身の口座間コピーは総運用資金$500Kまで許可される。他者のコピーは禁止。\nP15. スキャルピング制約\n記載なし\nー\nー\nChallenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止行為。\nP16. ストップロス制約\n※有\nー\nー\nChallenge・Funded共に必須ではないが、適切なストップロスの設定が推奨される。\nP17. リスクルール\n記載なし\nー\nー\nChallenge・Funded共に含み損に対する特有の制限の記載はない。\nP18. 最大ポジション制約\n記載なし\nー\nー\nChallenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。\nP19. 禁止行為\nArbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services\nー\nー\nArbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "The5ers - Hyper-Growth"
+          }
+        ],
+        "rd_prohibited": [
+          {
+            "text": "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス"
+          }
+        ],
+        "rd_target": [
+          {
+            "text": "10%|ー|EASE|Challengeでは10%の利益目標が必要。Fundedでは目標はない。"
+          }
+        ],
+        "rd_minDays": [
+          {
+            "text": "無||ー|Challenge・Funded共に最低取引日数の制約はなく、即日合格も可能。 / Challenge・Funded共に出金に必要な最低取引日数の明記はない。"
+          }
+        ],
+        "rd_dailyLoss": [
+          {
+            "text": "3%|ー|ー|Challenge・Funded共に1日あたり3%の損失で当日の取引が一時停止（Daily Pause）となる。"
+          }
+        ],
+        "rd_dailyLossType": [
+          {
+            "text": "Trailing（Higher B or E EOD）|ー|ー|Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。"
+          }
+        ],
+        "rd_maxLoss": [
+          {
+            "text": "6%|ー|ー|Challenge・Funded共に口座サイズから6%の損失で失格となる。"
+          }
+        ],
+        "rd_maxLossType": [
+          {
+            "text": "Static|ー|ー|Challenge・Funded共に初期残高を基準とした固定のドローダウン方式。"
+          }
+        ],
+        "rd_consistency": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に一貫性ルールは適用されない。"
+          }
+        ],
+        "rd_profitCap": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。"
+          }
+        ],
+        "rd_timeLimit": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。"
+          }
+        ],
+        "rd_news": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。"
+          }
+        ],
+        "rd_weekend": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に週末をまたぐポジションの保有が許可されている。"
+          }
+        ],
+        "rd_overnight": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。"
+          }
+        ],
+        "rd_ea": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。"
+          }
+        ],
+        "rd_copyTrade": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に自身の口座間コピーは総運用資金$500Kまで許可される。他者のコピーは禁止。"
+          }
+        ],
+        "rd_scalping": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止行為。"
+          }
+        ],
+        "rd_stopLoss": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に必須ではないが、適切なストップロスの設定が推奨される。"
+          }
+        ],
+        "rd_risk": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に含み損に対する特有の制限の記載はない。"
+          }
+        ],
+        "rd_maxPosition": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p4": {
+      "archives": [
+        "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス",
+        "Bootcamp\n項目\nC\nF\n差分\n詳細\nSteps\n3\nー\nー\n3段階の評価フェーズ（デモ口座）を経てFundedアカウントを獲得するプログラム。\nP01. 利益目標\n6%\nー\nEASE\nChallengeでは各ステージ6%の利益目標が必要。Fundedでは次のスケールアップ目標は5%だが合格要件としての目標はない。\nP02. 最低取引日数（合格）\n記載なし\nー\nー\nChallenge・Funded共に合格に必要な最低取引日数の明記はない。\nP02b. 最低取引日数（出金）\nー\n記載なし\nー\nChallenge・Funded共に出金に必要な最低取引日数の明記はない。\nP03. 日次損失\nー\n3%\nTRAP\nChallengeでは日次損失上限はない。Fundedでは1日あたり3%の損失で当日の取引が一時停止となる。\nP04. 日次損失タイプ\nー\nTrailing（Higher B or E EOD）\nTRAP\nChallengeでは該当しない。Fundedでは前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。\nP05. 最大損失\n5%\n4%\nTRAP\nChallengeでは5%の損失が上限となる。Fundedでは4%に制限が強化される。\nP06. 最大損失タイプ\nStatic\nー\nー\nChallenge・Funded共に初期またはスケーリング後の残高を基準とした固定のドローダウン方式。\nP07. 一貫性ルール\n記載なし\nー\nー\nChallenge・Funded共に一貫性ルールの記載はない。\nP08. 利益上限\n記載なし\nー\nー\nChallenge・Funded共に利益の獲得や出金額に対する上限の記載はない。\nP09. 制限時間\n無制限\nー\nー\nChallenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。\nP10. ニュース取引制限\n※有\nー\nー\nChallenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。\nP11. 週末保有制限\n無\nー\nー\nChallenge・Funded共に週末をまたぐポジションの保有が許可されている。\nP12. オーバーナイト制限\n無\nー\nー\nChallenge・Funded共に日をまたぐポジションの持ち越しが許可されている。\nP13. EA制限\n※有\nー\nー\nChallenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。\nP14. コピートレード制約\n※有\nー\nー\nChallenge・Funded共に他者のコピーは禁止。またBootcampアカウント間のコピートレードも禁止されている。\nP15. スキャルピング制約\n記載なし\nー\nー\nChallenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止。\nP16. ストップロス制約\n有\nー\nー\nChallenge・Funded共にすべてのポジションにストップロス設定が必須で、1ポジションあたり残高の2%以下のリスクに抑える必要がある。\nP17. リスクルール\n記載なし\nー\nー\nChallenge・Funded共に含み損に対する特有の制限の記載はない。\nP18. 最大ポジション制約\n記載なし\nー\nー\nChallenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。\nP19. 禁止行為\nArbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services\nー\nー\nArbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用"
+      ],
+      "targetText": "Bootcamp\n項目\nC\nF\n差分\n詳細\nSteps\n3\nー\nー\n3段階の評価フェーズ（デモ口座）を経てFundedアカウントを獲得するプログラム。\nP01. 利益目標\n6%\nー\nEASE\nChallengeでは各ステージ6%の利益目標が必要。Fundedでは次のスケールアップ目標は5%だが合格要件としての目標はない。\nP02. 最低取引日数（合格）\n記載なし\nー\nー\nChallenge・Funded共に合格に必要な最低取引日数の明記はない。\nP02b. 最低取引日数（出金）\nー\n記載なし\nー\nChallenge・Funded共に出金に必要な最低取引日数の明記はない。\nP03. 日次損失\nー\n3%\nTRAP\nChallengeでは日次損失上限はない。Fundedでは1日あたり3%の損失で当日の取引が一時停止となる。\nP04. 日次損失タイプ\nー\nTrailing（Higher B or E EOD）\nTRAP\nChallengeでは該当しない。Fundedでは前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。\nP05. 最大損失\n5%\n4%\nTRAP\nChallengeでは5%の損失が上限となる。Fundedでは4%に制限が強化される。\nP06. 最大損失タイプ\nStatic\nー\nー\nChallenge・Funded共に初期またはスケーリング後の残高を基準とした固定のドローダウン方式。\nP07. 一貫性ルール\n記載なし\nー\nー\nChallenge・Funded共に一貫性ルールの記載はない。\nP08. 利益上限\n記載なし\nー\nー\nChallenge・Funded共に利益の獲得や出金額に対する上限の記載はない。\nP09. 制限時間\n無制限\nー\nー\nChallenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。\nP10. ニュース取引制限\n※有\nー\nー\nChallenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。\nP11. 週末保有制限\n無\nー\nー\nChallenge・Funded共に週末をまたぐポジションの保有が許可されている。\nP12. オーバーナイト制限\n無\nー\nー\nChallenge・Funded共に日をまたぐポジションの持ち越しが許可されている。\nP13. EA制限\n※有\nー\nー\nChallenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。\nP14. コピートレード制約\n※有\nー\nー\nChallenge・Funded共に他者のコピーは禁止。またBootcampアカウント間のコピートレードも禁止されている。\nP15. スキャルピング制約\n記載なし\nー\nー\nChallenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止。\nP16. ストップロス制約\n有\nー\nー\nChallenge・Funded共にすべてのポジションにストップロス設定が必須で、1ポジションあたり残高の2%以下のリスクに抑える必要がある。\nP17. リスクルール\n記載なし\nー\nー\nChallenge・Funded共に含み損に対する特有の制限の記載はない。\nP18. 最大ポジション制約\n記載なし\nー\nー\nChallenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。\nP19. 禁止行為\nArbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services\nー\nー\nArbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "The5ers - Bootcamp"
+          }
+        ],
+        "rd_prohibited": [
+          {
+            "text": "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス"
+          }
+        ],
+        "steps": [
+          {
+            "text": "3"
+          }
+        ],
+        "rd_target": [
+          {
+            "text": "6%|ー|EASE|Challengeでは各ステージ6%の利益目標が必要。Fundedでは次のスケールアップ目標は5%だが合格要件としての目標はない。"
+          }
+        ],
+        "rd_minDays": [
+          {
+            "text": "無||ー|Challenge・Funded共に合格に必要な最低取引日数の明記はない。 / Challenge・Funded共に出金に必要な最低取引日数の明記はない。"
+          }
+        ],
+        "rd_dailyLoss": [
+          {
+            "text": "無|3%|TRAP|Challengeでは日次損失上限はない。Fundedでは1日あたり3%の損失で当日の取引が一時停止となる。"
+          }
+        ],
+        "rd_dailyLossType": [
+          {
+            "text": "無|Trailing（Higher B or E EOD）|TRAP|Challengeでは該当しない。Fundedでは前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。"
+          }
+        ],
+        "rd_maxLoss": [
+          {
+            "text": "5%|4%|TRAP|Challengeでは5%の損失が上限となる。Fundedでは4%に制限が強化される。"
+          }
+        ],
+        "rd_maxLossType": [
+          {
+            "text": "Static|ー|ー|Challenge・Funded共に初期またはスケーリング後の残高を基準とした固定のドローダウン方式。"
+          }
+        ],
+        "rd_consistency": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に一貫性ルールの記載はない。"
+          }
+        ],
+        "rd_profitCap": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。"
+          }
+        ],
+        "rd_timeLimit": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。"
+          }
+        ],
+        "rd_news": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。"
+          }
+        ],
+        "rd_weekend": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に週末をまたぐポジションの保有が許可されている。"
+          }
+        ],
+        "rd_overnight": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。"
+          }
+        ],
+        "rd_ea": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。"
+          }
+        ],
+        "rd_copyTrade": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共に他者のコピーは禁止。またBootcampアカウント間のコピートレードも禁止されている。"
+          }
+        ],
+        "rd_scalping": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止。"
+          }
+        ],
+        "rd_stopLoss": [
+          {
+            "text": "有|ー|ー|Challenge・Funded共にすべてのポジションにストップロス設定が必須で、1ポジションあたり残高の2%以下のリスクに抑える必要がある。"
+          }
+        ],
+        "rd_risk": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に含み損に対する特有の制限の記載はない。"
+          }
+        ],
+        "rd_maxPosition": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p5": {
+      "archives": [
+        "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス",
+        "Pro-Growth\n項目\nC\nF\n差分\n詳細\nSteps\n1\nー\nー\n1ステップの評価フェーズで目標を達成すればFundedアカウントを獲得するプログラム。\nP01. 利益目標\n10%\nー\nEASE\nChallengeでは10%の利益目標が必要。Fundedでは目標はない。\nP02. 最低取引日数（合格）\n3日\nー\nEASE\nChallengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。\nP02b. 最低取引日数（出金）\nー\n記載なし\nー\nChallenge・Funded共に出金に必要な最低取引日数の明記はない。\nP03. 日次損失\n3%\nー\nー\nChallenge・Funded共に1日あたり3%の損失が上限となる。\nP04. 日次損失タイプ\nTrailing（Higher B or E EOD）\nー\nー\nChallenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。\nP05. 最大損失\n6%\nー\nー\nChallenge・Funded共に初期残高から6%の損失が上限となる。\nP06. 最大損失タイプ\nStatic\nー\nー\nChallenge・Funded共に初期残高を基準とした固定のドローダウン方式。\nP07. 一貫性ルール\n記載なし\nー\nー\nChallenge・Funded共に一貫性ルールの記載はない。\nP08. 利益上限\n記載なし\nー\nー\nChallenge・Funded共に利益の獲得や出金額に対する上限の記載はない。\nP09. 制限時間\n無制限\nー\nー\nChallenge・Funded共に制限時間はなく自分のペースで進められる。\nP10. ニュース取引制限\n記載なし\nー\nー\nChallenge・Funded共にソースに明示的な記載はない。\nP11. 週末保有制限\n無\nー\nー\nChallenge・Funded共に週末をまたぐポジションの保有が許可されている。\nP12. オーバーナイト制限\n無\nー\nー\nChallenge・Funded共に日をまたぐポジションの持ち越しが許可されている。\nP13. EA制限\n記載なし\nー\nー\nChallenge・Funded共に特定の制約の記載はない。\nP14. コピートレード制約\n記載なし\nー\nー\nChallenge・Funded共に特定の制約の記載はない。\nP15. スキャルピング制約\n記載なし\nー\nー\nChallenge・Funded共にスキャルピングに関する制約の記載はない。\nP16. ストップロス制約\n※有\nー\nー\nChallenge・Funded共にストップロスの設定は必須ではないが強く推奨される。\nP17. リスクルール\n記載なし\nー\nー\nChallenge・Funded共に含み損に対する特有の制限の記載はない。\nP18. 最大ポジション制約\n記載なし\nー\nー\nChallenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。\nP19. 禁止行為\nArbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services\nー\nー\nArbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用"
+      ],
+      "targetText": "Pro-Growth\n項目\nC\nF\n差分\n詳細\nSteps\n1\nー\nー\n1ステップの評価フェーズで目標を達成すればFundedアカウントを獲得するプログラム。\nP01. 利益目標\n10%\nー\nEASE\nChallengeでは10%の利益目標が必要。Fundedでは目標はない。\nP02. 最低取引日数（合格）\n3日\nー\nEASE\nChallengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。\nP02b. 最低取引日数（出金）\nー\n記載なし\nー\nChallenge・Funded共に出金に必要な最低取引日数の明記はない。\nP03. 日次損失\n3%\nー\nー\nChallenge・Funded共に1日あたり3%の損失が上限となる。\nP04. 日次損失タイプ\nTrailing（Higher B or E EOD）\nー\nー\nChallenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。\nP05. 最大損失\n6%\nー\nー\nChallenge・Funded共に初期残高から6%の損失が上限となる。\nP06. 最大損失タイプ\nStatic\nー\nー\nChallenge・Funded共に初期残高を基準とした固定のドローダウン方式。\nP07. 一貫性ルール\n記載なし\nー\nー\nChallenge・Funded共に一貫性ルールの記載はない。\nP08. 利益上限\n記載なし\nー\nー\nChallenge・Funded共に利益の獲得や出金額に対する上限の記載はない。\nP09. 制限時間\n無制限\nー\nー\nChallenge・Funded共に制限時間はなく自分のペースで進められる。\nP10. ニュース取引制限\n記載なし\nー\nー\nChallenge・Funded共にソースに明示的な記載はない。\nP11. 週末保有制限\n無\nー\nー\nChallenge・Funded共に週末をまたぐポジションの保有が許可されている。\nP12. オーバーナイト制限\n無\nー\nー\nChallenge・Funded共に日をまたぐポジションの持ち越しが許可されている。\nP13. EA制限\n記載なし\nー\nー\nChallenge・Funded共に特定の制約の記載はない。\nP14. コピートレード制約\n記載なし\nー\nー\nChallenge・Funded共に特定の制約の記載はない。\nP15. スキャルピング制約\n記載なし\nー\nー\nChallenge・Funded共にスキャルピングに関する制約の記載はない。\nP16. ストップロス制約\n※有\nー\nー\nChallenge・Funded共にストップロスの設定は必須ではないが強く推奨される。\nP17. リスクルール\n記載なし\nー\nー\nChallenge・Funded共に含み損に対する特有の制限の記載はない。\nP18. 最大ポジション制約\n記載なし\nー\nー\nChallenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。\nP19. 禁止行為\nArbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services\nー\nー\nArbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "The5ers - Pro-Growth"
+          }
+        ],
+        "rd_prohibited": [
+          {
+            "text": "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス"
+          }
+        ],
+        "steps": [
+          {
+            "text": "1"
+          }
+        ],
+        "rd_target": [
+          {
+            "text": "10%|ー|EASE|Challengeでは10%の利益目標が必要。Fundedでは目標はない。"
+          }
+        ],
+        "rd_minDays": [
+          {
+            "text": "3日|無|EASE|Challengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。 / Challenge・Funded共に出金に必要な最低取引日数の明記はない。"
+          }
+        ],
+        "rd_dailyLoss": [
+          {
+            "text": "3%|ー|ー|Challenge・Funded共に1日あたり3%の損失が上限となる。"
+          }
+        ],
+        "rd_dailyLossType": [
+          {
+            "text": "Trailing（Higher B or E EOD）|ー|ー|Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。"
+          }
+        ],
+        "rd_maxLoss": [
+          {
+            "text": "6%|ー|ー|Challenge・Funded共に初期残高から6%の損失が上限となる。"
+          }
+        ],
+        "rd_maxLossType": [
+          {
+            "text": "Static|ー|ー|Challenge・Funded共に初期残高を基準とした固定のドローダウン方式。"
+          }
+        ],
+        "rd_consistency": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に一貫性ルールの記載はない。"
+          }
+        ],
+        "rd_profitCap": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。"
+          }
+        ],
+        "rd_timeLimit": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に制限時間はなく自分のペースで進められる。"
+          }
+        ],
+        "rd_news": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共にソースに明示的な記載はない。"
+          }
+        ],
+        "rd_weekend": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に週末をまたぐポジションの保有が許可されている。"
+          }
+        ],
+        "rd_overnight": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。"
+          }
+        ],
+        "rd_ea": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に特定の制約の記載はない。"
+          }
+        ],
+        "rd_copyTrade": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に特定の制約の記載はない。"
+          }
+        ],
+        "rd_scalping": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共にスキャルピングに関する制約の記載はない。"
+          }
+        ],
+        "rd_stopLoss": [
+          {
+            "text": "※有|ー|ー|Challenge・Funded共にストップロスの設定は必須ではないが強く推奨される。"
+          }
+        ],
+        "rd_risk": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に含み損に対する特有の制限の記載はない。"
+          }
+        ],
+        "rd_maxPosition": [
+          {
+            "text": "無|ー|ー|Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "f3": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "FundingPips"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    },
+    "p6": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundingPips - FundingPips Zero"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p7": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundingPips - 1-Step"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p8": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundingPips - 2-Step Standard"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p9": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundingPips - 2-Step Pro"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "f4": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "FundedNext"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    },
+    "p10": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedNext - Stellar 1-Step"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p11": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedNext - Stellar 2-Step"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p12": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedNext - Stellar Lite"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p13": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedNext - Stellar Instant"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    }
+  },
+  "glossaryTerms": []
+}
