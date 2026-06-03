@@ -855,54 +855,81 @@ function ResizeHandle({dir,onMouseDown}) {
 // ═══════════════════════════════════════════════════
 // 縦タブ（Firm→Plan階層）
 // ═══════════════════════════════════════════════════
-function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRename,width,onBulkImport,onReorder,tabDataMap,glossaryTerms,onMergeFirm,onDeleteMany,onTogglePin,onScannerPasted}) {
-  const [editId,setEditId]=useState(null);
-  const [editName,setEditName]=useState("");
+function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRename,width,onBulkImport,onReorder,tabDataMap,glossaryTerms,onMergeFirm,onDeleteMany,onTogglePin,onScannerPasted,sections,onAddSection,onRenameSection,onDeleteSection,onToggleCompleted,onMoveFirmToSection,sessionName,onSessionNameChange}) {
   const [collapsed,setCollapsed]=useState({});
-  // 起動時/新規Firm出現時：選択中Firm以外は折りたたみ。選択中Firmは常に自動展開（既存の手動開閉は尊重）
+  const [secCollapsed,setSecCollapsed]=useState({});
+  const [editSecId,setEditSecId]=useState(null);
+  const [editSecName,setEditSecName]=useState("");
+  const [showAddSec,setShowAddSec]=useState(false);
+  const [newSecName,setNewSecName]=useState("");
+  const [dragSecOver,setDragSecOver]=useState(null);
+  // 起動時/新規Firm出現時：新規のみ折りたたみ（activeIdによる自動展開はしない → クリック開閉に委任）
   const knownFirmsRef=useRef(null);
   useEffect(()=>{
     setCollapsed(prev=>{
       const next={...prev};
-      const known=knownFirmsRef.current; // 初回は null
+      const known=knownFirmsRef.current;
       (firms||[]).forEach(f=>{
-        const active=f.id===activeId||(f.plans||[]).some(p=>p.id===activeId);
         const isNew=!known||!known.has(f.id);
-        if(active)next[f.id]=false;        // 選択中Firmは常に展開（クリック自動展開）
-        else if(isNew)next[f.id]=true;     // 新規/起動時の非選択Firmは折りたたみ
-        // 既存の非選択Firmは手動状態を維持
+        if(isNew)next[f.id]=true; // 新規は折りたたみ
       });
       return next;
     });
     knownFirmsRef.current=new Set((firms||[]).map(f=>f.id));
-  },[firms,activeId]);
+  },[firms]);
   const [showImport,setShowImport]=useState(false);
   useEffect(()=>{const h=()=>setShowImport(true);document.addEventListener("pfd-csv-open",h);return()=>document.removeEventListener("pfd-csv-open",h)},[]);
   const [csvText,setCsvText]=useState("");
   const [dragId,setDragId]=useState(null);
-  const [checked,setChecked]=useState({}); // {firmId:true}
+  const [checked,setChecked]=useState({}); // クリック選択 {firmId:true}
   const [copied,setCopied]=useState(false);
   const [showPromptMenu,setShowPromptMenu]=useState(false);
+  // ブラシ複数選択／解除
+  const brushRef=useRef(false);
+  const brushModeRef=useRef("select"); // "select" | "deselect"
+  useEffect(()=>{
+    const onUp=()=>{brushRef.current=false};
+    window.addEventListener("mouseup",onUp);
+    return()=>window.removeEventListener("mouseup",onUp);
+  },[]);
+  // Active Firm Panel 用 state
+  const [panelFirmName,setPanelFirmName]=useState("");
+  const [planEditId,setPlanEditId]=useState(null);
+  const [planEditName,setPlanEditName]=useState("");
+  // パネル対象Firmを導出（activeIdがplanならその親Firmを返す）
+  const panelFirm=useMemo(()=>{
+    const f=firms.find(f=>f.id===activeId);
+    if(f)return f;
+    return firms.find(f=>(f.plans||[]).some(p=>p.id===activeId))||null;
+  },[firms,activeId]);
+  // panelFirmが変わったらFirm名をパネルに同期
+  useEffect(()=>{
+    setPanelFirmName(panelFirm?.name||"");
+    setPlanEditId(null);
+  },[panelFirm?.id]);
+  // plan名がリネームされたら編集値も同期
+  useEffect(()=>{
+    if(!planEditId)return;
+    const p=(panelFirm?.plans||[]).find(p=>p.id===planEditId);
+    if(p)setPlanEditName(p.name||"");
+  },[planEditId,panelFirm]);
 
   const checkedCount=Object.values(checked).filter(Boolean).length;
-  const allChecked=firms.length>0&&firms.every(f=>checked[f.id]&&(f.plans||[]).every(p=>checked[p.id]));
-  const toggleAll=()=>{
-    if(allChecked)setChecked({});
-    else{const n={};firms.forEach(f=>{n[f.id]=true;(f.plans||[]).forEach(p=>{n[p.id]=true})});setChecked(n);}
-  };
   const clearChecks=()=>setChecked({});
+  const selectAll=()=>{const n={};firms.forEach(f=>{if(!f.completed)n[f.id]=true});setChecked(n)};
 
-  // ピン済みを上に、非ピンを下に（各グループ内は配列順を保持）
-  const orderedFirms=[...firms.filter(f=>f.pinned),...firms.filter(f=>!f.pinned)];
-  const lastPinnedId=(()=>{const ps=firms.filter(f=>f.pinned);return ps.length?ps[ps.length-1].id:null;})();
+  // グループ内ソート: ピン済(非完了) → 通常(非完了) → 完了
+  const sortGroup=(list)=>[
+    ...list.filter(f=>f.pinned&&!f.completed),
+    ...list.filter(f=>!f.pinned&&!f.completed),
+    ...list.filter(f=>f.completed),
+  ];
+  const hasSections=(sections||[]).length>0;
 
   // 選択アイテム名を単純リストでコピー（種別問わず）
+  // 選択Firmのコピー
   const copyChecked=()=>{
-    const lines=[];
-    firms.forEach(f=>{
-      if(checked[f.id])lines.push(getFirmName(f.id,tabDataMap)||f.name||"（未命名）");
-      (f.plans||[]).forEach(p=>{if(checked[p.id])lines.push(p.name)});
-    });
+    const lines=firms.filter(f=>checked[f.id]).map(f=>getFirmName(f.id,tabDataMap)||f.name||"（未命名）");
     if(!lines.length)return;
     const text=lines.join("\n");
     const done=()=>{setCopied(true);setTimeout(()=>{setCopied(false);setChecked({})},1500)};
@@ -915,17 +942,12 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
     }
   };
 
-  // 選択Firm/Planをまとめて削除
+  // 選択Firmをまとめて削除
   const deleteChecked=()=>{
-    const ids=Object.keys(checked).filter(id=>checked[id]);
-    if(!ids.length)return;
-    const firmIds=ids.filter(id=>firms.some(f=>f.id===id));
-    const planIds=ids.filter(id=>!firms.some(f=>f.id===id));
-    const parts=[];
-    if(firmIds.length)parts.push(`Firm ${firmIds.length}件（配下Plan含む）`);
-    if(planIds.length)parts.push(`Plan ${planIds.length}件`);
-    if(!window.confirm(parts.join("・")+"を削除しますか？"))return;
-    onDeleteMany&&onDeleteMany(firmIds,planIds);
+    const firmIds=Object.keys(checked).filter(id=>checked[id]&&firms.some(f=>f.id===id));
+    if(!firmIds.length)return;
+    if(!window.confirm(`Firm ${firmIds.length}件（配下Plan含む）を削除しますか？`))return;
+    onDeleteMany&&onDeleteMany(firmIds,[]);
     setChecked({});
   };
 
@@ -969,84 +991,412 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
     setCsvText("");setShowImport(false);
   };
 
-  const renderEdit=(id)=>(
-    <input autoFocus value={editName} onChange={e=>setEditName(e.target.value)}
-      onBlur={()=>{onRename(id,editName);setEditId(null)}}
-      onKeyDown={e=>{if(e.key==="Enter"){onRename(id,editName);setEditId(null)}}}
-      onClick={e=>e.stopPropagation()}
-      style={{width:"100%",background:C.bg,color:C.textBright,border:`1px solid ${C.accent}`,borderRadius:3,padding:"1px 4px",fontSize:"0.72rem",fontFamily:font,outline:"none"}} />
-  );
+  // セクションヘッダー（通常 or 未分類）
+  const renderSectionHeader=(sec,isUnsectioned=false)=>{
+    const isOver=dragSecOver===sec.id;
+    return (
+      <div
+        onDragOver={e=>{if(dragId){e.preventDefault();setDragSecOver(sec.id)}}}
+        onDragLeave={()=>setDragSecOver(null)}
+        onDrop={e=>{e.preventDefault();if(dragId){onMoveFirmToSection&&onMoveFirmToSection(dragId,isUnsectioned?null:sec.id);setDragId(null);setDragSecOver(null)}}}
+        style={{padding:"4px 7px",
+          background:isOver?`${C.blue}22`:C.surfaceAlt,
+          borderBottom:`1px solid ${isOver?C.blue:C.border}`,
+          borderTop:`1px solid ${C.border}`,
+          display:"flex",alignItems:"center",gap:5,
+          transition:"background 0.1s",
+        }}>
+        {!isUnsectioned&&(
+          <span onClick={()=>setSecCollapsed(p=>({...p,[sec.id]:!p[sec.id]}))}
+            style={{fontSize:"0.55rem",cursor:"pointer",color:C.textDim,flexShrink:0,userSelect:"none"}}>
+            {secCollapsed[sec.id]?"▶":"▼"}
+          </span>
+        )}
+        {!isUnsectioned&&editSecId===sec.id?(
+          <input autoFocus value={editSecName} onChange={e=>setEditSecName(e.target.value)}
+            onBlur={()=>{onRenameSection&&onRenameSection(sec.id,editSecName);setEditSecId(null)}}
+            onKeyDown={e=>{if(e.key==="Enter"){onRenameSection&&onRenameSection(sec.id,editSecName);setEditSecId(null)}if(e.key==="Escape")setEditSecId(null)}}
+            style={{flex:1,background:C.bg,color:C.textBright,border:`1px solid ${C.blue}`,borderRadius:3,padding:"1px 4px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
+        ):(
+          <span onDoubleClick={isUnsectioned?undefined:()=>{setEditSecId(sec.id);setEditSecName(sec.name)}}
+            style={{flex:1,fontSize:"0.62rem",fontWeight:700,
+              color:isOver?C.blue:(isUnsectioned?C.textDim:C.textDim),
+              letterSpacing:"0.06em",textTransform:"uppercase",userSelect:"none"}}>
+            {isUnsectioned?"未分類":(sec.name||"（未命名）")}
+          </span>
+        )}
+        {isOver&&<span style={{fontSize:"0.55rem",color:C.blue,flexShrink:0}}>ドロップ</span>}
+        {!isUnsectioned&&editSecId!==sec.id&&(
+          <React.Fragment>
+            <span onClick={()=>{setEditSecId(sec.id);setEditSecName(sec.name)}}
+              title="名前変更" style={{cursor:"pointer",color:C.textDim,fontSize:"0.58rem",opacity:0.5,userSelect:"none"}}>✎</span>
+            <span onClick={()=>{if(window.confirm(`「${sec.name}」を削除しますか？\nFirmは未分類に移動します。`))onDeleteSection&&onDeleteSection(sec.id)}}
+              title="削除" style={{cursor:"pointer",color:C.red,fontSize:"0.6rem",opacity:0.5,userSelect:"none"}}>×</span>
+          </React.Fragment>
+        )}
+      </div>
+    );
+  };
+
+  // Firm行リスト（グループ共通）
+  const renderFirms=(firmList)=>{
+    const sorted=sortGroup(firmList);
+    const lastPinnedId=(()=>{const ps=sorted.filter(f=>f.pinned&&!f.completed);return ps.length?ps[ps.length-1].id:null;})();
+    const firstCompletedId=sorted.find(f=>f.completed)?.id;
+    return sorted.map(firm=>{
+      const isActive=activeId===firm.id||(firm.plans||[]).some(p=>p.id===activeId);
+      const isChecked=!!checked[firm.id]&&!firm.completed;
+      const isExpanded=!collapsed[firm.id]&&!firm.completed;
+      const hasPlans=(firm.plans||[]).length>0;
+      const cardBorder=firm.completed?C.border:(isActive?C.accent:(firm.pinned?`${C.yellow}88`:(isChecked?`${C.accent}55`:C.border)));
+      return (
+        <div key={firm.id} style={{margin:"3px 5px 0"}}>
+          {/* 完了区切り線 */}
+          {firm.id===firstCompletedId&&sorted.some(f=>!f.completed)&&(
+            <div style={{display:"flex",alignItems:"center",gap:4,padding:"3px 0 1px"}}>
+              <div style={{flex:1,height:"1px",background:`${C.textDim}28`}}/>
+              <span style={{fontSize:"0.52rem",color:C.textDim,flexShrink:0,letterSpacing:"0.08em"}}>完了</span>
+              <div style={{flex:1,height:"1px",background:`${C.textDim}28`}}/>
+            </div>
+          )}
+          {/* ピン区切り */}
+          {firm.id===lastPinnedId&&<div style={{height:3,marginBottom:2,borderBottom:`1px dashed ${C.yellow}44`}}/>}
+
+          {/* ── Firm カード ── */}
+          <div
+            onDragOver={e=>{if(!firm.completed)e.preventDefault()}}
+            onDrop={e=>{e.preventDefault();if(dragId&&dragId!==firm.id){onReorder(dragId,firm.id);setDragId(null);setDragSecOver(null)}}}
+            style={{
+              borderRadius:isExpanded&&hasPlans?`5px 5px 0 0`:5,
+              border:`1px solid ${cardBorder}`,
+              borderBottom:isExpanded&&hasPlans?`1px solid ${C.borderLight}`:`1px solid ${cardBorder}`,
+              background:isChecked?`${C.accent}12`:(firm.pinned&&!firm.completed?`${C.yellow}06`:C.surfaceAlt),
+              opacity:firm.completed?0.38:1,
+              transition:"opacity 0.15s,border-color 0.1s",
+              overflow:"hidden",
+            }}>
+            {/* カードヘッダー行：全体ドラッグ可 */}
+            <div
+              draggable={!firm.completed}
+              onDragStart={e=>{setDragId(firm.id)}}
+              onDragEnd={()=>setDragId(null)}
+              onMouseDown={e=>{
+                if(firm.completed||e.button!==0)return;
+                const wasSelected=!!checked[firm.id];
+                brushRef.current=true;
+                brushModeRef.current=wasSelected?"deselect":"select";
+                setChecked(p=>({...p,[firm.id]:!wasSelected}));
+              }}
+              onMouseEnter={()=>{
+                if(!brushRef.current||firm.completed)return;
+                setChecked(p=>({...p,[firm.id]:brushModeRef.current==="select"}));
+              }}
+              onDoubleClick={e=>{
+                if(firm.completed)return;
+                setCollapsed(p=>({...p,[firm.id]:!p[firm.id]}));
+              }}
+              style={{padding:"5px 6px",cursor:firm.completed?"default":"grab",
+                display:"flex",alignItems:"center",gap:6,userSelect:"none"}}>
+              {/* ラジオボタン（編集ターゲット） */}
+              <div
+                draggable={false}
+                onMouseDown={e=>e.stopPropagation()}
+                onDoubleClick={e=>e.stopPropagation()}
+                onDragStart={e=>e.stopPropagation()}
+                onClick={e=>{e.stopPropagation();onSelect(firm.id)}}
+                title={activeId===firm.id?"編集中":"編集ターゲットにする"}
+                style={{
+                  width:15,height:15,borderRadius:"50%",flexShrink:0,cursor:"pointer",
+                  border:`2px solid ${activeId===firm.id?C.accent:(firm.pinned?`${C.yellow}88`:C.textDim)}`,
+                  background:activeId===firm.id?C.accent:"transparent",
+                  transition:"background 0.12s,border-color 0.12s",
+                }}
+              />
+              {/* 展開インジケーター＋Firm名 */}
+              <span style={{fontSize:"0.48rem",color:isActive?C.accent:C.textDim,flexShrink:0,
+                opacity:hasPlans?0.7:0.2,lineHeight:1,pointerEvents:"none"}}>
+                {isExpanded?"▾":"▸"}
+              </span>
+              <span style={{
+                fontSize:"0.75rem",fontWeight:isActive?700:400,
+                color:isActive?C.accent:(isChecked?C.textBright:C.text),
+                overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
+                pointerEvents:"none",
+              }}>{firm.name||"（未命名）"}</span>
+              {/* Plan数バッジ（折りたたみ時のみ） */}
+              {!isExpanded&&hasPlans&&(
+                <span style={{fontSize:"0.52rem",color:C.textDim,flexShrink:0,
+                  background:C.bg,borderRadius:8,padding:"0 4px",lineHeight:"1.6",
+                  border:`1px solid ${C.border}`,pointerEvents:"none"}}>
+                  {firm.plans.length}
+                </span>
+              )}
+              {/* ボタン群（ドラッグ・選択を遮断） */}
+              <div
+                draggable={false}
+                onMouseDown={e=>e.stopPropagation()}
+                onDoubleClick={e=>e.stopPropagation()}
+                onDragStart={e=>e.stopPropagation()}
+                style={{display:"flex",alignItems:"center",gap:2,flexShrink:0}}>
+                {firm.completed?(
+                  <span onClick={e=>{e.stopPropagation();onToggleCompleted&&onToggleCompleted(firm.id)}}
+                    title="完了解除"
+                    style={{fontSize:"0.75rem",cursor:"pointer",color:C.green,fontWeight:700,userSelect:"none"}}>↩</span>
+                ):(
+                  <React.Fragment>
+                    <span onClick={e=>{e.stopPropagation();onTogglePin&&onTogglePin(firm.id)}}
+                      title={firm.pinned?"ピンを外す":"上に固定"}
+                      style={{fontSize:"0.9rem",cursor:"pointer",lineHeight:1,
+                        opacity:firm.pinned?1:0.2,userSelect:"none"}}>🔺</span>
+                    <span onClick={e=>{e.stopPropagation();onToggleCompleted&&onToggleCompleted(firm.id)}}
+                      title="完了にする"
+                      style={{fontSize:"0.9rem",cursor:"pointer",lineHeight:1,
+                        opacity:0.2,userSelect:"none"}}>🔻</span>
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Planリスト（展開時・カード外に続く形で表示） */}
+          {isExpanded&&hasPlans&&(
+            <div style={{
+              borderLeft:`1px solid ${cardBorder}`,
+              borderRight:`1px solid ${cardBorder}`,
+              borderBottom:`1px solid ${cardBorder}`,
+              borderRadius:`0 0 5px 5px`,
+              background:C.bg,
+              overflow:"hidden",
+            }}>
+              {firm.plans.map((plan,pi)=>{
+                const isPlanActive=activeId===plan.id;
+                const isPlanChecked=!!checked[plan.id];
+                return (
+                  <div key={plan.id}
+                    onMouseDown={e=>{
+                      if(e.button!==0)return;
+                      onSelect(plan.id);
+                      const wasSelected=!!checked[plan.id];
+                      brushRef.current=true;
+                      brushModeRef.current=wasSelected?"deselect":"select";
+                      setChecked(p=>({...p,[plan.id]:!wasSelected}));
+                    }}
+                    onMouseEnter={()=>{
+                      if(!brushRef.current)return;
+                      setChecked(p=>({...p,[plan.id]:brushModeRef.current==="select"}));
+                    }}
+                    style={{
+                      padding:"3px 8px 3px 18px",cursor:"pointer",userSelect:"none",
+                      borderTop:pi>0?`1px solid ${C.border}`:"none",
+                      background:isPlanActive?`${C.blue}22`:(isPlanChecked?`${C.blue}10`:"transparent"),
+                      borderLeft:isPlanActive?`2px solid ${C.blue}`:(isPlanChecked?`2px solid ${C.blue}55`:"2px solid transparent"),
+                    }}>
+                    <div style={{display:"flex",alignItems:"center",gap:5}}>
+                      <span style={{fontSize:"0.52rem",color:isPlanActive?C.blue:`${C.blue}88`,flexShrink:0}}>▸</span>
+                      <span style={{
+                        fontSize:"0.7rem",fontWeight:isPlanActive?600:400,
+                        color:isPlanActive?C.blue:(isPlanChecked?C.textBright:`${C.text}cc`),
+                        overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
+                      }}>{plan.name||"（未命名）"}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* 空マージン */}
+          <div style={{height:3}}/>
+        </div>
+      );
+    });
+  };
+
+  const unsectionedFirms=firms.filter(f=>!f.sectionId);
 
   return (
     <div style={{width,flexShrink:0,background:C.surface,overflow:"auto",display:"flex",flexDirection:"column"}}>
-      <div style={{padding:"8px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",gap:3}}>
-        <span style={{fontSize:"0.72rem",fontWeight:700,color:C.accent}}>Firms</span>
-        <Btn color={C.accent} onClick={onAddFirm} style={{padding:"1px 6px",fontSize:"0.75rem"}}>＋</Btn>
-      </div>
-      {/* 統合アクションバー: 選択時→操作 / 未選択+Firm選択中→プロンプト */}
-      {firms.length>0&&(
-        <div style={{padding:"4px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:4,background:checkedCount?C.surfaceAlt:"transparent",minHeight:28}}>
-          <label style={{display:"flex",alignItems:"center",cursor:"pointer"}}>
-            <input type="checkbox" checked={allChecked} onChange={toggleAll} style={{cursor:"pointer",accentColor:C.accent}} />
-          </label>
-          <div style={{flex:1}}/>
-          {checkedCount>0?(
-            <React.Fragment>
-              <span style={{fontSize:"0.6rem",color:C.textDim,cursor:"pointer"}} onClick={clearChecks} title="選択解除">×</span>
-              <span style={{fontSize:"0.6rem",color:C.textDim}}>{checkedCount}件</span>
-              <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
-              <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>削除</Btn>
-            </React.Fragment>
-          ):activeId&&firms.some(f=>f.id===activeId||(f.plans||[]).some(p=>p.id===activeId))?(
-            <div style={{position:"relative"}}>
-              {showPromptMenu&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowPromptMenu(false)}/>}
-              <Btn color={C.purple} onClick={()=>setShowPromptMenu(v=>!v)}
-                style={{padding:"1px 7px",fontSize:"0.6rem"}}>プロンプト▾</Btn>
-              {showPromptMenu&&(
-                <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,
-                  background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,
-                  padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:110,
-                  boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
-                  <div onClick={()=>setShowPromptMenu(false)}>
-                    <CopyBtn getText={()=>generateResearchPrompt(activeId,firms,tabDataMap,glossaryTerms)}
-                      label="リサーチ" color={C.purple} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
-                  </div>
-                  <div onClick={()=>setShowPromptMenu(false)}><CopyBtn getText={()=>{
-                    const firm=firms.find(f=>f.id===activeId);if(!firm)return"";
-                    const firmName=getFirmName(activeId,tabDataMap)||firm.name||"[ファーム名]";
-                    const planNames=getPlanNames(activeId,firms,tabDataMap)||[];
-                    const planBlock=planNames.length>0?`【対象プラン一覧】\n${planNames.map(p=>`- ${p}`).join("\n")}`:`【対象プラン一覧】\n（プラン未登録）`;
-                    const firmItems=glossaryItemLines(glossaryTerms,"Firm項目");
-                    return`【対象ファーム】${firmName}\n\n${planBlock}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_01セクションに従い、以下を出力してください:\n\n--- Firm情報 ---\n${firmItems}\n\n- テーブル1: 価格テーブル（各プランの口座サイズ別価格）\n- テーブル2: Firm基本情報\n- テーブル3: レバレッジ\n- テーブル4: 手数料\n- テーブル5: プラン比較テーブル\n\n各項目・各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。価格テーブルの実体はFirm単位で保持し、各プラン記事はこれを参照する。`;
-                  }} label="ファーム" color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
-                  <div onClick={()=>setShowPromptMenu(false)}><CopyBtn getText={()=>{
-                    const targetIds=new Set();
-                    firms.forEach(f=>{if(checked[f.id])targetIds.add(f.id);else if((f.plans||[]).some(p=>checked[p.id]))targetIds.add(f.id);});
-                    if(!targetIds.size){const af=firms.find(f=>f.id===activeId||(f.plans||[]).some(p=>p.id===activeId));if(af)targetIds.add(af.id);}
-                    const targets=firms.filter(f=>targetIds.has(f.id));
-                    if(!targets.length)return"（Firmを選択してください）";
-                    const planItems=glossaryItemLines(glossaryTerms,"Plan項目");
-                    const blocks=targets.map(f=>{
-                      const firmName=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
-                      const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
-                      const planLine=(planNames||[]).filter(Boolean).length?(planNames||[]).filter(Boolean).map(n=>`- ${n}`).join("\n"):"（プラン未登録）";
-                      return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
-                    }).join("\n\n");
-                    return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記19項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= Static / Trailing系の6分類のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身は詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: F側が緩い=EASE / F側が厳しい=TRAP / 同一=ー\n- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載`;
-                  }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
-                  <div onClick={()=>setShowPromptMenu(false)}>
-                    <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
-                      label="攻略" color={C.green} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
-                  </div>
-                  <div onClick={()=>{setShowPromptMenu(false);document.dispatchEvent(new CustomEvent("pfd-reinvestigate"))}}>
-                    <Btn color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>再調査</Btn>
-                  </div>
-                </div>
-              )}
+      {/* ヘッダー */}
+      <div style={{padding:"6px 7px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
+        <span style={{fontSize:"0.72rem",fontWeight:700,color:C.accent,flexShrink:0}}>Firms</span>
+        <div style={{flex:1}}/>
+        <Btn color={C.accent} onClick={onAddFirm} style={{padding:"1px 8px",fontSize:"0.68rem",fontWeight:700}}>新規</Btn>
+        <div style={{position:"relative"}}>
+          {showPromptMenu&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowPromptMenu(false)}/>}
+          <Btn color={C.purple} onClick={()=>setShowPromptMenu(v=>!v)}
+            style={{padding:"1px 7px",fontSize:"0.68rem"}}>プロンプト▾</Btn>
+          {showPromptMenu&&(
+            <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,
+              background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,
+              padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:110,
+              boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+              <div onClick={()=>setShowPromptMenu(false)}>
+                <CopyBtn getText={()=>generateResearchPrompt(activeId,firms,tabDataMap,glossaryTerms)}
+                  label="リサーチ" color={C.purple} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
+              </div>
+              <div onClick={()=>setShowPromptMenu(false)}><CopyBtn getText={()=>{
+                const firm=firms.find(f=>f.id===activeId);if(!firm)return"";
+                const firmName=getFirmName(activeId,tabDataMap)||firm.name||"[ファーム名]";
+                const planNames=getPlanNames(activeId,firms,tabDataMap)||[];
+                const planBlock=planNames.length>0?`【対象プラン一覧】\n${planNames.map(p=>`- ${p}`).join("\n")}`:`【対象プラン一覧】\n（プラン未登録）`;
+                const firmItems=glossaryItemLines(glossaryTerms,"Firm項目");
+                return`【対象ファーム】${firmName}\n\n${planBlock}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_01セクションに従い、以下を出力してください:\n\n--- Firm情報 ---\n${firmItems}\n\n- テーブル1: 価格テーブル（各プランの口座サイズ別価格）\n- テーブル2: Firm基本情報\n- テーブル3: レバレッジ\n- テーブル4: 手数料\n- テーブル5: プラン比較テーブル\n\n各項目・各テーブルには見出し・説明文・本体・補足注記（必要時）を含めること。価格テーブルの実体はFirm単位で保持し、各プラン記事はこれを参照する。`;
+              }} label="ファーム" color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
+              <div onClick={()=>setShowPromptMenu(false)}><CopyBtn getText={()=>{
+                const targetIds=new Set();
+                firms.forEach(f=>{if(checked[f.id])targetIds.add(f.id);else if((f.plans||[]).some(p=>checked[p.id]))targetIds.add(f.id);});
+                if(!targetIds.size){const af=firms.find(f=>f.id===activeId||(f.plans||[]).some(p=>p.id===activeId));if(af)targetIds.add(af.id);}
+                const targets=firms.filter(f=>targetIds.has(f.id));
+                if(!targets.length)return"（Firmを選択してください）";
+                const planItems=glossaryItemLines(glossaryTerms,"Plan項目");
+                const blocks=targets.map(f=>{
+                  const firmName=getFirmName(f.id,tabDataMap)||f.name||"（未命名）";
+                  const planNames=getPlanNames(f.id,firms,tabDataMap)||(f.plans||[]).map(p=>p.name);
+                  const planLine=(planNames||[]).filter(Boolean).length?(planNames||[]).filter(Boolean).map(n=>`- ${n}`).join("\n"):"（プラン未登録）";
+                  return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
+                }).join("\n\n");
+                return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記19項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= Static / Trailing系の6分類のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身は詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: F側が緩い=EASE / F側が厳しい=TRAP / 同一=ー\n- 詳細: その項目だけ読めばルールを理解できる完結した本文（補足ではなく本文）\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載`;
+              }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
+              <div onClick={()=>setShowPromptMenu(false)}>
+                <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
+                  label="攻略" color={C.green} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
+              </div>
+              <div onClick={()=>{setShowPromptMenu(false);document.dispatchEvent(new CustomEvent("pfd-reinvestigate"))}}>
+                <Btn color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>再調査</Btn>
+              </div>
             </div>
-          ):null}
+          )}
+        </div>
+      </div>
+
+      {/* ── Active Firm Workspace ─────────────────────── */}
+      {panelFirm&&(
+        <div style={{borderBottom:`2px solid ${C.accent}33`,background:`${C.accent}06`,flexShrink:0}}>
+          {/* Firm名 */}
+          <div style={{padding:"6px 8px 4px",display:"flex",alignItems:"center",gap:5}}>
+            <span style={{fontSize:"0.55rem",color:C.accent,fontWeight:700,flexShrink:0,letterSpacing:"0.05em"}}>FIRM</span>
+            <input
+              value={panelFirmName}
+              onChange={e=>setPanelFirmName(e.target.value)}
+              onBlur={()=>{if(panelFirmName.trim())onRename(panelFirm.id,panelFirmName)}}
+              onKeyDown={e=>{if(e.key==="Enter"&&panelFirmName.trim())onRename(panelFirm.id,panelFirmName)}}
+              placeholder="Firm名を入力"
+              style={{flex:1,background:"transparent",color:C.textBright,border:"none",
+                borderBottom:`1px solid ${C.border}`,borderRadius:0,
+                padding:"2px 4px",fontSize:"0.8rem",fontFamily:font,outline:"none"}}
+            />
+          </div>
+          {/* Planリスト */}
+          <div style={{padding:"2px 8px 6px 8px"}}>
+            {(panelFirm.plans||[]).map(plan=>{
+              const isActivePlan=activeId===plan.id;
+              const isEditing=planEditId===plan.id;
+              return (
+                <div key={plan.id} style={{
+                  display:"flex",alignItems:"center",gap:4,
+                  padding:"2px 4px",marginBottom:1,borderRadius:3,
+                  background:isActivePlan?`${C.blue}22`:"transparent",
+                  cursor:"pointer",
+                }} onMouseDown={e=>{if(e.button===0){e.stopPropagation();onSelect(plan.id)}}}>
+                  <span style={{fontSize:"0.58rem",color:C.blue,flexShrink:0}}>└</span>
+                  {isEditing?(
+                    <input autoFocus value={planEditName}
+                      onChange={e=>setPlanEditName(e.target.value)}
+                      onBlur={()=>{onRename(plan.id,planEditName);setPlanEditId(null)}}
+                      onKeyDown={e=>{
+                        if(e.key==="Enter"){onRename(plan.id,planEditName);setPlanEditId(null)}
+                        if(e.key==="Escape")setPlanEditId(null)
+                      }}
+                      onMouseDown={e=>e.stopPropagation()}
+                      style={{flex:1,background:C.bg,color:C.textBright,
+                        border:`1px solid ${C.blue}`,borderRadius:3,
+                        padding:"1px 4px",fontSize:"0.72rem",fontFamily:font,outline:"none"}}
+                    />
+                  ):(
+                    <span
+                      onDoubleClick={e=>{e.stopPropagation();setPlanEditId(plan.id);setPlanEditName(plan.name)}}
+                      style={{flex:1,fontSize:"0.72rem",
+                        color:isActivePlan?C.blue:C.text,
+                        fontWeight:isActivePlan?700:400,
+                        overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}
+                      title="ダブルクリックで名前変更">
+                      {plan.name||"（未命名）"}
+                    </span>
+                  )}
+                  {/* プラン削除 */}
+                  {!isEditing&&(
+                    <span
+                      onMouseDown={e=>e.stopPropagation()}
+                      onClick={e=>{e.stopPropagation();
+                        if(window.confirm(`「${plan.name||"このプラン"}」を削除しますか？`))onDelete(plan.id)
+                      }}
+                      title="プランを削除"
+                      style={{fontSize:"0.6rem",cursor:"pointer",color:C.textDim,
+                        opacity:0.4,flexShrink:0,userSelect:"none",lineHeight:1}}>×</span>
+                  )}
+                </div>
+              );
+            })}
+            {/* ＋ プラン追加 */}
+            <div
+              onMouseDown={e=>e.stopPropagation()}
+              onClick={e=>{e.stopPropagation();onAddPlan(panelFirm.id)}}
+              style={{display:"flex",alignItems:"center",gap:4,padding:"2px 4px",
+                cursor:"pointer",borderRadius:3,marginTop:2,
+                color:C.blue,fontSize:"0.65rem",opacity:0.7,userSelect:"none"}}>
+              <span>＋</span><span>プランを追加</span>
+            </div>
+          </div>
         </div>
       )}
+
+      {/* セクション追加フォーム */}
+      {showAddSec&&(
+        <div style={{padding:"5px 6px",borderBottom:`1px solid ${C.border}`,background:C.surfaceAlt,display:"flex",gap:4,alignItems:"center"}}>
+          <input autoFocus value={newSecName} onChange={e=>setNewSecName(e.target.value)}
+            onKeyDown={e=>{
+              if(e.key==="Enter"&&newSecName.trim()){onAddSection&&onAddSection(newSecName.trim());setNewSecName("");setShowAddSec(false)}
+              if(e.key==="Escape")setShowAddSec(false)
+            }}
+            placeholder="セクション名"
+            style={{flex:1,background:C.bg,color:C.textBright,border:`1px solid ${C.blue}`,borderRadius:3,padding:"2px 6px",fontSize:"0.7rem",fontFamily:font,outline:"none"}} />
+          <Btn color={C.blue} onClick={()=>{if(newSecName.trim()){onAddSection&&onAddSection(newSecName.trim());setNewSecName("");setShowAddSec(false)}}}
+            style={{padding:"1px 7px",fontSize:"0.65rem"}}>追加</Btn>
+          <span onClick={()=>setShowAddSec(false)} style={{cursor:"pointer",color:C.textDim,fontSize:"0.8rem",lineHeight:1,userSelect:"none"}}>×</span>
+        </div>
+      )}
+
+      {/* ツールバー: 全 | セッション名 | § */}
+      <div style={{padding:"4px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:5,minHeight:28,background:checkedCount?C.surfaceAlt:"transparent"}}>
+        {checkedCount>0?(
+          <React.Fragment>
+            <span style={{fontSize:"0.6rem",color:C.textDim,cursor:"pointer"}} onClick={clearChecks} title="選択解除">×</span>
+            <span style={{fontSize:"0.6rem",color:C.textDim}}>{checkedCount}件</span>
+            <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
+            <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>削除</Btn>
+          </React.Fragment>
+        ):(
+          <React.Fragment>
+            <span onClick={selectAll} title="全選択"
+              style={{fontSize:"0.58rem",color:C.textDim,cursor:"pointer",userSelect:"none",
+                border:`1px solid ${C.border}`,borderRadius:2,padding:"0 3px",lineHeight:"1.5",flexShrink:0}}>全</span>
+            <input
+              value={sessionName||""}
+              onChange={e=>onSessionNameChange&&onSessionNameChange(e.target.value)}
+              placeholder="セッション名"
+              style={{flex:1,background:"transparent",color:C.text,border:"none",
+                fontSize:"0.68rem",fontFamily:font,outline:"none",minWidth:0,
+                borderBottom:`1px solid transparent`}}
+              onFocus={e=>e.target.style.borderBottomColor=C.border}
+              onBlur={e=>e.target.style.borderBottomColor="transparent"}
+            />
+            <Btn onClick={()=>{setShowAddSec(v=>!v);setNewSecName("")}} title="セクションを追加"
+              style={{padding:"1px 5px",fontSize:"0.68rem",flexShrink:0,
+                background:showAddSec?C.borderLight:"transparent",
+                border:`1px solid ${C.border}`,color:C.textDim}}>§</Btn>
+          </React.Fragment>
+        )}
+      </div>
       {showImport&&(
         <div style={{padding:"6px",borderBottom:`1px solid ${C.border}`,background:C.surfaceAlt}}>
           <textarea value={csvText} onChange={e=>setCsvText(e.target.value)}
@@ -1055,80 +1405,18 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
           <Btn color={C.blue} onClick={handleImport} style={{marginTop:3,fontSize:"0.62rem"}}>一括登録</Btn>
         </div>
       )}
-      {orderedFirms.map((firm)=>(
-        <div key={firm.id}>
-          {/* ピン境界線 */}
-          {firm.id===lastPinnedId&&(
-            <div style={{height:0,borderBottom:`2px solid ${C.yellow}44`}} />
-          )}
-          {/* Firm行 */}
-          <div onClick={()=>onSelect(firm.id)}
-            onDragOver={e=>{e.preventDefault()}}
-            onDrop={e=>{e.preventDefault();if(dragId!==null&&dragId!==firm.id){onReorder(dragId,firm.id);setDragId(null)}}}
-            style={{
-            padding:"6px 8px",cursor:"pointer",borderBottom:`1px solid ${C.border}`,
-            background:activeId===firm.id?C.accentDim:(dragId===firm.id?C.borderLight:(firm.pinned?`${C.yellow}11`:"transparent")),
-            borderLeft:activeId===firm.id?`3px solid ${C.accent}`:(firm.pinned?`3px solid ${C.yellow}66`:"3px solid transparent"),
-          }}>
-            {editId===firm.id?renderEdit(firm.id):(
-              <div style={{display:"flex",alignItems:"center",gap:7}}>
-                <span onClick={e=>{e.stopPropagation();
-                  const plans=firm.plans||[];
-                  const allSel=checked[firm.id]&&plans.every(p=>checked[p.id]);
-                  setChecked(p=>({...p,[firm.id]:!allSel,...Object.fromEntries(plans.map(pl=>[pl.id,!allSel]))}));
-                }} title="Firm＋全プランを選択"
-                  style={{fontSize:"0.55rem",color:C.textDim,cursor:"pointer",flexShrink:0,
-                    border:`1px solid ${C.textDim}`,borderRadius:2,padding:"0 2px",lineHeight:"1.4",userSelect:"none"}}>グ</span>
-                <input type="checkbox"
-                  ref={el=>{if(el){const plans=firm.plans||[];el.indeterminate=!checked[firm.id]&&plans.some(p=>checked[p.id]);}}}
-                  checked={!!checked[firm.id]}
-                  onClick={e=>e.stopPropagation()}
-                  onChange={e=>{e.stopPropagation();setChecked(p=>({...p,[firm.id]:e.target.checked}))}}
-                  style={{cursor:"pointer",flexShrink:0,accentColor:C.accent}} />
-                <span draggable onDragStart={e=>{e.stopPropagation();setDragId(firm.id)}} onClick={e=>e.stopPropagation()}
-                  style={{fontSize:"0.7rem",color:C.textDim,cursor:"grab",flexShrink:0,userSelect:"none"}}>≡</span>
-                <span onClick={e=>{e.stopPropagation();setCollapsed(p=>({...p,[firm.id]:!p[firm.id]}))}}
-                  style={{fontSize:"0.6rem",color:C.textDim,cursor:"pointer",flexShrink:0}}>
-                  {collapsed[firm.id]?"▶":"▼"}
-                </span>
-                <span onDoubleClick={e=>{e.stopPropagation();setEditId(firm.id);setEditName(firm.name)}} style={{
-                  fontSize:"0.75rem",fontWeight:activeId===firm.id?700:400,
-                  color:activeId===firm.id?C.accent:C.text,
-                  overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
-                }}>{firm.name||"（未命名）"}</span>
-                <span onClick={e=>{e.stopPropagation();onTogglePin&&onTogglePin(firm.id)}} title={firm.pinned?"ピンを外す":"上に固定"}
-                  style={{fontSize:"0.66rem",cursor:"pointer",flexShrink:0,opacity:firm.pinned?1:0.35}}>📌</span>
-                <span onClick={e=>{e.stopPropagation();onAddPlan(firm.id)}} title="プラン追加"
-                  style={{color:C.blue,fontSize:"0.68rem",cursor:"pointer",flexShrink:0}}>＋</span>
-                <span onClick={e=>{e.stopPropagation();onMergeFirm&&onMergeFirm(firm.id)}} title="他のFirmをこのFirmに統合"
-                  style={{color:C.purple,fontSize:"0.66rem",cursor:"pointer",flexShrink:0}}>⤵</span>
-              </div>
-            )}
-          </div>
-          {/* Plan行 */}
-          {!collapsed[firm.id]&&firm.plans?.map(plan=>(
-            <div key={plan.id} onClick={()=>onSelect(plan.id)} style={{
-              padding:"4px 8px 4px 20px",cursor:"pointer",borderBottom:`1px solid ${C.border}`,
-              background:activeId===plan.id?`${C.blue}22`:"transparent",
-              borderLeft:activeId===plan.id?`3px solid ${C.blue}`:"3px solid transparent",
-            }}>
-              {editId===plan.id?renderEdit(plan.id):(
-                <div style={{display:"flex",alignItems:"center",gap:7}}>
-                  <input type="checkbox" checked={!!checked[plan.id]} onClick={e=>e.stopPropagation()}
-                    onChange={e=>{e.stopPropagation();setChecked(p=>({...p,[plan.id]:e.target.checked}))}}
-                    style={{cursor:"pointer",flexShrink:0,accentColor:C.blue}} />
-                  <span style={{fontSize:"0.58rem",color:C.blue,flexShrink:0}}>└</span>
-                  <span onDoubleClick={e=>{e.stopPropagation();setEditId(plan.id);setEditName(plan.name)}} style={{
-                    fontSize:"0.72rem",fontWeight:activeId===plan.id?700:400,
-                    color:activeId===plan.id?C.blue:C.text,
-                    overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
-                  }}>{plan.name||"（未命名）"}</span>
-                </div>
-              )}
-            </div>
-          ))}
+
+      {/* セクション一覧 */}
+      {(sections||[]).map(sec=>(
+        <div key={sec.id}>
+          {renderSectionHeader(sec)}
+          {!secCollapsed[sec.id]&&renderFirms(firms.filter(f=>f.sectionId===sec.id))}
         </div>
       ))}
+
+      {/* 未分類（セクションが1つ以上あるときのみヘッダー表示） */}
+      {hasSections&&renderSectionHeader({id:"__none__"},true)}
+      {renderFirms(unsectionedFirms)}
     </div>
   );
 }
@@ -2587,6 +2875,10 @@ function ConsolidateModal({show,onClose,firms,tabDataMap,initialKeepId,onApply})
 // MAIN APP
 // ═══════════════════════════════════════════════════
 function App() {
+  // セクション
+  const [sections,setSections]=useState([]);
+  const [sessionName,setSessionName]=useState("");
+
   // 縦タブ（Firm→Plan階層）
   const [firms,setFirms]=useState([{"id":"f2","name":"The5ers","plans":[{"id":"p2","name":"High Stakes"},{"id":"p3","name":"Hyper-Growth"},{"id":"p4","name":"Bootcamp"},{"id":"p5","name":"Pro-Growth"}]},{"id":"f3","name":"FundingPips","plans":[{"id":"p6","name":"FundingPips Zero"},{"id":"p7","name":"1-Step"},{"id":"p8","name":"2-Step Standard"},{"id":"p9","name":"2-Step Pro"}]},{"id":"f4","name":"FundedNext","plans":[{"id":"p10","name":"Stellar 1-Step"},{"id":"p11","name":"Stellar 2-Step"},{"id":"p12","name":"Stellar Lite"},{"id":"p13","name":"Stellar Instant"}]}]);
   const [activeTabId,setActiveTabId]=useState("f2");
@@ -3303,10 +3595,29 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     setGlossaryGenerating(false);
   },[]);
 
+  // セクション操作
+  const addSection=useCallback(name=>{
+    const id="s"+String(nextId.current++);
+    setSections(p=>[...p,{id,name}]);
+  },[]);
+  const renameSection=useCallback((id,name)=>{
+    setSections(p=>p.map(s=>s.id===id?{...s,name}:s));
+  },[]);
+  const deleteSection=useCallback(id=>{
+    setSections(p=>p.filter(s=>s.id!==id));
+    setFirms(p=>p.map(f=>f.sectionId===id?{...f,sectionId:null}:f));
+  },[]);
+  const toggleCompleted=useCallback(firmId=>{
+    setFirms(p=>p.map(f=>f.id===firmId?{...f,completed:!f.completed}:f));
+  },[]);
+  const moveFirmToSection=useCallback((firmId,sectionId)=>{
+    setFirms(p=>p.map(f=>f.id===firmId?{...f,sectionId:sectionId||null}:f));
+  },[]);
+
   // 縦タブ操作
   const addFirm=useCallback(()=>{
     const id="f"+String(nextId.current++);
-    setFirms(p=>[...p,{id,name:"",plans:[]}]);
+    setFirms(p=>[{id,name:"",plans:[]},...p]);
     setTabDataMap(p=>({...p,[id]:{archives:[],targetText:"",slotData:{},templateMode:"dbp01"}}));
     setActiveTabId(id);
   },[]);
@@ -3316,7 +3627,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     setTabDataMap(p=>({...p,[id]:{archives:[],targetText:"",slotData:{},templateMode:"dbp02"}}));
     setActiveTabId(id);
   },[]);
-  // ID指定でドラッグ並べ替え。ピングループをまたいだら移動先のpinned状態に合わせる
+  // ID指定でドラッグ並べ替え。ピン・セクションをドロップ先に合わせる
   const reorderFirms=useCallback((fromId,toId)=>{
     setFirms(p=>{
       const arr=[...p];
@@ -3324,8 +3635,9 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       const toIdx=arr.findIndex(f=>f.id===toId);
       if(fromIdx<0||toIdx<0)return p;
       const targetPinned=!!arr[toIdx].pinned;
+      const targetSection=arr[toIdx].sectionId||null;
       const [item]=arr.splice(fromIdx,1);
-      const newItem=item.pinned===targetPinned?item:{...item,pinned:targetPinned};
+      const newItem={...item,pinned:targetPinned,sectionId:targetSection};
       const insertIdx=arr.findIndex(f=>f.id===toId);
       arr.splice(insertIdx,0,newItem);
       return arr;
@@ -3451,7 +3763,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   },[hugoDir]);
 
   const exportAll=useCallback(async()=>{
-    const data={firms,tabDataMap,glossaryTerms};
+    const data={firms,sections,sessionName,tabDataMap,glossaryTerms};
     if(hugoDir){
       try{
         const fh=await getPmFile(true);
@@ -3629,6 +3941,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   const applyData=useCallback(d=>{
     if(!d)return;
     if(d.firms)setFirms(d.firms);
+    if(d.sections)setSections(d.sections);
+    if(d.sessionName!==undefined)setSessionName(d.sessionName||"");
     if(d.tabDataMap)setTabDataMap(d.tabDataMap);
     if(d.glossaryTerms){
       const loaded=d.glossaryTerms;
@@ -3667,7 +3981,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   },[applyData,hugoDir,getPmFile,showToast]);
 
   // バックアップ用：現在の全状態を取得 / 復元
-  const getCurrentData=useCallback(()=>({firms,tabDataMap,glossaryTerms}),[firms,tabDataMap,glossaryTerms]);
+  const getCurrentData=useCallback(()=>({firms,sections,sessionName,tabDataMap,glossaryTerms}),[firms,sections,tabDataMap,glossaryTerms]);
   const restoreData=useCallback(d=>applyData(d),[applyData]);
 
   // ═══════════════════════════════════════════════════
@@ -3692,7 +4006,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
 
   // ② 編集監視：変更をデバウンス（約800ms）で localStorage ドラフトへ退避
   useEffect(()=>{
-    const json=JSON.stringify({firms,tabDataMap,glossaryTerms});
+    const json=JSON.stringify({firms,sections,sessionName,tabDataMap,glossaryTerms});
     if(draftBaselineRef.current===null){draftBaselineRef.current=json;return;} // 初回はベースライン記録のみ
     if(json===draftBaselineRef.current)return; // 実変更なし
     dirtyRef.current=true;
@@ -3703,7 +4017,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       }catch(e){/* 容量超過等はファイル保存で担保するため無視 */}
     },800);
     return ()=>clearTimeout(t);
-  },[firms,tabDataMap,glossaryTerms]);
+  },[firms,sections,tabDataMap,glossaryTerms]);
 
   // ③ 離脱警告：ファイル未出力（全保存/Hugo）の変更があるとき
   useEffect(()=>{
@@ -3935,7 +4249,9 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         {/* 縦タブ */}
         <VerticalTabs firms={firms} activeId={activeTabId} onSelect={setActiveTabId}
           onAddFirm={addFirm} onAddPlan={addPlan} onDelete={deleteTab} onRename={renameTab}
-          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin} onScannerPasted={handleScannerPasted} />
+          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin} onScannerPasted={handleScannerPasted}
+          sections={sections} onAddSection={addSection} onRenameSection={renameSection} onDeleteSection={deleteSection} onToggleCompleted={toggleCompleted} onMoveFirmToSection={moveFirmToSection}
+          sessionName={sessionName} onSessionNameChange={setSessionName} />
         <ResizeHandle dir="x" onMouseDown={vtabDrag} />
 
         {/* 左カラム: 貼り付け + 取り込み対象 */}

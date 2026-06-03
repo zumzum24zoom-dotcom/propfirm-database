@@ -1,25 +1,25 @@
 {
   "slug": "the5ers",
   "ファーム名": "The5ers",
-  "拠点国": "",
-  "創業年": "",
-  "公式URL": "",
-  "カテゴリ": "CFD/FX",
-  "日本対応": "",
-  "ファームピッチ": "",
-  "リワードプログラム": "",
-  "スケールアップ": "",
-  "ブローカー": "",
-  "プラットフォーム": "",
-  "サーバー時間": "",
-  "DDリセット": "",
-  "レバレッジ": "",
-  "手数料": "",
-  "入金方法": "",
-  "出金方法": "",
-  "出金ポリシー": "",
-  "利益分配率": "",
-  "利益分配率補足": "",
+  "拠点国": "イスラエル / イギリス",
+  "創業年": "2016年",
+  "公式URL": "https://www.the5ers.com",
+  "カテゴリ": "FX / CFD / Crypto",
+  "日本対応": "日本語HP",
+  "ファームピッチ": "リアル資金提供、最大400万ドルへのスケーリング、時間制限なしの柔軟な評価プロセス",
+  "リワードプログラム": "ハブクレジット還元制度（評価フェーズ完了ごとに付与）、アフィリエイトプログラム",
+  "スケールアップ": "最大$500,000（High Stakes） / 最大$4,000,000（Hyper-Growth、Bootcamp） / 100%利益配分まで（Pro-Growth）",
+  "ブローカー": "商業LP直結（自社プール口座）",
+  "プラットフォーム": "MT5 / cTrader",
+  "サーバー時間": "GMT+2（冬時間）/ GMT+3（夏時間）。日本時間換算: 冬=+11時間（午前0時=日本11:00）、夏=+6時間（午前0時=日本06:00）",
+  "DDリセット": "00:00 MT5 Server Time（日本時間換算: 冬 11:00 / 夏 06:00）",
+  "レバレッジ": "最大1:100（プラン・資産クラスにより異なる。詳細はレバレッジテーブル参照）",
+  "手数料": "FX: $4/lot（往復）。詳細は手数料テーブル参照",
+  "入金方法": "クレジットカード、銀行振込、暗号通貨（USDT, USDC, TRX等）、Apple Pay、Google Pay、PayPal",
+  "出金方法": "Crypto（USDT, USDC, ETH, LTC）、Rise、Bank Transfer、Hub Credits",
+  "出金ポリシー": "頻度: 隔週、最低出金額: $150（High Stakesの場合）、申請: ダッシュボードから",
+  "利益分配率": "50% 〜 80%（初期）、最大100%",
+  "利益分配率補足": "全プランで最大100%までスケールアップ可能。Hyper-GrowthはFunded到達時に75%へ増加、BootcampはFundedの第2ステージから75%に増加。",
   "メールアドレス": "",
   "アフィリエイトURL": "",
   "クーポン": [],
@@ -27,10 +27,100 @@
     "High Stakes",
     "Hyper-Growth",
     "Bootcamp",
-    "Pro-Growth",
-    "One-Step Challenge",
-    "Two-Step Challenge",
-    "Instant Funding",
-    "Nova Challenge"
-  ]
+    "Pro-Growth"
+  ],
+  "価格テーブル": {
+    "rows": [
+      {
+        "size": "$2,500",
+        "tier": "",
+        "prices": {
+          "high-stakes": "$19/22",
+          "hyper-growth": "—",
+          "bootcamp": "—",
+          "pro-growth": "—"
+        }
+      },
+      {
+        "size": "$5,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "$35/39",
+          "hyper-growth": "$260",
+          "bootcamp": "—",
+          "pro-growth": "$74"
+        }
+      },
+      {
+        "size": "$10,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "$69/78",
+          "hyper-growth": "$450",
+          "bootcamp": "—",
+          "pro-growth": "$140"
+        }
+      },
+      {
+        "size": "$20,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "$176/195",
+          "hyper-growth": "$850",
+          "bootcamp": "$22",
+          "pro-growth": "$270"
+        }
+      },
+      {
+        "size": "$25,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "",
+          "hyper-growth": "—",
+          "bootcamp": "—",
+          "pro-growth": ""
+        }
+      },
+      {
+        "size": "$50,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "",
+          "hyper-growth": "—",
+          "bootcamp": "—",
+          "pro-growth": "$470"
+        }
+      },
+      {
+        "size": "$60,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "$278/309",
+          "hyper-growth": "—",
+          "bootcamp": "—",
+          "pro-growth": "—"
+        }
+      },
+      {
+        "size": "$100,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "$491/545",
+          "hyper-growth": "—",
+          "bootcamp": "$95",
+          "pro-growth": ""
+        }
+      },
+      {
+        "size": "$250,000",
+        "tier": "",
+        "prices": {
+          "high-stakes": "$—",
+          "hyper-growth": "—",
+          "bootcamp": "$225",
+          "pro-growth": "—"
+        }
+      }
+    ]
+  }
 }

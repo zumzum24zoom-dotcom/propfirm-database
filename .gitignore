@@ -17,3 +17,6 @@ __pycache__/
 
 # Claudian セッション一時ファイル
 .claudian/sessions/
+
+# チャットツリー（トークン含む可能性あり）
+99_chat-tree/
