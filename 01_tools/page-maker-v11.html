@@ -886,6 +886,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   const [dragId,setDragId]=useState(null);
   const [checked,setChecked]=useState({}); // クリック選択 {firmId:true}
   const [copied,setCopied]=useState(false);
+  const [hideActive,setHideActive]=useState(false);
   const [showPromptMenu,setShowPromptMenu]=useState(false);
   // ブラシ複数選択／解除
   const brushRef=useRef(false);
@@ -1046,12 +1047,13 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
     const sorted=sortGroup(firmList);
     const lastPinnedId=(()=>{const ps=sorted.filter(f=>f.pinned&&!f.completed);return ps.length?ps[ps.length-1].id:null;})();
     const firstCompletedId=sorted.find(f=>f.completed)?.id;
-    return sorted.map(firm=>{
+    const visible=hideActive?sorted.filter(f=>f.id!==activeId&&!(f.plans||[]).some(p=>p.id===activeId)):sorted;
+    return visible.map(firm=>{
       const isActive=activeId===firm.id||(firm.plans||[]).some(p=>p.id===activeId);
       const isChecked=!!checked[firm.id]&&!firm.completed;
       const isExpanded=!collapsed[firm.id]&&!firm.completed;
       const hasPlans=(firm.plans||[]).length>0;
-      const cardBorder=firm.completed?C.border:(isActive?C.accent:(firm.pinned?`${C.yellow}88`:(isChecked?`${C.accent}55`:C.border)));
+      const cardBorder=firm.completed?C.border:(isActive?C.accent:(firm.pinned?`${C.red}88`:(isChecked?C.blue:C.border)));
       return (
         <div key={firm.id} style={{margin:"3px 5px 0"}}>
           {/* 完了区切り線 */}
@@ -1063,7 +1065,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
             </div>
           )}
           {/* ピン区切り */}
-          {firm.id===lastPinnedId&&<div style={{height:3,marginBottom:2,borderBottom:`1px dashed ${C.yellow}44`}}/>}
+          {firm.id===lastPinnedId&&<div style={{height:3,marginBottom:2,borderBottom:`1px dashed ${C.red}44`}}/>}
 
           {/* ── Firm カード ── */}
           <div
@@ -1073,7 +1075,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
               borderRadius:isExpanded&&hasPlans?`5px 5px 0 0`:5,
               border:`1px solid ${cardBorder}`,
               borderBottom:isExpanded&&hasPlans?`1px solid ${C.borderLight}`:`1px solid ${cardBorder}`,
-              background:isChecked?`${C.accent}12`:(firm.pinned&&!firm.completed?`${C.yellow}06`:C.surfaceAlt),
+              background:isChecked?`${C.blue}28`:(firm.pinned&&!firm.completed?`${C.red}08`:C.surfaceAlt),
               opacity:firm.completed?0.38:1,
               transition:"opacity 0.15s,border-color 0.1s",
               overflow:"hidden",
@@ -1110,7 +1112,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                 title={activeId===firm.id?"編集中":"編集ターゲットにする"}
                 style={{
                   width:15,height:15,borderRadius:"50%",flexShrink:0,cursor:"pointer",
-                  border:`2px solid ${activeId===firm.id?C.accent:(firm.pinned?`${C.yellow}88`:C.textDim)}`,
+                  border:`2px solid ${activeId===firm.id?C.accent:(firm.pinned?`${C.red}88`:C.textDim)}`,
                   background:activeId===firm.id?C.accent:"transparent",
                   transition:"background 0.12s,border-color 0.12s",
                 }}
@@ -1178,7 +1180,6 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                   <div key={plan.id}
                     onMouseDown={e=>{
                       if(e.button!==0)return;
-                      onSelect(plan.id);
                       const wasSelected=!!checked[plan.id];
                       brushRef.current=true;
                       brushModeRef.current=wasSelected?"deselect":"select";
@@ -1191,11 +1192,15 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                     style={{
                       padding:"3px 8px 3px 18px",cursor:"pointer",userSelect:"none",
                       borderTop:pi>0?`1px solid ${C.border}`:"none",
-                      background:isPlanActive?`${C.blue}22`:(isPlanChecked?`${C.blue}10`:"transparent"),
-                      borderLeft:isPlanActive?`2px solid ${C.blue}`:(isPlanChecked?`2px solid ${C.blue}55`:"2px solid transparent"),
+                      background:isPlanActive?`${C.blue}22`:(isPlanChecked?`${C.blue}28`:"transparent"),
+                      borderLeft:isPlanActive?`2px solid ${C.blue}`:(isPlanChecked?`2px solid ${C.blue}`:"2px solid transparent"),
                     }}>
                     <div style={{display:"flex",alignItems:"center",gap:5}}>
-                      <span style={{fontSize:"0.52rem",color:isPlanActive?C.blue:`${C.blue}88`,flexShrink:0}}>▸</span>
+                      <span
+                        onMouseDown={e=>e.stopPropagation()}
+                        onClick={e=>{e.stopPropagation();onSelect(plan.id);}}
+                        title={isPlanActive?"編集中":"編集ターゲットにする"}
+                        style={{fontSize:"0.52rem",color:isPlanActive?C.blue:`${C.blue}88`,flexShrink:0,cursor:"pointer"}}>▸</span>
                       <span style={{
                         fontSize:"0.7rem",fontWeight:isPlanActive?600:400,
                         color:isPlanActive?C.blue:(isPlanChecked?C.textBright:`${C.text}cc`),
@@ -1373,8 +1378,9 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
       <div style={{padding:"4px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:5,minHeight:28,background:checkedCount?C.surfaceAlt:"transparent"}}>
         {checkedCount>0?(
           <React.Fragment>
-            <span style={{fontSize:"0.6rem",color:C.textDim,cursor:"pointer"}} onClick={clearChecks} title="選択解除">×</span>
-            <span style={{fontSize:"0.6rem",color:C.textDim}}>{checkedCount}件</span>
+            <Btn onClick={clearChecks} style={{padding:"1px 7px",fontSize:"0.6rem",background:`${C.blue}22`,border:`1px solid ${C.blue}55`,color:C.textBright,display:"flex",alignItems:"center",gap:4}}>
+              <span style={{opacity:0.7}}>×</span><span>{checkedCount}件</span><span style={{opacity:0.7}}>選択解除</span>
+            </Btn>
             <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
             <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>削除</Btn>
           </React.Fragment>
@@ -1393,6 +1399,11 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
               onFocus={e=>e.target.style.borderBottomColor=C.border}
               onBlur={e=>e.target.style.borderBottomColor="transparent"}
             />
+            <Btn onClick={()=>setHideActive(v=>!v)} title={hideActive?"編集中Firmをリストに表示":"編集中Firmをリストから非表示"}
+              style={{padding:"1px 5px",fontSize:"0.68rem",flexShrink:0,
+                background:hideActive?C.accent:"transparent",
+                border:`1px solid ${hideActive?C.accent:C.border}`,
+                color:hideActive?C.bg:C.textDim}}>✦</Btn>
             <Btn onClick={()=>{setShowAddSec(v=>!v);setNewSecName("")}} title="セクションを追加"
               style={{padding:"1px 5px",fontSize:"0.68rem",flexShrink:0,
                 background:showAddSec?C.borderLight:"transparent",
@@ -3811,8 +3822,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   // 保存 = 差分反映マージ（常に同一 pfdb.json へ書き戻し・連番増殖なし）
   // 読込台帳(loadedIdsRef)を基準に：新規→追加 / 既存→更新 / 読込済→消えた→削除 / 未読込→温存
   const exportAll=useCallback(async()=>{
-    if(!window.showSaveFilePicker){
-      // 非対応ブラウザ：差分マージ不可のため現状データをDL（連番増殖の可能性あり）
+    if(!window.showSaveFilePicker||location.protocol==="file:"){
+      // 非対応ブラウザ / file://環境：ダウンロードにフォールバック
       exportJSON({firms,sections,sessionName,tabDataMap,glossaryTerms},"pfdb.json");
       dirtyRef.current=false;return;
     }
@@ -3823,6 +3834,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       try{
         fh=await window.showSaveFilePicker({suggestedName:"pfdb.json",types:[{description:"JSON",accept:{"application/json":[".json"]}}]});
         await saveSaveHandle(fh);
+        setSaveFileName(fh.name);
       }catch(e){if(e.name!=="AbortError")showToast("✗ 保存先選択エラー: "+e.message);return;}
     }
     // 2) 既存ファイル読込（差分反映のベース）
@@ -3887,6 +3899,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   // Hugo出力
   const [hugoDir,setHugoDir]=useState(null);
   const [hugoDirName,setHugoDirName]=useState("");
+  const [saveFileName,setSaveFileName]=useState("");
 
   // IndexedDB でフォルダハンドルを永続化
   const IDB_NAME="pfd-settings",IDB_STORE="handles",IDB_KEY="hugoDir";
@@ -3899,7 +3912,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   const loadSaveHandle=async()=>{try{const db=await openIDB();return new Promise((res,rej)=>{const r=db.transaction(IDB_STORE).objectStore(IDB_STORE).get(SAVE_FILE_KEY);r.onsuccess=e=>res(e.target.result);r.onerror=rej;});}catch(e){return null;}};
   const ensureRW=async(fh,mode="readwrite")=>{try{let p=await fh.queryPermission({mode});if(p!=="granted")p=await fh.requestPermission({mode});return p==="granted";}catch(e){return false;}};
 
-  // 起動時にフォルダハンドルを復元
+  // 起動時にフォルダ・保存ファイルハンドルを復元
   useEffect(()=>{
     loadHandle().then(async h=>{
       if(!h)return;
@@ -3908,6 +3921,10 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         setHugoDirName(h.name+(perm==="granted"?"":"（要確認）"));
         if(perm==="granted")setHugoDir(h);
       }catch(e){}
+    });
+    loadSaveHandle().then(async h=>{
+      if(!h)return;
+      try{setSaveFileName(h.name);}catch(e){}
     });
   },[]);
 
@@ -3922,6 +3939,14 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       setHugoDir(d);setHugoDirName(d.name);
       await saveHandle(d);
     }catch(e){if(e.name!=="AbortError")alert("フォルダ選択エラー: "+e.message);}
+  },[]);
+  const clearHugoDir=useCallback(async()=>{
+    setHugoDir(null);setHugoDirName("");
+    try{const db=await openIDB();const tx=db.transaction(IDB_STORE,"readwrite");tx.objectStore(IDB_STORE).delete(IDB_KEY);}catch(e){}
+  },[]);
+  const clearSaveFile=useCallback(async()=>{
+    setSaveFileName("");
+    try{const db=await openIDB();const tx=db.transaction(IDB_STORE,"readwrite");tx.objectStore(IDB_STORE).delete(SAVE_FILE_KEY);}catch(e){}
   },[]);
   const exportHugo=useCallback(async()=>{
     let dir=hugoDir;
@@ -4044,27 +4069,36 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
 
   // 全件読込 = 保存と同一の pfdb.json から読む（記憶ハンドル優先・初回は選択して記憶）
   const importAll=useCallback(async()=>{
-    // 1) 記憶した保存先ファイルがあればそこから読込
+    // file://環境はFile System Access API不可 → 即 <input> フォールバック
+    if(location.protocol==="file:"){importJSON(applyData);return;}
+    // 1) 記憶した保存先ファイルがあればそこから読込（read権限のみ）
     let fh=await loadSaveHandle();
-    if(fh&&!(await ensureRW(fh)))fh=null;
+    if(fh&&!(await ensureRW(fh,"read")))fh=null;
     if(fh){
       try{
         applyData(JSON.parse(await (await fh.getFile()).text()));
         showToast(`✓ 読込完了（${fh.name}）`);
         return;
-      }catch(e){if(e.name!=="NotFoundError")showToast("✗ 読込エラー: "+e.message);}
+      }catch(e){fh=null;} // 権限切れ等 → フォールバック
     }
-    // 2) 未記憶：ファイル選択してハンドルを記憶（以降は保存と同一ファイル）
+    // 2) ファイル選択（File System Access API）
     if(window.showOpenFilePicker){
       try{
         const [picked]=await window.showOpenFilePicker({types:[{description:"JSON",accept:{"application/json":[".json"]}}]});
         await saveSaveHandle(picked);
+        setSaveFileName(picked.name);
         applyData(JSON.parse(await (await picked.getFile()).text()));
         showToast(`✓ 読込完了（${picked.name}）`);
         return;
-      }catch(e){if(e.name!=="AbortError")showToast("✗ 読込エラー: "+e.message);return;}
+      }catch(e){
+        if(e.name==="AbortError")return;
+        if(e.name!=="SecurityError"&&e.name!=="NotAllowedError"){
+          showToast("✗ 読込エラー: "+e.message);return;
+        }
+      }
     }
-    importJSON(applyData); // 非対応ブラウザのフォールバック（ハンドルは記憶されない）
+    // 3) <input type="file"> フォールバック
+    importJSON(applyData);
   },[applyData,showToast]);
 
   // バックアップ用：現在の全状態を取得 / 復元
@@ -4301,14 +4335,17 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         </div>
         <div style={{flex:1}} />
         {/* 保存ドロップダウン */}
-        <div style={{position:"relative"}}>
-          {showDataMenu==="save"&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowDataMenu(false)}/>}
-          <Btn color={C.green} onClick={()=>setShowDataMenu(v=>v==="save"?false:"save")} style={{fontSize:"0.6rem"}}>保存 ▾</Btn>
-          {showDataMenu==="save"&&(
-            <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:90,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
-              <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} title="差分反映マージで pfdb.json へ保存（同一ファイル上書き・未読込ファームは温存）">保存</Btn>
-            </div>
-          )}
+        <div style={{display:"flex",gap:1,alignItems:"center"}}>
+          <div style={{position:"relative"}}>
+            {showDataMenu==="save"&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowDataMenu(false)}/>}
+            <Btn color={C.green} onClick={()=>setShowDataMenu(v=>v==="save"?false:"save")} style={{fontSize:"0.6rem"}} title={saveFileName||"ファイル未選択"}>保存 ▾</Btn>
+            {showDataMenu==="save"&&(
+              <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:90,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+                <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} title="差分反映マージで pfdb.json へ保存（同一ファイル上書き・未読込ファームは温存）">保存</Btn>
+              </div>
+            )}
+          </div>
+          {saveFileName&&<Btn color="#ef4444" onClick={clearSaveFile} style={{fontSize:"0.6rem",padding:"1px 5px"}} title={`固定解除: ${saveFileName}`}>×</Btn>}
         </div>
         {/* 読込ドロップダウン */}
         <div style={{position:"relative"}}>
@@ -4326,7 +4363,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         {/* Hugo出力 */}
         <div style={{position:"relative",display:"flex",gap:1}}>
           <Btn color={C.yellow} onClick={async()=>{if(!hugoDir)await selectHugoDir();else exportHugo();}} style={{fontSize:"0.6rem",borderRadius:"4px 0 0 4px"}} title={hugoDirName||"フォルダ未選択"}>🚀 Hugo</Btn>
-          <Btn color={C.yellow} onClick={selectHugoDir} style={{fontSize:"0.6rem",padding:"1px 5px",borderRadius:"0 4px 4px 0",borderLeft:`1px solid rgba(0,0,0,0.3)`}} title="出力フォルダを再選択">▾</Btn>
+          <Btn color={C.yellow} onClick={selectHugoDir} style={{fontSize:"0.6rem",padding:"1px 5px",borderRadius:hugoDirName?"0":"0 4px 4px 0",borderLeft:`1px solid rgba(0,0,0,0.3)`}} title="出力フォルダを再選択">▾</Btn>
+          {hugoDirName&&<Btn color="#ef4444" onClick={clearHugoDir} style={{fontSize:"0.6rem",padding:"1px 5px",borderRadius:"0 4px 4px 0",borderLeft:`1px solid rgba(0,0,0,0.3)`}} title={`固定解除: ${hugoDirName}`}>×</Btn>}
         </div>
       </div>
 
