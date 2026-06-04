@@ -1,7 +1,7 @@
 {
   "firmSlug": "finotivefunding",
   "公式URL": "https://finotivefunding.com/",
-  "extractedAt": "2026-06-04T16:34:00.738Z",
+  "extractedAt": "2026-06-04T16:34:41.436Z",
   "クーポン": [
     {
       "code": "FIRST10",
@@ -22,16 +22,7 @@
     ]
   },
   "diff": {
-    "summary": "2_changes",
-    "changes": [
-      {
-        "type": "new_size",
-        "size": "$100,000"
-      },
-      {
-        "type": "new_size",
-        "size": "$200,000"
-      }
-    ]
+    "summary": "no_change",
+    "changes": []
   }
 }
