@@ -1,136 +1,28 @@
 {
-  "slug": "fundednext",
-  "ファーム名": "FundedNext",
-  "拠点国": "",
-  "創業年": "",
-  "公式URL": "",
-  "カテゴリ": "",
-  "日本対応": "",
-  "ファームピッチ": "",
-  "リワードプログラム": "",
-  "スケールアップ": "",
-  "ブローカー": "",
-  "プラットフォーム": "",
-  "サーバー時間": "",
-  "DDリセット": "",
-  "レバレッジ": "",
-  "手数料": "",
-  "入金方法": "",
-  "出金方法": "",
-  "出金ポリシー": "",
-  "利益分配率": "",
-  "利益分配率補足": "",
-  "メールアドレス": "",
-  "アフィリエイトURL": "",
-  "クーポン": [],
-  "プラン一覧": [
-    "Stellar 1-Step",
-    "Stellar 2-Step",
-    "Stellar Lite",
-    "Stellar Instant"
+  "firmSlug": "fundednext",
+  "公式URL": "https://fundednext.com/ja",
+  "extractedAt": "2026-06-04T17:44:10.338Z",
+  "クーポン": [
+    {
+      "code": "FLEX",
+      "discount": "最初の5回は47%割引、以降は40%割引",
+      "expires": null
+    }
   ],
-  "価格テーブル": {
-    "rows": [
+  "slotData": {
+    "priceTable": [
       {
-        "size": "$2,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "—",
-          "stellar-2-step": "—",
-          "stellar-lite": "—",
-          "stellar-instant": "$59.00"
-        }
-      },
+        "text": "{\"rows\":[{\"size\":\"$6K\",\"tier\":\"\",\"prices\":{\"Stellar 2-Step\":\"$59.99\"}},{\"size\":\"$15K\",\"tier\":\"\",\"prices\":{\"Stellar 2-Step\":\"$119.99\"}},{\"size\":\"$25K\",\"tier\":\"\",\"prices\":{\"Stellar 2-Step\":\"$199.99\"}},{\"size\":\"$50K\",\"tier\":\"\",\"prices\":{\"Stellar 2-Step\":\"$299.99\"}},{\"size\":\"$100K\",\"tier\":\"\",\"prices\":{\"Stellar 2-Step\":\"$549.99\"}},{\"size\":\"$200K\",\"tier\":\"\",\"prices\":{\"Stellar 2-Step\":\"$1,099.99\"}}]}"
+      }
+    ],
+    "planList": [
       {
-        "size": "$5,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "—",
-          "stellar-2-step": "—",
-          "stellar-lite": "$32.99",
-          "stellar-instant": "$149.00"
-        }
-      },
-      {
-        "size": "$6,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "$65.99",
-          "stellar-2-step": "$59.99",
-          "stellar-lite": "—",
-          "stellar-instant": "—"
-        }
-      },
-      {
-        "size": "$10,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "—",
-          "stellar-2-step": "—",
-          "stellar-lite": "$59.99",
-          "stellar-instant": "$299.00"
-        }
-      },
-      {
-        "size": "$15,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "$129.99",
-          "stellar-2-step": "$119.99",
-          "stellar-lite": "—",
-          "stellar-instant": "—"
-        }
-      },
-      {
-        "size": "$20,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "—",
-          "stellar-2-step": "—",
-          "stellar-lite": "—",
-          "stellar-instant": "$599.00"
-        }
-      },
-      {
-        "size": "$25,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "$219.99",
-          "stellar-2-step": "$199.99",
-          "stellar-lite": "$139.99",
-          "stellar-instant": "—"
-        }
-      },
-      {
-        "size": "$50,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "$329.99",
-          "stellar-2-step": "$299.99",
-          "stellar-lite": "$229.99",
-          "stellar-instant": "—"
-        }
-      },
-      {
-        "size": "$100,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "$569.99",
-          "stellar-2-step": "$549.99",
-          "stellar-lite": "$399.99",
-          "stellar-instant": "—"
-        }
-      },
-      {
-        "size": "$200,000",
-        "tier": "",
-        "prices": {
-          "stellar-1-step": "$1,099.99",
-          "stellar-2-step": "$1,099.99",
-          "stellar-lite": "$798.99",
-          "stellar-instant": "—"
-        }
+        "text": "Stellar 2-Step"
       }
     ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
   }
 }
