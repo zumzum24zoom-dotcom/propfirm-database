@@ -1,27 +1,22 @@
 {
-  "slug": "ftmo",
-  "ファーム名": "FTMO",
-  "拠点国": "",
-  "創業年": "",
-  "公式URL": "https://ftmo.com/",
-  "カテゴリ": "",
-  "日本対応": "",
-  "ファームピッチ": "",
-  "リワードプログラム": "",
-  "スケールアップ": "",
-  "ブローカー": "",
-  "プラットフォーム": "",
-  "サーバー時間": "",
-  "DDリセット": "",
-  "レバレッジ": "",
-  "手数料": "",
-  "入金方法": "",
-  "出金方法": "",
-  "出金ポリシー": "",
-  "利益分配率": "",
-  "利益分配率補足": "",
-  "メールアドレス": "",
-  "アフィリエイトURL": "",
+  "firmSlug": "ftmo",
+  "公式URL": "https://ftmo.com/en/",
+  "extractedAt": "2026-06-04T17:46:33.784Z",
   "クーポン": [],
-  "プラン一覧": []
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$200,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€1,080\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€439\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€345\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€250\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€89\",\"FTMO Challenge 1-Step\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "FTMO Challenge 2-Step, FTMO Challenge 1-Step"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
 }
