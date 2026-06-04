@@ -1,0 +1,28 @@
+{
+  "firmSlug": {},
+  "公式URL": "https://holaprime.com/ja",
+  "extractedAt": "2026-06-04T18:08:13.398Z",
+  "クーポン": [
+    {
+      "code": "HALFTIME40",
+      "discount": "40%割引",
+      "expires": null
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": ""
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
