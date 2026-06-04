@@ -1,0 +1,667 @@
+{
+  "firmSlug": "atmosfunded",
+  "_url": "https://atmosfunded.com/",
+  "_at": "2026-06-04T18:01:47.164Z",
+  "pageText": "Home\nProgram\nRules\nAbout Us\nContact\nResources\nEN\nPT\nES\nTH\nFR\nMS\nID\nDE\nZH\nAR\nIT\nLogin\nSign-Up\nThe Future of Trading is Funded\n\nWe fund. You trade. Keep the profits with your funded account.\n\nStart Trading\n\nBroker – Backed by\n\nListed on\nPropfirmmatch.com\n+20K TRADERS\n$1.5M+ IN REWARDS\n170+ COUNTRIES SERVED\n$100M+ IN TOTAL FUNDING\n+20K TRADERS\n$1.5M+ IN REWARDS\n170+ COUNTRIES SERVED\n$100M+ IN TOTAL FUNDING\n+20K TRADERS\n$1.5M+ IN REWARDS\n170+ COUNTRIES SERVED\n$100M+ IN TOTAL FUNDING\n+20K TRADERS\nIntroducing Atmos Nova Challenge\n\n$5. One phase. No minimum days. No consistency.\nHit the 5% target while respecting an 8% max loss.\n\nJoin for $5 →\nLearn More →\nWhy Choose Atmos Prop Firm?\nFast Payouts\nSecure Platform\nScale to $400K\n24/7 Support\nSimple payments with ATMOS funded account\n\nRequest payouts every 14 days. Just a $100 minimum to withdraw\n\nEarn More as You Succeed\n\nScale up to higher capital levels. Keep 90% of your profits. Perform well, and we’ll increase our backing\n\nBoost Your Balance with Payout Transfers\n\nTransfer instantly to your Taurex live trading account. Get a 10% deposit bonus. Trade with more capital\n\nChoose Your Path\n\nChoose your account size\n\n$5K\n$10K\n$25K\n$50K\n$100K\n$150K\n$200K\n\nChoose your account type\n\nStandard\nPlus\n1-Step Standard\n$36.55\n$43.00\none time fee\nProfit Target\n$500.00\nDaily Loss\n$150.00\nMax Drawdown\n$300.00\nDrawdown Type\nTrailing\nMin. Trading Days\n3 days\nActivation Fee\nNo\nConsistency\nNo\nReward Cycle\n14 days\nStart with 1-Step\n2-Step Standard\n$53.55\n$63.00\none time fee\nProfit Target P1\n$500.00\nProfit Target P2\n$250.00\nDaily Loss\n$250.00\nMax Drawdown\n$500.00\nDrawdown Type\nStatic\nMin. Trading Days\n3 days\nActivation Fee\nNo\nConsistency\nNo\nReward Cycle\n14 Days\nStart with 2-Step\nInstant Funding\n$63.75\n$75.00\none time fee\nDaily Loss\n$150.00\nMax Drawdown\n$250.00\nDrawdown Type\nTrailing\nTrailing Lock On\nYes\nDrawdown Lock On Payout\nYes\nConsistency\n20%\nReward Cycle\n14 Days\nStart with Instant Funding\n\nJune Promo: 15% OFF in all accounts, except Nova\n\n→\n\nUntil June 30\n\nCode:\nWORLDCUP",
+  "pricingOptions": [
+    {
+      "selector": "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_bc1770-e2.alignnone > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_4a3b3a-c6 > div.kt-inside-inner-col > section.atmos-marquee-section > div.atmos-marquee-container > div.atmos-marquee-track > div.atmos-marquee-content",
+      "items": [
+        "$1.5M+ IN REWARDS",
+        "$100M+ IN TOTAL FUNDING"
+      ]
+    },
+    {
+      "selector": "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_bc1770-e2.alignnone > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_4a3b3a-c6 > div.kt-inside-inner-col > section.atmos-marquee-section > div.atmos-marquee-container > div.atmos-marquee-track > div.atmos-marquee-content",
+      "items": [
+        "$1.5M+ IN REWARDS",
+        "$100M+ IN TOTAL FUNDING"
+      ]
+    },
+    {
+      "selector": "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_bc1770-e2.alignnone > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_4a3b3a-c6 > div.kt-inside-inner-col > section.atmos-marquee-section > div.atmos-marquee-container > div.atmos-marquee-track > div.atmos-marquee-content",
+      "items": [
+        "$1.5M+ IN REWARDS",
+        "$100M+ IN TOTAL FUNDING"
+      ]
+    },
+    {
+      "selector": "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_91783d-4e.alignwide > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_6b2378-e6 > div.kt-inside-inner-col > div.atmos-pricing-wrapper > div#atmosPricingCards > div#atmosCard1Step > div.atmos-card-header.default > div.atmos-card-pricing > div.atmos-price-row",
+      "items": [
+        "$36.55",
+        "$43.00"
+      ]
+    },
+    {
+      "selector": "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_91783d-4e.alignwide > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_6b2378-e6 > div.kt-inside-inner-col > div.atmos-pricing-wrapper > div#atmosPricingCards > div#atmosCard2Step > div.atmos-card-header.highlighted > div.atmos-card-pricing > div.atmos-price-row",
+      "items": [
+        "$53.55",
+        "$63.00"
+      ]
+    },
+    {
+      "selector": "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_91783d-4e.alignwide > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_6b2378-e6 > div.kt-inside-inner-col > div.atmos-pricing-wrapper > div#atmosPricingCards > div#atmosCardInstant > div.atmos-card-header.default > div.atmos-card-pricing > div.atmos-price-row",
+      "items": [
+        "$63.75",
+        "$75.00"
+      ]
+    }
+  ],
+  "meta": {
+    "url": "https://atmosfunded.com/",
+    "title": "Best Prop Firm with $200K Funded Accounts",
+    "description": "Join Atmos Funded, the best forex prop firm offering funded accounts up to $200K. Risk less, earn more with step-by-step challenges and up to 90% profit split.",
+    "ogp": {
+      "og:title": "Best Prop Firm with $200K Funded Accounts",
+      "og:description": "Join Atmos Funded, the best forex prop firm offering funded accounts up to $200K. Risk less, earn more with step-by-step challenges and up to 90% profit split.",
+      "og:url": "https://atmosfunded.com/",
+      "og:type": "website"
+    },
+    "viewport": "width=device-width, initial-scale=1"
+  },
+  "tables": [],
+  "structure": {
+    "semantic": {
+      "header": {
+        "count": 1,
+        "selectors": [
+          "div.wp-site-blocks > header.wp-block-kadence-header35223-cpt-id.new-home-header.wp-block-kadence-header"
+        ]
+      },
+      "nav": {
+        "count": 2,
+        "selectors": [
+          "div.wp-site-blocks > header.wp-block-kadence-header35223-cpt-id.new-home-header.wp-block-kadence-header > div.wp-block-kadence-header-desktop.kb-header-container > div.wp-block-kadence-header-row.wp-block-kadence-header-rowtwentytwentyfive__header_3e72b8-de.wp-block-kadence-header-row-top > div.kadence-header-row-inner > div.wp-block-kadence-header-column.wp-block-kadence-header-column-center > div.wp-block-kadence-navigation13193-cpt-id.kb-nav-desktop-horizontal-layout-standard.kb-nav-tablet-horizontal-layout-standard > nav.navigation.navigation-desktop-style-standard.navigation-tablet-style-standard",
+          "div.wp-site-blocks > header.wp-block-kadence-header35223-cpt-id.new-home-header.wp-block-kadence-header > div.wp-block-kadence-off-canvas.wp-block-kadence-off-canvastwentytwentyfive__header_8a5f3e-4e.open-left > div.kb-off-canvas-inner-wrap > div.kb-off-canvas-inner > div.wp-block-kadence-navigation654-cpt-id.kb-nav-desktop-horizontal-layout-standard.kb-nav-tablet-horizontal-layout-standard > nav.navigation.navigation-desktop-style-standard.navigation-tablet-style-standard"
+        ]
+      },
+      "aside": {
+        "count": 2,
+        "selectors": [
+          "div.wp-site-blocks > header.wp-block-kadence-header35223-cpt-id.new-home-header.wp-block-kadence-header > div.wp-block-kadence-header-desktop.kb-header-container > div.wp-block-kadence-header-row.wp-block-kadence-header-rowtwentytwentyfive__header_3e72b8-de.wp-block-kadence-header-row-top > div.kadence-header-row-inner > div.wp-block-kadence-header-section.wp-block-kadence-header-sectiontwentytwentyfive__header_281de9-a0 > aside.country-selector.weglot-dropdown.close_outside_click",
+          "div.wp-site-blocks > header.wp-block-kadence-header35223-cpt-id.new-home-header.wp-block-kadence-header > div.wp-block-kadence-header-tablet.kb-header-container > div.wp-block-kadence-header-row.wp-block-kadence-header-rowtwentytwentyfive__header_ce412b-7e.wp-block-kadence-header-row-center > div.kadence-header-row-inner > div.wp-block-kadence-header-column.wp-block-kadence-header-column-tablet-right > aside.country-selector.weglot-dropdown.close_outside_click"
+        ]
+      },
+      "footer": {
+        "count": 1,
+        "selectors": [
+          "div.wp-site-blocks > footer.wp-block-template-part"
+        ]
+      },
+      "section": {
+        "count": 3,
+        "selectors": [
+          "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_bc1770-e2.alignnone > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_4a3b3a-c6 > div.kt-inside-inner-col > section.atmos-marquee-section",
+          "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_efa62a-96.alignwide > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_a8a5e4-0a > div.kt-inside-inner-col > section.success-stories-section",
+          "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_f3d394-d2.alignwide > div.kt-row-column-wrap.kt-has-1-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_e932fe-a0 > div.kt-inside-inner-col > section#atcPayoutCarousel"
+        ]
+      }
+    }
+  },
+  "shadowDom": {
+    "iframes": [
+      {
+        "selector": "div.wp-site-blocks > div.entry-content.wp-block-post-content.is-layout-flow > div.kb-row-layout-wrap.kb-row-layout-id34506_e84bd3-87.alignwide > div.kt-row-column-wrap.kt-has-2-columns.kt-row-layout-equal > div.wp-block-kadence-column.kadence-column34506_822c72-99 > div.kt-inside-inner-col > div.trustpilot-widget > iframe",
+        "src": "https://widget.trustpilot.com/trustboxes/5419b732fbfb950b10de65e5/index.html?templateId=5419b732fbfb950b10de65e5&businessunitId=67f967279a66da099d7618f2#locale=en-GB&styleHeight=24px&styleWidth=280px&token=17f747db-4166-474a-95f3-2f4c8cdf4ed3",
+        "accessible": false
+      },
+      {
+        "selector": "iframe",
+        "src": "(none)",
+        "accessible": true
+      },
+      {
+        "selector": "div#criteo-tags-div > iframe#criteo-syncframe-onetag",
+        "src": "https://gum.criteo.com/syncframe?topUrl=atmosfunded.com&origin=onetag#{%22bundle%22:{%22identifierExtractor%22:{%22origin%22:0},%22value%22:null},%22cw%22:true,%22optout%22:{%22identifierExtractor%22:{%22origin%22:0},%22value%22:null},%22origin%22:%22onetag%22,%22tld%22:%22atmosfunded.com%22,%22topUrl%22:%22atmosfunded.com%22,%22version%22:%225_46_0%22,%22ifa%22:{%22identifierExtractor%22:{%22origin%22:0},%22value%22:null},%22lsw%22:true,%22pm%22:0,%22requestId%22:%2239e988d0-b555-4192-9884-2df0d26d6135%22}",
+        "accessible": false
+      },
+      {
+        "selector": "iframe#intercom-frame",
+        "src": "(none)",
+        "accessible": true
+      }
+    ],
+    "shadowDom": []
+  },
+  "cssVars": {
+    "--woocommerce": "#720eec",
+    "--wc-green": "#008a20",
+    "--wc-red": "#a00",
+    "--wc-orange": "#ffba00",
+    "--wc-blue": "#2ea2cc",
+    "--wc-primary": "#720eec",
+    "--wc-primary-text": "#fcfbfe",
+    "--wc-secondary": "#e9e6ed",
+    "--wc-secondary-text": "#515151",
+    "--wc-highlight": "#958e09",
+    "--wc-highligh-text": "white",
+    "--wc-content-bg": "#fff",
+    "--wc-subtext": "#767676",
+    "--wc-form-border-color": "rgba(32, 7, 7, 0.8)",
+    "--wc-form-border-radius": "4px",
+    "--wc-form-border-width": "1px",
+    "--wp--preset--aspect-ratio--square": "1",
+    "--wp--preset--aspect-ratio--4-3": "4/3",
+    "--wp--preset--aspect-ratio--3-4": "3/4",
+    "--wp--preset--aspect-ratio--3-2": "3/2",
+    "--wp--preset--aspect-ratio--2-3": "2/3",
+    "--wp--preset--aspect-ratio--16-9": "16/9",
+    "--wp--preset--aspect-ratio--9-16": "9/16",
+    "--wp--preset--color--black": "#000000",
+    "--wp--preset--color--cyan-bluish-gray": "#abb8c3",
+    "--wp--preset--color--white": "#ffffff",
+    "--wp--preset--color--pale-pink": "#f78da7",
+    "--wp--preset--color--vivid-red": "#cf2e2e",
+    "--wp--preset--color--luminous-vivid-orange": "#ff6900",
+    "--wp--preset--color--luminous-vivid-amber": "#fcb900",
+    "--wp--preset--color--light-green-cyan": "#7bdcb5",
+    "--wp--preset--color--vivid-green-cyan": "#00d084",
+    "--wp--preset--color--pale-cyan-blue": "#8ed1fc",
+    "--wp--preset--color--vivid-cyan-blue": "#0693e3",
+    "--wp--preset--color--vivid-purple": "#9b51e0",
+    "--wp--preset--color--base": "#FFFFFF",
+    "--wp--preset--color--contrast": "#111111",
+    "--wp--preset--color--accent-1": "#FFEE58",
+    "--wp--preset--color--accent-2": "#F6CFF4",
+    "--wp--preset--color--accent-3": "#503AA8",
+    "--wp--preset--color--accent-4": "#686868",
+    "--wp--preset--color--accent-5": "#FBFAF3",
+    "--wp--preset--color--accent-6": "color-mix(in srgb, currentColor 20%, transparent)",
+    "--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple": "linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)",
+    "--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan": "linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%)",
+    "--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange": "linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%)",
+    "--wp--preset--gradient--luminous-vivid-orange-to-vivid-red": "linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%)",
+    "--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray": "linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%)",
+    "--wp--preset--gradient--cool-to-warm-spectrum": "linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%)",
+    "--wp--preset--gradient--blush-light-purple": "linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%)",
+    "--wp--preset--gradient--blush-bordeaux": "linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%)",
+    "--wp--preset--gradient--luminous-dusk": "linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%)",
+    "--wp--preset--gradient--pale-ocean": "linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%)",
+    "--wp--preset--gradient--electric-grass": "linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%)",
+    "--wp--preset--gradient--midnight": "linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%)",
+    "--wp--preset--font-size--small": "0.875rem",
+    "--wp--preset--font-size--medium": "clamp(1rem, 1rem + ((1vw - 0.2rem) * 0.208), 1.125rem)",
+    "--wp--preset--font-size--large": "clamp(1.125rem, 1.125rem + ((1vw - 0.2rem) * 0.417), 1.375rem)",
+    "--wp--preset--font-size--x-large": "clamp(1.75rem, 1.75rem + ((1vw - 0.2rem) * 0.417), 2rem)",
+    "--wp--preset--font-size--xx-large": "clamp(2.15rem, 2.15rem + ((1vw - 0.2rem) * 1.417), 3rem)",
+    "--wp--preset--font-size--custom-1": "clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.208), 16px)",
+    "--wp--preset--font-family--manrope": "Manrope, sans-serif",
+    "--wp--preset--font-family--fira-code": "\"Fira Code\", monospace",
+    "--wp--preset--font-family--inter": "\"Inter\", sans-serif",
+    "--wp--preset--font-family--cardo": "Cardo",
+    "--wp--preset--font-family--host-grotesk": "\"Host Grotesk\"",
+    "--wp--preset--font-family--poppins": "Poppins, sans-serif",
+    "--wp--preset--font-family--space-grotesk": "\"Space Grotesk\"",
+    "--wp--preset--font-family--anton": "Anton, sans-serif",
+    "--wp--preset--font-family--anton-sc": "\"Anton SC\", sans-serif",
+    "--wp--preset--font-family--nohemi": "Nohemi",
+    "--wp--preset--font-family--haas-grot-text-trial": "\"Haas Grot Text Trial\"",
+    "--wp--preset--spacing--20": "10px",
+    "--wp--preset--spacing--30": "20px",
+    "--wp--preset--spacing--40": "30px",
+    "--wp--preset--spacing--50": "clamp(30px, 5vw, 50px)",
+    "--wp--preset--spacing--60": "clamp(30px, 7vw, 70px)",
+    "--wp--preset--spacing--70": "clamp(50px, 7vw, 90px)",
+    "--wp--preset--spacing--80": "clamp(70px, 10vw, 140px)",
+    "--wp--preset--shadow--natural": "6px 6px 9px rgba(0, 0, 0, 0.2)",
+    "--wp--preset--shadow--deep": "12px 12px 50px rgba(0, 0, 0, 0.4)",
+    "--wp--preset--shadow--sharp": "6px 6px 0px rgba(0, 0, 0, 0.2)",
+    "--wp--preset--shadow--outlined": "6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0)",
+    "--wp--preset--shadow--crisp": "6px 6px 0px rgb(0, 0, 0)",
+    "--wp--style--global--content-size": "1280px",
+    "--wp--style--global--wide-size": "1280px",
+    "--wp--style--block-gap": "1.2rem",
+    "--global-kb-font-size-sm": "clamp(0.8rem, 0.73rem + 0.217vw, 0.9rem)",
+    "--global-kb-font-size-md": "clamp(1.1rem, 0.995rem + 0.326vw, 1.25rem)",
+    "--global-kb-font-size-lg": "clamp(1.75rem, 1.576rem + 0.543vw, 2rem)",
+    "--global-kb-font-size-xl": "clamp(2.25rem, 1.728rem + 1.63vw, 3rem)",
+    "--global-kb-font-size-xxl": "clamp(2.5rem, 1.456rem + 3.26vw, 4rem)",
+    "--global-kb-font-size-xxxl": "clamp(2.75rem, 0.489rem + 7.065vw, 6rem)",
+    "--global-palette1": "#3182CE",
+    "--global-palette2": "#2B6CB0",
+    "--global-palette3": "#1A202C",
+    "--global-palette4": "#2D3748",
+    "--global-palette5": "#4A5568",
+    "--global-palette6": "#718096",
+    "--global-palette7": "#EDF2F7"
+  },
+  "externalResources": {
+    "scripts": [
+      "https://tr.snapchat.com/config/com/8823e30e-b630-4f27-aad9-df94d29e11e3.js?v=3.56.1-2604231811",
+      "https://widget.intercom.io/widget/qk2z27xh",
+      "https://widget.intercom.io/widget/qk2z27xh",
+      "https://www.googletagmanager.com/gtag/js?id=G-444LRXJW91&cx=c&gtm=4e6630",
+      "https://sc-static.net/scevent.min.js",
+      "https://static.ads-twitter.com/uwt.js",
+      "https://www.googletagmanager.com/gtag/js?id=G-ZBX9FYQBRZ&cx=c&gtm=4e6630",
+      "https://www.googletagmanager.com/gtag/js?id=AW-17028022227&cx=c&gtm=4e6630",
+      "https://static.ads-twitter.com/uwt.js",
+      "https://app.truconversion.com/ti-js/48773/a1fac.js",
+      "https://connect.facebook.net/signals/config/1164425508449515?v=2.9.331&r=stable&domain=atmosfunded.com&hme=e74ef087f6fde11ad272cfacc345e71ff5f13bae4406879254c760ecb88febfc&ex_m=105%2C208%2C156%2C22%2C73%2C74%2C147%2C69%2C68%2C11%2C165%2C91%2C16%2C139%2C128%2C39%2C76%2C79%2C135%2C161%2C167%2C8%2C4%2C5%2C7%2C6%2C3%2C92%2C102%2C168%2C173%2C222%2C62%2C189%2C190%2C55%2C280%2C30%2C75%2C234%2C233%2C232%2C23%2C33%2C104%2C61%2C10%2C64%2C98%2C99%2C100%2C106%2C131%2C31%2C29%2C133%2C134%2C130%2C129%2C157%2C77%2C160%2C158%2C159%2C50%2C60%2C124%2C15%2C164%2C45%2C267%2C268%2C266%2C26%2C27%2C28%2C48%2C148%2C78%2C113%2C18%2C20%2C44%2C40%2C42%2C41%2C84%2C93%2C97%2C111%2C146%2C149%2C46%2C112%2C24%2C21%2C120%2C70%2C36%2C151%2C150%2C152%2C143%2C141%2C25%2C35%2C59%2C110%2C163%2C71%2C17%2C154%2C115%2C82%2C67%2C19%2C86%2C87%2C117%2C85%2C137%2C136%2C140%2C162%2C34%2C282%2C298%2C215%2C204%2C205%2C203%2C301%2C292%2C52%2C216%2C108%2C132%2C81%2C122%2C54%2C47%2C49%2C114%2C121%2C127%2C126%2C58%2C65%2C63%2C153%2C116%2C37%2C32%2C53%2C56%2C101%2C166%2C1%2C125%2C14%2C123%2C12%2C2%2C57%2C94%2C66%2C119%2C90%2C89%2C169%2C170%2C95%2C96%2C9%2C103%2C51%2C144%2C88%2C80%2C72%2C118%2C107%2C43%2C145%2C0%2C83%2C138%2C142%2C155%2C38%2C109%2C13%2C171",
+      "https://connect.facebook.net/en_US/fbevents.js",
+      "https://www.googletagmanager.com/gtm.js?id=GTM-5PZG6N7K",
+      "data:text/javascript;base64,Y29uc29sZS5sb2coJ1BpeGVsWW91clNpdGUgRnJlZSB2ZXJzaW9uIDExLjIuMC41Jyk7",
+      "https://atmosfunded.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+      "https://atmosfunded.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+      "https://atmosfunded.com/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.10.7.0",
+      "https://atmosfunded.com/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=10.7.0",
+      "https://atmosfunded.com/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.10.7.0",
+      "https://atmosfunded.com/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=10.7.0",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/weglot/dist/front-js.js?ver=1779798985",
+      "data:text/javascript;base64,CmNvbnNvbGUud2FybiggIlNjcmlwdHMgdGhhdCBoYXZlIGEgZGVwZW5kZW5jeSBvbiBbd2Mtc2V0dGluZ3MsIHdjLWJsb2Nrcy1jaGVja291dF0gbXVzdCBiZSBsb2FkZWQgaW4gdGhlIGZvb3Rlciwga2xhdml5by1rbGF2aXlvLWNoZWNrb3V0LWJsb2NrLWVkaXRvci1zY3JpcHQgd2FzIHJlZ2lzdGVyZWQgdG8gbG9hZCBpbiB0aGUgaGVhZGVyLCBidXQgaGFzIGJlZW4gc3dpdGNoZWQgdG8gbG9hZCBpbiB0aGUgZm9vdGVyIGluc3RlYWQuIFNlZSBodHRwczovL2dpdGh1Yi5jb20vd29vY29tbWVyY2Uvd29vY29tbWVyY2UtZ3V0ZW5iZXJnLXByb2R1Y3RzLWJsb2NrL3B1bGwvNTA1OSIgKTsKY29uc29sZS53YXJuKCAiU2NyaXB0cyB0aGF0IGhhdmUgYSBkZXBlbmRlbmN5IG9uIFt3Yy1zZXR0aW5ncywgd2MtYmxvY2tzLWNoZWNrb3V0XSBtdXN0IGJlIGxvYWRlZCBpbiB0aGUgZm9vdGVyLCBrbGF2aXlvLWtsYXZpeW8tY2hlY2tvdXQtYmxvY2stdmlldy1zY3JpcHQgd2FzIHJlZ2lzdGVyZWQgdG8gbG9hZCBpbiB0aGUgaGVhZGVyLCBidXQgaGFzIGJlZW4gc3dpdGNoZWQgdG8gbG9hZCBpbiB0aGUgZm9vdGVyIGluc3RlYWQuIFNlZSBodHRwczovL2dpdGh1Yi5jb20vd29vY29tbWVyY2Uvd29vY29tbWVyY2UtZ3V0ZW5iZXJnLXByb2R1Y3RzLWJsb2NrL3B1bGwvNTA1OSIgKTsKLy8jIHNvdXJjZVVSTD13Yy1zZXR0aW5ncy1kZXAtaW4taGVhZGVyLWpzLWFmdGVyCg==",
+      "data:text/javascript;base64,KGZ1bmN0aW9uKHcsZCxzLGwsaSl7d1tsXT13W2xdfHxbXTt3W2xdLnB1c2goeydndG0uc3RhcnQnOgpuZXcgRGF0ZSgpLmdldFRpbWUoKSxldmVudDonZ3RtLmpzJ30pO3ZhciBmPWQuZ2V0RWxlbWVudHNCeVRhZ05hbWUocylbMF0sCmo9ZC5jcmVhdGVFbGVtZW50KHMpLGRsPWwhPSdkYXRhTGF5ZXInPycmbD0nK2w6Jyc7ai5hc3luYz10cnVlO2ouc3JjPQonaHR0cHM6Ly93d3cuZ29vZ2xldGFnbWFuYWdlci5jb20vZ3RtLmpzP2lkPScraStkbDtmLnBhcmVudE5vZGUuaW5zZXJ0QmVmb3JlKGosZik7Cn0pKHdpbmRvdyxkb2N1bWVudCwnc2NyaXB0JywnZGF0YUxheWVyJywnR1RNLTVQWkc2TjdLJyk7",
+      "https://www.googletagmanager.com/gtag/js?id=G-444LRXJW91",
+      "data:text/javascript;base64,ICAgd2luZG93LmRhdGFMYXllciA9IHdpbmRvdy5kYXRhTGF5ZXIgfHwgW107ICAgZnVuY3Rpb24gZ3RhZygpe2RhdGFMYXllci5wdXNoKGFyZ3VtZW50cyk7fSAgIGd0YWcoJ2pzJywgbmV3IERhdGUoKSk7ICAgZ3RhZygnY29uZmlnJywgJ0ctNDQ0TFJYSlc5MScpOyA=",
+      "data:text/javascript;base64,CiFmdW5jdGlvbihmLGIsZSx2LG4sdCxzKQp7aWYoZi5mYnEpcmV0dXJuO249Zi5mYnE9ZnVuY3Rpb24oKXtuLmNhbGxNZXRob2Q/Cm4uY2FsbE1ldGhvZC5hcHBseShuLGFyZ3VtZW50cyk6bi5xdWV1ZS5wdXNoKGFyZ3VtZW50cyl9OwppZighZi5fZmJxKWYuX2ZicT1uO24ucHVzaD1uO24ubG9hZGVkPSEwO24udmVyc2lvbj0nMi4wJzsKbi5xdWV1ZT1bXTt0PWIuY3JlYXRlRWxlbWVudChlKTt0LmFzeW5jPSEwOwp0LnNyYz12O3M9Yi5nZXRFbGVtZW50c0J5VGFnTmFtZShlKVswXTsKcy5wYXJlbnROb2RlLmluc2VydEJlZm9yZSh0LHMpfSh3aW5kb3csIGRvY3VtZW50LCdzY3JpcHQnLAonaHR0cHM6Ly9jb25uZWN0LmZhY2Vib29rLm5ldC9lbl9VUy9mYmV2ZW50cy5qcycpOwpmYnEoJ2luaXQnLCAnMTE2NDQyNTUwODQ0OTUxNScpOwpmYnEoJ3RyYWNrJywgJ1BhZ2VWaWV3Jyk7Cg==",
+      "data:text/javascript;base64,CnZhciBoZWFkID0gZG9jdW1lbnQuaGVhZDsKdmFyIHNjcmlwdCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ3NjcmlwdCcpOwpzY3JpcHQudHlwZSA9ICd0ZXh0L2phdmFzY3JpcHQnOwpzY3JpcHQuc3JjID0gImh0dHBzOi8vdC5hdG1vc2Z1bmRlZC5jb20vdjEvbHN0L3VuaXZlcnNhbC1zY3JpcHQ/cGg9ZDkwOGE0YzU3OTRlNTEwMWM4OGMwODEyOWExNmUzNDFhMTVkNWRjMzA1NzllNThlMmQxOTFiYmI0Zjk3ZmMyZSZ0YWc9IWNsaWNrZWQmcmVmX3VybD0iICsgZW5jb2RlVVJJKGRvY3VtZW50LlVSTCkgOwpoZWFkLmFwcGVuZENoaWxkKHNjcmlwdCk7Cg==",
+      "data:text/javascript;base64,CiAgICB2YXIgX3RpcCA9IF90aXAgfHwgW107CiAgICAoZnVuY3Rpb24oZCxzLGlkKXsKICAgICAgICB2YXIganMsIHRqcyA9IGQuZ2V0RWxlbWVudHNCeVRhZ05hbWUocylbMF07CiAgICAgICAgaWYoZC5nZXRFbGVtZW50QnlJZChpZCkpIHsgcmV0dXJuOyB9CiAgICAgICAganMgPSBkLmNyZWF0ZUVsZW1lbnQocyk7IGpzLmlkID0gaWQ7CiAgICAgICAganMuYXN5bmMgPSB0cnVlOwogICAgICAgIGpzLnNyYyA9IGQubG9jYXRpb24ucHJvdG9jb2wgKyAnLy9hcHAudHJ1Y29udmVyc2lvbi5jb20vdGktanMvNDg3NzMvYTFmYWMuanMnOwogICAgICAgIHRqcy5wYXJlbnROb2RlLmluc2VydEJlZm9yZShqcywgdGpzKTsKICAgIH0oZG9jdW1lbnQsICdzY3JpcHQnLCAndGktanMnKSk7Cg==",
+      "https://atmosfunded.com/wp-content/cache/min/1/bootstrap/v5/tp.widget.bootstrap.min.js?ver=1779798985",
+      "data:text/javascript;base64,CiFmdW5jdGlvbihlLHQsbixzLHUsYSl7ZS50d3F8fChzPWUudHdxPWZ1bmN0aW9uKCl7cy5leGU/cy5leGUuYXBwbHkocyxhcmd1bWVudHMpOnMucXVldWUucHVzaChhcmd1bWVudHMpOwp9LHMudmVyc2lvbj0nMS4xJyxzLmRvbnRTZXRDb29raWU9dHJ1ZSxzLnF1ZXVlPVtdLHU9dC5jcmVhdGVFbGVtZW50KG4pLHUuYXN5bmM9ITAsdS5zcmM9J2h0dHBzOi8vc3RhdGljLmFkcy10d2l0dGVyLmNvbS91d3QuanMnLAphPXQuZ2V0RWxlbWVudHNCeVRhZ05hbWUobilbMF0sYS5wYXJlbnROb2RlLmluc2VydEJlZm9yZSh1LGEpKX0od2luZG93LGRvY3VtZW50LCdzY3JpcHQnKTsKdHdxKCdjb25maWcnLCdudG5xeicpOwo=",
+      "https://atmosfunded.com/wp-content/cache/min/1/weglot.min.js?ver=1779798985",
+      "data:text/javascript;base64,CgkJCQkJV2VnbG90LmluaXRpYWxpemUoeyJhcGlfa2V5Ijoid2dfNDlmYzUwMjI2ZTFkZjM0MGQ3NGM2ZGQ0Nzg5NzljNTAzIiwid2hpdGVsaXN0IjpbeyJ2YWx1ZSI6Ii5yb3ctcHJpY2luZyJ9LHsidmFsdWUiOiIucm93LWJ1dHRvbiJ9LHsidmFsdWUiOiIucm93LWl0ZW0ifSx7InZhbHVlIjoiI3ByaWNpbmdUYWJsZSA+IGRpdi5wcmljaW5nLWNvbHVtbi5sYWJlbC1jb2wifV0sImR5bmFtaWNzIjpbeyJ2YWx1ZSI6Ii5yb3ctcHJpY2luZyJ9LHsidmFsdWUiOiIucm93LWJ1dHRvbiJ9LHsidmFsdWUiOiIucm93LWl0ZW0ifSx7InZhbHVlIjoiI3ByaWNpbmdUYWJsZSA+IGRpdi5wcmljaW5nLWNvbHVtbi5sYWJlbC1jb2wifV0sInByb3hpZnlfaWZyYW1lcyI6W10sImhpZGVfc3dpdGNoZXIiOiJ0cnVlIiwiYXV0b19zd2l0Y2giOiJmYWxzZSIsImxhbmd1YWdlX3RvIjoiZW4ifSk7CgkJCQk=",
+      "data:text/javascript;base64,alF1ZXJ5KGRvY3VtZW50KS5yZWFkeShmdW5jdGlvbigpIHsKCgpjbGFzcyBDYXJvdXNlbCB7CiAgICAgIGNvbnN0cnVjdG9yKGVsZW1lbnQpIHsKCiAgICAgICAgdGhpcy5jb250YWluZXIgPSBlbGVtZW50OwogICAgICAgIHRoaXMudHJhY2sgPSBlbGVtZW50LnF1ZXJ5U2VsZWN0b3IoJy5jYXJvdXNlbC10cmFjaycpOwoKICAgICAgIC8vIGlmICghdGhpcy50cmFjaykgewogICAgICAgIC8vICBjb25zb2xlLmVycm9yKCdDYXJvdXNlbCB0cmFjayBub3QgZm91bmQhJyk7CiAgICAgICAvLyAgcmV0dXJuOyAvLyBFeGl0IHRoZSBjb25zdHJ1Y3RvciBlYXJseSBpZiB0cmFjayBpcyBtaXNzaW5nCiAgICAgIAkvL30KCiAgICAgICAgdGhpcy5zbGlkZXMgPSBBcnJheS5mcm9tKHRoaXMudHJhY2suY2hpbGRyZW4pOwogICAgICAgIAogICAgICAgIC8vIFRvdWNoIGhhbmRsaW5nIHZhcmlhYmxlcwogICAgICAgIHRoaXMuaXNEcmFnZ2luZyA9IGZhbHNlOwogICAgICAgIHRoaXMuc3RhcnRQb3MgPSAwOwogICAgICAgIHRoaXMuY3VycmVudFRyYW5zbGF0ZSA9IDA7CiAgICAgICAgdGhpcy5wcmV2VHJhbnNsYXRlID0gMDsKICAgICAgICB0aGlzLmN1cnJlbnRJbmRleCA9IDA7CgogICAgICAgIHRoaXMuaW5pdGlhbGl6ZUNhcm91c2VsKCk7CiAgICAgIH0KCiAgICAgIGluaXRpYWxpemVDYXJvdXNlbCgpIHsKICAgICAgICAvLyBUb3VjaCBldmVudHMKICAgICAgICB0aGlzLnRyYWNrLmFkZEV2ZW50TGlzdGVuZXIoJ3RvdWNoc3RhcnQnLCB0aGlzLnRvdWNoU3RhcnQuYmluZCh0aGlzKSk7CiAgICAgICAgdGhpcy50cmFjay5hZGRFdmVudExpc3RlbmVyKCd0b3VjaG1vdmUnLCB0aGlzLnRvdWNoTW92ZS5iaW5kKHRoaXMpKTsKICAgICAgICB0aGlzLnRyYWNrLmFkZEV2ZW50TGlzdGVuZXIoJ3RvdWNoZW5kJywgdGhpcy50b3VjaEVuZC5iaW5kKHRoaXMpKTsKCiAgICAgICAgLy8gTW91c2UgZXZlbnRzCiAgICAgICAgdGhpcy50cmFjay5hZGRFdmVudExpc3RlbmVyKCdtb3VzZWRvd24nLCB0aGlzLnRvdWNoU3RhcnQuYmluZCh0aGlzKSk7CiAgICAgICAgdGhpcy50cmFjay5hZGRFdmVudExpc3RlbmVyKCdtb3VzZW1vdmUnLCB0aGlzLnRvdWNoTW92ZS5iaW5kKHRoaXMpKTsKICAgICAgICB0aGlzLnRyYWNrLmFkZEV2ZW50TGlzdGVuZXIoJ21vdXNldXAnLCB0aGlzLnRvdWNoRW5kLmJpbmQodGhpcykpOwogICAgICAgIHRoaXMudHJhY2suYWRkRXZlbnRMaXN0ZW5lcignbW91c2VsZWF2ZScsIHRoaXMudG91Y2hFbmQuYmluZCh0aGlzKSk7CiAgICAgIH0KCiAgICAgIHRvdWNoU3RhcnQoZXZlbnQpIHsKICAgICAgICB0aGlzLmlzRHJhZ2dpbmcgPSB0cnVlOwogICAgICAgIHRoaXMuc3RhcnRQb3MgPSB0aGlzLmdldFBvc2l0aW9uWChldmVudCk7CiAgICAgICAgdGhpcy50cmFjay5jbGFzc0xpc3QuYWRkKCdkcmFnZ2luZycpOwogICAgICB9CgogICAgICB0b3VjaE1vdmUoZXZlbnQpIHsKICAgICAgICBpZiAoIXRoaXMuaXNEcmFnZ2luZykgcmV0dXJuOwoKICAgICAgICBjb25zdCBjdXJyZW50UG9zaXRpb24gPSB0aGlzLmdldFBvc2l0aW9uWChldmVudCk7CiAgICAgICAgY29uc3QgZGlmZiA9IGN1cnJlbnRQb3NpdGlvbiAtIHRoaXMuc3RhcnRQb3M7CiAgICAgICAgdGhpcy5jdXJyZW50VHJhbnNsYXRlID0gdGhpcy5wcmV2VHJhbnNsYXRlICsgZGlmZjsKCiAgICAgICAgLy8gTGltaXQgc2xpZGluZyB0byBwcmV2ZW50IGdvaW5nIHRvbyBmYXIKICAgICAgICBjb25zdCBtYXhUcmFuc2xhdGUgPSAtKHRoaXMuc2xpZGVzLmxlbmd0aCAtIDEpICogdGhpcy5zbGlkZXNbMF0ub2Zmc2V0V2lkdGg7CiAgICAgICAgdGhpcy5jdXJyZW50VHJhbnNsYXRlID0gTWF0aC5tYXgoTWF0aC5taW4odGhpcy5jdXJyZW50VHJhbnNsYXRlLCAwKSwgbWF4VHJhbnNsYXRlKTsKCiAgICAgICAgdGhpcy5zZXRUcmFuc2Zvcm0odGhpcy5jdXJyZW50VHJhbnNsYXRlKTsKICAgICAgfQoKICAgICAgdG91Y2hFbmQoKSB7CiAgICAgICAgdGhpcy5pc0RyYWdnaW5nID0gZmFsc2U7CiAgICAgICAgdGhpcy50cmFjay5jbGFzc0xpc3QucmVtb3ZlKCdkcmFnZ2luZycpOwoKICAgICAgICAvLyBTbmFwIHRvIG5lYXJlc3Qgc2xpZGUKICAgICAgICBjb25zdCBzbGlkZVdpZHRoID0gdGhpcy5zbGlkZXNbMF0ub2Zmc2V0V2lkdGg7CiAgICAgICAgdGhpcy5jdXJyZW50SW5kZXggPSBNYXRoLnJvdW5kKE1hdGguYWJzKHRoaXMuY3VycmVudFRyYW5zbGF0ZSAvIHNsaWRlV2lkdGgpKTsKICAgICAgICB0aGlzLmN1cnJlbnRUcmFuc2xhdGUgPSAtdGhpcy5jdXJyZW50SW5kZXggKiBzbGlkZVdpZHRoOwogICAgICAgIHRoaXMucHJldlRyYW5zbGF0ZSA9IHRoaXMuY3VycmVudFRyYW5zbGF0ZTsKCiAgICAgICAgdGhpcy5zZXRUcmFuc2Zvcm0odGhpcy5jdXJyZW50VHJhbnNsYXRlKTsKICAgICAgfQoKICAgICAgZ2V0UG9zaXRpb25YKGV2ZW50KSB7CiAgICAgICAgcmV0dXJuIGV2ZW50LnR5cGUuaW5jbHVkZXMoJ21vdXNlJykgPyBldmVudC5wYWdlWCA6IGV2ZW50LnRvdWNoZXNbMF0uY2xpZW50WDsKICAgICAgfQoKICAgICAgc2V0VHJhbnNmb3JtKHRyYW5zbGF0ZSkgewogICAgICAgIHRoaXMudHJhY2suc3R5bGUudHJhbnNmb3JtID0gYHRyYW5zbGF0ZVgoJHt0cmFuc2xhdGV9cHgpYDsKICAgICAgfQogICAgfQoKICAgIC8vIEluaXRpYWxpemUgY2Fyb3VzZWwKICAgICBkb2N1bWVudC5hZGRFdmVudExpc3RlbmVyKCdET01Db250ZW50TG9hZGVkJywgKCkgPT4gewogICAgIGNvbnN0IGNhcm91c2VsQ29udGFpbmVyID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignLmNhcm91c2VsLWNvbnRhaW5lcicpOwogICAgICBuZXcgQ2Fyb3VzZWwoY2Fyb3VzZWxDb250YWluZXIpOwogICAgfSk7CgoKICAgICAgCgkKICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoJy5jb25kaXRpb24taGVhZGVyJykuZm9yRWFjaChoZWFkZXIgPT4gewogICAgICBoZWFkZXIuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCAoKSA9PiB7CiAgICAgICAgY29uc3QgY29udGVudCA9IGhlYWRlci5wYXJlbnRFbGVtZW50LnF1ZXJ5U2VsZWN0b3IoJy5kcm9wZG93bi1jb250ZW50Jyk7CiAgICAgICAgY29udGVudC5jbGFzc0xpc3QudG9nZ2xlKCdhY3RpdmUnKTsKICAgICAgfSk7CiAgICB9KTsKCQoJCgkKICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoJy50b2dnbGUtYnRuJykuZm9yRWFjaChidXR0b24gPT4gewogICAgICBidXR0b24uYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCAoKSA9PiB7CiAgICAgICAgLy8gVG9nZ2xlIHRoZSBidXR0b24ncyBhY3RpdmUgc3RhdGUKICAgICAgICBidXR0b24uY2xhc3NMaXN0LnRvZ2dsZSgnYWN0aXZlJyk7CiAgICAgICAgCiAgICAgICAgLy8gRmluZCBhbmQgdG9nZ2xlIHRoZSBkZXRhaWwgcm93CiAgICAgICAgY29uc3QgZGV0YWlsUm93ID0gYnV0dG9uLmNsb3Nlc3QoJ3RyJykubmV4dEVsZW1lbnRTaWJsaW5nOwogICAgICAgIGRldGFpbFJvdy5jbGFzc0xpc3QudG9nZ2xlKCd2aXNpYmxlJyk7CiAgICAgICAgCiAgICAgICAgLy8gU21vb3RoIGFuaW1hdGlvbiBpcyBoYW5kbGVkIGJ5IENTUyB0cmFuc2l0aW9ucwogICAgICB9KTsKICAgwqB9KTsKCQoJCgkgICAvLyBTZWxlY3QgYWxsIGFjY29yZGlvbiBpdGVtcwogIGNvbnN0IGFjY29yZGlvbkl0ZW1zID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnLmFjY29yZGlvbi1saXN0IGxpJyk7CgogIGFjY29yZGlvbkl0ZW1zLmZvckVhY2goaXRlbSA9PiB7CiAgICBpdGVtLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywgKCkgPT4gewogICAgICAvLyBUb2dnbGUgdGhlIGFjdGl2ZSBjbGFzcyBvbiB0aGUgY2xpY2tlZCBpdGVtCiAgICAgIGNvbnN0IGlzQWN0aXZlID0gaXRlbS5jbGFzc0xpc3QuY29udGFpbnMoJ2FjdGl2ZScpOwogICAgICBhY2NvcmRpb25JdGVtcy5mb3JFYWNoKGkgPT4gaS5jbGFzc0xpc3QucmVtb3ZlKCdhY3RpdmUnKSk7IC8vIENsb3NlIGFsbCBpdGVtcwogICAgICBpZiAoIWlzQWN0aXZlKSB7CiAgICAgICAgaXRlbS5jbGFzc0xpc3QuYWRkKCdhY3RpdmUnKTsgLy8gT3BlbiB0aGUgY2xpY2tlZCBpdGVtCiAgICAgIH0KICAgIH0pOwogIH0pOwoJCn0pOyAKCg==",
+      "data:text/javascript;base64,alF1ZXJ5KGRvY3VtZW50KS5yZWFkeShmdW5jdGlvbigpIHsKCS8vU2hvdyBwYWdlIHdoZW4gbG9hZCBhbGwgZWxlbWVudHMKCWNvbnN0IG1haW5FbGVtZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcigibWFpbiIpOwoJbWFpbkVsZW1lbnQuY2xhc3NMaXN0LmFkZCgiY2hlY2tvdXQtbG9hZGVkIik7CgkKCS8vTG9nbwogICAgY29uc3Qgc2l0ZUxvZ28gPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcud29vY29tbWVyY2UtY2hlY2tvdXQgLndwLWJsb2NrLXNpdGUtdGl0bGUnKTsKCS8vY29uc3Qgc2l0ZUxvZ28yID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignLndvb2NvbW1lcmNlLW9yZGVyLXJlY2VpdmVkIC53cC1ibG9jay10ZW1wbGF0ZS1wYXJ0Jyk7CiAgICAKICAgIGlmIChzaXRlTG9nbykgewogICAgICAgIGNvbnN0IGxvZ29JbWcgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdpbWcnKTsKICAgICAgICBsb2dvSW1nLnNyYyA9ICdodHRwczovL2F0bW9zZnVuZGVkLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAyNi8wMi9XaGl0ZS1GdWxsLnBuZyc7IAogICAgICAgIGxvZ29JbWcuYWx0ID0gJ0F0bW9zJzsKICAgICAgICBsb2dvSW1nLnN0eWxlLndpZHRoID0gJzExMHB4JzsgCiAgICAgICAgbG9nb0ltZy5zdHlsZS5oZWlnaHQgPSAnYXV0byc7CgogICAgICAgIC8vIEluc2VydCB0aGUgaW1hZ2UgaW5zaWRlIC53cC1ibG9jay1zaXRlLXRpdGxlCiAgICAgICAgc2l0ZUxvZ28uaW5uZXJIVE1MID0gJyc7CiAgICAgICAgc2l0ZUxvZ28uYXBwZW5kQ2hpbGQobG9nb0ltZyk7CgkJLy9zaXRlTG9nbzIuYXBwZW5kQ2hpbGQobG9nb0ltZyk7CiAgICAKCgkKCWNvbnN0IHBsYXRmb3JtRWwgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcub3JkZXJfaXRlbSB1bC53Yy1pdGVtLW1ldGEgbGk6Zmlyc3QtY2hpbGQgcCcpOwoJY29uc3QgYWNjb3VudFNpemVFbCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJy5vcmRlcl9pdGVtIHVsLndjLWl0ZW0tbWV0YSBsaTpudGgtY2hpbGQoMikgcCcpOwoJCgljb25zdCBwbGF0Zm9ybV90ZXh0ID0gcGxhdGZvcm1FbCA/IHBsYXRmb3JtRWwudGV4dENvbnRlbnQgOiBudWxsOwoJY29uc3QgYWNjb3VudFNpemVfdGV4dCA9IGFjY291bnRTaXplRWwgPyBhY2NvdW50U2l6ZUVsLnRleHRDb250ZW50IDogbnVsbDsKCQoJLy9DaGFuZ2UgcHJvZHVjdCBuYW1lIGFjY29yZGluZyB0byB0aGUgb3JpZ2luYWwgdGV4dCBvZiB0aGUgY3VycmVudCBwcm9kdWN0CQoJY29uc3QgcHJvZHVjdE5hbWVFbGVtZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignLm9yZGVyX3Byb2R1Y3RfbmFtZSBsaSBzdHJvbmcnKTsKCWNvbnN0IHByb2R1Y3ROYW1lX3RleHQgPSBwcm9kdWN0TmFtZUVsZW1lbnQgPyBwcm9kdWN0TmFtZUVsZW1lbnQudGV4dENvbnRlbnQgOiBudWxsOwoJbGV0IG5ld1Byb2R1Y3ROYW1lID0gIlBoYXNlIENoYWxsZW5nZSI7CgkJCglpZiAocHJvZHVjdE5hbWVFbGVtZW50KSB7CgkJc3dpdGNoICh0cnVlKSB7CgkJCWNhc2UgcHJvZHVjdE5hbWVfdGV4dC5pbmNsdWRlcygiT25lIik6CgkJCQluZXdQcm9kdWN0TmFtZSA9ICIxLVBoYXNlIENoYWxsZW5nZSI7CgkJCQlicmVhazsKCQkJY2FzZSBwcm9kdWN0TmFtZV90ZXh0LmluY2x1ZGVzKCJUd28iKToKCQkJCW5ld1Byb2R1Y3ROYW1lID0gIjItUGhhc2UgQ2hhbGxlbmdlIjsKCQkJCWJyZWFrOwoJCQljYXNlIHByb2R1Y3ROYW1lX3RleHQuaW5jbHVkZXMoIkluc3RhbnQiKToKCQkJCW5ld1Byb2R1Y3ROYW1lID0gIkluc3RhbnQgRnVuZGluZyI7CgkJCQlicmVhazsKCQkJZGVmYXVsdDoKCQkJCW5ld1Byb2R1Y3ROYW1lID0gIlBoYXNlIENoYWxsZW5nZSI7CgkJCWJyZWFrOwoJCX0KCX0KCgoKCS8vY29uc3QgdG9iZVBhaWRfdGV4dCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJy53b29jb21tZXJjZS1QcmljZS1hbW91bnQuYW1vdW50IGJkaScpLnRleHRDb250ZW50OwoJCgkKCS8vY29uc3QgcHJpY2VFbGVtZW50cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoJy53b29jb21tZXJjZS1QcmljZS1hbW91bnQuYW1vdW50Jyk7CgkvL2NvbnN0IGxhc3RQcmljZUVsZW1lbnQgPSBwcmljZUVsZW1lbnRzID8gcHJpY2VFbGVtZW50c1twcmljZUVsZW1lbnRzLmxlbmd0aCAtIDFdIDogbnVsbDsKCgkJCgkvL2NvbnN0IGJkaUVsID0gbGFzdFByaWNlRWxlbWVudC5xdWVyeVNlbGVjdG9yKCdiZGknKTsKCS8vY29uc3QgdG9iZVBhaWRfdGV4dCA9IGJkaUVsID8gYmRpRWwudGV4dENvbnRlbnQgOiBudWxsOwoKCS8vIFRyeSB0byBnZXQgdGhlIGFtb3VudCBmcm9tIHRoZSA0dGggPHRyPiBpbiB0aGUgdGZvb3QgZmlyc3QKCWNvbnN0IGZvdXJ0aFRyQW1vdW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignLnNob3BfdGFibGUgdGZvb3QgdHI6bnRoLWNoaWxkKDMpIC53b29jb21tZXJjZS1QcmljZS1hbW91bnQuYW1vdW50Jyk7CgoJLy8gRmFsbGJhY2sgdG8gdGhlIC5wcm9kdWN0LXRvdGFsIGFtb3VudCBpZiB0aGUgYWJvdmUgZG9lc24ndCBleGlzdAoJY29uc3QgcHJvZHVjdFRvdGFsQW1vdW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignLnByb2R1Y3QtdG90YWwgLndvb2NvbW1lcmNlLVByaWNlLWFtb3VudC5hbW91bnQnKTsKCgkvLyBHZXQgdGhlIHRleHQgdmFsdWUgc2FmZWx5IChhdm9pZCBudWxsIGVycm9ycykKCWNvbnN0IHRvYmVQYWlkX3RleHQgPSBmb3VydGhUckFtb3VudD8udGV4dENvbnRlbnQudHJpbSgpIHx8IHByb2R1Y3RUb3RhbEFtb3VudD8udGV4dENvbnRlbnQudHJpbSgpIHx8ICcnOwoKCgoKY29uc29sZS5sb2codG9iZVBhaWRfdGV4dCk7CgoJCQoJCQoJCgkvLyBVc2UgdGhlIGN1cnJlbnQgVVJMIGZyb20gdGhlIGJyb3dzZXIncyBhZGRyZXNzIGJhcgoJY29uc3QgdXJsID0gd2luZG93LmxvY2F0aW9uLmhyZWY7CgoJLy8gRXh0cmFjdCB0aGUgbnVtYmVyIHVzaW5nIFVSTCBwYXRoCgljb25zdCB1cmxQYXJ0cyA9IG5ldyBVUkwodXJsKS5wYXRobmFtZS5zcGxpdCgnLycpOyAKCWNvbnN0IG9yZGVyTnVtYmVyX3RleHQgPSB1cmxQYXJ0c1szXTsgLy8gR2V0IG9yZGVyIG51bWJlcgoKCSAvLyBTZWxlY3QgdGhlIGVsZW1lbnQgd2l0aCB0aGUgY2xhc3MgIm1haW4iCiAgICBjb25zdCBwYWdlSGVhZGVyID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignLndvb2NvbW1lcmNlLWNoZWNrb3V0IG1haW4nKTsKCQogICAgLy8gQ3JlYXRlIHRoZSBuZXcgSFRNTCBzdHJ1Y3R1cmUKICAgIGNvbnN0IG9yZGVyQm94ID0gYAoJPGRpdiBjbGFzcz0ibWFpbi1QTSI+CiAgICAgICAgPGRpdiBjbGFzcz0iYm94LXBheS1mb3Itb3JkZXIiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJwYXlmb3JvcmRlci10aXRsZSI+CiAgICAgICAgICAgICAgICA8aDI+Q29zdCBvZiBjaGFsbGVuZ2UgPHNwYW4gc3R5bGU9ImNvbG9yOiAjQkVGNDUwOyI+JHt0b2JlUGFpZF90ZXh0fTwvc3Bhbj48L2gyPgogICAgICAgICAgICAgICAgPHA+WW914oCZcmUgbmVhcmx5IHRoZXJlLCBmaW5hbGl6ZSB5b3VyIG9yZGVyIGJ5IHBheWluZyBiZWxvdzwvcD4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9InBheWZvcm9yZGVyLW9yZGVyLWJveCI+CiAgICAgICAgICAgICAgICA8ZGl2PgogICAgICAgICAgICAgICAgICAgIDx1bCBjbGFzcz0iaXRlbS1ib3giPgogICAgICAgICAgICAgICAgICAgICAgICA8bGk+T3JkZXIgTnVtYmVyPC9saT4KICAgICAgICAgICAgICAgICAgICAgICAgPGxpPiR7b3JkZXJOdW1iZXJfdGV4dH08L2xpPgogICAgICAgICAgICAgICAgICAgIDwvdWw+CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgICAgICAgICAgPHVsIGNsYXNzPSJpdGVtLWJveCI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxsaT5Qcm9kdWN0IFR5cGU8L2xpPgogICAgICAgICAgICAgICAgICAgICAgICA8bGk+JHtuZXdQcm9kdWN0TmFtZX08L2xpPgogICAgICAgICAgICAgICAgICAgIDwvdWw+CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgICAgICAgICAgPHVsIGNsYXNzPSJpdGVtLWJveCI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxsaT5BY2NvdW50IEJhbGFuY2U8L2xpPgogICAgICAgICAgICAgICAgICAgICAgICA8bGk+JHthY2NvdW50U2l6ZV90ZXh0fTwvbGk+CiAgICAgICAgICAgICAgICAgICAgPC91bD4KICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgPGRpdj4KICAgICAgICAgICAgICAgICAgICA8dWwgY2xhc3M9Iml0ZW0tYm94Ij4KICAgICAgICAgICAgICAgICAgICAgICAgPGxpPlBsYXRmb3JtPC9saT4KICAgICAgICAgICAgICAgICAgICAgICAgPGxpPiR7cGxhdGZvcm1fdGV4dH08L2xpPgogICAgICAgICAgICAgICAgICAgIDwvdWw+CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgICAgICAgICAgPHVsIGNsYXNzPSJpdGVtLWJveCI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxsaT5QcmljZTwvbGk+CiAgICAgICAgICAgICAgICAgICAgICAgIDxsaT4ke3RvYmVQYWlkX3RleHR9PC9saT4KICAgICAgICAgICAgICAgICAgICA8L3VsPgogICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvZGl2PgogICAgPC9kaXY+CiAgICBgOwoJCiAgICAvLyBJbnNlcnQgdGhlIG5ldyBIVE1MIGludG8gdGhlIG1haW4gZWxlbWVudAogICAgLy9wYWdlSGVhZGVyLmluc2VydEFkamFjZW50SFRNTCgnYWZ0ZXJiZWdpbicsIG9yZGVyQm94KTsKCQoJCQoJCQoJCgkKCS8vIFNlbGVjdCB0aGUgZWxlbWVudCB3aXRoIHRoZSAicGF5bWVudCB1bCIKICAgIGNvbnN0IGNob29zZVBheW1lbnRFbGVtZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI3BheW1lbnQgdWwud2NfcGF5bWVudF9tZXRob2RzLnBheW1lbnRfbWV0aG9kcy5tZXRob2RzJyk7CgoJCgkvLyBJbnNlcnQgdGhlIG5ldyBIVE1MIGludG8gdGhlIHBheW1lbnQgdWwgZWxlbWVudAogICAgLy9jaG9vc2VQYXltZW50RWxlbWVudC5pbnNlcnRBZGphY2VudEhUTUwoJ2FmdGVyYmVnaW4nLCBjaG9vc2VQYXltZW50Qm94KTsKCWlmIChjaG9vc2VQYXltZW50RWxlbWVudCAmJiBvcmRlckJveCkgewoJY2hvb3NlUGF5bWVudEVsZW1lbnQuaW5zZXJ0QWRqYWNlbnRIVE1MKCdhZnRlcmJlZ2luJywgb3JkZXJCb3gpOwoKCX0gZWxzZSB7CgkJY29uc29sZS53YXJuKCdjaG9vc2VQYXltZW50RWxlbWVudCBvciBjaG9vc2VQYXltZW50Qm94IG5vIGF2YWlsYWJsZScpOwoJfQoJCgkKCQoJCgkKCS8vIFNlbGVjdCB0aGUgZWxlbWVudCB3aXRoIHRoZSAicGF5bWVudCIKICAgIGNvbnN0IHRvdGFsRWxlbWVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNwYXltZW50IC5mb3JtLXJvdycpOwoJCiAgICAvLyBDcmVhdGUgdGhlIG5ldyBIVE1MIHN0cnVjdHVyZQogICAgY29uc3QgdG90YWxCb3ggPSBgCgk8ZGl2IGNsYXNzPSJvcmRlci10b3RhbC1zZWN0aW9uIj4KCQk8ZGl2IGNsYXNzPSJ0b3RhbC1sYWJlbCI+VG90YWwgQ29zdCA6IDwvZGl2PgoJCTxkaXYgY2xhc3M9InRvdGFsLWFtb3VudCBoaWdobGlnaHQiPiR7dG9iZVBhaWRfdGV4dH08L2Rpdj4KCTwvZGl2PgogICAgYDsKCQoJLy8gSW5zZXJ0IHRoZSBuZXcgSFRNTCBpbnRvIHRoZSBwYXltZW50IGVsZW1lbnQKICAgIC8vdG90YWxFbGVtZW50Lmluc2VydEFkamFjZW50SFRNTCgnYWZ0ZXJiZWdpbicsIHRvdGFsQm94KTsKCWlmICh0b3RhbEVsZW1lbnQgJiYgdG90YWxCb3gpIHsKCQl0b3RhbEVsZW1lbnQuaW5zZXJ0QWRqYWNlbnRIVE1MKCdhZnRlcmJlZ2luJywgdG90YWxCb3gpOwoJfSBlbHNlIHsKCQljb25zb2xlLndhcm4oJ3RvdGFsRWxlbWVudCBvIHRvdGFsQm94IG5vIGF2YWlsYWJsZScpOwoJfQoJCQp9IC8qZW5kIGlmIChzaXRlTG9nbykqLwoJCgkvKgoJLy8gU2VsZWN0IHRoZSBsYWJlbCBvZiB0aGUgcGF5bWVudCBtZXRoZ29kCgljb25zdCBjcnlwdG9faW1nID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignbGFiZWxbZm9yPSJwYXltZW50X21ldGhvZF93b29jb21tZXJjZS1nYXRld2F5LWdhdGV3YXktbGV0a25vd3BheSJdJyk7Cgljb25zdCBjY19pbWcgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdsYWJlbFtmb3I9InBheW1lbnRfbWV0aG9kX3VuaXBheW1lbnQiXScpOwoJY29uc3Qgd3BnZnVsbF9pbWcgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdsYWJlbFtmb3I9InBheW1lbnRfbWV0aG9kX3dwZ2Z1bGwnKTsKCWNvbnN0IHBheXBhbHBwY3BfaW1nID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignbGFiZWxbZm9yPSJwYXltZW50X21ldGhvZF9wcGNwIl0nKTsKCWNvbnN0IHBheV9pbWcgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdsYWJlbFtmb3I9InBheW1lbnRfbWV0aG9kX3BheSJdJyk7Cgljb25zdCBwYXRobHlfaW1nID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignbGFiZWxbZm9yPSJwYXltZW50X21ldGhvZF9wYXRobHkiXScpOwoKCglpZiAoY3J5cHRvX2ltZykgY3J5cHRvX2ltZy5pbm5lckhUTUwgPSBgPGltZyBzcmM9Imh0dHBzOi8vZGV2LWF0bW9zZnVuZGVkLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAyNS8wMS9wYXltZW50LTEucG5nIj5gOwoJaWYgKGNjX2ltZykgY2NfaW1nLmlubmVySFRNTCA9IGA8aW1nIHNyYz0iaHR0cHM6Ly9kZXYtYXRtb3NmdW5kZWQuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDI1LzAxL3BheW1lbnQtMi5wbmciPmA7CglpZiAocGF5cGFscHBjcF9pbWcpIHBheXBhbHBwY3BfaW1nLmlubmVySFRNTCA9IGA8aW1nIHNyYz0iaHR0cHM6Ly9kZXYtYXRtb3NmdW5kZWQuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDI1LzAxL3BheW1lbnQtMi5wbmciPmA7CglpZiAod3BnZnVsbF9pbWcpIHdwZ2Z1bGxfaW1nLmlubmVySFRNTCA9IGA8aW1nIHNyYz0iaHR0cHM6Ly9hdG1vc3YxLmxvY2FsL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDI1LzAyL3BheW1lbnQtZmxhZ3MyLnBuZyI+YDsKCWlmIChwYXlwYWxwcGNwX2ltZykgcGF5cGFscHBjcF9pbWcuaW5uZXJIVE1MID0gYDxpbWcgc3JjPSJodHRwczovL2Rldi1hdG1vc2Z1bmRlZC5jb20vd3AtY29udGVudC91cGxvYWRzLzIwMjUvMDEvcGF5bWVudC0zLnBuZyI+YDsKCWlmIChwYXlfaW1nKSBwYXlfaW1nLmlubmVySFRNTCA9IGA8aW1nIHNyYz0iaHR0cHM6Ly9hdG1vc3YxLmxvY2FsL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDI1LzAxL3BheTIucG5nIj5gOwoJaWYgKCBwYXRobHlfaW1nKSAgcGF0aGx5X2ltZy5pbm5lckhUTUwgPSBgPGltZyBzcmM9Imh0dHBzOi8vZGV2LWF0bW9zZnVuZGVkLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAyNS8wMS9wYXltZW50LTIucG5nIj5gOwoJKi8KCQoJCgkvLyBzZWxlY3QgcGF5bWVudCBtZXRob2QgdG8gYWRkIGEgbGluZSBncmVlbgogICAgY29uc3QgcGF5bWVudE1ldGhvZHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCIud2NfcGF5bWVudF9tZXRob2RzID4gLndjX3BheW1lbnRfbWV0aG9kIik7CgogICAgaWYgKHBheW1lbnRNZXRob2RzLmxlbmd0aCA+IDApIHsKICAgICAgICAvLyBTZXQgdGhlIGZpcnN0IGNoaWxkIGFzIHNlbGVjdGVkIGJ5IGRlZmF1bHQKICAgICAgICBwYXltZW50TWV0aG9kc1swXS5jbGFzc0xpc3QuYWRkKCJhY3RpdmUiKTsKICAgIH0KCQoJcGF5bWVudE1ldGhvZHMuZm9yRWFjaChtZXRob2QgPT4gewogICAgbWV0aG9kLnN0eWxlLmN1cnNvciA9ICJwb2ludGVyIjsKfSk7CgpwYXltZW50TWV0aG9kcy5mb3JFYWNoKG1ldGhvZCA9PiB7CiAgICBtZXRob2QuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLCBmdW5jdGlvbiAoZXZlbnQpIHsKICAgICAgICAvLyBSZW1vdmUgJ3NlbGVjdGVkJyBjbGFzcyBmcm9tIGFsbCBmaXJzdC1sZXZlbCBlbGVtZW50cwogICAgICAgIHBheW1lbnRNZXRob2RzLmZvckVhY2goaXRlbSA9PiBpdGVtLmNsYXNzTGlzdC5yZW1vdmUoImFjdGl2ZSIpKTsKICAgICAgICAKICAgICAgICAvLyBBZGQgJ3NlbGVjdGVkJyBjbGFzcyB0byB0aGUgY2xpY2tlZCBwYXltZW50IG1ldGhvZAogICAgICAgIHRoaXMuY2xhc3NMaXN0LmFkZCgiYWN0aXZlIik7CiAgICAgICAgCiAgICAgICAgLy8gRmluZCBhbmQgY2xpY2sgdGhlIGlucHV0IGluc2lkZSB0aGlzIHBheW1lbnQgbWV0aG9kIGlmIGl0IGV4aXN0cwogICAgICAgIGNvbnN0IGlucHV0ID0gdGhpcy5xdWVyeVNlbGVjdG9yKCdpbnB1dFt0eXBlPSJyYWRpbyJdJyk7CiAgICAgICAgaWYgKGlucHV0ICYmICFpbnB1dC5jaGVja2VkKSB7CiAgICAgICAgICAgIGlucHV0LmNoZWNrZWQgPSB0cnVlOwogICAgICAgICAgICAvLyBPcHRpb25hbGx5IHRyaWdnZXIgdGhlIGNoYW5nZSBldmVudCBpZiBuZWVkZWQKICAgICAgICAgICAgY29uc3QgY2hhbmdlRXZlbnQgPSBuZXcgRXZlbnQoJ2NoYW5nZScsIHsgYnViYmxlczogdHJ1ZSB9KTsKICAgICAgICAgICAgaW5wdXQuZGlzcGF0Y2hFdmVudChjaGFuZ2VFdmVudCk7CiAgICAgICAgfQogICAgfSk7Cn0pOwoJCgkKfSk7IAkK",
+      "data:text/javascript;base64,ZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsICgpID0+IHsKCiAgLy8gTGFuZ3VhZ2VzCiAgY29uc3Qgc3VwcG9ydGVkTGFuZ3VhZ2VzID0gWydlcycsICdwdCcsICd0aCcsICdmcicsICdtcycsICdpZCcsICdkZScsICd6aCcsICdhcicsICdpdCddOwogIGNvbnN0IHRhcmdldERvbWFpbiA9ICdhcHAuYXRtb3NmdW5kZWQuY29tJzsgCgogIGNvbnN0IHsgcGF0aG5hbWUgfSA9IHdpbmRvdy5sb2NhdGlvbjsKCiAgLy8gRGV0ZWN0IHRoZSBjdXJyZW50IGxhbmd1YWdlCiAgY29uc3QgcGF0aFNlZ21lbnRzID0gcGF0aG5hbWUuc3BsaXQoJy8nKS5maWx0ZXIoc2VnbWVudCA9PiBzZWdtZW50KTsgCiAgY29uc3QgY3VycmVudExhbmd1YWdlID0gcGF0aFNlZ21lbnRzLmxlbmd0aCA+IDAgJiYgc3VwcG9ydGVkTGFuZ3VhZ2VzLmluY2x1ZGVzKHBhdGhTZWdtZW50c1swXSkKICAgID8gcGF0aFNlZ21lbnRzWzBdCiAgICA6ICdlbic7CgogIC8vIEZpbmQgYWxsIGxpbmtzCiAgY29uc3QgYWxsTGlua3MgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCdhJyk7CgogIGFsbExpbmtzLmZvckVhY2gobGluayA9PiB7CiAgICBpZiAobGluay5ob3N0bmFtZSA9PT0gdGFyZ2V0RG9tYWluKSB7CiAgICAgIGNvbnN0IGhyZWYgPSBsaW5rLmdldEF0dHJpYnV0ZSgnaHJlZicpOwoKICAgICAgLy8gU2tpcCBsaW5rcyB0aGF0IGFyZSBlbXB0eSBvciBqdXN0IHBvaW50IHRvIHBhZ2Ugc2VjdGlvbnMgKCMpCiAgICAgIGlmICghaHJlZiB8fCBocmVmLnN0YXJ0c1dpdGgoJyMnKSkgewogICAgICAgIHJldHVybjsKICAgICAgfQoKICAgICAgdHJ5IHsKICAKICAgICAgICBjb25zdCB1cmwgPSBuZXcgVVJMKGxpbmsuaHJlZik7CiAgICAgICAgbGV0IGxpbmtQYXRobmFtZSA9IHVybC5wYXRobmFtZTsKCiAgICAgICAgLy8gQ2hlY2sgYW5kIHJlcGxhY2UgVVJMcyAoL2VuKQogICAgICAgIGlmIChsaW5rUGF0aG5hbWUuc3RhcnRzV2l0aCgnL2VuLycpKSB7CiAgICAgICAgICBjb25zdCBvbGRIcmVmID0gbGluay5ocmVmOwogICAgICAgICAgbGluay5ocmVmID0gb2xkSHJlZi5yZXBsYWNlKCcvZW4vJywgYC8ke2N1cnJlbnRMYW5ndWFnZX0vYCk7CiAgICAgICAgICAvL2NvbnNvbGUubG9nKGBSZXdyb3RlIEVOIGxpbms6ICR7b2xkSHJlZn0gLT4gJHtsaW5rLmhyZWZ9YCk7CiAgICAgICAgICByZXR1cm47IAogICAgICAgIH0KCiAgICAgICAgLy8gQ2hlY2sgZm9yIGxpbmtzIG1pc3NpbmcgCiAgICAgICAgY29uc3QgbGlua1NlZ21lbnRzID0gbGlua1BhdGhuYW1lLnNwbGl0KCcvJykuZmlsdGVyKHNlZ21lbnQgPT4gc2VnbWVudCk7CiAgICAgICAgY29uc3QgaGFzTGFuZ3VhZ2VQcmVmaXggPSBsaW5rU2VnbWVudHMubGVuZ3RoID4gMCAmJiBzdXBwb3J0ZWRMYW5ndWFnZXMuaW5jbHVkZXMobGlua1NlZ21lbnRzWzBdKTsKCiAgICAgICAgLy8gQWRkIHRoZSBsYW5ndWFnZSB0byB0aGUgbGluawogICAgICAgIGlmICghaGFzTGFuZ3VhZ2VQcmVmaXgpIHsKICAgICAgICAgICAgY29uc3Qgb2xkSHJlZiA9IGxpbmsuaHJlZjsKICAgICAgICAgICAgCiAgICAgICAgICAgIGNvbnN0IG5ld1BhdGggPSBgLyR7Y3VycmVudExhbmd1YWdlfS8ke2xpbmtQYXRobmFtZS5yZXBsYWNlKC9eXC8vLCAnJyl9YDsKICAgICAgICAgICAgbGluay5wYXRobmFtZSA9IG5ld1BhdGg7CiAgICAgICAgICAgIC8vY29uc29sZS5sb2coYEFkZGVkIGxhbmd1YWdlOiAke29sZEhyZWZ9IC0+ICR7bGluay5ocmVmfWApOwogICAgICAgIH0KCiAgICAgIH0gY2F0Y2ggKGVycm9yKSB7CiAgICAgICAgLy9jb25zb2xlLmVycm9yKGBVUkwgUmV3cml0ZXI6IENvdWxkIG5vdCBwYXJzZSBsaW5rOiAke2hyZWZ9YCwgZXJyb3IpOwogICAgICB9CiAgICB9CiAgfSk7Cgp9KTsK",
+      "data:text/javascript;base64,Cglkb2N1bWVudC5hZGRFdmVudExpc3RlbmVyKCdET01Db250ZW50TG9hZGVkJywgZnVuY3Rpb24oKSB7CgkJY29uc3Qga2xhdml5b0J1dHRvbnMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCcua2xhdml5by1wb3B1cCcpOwoJCWtsYXZpeW9CdXR0b25zLmZvckVhY2goYnV0dG9uID0+IHsKCQkJYnV0dG9uLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywgZnVuY3Rpb24oKSB7CgkJCQl3aW5kb3cuX2tsT25zaXRlID0gd2luZG93Ll9rbE9uc2l0ZSB8fCBbXTsKCQkJCXdpbmRvdy5fa2xPbnNpdGUucHVzaChbJ29wZW5Gb3JtJywgJ1ZqZkNySCddKTsKCQkJfSk7CgkJfSk7Cgl9KTsK",
+      "data:text/javascript;base64,CiFmdW5jdGlvbihlLHQsbixzLHUsYSl7ZS50d3F8fChzPWUudHdxPWZ1bmN0aW9uKCl7cy5leGU/cy5leGUuYXBwbHkocyxhcmd1bWVudHMpOnMucXVldWUucHVzaChhcmd1bWVudHMpOwp9LHMudmVyc2lvbj0nMS4xJyxzLnF1ZXVlPVtdLHU9dC5jcmVhdGVFbGVtZW50KG4pLHUuYXN5bmM9ITAsdS5zcmM9J2h0dHBzOi8vc3RhdGljLmFkcy10d2l0dGVyLmNvbS91d3QuanMnLAphPXQuZ2V0RWxlbWVudHNCeVRhZ05hbWUobilbMF0sYS5wYXJlbnROb2RlLmluc2VydEJlZm9yZSh1LGEpKX0od2luZG93LGRvY3VtZW50LCdzY3JpcHQnKTsKdHdxKCdjb25maWcnLCdvc2VuMicpOwo=",
+      "data:text/javascript;base64,CiAgLy8gSW5zZXJ0IFR3aXR0ZXIgRXZlbnQgSUQKICB0d3EoJ2V2ZW50JywgJ3R3LW9zZW4yLW9zZmRrJywgewogIH0pOwo=",
+      "https://atmosfunded.com/wp-content/cache/min/1/js/ld/ld.js?ver=1779798985",
+      "https://t.atmosfunded.com/v1/lst/universal-script?ph=d908a4c5794e5101c88c08129a16e341a15d5dc30579e58e2d191bbb4f97fc2e&tag=!clicked&ref_url=https://atmosfunded.com/",
+      "https://209891.t.hyros.com/v1/lst/universal-script?ph=d908a4c5794e5101c88c08129a16e341a15d5dc30579e58e2d191bbb4f97fc2e&tag=!clicked&ref_url=https://atmosfunded.com/",
+      "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/17028022227/?random=1780596099612&cv=11&fst=1780596099612&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be6630z89188418610za20gzb9188418610zd9188418610xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=0~115938466~115938469~118228215~119027224&u_w=1920&u_h=1080&url=https%3A%2F%2Fatmosfunded.com%2F&rcb=2&frm=0&tiba=Best%20Prop%20Firm%20with%20%24200K%20Funded%20Accounts&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=803089943.1780596099&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uamb=0&uam=&uap=Windows&uapv=19.0.0&uaw=0&data=event%3Dgtag.config&ept=9&rfmt=3&fmt=4",
+      "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/16680051729/?random=1780596099681&cv=11&fst=1780596099681&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45je6630v9194104613z89188418610za20gzb9188418610zd9188418610xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=0~115616986~115938466~115938468~118228215~119027222~119064591&u_w=1920&u_h=1080&url=https%3A%2F%2Fatmosfunded.com%2F&rcb=11&frm=0&tiba=Best%20Prop%20Firm%20with%20%24200K%20Funded%20Accounts&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=803089943.1780596099&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uamb=0&uam=&uap=Windows&uapv=19.0.0&uaw=0&data=event%3Dgtag.config&ept=9&rfmt=3&fmt=4",
+      "https://static-tracking.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/fender_analytics.37a265ef24da1ae3c155.js?cb=2",
+      "https://static-tracking.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/static.964c1ae7de61b8e06068.js?cb=2",
+      "https://static-tracking.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/vendors~static~in_app_forms~signup_forms~post_identification_sync~web_personalization~client_identity~server_side_cookies~reviews~telemetry~customerHubRoot~favorites~faq~.47f7776b98a43f526caf.js?cb=2",
+      "https://static.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/runtime.f8b8b1aa6520d4287b9d.js?cb=2",
+      "https://static.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/sharedUtils.56939a87685d8488294f.js?cb=2",
+      "https://static.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/vendors~in_app_forms~signup_forms~client_identity~telemetry~onsite-triggering-v2~onsite-triggering~.00140035a0ee1bdef5e1.js?cb=2",
+      "https://static.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/vendors~in_app_forms~signup_forms~reviews~atlas.0201e888d834a3782e3a.js?cb=2"
+    ],
+    "styles": [
+      "https://atmosfunded.com/wp-content/cache/fonts/1/google-fonts/css/6/6/a/9cce3a54487c8f3890c0d5548e125.css",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-header.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-image.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-navigation.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-advancedbtn.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/plugins/kadence-blocks/includes/assets/css/kb-button-deprecated-style.min.css?ver=3.7.2",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-identity.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-column.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-rowlayout.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-iconlist.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-accordion.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/kadence-blocks/dist/style-blocks-icon.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/woocommerce/assets/css/woocommerce-blocktheme.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/woocommerce/assets/css/woocommerce-layout.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/woocommerce/assets/css/woocommerce-smallscreen.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/background-css/1/atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/woocommerce/assets/css/woocommerce.css?ver=1779798985&wpr_t=1780573318",
+      "https://atmosfunded.com/wp-content/plugins/complianz-gdpr/assets/css/cookieblocker.min.css?ver=1779444290",
+      "https://atmosfunded.com/wp-content/cache/background-css/1/atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/weglot/dist/css/front-css.css?ver=1779798985&wpr_t=1780573318",
+      "https://atmosfunded.com/wp-content/cache/background-css/1/atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/weglot/dist/css/new-flags.css?ver=1779798985&wpr_t=1780573318",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/themes/twentytwentyfive/style.css?ver=1779798985",
+      "https://atmosfunded.com/wp-content/cache/background-css/1/atmosfunded.com/wp-content/plugins/chaty/css/chaty-front.min.css?ver=3.5.61755089241&wpr_t=1780573318",
+      "https://cdn.weglot.com/weglot.min.css?v=11",
+      "https://static.klaviyo.com/onsite/js/build-preview/commit-f77fb70b82ed7968c4dd76f444afc32a9126a8b0/532.0e7e190ea756de832333.css",
+      "https://atmosfunded.com/wp-content/cache/min/1/wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks.css?ver=1779798985"
+    ]
+  },
+  "dataAttributes": [
+    {
+      "name": "data-kb-block",
+      "count": 79,
+      "sampleValues": [
+        "kb-adv-heading34506_689c80-bd",
+        "kb-adv-heading34506_2c70a1-2b",
+        "kb-adv-heading34506_b73ba0-3d"
+      ]
+    },
+    {
+      "name": "data-lazy-src",
+      "count": 63,
+      "sampleValues": [
+        "https://atmosfunded.com/wp-content/uploads/2026/02/White-Full-Stacked-1-300x105.",
+        "https://atmosfunded.com/wp-content/uploads/2026/02/profit-1.png",
+        "https://atmosfunded.com/wp-content/uploads/2026/02/monthly-1.png"
+      ]
+    },
+    {
+      "name": "data-index",
+      "count": 38,
+      "sampleValues": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    {
+      "name": "data-rocket-status",
+      "count": 36,
+      "sampleValues": [
+        "executed",
+        "executed",
+        "executed"
+      ]
+    },
+    {
+      "name": "data-wg-notranslate",
+      "count": 22,
+      "sampleValues": []
+    },
+    {
+      "name": "data-l",
+      "count": 22,
+      "sampleValues": [
+        "en",
+        "pt",
+        "es"
+      ]
+    },
+    {
+      "name": "data-code-language",
+      "count": 22,
+      "sampleValues": [
+        "wg-en",
+        "pt",
+        "es"
+      ]
+    },
+    {
+      "name": "data-rocket-lazy-bg-5916647b-c739-40fc-a189-a578d8509e92",
+      "count": 22,
+      "sampleValues": [
+        "loaded",
+        "loaded",
+        "loaded"
+      ]
+    },
+    {
+      "name": "data-rocket-lazy-bg-80b42e5a-4c42-4f19-85a3-c4773fb4b529",
+      "count": 22,
+      "sampleValues": [
+        "loaded",
+        "loaded",
+        "loaded"
+      ]
+    },
+    {
+      "name": "data-kt-accordion-header-id",
+      "count": 19,
+      "sampleValues": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    {
+      "name": "data-panel-height",
+      "count": 19,
+      "sampleValues": [
+        "0px",
+        "0px",
+        "0px"
+      ]
+    },
+    {
+      "name": "data-type",
+      "count": 17,
+      "sampleValues": [
+        "standard",
+        "plus",
+        "page"
+      ]
+    },
+    {
+      "name": "data-id",
+      "count": 17,
+      "sampleValues": [
+        "561",
+        "561",
+        "235"
+      ]
+    },
+    {
+      "name": "data-testid",
+      "count": 10,
+      "sampleValues": [
+        "klaviyo-form-TDzdRp",
+        "form-row",
+        "form-component"
+      ]
+    },
+    {
+      "name": "data-wpr-lazyrender",
+      "count": 9,
+      "sampleValues": [
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "name": "data-size",
+      "count": 7,
+      "sampleValues": [
+        "5k",
+        "10k",
+        "25k"
+      ]
+    },
+    {
+      "name": "data-relative_url",
+      "count": 7,
+      "sampleValues": [
+        "#cmplz-manage-consent-container",
+        "#cmplz-cookies-overview",
+        "#cmplz-tcf-wrapper"
+      ]
+    },
+    {
+      "name": "data-minify",
+      "count": 6,
+      "sampleValues": [
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "name": "data-category",
+      "count": 6,
+      "sampleValues": [
+        "cmplz_functional",
+        "cmplz_preferences",
+        "cmplz_statistics"
+      ]
+    },
+    {
+      "name": "data-prefix",
+      "count": 4,
+      "sampleValues": [
+        "$",
+        "fas"
+      ]
+    },
+    {
+      "name": "data-lazy-srcset",
+      "count": 4,
+      "sampleValues": [
+        "https://atmosfunded.com/wp-content/uploads/2026/01/trade-img.png 490w, https://a",
+        "https://atmosfunded.com/wp-content/uploads/2026/02/crypto-icon-image.png 342w, h",
+        "https://atmosfunded.com/wp-content/uploads/2026/03/general-image-1.png 165w, htt"
+      ]
+    },
+    {
+      "name": "data-lazy-sizes",
+      "count": 4,
+      "sampleValues": [
+        "(max-width: 490px) 100vw, 490px",
+        "(max-width: 342px) 100vw, 342px",
+        "(max-width: 165px) 100vw, 165px"
+      ]
+    },
+    {
+      "name": "data-column",
+      "count": 3,
+      "sampleValues": [
+        "column1",
+        "column2",
+        "column3"
+      ]
+    },
+    {
+      "name": "data-tab",
+      "count": 3,
+      "sampleValues": [
+        "simple-payments",
+        "earn-more",
+        "payout-transfers"
+      ]
+    },
+    {
+      "name": "data-content",
+      "count": 3,
+      "sampleValues": [
+        "simple-payments",
+        "earn-more",
+        "payout-transfers"
+      ]
+    },
+    {
+      "name": "data-step",
+      "count": 3,
+      "sampleValues": [
+        "1step",
+        "2step",
+        "instant"
+      ]
+    },
+    {
+      "name": "data-program",
+      "count": 3,
+      "sampleValues": [
+        "1step",
+        "2step",
+        "instant"
+      ]
+    },
+    {
+      "name": "data-start",
+      "count": 3,
+      "sampleValues": [
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "name": "data-end",
+      "count": 3,
+      "sampleValues": [
+        "1.5",
+        "20",
+        "170"
+      ]
+    },
+    {
+      "name": "data-suffix",
+      "count": 3,
+      "sampleValues": [
+        "M+",
+        "K+",
+        "+"
+      ]
+    }
+  ],
+  "repeatingPatterns": [
+    {
+      "class": "kt-inside-inner-col",
+      "tag": "div",
+      "count": 53,
+      "sampleText": "The Future of Trading is Funded\n\nWe fund. You trade. Keep the profits with your funded account.\n\nSta"
+    },
+    {
+      "class": "payment-logo",
+      "tag": "div",
+      "count": 30,
+      "sampleText": ""
+    },
+    {
+      "class": "kb-link-wrap",
+      "tag": "div",
+      "count": 24,
+      "sampleText": "Home"
+    },
+    {
+      "class": "kb-nav-link-content",
+      "tag": "a",
+      "count": 24,
+      "sampleText": "Home"
+    },
+    {
+      "class": "atmos-carousel-item",
+      "tag": "div",
+      "count": 24,
+      "sampleText": ""
+    },
+    {
+      "class": "atmos-detail-row",
+      "tag": "div",
+      "count": 24,
+      "sampleText": "Profit Target\n$500.00"
+    },
+    {
+      "class": "atmos-detail-label",
+      "tag": "span",
+      "count": 24,
+      "sampleText": "Profit Target"
+    },
+    {
+      "class": "atmos-detail-value",
+      "tag": "span",
+      "count": 24,
+      "sampleText": "$500.00"
+    },
+    {
+      "class": "ss-testimonial-card",
+      "tag": "div",
+      "count": 19,
+      "sampleText": ""
+    },
+    {
+      "class": "ss-card-content",
+      "tag": "div",
+      "count": 19,
+      "sampleText": ""
+    },
+    {
+      "class": "ss-testimonial-text",
+      "tag": "p",
+      "count": 19,
+      "sampleText": ""
+    },
+    {
+      "class": "ss-quote-icon",
+      "tag": "div",
+      "count": 19,
+      "sampleText": ""
+    },
+    {
+      "class": "ss-testimonial-author",
+      "tag": "div",
+      "count": 19,
+      "sampleText": ""
+    },
+    {
+      "class": "ss-author-avatar",
+      "tag": "div",
+      "count": 19,
+      "sampleText": ""
+    },
+    {
+      "class": "ss-author-name",
+      "tag": "span",
+      "count": 19,
+      "sampleText": ""
+    }
+  ]
+}
