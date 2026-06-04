@@ -1,0 +1,22 @@
+{
+  "firmSlug": "holaprime",
+  "公式URL": "https://holaprime.com/ja",
+  "extractedAt": "2026-06-04T18:42:20.239Z",
+  "クーポン": [],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": ""
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
