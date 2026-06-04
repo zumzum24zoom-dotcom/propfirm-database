@@ -1,0 +1,22 @@
+{
+  "firmSlug": "mentfunding",
+  "公式URL": "https://mentfunding.com/",
+  "extractedAt": "2026-06-04T18:06:55.434Z",
+  "クーポン": [],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"$250\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"$325\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"—\"}},{\"size\":\"$200,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"—\"}},{\"size\":\"$400,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"—\"}},{\"size\":\"$1,000,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"—\"}},{\"size\":\"$2,000,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"—\"}},{\"size\":\"$5,000,000\",\"tier\":\"\",\"prices\":{\"1-Step Evaluation\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "1-Step Evaluation"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
