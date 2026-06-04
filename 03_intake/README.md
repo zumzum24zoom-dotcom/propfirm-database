@@ -19,7 +19,7 @@ NotebookLM 出力 → Page Maker でほぼ充填され、**埋まらなかった
 | パス | 役割 |
 |------|------|
 | `03_intake/intake-sotoh.json` | **ソートー作業用**JSON。構造は `{ firms, tabDataMap, glossaryTerms }`。ソートーがここに追記 → マスターがチェック |
-| `data/pfdb-intake-all.json` | **マスター正本**。マスターが Page Maker から保存・維持する本番データ |
+| `data/pfdb.json` | **マスター正本**。マスターが Page Maker から保存・維持する本番データ |
 | `screenshots/` | チャットに貼る前後のスクショ置き場（任意保管） |
 
 ## データの流れ（責任分界）
@@ -29,7 +29,7 @@ NotebookLM 出力 → Page Maker でほぼ充填され、**埋まらなかった
             ↓（マスターが Page Maker で「読込」してチェック）
        Page Maker 画面で確認・微修正
             ↓（マスターが「🚀 Hugo / 全保存」）
-       data/pfdb-intake-all.json ・ 本番 data/ ・ content/ へ反映
+       data/pfdb.json ・ 本番 data/ ・ content/ へ反映
                                   ← ここは Page Maker / マスターだけが書く
 ```
 
@@ -49,7 +49,7 @@ NotebookLM 出力 → Page Maker でほぼ充填され、**埋まらなかった
 2. スクショを撮る（概要／料金表／ルール詳細／出金 など断面ごとに複数枚推奨）
 3. チャットに貼る
 4. ソートーが解析 → 抽出値を提示 → 承認後に `intake-sotoh.json` へ追記
-5. マスターが Page Maker で「読込」→ 確認 →「🚀 Hugo / 全保存」で `data/pfdb-intake-all.json`・本番反映
+5. マスターが Page Maker で「読込」→ 確認 →「🚀 Hugo / 全保存」で `data/pfdb.json`・本番反映
 
 ## スロット定義（参照）
 

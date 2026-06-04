@@ -1,29 +1,6 @@
 {
   "firms": [
     {
-      "id": "f2",
-      "name": "The5ers",
-      "plans": [
-        {
-          "id": "p2",
-          "name": "High Stakes"
-        },
-        {
-          "id": "p3",
-          "name": "Hyper-Growth"
-        },
-        {
-          "id": "p4",
-          "name": "Bootcamp"
-        },
-        {
-          "id": "p5",
-          "name": "Pro-Growth"
-        }
-      ],
-      "pinned": true
-    },
-    {
       "id": "f3",
       "name": "FundingPips",
       "plans": [
@@ -46,6 +23,30 @@
       ]
     },
     {
+      "id": "f2",
+      "name": "The5ers",
+      "plans": [
+        {
+          "id": "p2",
+          "name": "High Stakes"
+        },
+        {
+          "id": "p3",
+          "name": "Hyper-Growth"
+        },
+        {
+          "id": "p4",
+          "name": "Bootcamp"
+        },
+        {
+          "id": "p5",
+          "name": "Pro-Growth"
+        }
+      ],
+      "pinned": false,
+      "completed": true
+    },
+    {
       "id": "f4",
       "name": "FundedNext",
       "plans": [
@@ -66,8 +67,41 @@
           "name": "Stellar Instant"
         }
       ]
+    },
+    {
+      "id": "f14",
+      "name": "FundedElite",
+      "plans": [
+        {
+          "id": "p15",
+          "name": "LITE 1-Step "
+        },
+        {
+          "id": "p16",
+          "name": "LITE 2-Step"
+        },
+        {
+          "id": "p17",
+          "name": "1-Step + FREE RETRY "
+        },
+        {
+          "id": "p18",
+          "name": "2-Step + FREE RETRY "
+        },
+        {
+          "id": "p19",
+          "name": "FLASH ACTIVATION "
+        },
+        {
+          "id": "p20",
+          "name": "INSTANT "
+        }
+      ],
+      "pinned": true
     }
   ],
+  "sections": [],
+  "sessionName": "",
   "tabDataMap": {
     "f2": {
       "archives": [
@@ -216,7 +250,7 @@
         "NotebookLMのソース定義（DBP_02セクション）および用語辞典の指定に従い、The5ersの4プランについてルール早見表・詳細リストを出力します。\n\n### High Stakes\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 2 | ー | ー | 2ステップの評価フェーズを経てFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 10% / 5% | $150 | EASE | ChallengeではPhase 1で10%、Phase 2で5%の利益目標が必要。Fundedでは目標はないが、出金には最低$150の利益が必要。 |\n| P02. 最低取引日数（合格） | 3日 | ー | EASE | Challengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | 5% | ー | ー | Challenge・Funded共に1日あたり5%の損失が上限となる。 |\n| P04. 日次損失タイプ | Trailing（Higher B or E EOD） | ー | ー | Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 10% | ー | ー | Challenge・Funded共に初期残高から10%の損失が上限となる。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期残高を基準とした固定（Absolute）のドローダウン方式。 |\n| P07. 一貫性ルール | なし（明示） | ー | ー | Challenge・Funded共に一貫性ルールは適用されない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に合格や目標達成にかかる期限はない（ただし30日間の非アクティブで失効）。 |\n| P10. ニュース取引制限 | ※有 | ー | ー | Challenge・Funded共に重要指標発表の前後2分間における新規注文（成行・待機注文）の実行が禁止されている。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | ※有 | ー | ー | Challenge・Funded共に利用可能だが、ステルスモードのストップロスや禁止手法に該当するEAの使用は不可。 |\n| P14. コピートレード制約 | ※有 | ー | ー | Challenge・Funded共に他者のコピートレードは禁止。自身の別口座からのコピーは特定の条件下で許可。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止行為に指定されている。 |\n| P16. ストップロス制約 | ※有 | ー | ー | Challenge・Funded共に設定は必須ではないが、1ポジションのリスクを1%以下に抑える適切な設定が推奨される。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |\n\n---\n\n### Hyper-Growth\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 1 | ー | ー | 1ステップの評価フェーズで目標を達成すればFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 10% | ー | EASE | Challengeでは10%の利益目標が必要。Fundedでは目標はない。 |\n| P02. 最低取引日数（合格） | 0日 | ー | ー | Challenge・Funded共に最低取引日数の制約はなく、即日合格も可能。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | 3% | ー | ー | Challenge・Funded共に1日あたり3%の損失で当日の取引が一時停止（Daily Pause）となる。 |\n| P04. 日次損失タイプ | Trailing（Higher B or E EOD） | ー | ー | Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 6% | ー | ー | Challenge・Funded共に口座サイズから6%の損失で失格となる。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期残高を基準とした固定のドローダウン方式。 |\n| P07. 一貫性ルール | なし（明示） | ー | ー | Challenge・Funded共に一貫性ルールは適用されない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。 |\n| P10. ニュース取引制限 | ※有 | ー | ー | Challenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | ※有 | ー | ー | Challenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。 |\n| P14. コピートレード制約 | ※有 | ー | ー | Challenge・Funded共に自身の口座間コピーは総運用資金$500Kまで許可される。他者のコピーは禁止。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止行為。 |\n| P16. ストップロス制約 | ※有 | ー | ー | Challenge・Funded共に必須ではないが、適切なストップロスの設定が推奨される。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |\n\n---\n\n### Bootcamp\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 3 | ー | ー | 3段階の評価フェーズ（デモ口座）を経てFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 6% | ー | EASE | Challengeでは各ステージ6%の利益目標が必要。Fundedでは次のスケールアップ目標は5%だが合格要件としての目標はない。 |\n| P02. 最低取引日数（合格） | 記載なし | ー | ー | Challenge・Funded共に合格に必要な最低取引日数の明記はない。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | ー | 3% | TRAP | Challengeでは日次損失上限はない。Fundedでは1日あたり3%の損失で当日の取引が一時停止となる。 |\n| P04. 日次損失タイプ | ー | Trailing（Higher B or E EOD） | TRAP | Challengeでは該当しない。Fundedでは前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 5% | 4% | TRAP | Challengeでは5%の損失が上限となる。Fundedでは4%に制限が強化される。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期またはスケーリング後の残高を基準とした固定のドローダウン方式。 |\n| P07. 一貫性ルール | 記載なし | ー | ー | Challenge・Funded共に一貫性ルールの記載はない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に合格や目標達成にかかる期限はない（30日非アクティブで失効）。 |\n| P10. ニュース取引制限 | ※有 | ー | ー | Challenge・Funded共に指標発表時の取引は可能だが、前後に両建て注文を置くブラケット戦略は禁止されている。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | ※有 | ー | ー | Challenge・Funded共に利用可能だが、ステルスモードのSLや禁止手法に該当するEAの使用は不可。 |\n| P14. コピートレード制約 | ※有 | ー | ー | Challenge・Funded共に他者のコピーは禁止。またBootcampアカウント間のコピートレードも禁止されている。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピング自体の制約はないが、ティックスキャルピングは禁止。 |\n| P16. ストップロス制約 | 有 | ー | ー | Challenge・Funded共にすべてのポジションにストップロス設定が必須で、1ポジションあたり残高の2%以下のリスクに抑える必要がある。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |\n\n---\n\n### Pro-Growth\n\n| 項目 | C | F | 差分 | 詳細 |\n|---|---|---|---|---|\n| Steps | 1 | ー | ー | 1ステップの評価フェーズで目標を達成すればFundedアカウントを獲得するプログラム。 |\n| P01. 利益目標 | 10% | ー | EASE | Challengeでは10%の利益目標が必要。Fundedでは目標はない。 |\n| P02. 最低取引日数（合格） | 3日 | ー | EASE | Challengeでは合格に最低3日の利益日が必要。Fundedではこの要件はない。 |\n| P02b. 最低取引日数（出金） | ー | 記載なし | ー | Challenge・Funded共に出金に必要な最低取引日数の明記はない。 |\n| P03. 日次損失 | 3% | ー | ー | Challenge・Funded共に1日あたり3%の損失が上限となる。 |\n| P04. 日次損失タイプ | Trailing（Higher B or E EOD） | ー | ー | Challenge・Funded共に前日サーバー時間0時時点の残高または有効証拠金の高い方を基準に計算される。 |\n| P05. 最大損失 | 6% | ー | ー | Challenge・Funded共に初期残高から6%の損失が上限となる。 |\n| P06. 最大損失タイプ | Static | ー | ー | Challenge・Funded共に初期残高を基準とした固定のドローダウン方式。 |\n| P07. 一貫性ルール | 記載なし | ー | ー | Challenge・Funded共に一貫性ルールの記載はない。 |\n| P08. 利益上限 | 記載なし | ー | ー | Challenge・Funded共に利益の獲得や出金額に対する上限の記載はない。 |\n| P09. 制限時間 | 無制限 | ー | ー | Challenge・Funded共に制限時間はなく自分のペースで進められる。 |\n| P10. ニュース取引制限 | 記載なし | ー | ー | Challenge・Funded共にソースに明示的な記載はない。 |\n| P11. 週末保有制限 | 無 | ー | ー | Challenge・Funded共に週末をまたぐポジションの保有が許可されている。 |\n| P12. オーバーナイト制限 | 無 | ー | ー | Challenge・Funded共に日をまたぐポジションの持ち越しが許可されている。 |\n| P13. EA制限 | 記載なし | ー | ー | Challenge・Funded共に特定の制約の記載はない。 |\n| P14. コピートレード制約 | 記載なし | ー | ー | Challenge・Funded共に特定の制約の記載はない。 |\n| P15. スキャルピング制約 | 記載なし | ー | ー | Challenge・Funded共にスキャルピングに関する制約の記載はない。 |\n| P16. ストップロス制約 | ※有 | ー | ー | Challenge・Funded共にストップロスの設定は必須ではないが強く推奨される。 |\n| P17. リスクルール | 記載なし | ー | ー | Challenge・Funded共に含み損に対する特有の制限の記載はない。 |\n| P18. 最大ポジション制約 | 記載なし | ー | ー | Challenge・Funded共に同時保有ポジション数やロット数の明確な上限は記載されていない。 |\n| P19. 禁止行為 | Arbitrage Trading, High-frequency trading, Bulk trading, Bracketing strategy, System Errors Exploitation, Trade coordination or copy trading, One-sided bets, Rollover EA scalping, Third-party EA with identical trades, EA without source code ownership, Tick Scalping, Hedge Arbitrage Trading, Reverse Arbitrage Trading, Account Sharing or Reselling, Account Management Services | ー | ー | Arbitrage Trading：異なる市場間の価格差を悪用する取引<br>High-frequency trading：大半の取引が数秒以内で完了する高頻度取引<br>Bulk trading：自動ツールで複数の取引を同時にオープンする取引<br>Bracketing strategy：重要ニュース発表前に買いと売りのストップ注文を同時に置く戦略<br>System Errors Exploitation：価格表示の不正確さや更新遅延などを悪用する取引<br>Trade coordination or copy trading：他者と協調した取引や、他者のトレードをコピーする行為<br>One-sided bets：市場環境に関わらず常に一方向にのみポジションを取り続ける取引<br>Rollover EA scalping：ロールオーバー時の流動性低下による価格差をEAで狙う取引<br>Third-party EA with identical trades：他者と同じ取引になるサードパーティ製EAの使用<br>EA without source code ownership：トレーダー自身がソースコードを所有していないEAの使用<br>Tick Scalping：ティックごとの微小な価格変動を狙う取引<br>Hedge Arbitrage Trading：複数口座で同一ペアの両建てを持ち価格差を抜く取引<br>Reverse Arbitrage Trading：リバース・アービトラージ取引<br>Account Sharing or Reselling：アカウントの共有、譲渡、または他者への転売<br>Account Management Services：\"Pass your Challenge\"などの代行・管理サービスの利用 |",
         "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス"
       ],
-      "targetText": "アービトラージ取引、高頻度取引、大口取引、ブラケット戦略、システムエラーエクスプロイテーション、取引調整またはコピートレード、一方向ベット、ロールオーバーEAスキャルピング、同一取引を行うサードパーティEA、ソースコード所有権のないEA、ティックスキャルピング、ヘッジアービトラージ取引、リバースアービトラージ取引、アカウント共有または転売、アカウント管理サービス",
+      "targetText": "",
       "slotData": {
         "challengeName": [
           {
@@ -673,6 +707,11 @@
           {
             "text": "FundingPips"
           }
+        ],
+        "priceTable": [
+          {
+            "text": "{\"rows\":[{\"size\":\"¥\",\"prices\":{}}]}"
+          }
         ]
       },
       "templateMode": "dbp01"
@@ -784,7 +823,669 @@
         ]
       },
       "templateMode": "dbp02"
+    },
+    "f14": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "FundedElite"
+          }
+        ],
+        "country": [
+          {
+            "text": "イタリア"
+          }
+        ],
+        "established": [
+          {
+            "text": "2023年"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://fundedelite.com/"
+          }
+        ],
+        "firmCategory": [
+          {
+            "text": "CFD／FX"
+          }
+        ],
+        "japanChat": [
+          {
+            "text": "日本語HP"
+          }
+        ],
+        "firmPitch": [
+          {
+            "text": "カスタマイズ性の高い評価プラン（レバレッジ、損失制限、利益目標など）、無料の「セカンドチャンス（再試行）」機能、わずか$5から始められるFlash Activationチャレンジなどを提供"
+          }
+        ],
+        "rewardProgram": [],
+        "scaleUp": [
+          {
+            "text": "Funded口座での出金3回ごとに残高が10%増加し、最大ドローダウン枠が1%増加（最大14%まで）。出金5回で利益分配率が90%に拡大し、出金7回で週次出金に移行。"
+          }
+        ],
+        "broker": [
+          {
+            "text": "提携パートナーブローカー（Purple Tradingなど）"
+          }
+        ],
+        "platform": [
+          {
+            "text": "MetaTrader 5 (MT5)、TradeLocker、Match Trader、cTrader"
+          }
+        ],
+        "serverTime": [
+          {
+            "text": "EET/EEST (UTC+2 / UTC+3, 日本時間-7時間 / 日本時間-8時間)"
+          }
+        ],
+        "ddReset": [
+          {
+            "text": "00:00 Server Time（日本時間 07:00 / 08:00）"
+          }
+        ],
+        "leverage": [
+          {
+            "text": "FXは1:30〜1:100、その他は資産クラスとフェーズ（Challenge/Funded）により異なる"
+          }
+        ],
+        "commission": [
+          {
+            "text": "FX・一部貴金属・原油は$3.00/lot（往復）、その他指数や暗号資産は$0.00/lot（往復）"
+          }
+        ],
+        "paymentMethods": [
+          {
+            "text": "クレジットカード、銀行送金、暗号通貨、Google Pay、Apple Pay"
+          }
+        ],
+        "payoutMethods": [
+          {
+            "text": "銀行送金、暗号通貨、Rise、PayPal"
+          }
+        ],
+        "payoutPolicy": [
+          {
+            "text": "初回出金はFunded開始から21日後に可能。以降は隔週（購入時のカスタマイズで3〜21日の間隔を選択可能）。利益上限はなし。"
+          }
+        ],
+        "profitSplit": [
+          {
+            "text": "60%、70%、80%、95%（購入時に選択可能）"
+          }
+        ],
+        "profitSplitNote": [
+          {
+            "text": "無料の「セカンドチャンス（再試行）」適用口座では利益分配率が50%に固定される。Instantチャレンジの初回出金時は70%。ソフトブリーチ違反によるペナルティ時は、一時的に30%に減額される場合がある。"
+          }
+        ],
+        "priceTable": [
+          {
+            "text": "{\"rows\":[{\"size\":\"¥1,000,000\",\"prices\":{\"LITE 1-Step \":\"¥7,800\",\"LITE 2-Step\":\"¥5,980\",\"1-Step + FREE RETRY \":\"¥22,800\",\"2-Step + FREE RETRY \":\"¥21,800\"}},{\"size\":\"¥1,300,000\",\"prices\":{\"INSTANT \":\"¥32,800\"}},{\"size\":\"¥2,000,000\",\"prices\":{\"LITE 1-Step \":\"¥15,800\",\"LITE 2-Step\":\"¥11,800\",\"1-Step + FREE RETRY \":\"\"}},{\"size\":\"¥2,500,000\",\"prices\":{\"LITE 1-Step \":\"¥19,800\",\"LITE 2-Step\":\"¥17,800\",\"1-Step + FREE RETRY \":\"¥34,800\",\"2-Step + FREE RETRY \":\"¥31,800\",\"INSTANT \":\"¥69,800\"}},{\"size\":\"¥5,000,000\",\"prices\":{\"LITE 1-Step \":\"¥32,800\",\"LITE 2-Step\":\"¥27,800\",\"1-Step + FREE RETRY \":\"¥54,800\",\"2-Step + FREE RETRY \":\"¥52,800\",\"FLASH ACTIVATION \":\"¥700/32,800\",\"INSTANT \":\"¥89,800\"}},{\"size\":\"¥10,000,000\",\"prices\":{\"LITE 1-Step \":\"¥64,800\",\"LITE 2-Step\":\"¥59,800\",\"1-Step + FREE RETRY \":\"¥84,800\",\"2-Step + FREE RETRY \":\"¥79,800\",\"FLASH ACTIVATION \":\"¥700/69,800\",\"INSTANT \":\"¥178,000\"}},{\"size\":\"¥20,000,000\",\"prices\":{\"LITE 1-Step \":\"¥108,000\",\"LITE 2-Step\":\"¥89,880\",\"1-Step + FREE RETRY \":\"¥148,800\",\"2-Step + FREE RETRY \":\"¥134,800\",\"FLASH ACTIVATION \":\"¥700/108,000\",\"INSTANT \":\"¥338,000\"}},{\"size\":\"¥35,000,000\",\"prices\":{\"LITE 1-Step \":\"¥228,000\",\"LITE 2-Step\":\"¥188,000\",\"1-Step + FREE RETRY \":\"¥298,000\",\"2-Step + FREE RETRY \":\"¥268,000\",\"FLASH ACTIVATION \":\"¥700/228,000\",\"INSTANT \":\"\"}},{\"size\":\"¥50,000,000\",\"prices\":{\"LITE 1-Step \":\"¥348,000\",\"LITE 2-Step\":\"¥288,000\",\"1-Step + FREE RETRY \":\"¥438,000\",\"2-Step + FREE RETRY \":\"¥398,000\"}}],\"sizeCur\":\"¥\",\"currencies\":{\"LITE 1-Step \":\"¥\",\"LITE 2-Step\":\"¥\",\"1-Step + FREE RETRY \":\"¥\",\"2-Step + FREE RETRY \":\"¥\",\"FLASH ACTIVATION \":\"¥\",\"INSTANT \":\"¥\"}}"
+          }
+        ],
+        "planList": [
+          {
+            "text": "LITE 1-Step \nLITE 2-Step | \n1-Step + FREE RETRY | \n2-Step + FREE RETRY |\nFLASH ACTIVATION | \nINSTANT |"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    },
+    "p15": {
+      "archives": [
+        "## LITE 1-Step ルール早見表\nLITE 1-Stepプランの取引ルールおよび条件をまとめたテーブルです。\n\n| 項目 | C | F | 差分 | 詳細 |\n| ------ | ------ | ------ | ------ | ------ |\n| Steps | 1 | ー | ー | 1つのChallengeフェーズとFundedフェーズで構成される。 |\n| P01: 利益目標 | 8%, 10%, 12%から選択 | ー | ー | Challengeでは8%、10%、12%から目標を選択する。Fundedは最低出金額の設定なし。 |\n| P02: 最低取引日数（合格） | 3日 | ー | ー | Challengeでは最低3日の取引が必要（1日あたり口座サイズの1%以上の利益必須）。 |\n| P02b: 最低取引日数（出金） | ー | 3日 | ー | Fundedでは出金条件として最低3日の取引が必要（特定利益目標はなし）。 |\n| P03: 日次損失 | 3% | 3% | ー | Challenge・Funded共に日次損失上限は3%。 |\n| P04: 日次損失タイプ | Trailing（Higher B or E EOD） | Trailing（Higher B or E EOD） | ー | Challenge・Funded共に日次損失は前日の有効証拠金または残高の大きい方を基準に計算される。 |\n| P05: 最大損失 | 5%, 6%, 7%, 8%, 10%から選択 | 左記に同じ | ー | Challenge・Funded共に最大損失上限は5%、6%、7%、8%、10%から選択する。 |\n| P06: 最大損失タイプ | Static | Static | ー | Challenge・Funded共に最大損失は初期残高を基準とした固定値で計算される。 |\n| P07: 一貫性ルール | ※有 | ※有 | ー | Challenge・Funded共に、300Kアカウントのみ単日の利益が総利益の60%を超えてはならない制限がある。 |\n| P08: 利益上限 | ー | 無 | ー | Challengeは非該当。Fundedでは利益や出金額の上限はない。 |\n| P09: 制限時間 | 記載なし | ー | ー | Challengeの合格期限に関する記載なし（無活動29日で終了）。Fundedは非該当。 |\n| P10: ニュース取引制限 | 無 | 無 | ー | Challenge・Funded共にニュース発表時の取引は許可されている。 |\n| P11: 週末保有制限 | 無 | 無 | ー | Challenge・Funded共に週末をまたぐポジションの保有は許可されている。 |\n| P12: オーバーナイト制限 | 記載なし | 記載なし | ー | Challenge・Funded共に日をまたぐポジション保有の制限に関する記載なし。 |\n| P13: EA制限 | ※有 | ※有 | ー | Challenge・Funded共にリスク管理等の補助目的でのみEA使用可能。完全自動売買による独立取引は禁止。 |\n| P14: コピートレード制約 | ※有 | ※有 | ー | Challenge・Funded共に、自身の所有するアカウント間でのみコピートレードが許可される。 |\n| P15: スキャルピング制約 | ※有 | ※有 | ー | Challenge・Funded共にポジションを最低3分間保持する必要がある（アドオン購入で30秒に短縮可能）。 |\n| P16: ストップロス制約 | 記載なし | 記載なし | ー | Challenge・Funded共にストップロスの設定義務に関する記載なし。 |\n| P17: リスクルール | 無 | ※有 | TRAP | Challengeでは制限なし。Fundedでは1日に許容される日次損失上限の50%以上を単一商品でリスクに晒すことは禁止。 |\n| P18: 最大ポジション制約 | 記載なし | 記載なし | ー | Challenge・Funded共にポジション数やロット数の上限に関する記載なし。 |\n| P19: 禁止行為 | Account Rolling, Account Sharing/any passing service, Gambling, HFT and High-Frequency Scalping, Hedging, IP sharing, Latency Arbitrage, Server Spamming, Weekend Trading | ー | ー | Account Rolling: 複数アカウントでギャンブル的にトレードする行為 / Account Sharing/any passing service: アカウント共有・合格代行の利用 / Gambling: 一貫性なくニュース等で単一トレードでの目標達成を狙う行為 / HFT and High-Frequency Scalping: 超高頻度・超短時間（数秒単位）での取引 / Hedging: 同一・他アカウントや他社間での両建て行為 / IP sharing: IPアドレスの共有 / Latency Arbitrage: 価格遅延を利用した裁定取引 / Server Spamming: 大量の注文でサーバーに負荷をかける行為 / Weekend Trading: アドオンなしでの週末中の新規注文や決済行為（SL/TP作動も含む） |"
+      ],
+      "targetText": "## LITE 1-Step ルール早見表\nLITE 1-Stepプランの取引ルールおよび条件をまとめたテーブルです。\n\n| 項目 | C | F | 差分 | 詳細 |\n| ------ | ------ | ------ | ------ | ------ |\n| Steps | 1 | ー | ー | 1つのChallengeフェーズとFundedフェーズで構成される。 |\n| P01: 利益目標 | 8%, 10%, 12%から選択 | ー | ー | Challengeでは8%、10%、12%から目標を選択する。Fundedは最低出金額の設定なし。 |\n| P02: 最低取引日数（合格） | 3日 | ー | ー | Challengeでは最低3日の取引が必要（1日あたり口座サイズの1%以上の利益必須）。 |\n| P02b: 最低取引日数（出金） | ー | 3日 | ー | Fundedでは出金条件として最低3日の取引が必要（特定利益目標はなし）。 |\n| P03: 日次損失 | 3% | 3% | ー | Challenge・Funded共に日次損失上限は3%。 |\n| P04: 日次損失タイプ | Trailing（Higher B or E EOD） | Trailing（Higher B or E EOD） | ー | Challenge・Funded共に日次損失は前日の有効証拠金または残高の大きい方を基準に計算される。 |\n| P05: 最大損失 | 5%, 6%, 7%, 8%, 10%から選択 | 左記に同じ | ー | Challenge・Funded共に最大損失上限は5%、6%、7%、8%、10%から選択する。 |\n| P06: 最大損失タイプ | Static | Static | ー | Challenge・Funded共に最大損失は初期残高を基準とした固定値で計算される。 |\n| P07: 一貫性ルール | ※有 | ※有 | ー | Challenge・Funded共に、300Kアカウントのみ単日の利益が総利益の60%を超えてはならない制限がある。 |\n| P08: 利益上限 | ー | 無 | ー | Challengeは非該当。Fundedでは利益や出金額の上限はない。 |\n| P09: 制限時間 | 記載なし | ー | ー | Challengeの合格期限に関する記載なし（無活動29日で終了）。Fundedは非該当。 |\n| P10: ニュース取引制限 | 無 | 無 | ー | Challenge・Funded共にニュース発表時の取引は許可されている。 |\n| P11: 週末保有制限 | 無 | 無 | ー | Challenge・Funded共に週末をまたぐポジションの保有は許可されている。 |\n| P12: オーバーナイト制限 | 記載なし | 記載なし | ー | Challenge・Funded共に日をまたぐポジション保有の制限に関する記載なし。 |\n| P13: EA制限 | ※有 | ※有 | ー | Challenge・Funded共にリスク管理等の補助目的でのみEA使用可能。完全自動売買による独立取引は禁止。 |\n| P14: コピートレード制約 | ※有 | ※有 | ー | Challenge・Funded共に、自身の所有するアカウント間でのみコピートレードが許可される。 |\n| P15: スキャルピング制約 | ※有 | ※有 | ー | Challenge・Funded共にポジションを最低3分間保持する必要がある（アドオン購入で30秒に短縮可能）。 |\n| P16: ストップロス制約 | 記載なし | 記載なし | ー | Challenge・Funded共にストップロスの設定義務に関する記載なし。 |\n| P17: リスクルール | 無 | ※有 | TRAP | Challengeでは制限なし。Fundedでは1日に許容される日次損失上限の50%以上を単一商品でリスクに晒すことは禁止。 |\n| P18: 最大ポジション制約 | 記載なし | 記載なし | ー | Challenge・Funded共にポジション数やロット数の上限に関する記載なし。 |\n| P19: 禁止行為 | Account Rolling, Account Sharing/any passing service, Gambling, HFT and High-Frequency Scalping, Hedging, IP sharing, Latency Arbitrage, Server Spamming, Weekend Trading | ー | ー | Account Rolling: 複数アカウントでギャンブル的にトレードする行為 / Account Sharing/any passing service: アカウント共有・合格代行の利用 / Gambling: 一貫性なくニュース等で単一トレードでの目標達成を狙う行為 / HFT and High-Frequency Scalping: 超高頻度・超短時間（数秒単位）での取引 / Hedging: 同一・他アカウントや他社間での両建て行為 / IP sharing: IPアドレスの共有 / Latency Arbitrage: 価格遅延を利用した裁定取引 / Server Spamming: 大量の注文でサーバーに負荷をかける行為 / Weekend Trading: アドオンなしでの週末中の新規注文や決済行為（SL/TP作動も含む） |",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedElite - LITE 1-Step "
+          }
+        ],
+        "steps": [
+          {
+            "text": "1"
+          },
+          {
+            "text": "1"
+          },
+          {
+            "text": "1"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p16": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedElite - LITE 2-Step"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p17": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedElite - 1-Step + FREE RETRY "
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p18": {
+      "archives": [],
+      "targetText": "損益（Profit and Loss）",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedElite - 2-Step + FREE RETRY "
+          }
+        ],
+        "steps": [
+          {
+            "text": "2"
+          }
+        ],
+        "rd_target": [
+          {
+            "text": "8%/5%|無"
+          }
+        ],
+        "rd_minDays": [
+          {
+            "text": "5日|5日"
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p19": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedElite - FLASH ACTIVATION "
+          }
+        ]
+      },
+      "templateMode": "dbp02"
+    },
+    "p20": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "challengeName": [
+          {
+            "text": "FundedElite - INSTANT "
+          }
+        ]
+      },
+      "templateMode": "dbp02"
     }
   },
-  "glossaryTerms": []
+  "glossaryTerms": [
+    {
+      "key": "F01",
+      "term": "ファーム名",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "プロップファームの正式名称。"
+    },
+    {
+      "key": "F02",
+      "term": "拠点国",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "運営会社の本社所在地または法人登記国。"
+    },
+    {
+      "key": "F03",
+      "term": "創業年",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "ファームの設立年（西暦4桁）。"
+    },
+    {
+      "key": "F04",
+      "term": "公式URL",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "ファームの公式サイトURL。アフィリエイトURLがあれば優先する。"
+    },
+    {
+      "key": "F05",
+      "term": "カテゴリ",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "取り扱う商品区分。CFD／FXのいずれか。"
+    },
+    {
+      "key": "F06",
+      "term": "日本対応",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "日本居住者への対応状況。禁止／可能／日本語HP／日本語チャットのいずれかで示す。"
+    },
+    {
+      "key": "F07",
+      "term": "ファームピッチ",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "ファームが掲げる特徴・差別化ポイント。"
+    },
+    {
+      "key": "F08",
+      "term": "リワードプログラム",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "紹介報酬・ロイヤリティ等の還元制度。"
+    },
+    {
+      "key": "F09",
+      "term": "スケールアップ",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "口座サイズを段階的に拡大できる条件と上限額。"
+    },
+    {
+      "key": "F10",
+      "term": "ブローカー",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "約定を担う接続先ブローカー。"
+    },
+    {
+      "key": "F11",
+      "term": "プラットフォーム",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "取引に使う環境。MT4／MT5／cTrader等。"
+    },
+    {
+      "key": "F12",
+      "term": "Server Time",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "取引サーバーの基準時刻。タイムゾーン＋UTCオフセット＋日本時間換算を併記する。"
+    },
+    {
+      "key": "F13",
+      "term": "DD Reset",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "ドローダウン基準値がリセットされる時刻。日本時間換算を併記する。"
+    },
+    {
+      "key": "F14",
+      "term": "レバレッジ",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "資産クラス×プラン別の最大レバレッジ倍率。"
+    },
+    {
+      "key": "F15",
+      "term": "手数料",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "資産クラス別の取引手数料。往復／片道の別と通貨単位を明記する。"
+    },
+    {
+      "key": "F16",
+      "term": "入金方法",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "チャレンジ費用等の支払手段。カード／銀行／暗号通貨等。"
+    },
+    {
+      "key": "F17",
+      "term": "出金方法",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "利益分配金の受取手段。銀行／暗号通貨／PayPal等。"
+    },
+    {
+      "key": "F18",
+      "term": "出金ポリシー",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "出金頻度・最低出金額・申請方法・処理期間を定めた規定。"
+    },
+    {
+      "key": "F19",
+      "term": "Profit Split",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "Funded口座で得た利益のうちトレーダーに分配される割合。"
+    },
+    {
+      "key": "F20",
+      "term": "※Profit Split",
+      "type": "label",
+      "category": "Firm項目",
+      "definition": "利益分配率の変動条件やスケールアップ後の比率を補足する注記。"
+    },
+    {
+      "key": "P01",
+      "term": "利益目標",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "C列=Challengeフェーズの合格利益目標(%)。F列=Funded最低出金額（初期残高に対する%または固定額。ファームにより設定がない場合は—）。"
+    },
+    {
+      "key": "P02",
+      "term": "最低取引日数（合格）",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "チャレンジ合格に必要な最低取引日数。出金要件とは区別する。"
+    },
+    {
+      "key": "P02b",
+      "term": "最低取引日数（出金）",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "出金申請に必要な最低取引日数。合格要件とは区別する。"
+    },
+    {
+      "key": "P03",
+      "term": "日次損失",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "1日あたりに許容される損失の上限（%または$）。"
+    },
+    {
+      "key": "P04",
+      "term": "日次損失タイプ",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "日次損失の計算基準。DD分類6パターンのいずれか。"
+    },
+    {
+      "key": "P05",
+      "term": "最大損失",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "口座全体で許容される累積損失の上限（%または$）。"
+    },
+    {
+      "key": "P06",
+      "term": "最大損失タイプ",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "最大損失の計算基準。DD分類6パターンのいずれか。"
+    },
+    {
+      "key": "P07",
+      "term": "一貫性ルール",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "特定の日の利益が総利益に占める比率を制限するルール（Best Day等）。"
+    },
+    {
+      "key": "P08",
+      "term": "利益上限",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "利益または出金額の上限。"
+    },
+    {
+      "key": "P09",
+      "term": "制限時間",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "チャレンジ合格までの期限（日数または無制限）。"
+    },
+    {
+      "key": "P10",
+      "term": "ニュース取引制限",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "重要経済指標の発表前後における取引の制限。"
+    },
+    {
+      "key": "P11",
+      "term": "週末保有制限",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "金曜クローズ前にポジションを決済する義務の有無。"
+    },
+    {
+      "key": "P12",
+      "term": "オーバーナイト制限",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "日をまたいでポジションを保有することへの制限。"
+    },
+    {
+      "key": "P13",
+      "term": "EA制限",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "自動売買プログラム（EA）の使用可否・条件。"
+    },
+    {
+      "key": "P14",
+      "term": "コピートレード制約",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "他口座・他者の取引を複写することへの制約。"
+    },
+    {
+      "key": "P15",
+      "term": "スキャルピング制約",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "超短時間売買の可否・条件に関する制約。"
+    },
+    {
+      "key": "P16",
+      "term": "ストップロス制約",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "損切り注文の設定義務や推奨に関する制約。"
+    },
+    {
+      "key": "P17",
+      "term": "リスクルール",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "含み損（未決済ポジションの評価損）に対する制限。"
+    },
+    {
+      "key": "P18",
+      "term": "最大ポジション制約",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "同時に保有できるポジション数やロット数の上限。"
+    },
+    {
+      "key": "P19",
+      "term": "禁止行為",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "アカウント失格の対象となる禁止された取引手法・行為。"
+    },
+    {
+      "key": "P20",
+      "term": "Steps",
+      "type": "label",
+      "category": "Plan項目",
+      "definition": "チャレンジのステップ数。Instant=0 / 1-Step=1 / 2-Step=2 等。"
+    },
+    {
+      "key": "DD_STATIC",
+      "term": "Static",
+      "type": "notation",
+      "category": "DD計算基準",
+      "definition": "初期残高（口座開設時の残高）を基準に固定するドローダウン方式。判定根拠: initial balance / fixed / starting balance。"
+    },
+    {
+      "key": "DD_BAL_EOD",
+      "term": "Trailing（Balance EOD）",
+      "type": "notation",
+      "category": "DD計算基準",
+      "definition": "日次終了時点の残高を基準に追従するドローダウン方式。判定根拠: end of day balance / daily reset balance。"
+    },
+    {
+      "key": "DD_BAL_HWM",
+      "term": "Trailing（Balance HWM）",
+      "type": "notation",
+      "category": "DD計算基準",
+      "definition": "記録した最高残高を基準に追従するドローダウン方式。判定根拠: highest balance / recorded highest balance。"
+    },
+    {
+      "key": "DD_EQ_EOD",
+      "term": "Trailing（Equity EOD）",
+      "type": "notation",
+      "category": "DD計算基準",
+      "definition": "日次終了時点の有効証拠金を基準に追従するドローダウン方式。判定根拠: end of day equity。"
+    },
+    {
+      "key": "DD_EQ_HWM",
+      "term": "Trailing（Equity HWM）",
+      "type": "notation",
+      "category": "DD計算基準",
+      "definition": "リアルタイムの最高有効証拠金を基準に追従するドローダウン方式。判定根拠: highest equity / real-time equity。"
+    },
+    {
+      "key": "DD_HIGHER",
+      "term": "Trailing（Higher B or E EOD）",
+      "type": "notation",
+      "category": "DD計算基準",
+      "definition": "前日終了時点の残高と有効証拠金のうち高い方を基準に追従するドローダウン方式。判定根拠: previous day's balance or equity / higher of balance or equity。"
+    },
+    {
+      "key": "PHASE_C",
+      "term": "Challenge",
+      "type": "notation",
+      "category": "フェーズ",
+      "definition": "評価フェーズの統一表記。Evaluation／Assessment／Phase／Step／審査段階は全てこれに変換する。"
+    },
+    {
+      "key": "PHASE_F",
+      "term": "Funded",
+      "type": "notation",
+      "category": "フェーズ",
+      "definition": "資金提供後フェーズの統一表記。Master／Live／Funded Account／Real Accountは全てこれに変換する。"
+    },
+    {
+      "key": "ABS_NONE",
+      "term": "なし（明示）",
+      "type": "notation",
+      "category": "不在表記",
+      "definition": "ソースに「なし（No／None／0）」と明記されている状態。条件が存在しないと断定できる。"
+    },
+    {
+      "key": "ABS_NA",
+      "term": "ー",
+      "type": "notation",
+      "category": "不在表記",
+      "definition": "その項目自体が構造上適用されない状態（N/A）。全角ハイフンで表記し、「記載なし」とは区別する。"
+    },
+    {
+      "key": "ABS_UNKNOWN",
+      "term": "記載なし",
+      "type": "notation",
+      "category": "不在表記",
+      "definition": "一次ソースを調査したが該当情報が見つからない状態。条件不在の「ー」とは区別する。絵文字は付けない。"
+    },
+    {
+      "key": "DIFF_EASE",
+      "term": "EASE",
+      "type": "notation",
+      "category": "早見表差分",
+      "definition": "早見表でFunded側がChallenge側より緩い（トレーダーに有利な）ことを示す差分判定。"
+    },
+    {
+      "key": "DIFF_TRAP",
+      "term": "TRAP",
+      "type": "notation",
+      "category": "早見表差分",
+      "definition": "早見表でFunded側がChallenge側より厳しい（トレーダーに不利な）ことを示す差分判定。"
+    },
+    {
+      "key": "DIFF_NONE",
+      "term": "ー",
+      "type": "notation",
+      "category": "早見表差分",
+      "definition": "早見表でChallenge／Fundedが同値、またはFunded側が「ー」で差分がないことを示す。"
+    },
+    {
+      "key": "FREQ_ONDEMAND",
+      "term": "随時",
+      "type": "notation",
+      "category": "出金頻度",
+      "definition": "出金申請に頻度制約がない方式。最速出金計算では待機0日として扱う。"
+    },
+    {
+      "key": "FREQ_WEEKLY",
+      "term": "毎週",
+      "type": "notation",
+      "category": "出金頻度",
+      "definition": "週1回の出金頻度。最速出金計算では待機をMAX(7日, X)とする。"
+    },
+    {
+      "key": "FREQ_BIWEEKLY",
+      "term": "隔週",
+      "type": "notation",
+      "category": "出金頻度",
+      "definition": "2週に1回の出金頻度。最速出金計算では待機をMAX(14日, X)とする。"
+    },
+    {
+      "key": "FREQ_MONTHLY",
+      "term": "月次",
+      "type": "notation",
+      "category": "出金頻度",
+      "definition": "月1回の出金頻度。最速出金計算では待機をMAX(30日, X)とする。"
+    },
+    {
+      "key": "CALC_PASS",
+      "term": "最短合格",
+      "type": "label",
+      "category": "計算結果",
+      "definition": "チャレンジに合格できる理論上の最短日数。各StepのMAX(最低取引日数, 一貫性達成最速日数)の合計（結果のみ）。"
+    },
+    {
+      "key": "CALC_PAYOUT",
+      "term": "最速出金",
+      "type": "label",
+      "category": "計算結果",
+      "definition": "Funded到達後に出金申請できる理論上の最短日数。出金頻度による待機を反映した結果（結果のみ）。"
+    },
+    {
+      "key": "CALC_TOTAL",
+      "term": "トータル日数",
+      "type": "label",
+      "category": "計算結果",
+      "definition": "最短合格と最速出金を合算した、申込から最初の出金申請までの理論最短日数。"
+    },
+    {
+      "key": "CALC_STEPS",
+      "term": "Steps",
+      "type": "label",
+      "category": "計算結果",
+      "definition": "プランの評価ステップ数。Instant=0／1-Step=1／2-Step=2等。"
+    },
+    {
+      "key": "CALC_ARRIVAL",
+      "term": "着金目安",
+      "type": "label",
+      "category": "計算結果",
+      "definition": "出金申請から実際の着金までの目安日数。処理時間を反映した値。"
+    }
+  ]
 }

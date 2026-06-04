@@ -71,6 +71,8 @@ Page Maker v0.9
 <body>
 <div id="root"></div>
 <script>
+var LLM_PROXY = "https://misty-term-6eac.purple-voice-a554.workers.dev/api/llm";
+var LLM_MODEL = "claude-sonnet-4-20250514";
 window.name = "pfm-intake";
 // 小窓HTML
 window.__pfmPasteWindowHTML = [
@@ -105,13 +107,13 @@ window.__pfmPasteWindowHTML = [
 '<div id="transResult" style="display:none;border-top:1px solid #1e2d3d;background:#1a2332;overflow:auto;padding:0;position:relative"><button id="transClose" style="position:absolute;top:2px;right:4px;background:transparent;color:#ef4444;border:none;cursor:pointer;font-size:0.8rem;z-index:1">×</button><div id="transText" style="padding:8px;font-size:0.8rem;line-height:1.5;white-space:pre-wrap;user-select:text"></div></div>',
 '<div class="drop-overlay" id="dropOverlay" style="display:none"><span>画像をドロップ → OCR</span></div>',
 '<scr'+'ipt>',
-'var LLM_PROXY="https://misty-term-6eac.purple-voice-a554.workers.dev/api/llm";',
+'var LLM_PROXY="'+LLM_PROXY+'";var LLM_MODEL="'+LLM_MODEL+'";',
 'var ta=document.getElementById("ta"),btn=document.getElementById("sendBtn"),st=document.getElementById("status"),ov=document.getElementById("dropOverlay"),urlIn=document.getElementById("urlInput"),puBtn=document.getElementById("pasteUrlBtn"),transBtn=document.getElementById("transBtn"),transResult=document.getElementById("transResult"),transText=document.getElementById("transText"),transClose=document.getElementById("transClose");',
 'puBtn.onclick=function(){navigator.clipboard.readText().then(function(t){urlIn.value=t}).catch(function(){})};',
 'transClose.onclick=function(){transResult.style.display="none";transResult.style.height="0";transText.textContent="";ta.style.height="calc(100vh - 122px)"};',
 'function getSel(){var s=ta.selectionStart,e=ta.selectionEnd;return ta.value.substring(s,e).trim()||ta.value.trim()}',
 'btn.onclick=function(){var sel=getSel();if(!sel){st.textContent="テキストを選択";return}window.opener.postMessage({type:"pfm-intake-paste",text:sel,url:urlIn.value.trim()||""},"*");st.textContent="✓";setTimeout(function(){st.textContent=""},1500)};',
-'transBtn.onclick=function(){var sel=getSel();if(!sel){st.textContent="テキストを選択";return}st.textContent="翻訳中...";transBtn.disabled=true;fetch(LLM_PROXY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:sel}]})}).then(function(r){return r.json()}).then(function(d){var txt=(d.content||[]).filter(function(b){return b.type==="text"}).map(function(b){return b.text}).join("");transResult.style.display="block";transResult.style.height="30vh";transText.textContent=txt;ta.style.height="calc(100vh - 122px - 30vh)";st.textContent="翻訳完了"}).catch(function(e){st.textContent="翻訳エラー"}).finally(function(){transBtn.disabled=false})};',
+'transBtn.onclick=function(){var sel=getSel();if(!sel){st.textContent="テキストを選択";return}st.textContent="翻訳中...";transBtn.disabled=true;fetch(LLM_PROXY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:LLM_MODEL,max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:sel}]})}).then(function(r){return r.json()}).then(function(d){var txt=(d.content||[]).filter(function(b){return b.type==="text"}).map(function(b){return b.text}).join("");transResult.style.display="block";transResult.style.height="30vh";transText.textContent=txt;ta.style.height="calc(100vh - 122px - 30vh)";st.textContent="翻訳完了"}).catch(function(e){st.textContent="翻訳エラー"}).finally(function(){transBtn.disabled=false})};',
 'ta.onpaste=function(e){var items=e.clipboardData&&e.clipboardData.items;if(!items)return;for(var i=0;i<items.length;i++){if(items[i].type.indexOf("image/")===0){e.preventDefault();var f=items[i].getAsFile();var r=new FileReader();r.onload=function(){var b64=r.result.split(",")[1];window.opener.postMessage({type:"pfm-intake-ocr-image",base64:b64,mediaType:f.type,url:urlIn.value.trim()||""},"*");st.textContent="OCR送信中..."};r.readAsDataURL(f);return}}};',
 'document.body.ondragover=function(e){e.preventDefault();ov.style.display="flex"};document.body.ondragleave=function(){ov.style.display="none"};',
 'document.body.ondrop=function(e){e.preventDefault();ov.style.display="none";var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f&&f.type.indexOf("image/")===0){var r=new FileReader();r.onload=function(){var b64=r.result.split(",")[1];window.opener.postMessage({type:"pfm-intake-ocr-image",base64:b64,mediaType:f.type,url:urlIn.value.trim()||""},"*");st.textContent="OCR送信中..."};r.readAsDataURL(f)}};',
@@ -124,7 +126,8 @@ const { useState, useRef, useCallback, useEffect, useMemo } = React;
 // ═══════════════════════════════════════════════════
 // CONFIG & TOKENS
 // ═══════════════════════════════════════════════════
-const LLM_PROXY = "https://misty-term-6eac.purple-voice-a554.workers.dev/api/llm";
+const LLM_PROXY = window.LLM_PROXY;
+const MODEL = window.LLM_MODEL;
 const SCAN_ENDPOINT = "https://pfd-coupon-fetcher.purple-voice-a554.workers.dev/scan?secret=pfd-secret-2026";
 const C = {
   bg:"#0a0e17",surface:"#111827",surfaceAlt:"#1a2332",
@@ -1523,7 +1526,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
     setOcrStatus("OCR中...");
     try {
       const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
-      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:file.type,data:b64}},{type:"text",text:"この画像内のテキストを全て抽出。テーブルはMarkdown形式。抽出テキストのみ出力。"}]}]});
+      const data=await callAPI({model:MODEL,max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:file.type,data:b64}},{type:"text",text:"この画像内のテキストを全て抽出。テーブルはMarkdown形式。抽出テキストのみ出力。"}]}]});
       if(taRef.current){const ta=taRef.current;ta.value+=(ta.value?"\n\n--- OCR ---\n":"")+exText(data)}
       setOcrStatus("完了"); setTimeout(()=>setOcrStatus(""),2000);
     } catch(e){setOcrStatus("エラー: "+e.message)}
@@ -2050,49 +2053,91 @@ function RuleTableEditor({slotData,setSlotData,locks}){
 // ═══════════════════════════════════════════════════
 // 価格マトリクスエディタ（DBP_01・口座サイズ×プラン）
 const PRICE_TIERS=["$5k","$10k","$25k","$50k","$100k","$200k"];
-const CURRENCIES=["$","¥","€"];
+const CURRENCIES=["$","€","¥"];
 // 価格セル文字列を {cur,num} に分解（通貨記号のみ／ダッシュは num=""=値なし扱い）
 function parsePrice(v){v=(v||"").trim();if(/^[—ー―\-]+$/.test(v))return{cur:"$",num:""};const c=CURRENCIES.find(x=>v.startsWith(x));return c?{cur:c,num:v.slice(c.length)}:{cur:"$",num:v};}
+// 自動フォーマット: 全角→半角 + 整数自動カンマ
+function autoFmt(s){
+  if(!s)return s;
+  // 全角英数記号→半角
+  let h=s.replace(/[！-～]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/　/g," ");
+  // カンマ除去して純整数なら再フォーマット
+  const n=h.replace(/,/g,"");
+  if(/^\d+$/.test(n))h=parseInt(n,10).toLocaleString("ja-JP");
+  return h;
+}
 function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
   const cols=planNames||[];
   const locked=!!(locks&&locks.priceTable);
   const raw=(()=>{const fr=slotData.priceTable;if(!fr||!fr.length)return"";const m=fr.find(f=>f.merged);return m?m.text:(fr[0]&&fr[0].text)||"";})();
   let matrix={rows:[]};
   try{if(raw){const o=JSON.parse(raw);if(o&&Array.isArray(o.rows))matrix=o;}}catch(e){matrix={rows:[]};}
+  // 列ごとの通貨（sizeCur + currencies:{colName:cur}）
+  const sizeCur=matrix.sizeCur||"$";
+  const colCur=col=>(matrix.currencies||{})[col]||"$";
   const commit=next=>setSlotData(prev=>({...prev,priceTable:[{text:JSON.stringify(next)}]}));
+  const setSizeCur=cur=>commit({...matrix,sizeCur:cur});
+  const setColCur=(col,cur)=>commit({...matrix,currencies:{...(matrix.currencies||{}),[col]:cur}});
   const setRow=(i,patch)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,...patch}:r)});
   const setCell=(i,col,val)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,prices:{...(r.prices||{}),[col]:val}}:r)});
   const addRow=()=>commit({...matrix,rows:[...matrix.rows,{size:"",prices:{}}]});
   const delRow=i=>commit({...matrix,rows:matrix.rows.filter((_,idx)=>idx!==i)});
-  const th={padding:"5px 6px",textAlign:"left",color:C.textDim,fontWeight:700,fontSize:"0.6rem",whiteSpace:"nowrap",borderBottom:`2px solid ${C.border}`};
+  const th={padding:"4px 6px",textAlign:"left",color:C.textDim,fontWeight:700,fontSize:"0.6rem",whiteSpace:"nowrap",borderBottom:`2px solid ${C.border}`};
   const td={padding:"3px 4px",borderBottom:`1px solid ${C.border}`};
-  const inp={width:"100%",minWidth:70,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 5px",fontSize:"0.66rem",fontFamily:font,outline:"none"};
-  const curSel={background:C.surface,color:C.accent,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 2px",fontSize:"0.66rem",fontFamily:font,outline:"none",cursor:"pointer",width:34,minWidth:34};
+  const inp={width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 5px",fontSize:"0.66rem",fontFamily:font,outline:"none"};
+  const curSel={background:C.surface,color:C.accent,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 2px",fontSize:"0.62rem",fontFamily:font,outline:"none",cursor:"pointer",width:32,minWidth:32};
   return(
     <div style={{overflow:"auto"}}>
       <table style={{borderCollapse:"collapse",fontSize:"0.68rem"}}>
-        <thead><tr>
-          <th style={th}>口座サイズ</th>
-          {cols.map(c=><th key={c} style={th}>{c}</th>)}
-          <th style={th}></th>
-        </tr></thead>
+        <thead>
+          {/* 通貨行 */}
+          <tr>
+            <th style={{...th,color:C.textDim,fontWeight:400,paddingBottom:2}}>
+              <select disabled={locked} value={sizeCur} onChange={e=>setSizeCur(e.target.value)} style={curSel}>
+                {CURRENCIES.map(x=><option key={x} value={x}>{x}</option>)}
+              </select>
+            </th>
+            {cols.map(c=>(
+              <th key={c} style={{...th,color:C.textDim,fontWeight:400,paddingBottom:2}}>
+                <select disabled={locked} value={colCur(c)} onChange={e=>setColCur(c,e.target.value)} style={curSel}>
+                  {CURRENCIES.map(x=><option key={x} value={x}>{x}</option>)}
+                </select>
+              </th>
+            ))}
+            <th style={th}/>
+          </tr>
+          {/* ラベル行 */}
+          <tr>
+            <th style={th}>口座サイズ</th>
+            {cols.map(c=><th key={c} style={th}>{c}</th>)}
+            <th style={th}/>
+          </tr>
+        </thead>
         <tbody>
-          {matrix.rows.map((r,i)=>(
-            <tr key={i}>
-              <td style={td}><input disabled={locked} value={r.size||""} onChange={e=>setRow(i,{size:e.target.value})} placeholder="¥1,300,000 / $10,000" style={inp}/></td>
-              {cols.map(c=>{const {cur,num}=parsePrice((r.prices||{})[c]||"");return(
-                <td key={c} style={td}>
-                  <div style={{display:"flex",gap:2}}>
-                    <select disabled={locked} value={cur} onChange={e=>setCell(i,c,e.target.value+num)} style={curSel}>
-                      {CURRENCIES.map(x=><option key={x} value={x}>{x}</option>)}
-                    </select>
-                    <input disabled={locked} value={num} onChange={e=>setCell(i,c,e.target.value?cur+e.target.value:"")} placeholder="—" inputMode="decimal" style={{...inp,minWidth:54}}/>
-                  </div>
+          {matrix.rows.map((r,i)=>{
+            const szNum=(r.size||"").replace(/^[$€¥]/,"");
+            return(
+              <tr key={i}>
+                <td style={td}>
+                  <input disabled={locked} value={szNum}
+                    onChange={e=>{const f=autoFmt(e.target.value);setRow(i,{size:f?sizeCur+f:""});}}
+                    placeholder="10,000" inputMode="decimal" style={{...inp,minWidth:70}}/>
                 </td>
-              );})}
-              <td style={td}>{!locked&&<span onClick={()=>delRow(i)} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem"}}>×</span>}</td>
-            </tr>
-          ))}
+                {cols.map(c=>{
+                  const raw=(r.prices||{})[c]||"";
+                  const num=raw.replace(/^[$€¥]/,"");
+                  return(
+                    <td key={c} style={td}>
+                      <input disabled={locked} value={num}
+                        onChange={e=>{const f=autoFmt(e.target.value);setCell(i,c,f?colCur(c)+f:"");}}
+                        placeholder="—" inputMode="decimal" style={{...inp,minWidth:60}}/>
+                    </td>
+                  );
+                })}
+                <td style={td}>{!locked&&<span onClick={()=>delRow(i)} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem"}}>×</span>}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       {cols.length===0&&<p style={{color:C.textDim,fontSize:"0.65rem",marginTop:6}}>※ プランがありません（列はプランから自動生成）</p>}
@@ -2148,7 +2193,7 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
     try {
       const slot=currentSlots.find(s=>s.id===slotId);
       const texts=frags.filter(f=>!f.merged).map(f=>f.text);
-      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,
+      const data=await callAPI({model:MODEL,max_tokens:2000,
         system:`プロップファーム情報ライター。「${slot?.label||slotId}」の断片を1つに整形。重複統合・数値保持。整形結果のみ出力。`,
         messages:[{role:"user",content:texts.map((t,i)=>`【${i+1}】\n${t}`).join("\n\n")}]});
       setSlotData(prev=>({...prev,[slotId]:[...frags.filter(f=>!f.merged),{text:exText(data),merged:true}]}));
@@ -2880,9 +2925,9 @@ function App() {
   const [sessionName,setSessionName]=useState("");
 
   // 縦タブ（Firm→Plan階層）
-  const [firms,setFirms]=useState([{"id":"f2","name":"The5ers","plans":[{"id":"p2","name":"High Stakes"},{"id":"p3","name":"Hyper-Growth"},{"id":"p4","name":"Bootcamp"},{"id":"p5","name":"Pro-Growth"}]},{"id":"f3","name":"FundingPips","plans":[{"id":"p6","name":"FundingPips Zero"},{"id":"p7","name":"1-Step"},{"id":"p8","name":"2-Step Standard"},{"id":"p9","name":"2-Step Pro"}]},{"id":"f4","name":"FundedNext","plans":[{"id":"p10","name":"Stellar 1-Step"},{"id":"p11","name":"Stellar 2-Step"},{"id":"p12","name":"Stellar Lite"},{"id":"p13","name":"Stellar Instant"}]}]);
-  const [activeTabId,setActiveTabId]=useState("f2");
-  const nextId=useRef(14);
+  const [firms,setFirms]=useState([]);
+  const [activeTabId,setActiveTabId]=useState("");
+  const nextId=useRef(2);
 
   // アクティブがFirmかPlanか判定
   const activeType=useMemo(()=>{
@@ -2891,7 +2936,7 @@ function App() {
 
   // 各タブのデータ { [tabId]: { archives:[], targetText:"", slotData:{} } }
   // templateModeはactiveTypeで自動決定（firm→dbp01/koryaku, plan→dbp02）
-  const [tabDataMap,setTabDataMap]=useState({"f2":{"archives":[],"targetText":"","slotData":{"firmName":[{"text":"The5ers"}]},"templateMode":"dbp01"},"p2":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - High Stakes"}]},"templateMode":"dbp02"},"p3":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - Hyper-Growth"}]},"templateMode":"dbp02"},"p4":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - Bootcamp"}]},"templateMode":"dbp02"},"p5":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"The5ers - Pro-Growth"}]},"templateMode":"dbp02"},"f3":{"archives":[],"targetText":"","slotData":{"firmName":[{"text":"FundingPips"}]},"templateMode":"dbp01"},"p6":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - FundingPips Zero"}]},"templateMode":"dbp02"},"p7":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - 1-Step"}]},"templateMode":"dbp02"},"p8":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - 2-Step Standard"}]},"templateMode":"dbp02"},"p9":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundingPips - 2-Step Pro"}]},"templateMode":"dbp02"},"f4":{"archives":[],"targetText":"","slotData":{"firmName":[{"text":"FundedNext"}]},"templateMode":"dbp01"},"p10":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar 1-Step"}]},"templateMode":"dbp02"},"p11":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar 2-Step"}]},"templateMode":"dbp02"},"p12":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar Lite"}]},"templateMode":"dbp02"},"p13":{"archives":[],"targetText":"","slotData":{"challengeName":[{"text":"FundedNext - Stellar Instant"}]},"templateMode":"dbp02"}});
+  const [tabDataMap,setTabDataMap]=useState({});
 
   // UI state
   const [rightMode,setRightMode]=useState("slots"); // slots | glossary
@@ -2916,6 +2961,7 @@ function App() {
   const dirtyRef=useRef(false);          // ファイル出力後に変更があるか（離脱警告用）
   const draftBaselineRef=useRef(null);   // 直近ドラフトのシリアライズ値（実変更検出用）
   const draftRestoredRef=useRef(false);  // 起動時復元の二重実行防止
+  const loadedIdsRef=useRef(new Set());  // 読込台帳：読込/前回保存時点のファーム+プランID（差分反映保存の基準）
 
   // 用語辞典（グローバル）— 正本65キーで初期化
   const [glossaryTerms,setGlossaryTerms]=useState(()=>GLOSSARY_SEED.map(t=>({...t})));
@@ -3004,7 +3050,7 @@ function App() {
   },[firms,tabDataMap]);
 
   const handleOCRFromChild=useCallback(async(b64,mt)=>{
-    try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mt||"image/png",data:b64}},{type:"text",text:"画像テキスト抽出。テーブルはMarkdown。抽出のみ出力。"}]}]});if(pasteAreaRef.current)pasteAreaRef.current.value+=(pasteAreaRef.current.value?"\n\n--- OCR ---\n":"")+exText(data)}catch(e){if(pasteAreaRef.current)pasteAreaRef.current.value+="\nOCRエラー: "+e.message}
+    try{const data=await callAPI({model:MODEL,max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mt||"image/png",data:b64}},{type:"text",text:"画像テキスト抽出。テーブルはMarkdown。抽出のみ出力。"}]}]});if(pasteAreaRef.current)pasteAreaRef.current.value+=(pasteAreaRef.current.value?"\n\n--- OCR ---\n":"")+exText(data)}catch(e){if(pasteAreaRef.current)pasteAreaRef.current.value+="\nOCRエラー: "+e.message}
   },[]);
 
   // coupon-config.json に追記（Hugo出力先フォルダ経由）
@@ -3059,7 +3105,7 @@ function App() {
   // 貼り付け→翻訳→取り込み対象
   const handleTranslateToTarget=useCallback(async text=>{
     setTranslating(true); setTabField("targetText","翻訳中..."); setPasteH(100);
-    try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:text}]});setTabField("targetText",exText(data))}
+    try{const data=await callAPI({model:MODEL,max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:text}]});setTabField("targetText",exText(data))}
     catch(e){setTabField("targetText","翻訳エラー: "+e.message)}
     setTranslating(false);
   },[setTabField]);
@@ -3131,7 +3177,7 @@ function App() {
         contextInfo=`対象Firm: ${firmName}\n対象Plan: ${currentName}（${firmName} - ${currentName}）\nこのプランの情報のみ抽出してください。他のプランの情報が混在している場合は除外。複数プランの比較表から該当プランの列だけ抽出。`;
       }
       const slotList=currentSlots.map(s=>`"${s.id}": [${s.section}] ${s.label}${s.hint?" — "+s.hint:""}`).join("\n");
-      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,
+      const data=await callAPI({model:MODEL,max_tokens:4000,
         system:`あなたはプロップファーム情報の分類エンジンです。
 ${contextInfo}
 
@@ -3380,8 +3426,8 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
     // P02/P02b の括弧バリアント（合格）（出金）も rd_minDays にマップ
     labelToId["最低取引日数（合格）"]="rd_minDays";
     labelToId["最低取引日数（出金）"]="rd_minDays";
-    // P-key プレフィックスを除去: "P01. 利益目標" → "利益目標"
-    const stripPKey=s=>s.replace(/^P\d+[a-z]*[.．]\s*/,"").trim();
+    // P-key プレフィックスを除去: "P01. 利益目標" / "P01: 利益目標" → "利益目標"
+    const stripPKey=s=>s.replace(/^P\d+[a-z]*[:：.．]\s*/,"").trim();
     const updates={};let stored=0;const skipped=[];
     tableLines.forEach(line=>{
       const cells=parseRow(line);
@@ -3443,7 +3489,7 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
 
       if(!planTexts){alert("配下プランのデータがありません");setAiGenKoryaku(false);return}
 
-      const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:8000,
+      const data=await callAPI({model:MODEL,max_tokens:8000,
         system:`プロップファーム攻略記事ライター。FirmデータとPlanデータから3つの断面ブロックを生成。
 
 ■ 出力形式（JSON）
@@ -3525,7 +3571,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           return `【${p.name}】\n${ruleItems}\n価格データ:\n${priceData}`;
         }).join("\n\n");
 
-        const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:4000,
+        const data=await callAPI({model:MODEL,max_tokens:4000,
           system:`プロップファーム プラン比較テーブル生成。Markdownテーブルのみ出力。
 
 列: 項目 | ${planDataList.map(p=>p.name).join(" | ")}
@@ -3585,7 +3631,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   // 用語登録
   const handleGlossaryAdd=useCallback(async text=>{
     setGlossaryGenerating(true);
-    try{const data=await callAPI({model:"claude-sonnet-4-20250514",max_tokens:2000,
+    try{const data=await callAPI({model:MODEL,max_tokens:2000,
       system:'プロップファーム用語辞典編集者。JSON配列のみ出力。各要素:{term,category,definition,explanation,trivia}',
       messages:[{role:"user",content:text}]});
       const arr=JSON.parse(exText(data).replace(/```json|```/g,"").trim());
@@ -3762,22 +3808,49 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     return pmDir.getFileHandle(PM_FILE,{create});
   },[hugoDir]);
 
+  // 保存 = 差分反映マージ（常に同一 pfdb.json へ書き戻し・連番増殖なし）
+  // 読込台帳(loadedIdsRef)を基準に：新規→追加 / 既存→更新 / 読込済→消えた→削除 / 未読込→温存
   const exportAll=useCallback(async()=>{
-    const data={firms,sections,sessionName,tabDataMap,glossaryTerms};
-    if(hugoDir){
-      try{
-        const fh=await getPmFile(true);
-        const w=await fh.createWritable();
-        await w.write(JSON.stringify(data,null,2));
-        await w.close();
-        dirtyRef.current=false;
-        showToast(`✓ 保存完了 (${PM_DIR}/${PM_FILE})`);
-        return;
-      }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
+    if(!window.showSaveFilePicker){
+      // 非対応ブラウザ：差分マージ不可のため現状データをDL（連番増殖の可能性あり）
+      exportJSON({firms,sections,sessionName,tabDataMap,glossaryTerms},"pfdb.json");
+      dirtyRef.current=false;return;
     }
-    exportJSON(data,"pfdb-all.json"); // フォールバック
-    dirtyRef.current=false;
-  },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
+    // 1) 保存先ハンドル：記憶優先 → 無ければ初回だけ選択して記憶
+    let fh=await loadSaveHandle();
+    if(fh&&!(await ensureRW(fh)))fh=null;
+    if(!fh){
+      try{
+        fh=await window.showSaveFilePicker({suggestedName:"pfdb.json",types:[{description:"JSON",accept:{"application/json":[".json"]}}]});
+        await saveSaveHandle(fh);
+      }catch(e){if(e.name!=="AbortError")showToast("✗ 保存先選択エラー: "+e.message);return;}
+    }
+    // 2) 既存ファイル読込（差分反映のベース）
+    let base={firms:[],tabDataMap:{},glossaryTerms:[]};
+    try{const txt=await (await fh.getFile()).text();if(txt.trim())base=JSON.parse(txt);}catch(e){}
+    // 3) 差分反映マージ
+    const loaded=loadedIdsRef.current||new Set();
+    const memFirmIds=new Set(firms.map(f=>f.id));
+    const memIds=new Set();firms.forEach(f=>{memIds.add(f.id);(f.plans||[]).forEach(p=>memIds.add(p.id))});
+    // firms：未読込のみ温存（読込台帳に有り＆メモリに無し＝削除 → 落とす／メモリ有り＝後で更新分を足す）
+    const keptFirms=(base.firms||[]).filter(f=>!memFirmIds.has(f.id)&&!loaded.has(f.id));
+    const mergedFirms=[...keptFirms,...firms];
+    // tabDataMap：読込→削除キーを除去 → メモリの全キーで更新（未読込キーは温存）
+    const mergedTdm={...(base.tabDataMap||{})};
+    for(const k of Object.keys(mergedTdm))if(loaded.has(k)&&!memIds.has(k))delete mergedTdm[k];
+    for(const k of Object.keys(tabDataMap))mergedTdm[k]=tabDataMap[k];
+    const mergedGlossary=(glossaryTerms&&glossaryTerms.length)?glossaryTerms:(base.glossaryTerms||[]);
+    const merged={firms:mergedFirms,sections,sessionName,tabDataMap:mergedTdm,glossaryTerms:mergedGlossary};
+    // 4) 同一ファイルへ書き戻し
+    try{
+      const w=await fh.createWritable();
+      await w.write(JSON.stringify(merged,null,2));
+      await w.close();
+      dirtyRef.current=false;
+      loadedIdsRef.current=memIds; // 次回保存の基準＝今メモリにある範囲（未読込分は基準に含めない＝温存を維持）
+      showToast(`✓ 保存完了（${fh.name}・全${mergedFirms.length}社）`);
+    }catch(e){showToast("✗ 保存エラー: "+e.message);}
+  },[firms,sections,sessionName,tabDataMap,glossaryTerms,showToast]);
 
   // 保存>追加: 既存ファイルに現在のデータをマージして保存
   const exportMergeAll=useCallback(async()=>{
@@ -3807,7 +3880,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         return;
       }catch(e){showToast("✗ 保存エラー: "+e.message);return;}
     }
-    exportJSON(merged,"pfdb-all.json");
+    exportJSON(merged,"pfdb.json");
     dirtyRef.current=false;
   },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
 
@@ -3820,6 +3893,11 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   const openIDB=()=>new Promise((res,rej)=>{const r=indexedDB.open(IDB_NAME,1);r.onupgradeneeded=e=>e.target.result.createObjectStore(IDB_STORE);r.onsuccess=e=>res(e.target.result);r.onerror=e=>rej(e);});
   const saveHandle=async h=>{try{const db=await openIDB();const tx=db.transaction(IDB_STORE,"readwrite");tx.objectStore(IDB_STORE).put(h,IDB_KEY);}catch(e){}};
   const loadHandle=async()=>{try{const db=await openIDB();return new Promise((res,rej)=>{const r=db.transaction(IDB_STORE).objectStore(IDB_STORE).get(IDB_KEY);r.onsuccess=e=>res(e.target.result);r.onerror=rej;});}catch(e){return null;}};
+  // 保存先ファイル（pfdb.json）のハンドルを永続化 — 常に同一ファイルへ上書きし連番増殖を防ぐ
+  const SAVE_FILE_KEY="saveFile";
+  const saveSaveHandle=async h=>{try{const db=await openIDB();const tx=db.transaction(IDB_STORE,"readwrite");tx.objectStore(IDB_STORE).put(h,SAVE_FILE_KEY);}catch(e){}};
+  const loadSaveHandle=async()=>{try{const db=await openIDB();return new Promise((res,rej)=>{const r=db.transaction(IDB_STORE).objectStore(IDB_STORE).get(SAVE_FILE_KEY);r.onsuccess=e=>res(e.target.result);r.onerror=rej;});}catch(e){return null;}};
+  const ensureRW=async(fh,mode="readwrite")=>{try{let p=await fh.queryPermission({mode});if(p!=="granted")p=await fh.requestPermission({mode});return p==="granted";}catch(e){return false;}};
 
   // 起動時にフォルダハンドルを復元
   useEffect(()=>{
@@ -3953,32 +4031,41 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     if(d.firms?.[0])setActiveTabId(d.firms[0].id);
     if(d.firms){
       let maxId=0;
+      const ids=new Set();
       d.firms.forEach(f=>{
+        ids.add(f.id);
         const fn=parseInt(f.id.replace(/\D/g,""))||0; if(fn>maxId)maxId=fn;
-        (f.plans||[]).forEach(p=>{const pn=parseInt(p.id.replace(/\D/g,""))||0; if(pn>maxId)maxId=pn});
+        (f.plans||[]).forEach(p=>{ids.add(p.id);const pn=parseInt(p.id.replace(/\D/g,""))||0; if(pn>maxId)maxId=pn});
       });
       nextId.current=maxId+1;
+      loadedIdsRef.current=ids; // 読込台帳を確定（差分反映保存の基準）
     }
   },[]);
 
+  // 全件読込 = 保存と同一の pfdb.json から読む（記憶ハンドル優先・初回は選択して記憶）
   const importAll=useCallback(async()=>{
-    if(hugoDir){
+    // 1) 記憶した保存先ファイルがあればそこから読込
+    let fh=await loadSaveHandle();
+    if(fh&&!(await ensureRW(fh)))fh=null;
+    if(fh){
       try{
-        const fh=await getPmFile(false);
-        const file=await fh.getFile();
-        const data=JSON.parse(await file.text());
-        applyData(data);
-        showToast(`✓ 読込完了 (${PM_DIR}/${PM_FILE})`);
+        applyData(JSON.parse(await (await fh.getFile()).text()));
+        showToast(`✓ 読込完了（${fh.name}）`);
         return;
-      }catch(e){
-        // ファイルなければダウンロード版にフォールバック
-        if(e.name!=="NotFoundError")showToast("✗ 読込エラー: "+e.message);
-        else importJSON(applyData);
-        return;
-      }
+      }catch(e){if(e.name!=="NotFoundError")showToast("✗ 読込エラー: "+e.message);}
     }
-    importJSON(applyData);
-  },[applyData,hugoDir,getPmFile,showToast]);
+    // 2) 未記憶：ファイル選択してハンドルを記憶（以降は保存と同一ファイル）
+    if(window.showOpenFilePicker){
+      try{
+        const [picked]=await window.showOpenFilePicker({types:[{description:"JSON",accept:{"application/json":[".json"]}}]});
+        await saveSaveHandle(picked);
+        applyData(JSON.parse(await (await picked.getFile()).text()));
+        showToast(`✓ 読込完了（${picked.name}）`);
+        return;
+      }catch(e){if(e.name!=="AbortError")showToast("✗ 読込エラー: "+e.message);return;}
+    }
+    importJSON(applyData); // 非対応ブラウザのフォールバック（ハンドルは記憶されない）
+  },[applyData,showToast]);
 
   // バックアップ用：現在の全状態を取得 / 復元
   const getCurrentData=useCallback(()=>({firms,sections,sessionName,tabDataMap,glossaryTerms}),[firms,sections,tabDataMap,glossaryTerms]);
@@ -4219,8 +4306,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <Btn color={C.green} onClick={()=>setShowDataMenu(v=>v==="save"?false:"save")} style={{fontSize:"0.6rem"}}>保存 ▾</Btn>
           {showDataMenu==="save"&&(
             <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:90,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
-              <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>保存</Btn>
-              <Btn color={C.green} onClick={()=>{exportMergeAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>追加</Btn>
+              <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} title="差分反映マージで pfdb.json へ保存（同一ファイル上書き・未読込ファームは温存）">保存</Btn>
             </div>
           )}
         </div>
