@@ -1,27 +1,33 @@
 {
-  "slug": "fxify",
-  "ファーム名": "FXIFY",
-  "拠点国": "",
-  "創業年": "",
+  "firmSlug": "fxify",
   "公式URL": "https://fxify.com/",
-  "カテゴリ": "",
-  "日本対応": "",
-  "ファームピッチ": "",
-  "リワードプログラム": "",
-  "スケールアップ": "",
-  "ブローカー": "",
-  "プラットフォーム": "",
-  "サーバー時間": "",
-  "DDリセット": "",
-  "レバレッジ": "",
-  "手数料": "",
-  "入金方法": "",
-  "出金方法": "",
-  "出金ポリシー": "",
-  "利益分配率": "",
-  "利益分配率補足": "",
-  "メールアドレス": "",
-  "アフィリエイトURL": "",
-  "クーポン": [],
-  "プラン一覧": []
+  "extractedAt": "2026-06-04T18:05:38.473Z",
+  "クーポン": [
+    {
+      "code": "GOAL26",
+      "discount": "26%割引",
+      "expires": "2026-07-19"
+    },
+    {
+      "code": "NEW40",
+      "discount": "40%割引",
+      "expires": "2026-12-31"
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$5,000\",\"tier\":\"\",\"prices\":{\"One Phase\":\"—\",\"Two Phase\":\"$43.66\",\"Three Phase\":\"—\",\"Instant Funding\":\"—\",\"Lightning\":\"—\"}},{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"One Phase\":\"—\",\"Two Phase\":\"$59\",\"Three Phase\":\"—\",\"Instant Funding\":\"—\",\"Lightning\":\"—\"}},{\"size\":\"$15,000\",\"tier\":\"\",\"prices\":{\"One Phase\":\"—\",\"Two Phase\":\"—\",\"Three Phase\":\"—\",\"Instant Funding\":\"—\",\"Lightning\":\"—\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"One Phase\":\"—\",\"Two Phase\":\"—\",\"Three Phase\":\"—\",\"Instant Funding\":\"—\",\"Lightning\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"One Phase\":\"—\",\"Two Phase\":\"—\",\"Three Phase\":\"—\",\"Instant Funding\":\"—\",\"Lightning\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"One Phase\":\"—\",\"Two Phase\":\"—\",\"Three Phase\":\"—\",\"Instant Funding\":\"—\",\"Lightning\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "One Phase, Two Phase, Three Phase, Instant Funding, Lightning"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
 }
