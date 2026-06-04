@@ -1,11 +1,11 @@
 {
   "firmSlug": "fundednext",
   "公式URL": "https://fundednext.com/ja",
-  "extractedAt": "2026-06-04T17:44:10.338Z",
+  "extractedAt": "2026-06-04T17:45:25.748Z",
   "クーポン": [
     {
       "code": "FLEX",
-      "discount": "最初の5回は47%割引、以降は40%割引",
+      "discount": "47% off first 5 Flex, 40% for rest (Futures)",
       "expires": null
     }
   ],
@@ -22,7 +22,7 @@
     ]
   },
   "diff": {
-    "summary": "new",
+    "summary": "no_change",
     "changes": []
   }
 }
