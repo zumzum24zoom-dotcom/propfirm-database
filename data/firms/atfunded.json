@@ -1,27 +1,22 @@
 {
-  "slug": "atfunded",
-  "ファーム名": "ATFunded",
-  "拠点国": "",
-  "創業年": "",
+  "firmSlug": "atfunded",
   "公式URL": "https://atfunded.com/",
-  "カテゴリ": "",
-  "日本対応": "",
-  "ファームピッチ": "",
-  "リワードプログラム": "",
-  "スケールアップ": "",
-  "ブローカー": "",
-  "プラットフォーム": "",
-  "サーバー時間": "",
-  "DDリセット": "",
-  "レバレッジ": "",
-  "手数料": "",
-  "入金方法": "",
-  "出金方法": "",
-  "出金ポリシー": "",
-  "利益分配率": "",
-  "利益分配率補足": "",
-  "メールアドレス": "",
-  "アフィリエイトURL": "",
+  "extractedAt": "2026-06-04T18:02:22.342Z",
   "クーポン": [],
-  "プラン一覧": []
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"Pro Program\":\"$500\",\"2-Phase Legacy Program\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"Pro Program\":\"$2,000\",\"2-Phase Legacy Program\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"Pro Program\":\"$3,000\",\"2-Phase Legacy Program\":\"—\"}},{\"size\":\"$150,000\",\"tier\":\"\",\"prices\":{\"Pro Program\":\"$4,500\",\"2-Phase Legacy Program\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "Pro Program, 2-Phase Legacy Program"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
 }
