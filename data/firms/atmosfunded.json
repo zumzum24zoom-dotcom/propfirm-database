@@ -1,0 +1,28 @@
+{
+  "firmSlug": "atmosfunded",
+  "公式URL": "https://atmosfunded.com/",
+  "extractedAt": "2026-06-04T18:01:57.907Z",
+  "クーポン": [
+    {
+      "code": "WORLDCUP",
+      "discount": "15%割引",
+      "expires": "2024-06-30"
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$5K\",\"tier\":\"\",\"prices\":{\"1-Step Standard\":\"$36.55\",\"2-Step Standard\":\"$53.55\",\"Instant Funding\":\"$63.75\",\"Atmos Nova Challenge\":\"$5\"}},{\"size\":\"$10K\",\"tier\":\"\",\"prices\":{\"1-Step Standard\":\"$43.00\",\"2-Step Standard\":\"$63.00\",\"Instant Funding\":\"$75.00\",\"Atmos Nova Challenge\":\"$5\"}},{\"size\":\"$25K\",\"tier\":\"\",\"prices\":{\"1-Step Standard\":\"—\",\"2-Step Standard\":\"—\",\"Instant Funding\":\"—\",\"Atmos Nova Challenge\":\"$5\"}},{\"size\":\"$50K\",\"tier\":\"\",\"prices\":{\"1-Step Standard\":\"—\",\"2-Step Standard\":\"—\",\"Instant Funding\":\"—\",\"Atmos Nova Challenge\":\"$5\"}},{\"size\":\"$100K\",\"tier\":\"\",\"prices\":{\"1-Step Standard\":\"—\",\"2-Step Standard\":\"—\",\"Instant Funding\":\"—\",\"Atmos Nova Challenge\":\"$5\"}},{\"size\":\"$150K\",\"tier\":\"\",\"prices\":{\"1-Step Standard\":\"—\",\"2-Step Standard\":\"—\",\"Instant Funding\":\"—\",\"Atmos Nova Challenge\":\"$5\"}},{\"size\":\"$200K\",\"tier\":\"\",\"prices\":{\"1-Step Standard\":\"—\",\"2-Step Standard\":\"—\",\"Instant Funding\":\"—\",\"Atmos Nova Challenge\":\"$5\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "1-Step Standard, 2-Step Standard, Instant Funding, Atmos Nova Challenge"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
