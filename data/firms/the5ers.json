@@ -1,49 +1,130 @@
 {
   "firmSlug": "the5ers",
   "公式URL": "https://www.the5ers.com/",
-  "extractedAt": "2026-06-04T17:21:51.571Z",
+  "extractedAt": "2026-06-04T17:32:04.184Z",
   "クーポン": [],
   "slotData": {
     "priceTable": [
       {
-        "text": "{\"rows\":[{\"size\":\"$2.5K\",\"tier\":\"\",\"prices\":{\"1 Step | Hyper Growth\":\"—\",\"2 Step | High Stakes\":\"—\",\"3 Step | Bootcamp\":\"—\"}},{\"size\":\"$5K\",\"tier\":\"\",\"prices\":{\"1 Step | Hyper Growth\":\"—\",\"2 Step | High Stakes\":\"—\",\"3 Step | Bootcamp\":\"—\"}},{\"size\":\"$10K\",\"tier\":\"\",\"prices\":{\"1 Step | Hyper Growth\":\"—\",\"2 Step | High Stakes\":\"—\",\"3 Step | Bootcamp\":\"—\"}},{\"size\":\"$25K\",\"tier\":\"\",\"prices\":{\"1 Step | Hyper Growth\":\"—\",\"2 Step | High Stakes\":\"—\",\"3 Step | Bootcamp\":\"—\"}},{\"size\":\"$50K\",\"tier\":\"\",\"prices\":{\"1 Step | Hyper Growth\":\"—\",\"2 Step | High Stakes\":\"—\",\"3 Step | Bootcamp\":\"—\"}},{\"size\":\"$100K\",\"tier\":\"\",\"prices\":{\"1 Step | Hyper Growth\":\"$22\",\"2 Step | High Stakes\":\"—\",\"3 Step | Bootcamp\":\"—\"}}]}"
+        "text": "{\"rows\":[{\"size\":\"$2.5K\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"$22\",\"2 STEPS\":\"—\",\"3 STEPS\":\"—\"}},{\"size\":\"$5K\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"$22\",\"2 STEPS\":\"—\",\"3 STEPS\":\"—\"}},{\"size\":\"$10K\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"$22\",\"2 STEPS\":\"—\",\"3 STEPS\":\"—\"}},{\"size\":\"$25K\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"$22\",\"2 STEPS\":\"—\",\"3 STEPS\":\"—\"}},{\"size\":\"$50K\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"$22\",\"2 STEPS\":\"—\",\"3 STEPS\":\"—\"}},{\"size\":\"$100K\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"$22\",\"2 STEPS\":\"—\",\"3 STEPS\":\"—\"}}]}"
       }
     ],
     "planList": [
       {
-        "text": "1 Step | Hyper Growth, 2 Step | High Stakes, 3 Step | Bootcamp"
+        "text": "1 STEP, 2 STEPS, 3 STEPS"
       }
     ]
   },
   "diff": {
-    "summary": "6_changes",
+    "summary": "18_changes",
     "changes": [
       {
-        "type": "new_size",
-        "size": "$2.5K"
+        "type": "price_change",
+        "size": "$2.5K",
+        "plan": "1 STEP",
+        "to": "$22"
       },
       {
-        "type": "new_size",
-        "size": "$5K"
+        "type": "price_change",
+        "size": "$2.5K",
+        "plan": "2 STEPS",
+        "to": "—"
       },
       {
-        "type": "new_size",
-        "size": "$10K"
+        "type": "price_change",
+        "size": "$2.5K",
+        "plan": "3 STEPS",
+        "to": "—"
       },
       {
-        "type": "new_size",
-        "size": "$25K"
+        "type": "price_change",
+        "size": "$5K",
+        "plan": "1 STEP",
+        "to": "$22"
       },
       {
-        "type": "new_size",
-        "size": "$50K"
+        "type": "price_change",
+        "size": "$5K",
+        "plan": "2 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$5K",
+        "plan": "3 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$10K",
+        "plan": "1 STEP",
+        "to": "$22"
+      },
+      {
+        "type": "price_change",
+        "size": "$10K",
+        "plan": "2 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$10K",
+        "plan": "3 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$25K",
+        "plan": "1 STEP",
+        "to": "$22"
+      },
+      {
+        "type": "price_change",
+        "size": "$25K",
+        "plan": "2 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$25K",
+        "plan": "3 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$50K",
+        "plan": "1 STEP",
+        "to": "$22"
+      },
+      {
+        "type": "price_change",
+        "size": "$50K",
+        "plan": "2 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$50K",
+        "plan": "3 STEPS",
+        "to": "—"
       },
       {
         "type": "price_change",
         "size": "$100K",
-        "plan": "1 Step | Hyper Growth",
-        "from": "—",
+        "plan": "1 STEP",
         "to": "$22"
+      },
+      {
+        "type": "price_change",
+        "size": "$100K",
+        "plan": "2 STEPS",
+        "to": "—"
+      },
+      {
+        "type": "price_change",
+        "size": "$100K",
+        "plan": "3 STEPS",
+        "to": "—"
       }
     ]
   }
