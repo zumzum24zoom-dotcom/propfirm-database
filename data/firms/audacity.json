@@ -1,7 +1,7 @@
 {
   "firmSlug": "audacity",
-  "公式URL": "https://audacity.capital/",
-  "extractedAt": "2026-06-04T18:00:18.039Z",
+  "公式URL": "https://audacity.capital/ja/",
+  "extractedAt": "2026-06-04T18:00:44.303Z",
   "クーポン": [],
   "slotData": {
     "priceTable": [
@@ -16,7 +16,7 @@
     ]
   },
   "diff": {
-    "summary": "new",
+    "summary": "no_change",
     "changes": []
   }
 }
