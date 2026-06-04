@@ -1,0 +1,28 @@
+{
+  "firmSlug": "e8markets",
+  "公式URL": "https://e8markets.com/",
+  "extractedAt": "2026-06-04T17:53:41.595Z",
+  "クーポン": [
+    {
+      "code": "E8PRO",
+      "discount": "30%割引",
+      "expires": null
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"E8 Signature\":\"—\",\"E8 One\":\"—\",\"E8 Pro\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"E8 Signature\":\"—\",\"E8 One\":\"—\",\"E8 Pro\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"E8 Signature\":\"$260\",\"E8 One\":\"—\",\"E8 Pro\":\"—\"}},{\"size\":\"$150,000\",\"tier\":\"\",\"prices\":{\"E8 Signature\":\"—\",\"E8 One\":\"—\",\"E8 Pro\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "E8 Signature, E8 One, E8 Pro"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
