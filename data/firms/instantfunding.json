@@ -1,0 +1,22 @@
+{
+  "firmSlug": "instantfunding",
+  "公式URL": "https://instantfunding.com/",
+  "extractedAt": "2026-06-04T17:49:40.366Z",
+  "クーポン": [],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$625\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$1,250\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$2,500\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$5,000\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$20,000\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$40,000\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$80,000\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}},{\"size\":\"$120,000\",\"tier\":\"\",\"prices\":{\"Instant Funding\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "Instant Funding"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
