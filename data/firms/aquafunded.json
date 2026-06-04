@@ -1,27 +1,33 @@
 {
-  "slug": "aquafunded",
-  "ファーム名": "AquaFunded",
-  "拠点国": "",
-  "創業年": "",
-  "公式URL": "https://aquafunded.com/",
-  "カテゴリ": "",
-  "日本対応": "",
-  "ファームピッチ": "",
-  "リワードプログラム": "",
-  "スケールアップ": "",
-  "ブローカー": "",
-  "プラットフォーム": "",
-  "サーバー時間": "",
-  "DDリセット": "",
-  "レバレッジ": "",
-  "手数料": "",
-  "入金方法": "",
-  "出金方法": "",
-  "出金ポリシー": "",
-  "利益分配率": "",
-  "利益分配率補足": "",
-  "メールアドレス": "",
-  "アフィリエイトURL": "",
-  "クーポン": [],
-  "プラン一覧": []
+  "firmSlug": "aquafunded",
+  "公式URL": "https://www.aquafunded.com/",
+  "extractedAt": "2026-06-04T17:57:08.324Z",
+  "クーポン": [
+    {
+      "code": "AQUA",
+      "discount": "40% OFF + BOGO + 150% Refund",
+      "expires": null
+    },
+    {
+      "code": "WELCOME",
+      "discount": "50% OFF + $100",
+      "expires": null
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$2.5k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$5k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$10k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$25k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$50k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$100k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$150k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$200k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$250k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$300k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}},{\"size\":\"$400k\",\"tier\":\"Standard\",\"prices\":{\"Instant Funding\":\"—\",\"One Step\":\"—\",\"Two Step\":\"—\",\"Three Step\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "Instant Funding, One Step, Two Step, Three Step"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
 }
