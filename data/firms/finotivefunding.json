@@ -1,7 +1,7 @@
 {
   "firmSlug": "finotivefunding",
   "公式URL": "https://finotivefunding.com/",
-  "extractedAt": "2026-06-04T15:50:17.501Z",
+  "extractedAt": "2026-06-04T15:55:55.601Z",
   "slotData": {
     "priceTable": [
       {
@@ -15,7 +15,7 @@
     ]
   },
   "diff": {
-    "summary": "new",
+    "summary": "no_change",
     "changes": []
   },
   "extractionError": "Claude API 401: x-api-key header is required"
