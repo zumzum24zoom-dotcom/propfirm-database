@@ -1,8 +1,14 @@
 {
   "firmSlug": "fundedelite",
-  "公式URL": "https://fundedelite.com/",
-  "extractedAt": "2026-06-04T17:45:53.474Z",
-  "クーポン": [],
+  "公式URL": "https://fundedelite.jp/",
+  "extractedAt": "2026-06-04T19:36:24.308Z",
+  "クーポン": [
+    {
+      "code": "10",
+      "discount": "10%割引",
+      "expires": null
+    }
+  ],
   "slotData": {
     "priceTable": [
       {
