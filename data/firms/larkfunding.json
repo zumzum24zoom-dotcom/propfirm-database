@@ -1,0 +1,28 @@
+{
+  "firmSlug": "larkfunding",
+  "公式URL": "https://larkfunding.com/",
+  "extractedAt": "2026-06-04T17:58:40.292Z",
+  "クーポン": [
+    {
+      "code": "MAY2026",
+      "discount": "同じサイズのアカウント1つ無料（ペイアウト獲得時）",
+      "expires": null
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"Instant\":\"$200\",\"1-Step\":\"—\",\"3-Step\":\"—\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"Instant\":\"$200\",\"1-Step\":\"—\",\"3-Step\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"Instant\":\"$200\",\"1-Step\":\"—\",\"3-Step\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"Instant\":\"$200\",\"1-Step\":\"$340\",\"3-Step\":\"—\"}},{\"size\":\"$200,000\",\"tier\":\"\",\"prices\":{\"Instant\":\"$200\",\"1-Step\":\"—\",\"3-Step\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "Instant, 1-Step, 3-Step"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
