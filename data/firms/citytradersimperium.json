@@ -1,0 +1,28 @@
+{
+  "firmSlug": "citytradersimperium",
+  "公式URL": "https://citytradersimperium.com/",
+  "extractedAt": "2026-06-04T17:51:12.650Z",
+  "クーポン": [
+    {
+      "code": "GOLD15",
+      "discount": "15%割引",
+      "expires": null
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"—\",\"2 STEP\":\"—\",\"INSTANT\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"—\",\"2 STEP\":\"—\",\"INSTANT\":\"—\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"—\",\"2 STEP\":\"—\",\"INSTANT\":\"—\"}},{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"$27\",\"2 STEP\":\"$34\",\"INSTANT\":\"$62\"}},{\"size\":\"$5,000\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"—\",\"2 STEP\":\"—\",\"INSTANT\":\"—\"}},{\"size\":\"$2,500\",\"tier\":\"\",\"prices\":{\"1 STEP\":\"—\",\"2 STEP\":\"—\",\"INSTANT\":\"—\"}}]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": "1 STEP, 2 STEP, INSTANT"
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
