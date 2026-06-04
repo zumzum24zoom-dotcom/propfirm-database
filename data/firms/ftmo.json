@@ -1,12 +1,12 @@
 {
   "firmSlug": "ftmo",
-  "公式URL": "https://ftmo.com/en/",
-  "extractedAt": "2026-06-04T17:46:33.784Z",
+  "公式URL": "https://ftmo.com/en/#pricing-1-step",
+  "extractedAt": "2026-06-04T17:47:37.069Z",
   "クーポン": [],
   "slotData": {
     "priceTable": [
       {
-        "text": "{\"rows\":[{\"size\":\"$200,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€1,080\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€439\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€345\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€250\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€89\",\"FTMO Challenge 1-Step\":\"—\"}}]}"
+        "text": "{\"rows\":[{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€79\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€199\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€319\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"Best Value\",\"prices\":{\"FTMO Challenge 2-Step\":\"€499\",\"FTMO Challenge 1-Step\":\"—\"}},{\"size\":\"$200,000\",\"tier\":\"\",\"prices\":{\"FTMO Challenge 2-Step\":\"€999\",\"FTMO Challenge 1-Step\":\"—\"}}]}"
       }
     ],
     "planList": [
@@ -16,7 +16,43 @@
     ]
   },
   "diff": {
-    "summary": "new",
-    "changes": []
+    "summary": "5_changes",
+    "changes": [
+      {
+        "type": "price_change",
+        "size": "$10,000",
+        "plan": "FTMO Challenge 2-Step",
+        "from": "€89",
+        "to": "€79"
+      },
+      {
+        "type": "price_change",
+        "size": "$25,000",
+        "plan": "FTMO Challenge 2-Step",
+        "from": "€250",
+        "to": "€199"
+      },
+      {
+        "type": "price_change",
+        "size": "$50,000",
+        "plan": "FTMO Challenge 2-Step",
+        "from": "€345",
+        "to": "€319"
+      },
+      {
+        "type": "price_change",
+        "size": "$100,000",
+        "plan": "FTMO Challenge 2-Step",
+        "from": "€439",
+        "to": "€499"
+      },
+      {
+        "type": "price_change",
+        "size": "$200,000",
+        "plan": "FTMO Challenge 2-Step",
+        "from": "€1,080",
+        "to": "€999"
+      }
+    ]
   }
 }
