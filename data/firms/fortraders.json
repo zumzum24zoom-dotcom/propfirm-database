@@ -1,0 +1,22 @@
+{
+  "firmSlug": "fortraders",
+  "sourceUrl": "https://www.fortraders.com/?utm_source=google&utm_medium=cpc&utm_campaign=SEA%20EN%20Konkurence&utm_id=21656096382&gc_id=21656096382&h_ad_id=779932219105&gad_source=1#forex",
+  "extractedAt": "2026-06-04T15:33:19.909Z",
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": ""
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  },
+  "extractionError": "Claude API 401: x-api-key header is required"
+}
