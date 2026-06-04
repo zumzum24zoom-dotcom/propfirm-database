@@ -1,7 +1,7 @@
 {
   "firmSlug": "finotivefunding",
   "公式URL": "https://finotivefunding.com/",
-  "extractedAt": "2026-06-04T16:35:09.710Z",
+  "extractedAt": "2026-06-04T18:02:41.151Z",
   "クーポン": [
     {
       "code": "FIRST10",
@@ -12,64 +12,38 @@
   "slotData": {
     "priceTable": [
       {
-        "text": "{\"rows\":[{\"size\":\"$2,500\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$39\",\"Challenge Two Step\":\"—\",\"Instant Funding Lite\":\"$119\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"—\",\"Pro Two Step\":\"—\"}},{\"size\":\"$5,000\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$69\",\"Challenge Two Step\":\"—\",\"Instant Funding Lite\":\"—\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"—\",\"Pro Two Step\":\"—\"}},{\"size\":\"$10,000\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$109\",\"Challenge Two Step\":\"—\",\"Instant Funding Lite\":\"—\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"—\",\"Pro Two Step\":\"—\"}},{\"size\":\"$25,000\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$269\",\"Challenge Two Step\":\"—\",\"Instant Funding Lite\":\"—\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"—\",\"Pro Two Step\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$499\",\"Challenge Two Step\":\"—\",\"Instant Funding Lite\":\"—\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"$469\",\"Pro Two Step\":\"—\"}},{\"size\":\"$100,000\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$799\",\"Challenge Two Step\":\"—\",\"Instant Funding Lite\":\"—\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"—\",\"Pro Two Step\":\"$914\"}},{\"size\":\"$200,000\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$1,349\",\"Challenge Two Step\":\"—\",\"Instant Funding Lite\":\"—\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"—\",\"Pro Two Step\":\"$1,799\"}}]}"
+        "text": "{\"rows\":[{\"size\":\"$2,500\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"$39\",\"Instant Funding Standard\":\"$119\",\"Pro One Step\":\"—\"}},{\"size\":\"$50,000\",\"tier\":\"\",\"prices\":{\"Challenge One Step\":\"—\",\"Instant Funding Standard\":\"—\",\"Pro One Step\":\"$514\"}}]}"
       }
     ],
     "planList": [
       {
-        "text": "Challenge One Step, Challenge Two Step, Instant Funding Lite, Instant Funding Standard, Pro One Step, Pro Two Step"
+        "text": "Challenge One Step, Instant Funding Standard, Pro One Step"
       }
     ]
   },
   "diff": {
-    "summary": "8_changes",
+    "summary": "3_changes",
     "changes": [
       {
         "type": "price_change",
         "size": "$2,500",
-        "plan": "Instant Funding Lite",
-        "from": "$65",
+        "plan": "Instant Funding Standard",
+        "from": "—",
         "to": "$119"
-      },
-      {
-        "type": "new_size",
-        "size": "$5,000"
-      },
-      {
-        "type": "new_size",
-        "size": "$10,000"
-      },
-      {
-        "type": "new_size",
-        "size": "$25,000"
       },
       {
         "type": "price_change",
         "size": "$50,000",
         "plan": "Challenge One Step",
-        "from": "—",
-        "to": "$499"
+        "from": "$499",
+        "to": "—"
       },
       {
         "type": "price_change",
         "size": "$50,000",
         "plan": "Pro One Step",
-        "from": "$514",
-        "to": "$469"
-      },
-      {
-        "type": "price_change",
-        "size": "$100,000",
-        "plan": "Challenge One Step",
-        "from": "—",
-        "to": "$799"
-      },
-      {
-        "type": "price_change",
-        "size": "$200,000",
-        "plan": "Challenge One Step",
-        "from": "—",
-        "to": "$1,349"
+        "from": "$469",
+        "to": "$514"
       }
     ]
   }
