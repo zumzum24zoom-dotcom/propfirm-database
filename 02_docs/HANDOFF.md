@@ -1,7 +1,7 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-06-03（セッション4）
+> **最終更新**: 2026-06-06（セッション5）
 
 ---
 
@@ -33,6 +33,7 @@
 | ③ | **計算機（Widget Maker）を独立ツール化** | ウィジェットをどんどん追加できる構造にするため |
 | ④ | 計算機は **完成SVG/HTMLまで出力**（Hugoは貼るだけ） | Hugoに計算ロジックを持たせない／見た目を完全制御 |
 | ⑤ | 計算機の入力は **Page Maker出力JSONのみ**（手入力は試作時の一時措置） | 1本道の徹底 |
+| ⑥ | **MASTER_DEFS が唯一の正本**。スロット・用語・キーマップはここから derive | 分散定義の撲滅 |
 
 ### 役割（3層）
 ```
@@ -45,10 +46,28 @@ Page Maker（入力・収集） ──出力JSON──▶ Widget Maker（計算+
 
 | ファイル | 内容 | 状態 |
 |---|---|---|
-| `01_tools/page-maker-v11.html` | データ入力・収集ツール（既存・3217行） | 稼働中 |
+| `01_tools/page-maker-v11.html` | データ入力・収集ツール | 稼働中（MASTER_DEFS 導入済み） |
 | `01_tools/widget-maker.html` | **計算機（新規）**。プラグイン方式でウィジェット生成 | 試作 v0.1 |
 | `02_docs/page-maker-v11-analysis.md` | Page Maker 構造分析 | 完了 |
 | `02_docs/HANDOFF.md` | 本資料 | 随時更新 |
+
+### Page Maker の正本構造（セッション5で確立）
+
+```
+MASTER_DEFS（page-maker-v11.html 内）  ← 唯一の正本
+  dbp01[23件]  fkey / id / term / section / hint / definition
+  dbp02[23件]  pkey / id / term / section / hint / definition / extra(P02b)
+  koryaku[3件] id / term / section / hint
+      │
+      ├─ SLOT_DEFS        ← UI表示（自動生成）
+      ├─ FIRM_KEY_MAP      ← Hugo export（自動生成）
+      ├─ PLAN_KEY_MAP      ← Hugo export（自動生成）
+      ├─ F_KEY_MAP         ← 取込テーブル解析（自動生成）
+      └─ GLOSSARY_SEED     ← Firm項目(F01-F22) + Plan項目(P01-P20+P02b)（自動生成）
+                             + GLOSSARY_BASE（表記・計算結果・固定）
+```
+
+**変更はすべて MASTER_DEFS の1行のみ。** SLOT_DEFS/GLOSSARY_SEED 等は直接編集禁止。
 
 ### Widget Maker の構造（拡張方法）
 ```js
@@ -87,14 +106,6 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 - `.mcp.json` + `@notionhq/notion-mcp-server` で接続確立
 - DB_100_Impl から移設・転用タスクを自動取得 → `HANDOFF.md` に整理
 
-**CLAUDE.md 更新**
-- 起動時アクションに `02_docs/HANDOFF.md` 必読を追加
-
-**git コミット（2件）**
-- `27f1f5c`: Page Maker強化・Hugo実装・クーポン自動化システム構築（26ファイル）
-- `3bf064f`: データ更新・不要ファイル削除
-- `35190a4`: 起動時アクション更新・セッション記録
-
 ---
 
 ### ✅ 完了（2026-05-30 セッション3）
@@ -107,48 +118,64 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 - トグルスイッチ: Page Makerタイトル横（スロット↔用語）
 
 **クーポン自動化パイプライン強化**
-- Dom貼付 → 自動でcoupon-config.jsonに保存（フォルダ未選択時は自動ピッカー起動）
-- toast通知（右下に保存結果表示）
-- Firm選択中にDom貼付 → slug自動設定・モーダル不要
-- coupon-config.json スキーマ拡張: `{firmSlug: {coupon: {...}, rules: {...}}}` 構造に変更（将来のルール変更検知等に対応）
-- extract-coupons.mjs: 新スキーマ対応（`firmEntry.coupon` のみ処理）
+- Dom貼付 → 自動でcoupon-config.jsonに保存
+- coupon-config.json スキーマ拡張: `{firmSlug: {coupon: {...}, rules: {...}}}` 構造
+
+---
 
 ### ✅ 完了（2026-06-03 セッション4）
 
 **site-scanner → Worker → GitHub パイプライン構築**
-
-- `01_tools/coupon-fetcher/worker.js` — `/scan` POST エンドポイント追加・CORS ヘッダー追加・`ghPutFile` ヘルパー追加
+- `01_tools/coupon-fetcher/worker.js` — `/scan` POST エンドポイント追加・CORS ヘッダー追加
 - `pfd-coupon-fetcher` Worker を Cloudflare にデプロイ済み
   - URL: `https://pfd-coupon-fetcher.purple-voice-a554.workers.dev`
   - Secrets 登録済み: `ANTHROPIC_KEY` / `GITHUB_TOKEN` / `TRIGGER_SECRET=pfd-secret-2026`
 - `01_tools/site-scanner.js` — bookmarklet ソース管理ファイル作成（POST直行版）
-- Page Maker `SCAN_ENDPOINT` 設定済み
-- Page Maker スキャナー検知バグ修正（`"_tool": "site-scanner"` スペースあり対応）
-- Page Maker スキャナーペースト処理変更: クーポン抽出→ページ構造保存（`data/scans/{slug}.json`）
-
-**保存フロー（設計済み・動作未確認）**
-```
-bookmarklet実行 → firmSlug確認 → Worker POST → GitHub data/scans/{slug}.json
-```
 
 **未解決: ブックマークレットが無反応**
 - Chrome の `allow pasting` セキュリティが邪魔でコンソールテスト未完
-- CORS fix 適用後のデプロイは完了済み → 次回セッションでブックマークレット更新して動作確認
+- CORS fix 適用後のデプロイは完了済み
+
+---
+
+### ✅ 完了（2026-06-06 セッション5）
+
+**Page Maker 正本（MASTER_DEFS）構築**
+
+- **F21/F22 正式追加**（commit `abf18fc`）
+  - GLOSSARY_SEED: F21=プラン名リスト（名称のみ列挙）/ F22=プラン比較テーブル を Firm項目に追加
+  - F_KEY_MAP: F21→planList / F22→planComparison に更新（旧: F21→planComparison）
+  - リサーチプロンプトの `（F21）` ラベル削除
+
+- **MASTER_DEFS を唯一の正本として導入**（commit `21da4d6`）
+  - `MASTER_DEFS`（dbp01/dbp02/koryaku）新設
+  - 下記5定義を全て MASTER_DEFS から自動導出:
+    - `SLOT_DEFS`（UI表示）
+    - `FIRM_KEY_MAP`（Hugo export用）
+    - `PLAN_KEY_MAP`（Hugo export用）
+    - `F_KEY_MAP`（取込テーブル解析用・ローカル変数）
+    - `GLOSSARY_SEED` の Firm項目(F01-F22)・Plan項目(P01-P20+P02b)
+  - `GLOSSARY_BASE` を分離（表記・計算結果18+5件の固定エントリ）
+  - `buildGlossarySeed()` 関数追加
+  - `rd_minDays` ラベル変更（`最低取引日数` → `最低取引日数（合格）`）の後方互換エントリ追加
+  - 旧ハードコード定義（SLOT_DEFS/GLOSSARY_SEED直書き等）を全削除
+
+---
 
 ### ⬜ 次にやること（優先順）
-→ 詳細は「セクション5 サイト照合タスク」を参照
 
-1. **ブックマークレット動作確認** — ブックマーク更新（`01_tools/site-scanner.js` 行13〜35）→ 対象サイトで実行 → `data/scans/` に JSON が届くか確認
-2. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— データ入力後すぐ表示可
-3. ❷ DBP_01 プランナビゲーション（firms/single.html）
-4. ❸ 実質最短日数タイムライン（Widget Maker 移植）
-5. Page Maker でデータ入力継続 → exportHugo
+1. **【最優先】Page Maker 全プロンプトの正本反映** — MASTER_DEFS/GLOSSARY_BASE 導入後も残っているハードコード値を動的参照に更新（8箇所・詳細は下記セクション8参照）
+2. **ブックマークレット動作確認** — ブックマーク更新（`01_tools/site-scanner.js` 行13〜35）→ 対象サイトで実行 → `data/scans/` に JSON が届くか確認
+3. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— データ入力後すぐ表示可
+4. ❷ DBP_01 プランナビゲーション（firms/single.html）
+5. ❸ 実質最短日数タイムライン（Widget Maker 移植）
+6. Page Maker でデータ入力継続 → exportHugo
 
 ---
 
 ## 4. 計算ロジック仕様（最速出金スケジュール）
 
-用語辞典（Page Maker内 GLOSSARY）の計算結果ラベルと一致：
+用語辞典（Page Maker内 GLOSSARY_BASE）の計算結果ラベルと一致：
 - `CALC_PASS` 最短合格 = 各Step `MAX(最低取引日数, 一貫性達成最速)` の合計。不存在は 1日×Step数 でフォールバック
 - `CALC_PAYOUT` 最速出金 = 出金頻度待機を反映（随時0/毎週MAX(7,X)/隔週MAX(14,X)/月次MAX(30,X)）
 - `CALC_TOTAL` トータル = 最短合格 + 最速出金
@@ -224,23 +251,49 @@ bookmarklet実行 → firmSlug確認 → Worker POST → GitHub data/scans/{slug
 
 ---
 
-## 6. 転用タスク（考え方・アプローチの流用）
+## 7. 転用タスク（考え方・アプローチの流用）
 
 > 転用 = 旧環境のロジック・設計思想を**新しい文脈に応用**する。DB_100_Impl 状態=転用 より自動取得。
 
 - [ ] 縦タブプロンプトボタン修正（DBP_01/DBP_02）— Page Maker の UI設計をHugo側スロット構造に転用
-- [ ] 最低取引日数 表記統一 ver.01 — C系「最低取引日数（合格）」/F系「最低取引日数（出金）」→ 用語辞典正本に転用済み
-- [ ] 統制語彙統一・P1-P3クリーンアップ ver.01 — 不在表記ルール → `GLOSSARY_SEED` の notation に転用
+- [ ] 最低取引日数 表記統一 ver.01 — C系「最低取引日数（合格）」/F系「最低取引日数（出金）」→ MASTER_DEFS で正本化済み ✅
+- [ ] 統制語彙統一・P1-P3クリーンアップ ver.01 — 不在表記ルール → `GLOSSARY_BASE` の notation に転用済み ✅
 - [ ] 汎用デザインエディタ（スタンドアロンHTMLツール）→ Page Maker / Widget Maker のテーマ設計に転用
-- [ ] パーマリンク実装（slugプロパティ追加）→ Hugo の slug ルーティング設計に転用済み
+- [ ] パーマリンク実装（slugプロパティ追加）→ Hugo の slug ルーティング設計に転用済み ✅
 - [ ] DBP_02 ルール詳細静的化（SEO対策）→ Hugo テンプレートでのルール表静的生成に転用
 - [ ] DBP_02 実質最短日数 再計算・Worker v7対応 → Widget Maker の計算ロジックに転用中
 
 ---
 
-## 7. 留意点・補足
+## 8. 【次セッション】プロンプト正本反映タスク
+
+> MASTER_DEFS/GLOSSARY_BASE 導入後も、各プロンプト内にハードコードが残っている。
+> 次セッションで全8箇所を動的参照に更新する。
+
+| # | 対象関数/箇所 | ハードコード内容 | 正本参照先 |
+|---|---|---|---|
+| 1 | `generateResearchPrompt` | `F01〜F22` 固定文字列 | `MASTER_DEFS.dbp01.filter(d=>d.fkey)` の先頭/末尾 fkey |
+| 2 | プランボタン（inline） | `上記19項目を各1行` | `MASTER_DEFS.dbp02.filter(d=>d.pkey)` の件数 |
+| 3 | プランボタン（inline） | `Static / Trailing系の6分類のみ` | `GLOSSARY_BASE` DD計算基準の件数+一覧 |
+| 4 | プランボタン（inline） | `EASE / TRAP / ー` | `GLOSSARY_BASE` 早見表差分 |
+| 5 | 自動取込プロンプト（inline） | `TRAP / EASE / ー` | `GLOSSARY_BASE` 早見表差分 |
+| 6 | `handleAIGenTable` system | `随時/毎週/隔週/月次` 4行 | `GLOSSARY_BASE` 出金頻度 terms |
+| 7 | `generateKoryakuPrompt` | `6分類` ×2箇所 | `GLOSSARY_BASE` DD計算基準の件数 |
+| 8 | `generateKoryakuPrompt` 断面③ | `最短合格/最速出金/トータル日数/着金目安` 列名 | `GLOSSARY_BASE` 計算結果 |
+
+**実装方針**: `glossaryRulesBlock` と同様に小さなヘルパー関数を追加し、各プロンプトから呼び出す。
+- `ddTypesCount(T)` → DD計算基準の件数
+- `diffTermLine(T)` → 早見表差分の EASE/TRAP/ー 表記
+- `freqCalcLines(T)` → 出金頻度×計算式の4行
+- `calcColNames(T)` → 計算結果の列名セット
+
+---
+
+## 9. 留意点・補足
 
 - Page Maker はファイル名「v11」だが内部表記は `APP_VERSION="v0.9"`（不一致・混乱注意）
 - LLM呼び出しは Cloudflare Worker プロキシ `/api/llm` 経由（APIキーは Worker Secrets に隔離）
 - 旧 Worker (PFC API v22) の `generateWidgetHtml` は価格カード/スコアチャート/ルール表を生成していた → **これらを Widget Maker に移植していく**（最速出金スケジュールは旧Workerには無く新規）
 - Hugo出力（Page Makerの🚀Hugoボタン）は File System Access API依存＝Chromium系ブラウザ必須
+- `GLOSSARY_SEED` は `buildGlossarySeed(MASTER_DEFS, GLOSSARY_BASE)` で生成。`GLOSSARY_BASE` のみ直接編集可
+- `rd_minDays` の UI ラベルが `最低取引日数（合格）` に変更済み。旧ラベル `最低取引日数` の後方互換エントリ（labelToId）あり
