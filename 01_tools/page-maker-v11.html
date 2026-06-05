@@ -382,7 +382,7 @@ function getPlanNames(firmId, firms, tabDataMap) {
     
     // textが文字列であることを確認
     if (typeof text === 'string' && text) {
-      return text.split(/[,、\n]/).map(s => s.trim()).filter(Boolean);
+      return text.split(/[,、\n|｜]/).map(s => s.trim()).filter(Boolean);
     }
   }
   
@@ -445,7 +445,7 @@ ${planLines}
 | 資産クラス | 手数料 |
 | FX | $X/lot（往復） |
 
-■ プラン比較テーブル（F21）
+■ プラン比較テーブル
 | 項目 | プラン名1 | プラン名2 | … |
 | ステップ | 1 | 2 | … |
 （ルール比較9行 + 口座サイズ別価格の2部構成）`;
@@ -674,6 +674,8 @@ const GLOSSARY_SEED = [
   {key:"F18",term:"出金ポリシー",type:"label",category:"Firm項目",definition:"出金頻度・最低出金額・申請方法・処理期間を定めた規定。"},
   {key:"F19",term:"Profit Split",type:"label",category:"Firm項目",definition:"Funded口座で得た利益のうちトレーダーに分配される割合。"},
   {key:"F20",term:"※Profit Split",type:"label",category:"Firm項目",definition:"利益分配率の変動条件やスケールアップ後の比率を補足する注記。"},
+  {key:"F21",term:"プラン名リスト",type:"label",category:"Firm項目",definition:"配下プランの名称のみを列挙したリスト。説明・補足は不要。"},
+  {key:"F22",term:"プラン比較テーブル",type:"label",category:"Firm項目",definition:"プラン間のルール・価格を比較したテーブル。"},
   // ── グループ2: Plan項目ラベル（21）──
   {key:"P01",term:"利益目標",type:"label",category:"Plan項目",definition:"C列=Challengeフェーズの合格利益目標(%)。F列=Funded最低出金額（初期残高に対する%または固定額。ファームにより設定がない場合は—）。"},
   {key:"P02",term:"最低取引日数（合格）",type:"label",category:"Plan項目",definition:"チャレンジ合格に必要な最低取引日数。出金要件とは区別する。"},
@@ -886,7 +888,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   const [dragId,setDragId]=useState(null);
   const [checked,setChecked]=useState({}); // クリック選択 {firmId:true}
   const [copied,setCopied]=useState(false);
-  const [hideActive,setHideActive]=useState(false);
+  const [hideActive,setHideActive]=useState(true);
   const [showPromptMenu,setShowPromptMenu]=useState(false);
   // ブラシ複数選択／解除
   const brushRef=useRef(false);
@@ -1123,11 +1125,11 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                 {isExpanded?"▾":"▸"}
               </span>
               <span style={{
-                fontSize:"0.75rem",fontWeight:isActive?700:400,
-                color:isActive?C.accent:(isChecked?C.textBright:C.text),
-                overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
-                pointerEvents:"none",
-              }}>{firm.name||"（未命名）"}</span>
+                  fontSize:"0.75rem",fontWeight:isActive?700:400,
+                  color:isActive?C.accent:(isChecked?C.textBright:C.text),
+                  overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
+                  pointerEvents:"none",
+                }}>{firm.name||"（未命名）"}</span>
               {/* Plan数バッジ（折りたたみ時のみ） */}
               {!isExpanded&&hasPlans&&(
                 <span style={{fontSize:"0.52rem",color:C.textDim,flexShrink:0,
@@ -1202,10 +1204,11 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                         title={isPlanActive?"編集中":"編集ターゲットにする"}
                         style={{fontSize:"0.52rem",color:isPlanActive?C.blue:`${C.blue}88`,flexShrink:0,cursor:"pointer"}}>▸</span>
                       <span style={{
-                        fontSize:"0.7rem",fontWeight:isPlanActive?600:400,
-                        color:isPlanActive?C.blue:(isPlanChecked?C.textBright:`${C.text}cc`),
-                        overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
-                      }}>{plan.name||"（未命名）"}</span>
+                          fontSize:"0.7rem",fontWeight:isPlanActive?600:400,
+                          color:isPlanActive?C.blue:(isPlanChecked?C.textBright:`${C.text}cc`),
+                          overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,
+                          pointerEvents:"none",
+                        }}>{plan.name||"（未命名）"}</span>
                     </div>
                   </div>
                 );
@@ -1282,9 +1285,10 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
         <div style={{borderBottom:`2px solid ${C.accent}33`,background:`${C.accent}06`,flexShrink:0}}>
           {/* Firm名 */}
           <div style={{padding:"6px 8px 4px",display:"flex",alignItems:"center",gap:5}}>
-            <span style={{fontSize:"0.55rem",color:C.accent,fontWeight:700,flexShrink:0,letterSpacing:"0.05em"}}>FIRM</span>
+            <span onClick={()=>onSelect(panelFirm.id)} style={{fontSize:"0.55rem",color:C.accent,fontWeight:700,flexShrink:0,letterSpacing:"0.05em",cursor:"pointer"}} title="Firmページを開く">FIRM</span>
             <input
               value={panelFirmName}
+              onClick={()=>onSelect(panelFirm.id)}
               onChange={e=>setPanelFirmName(e.target.value)}
               onBlur={()=>{if(panelFirmName.trim())onRename(panelFirm.id,panelFirmName)}}
               onKeyDown={e=>{if(e.key==="Enter"&&panelFirmName.trim())onRename(panelFirm.id,panelFirmName)}}
@@ -2078,11 +2082,11 @@ function autoFmt(s){
   return h;
 }
 function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
-  const cols=planNames||[];
   const locked=!!(locks&&locks.priceTable);
   const raw=(()=>{const fr=slotData.priceTable;if(!fr||!fr.length)return"";const m=fr.find(f=>f.merged);return m?m.text:(fr[0]&&fr[0].text)||"";})();
   let matrix={rows:[]};
   try{if(raw){const o=JSON.parse(raw);if(o&&Array.isArray(o.rows))matrix=o;}}catch(e){matrix={rows:[]};}
+  const cols=(matrix.planCols&&matrix.planCols.length?matrix.planCols:planNames)||[];
   // 列ごとの通貨（sizeCur + currencies:{colName:cur}）
   const sizeCur=matrix.sizeCur||"$";
   const colCur=col=>(matrix.currencies||{})[col]||"$";
@@ -2315,6 +2319,13 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
   const [selectedSlotsForReinvestigate,setSelectedSlotsForReinvestigate]=useState([]);
 
   const filled=currentSlots.filter(s=>slotData[s.id]?.length>0).length;
+  const navBtns=[
+    {label:`Firm(${SLOT_DEFS.dbp01.filter(s=>slotData[s.id]?.length>0).length}/${SLOT_DEFS.dbp01.length})`,active:templateMode==="dbp01"&&!showPriceMatrix,color:C.accent,onClick:()=>{setTemplateMode("dbp01");setShowPriceMatrix(false);setShowRuleTable(false);}},
+    {label:"価格",active:templateMode==="dbp01"&&showPriceMatrix,color:C.yellow,onClick:()=>{setTemplateMode("dbp01");setShowPriceMatrix(true);}},
+    {label:`攻略(${SLOT_DEFS.koryaku.filter(s=>slotData[s.id]?.length>0).length}/${SLOT_DEFS.koryaku.length})`,active:templateMode==="koryaku",color:C.accent,onClick:()=>{setTemplateMode("koryaku");setShowPriceMatrix(false);setShowRuleTable(false);}},
+    {label:`Plan(${SLOT_DEFS.dbp02.filter(s=>slotData[s.id]?.length>0).length}/${SLOT_DEFS.dbp02.length})`,active:templateMode==="dbp02"&&!showRuleTable,color:C.accent,onClick:()=>{setTemplateMode("dbp02");setShowPriceMatrix(false);setShowRuleTable(false);}},
+    {label:"早見表",active:templateMode==="dbp02"&&showRuleTable,color:C.yellow,onClick:()=>{setTemplateMode("dbp02");setShowRuleTable(true);}},
+  ];
 
   // 再調査プロンプト生成
   const generateReinvestigatePrompt=useCallback((mode)=>{
@@ -2370,29 +2381,12 @@ ${slotList}
       {/* ヘッダー: テンプレ切替 + 充填率 + ⋮メニュー + × */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:4}}>
         <div style={{display:"flex",gap:2,alignItems:"center"}}>
-          {availableTemplates.map(([m,l])=>(
-            <button key={m} onClick={()=>setTemplateMode(m)} style={{
-              background:templateMode===m?C.accent:"transparent",color:templateMode===m?C.bg:C.textDim,
-              border:`1px solid ${templateMode===m?C.accent:C.border}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"
-            }}>{l}</button>
+          {navBtns.map(({label,active,color,onClick})=>(
+            <button key={label} onClick={onClick} style={{
+              padding:"2px 8px",fontSize:"0.65rem",fontWeight:700,cursor:"pointer",borderRadius:3,whiteSpace:"nowrap",
+              background:active?color:"transparent",color:active?C.bg:C.textDim,border:`1px solid ${active?color:C.border}`
+            }}>{label}</button>
           ))}
-          <span style={{fontSize:"0.62rem",color:filled===currentSlots.length?C.green:C.textDim,marginLeft:4}}>{filled}/{currentSlots.length}</span>
-          {templateMode==="dbp02"&&(
-            <button onClick={()=>setShowRuleTable(v=>!v)} style={{
-              padding:"2px 7px",fontSize:"0.65rem",fontWeight:700,cursor:"pointer",borderRadius:3,
-              background:showRuleTable?C.yellow:"transparent",
-              color:showRuleTable?C.bg:C.yellow,
-              border:`1px solid ${C.yellow}`
-            }}>📊 テーブル</button>
-          )}
-          {templateMode==="dbp01"&&(
-            <button onClick={()=>setShowPriceMatrix(v=>!v)} style={{
-              padding:"2px 7px",fontSize:"0.65rem",fontWeight:700,cursor:"pointer",borderRadius:3,
-              background:showPriceMatrix?C.yellow:"transparent",
-              color:showPriceMatrix?C.bg:C.yellow,
-              border:`1px solid ${C.yellow}`
-            }}>📊 価格表</button>
-          )}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
           <Btn color={C.accent} onClick={()=>setShowMdPreview(true)} style={{fontSize:"0.65rem",padding:"2px 8px"}}>プレビュー</Btn>
@@ -3388,14 +3382,14 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
       F09:"scaleUp",F10:"broker",F11:"platform",F12:"serverTime",
       F13:"ddReset",F14:"leverage",F15:"commission",F16:"paymentMethods",
       F17:"payoutMethods",F18:"payoutPolicy",F19:"profitSplit",F20:"profitSplitNote",
-      F21:"planComparison",F22:"planList"
+      F21:"planList",F22:"planComparison"
     };
     const hasFKey=tableLines.some(l=>/^[|\s]*\**F\d{1,2}\**[|\s]/.test(l));
 
     // 価格テーブル単体（F-keyなし）→ priceTable のみ格納
     if(priceTable&&!hasFKey){
       if(slotLocks["priceTable"]){alert("priceTable がロックされています");return;}
-      setTabField("slotData",prev=>({...prev,priceTable:[{text:JSON.stringify({rows:priceTable.rows})}]}));
+      setTabField("slotData",prev=>({...prev,priceTable:[{text:JSON.stringify({rows:priceTable.rows,planCols:priceTable.planCols})}]}));
       alert(`価格テーブル取込: ${priceTable.rows.length}行 × ${priceTable.planCols.length}プランを格納`);
       return;
     }
@@ -3424,7 +3418,7 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
           if(slotLocks[id]){locked++;continue;}
           next[id]=[...(prev[id]||[]),{text:val}]; // 追記（置換ではなく）
         }
-        if(priceOK)next.priceTable=[{text:JSON.stringify({rows:priceTable.rows})}];
+        if(priceOK)next.priceTable=[{text:JSON.stringify({rows:priceTable.rows,planCols:priceTable.planCols})}];
         return next;
       });
       alert(`Firm取込: ${stored}項目を格納`+(priceOK?` ／ 価格テーブル: ${priceTable.rows.length}行×${priceTable.planCols.length}プラン`:"")+(locked?`（ロック${locked}件スキップ）`:"")+(skipped.length?`\n未対応キー: ${skipped.join(", ")}`:""));
@@ -4401,10 +4395,10 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
             availableTemplates={availableTemplates}
             onAIGenKoryaku={td.templateMode==="koryaku"?handleAIGenKoryaku:null} aiGenKoryaku={aiGenKoryaku}
             onAIGenTable={handleAIGenTable} aiGenTable={aiGenTable}
-            locks={slotLocks} setLocks={setSlotLocks} 
+            locks={slotLocks} setLocks={setSlotLocks}
             activeSlotId={activeSlotId} setActiveSlotId={setActiveSlotId}
             onSyncPlans={syncPlansFromList}
-            planNames={(firms.find(f=>f.id===activeTabId)?.plans||[]).map(p=>p.name)} />
+            planNames={(firms.find(f=>f.id===activeTabId)||{plans:[]}).plans.map(p=>p.name)} />
         ):(
           <GlossaryPanel terms={glossaryTerms} setTerms={setGlossaryTerms} generating={glossaryGenerating} />
         )}
