@@ -1,8 +1,9 @@
 {
   "_tool": "site-scanner",
-  "_version": "1.0",
+  "_version": "1.1",
   "_url": "https://trading.propfirm-challengers.jp/",
-  "_at": "2026-06-05T06:38:07.638Z",
+  "_at": "2026-06-05T06:38:12.880Z",
+  "pageText": "Live Charts\n1\n2\n4\n6\n8\n🔔\nAlerts\nLive\n🔔 アラート\n0\n×\nアクティブ\n0\n履歴\n0\n並び替え\n予測時間順\n距離順\nシンボル順\n設定済みアラートはありません\nチャート上で水平線を引き、右クリック → ⚠ Set Alert で作成できます\nCrypto\nStock\nFutures\nFX\n— preset —\n▾\n1m\n5m\n15m\n1h\n4h\n1d\n61,702.00\n-5.64%\n↻\n─\n╱\n▭\n𝝓\n!\n×\n\t\n\t\n\n\t\n\t\n401 bars · 5m\n15:37:57\nCrypto\nStock\nFutures\nFX\n— preset —\n▾\n1m\n5m\n15m\n1h\n4h\n1d\n311.23\n-0.17%\n↻\n─\n╱\n▭\n𝝓\n!\n×\n\t\n\t\n\n\t\n\t\n391 bars · 5m\n15:37:57\nCrypto\nStock\nFutures\nFX\n— preset —\n▾\n1m\n5m\n15m\n1h\n4h\n1d\n7,556.50\n-0.73%\n↻\n─\n╱\n▭\n𝝓\n!\n×\n\t\n\t\n\n\t\n\t\n1104 bars · 5m\n15:37:57\nCrypto\nStock\nFutures\nFX\n— preset —\n▾\n1m\n5m\n15m\n1h\n4h\n1d\n1.16239\n-0.29%\n↻\n─\n╱\n▭\n𝝓\n!\n×\n\t\n\t\n\n\t\n\t\n1245 bars · 5m\n15:37:57\n📡 送信中: trading",
   "meta": {
     "url": "https://trading.propfirm-challengers.jp/",
     "title": "Live Charts — Hyperliquid & Yahoo Finance",
@@ -11,7 +12,7 @@
   "structure": {
     "tree": {
       "tag": "body",
-      "childCount": 11,
+      "childCount": 12,
       "children": [
         {
           "tag": "header",
@@ -459,6 +460,10 @@
           "data": {
             "data-cf-beacon": "{\"version\":\"2024.11.0\",\"token\":\"a250d23022be4455b7183f128d5d040b\",\"r\":1,\"server_timing\":{\"name\":{\"cfCacheStatus\":true,\"cfEdge\":true,\"cfExtPri\":true,\"cfL4\":true,\"cfOrigin\":true,\"cfSpeedBrain\":true},\"location_startswith\":null}}"
           }
+        },
+        {
+          "tag": "div",
+          "childCount": 0
         }
       ]
     },
