@@ -204,26 +204,77 @@ async function writeHugoFile(dirHandle,pathParts,content){
   const fh=await cur.getFileHandle(pathParts[pathParts.length-1],{create:true});
   const w=await fh.createWritable();await w.write(content);await w.close();
 }
-const FIRM_KEY_MAP={
-  firmName:"ファーム名",country:"拠点国",established:"創業年",
-  officialUrl:"公式URL",firmCategory:"カテゴリ",japanChat:"日本対応",
-  firmPitch:"ファームピッチ",rewardProgram:"リワードプログラム",scaleUp:"スケールアップ",
-  broker:"ブローカー",platform:"プラットフォーム",serverTime:"サーバー時間",
-  ddReset:"DDリセット",leverage:"レバレッジ",commission:"手数料",
-  paymentMethods:"入金方法",payoutMethods:"出金方法",payoutPolicy:"出金ポリシー",
-  profitSplit:"利益分配率",profitSplitNote:"利益分配率補足",
+// ═══════════════════════════════════════════════════
+// MASTER_DEFS — 唯一の正本（2026-06-06）
+// SLOT_DEFS / F_KEY_MAP / FIRM_KEY_MAP / PLAN_KEY_MAP / GLOSSARY_SEED(Firm項目・Plan項目)
+// はすべてここから derive する。変更はここ1箇所のみ。
+// フィールド: fkey=取込Fキー pkey=辞典Pキー id=slotDataキー term=表示名
+//             section=UIグループ hint=UIヒント definition=辞典定義文(nullは辞典登録なし)
+//             extra=P02b等の同一slotに複数Pキーが紐づく場合の追加エントリ
+// ═══════════════════════════════════════════════════
+const MASTER_DEFS = {
+  dbp01: [
+    {fkey:"F01",id:"firmName",       term:"ファーム名",         section:"基本情報",hint:"タイトル（必須）",                       definition:"プロップファームの正式名称。"},
+    {fkey:"F02",id:"country",        term:"拠点国",             section:"基本情報",hint:"",                                       definition:"運営会社の本社所在地または法人登記国。"},
+    {fkey:"F03",id:"established",    term:"創業年",             section:"基本情報",hint:"",                                       definition:"ファームの設立年（西暦4桁）。"},
+    {fkey:"F04",id:"officialUrl",    term:"公式URL",            section:"基本情報",hint:"アフィリエイトURL優先、なければ公式URL",  definition:"ファームの公式サイトURL。アフィリエイトURLがあれば優先する。"},
+    {fkey:"F05",id:"firmCategory",   term:"カテゴリ",           section:"基本情報",hint:"CFD/FX（固定）",                         definition:"取り扱う商品区分。CFD／FXのいずれか。"},
+    {fkey:"F06",id:"japanChat",      term:"日本対応",           section:"基本情報",hint:"禁止/可能/日本語HP/日本語チャット",      definition:"日本居住者への対応状況。禁止／可能／日本語HP／日本語チャットのいずれかで示す。"},
+    {fkey:"F07",id:"firmPitch",      term:"ファームピッチ",     section:"特色",    hint:"あれば記載",                             definition:"ファームが掲げる特徴・差別化ポイント。"},
+    {fkey:"F08",id:"rewardProgram",  term:"リワードプログラム", section:"特色",    hint:"あれば記載",                             definition:"紹介報酬・ロイヤリティ等の還元制度。"},
+    {fkey:"F09",id:"scaleUp",        term:"スケールアップ",     section:"特色",    hint:"あれば記載",                             definition:"口座サイズを段階的に拡大できる条件と上限額。"},
+    {fkey:"F10",id:"broker",         term:"ブローカー",         section:"取引環境",hint:"",                                       definition:"約定を担う接続先ブローカー。"},
+    {fkey:"F11",id:"platform",       term:"プラットフォーム",   section:"取引環境",hint:"MT4/MT5/cTrader等",                      definition:"取引に使う環境。MT4／MT5／cTrader等。"},
+    {fkey:"F12",id:"serverTime",     term:"Server Time",        section:"取引環境",hint:"TZ + UTC offset + 日本時間併記必須",     definition:"取引サーバーの基準時刻。タイムゾーン＋UTCオフセット＋日本時間換算を併記する。"},
+    {fkey:"F13",id:"ddReset",        term:"DD Reset",           section:"取引環境",hint:"リセット時刻 + 日本時間併記必須",        definition:"ドローダウン基準値がリセットされる時刻。日本時間換算を併記する。"},
+    {fkey:"F14",id:"leverage",       term:"レバレッジ",         section:"取引環境",hint:"資産×プラン テーブル",                  definition:"資産クラス×プラン別の最大レバレッジ倍率。"},
+    {fkey:"F15",id:"commission",     term:"手数料",             section:"取引環境",hint:"テーブル",                              definition:"資産クラス別の取引手数料。往復／片道の別と通貨単位を明記する。"},
+    {fkey:"F16",id:"paymentMethods", term:"入金方法",           section:"入出金",  hint:"",                                       definition:"チャレンジ費用等の支払手段。カード／銀行／暗号通貨等。"},
+    {fkey:"F17",id:"payoutMethods",  term:"出金方法",           section:"入出金",  hint:"",                                       definition:"利益分配金の受取手段。銀行／暗号通貨／PayPal等。"},
+    {fkey:"F18",id:"payoutPolicy",   term:"出金ポリシー",       section:"入出金",  hint:"",                                       definition:"出金頻度・最低出金額・申請方法・処理期間を定めた規定。"},
+    {fkey:"F19",id:"profitSplit",    term:"Profit Split",       section:"入出金",  hint:"全プランの数値記載、同値はまとめて",     definition:"Funded口座で得た利益のうちトレーダーに分配される割合。"},
+    {fkey:"F20",id:"profitSplitNote",term:"※Profit Split",     section:"入出金",  hint:"補足テキスト",                           definition:"利益分配率の変動条件やスケールアップ後の比率を補足する注記。"},
+    {fkey:"F21",id:"planList",       term:"プラン名リスト",     section:"全プラン",hint:"名称のみ列挙",                           definition:"配下プランの名称のみを列挙したリスト。説明・補足は不要。"},
+    {fkey:"F22",id:"planComparison", term:"プラン比較テーブル", section:"全プラン",hint:"Collectorと同じ項目",                    definition:"プラン間のルール・価格を比較したテーブル。"},
+    {fkey:null, id:"priceTable",     term:"価格テーブル",       section:"全プラン",hint:"口座サイズ×プラン マトリクス（構造化）",definition:null},
+  ],
+  dbp02: [
+    {pkey:null,  id:"challengeName",   term:"プラン名",             section:"タイトル",hint:"必須",                                     definition:null},
+    {pkey:"P20", id:"steps",           term:"Steps",                section:"タイトル",hint:"1=1-Step / 2=2-Step / 0=Instant",          definition:"チャレンジのステップ数。Instant=0 / 1-Step=1 / 2-Step=2 等。"},
+    {pkey:null,  id:"priceTable",      term:"価格テーブル",         section:"価格",    hint:"口座サイズ×価格 マトリクス（構造化）",     definition:null},
+    {pkey:null,  id:"ruleQuickRef",    term:"ルール早見表",         section:"早見表",  hint:"",                                          definition:null},
+    {pkey:"P01", id:"rd_target",       term:"利益目標",             section:"詳細",    hint:"C=%目標, F=最小出金額(%or金額)。補足付き",  definition:"C列=Challengeフェーズの合格利益目標(%)。F列=Funded最低出金額（初期残高に対する%または固定額。ファームにより設定がない場合は—）。"},
+    {pkey:"P02", id:"rd_minDays",      term:"最低取引日数（合格）", section:"詳細",    hint:"日数",                                      definition:"チャレンジ合格に必要な最低取引日数。出金要件とは区別する。",
+     extra:{pkey:"P02b",term:"最低取引日数（出金）",definition:"出金申請に必要な最低取引日数。合格要件とは区別する。"}},
+    {pkey:"P03", id:"rd_dailyLoss",    term:"日次損失",             section:"詳細",    hint:"%",                                         definition:"1日あたりに許容される損失の上限（%または$）。"},
+    {pkey:"P04", id:"rd_dailyLossType",term:"日次損失タイプ",       section:"詳細",    hint:"日本語変換済み",                            definition:"日次損失の計算基準。DD分類6パターンのいずれか。"},
+    {pkey:"P05", id:"rd_maxLoss",      term:"最大損失",             section:"詳細",    hint:"%",                                         definition:"口座全体で許容される累積損失の上限（%または$）。"},
+    {pkey:"P06", id:"rd_maxLossType",  term:"最大損失タイプ",       section:"詳細",    hint:"日本語変換済み",                            definition:"最大損失の計算基準。DD分類6パターンのいずれか。"},
+    {pkey:"P07", id:"rd_consistency",  term:"一貫性ルール",         section:"詳細",    hint:"補足テキスト付き",                          definition:"特定の日の利益が総利益に占める比率を制限するルール（Best Day等）。"},
+    {pkey:"P08", id:"rd_profitCap",    term:"利益上限",             section:"詳細",    hint:"補足テキスト付き",                          definition:"利益または出金額の上限。"},
+    {pkey:"P09", id:"rd_timeLimit",    term:"制限時間",             section:"詳細",    hint:"補足テキスト付き",                          definition:"チャレンジ合格までの期限（日数または無制限）。"},
+    {pkey:"P10", id:"rd_news",         term:"ニュース取引制限",     section:"詳細",    hint:"補足テキスト付き",                          definition:"重要経済指標の発表前後における取引の制限。"},
+    {pkey:"P11", id:"rd_weekend",      term:"週末保有制限",         section:"詳細",    hint:"補足テキスト付き",                          definition:"金曜クローズ前にポジションを決済する義務の有無。"},
+    {pkey:"P12", id:"rd_overnight",    term:"オーバーナイト制限",   section:"詳細",    hint:"補足テキスト付き",                          definition:"日をまたいでポジションを保有することへの制限。"},
+    {pkey:"P13", id:"rd_ea",           term:"EA制限",               section:"詳細",    hint:"補足テキスト付き",                          definition:"自動売買プログラム（EA）の使用可否・条件。"},
+    {pkey:"P14", id:"rd_copyTrade",    term:"コピートレード制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"他口座・他者の取引を複写することへの制約。"},
+    {pkey:"P15", id:"rd_scalping",     term:"スキャルピング制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"超短時間売買の可否・条件に関する制約。"},
+    {pkey:"P16", id:"rd_stopLoss",     term:"ストップロス制約",     section:"詳細",    hint:"補足テキスト付き",                          definition:"損切り注文の設定義務や推奨に関する制約。"},
+    {pkey:"P17", id:"rd_risk",         term:"リスクルール",         section:"詳細",    hint:"補足テキスト付き",                          definition:"含み損（未決済ポジションの評価損）に対する制限。"},
+    {pkey:"P18", id:"rd_maxPosition",  term:"最大ポジション制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"同時に保有できるポジション数やロット数の上限。"},
+    {pkey:"P19", id:"rd_prohibited",   term:"禁止行為",             section:"詳細",    hint:"補足テキスト付き",                          definition:"アカウント失格の対象となる禁止された取引手法・行為。"},
+  ],
+  koryaku: [
+    {id:"k_dd",    term:"断面① Drawdown",     section:"断面",hint:"DD比較テーブル・補足注記・合格/出金注意点・特殊ルール"},
+    {id:"k_rules", term:"断面② 取引ルール",   section:"断面",hint:"一貫性・共通制限・プラン間差分・合格/出金注意点"},
+    {id:"k_payout",term:"断面③ 出金までの流れ",section:"断面",hint:"出金条件テーブル・スケジュール・補足事項"},
+  ],
 };
-const PLAN_KEY_MAP={
-  challengeName:"プラン名",steps:"Steps",
-  rd_target:"利益目標",rd_minDays:"最低取引日数",
-  rd_dailyLoss:"日次損失",rd_dailyLossType:"日次損失タイプ",
-  rd_maxLoss:"最大損失",rd_maxLossType:"最大損失タイプ",
-  rd_consistency:"一貫性ルール",rd_profitCap:"利益上限",rd_timeLimit:"制限時間",
-  rd_news:"ニュース取引制限",rd_weekend:"週末保有制限",rd_overnight:"オーバーナイト制限",
-  rd_ea:"EA制限",rd_copyTrade:"コピートレード制約",rd_scalping:"スキャルピング制約",
-  rd_stopLoss:"ストップロス制約",rd_risk:"リスクルール",
-  rd_maxPosition:"最大ポジション制約",rd_prohibited:"禁止行為",
-};
+
+// ── Derive: FIRM_KEY_MAP (Hugo export用: slotId → 日本語label) ──
+const FIRM_KEY_MAP = Object.fromEntries(MASTER_DEFS.dbp01.map(d=>[d.id,d.term]));
+// ── Derive: PLAN_KEY_MAP (Hugo export用: slotId → 日本語label) ──
+const PLAN_KEY_MAP = Object.fromEntries(MASTER_DEFS.dbp02.map(d=>[d.id,d.term]));
 
 // ═══════════════════════════════════════════════════
 // localStorage バックアップ（スナップショット）
@@ -583,122 +634,20 @@ ${ruleDetailsList || "（ルール詳細リストが未格納です。先にPlan
 
 
 // ═══════════════════════════════════════════════════
-// Slot Definitions - v0.3
+// SLOT_DEFS — MASTER_DEFS から自動生成（直接編集禁止）
 // ═══════════════════════════════════════════════════
 const SLOT_DEFS = {
-  dbp01: [
-    // 基本情報
-    {id:"firmName",label:"ファーム名",section:"基本情報",hint:"タイトル（必須）"},
-    {id:"country",label:"拠点国",section:"基本情報",hint:""},
-    {id:"established",label:"創業年",section:"基本情報",hint:""},
-    {id:"officialUrl",label:"公式URL",section:"基本情報",hint:"アフィリエイトURL優先、なければ公式URL"},
-    {id:"firmCategory",label:"カテゴリ",section:"基本情報",hint:"CFD/FX（固定）"},
-    {id:"japanChat",label:"日本対応",section:"基本情報",hint:"禁止/可能/日本語HP/日本語チャット"},
-    // 特色
-    {id:"firmPitch",label:"ファームピッチ",section:"特色",hint:"あれば記載"},
-    {id:"rewardProgram",label:"リワードプログラム",section:"特色",hint:"あれば記載"},
-    {id:"scaleUp",label:"スケールアップ",section:"特色",hint:"あれば記載"},
-    // 取引環境
-    {id:"broker",label:"ブローカー",section:"取引環境",hint:""},
-    {id:"platform",label:"プラットフォーム",section:"取引環境",hint:"MT4/MT5/cTrader等"},
-    {id:"serverTime",label:"Server Time",section:"取引環境",hint:"TZ + UTC offset + 日本時間併記必須"},
-    {id:"ddReset",label:"DD Reset",section:"取引環境",hint:"リセット時刻 + 日本時間併記必須"},
-    {id:"leverage",label:"レバレッジ",section:"取引環境",hint:"資産×プラン テーブル"},
-    {id:"commission",label:"手数料",section:"取引環境",hint:"テーブル"},
-    // 入出金
-    {id:"paymentMethods",label:"入金方法",section:"入出金",hint:""},
-    {id:"payoutMethods",label:"出金方法",section:"入出金",hint:""},
-    {id:"payoutPolicy",label:"出金ポリシー",section:"入出金",hint:""},
-    {id:"profitSplit",label:"Profit Split",section:"入出金",hint:"全プランの数値記載、同値はまとめて"},
-    {id:"profitSplitNote",label:"※Profit Split",section:"入出金",hint:"補足テキスト"},
-    // 全プラン
-    {id:"priceTable",label:"価格テーブル",section:"全プラン",hint:"口座サイズ×プラン マトリクス（構造化）"},
-    {id:"planComparison",label:"プラン比較テーブル",section:"全プラン",hint:"Collectorと同じ項目"},
-    {id:"planList",label:"プラン名リスト",section:"全プラン",hint:"Collectorのフィールド編集タブと同一構造（ナビゲーション強調表示用）"},
-  ],
-  dbp02: [
-    {id:"challengeName",label:"プラン名",section:"タイトル",hint:"必須"},
-    {id:"steps",label:"Steps",section:"タイトル",hint:"1=1-Step / 2=2-Step / 0=Instant"},
-    {id:"rd_target",label:"利益目標",section:"詳細",hint:"C=%目標, F=最小出金額(%or金額)。補足付き"},
-    {id:"rd_minDays",label:"最低取引日数",section:"詳細",hint:"日数"},
-    {id:"rd_dailyLoss",label:"日次損失",section:"詳細",hint:"%"},
-    {id:"rd_dailyLossType",label:"日次損失タイプ",section:"詳細",hint:"日本語変換済み"},
-    {id:"rd_maxLoss",label:"最大損失",section:"詳細",hint:"%"},
-    {id:"rd_maxLossType",label:"最大損失タイプ",section:"詳細",hint:"日本語変換済み"},
-    {id:"rd_consistency",label:"一貫性ルール",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_profitCap",label:"利益上限",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_timeLimit",label:"制限時間",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_news",label:"ニュース取引制限",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_weekend",label:"週末保有制限",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_overnight",label:"オーバーナイト制限",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_ea",label:"EA制限",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_copyTrade",label:"コピートレード制約",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_scalping",label:"スキャルピング制約",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_stopLoss",label:"ストップロス制約",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_risk",label:"リスクルール",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_maxPosition",label:"最大ポジション制約",section:"詳細",hint:"補足テキスト付き"},
-    {id:"rd_prohibited",label:"禁止行為",section:"詳細",hint:"補足テキスト付き"},
-  ],
-  koryaku: [
-    {id:"k_dd",label:"断面① Drawdown",section:"断面",hint:"DD比較テーブル・補足注記・合格/出金注意点・特殊ルール"},
-    {id:"k_rules",label:"断面② 取引ルール",section:"断面",hint:"一貫性・共通制限・プラン間差分・合格/出金注意点"},
-    {id:"k_payout",label:"断面③ 出金までの流れ",section:"断面",hint:"出金条件テーブル・スケジュール・補足事項"},
-  ],
+  dbp01:   MASTER_DEFS.dbp01.map(d=>({id:d.id,label:d.term,section:d.section,hint:d.hint})),
+  dbp02:   MASTER_DEFS.dbp02.map(d=>({id:d.id,label:d.term,section:d.section,hint:d.hint})),
+  koryaku: MASTER_DEFS.koryaku.map(d=>({id:d.id,label:d.term,section:d.section,hint:d.hint})),
 };
 
 // ═══════════════════════════════════════════════════
-// 用語辞典 初期データ（正本・64キー）v1 2026-05-27
-// 国語辞典思想: 結果の語句のみ＋語釈。算出式は載せない。
+// GLOSSARY_BASE — 表記・計算結果（MASTER_DEFSから独立した固定エントリ）
 // type: label(項目ラベル/計算結果列名) | notation(正規表記)
-// definition: 語句の意味（正本ポリシー根拠）
 // ═══════════════════════════════════════════════════
-const GLOSSARY_SEED = [
-  // ── グループ1: Firm項目ラベル（20）──
-  {key:"F01",term:"ファーム名",type:"label",category:"Firm項目",definition:"プロップファームの正式名称。"},
-  {key:"F02",term:"拠点国",type:"label",category:"Firm項目",definition:"運営会社の本社所在地または法人登記国。"},
-  {key:"F03",term:"創業年",type:"label",category:"Firm項目",definition:"ファームの設立年（西暦4桁）。"},
-  {key:"F04",term:"公式URL",type:"label",category:"Firm項目",definition:"ファームの公式サイトURL。アフィリエイトURLがあれば優先する。"},
-  {key:"F05",term:"カテゴリ",type:"label",category:"Firm項目",definition:"取り扱う商品区分。CFD／FXのいずれか。"},
-  {key:"F06",term:"日本対応",type:"label",category:"Firm項目",definition:"日本居住者への対応状況。禁止／可能／日本語HP／日本語チャットのいずれかで示す。"},
-  {key:"F07",term:"ファームピッチ",type:"label",category:"Firm項目",definition:"ファームが掲げる特徴・差別化ポイント。"},
-  {key:"F08",term:"リワードプログラム",type:"label",category:"Firm項目",definition:"紹介報酬・ロイヤリティ等の還元制度。"},
-  {key:"F09",term:"スケールアップ",type:"label",category:"Firm項目",definition:"口座サイズを段階的に拡大できる条件と上限額。"},
-  {key:"F10",term:"ブローカー",type:"label",category:"Firm項目",definition:"約定を担う接続先ブローカー。"},
-  {key:"F11",term:"プラットフォーム",type:"label",category:"Firm項目",definition:"取引に使う環境。MT4／MT5／cTrader等。"},
-  {key:"F12",term:"Server Time",type:"label",category:"Firm項目",definition:"取引サーバーの基準時刻。タイムゾーン＋UTCオフセット＋日本時間換算を併記する。"},
-  {key:"F13",term:"DD Reset",type:"label",category:"Firm項目",definition:"ドローダウン基準値がリセットされる時刻。日本時間換算を併記する。"},
-  {key:"F14",term:"レバレッジ",type:"label",category:"Firm項目",definition:"資産クラス×プラン別の最大レバレッジ倍率。"},
-  {key:"F15",term:"手数料",type:"label",category:"Firm項目",definition:"資産クラス別の取引手数料。往復／片道の別と通貨単位を明記する。"},
-  {key:"F16",term:"入金方法",type:"label",category:"Firm項目",definition:"チャレンジ費用等の支払手段。カード／銀行／暗号通貨等。"},
-  {key:"F17",term:"出金方法",type:"label",category:"Firm項目",definition:"利益分配金の受取手段。銀行／暗号通貨／PayPal等。"},
-  {key:"F18",term:"出金ポリシー",type:"label",category:"Firm項目",definition:"出金頻度・最低出金額・申請方法・処理期間を定めた規定。"},
-  {key:"F19",term:"Profit Split",type:"label",category:"Firm項目",definition:"Funded口座で得た利益のうちトレーダーに分配される割合。"},
-  {key:"F20",term:"※Profit Split",type:"label",category:"Firm項目",definition:"利益分配率の変動条件やスケールアップ後の比率を補足する注記。"},
-  {key:"F21",term:"プラン名リスト",type:"label",category:"Firm項目",definition:"配下プランの名称のみを列挙したリスト。説明・補足は不要。"},
-  {key:"F22",term:"プラン比較テーブル",type:"label",category:"Firm項目",definition:"プラン間のルール・価格を比較したテーブル。"},
-  // ── グループ2: Plan項目ラベル（21）──
-  {key:"P01",term:"利益目標",type:"label",category:"Plan項目",definition:"C列=Challengeフェーズの合格利益目標(%)。F列=Funded最低出金額（初期残高に対する%または固定額。ファームにより設定がない場合は—）。"},
-  {key:"P02",term:"最低取引日数（合格）",type:"label",category:"Plan項目",definition:"チャレンジ合格に必要な最低取引日数。出金要件とは区別する。"},
-  {key:"P02b",term:"最低取引日数（出金）",type:"label",category:"Plan項目",definition:"出金申請に必要な最低取引日数。合格要件とは区別する。"},
-  {key:"P03",term:"日次損失",type:"label",category:"Plan項目",definition:"1日あたりに許容される損失の上限（%または$）。"},
-  {key:"P04",term:"日次損失タイプ",type:"label",category:"Plan項目",definition:"日次損失の計算基準。DD分類6パターンのいずれか。"},
-  {key:"P05",term:"最大損失",type:"label",category:"Plan項目",definition:"口座全体で許容される累積損失の上限（%または$）。"},
-  {key:"P06",term:"最大損失タイプ",type:"label",category:"Plan項目",definition:"最大損失の計算基準。DD分類6パターンのいずれか。"},
-  {key:"P07",term:"一貫性ルール",type:"label",category:"Plan項目",definition:"特定の日の利益が総利益に占める比率を制限するルール（Best Day等）。"},
-  {key:"P08",term:"利益上限",type:"label",category:"Plan項目",definition:"利益または出金額の上限。"},
-  {key:"P09",term:"制限時間",type:"label",category:"Plan項目",definition:"チャレンジ合格までの期限（日数または無制限）。"},
-  {key:"P10",term:"ニュース取引制限",type:"label",category:"Plan項目",definition:"重要経済指標の発表前後における取引の制限。"},
-  {key:"P11",term:"週末保有制限",type:"label",category:"Plan項目",definition:"金曜クローズ前にポジションを決済する義務の有無。"},
-  {key:"P12",term:"オーバーナイト制限",type:"label",category:"Plan項目",definition:"日をまたいでポジションを保有することへの制限。"},
-  {key:"P13",term:"EA制限",type:"label",category:"Plan項目",definition:"自動売買プログラム（EA）の使用可否・条件。"},
-  {key:"P14",term:"コピートレード制約",type:"label",category:"Plan項目",definition:"他口座・他者の取引を複写することへの制約。"},
-  {key:"P15",term:"スキャルピング制約",type:"label",category:"Plan項目",definition:"超短時間売買の可否・条件に関する制約。"},
-  {key:"P16",term:"ストップロス制約",type:"label",category:"Plan項目",definition:"損切り注文の設定義務や推奨に関する制約。"},
-  {key:"P17",term:"リスクルール",type:"label",category:"Plan項目",definition:"含み損（未決済ポジションの評価損）に対する制限。"},
-  {key:"P18",term:"最大ポジション制約",type:"label",category:"Plan項目",definition:"同時に保有できるポジション数やロット数の上限。"},
-  {key:"P19",term:"禁止行為",type:"label",category:"Plan項目",definition:"アカウント失格の対象となる禁止された取引手法・行為。"},
-  {key:"P20",term:"Steps",type:"label",category:"Plan項目",definition:"チャレンジのステップ数。Instant=0 / 1-Step=1 / 2-Step=2 等。"},
-  // ── グループ3: 正規表記（18）──
+const GLOSSARY_BASE = [
+  // ── 正規表記（18）──
   {key:"DD_STATIC",term:"Static",type:"notation",category:"DD計算基準",definition:"初期残高（口座開設時の残高）を基準に固定するドローダウン方式。判定根拠: initial balance / fixed / starting balance。"},
   {key:"DD_BAL_EOD",term:"Trailing（Balance EOD）",type:"notation",category:"DD計算基準",definition:"日次終了時点の残高を基準に追従するドローダウン方式。判定根拠: end of day balance / daily reset balance。"},
   {key:"DD_BAL_HWM",term:"Trailing（Balance HWM）",type:"notation",category:"DD計算基準",definition:"記録した最高残高を基準に追従するドローダウン方式。判定根拠: highest balance / recorded highest balance。"},
@@ -724,6 +673,27 @@ const GLOSSARY_SEED = [
   {key:"CALC_STEPS",term:"Steps",type:"label",category:"計算結果",definition:"プランの評価ステップ数。Instant=0／1-Step=1／2-Step=2等。"},
   {key:"CALC_ARRIVAL",term:"着金目安",type:"label",category:"計算結果",definition:"出金申請から実際の着金までの目安日数。処理時間を反映した値。"},
 ];
+
+// ── Derive: GLOSSARY_SEED = Firm項目(F01-F22) + Plan項目(P01-P20+P02b) + GLOSSARY_BASE ──
+// Firm項目・Plan項目は MASTER_DEFS から自動生成。GLOSSARY_BASE のみ直接編集可。
+function buildGlossarySeed(masterDefs, base) {
+  const firmItems = masterDefs.dbp01
+    .filter(d => d.fkey && d.definition)
+    .map(d => ({key:d.fkey, term:d.term, type:"label", category:"Firm項目", definition:d.definition}));
+  const planItems = [];
+  masterDefs.dbp02.forEach(d => {
+    if (d.pkey && d.definition)
+      planItems.push({key:d.pkey, term:d.term, type:"label", category:"Plan項目", definition:d.definition});
+    if (d.extra?.pkey)
+      planItems.push({key:d.extra.pkey, term:d.extra.term, type:"label", category:"Plan項目", definition:d.extra.definition});
+  });
+  planItems.sort((a,b) => {
+    const an = parseInt(a.key.replace(/[Pb]/g,"")), bn = parseInt(b.key.replace(/[Pb]/g,""));
+    return an !== bn ? an - bn : (a.key.includes("b") ? 1 : -1);
+  });
+  return [...firmItems, ...planItems, ...base];
+}
+const GLOSSARY_SEED = buildGlossarySeed(MASTER_DEFS, GLOSSARY_BASE);
 
 // ═══════════════════════════════════════════════════
 // 用語辞典 参照ヘルパ（プロンプト生成が辞典を単一情報源として参照）
@@ -3375,15 +3345,8 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
     };
     const priceTable=extractPriceRows();
 
-    // F01〜F22 キー → DBP-01 slot id マップ
-    const F_KEY_MAP={
-      F01:"firmName",F02:"country",F03:"established",F04:"officialUrl",
-      F05:"firmCategory",F06:"japanChat",F07:"firmPitch",F08:"rewardProgram",
-      F09:"scaleUp",F10:"broker",F11:"platform",F12:"serverTime",
-      F13:"ddReset",F14:"leverage",F15:"commission",F16:"paymentMethods",
-      F17:"payoutMethods",F18:"payoutPolicy",F19:"profitSplit",F20:"profitSplitNote",
-      F21:"planList",F22:"planComparison"
-    };
+    // F01〜F22 キー → DBP-01 slot id マップ（MASTER_DEFS から自動生成）
+    const F_KEY_MAP = Object.fromEntries(MASTER_DEFS.dbp01.filter(d=>d.fkey).map(d=>[d.fkey,d.id]));
     const hasFKey=tableLines.some(l=>/^[|\s]*\**F\d{1,2}\**[|\s]/.test(l));
 
     // 価格テーブル単体（F-keyなし）→ priceTable のみ格納
@@ -3428,7 +3391,8 @@ JSONのみ出力。該当情報があるスロットのキーのみ含める。M
     const labelToId={};
     SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{labelToId[s.label]=s.id;});
     labelToId["Steps"]="steps";
-    // P02/P02b の括弧バリアント（合格）（出金）も rd_minDays にマップ
+    // P02/P02b: 括弧なし旧ラベル・（合格）・（出金）すべて rd_minDays にマップ
+    labelToId["最低取引日数"]="rd_minDays";
     labelToId["最低取引日数（合格）"]="rd_minDays";
     labelToId["最低取引日数（出金）"]="rd_minDays";
     // P-key プレフィックスを除去: "P01. 利益目標" / "P01: 利益目標" → "利益目標"
