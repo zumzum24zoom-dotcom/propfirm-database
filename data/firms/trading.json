@@ -1,0 +1,22 @@
+{
+  "firmSlug": "trading",
+  "公式URL": "https://trading.propfirm-challengers.jp/",
+  "extractedAt": "2026-06-05T06:38:13.646Z",
+  "クーポン": [],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": ""
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}
