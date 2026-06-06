@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
 Page Maker v0.9
+2026-06-06 ver.35: 取込ワークフロー再編 — 貼付エリアに「整形」ボタン追加（AIで格納用フォーマットに変換し取込エリアへ直送）。取込エリアに「⇧」ボタン追加（取込→貼付の差し戻し・整形/翻訳のやり直し用）。「表取込」を「格納」にリネーム。自動ボタンは保険として残置。整形プロンプトは Firm/Plan で出力形式を切替（Firmは F01〜F22 パイプ表、Planは 項目|C|F|差分|詳細 表）。
 2026-05-30 ver.34: Stepsスロット追加（DBP_02 P20）・ボタン整理（ヘッダーデータ管理ドロップダウン化・縦タブ選択/プロンプトバー統合・個別削除ボタン廃止→選択削除に統一・Plan行チェックボックス追加）
 2026-05-27 ver.33: APIキー直書きを廃止しWorkerプロキシ経由に — api.anthropic.com直叩き＋ハードコードキー（2箇所）を全廃。callAPI/子ウィンドウ翻訳をWorker /api/llm 経由に変更（キーはWorker Secretsのenv.ANTHROPIC_KEYで保持）。callAPIはエラー本文を表示するよう改善（HTTP 400の理由が読める）。要：Worker側 /api/llm デプロイ＋ANTHROPIC_KEY登録＋旧キー失効
 2026-05-27 ver.32: 📄 Plan出力ボタンを追加 — 選択（チェック）した全Firmの全Planを対象に、ソース定義v08のDBP_02セクション（ルール早見表＋ルール詳細リスト）に従った出力プロンプトをコピー。Firmチェックボックスの「コピー」「削除」の並びに配置。Plan項目20件＋表記ルールを辞典から動的注入
@@ -1548,7 +1549,7 @@ function CouponConfigModal({show,config,slug,onClose,onSaveToDir,hugoDir}) {
 // ═══════════════════════════════════════════════════
 // 貼り付けエリア（入力＋保管）
 // ═══════════════════════════════════════════════════
-function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,archives,onDeleteArchive,height,onOpenChild,onTextPasted}) {
+function PastePanel({onSendToTarget,onTranslateToTarget,onFormatToTarget,onArchive,externalRef,archives,onDeleteArchive,height,onOpenChild,onTextPasted}) {
   const taRef=useRef(null);
   const setRefs=useCallback(el=>{taRef.current=el;if(externalRef)externalRef.current=el},[externalRef]);
   const [dragOver,setDragOver]=useState(false);
@@ -1579,6 +1580,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
         <div style={{display:"flex",gap:3,alignItems:"center"}}>
           <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onArchive(t)}} style={{background:"transparent",color:C.purple,border:`1px solid ${C.purple}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>保管</button>
           <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onTranslateToTarget(t)}} style={{background:"transparent",color:C.blue,border:`1px solid ${C.blue}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>翻訳</button>
+          <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onFormatToTarget&&onFormatToTarget(t)}} style={{background:"transparent",color:C.yellow,border:`1px solid ${C.yellow}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}} title="AIで格納フォーマットに整形 → 取込エリアへ直送">整形</button>
           <button onMouseDown={e=>{e.preventDefault();const t=getSelected();if(t)onSendToTarget(t)}} style={{background:"transparent",color:C.accent,border:`1px solid ${C.accent}`,borderRadius:3,padding:"2px 8px",fontSize:"0.68rem",fontWeight:700,cursor:"pointer"}}>反映</button>
           <Btn color={C.red} onClick={()=>{if(taRef.current)taRef.current.value=""}} style={{padding:"1px 5px"}}>×</Btn>
         </div>
@@ -1620,7 +1622,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onArchive,externalRef,ar
 // ═══════════════════════════════════════════════════
 // 取り込み対象エリア
 // ═══════════════════════════════════════════════════
-function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,onClear,onAdd,activeSlot,onSelectText}) {
+function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,onClear,onAdd,activeSlot,onSelectText,onSendToPaste}) {
   // 取込エリア内で選択し終えた瞬間に文字を記憶（スロットclickで選択が消えても保持される）
   const captureSel=()=>{const s=window.getSelection()?.toString();if(s&&s.trim())onSelectText&&onSelectText(s);};
   return (
@@ -1628,15 +1630,17 @@ function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,o
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
           <span style={{fontSize:"0.78rem",fontWeight:700,color:C.yellow}}>取込エリア</span>
-          {translating&&<span style={{fontSize:"0.65rem",color:C.blue}}>翻訳中...</span>}
+          {translating&&<span style={{fontSize:"0.65rem",color:C.blue}}>処理中...</span>}
         </div>
         <div style={{display:"flex",gap:3}}>
+          <Btn color={C.purple} disabled={!text} onClick={onSendToPaste}
+            style={{padding:"1px 6px",fontSize:"0.68rem"}} title="取込エリア → 貼付エリア（差し戻し・整形/翻訳のやり直し用）">⇧</Btn>
           <Btn color={C.yellow} bg={autoAssigning?C.surface:C.yellow} style={{color:autoAssigning?C.textDim:C.bg}}
             disabled={autoAssigning||!text} onClick={()=>onAutoAssign(text)}>
             {autoAssigning?"振り分け中...":"自動"}
           </Btn>
           <Btn color={C.green} disabled={!text} onClick={()=>onTableParse&&onTableParse(text)}
-            style={{padding:"1px 8px",fontSize:"0.68rem"}} title="項目|C|F|差分|詳細 の表を決定的に取込（AI不使用）">表取込</Btn>
+            style={{padding:"1px 8px",fontSize:"0.68rem"}} title="整形済み表を決定的にスロット格納（AI不使用・100%精度）">格納</Btn>
           <Btn color={C.accent} disabled={!activeSlot} onClick={onAdd} title={activeSlot?`${activeSlot}に取り込み`:"スロットを選択してください"}>
             ⇨
           </Btn>
@@ -2100,7 +2104,10 @@ function PriceMatrixEditor({slotData,setSlotData,locks,setLocks,planNames}){
   const setColCur=(col,cur)=>commit({...matrix,currencies:{...(matrix.currencies||{}),[col]:cur}});
   const setRow=(i,patch)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,...patch}:r)});
   const setCell=(i,col,val)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,prices:{...(r.prices||{}),[col]:val}}:r)});
-  const addRow=()=>commit({...matrix,rows:[...matrix.rows,{size:"",prices:{}}]});
+  const addRow=()=>{
+    const last=matrix.rows.length?matrix.rows[matrix.rows.length-1]:null;
+    commit({...matrix,rows:[...matrix.rows,{size:last?.size||"",prices:{}}]});
+  };
   const delRow=i=>commit({...matrix,rows:matrix.rows.filter((_,idx)=>idx!==i)});
   const sortRows=()=>{
     const toNum=r=>parseFloat((r.size||"").replace(/^[$€¥]/,"").replace(/,/g,""))||0;
@@ -3267,6 +3274,17 @@ function App() {
   // 貼り付け→取り込み対象（そのまま）
   const handleSendToTarget=useCallback(text=>{setTabField("targetText",text);setPasteH(100)},[setTabField,setPasteH]);
 
+  // 取り込み対象→貼り付け（差し戻し・整形/翻訳のやり直し用）
+  const handleSendToPaste=useCallback(()=>{
+    const text=getTabData(activeTabId)?.targetText||"";
+    if(!text)return;
+    if(pasteAreaRef.current){
+      const ta=pasteAreaRef.current;
+      ta.value=(ta.value?ta.value+"\n\n":"")+text;
+    }
+    setPasteH(520);
+  },[activeTabId,getTabData,setPasteH]);
+
   // 貼り付け→翻訳→取り込み対象
   const handleTranslateToTarget=useCallback(async text=>{
     setTranslating(true); setTabField("targetText","翻訳中..."); setPasteH(100);
@@ -3274,6 +3292,73 @@ function App() {
     catch(e){setTabField("targetText","翻訳エラー: "+e.message)}
     setTranslating(false);
   },[setTabField]);
+
+  // 貼り付け→整形→取り込み対象（AI整形・格納フォーマットに変換）
+  const handleFormat=useCallback(async text=>{
+    if(!text)return;
+    setTranslating(true); setTabField("targetText","整形中..."); setPasteH(100);
+    try{
+      let currentName="";
+      let formatInstruction="";
+      let slotList="";
+      if(activeType==="firm"){
+        const firm=firms.find(f=>f.id===activeTabId);
+        currentName=firm?.name||"";
+        const dbp01Defs=MASTER_DEFS.dbp01.filter(d=>d.fkey);
+        slotList=dbp01Defs.map(d=>`${d.fkey} (${d.term||d.id}): ${d.definition||""}`).join("\n");
+        formatInstruction=`
+■ 出力形式（厳守）
+パイプ区切り表。1行1項目。
+| <Fキー> | <ラベル> | <値> |
+
+- Fキーは F01〜F22 のいずれか（上記スロット一覧参照）
+- 該当情報がない項目は行ごと省略（「記載なし」行を作らない）
+- 価格表が含まれる場合は別途 | 口座サイズ | プラン名... | で始まる表を追加
+- 出力はパイプ表のみ。前置き・説明文・コードフェンス禁止`;
+      } else {
+        const parentFirm=firms.find(f=>(f.plans||[]).some(pl=>pl.id===activeTabId));
+        const plan=parentFirm?.plans?.find(pl=>pl.id===activeTabId);
+        currentName=plan?.name||"";
+        const dbp02Defs=MASTER_DEFS.dbp02.filter(d=>d.section==="詳細");
+        slotList=dbp02Defs.map(d=>`${d.term||d.id}: ${d.definition||""}`).join("\n");
+        formatInstruction=`
+■ 出力形式（厳守）
+パイプ区切り表。ヘッダー行+データ行。
+
+| 項目 | Challenge | Funded | 差分 | 詳細 |
+|------|-----------|--------|------|------|
+| <ラベル> | <C値> | <F値> | <差分> | <詳細> |
+
+- 項目ラベルは上記スロット一覧の「項目名」と完全一致させる
+- 該当情報がない項目は行ごと省略
+- 差分列: ${diffTermLine(glossaryTerms)}（同一またはF非該当→「—」、異なる→EASE/TRAP）
+- C/Fが同一またはF非該当 → F列・差分は「—」
+- Instantプラン → C列は「ー」、F列に値、差分は「—」
+- 数値型 (利益目標/最低取引日数/日次DD/最大DD/整合性): 数値+単位のみ（「8%」「10日」「$500」等）。未設定は「ー」
+- Lossタイプ型 (日次DD計算タイプ/最大DD計算タイプ): ${ddTypesStr(glossaryTerms)} のみ
+- 詳細列の書き出し:
+  ・差分=— → 「Challenge・Funded共に〜。」
+  ・差分=EASE/TRAP → 「Challengeでは〜。Fundedでは〜。」
+- 主観形容詞・煽り（「重要」「厳格」「注意が必要」等）禁止
+- 出力はパイプ表のみ。前置き・説明文・コードフェンス禁止`;
+      }
+      const data=await callAPI({model:MODEL,max_tokens:4000,
+        system:`あなたはプロップファーム情報の整形エンジンです。入力テキストから「${currentName}」に関する情報のみを抽出し、用語辞典の表記に従って指定フォーマットに整形してください。
+
+対象: ${currentName}
+このFirm/Planの情報のみ抽出。他の情報が混在している場合は除外。
+
+${glossaryRulesBlock(glossaryTerms)}
+
+■ スロット一覧
+${slotList}
+
+${formatInstruction}`,
+        messages:[{role:"user",content:text}]});
+      setTabField("targetText",exText(data));
+    } catch(e){setTabField("targetText","整形エラー: "+e.message)}
+    setTranslating(false);
+  },[setTabField,setPasteH,activeType,activeTabId,firms,glossaryTerms]);
 
   // 保管
   const handleArchive=useCallback(text=>{setTabField("archives",prev=>[...prev,text])},[setTabField]);
@@ -4637,6 +4722,7 @@ ${freqCalcLines(glossaryTerms)}
         <div style={{width:leftW,flexShrink:0,display:"flex",flexDirection:"column",overflow:"hidden"}}>
           <PastePanel externalRef={pasteAreaRef} archives={td.archives}
             onSendToTarget={handleSendToTarget} onTranslateToTarget={handleTranslateToTarget}
+            onFormatToTarget={handleFormat}
             onArchive={handleArchive} onDeleteArchive={handleDeleteArchive}
             height={pasteH} onOpenChild={openPasteWindow} onOpenQuickRef={openQuickRef}
             onTextPasted={handlePasteExpand} />
@@ -4645,7 +4731,8 @@ ${freqCalcLines(glossaryTerms)}
             autoAssigning={autoAssigning} onTableParse={handleTableParse} translating={translating}
             onClear={()=>{setTabField("targetText","");selectedTextRef.current=""}} onAdd={handleAdd}
             activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
-            onSelectText={t=>{selectedTextRef.current=t}} />
+            onSelectText={t=>{selectedTextRef.current=t}}
+            onSendToPaste={handleSendToPaste} />
         </div>
         <ResizeHandle dir="x" onMouseDown={leftDrag} />
 
