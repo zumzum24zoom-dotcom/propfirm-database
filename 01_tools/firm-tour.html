@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Firm Tour</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0e17; color: #c8d6e5; font-family: 'JetBrains Mono', monospace, sans-serif; padding: 20px; }
+  h1 { color: #00d4aa; font-size: 18px; margin-bottom: 8px; }
+  .stats { color: #636e7b; font-size: 12px; margin-bottom: 16px; display: flex; gap: 20px; }
+  .stats span { color: #00d4aa; font-weight: bold; }
+  .controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  button { background: #111827; border: 1px solid #1e2d3d; color: #c8d6e5; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 12px; }
+  button:hover { border-color: #00d4aa; color: #00d4aa; }
+  .btn-next { background: #f0b90b; color: #0a0e17; border-color: #f0b90b; font-weight: bold; }
+  .btn-next:hover { background: #d4a009; }
+  .btn-refresh { border-color: #3b82f6; color: #3b82f6; }
+  .firm-list { display: flex; flex-direction: column; gap: 5px; }
+  .firm-item { display: grid; grid-template-columns: 24px 18px 1fr auto auto auto auto; align-items: center; gap: 8px; background: #111827; border: 1px solid #1e2d3d; border-radius: 8px; padding: 8px 12px; }
+  .firm-item.done { opacity: 0.4; }
+  .firm-item.done .firm-name { text-decoration: line-through; color: #636e7b; }
+  .firm-item.has-data { border-left: 3px solid #00d4aa; }
+  .firm-item.no-data { border-left: 3px solid #636e7b; }
+  .firm-item.partial { border-left: 3px solid #f0b90b; }
+  .num { color: #636e7b; font-size: 11px; text-align: right; }
+  input[type=checkbox] { width: 15px; height: 15px; accent-color: #00d4aa; cursor: pointer; }
+  .firm-name { font-size: 13px; }
+  .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+  .badge-plans { background: #1e3a5f; color: #60a5fa; }
+  .badge-sizes { background: #1a3a2a; color: #34d399; }
+  .badge-coupons { background: #3d2a00; color: #f0b90b; }
+  .badge-empty { background: #1a1a1a; color: #636e7b; }
+  a.url-btn { background: #1a2332; border: 1px solid #1e2d3d; color: #3b82f6; padding: 3px 10px; border-radius: 5px; font-size: 11px; text-decoration: none; white-space: nowrap; }
+  a.url-btn:hover { border-color: #3b82f6; }
+  .loading { color: #636e7b; font-size: 11px; }
+</style>
+</head>
+<body>
+<h1>🗺 Firm Tour</h1>
+<div class="stats">
+  完了: <span id="done-count">0</span> / <span id="total-count">0</span> &nbsp;|&nbsp;
+  データあり: <span id="data-count">0</span> &nbsp;|&nbsp;
+  クーポンあり: <span id="coupon-count">0</span>
+</div>
+<div class="controls">
+  <button class="btn-next" onclick="openNext()">▶ 次を開く</button>
+  <button class="btn-refresh" onclick="loadData()">↻ データ更新</button>
+  <button onclick="resetAll()">リセット</button>
+</div>
+<div class="firm-list" id="firm-list"></div>
+
+<script>
+const GH_BASE = 'https://raw.githubusercontent.com/zumzum24zoom-dotcom/propfirm-database/master/data/firms/';
+const LS_KEY = 'pfd-tour-done';
+
+const FIRMS = [
+  { slug: 'the5ers',               dataSlug: 'the5ers',               name: 'The5ers',                 url: 'https://www.the5ers.com/' },
+  { slug: 'fundingpips',           dataSlug: 'fundingpips',           name: 'FundingPips',             url: 'https://fundingpips.com/' },
+  { slug: 'fundednext',            dataSlug: 'fundednext',            name: 'FundedNext',              url: 'https://fundednext.com/' },
+  { slug: 'fundedelite',           dataSlug: 'fundedelite',           name: 'FundedElite',             url: 'https://fundedelite.com/' },
+  { slug: 'ftmo',                  dataSlug: 'ftmo',                  name: 'FTMO',                    url: 'https://ftmo.com/' },
+  { slug: 'top-one-trader',        dataSlug: 'toponetrader',          name: 'Top One Trader',          url: 'https://www.toponetrader.com/' },
+  { slug: 'instant-funding',       dataSlug: 'instantfunding',        name: 'Instant Funding',         url: 'https://instantfunding.com/' },
+  { slug: 'fintokei',              dataSlug: 'fintokei',              name: 'Fintokei',                url: 'https://www.fintokei.com/' },
+  { slug: 'city-traders-imperium', dataSlug: 'citytradersimperium',   name: 'City Traders Imperium',   url: 'https://citytradersimperium.com/' },
+  { slug: 'hantec-trader',         dataSlug: 'htrader',               name: 'Hantec Trader',           url: 'https://hantectrader.com/' },
+  { slug: 'alpha-capital',         dataSlug: 'alphacapitalgroup',     name: 'Alpha Capital',           url: 'https://www.alphacapitalgroup.uk/' },
+  { slug: 'e8-markets',            dataSlug: 'e8markets',             name: 'E8 Markets',              url: 'https://e8markets.com/' },
+  { slug: 'maven',                 dataSlug: 'maventrading',          name: 'Maven',                   url: 'https://maventrading.com/' },
+  { slug: 'bem-funding',           dataSlug: 'bemfunding',            name: 'BEM Funding',             url: 'https://bemfunding.com/' },
+  { slug: 'brightfunded',          dataSlug: 'brightfunded',          name: 'BrightFunded',            url: 'https://brightfunded.com/' },
+  { slug: 'blueberry-funded',      dataSlug: 'blueberryfunded',       name: 'Blueberry Funded',        url: 'https://blueberryfunded.com/' },
+  { slug: 'aquafunded',            dataSlug: 'aquafunded',            name: 'AquaFunded',              url: 'https://aquafunded.com/' },
+  { slug: 'for-traders',           dataSlug: 'fortraders',            name: 'For Traders',             url: 'https://fortraders.com/' },
+  { slug: 'lark-funding',          dataSlug: 'larkfunding',           name: 'Lark Funding',            url: 'https://www.larkfunding.com/' },
+  { slug: 'qt-funded',             dataSlug: 'qtfunded',              name: 'QT Funded',               url: 'https://qtfunded.com/' },
+  { slug: 'audacity-capital',      dataSlug: 'audacity',              name: 'Audacity Capital',        url: 'https://audacity.capital/' },
+  { slug: 'moneta-funded',         dataSlug: 'monetafunded',          name: 'Moneta Funded',           url: 'https://monetafunded.com/' },
+  { slug: 'atmos-funded',          dataSlug: 'atmosfunded',           name: 'Atmos Funded',            url: 'https://atmosfunded.com/' },
+  { slug: 'atfunded',              dataSlug: 'atfunded',              name: 'ATFunded',                url: 'https://atfunded.com/' },
+  { slug: 'finotive-funding',      dataSlug: 'finotivefunding',       name: 'Finotive Funding',        url: 'https://finotivefunding.com/' },
+  { slug: 'trade-the-pool',        dataSlug: 'tradethepool',          name: 'Trade The Pool',          url: 'https://tradethepool.com/' },
+  { slug: 'thinkcapital',          dataSlug: 'thinkcapital',          name: 'ThinkCapital',            url: 'https://www.thinkcapital.com/' },
+  { slug: 'funded-trading-plus',   dataSlug: 'fundedtradingplus',     name: 'Funded Trading Plus',     url: 'https://www.fundedtradingplus.com/' },
+  { slug: 'nordic-funder',         dataSlug: 'nordicfunder',          name: 'Nordic Funder',           url: 'https://nordicfunder.com/' },
+  { slug: 'fxify',                 dataSlug: 'fxify',                 name: 'FXIFY',                   url: 'https://fxify.com/' },
+  { slug: 'the-trading-pit',       dataSlug: 'thetradingpit',         name: 'The Trading Pit',         url: 'https://www.thetradingpit.com/' },
+  { slug: 'ment-funding',          dataSlug: 'mentfunding',           name: 'Ment Funding',            url: 'https://mentfunding.com/' },
+  { slug: 'hola-prime',            dataSlug: 'holaprime',             name: 'Hola Prime',              url: 'https://holaprime.com/' }
+];
+
+function getDone() { try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; } }
+function saveDone(arr) { localStorage.setItem(LS_KEY, JSON.stringify(arr)); }
+
+function toggle(slug) {
+  let done = getDone();
+  done.includes(slug) ? done = done.filter(s => s !== slug) : done.push(slug);
+  saveDone(done);
+  const item = document.querySelector(`[data-slug="${slug}"]`);
+  if (item) item.classList.toggle('done', done.includes(slug));
+  updateStats();
+}
+
+function updateStats() {
+  const done = getDone();
+  document.getElementById('done-count').textContent = done.length;
+  document.getElementById('total-count').textContent = FIRMS.length;
+  let dataCount = 0, couponCount = 0;
+  document.querySelectorAll('.firm-item[data-plans]').forEach(el => {
+    if (parseInt(el.dataset.plans) > 0) dataCount++;
+    if (parseInt(el.dataset.coupons) > 0) couponCount++;
+  });
+  document.getElementById('data-count').textContent = dataCount;
+  document.getElementById('coupon-count').textContent = couponCount;
+}
+
+function openNext() {
+  const done = getDone();
+  for (const f of FIRMS) {
+    if (!done.includes(f.slug)) {
+      window.open(f.url, '_blank');
+      document.querySelector(`[data-slug="${f.slug}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+  }
+  alert('全ファーム完了！');
+}
+
+function resetAll() {
+  if (!confirm('チェックをリセットしますか？')) return;
+  saveDone([]);
+  document.querySelectorAll('.firm-item').forEach(el => el.classList.remove('done'));
+  updateStats();
+}
+
+async function fetchFirmData(dataSlug) {
+  try {
+    const r = await fetch(GH_BASE + dataSlug + '.json');
+    if (!r.ok) return null;
+    const d = await r.json();
+    let plans = 0, sizes = 0, coupons = 0;
+    try { const pt = JSON.parse(d.slotData?.priceTable?.[0]?.text || '{}'); sizes = (pt.rows || []).length; } catch {}
+    try { plans = (d.slotData?.planList?.[0]?.text || '').split(',').filter(s => s.trim()).length; } catch {}
+    coupons = (d['クーポン'] || []).length;
+    return { plans, sizes, coupons, diff: d.diff?.summary || '' };
+  } catch { return null; }
+}
+
+function renderBadges(data) {
+  if (!data) return '<span class="badge badge-empty">未取得</span>';
+  if (data.plans === 0 && data.sizes === 0 && data.coupons === 0)
+    return '<span class="badge badge-empty">空</span>';
+  let b = '';
+  if (data.plans > 0) b += `<span class="badge badge-plans">${data.plans}プラン</span> `;
+  if (data.sizes > 0) b += `<span class="badge badge-sizes">${data.sizes}サイズ</span> `;
+  if (data.coupons > 0) b += `<span class="badge badge-coupons">${data.coupons}クーポン</span>`;
+  return b || '<span class="badge badge-empty">空</span>';
+}
+
+async function loadData() {
+  const done = getDone();
+  const list = document.getElementById('firm-list');
+  list.innerHTML = '';
+
+  for (let i = 0; i < FIRMS.length; i++) {
+    const f = FIRMS[i];
+    const isDone = done.includes(f.slug);
+    const div = document.createElement('div');
+    div.className = 'firm-item' + (isDone ? ' done' : '');
+    div.dataset.slug = f.slug;
+    div.dataset.plans = '0';
+    div.dataset.coupons = '0';
+    div.innerHTML = `
+      <span class="num">${i+1}</span>
+      <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggle('${f.slug}')">
+      <span class="firm-name">${f.name}</span>
+      <span class="loading" id="badge-${f.slug}">...</span>
+      <span></span><span></span>
+      <a class="url-btn" href="${f.url}" target="_blank">開く →</a>
+    `;
+    list.appendChild(div);
+  }
+  updateStats();
+
+  // 非同期でデータ取得
+  for (const f of FIRMS) {
+    const data = await fetchFirmData(f.dataSlug);
+    const badgeEl = document.getElementById('badge-' + f.slug);
+    const item = document.querySelector(`[data-slug="${f.slug}"]`);
+    if (badgeEl) badgeEl.outerHTML = renderBadges(data);
+    if (item && data) {
+      item.dataset.plans = data.plans;
+      item.dataset.coupons = data.coupons;
+      if (data.plans > 0 || data.sizes > 0) {
+        item.classList.add('has-data');
+      } else if (data.coupons > 0) {
+        item.classList.add('partial');
+      } else {
+        item.classList.add('no-data');
+      }
+    } else if (item) {
+      item.classList.add('no-data');
+    }
+  }
+  updateStats();
+}
+
+loadData();
+</script>
+</body>
+</html>

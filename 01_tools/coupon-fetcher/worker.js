@@ -38,15 +38,113 @@ export default {
     // POST /scan — ブックマークレット / Page Maker からのページ構造保存
     if (request.method === "POST" && url.pathname === "/scan") {
       const body = await request.json();
-      const { firmSlug, data } = body;
+      const { firmSlug } = body;
+      const data = body.data || body; // 旧フォーマット({firmSlug,data})と新フォーマット両対応
       if (!firmSlug) return cors(json({ error: "firmSlug required" }, 400));
       const [owner, repo] = env.GITHUB_REPO.split("/");
-      await ghPutFile(owner, repo, env.GITHUB_BRANCH || "master",
+      const branch = env.GITHUB_BRANCH || "master";
+
+      // 1. rawスキャン保存
+      await ghPutFile(owner, repo, branch,
         `data/scans/${firmSlug}.json`,
         JSON.stringify(data, null, 2),
         env.GITHUB_TOKEN
       );
-      return cors(json({ status: "saved", path: `data/scans/${firmSlug}.json` }));
+
+      // 2. LLM抽出（価格 + クーポン）
+      const pageText = (data.pageText || "").slice(0, 25000);
+      const pricingOptions = data.pricingOptions || [];
+      let extracted = { planNames: [], rows: [], planList: "" };
+      let coupons = [];
+      let extractionError = null;
+      try {
+        [extracted, coupons] = await Promise.all([
+          extractPriceData(firmSlug, data._url || "", pageText, pricingOptions, env.ANTHROPIC_KEY),
+          extractCoupons(firmSlug, data._url || "", pageText, env.ANTHROPIC_KEY)
+        ]);
+        console.log(`[scan] ${firmSlug}: ${extracted.planNames.length}プラン / ${extracted.rows.length}サイズ / ${coupons.length}クーポン`);
+      } catch (err) {
+        extractionError = err.message;
+        console.error(`[scan] LLM失敗 ${firmSlug}: ${err.message}`);
+      }
+
+      // 3. 前回データ取得（差分用）
+      let prevData = null;
+      try {
+        const prev = await ghGetFile(owner, repo, `data/firms/${firmSlug}.json`, env.GITHUB_TOKEN);
+        prevData = JSON.parse(prev.content);
+      } catch {}
+
+      // 4. 差分計算
+      const diff = computeDiff(prevData, extracted);
+
+      // 5. firmsデータ保存
+      const firmsData = {
+        firmSlug,
+        "公式URL": data._url || "",
+        extractedAt: new Date().toISOString(),
+        "クーポン": coupons,
+        slotData: {
+          priceTable: [{ text: JSON.stringify({ rows: extracted.rows }) }],
+          planList: [{ text: extracted.planList }]
+        },
+        diff,
+        ...(extractionError ? { extractionError } : {})
+      };
+      await ghPutFile(owner, repo, branch,
+        `data/firms/${firmSlug}.json`,
+        JSON.stringify(firmsData, null, 2),
+        env.GITHUB_TOKEN
+      );
+
+      return cors(json({
+        status: "saved",
+        extracted: { plans: extracted.planNames, sizes: extracted.rows.length, rows: extracted.rows, coupons: coupons.length, couponList: coupons },
+        diff: diff.summary,
+        ...(extractionError ? { extractionError } : {})
+      }));
+    }
+
+    // POST /cleanup — 旧フォーマットファイル削除（バックグラウンド実行）
+    if (request.method === "POST" && url.pathname === "/cleanup") {
+      const [owner, repo] = env.GITHUB_REPO.split("/");
+      const branch = env.GITHUB_BRANCH || "master";
+      ctx.waitUntil((async () => {
+        try {
+          const entries = await ghList(owner, repo, FIRMS_DIR, env.GITHUB_TOKEN);
+          const files = entries.filter(e => e.type === "file" && e.name.endsWith(".json"));
+          for (const f of files) {
+            try {
+              const { content: raw, sha } = await ghGetFile(owner, repo, f.path, env.GITHUB_TOKEN);
+              let data; try { data = JSON.parse(raw); } catch { data = {}; }
+              const isNew = !!(data.firmSlug && data.extractedAt);
+              const isBad = f.name.includes("[object") || f.name.includes("%5B");
+              if (!isNew || isBad) {
+                await ghFetch(`https://api.github.com/repos/${owner}/${repo}/contents/${f.path}`, env.GITHUB_TOKEN, {
+                  method: "DELETE",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ message: `[cleanup] ${f.name}`, sha, branch })
+                });
+                console.log(`[cleanup] 削除: ${f.name}`);
+              }
+            } catch (e) { console.error(`[cleanup] ${f.name}: ${e.message}`); }
+            await sleep(500);
+          }
+          console.log("[cleanup] 完了");
+        } catch (e) { console.error(`[cleanup] 失敗: ${e.message}`); }
+      })());
+      return cors(json({ status: "started", message: "バックグラウンドで削除中" }));
+    }
+
+    // POST /restore — 特定ファイルの復元
+    if (request.method === "POST" && url.pathname === "/restore") {
+      const body = await request.json();
+      const { path, content } = body;
+      if (!path || !content) return cors(json({ error: "path and content required" }, 400));
+      const [owner, repo] = env.GITHUB_REPO.split("/");
+      const branch = env.GITHUB_BRANCH || "master";
+      await ghPutFile(owner, repo, branch, path, content, env.GITHUB_TOKEN);
+      return cors(json({ status: "restored", path }));
     }
 
     // GET /?secret=... — 手動クーポン取得トリガー
@@ -57,35 +155,46 @@ export default {
 
 // ── メイン処理 ──────────────────────────────────────────────────────────
 
+function getPrevPriceRows(firm) {
+  try {
+    const pt = firm.slotData?.priceTable?.[0]?.text;
+    if (pt) return JSON.parse(pt).rows || [];
+  } catch {}
+  try {
+    const pt = firm["価格テーブル"];
+    if (pt?.rows) return pt.rows;
+  } catch {}
+  return [];
+}
+
 async function run(env) {
   const [owner, repo] = env.GITHUB_REPO.split("/");
   const branch = env.GITHUB_BRANCH || "master";
 
-  console.log(`[coupon-fetcher] 開始 ${new Date().toISOString()}`);
+  console.log(`[auto] 開始 ${new Date().toISOString()}`);
 
   // 1. data/firms/ 配下の *.json を一覧取得
   const dirEntries = await ghList(owner, repo, FIRMS_DIR, env.GITHUB_TOKEN);
   const firmFiles = dirEntries.filter(e => e.type === "file" && e.name.endsWith(".json"));
-  console.log(`[coupon-fetcher] ${firmFiles.length} 件のFirmファイルを検出`);
+  console.log(`[auto] ${firmFiles.length} 件のFirmファイルを検出`);
 
-  const updates = []; // { path, content }
+  const updates = [];
 
   for (const file of firmFiles) {
     try {
-      const { content: rawJson, sha } = await ghGetFile(owner, repo, file.path, env.GITHUB_TOKEN);
+      const { content: rawJson } = await ghGetFile(owner, repo, file.path, env.GITHUB_TOKEN);
       const firm = JSON.parse(rawJson);
 
       const targetUrl = (firm["アフィリエイトURL"] || firm["公式URL"] || "").trim();
-      if (!targetUrl) {
-        console.log(`[skip] ${file.name}: URL未設定`);
-        continue;
-      }
+      if (!targetUrl) { console.log(`[skip] ${file.name}: URL未設定`); continue; }
 
-      // 2. 公式サイトのHTMLを取得
+      const firmName = firm["ファーム名"] || file.name.replace(".json", "");
+
+      // 2. HTMLを取得
       let html = "";
       try {
         const resp = await fetch(targetUrl, {
-          headers: { "User-Agent": "Mozilla/5.0 (compatible; PFD-CouponBot/1.0)" },
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; PFD-Bot/1.0)" },
           redirect: "follow",
           signal: AbortSignal.timeout(10000)
         });
@@ -95,23 +204,37 @@ async function run(env) {
         continue;
       }
 
-      // 3. Claude Haiku でクーポンコードを抽出
-      const coupons = await extractCoupons(
-        firm["ファーム名"] || file.name.replace(".json", ""),
-        targetUrl,
-        html,
-        env.ANTHROPIC_KEY
-      );
-      console.log(`[result] ${file.name}: ${coupons.length} 件`);
+      // 3. クーポン + 価格を並列抽出
+      const [coupons, priceData] = await Promise.all([
+        extractCoupons(firmName, targetUrl, html, env.ANTHROPIC_KEY),
+        extractPriceData(firmName, targetUrl, html, [], env.ANTHROPIC_KEY)
+      ]);
 
-      // 4. 変更がある場合のみ更新対象に追加
-      if (JSON.stringify(firm["クーポン"] || []) !== JSON.stringify(coupons)) {
+      // 4. 差分判定
+      const prevCoupons = firm["クーポン"] || [];
+      const prevRows = getPrevPriceRows(firm);
+      const prevState = prevRows.length
+        ? { slotData: { priceTable: [{ text: JSON.stringify({ rows: prevRows }) }] } }
+        : null;
+      const priceDiff = computeDiff(prevState, priceData);
+
+      const couponsChanged = JSON.stringify(prevCoupons) !== JSON.stringify(coupons);
+      const pricesChanged = priceDiff.changes.length > 0;
+
+      console.log(`[result] ${file.name}: coupon=${coupons.length}件 price=${priceData.rows.length}サイズ diff=${priceDiff.summary}`);
+
+      // 5. 変更あり → 更新
+      if (couponsChanged || pricesChanged) {
         firm["クーポン"] = coupons;
+        if (!firm.slotData) firm.slotData = {};
+        firm.slotData.priceTable = [{ text: JSON.stringify({ rows: priceData.rows }) }];
+        firm.slotData.planList = [{ text: priceData.planList }];
+        firm["lastAutoUpdate"] = new Date().toISOString();
+        firm["diff"] = priceDiff;
         updates.push({ path: file.path, content: JSON.stringify(firm, null, 2) });
       }
 
-      // API レート制限対策
-      await sleep(1200);
+      await sleep(1500);
     } catch (err) {
       console.error(`[error] ${file.name}: ${err.message}`);
     }
@@ -125,6 +248,87 @@ async function run(env) {
   // 5. GitHub にバッチコミット（1コミットで全ファイル更新）
   await batchCommit(owner, repo, branch, updates, env.GITHUB_TOKEN);
   console.log(`[coupon-fetcher] 完了 — ${updates.length} ファイル更新`);
+}
+
+// ── 価格データ抽出 ───────────────────────────────────────────────────────
+
+async function extractPriceData(firmName, url, pageText, pricingOptions, apiKey) {
+  const optionsSection = pricingOptions.length
+    ? `\nドロップダウン候補データ（非表示要素含む）:\n${JSON.stringify(pricingOptions.slice(0, 20), null, 2)}`
+    : "";
+
+  const prompt = `以下のプロップファームのページテキストからプラン名・口座サイズ・価格を抽出してください。
+
+ファーム: ${firmName}
+URL: ${url}
+
+抽出ルール:
+- プラン名（例: "FTMO Challenge", "Stellar 2-Step"）
+- 口座サイズ（例: "$10,000", "¥1,000,000"）
+- 各プラン×サイズの価格
+- 価格が存在しない組み合わせは "—" とする
+- ドロップダウン候補データにサイズ一覧が含まれる場合はそちらも優先参照
+- 見つからない場合は空配列
+
+出力: JSONのみ（説明不要）
+形式: {"planNames":["プラン名1"],"rows":[{"size":"$10,000","tier":"","prices":{"プラン名1":"$155"}}]}
+
+ページテキスト:
+${pageText}${optionsSection}`;
+
+  const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 2048,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(`Claude API ${resp.status}: ${err.error?.message || "unknown"}`);
+  }
+
+  const result = await resp.json();
+  const text = result.content[0].text.trim().replace(/```json|```/g, "").trim();
+  try {
+    const parsed = JSON.parse(text);
+    return {
+      planNames: Array.isArray(parsed.planNames) ? parsed.planNames : [],
+      rows: Array.isArray(parsed.rows) ? parsed.rows : [],
+      planList: Array.isArray(parsed.planNames) ? parsed.planNames.join(", ") : ""
+    };
+  } catch {
+    return { planNames: [], rows: [], planList: "" };
+  }
+}
+
+function computeDiff(prev, curr) {
+  if (!prev?.slotData?.priceTable?.[0]?.text) return { summary: "new", changes: [] };
+
+  let prevRows = [];
+  try { prevRows = JSON.parse(prev.slotData.priceTable[0].text).rows || []; } catch {}
+  if (!prevRows.length) return { summary: "new", changes: [] };
+
+  const changes = [];
+  for (const currRow of curr.rows) {
+    const prevRow = prevRows.find(r => r.size === currRow.size);
+    if (!prevRow) continue; // 新規サイズは差分としてカウントしない
+    for (const [plan, price] of Object.entries(currRow.prices || {})) {
+      const prevPrice = prevRow.prices?.[plan];
+      if (prevPrice !== undefined && prevPrice !== price) {
+        changes.push({ type: "price_change", size: currRow.size, plan, from: prevPrice, to: price });
+      }
+    }
+  }
+
+  return { summary: changes.length === 0 ? "no_change" : `${changes.length}_changes`, changes };
 }
 
 // ── クーポン抽出 ─────────────────────────────────────────────────────────
@@ -261,7 +465,7 @@ async function batchCommit(owner, repo, branch, updates, token) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      message: `[auto] クーポン更新 ${today}`,
+      message: `[auto] クーポン・価格更新 ${today} (${updates.length}件)`,
       tree: tree.sha,
       parents: [latestSha]
     })
