@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
 Page Maker v0.9
+2026-06-06 ver.36: パネル表示トグル追加 — ヘッダーに3つのアイコン（縦3分割表現・左/中央/右）。各クリックで対応パネルの表示/非表示を切替。localStorage 永続化。中央と右の同時OFFはガード。価格テーブル「＋ 口座サイズ行」が直前行の size を初期値に引き継ぐよう修正。
 2026-06-06 ver.35: 取込ワークフロー再編 — 貼付エリアに「整形」ボタン追加（AIで格納用フォーマットに変換し取込エリアへ直送）。取込エリアに「⇧」ボタン追加（取込→貼付の差し戻し・整形/翻訳のやり直し用）。「表取込」を「格納」にリネーム。自動ボタンは保険として残置。整形プロンプトは Firm/Plan で出力形式を切替（Firmは F01〜F22 パイプ表、Planは 項目|C|F|差分|詳細 表）。
 2026-05-30 ver.34: Stepsスロット追加（DBP_02 P20）・ボタン整理（ヘッダーデータ管理ドロップダウン化・縦タブ選択/プロンプトバー統合・個別削除ボタン廃止→選択削除に統一・Plan行チェックボックス追加）
 2026-05-27 ver.33: APIキー直書きを廃止しWorkerプロキシ経由に — api.anthropic.com直叩き＋ハードコードキー（2箇所）を全廃。callAPI/子ウィンドウ翻訳をWorker /api/llm 経由に変更（キーはWorker Secretsのenv.ANTHROPIC_KEYで保持）。callAPIはエラー本文を表示するよう改善（HTTP 400の理由が読める）。要：Worker側 /api/llm デプロイ＋ANTHROPIC_KEY登録＋旧キー失効
@@ -3118,6 +3119,20 @@ function App() {
 
   // UI state
   const [rightMode,setRightMode]=useState("slots"); // slots | glossary
+  // パネル表示トグル（左:Firmリスト / 中央:貼付・取込 / 右:スロット）— localStorage 永続化
+  const [panelVis,setPanelVis]=useState(()=>{
+    try{const s=localStorage.getItem("pfm-panel-vis");if(s){const v=JSON.parse(s);return{left:v.left!==false,center:v.center!==false,right:v.right!==false}}}catch(e){}
+    return{left:true,center:true,right:true};
+  });
+  useEffect(()=>{try{localStorage.setItem("pfm-panel-vis",JSON.stringify(panelVis))}catch(e){}},[panelVis]);
+  const togglePanel=useCallback(key=>{
+    setPanelVis(prev=>{
+      const next={...prev,[key]:!prev[key]};
+      // 中央と右が両方OFFになるのを防ぐ（最低どちらか1つは表示）
+      if(!next.center&&!next.right){return prev}
+      return next;
+    });
+  },[]);
   const [translating,setTranslating]=useState(false);
   const [autoAssigning,setAutoAssigning]=useState(false);
   const [aiGenKoryaku,setAiGenKoryaku]=useState(false);
@@ -4673,6 +4688,41 @@ ${freqCalcLines(glossaryTerms)}
             width:16,height:16,borderRadius:8,background:"#fff",
             transition:"left 0.2s",boxShadow:"0 1px 3px rgba(0,0,0,0.3)"}} />
         </div>
+        {/* パネル表示トグル（左/中央/右） */}
+        {(()=>{
+          const ON="#ffffff";
+          const OFF="#4a5568";
+          const PanelIcon=({target})=>{
+            const cell={flex:1,margin:"0 1px",borderRadius:1};
+            return(
+              <div style={{display:"flex",alignItems:"stretch",width:18,height:14,padding:1,gap:0}}>
+                <div style={{...cell,background:target==="left"?ON:OFF}}/>
+                <div style={{...cell,background:target==="center"?ON:OFF}}/>
+                <div style={{...cell,background:target==="right"?ON:OFF}}/>
+              </div>
+            );
+          };
+          const btn=(key,label)=>{
+            const on=panelVis[key];
+            return(
+              <div key={key} onClick={()=>togglePanel(key)} title={`${label} (${on?"表示中":"非表示"})`}
+                style={{cursor:"pointer",display:"inline-flex",alignItems:"center",justifyContent:"center",
+                  width:24,height:20,borderRadius:3,
+                  background:on?"#2a3a4d":"transparent",
+                  border:`1px solid ${on?ON:OFF}`,
+                  opacity:on?1:0.55,userSelect:"none"}}>
+                <PanelIcon target={key}/>
+              </div>
+            );
+          };
+          return(
+            <div style={{display:"flex",gap:3,alignItems:"center"}}>
+              {btn("left","Firmリスト")}
+              {btn("center","貼付・取込")}
+              {btn("right","スロット")}
+            </div>
+          );
+        })()}
         <div style={{flex:1}} />
         {/* 保存ドロップダウン */}
         <div style={{display:"flex",gap:1,alignItems:"center"}}>
@@ -4710,34 +4760,38 @@ ${freqCalcLines(glossaryTerms)}
 
       {/* Main */}
       <div style={{flex:1,display:"flex",overflow:"hidden"}}>
-        {/* 縦タブ */}
-        <VerticalTabs firms={firms} activeId={activeTabId} onSelect={setActiveTabId}
-          onAddFirm={addFirm} onAddPlan={addPlan} onDelete={deleteTab} onRename={renameTab}
-          width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin}
-          sections={sections} onAddSection={addSection} onRenameSection={renameSection} onDeleteSection={deleteSection} onToggleCompleted={toggleCompleted} onMoveFirmToSection={moveFirmToSection}
-          sessionName={sessionName} onSessionNameChange={setSessionName} />
-        <ResizeHandle dir="x" onMouseDown={vtabDrag} />
+        {/* 縦タブ（Firmリスト） */}
+        {panelVis.left&&<>
+          <VerticalTabs firms={firms} activeId={activeTabId} onSelect={setActiveTabId}
+            onAddFirm={addFirm} onAddPlan={addPlan} onDelete={deleteTab} onRename={renameTab}
+            width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin}
+            sections={sections} onAddSection={addSection} onRenameSection={renameSection} onDeleteSection={deleteSection} onToggleCompleted={toggleCompleted} onMoveFirmToSection={moveFirmToSection}
+            sessionName={sessionName} onSessionNameChange={setSessionName} />
+          <ResizeHandle dir="x" onMouseDown={vtabDrag} />
+        </>}
 
         {/* 左カラム: 貼り付け + 取り込み対象 */}
-        <div style={{width:leftW,flexShrink:0,display:"flex",flexDirection:"column",overflow:"hidden"}}>
-          <PastePanel externalRef={pasteAreaRef} archives={td.archives}
-            onSendToTarget={handleSendToTarget} onTranslateToTarget={handleTranslateToTarget}
-            onFormatToTarget={handleFormat}
-            onArchive={handleArchive} onDeleteArchive={handleDeleteArchive}
-            height={pasteH} onOpenChild={openPasteWindow} onOpenQuickRef={openQuickRef}
-            onTextPasted={handlePasteExpand} />
-          <ResizeHandle dir="y" onMouseDown={pasteDrag} />
-          <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
-            autoAssigning={autoAssigning} onTableParse={handleTableParse} translating={translating}
-            onClear={()=>{setTabField("targetText","");selectedTextRef.current=""}} onAdd={handleAdd}
-            activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
-            onSelectText={t=>{selectedTextRef.current=t}}
-            onSendToPaste={handleSendToPaste} />
-        </div>
-        <ResizeHandle dir="x" onMouseDown={leftDrag} />
+        {panelVis.center&&<>
+          <div style={{width:panelVis.right?leftW:"100%",flex:panelVis.right?"none":1,flexShrink:0,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+            <PastePanel externalRef={pasteAreaRef} archives={td.archives}
+              onSendToTarget={handleSendToTarget} onTranslateToTarget={handleTranslateToTarget}
+              onFormatToTarget={handleFormat}
+              onArchive={handleArchive} onDeleteArchive={handleDeleteArchive}
+              height={pasteH} onOpenChild={openPasteWindow} onOpenQuickRef={openQuickRef}
+              onTextPasted={handlePasteExpand} />
+            <ResizeHandle dir="y" onMouseDown={pasteDrag} />
+            <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
+              autoAssigning={autoAssigning} onTableParse={handleTableParse} translating={translating}
+              onClear={()=>{setTabField("targetText","");selectedTextRef.current=""}} onAdd={handleAdd}
+              activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
+              onSelectText={t=>{selectedTextRef.current=t}}
+              onSendToPaste={handleSendToPaste} />
+          </div>
+          {panelVis.right&&<ResizeHandle dir="x" onMouseDown={leftDrag} />}
+        </>}
 
         {/* 右カラム */}
-        {rightMode==="slots"?(
+        {panelVis.right&&(rightMode==="slots"?(
           <SlotPanel templateMode={td.templateMode} setTemplateMode={m=>setTabField("templateMode",m)}
             slotData={td.slotData} setSlotData={v=>setTabField("slotData",v)} currentSlots={currentSlots}
             availableTemplates={availableTemplates}
@@ -4756,7 +4810,7 @@ ${freqCalcLines(glossaryTerms)}
             onNavigateTab={navigateTab} />
         ):(
           <GlossaryPanel terms={glossaryTerms} setTerms={setGlossaryTerms} generating={glossaryGenerating} />
-        )}
+        ))}
       </div>
     </div>
   );
