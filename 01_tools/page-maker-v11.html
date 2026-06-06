@@ -1902,7 +1902,7 @@ function diffStyle(d){
   return{color:C.textDim,fontWeight:400};
 }
 
-function RuleTableEditor({slotData,setSlotData,locks}){
+function RuleTableEditor({slotData,setSlotData,locks,setLocks}){
   const [open,setOpen]=useState(null); // 編集中のslotId
   const [draft,setDraft]=useState({c:"",f:"",diff:"ー",note:""});
 
@@ -1978,6 +1978,9 @@ function RuleTableEditor({slotData,setSlotData,locks}){
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:"0.68rem"}}>
         <thead>
           <tr style={{borderBottom:`2px solid ${C.border}`}}>
+            <th style={{padding:"4px 6px",width:20,textAlign:"center"}}>
+              {setLocks&&(()=>{const allL=slots.every(s=>!!locks[s.id]);return<span onClick={()=>{const next={...locks};slots.forEach(s=>{next[s.id]=!allL});setLocks(next)}} style={{cursor:"pointer",fontSize:"0.65rem",color:allL?C.yellow:C.textDim}} title={allL?"全解除":"全ロック"}>{allL?"🔒":"🔓"}</span>;})()}
+            </th>
             {["項目","Challenge","Funded","差分"].map(h=>(
               <th key={h} style={{padding:"5px 6px",textAlign:"left",color:C.textDim,
                 fontWeight:700,fontSize:"0.6rem",letterSpacing:"0.05em",whiteSpace:"nowrap"}}>{h}</th>
@@ -2001,8 +2004,10 @@ function RuleTableEditor({slotData,setSlotData,locks}){
                     background:isOpen?C.accentDim:"transparent"}}
                   onMouseEnter={e=>{if(!isOpen&&!locked)e.currentTarget.style.background=C.surfaceAlt}}
                   onMouseLeave={e=>{if(!isOpen)e.currentTarget.style.background="transparent"}}>
+                  <td style={{padding:"4px 6px",textAlign:"center",width:20}} onClick={e=>e.stopPropagation()}>
+                    {setLocks&&<span onClick={()=>setLocks(p=>({...p,[slot.id]:!locked}))} style={{cursor:"pointer",fontSize:"0.65rem",color:locked?C.yellow:C.textDim}} title={locked?"解除":"ロック"}>{locked?"🔒":"🔓"}</span>}
+                  </td>
                   <td style={{padding:"6px 6px",color:isEmpty?C.textDim:C.textBright,fontWeight:isEmpty?400:500,whiteSpace:"nowrap"}}>
-                    {locked&&<span style={{fontSize:"0.55rem",marginRight:3}}>🔒</span>}
                     {slot.label}
                   </td>
                   {isProhibit?(
@@ -2080,8 +2085,9 @@ function autoFmt(s){
   if(/^\d+$/.test(n))h=parseInt(n,10).toLocaleString("ja-JP");
   return h;
 }
-function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
+function PriceMatrixEditor({slotData,setSlotData,locks,setLocks,planNames}){
   const locked=!!(locks&&locks.priceTable);
+  const [focusedRow,setFocusedRow]=useState(null);
   const raw=(()=>{const fr=slotData.priceTable;if(!fr||!fr.length)return"";const m=fr.find(f=>f.merged);return m?m.text:(fr[0]&&fr[0].text)||"";})();
   let matrix={rows:[]};
   try{if(raw){const o=JSON.parse(raw);if(o&&Array.isArray(o.rows))matrix=o;}}catch(e){matrix={rows:[]};}
@@ -2096,12 +2102,19 @@ function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
   const setCell=(i,col,val)=>commit({...matrix,rows:matrix.rows.map((r,idx)=>idx===i?{...r,prices:{...(r.prices||{}),[col]:val}}:r)});
   const addRow=()=>commit({...matrix,rows:[...matrix.rows,{size:"",prices:{}}]});
   const delRow=i=>commit({...matrix,rows:matrix.rows.filter((_,idx)=>idx!==i)});
+  const sortRows=()=>{
+    const toNum=r=>parseFloat((r.size||"").replace(/^[$€¥]/,"").replace(/,/g,""))||0;
+    commit({...matrix,rows:[...matrix.rows].sort((a,b)=>toNum(a)-toNum(b))});
+  };
   const th={padding:"4px 6px",textAlign:"left",color:C.textDim,fontWeight:700,fontSize:"0.6rem",whiteSpace:"nowrap",borderBottom:`2px solid ${C.border}`};
   const td={padding:"3px 4px",borderBottom:`1px solid ${C.border}`};
   const inp={width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 5px",fontSize:"0.66rem",fontFamily:font,outline:"none"};
   const curSel={background:C.surface,color:C.accent,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 2px",fontSize:"0.62rem",fontFamily:font,outline:"none",cursor:"pointer",width:32,minWidth:32};
   return(
     <div style={{overflow:"auto"}}>
+      <div style={{display:"flex",justifyContent:"flex-end",marginBottom:4}}>
+        {setLocks&&<span onClick={()=>setLocks(p=>({...p,priceTable:!locked}))} style={{cursor:"pointer",fontSize:"0.65rem",color:locked?C.yellow:C.textDim,userSelect:"none"}} title={locked?"ロック解除":"ロック"}>{locked?"🔒 ロック中":"🔓 編集可"}</span>}
+      </div>
       <table style={{borderCollapse:"collapse",fontSize:"0.68rem"}}>
         <thead>
           {/* 通貨行 */}
@@ -2134,9 +2147,26 @@ function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
               <tr key={i}>
                 <td style={td}>{!locked&&<span onClick={()=>delRow(i)} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem"}}>×</span>}</td>
                 <td style={td}>
-                  <input disabled={locked} value={szNum}
-                    onChange={e=>{const f=autoFmt(e.target.value);setRow(i,{size:f?sizeCur+f:""});}}
-                    placeholder="10,000" inputMode="decimal" style={{...inp,minWidth:70}}/>
+                  <div style={{display:"flex",flexDirection:"column",gap:2}}>
+                    <input disabled={locked} value={szNum}
+                      onChange={e=>{const f=autoFmt(e.target.value);setRow(i,{size:f?sizeCur+f:""});}}
+                      onFocus={()=>setFocusedRow(i)} onBlur={()=>setFocusedRow(null)}
+                      placeholder="10,000" inputMode="decimal" style={{...inp,minWidth:70}}/>
+                    {!locked&&focusedRow===i&&(()=>{
+                      const isYen=sizeCur==="¥";
+                      const steps=isYen?[[5000000,"500万"],[10000000,"1000万"]]:[[5000,"5k"],[10000,"10k"]];
+                      const bump=d=>{const cur=parseInt((szNum||"0").replace(/,/g,""),10)||0;const next=Math.max(0,cur+d);setRow(i,{size:next?sizeCur+autoFmt(String(next)):""});};
+                      const bBase={cursor:"pointer",fontSize:"0.52rem",borderRadius:2,padding:"1px 4px",whiteSpace:"nowrap",userSelect:"none"};
+                      const bPos={...bBase,color:C.accent,border:`1px solid ${C.accent}40`};
+                      const bNeg={...bBase,color:C.red,border:`1px solid ${C.red}40`};
+                      return<div onMouseDown={e=>e.preventDefault()} style={{display:"flex",gap:2,flexWrap:"wrap"}}>
+                        {steps.flatMap(([d,lbl])=>[
+                          <span key={"+"+lbl} onClick={()=>bump(d)} style={bPos}>+{lbl}</span>,
+                          <span key={"-"+lbl} onClick={()=>bump(-d)} style={bNeg}>−{lbl}</span>
+                        ])}
+                      </div>;
+                    })()}
+                  </div>
                 </td>
                 {cols.map(c=>{
                   const raw=(r.prices||{})[c]||"";
@@ -2155,7 +2185,10 @@ function PriceMatrixEditor({slotData,setSlotData,locks,planNames}){
         </tbody>
       </table>
       {cols.length===0&&<p style={{color:C.textDim,fontSize:"0.65rem",marginTop:6}}>※ プランがありません（列はプランから自動生成）</p>}
-      {!locked&&<Btn color={C.accent} onClick={addRow} style={{marginTop:6,padding:"2px 10px",fontSize:"0.65rem"}}>＋ 口座サイズ行</Btn>}
+      {!locked&&<span style={{display:"inline-flex",gap:6,marginTop:6}}>
+        <Btn color={C.accent} onClick={addRow} style={{padding:"2px 10px",fontSize:"0.65rem"}}>＋ 口座サイズ行</Btn>
+        <Btn color={C.textDim} onClick={sortRows} style={{padding:"2px 10px",fontSize:"0.65rem"}}>↑ 小→大</Btn>
+      </span>}
     </div>
   );
 }
@@ -2540,9 +2573,9 @@ ${slotList}
           ?<PlanPreview slotData={slotData} planName={activePlanName} parentFirmSlotData={parentFirmSlotData} parentPlanNames={parentPlanNames}/>
           :<KoryakuPreview slotData={slotData}/>)
         :templateMode==="dbp02"&&showRuleTable
-        ?<RuleTableEditor slotData={slotData} setSlotData={setSlotData} locks={locks} />
+        ?<RuleTableEditor slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} />
         :templateMode==="dbp01"&&showPriceMatrix
-        ?<PriceMatrixEditor slotData={slotData} setSlotData={setSlotData} locks={locks} planNames={planNames} />
+        ?<PriceMatrixEditor slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} planNames={planNames} />
         :sections.map(([sec,slots])=>{
         const fc=slots.filter(s=>slotData[s.id]?.length>0).length;
         const allSectionLocked=slots.every(s=>isLocked(s.id));

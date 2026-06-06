@@ -1,7 +1,7 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-06-06（セッション5）
+> **最終更新**: 2026-06-06（セッション7）
 
 ---
 
@@ -162,14 +162,82 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 
 ---
 
+### ✅ 完了（2026-06-06 セッション6）
+
+**Page Maker プレビュー機能とデータ格納一元化**（commit `4e5738c`）
+
+- **プレビュー3ページ新設**（公開ページ準拠ダークテーマ）
+  - FirmPreview: F01〜F22 + 価格テーブル（テーブル1）を集約表示
+  - PlanPreview: 親FirmのpriceTable（該当プラン強調）+ 早見表4列 + ルール詳細リスト形式
+  - KoryakuPreview: 3断面（k_dd/k_rules/k_payout）
+  - 旧 Markdown プレビューは削除し新プレビューに一本化
+- **データ格納一元化（重複削除）**
+  - `dbp02.priceTable` スロット削除 — 親Firm.priceTable を正本に統一
+  - `dbp02.ruleQuickRef` スロット削除 — 未使用デッドコード
+  - `dbp01.priceTable` 汎用スロット欄を MASTER_DEFS から削除 — 価格タブ専用エディタに一本化
+  - プラン比較テーブルから価格行を除外（priceTable と重複していた下半分）
+  - デッドコード `aiSlotIds` 削除
+- **ナビゲーション修正**
+  - Plan編集中の Firm/価格/攻略 ボタン → 親Firmへ自動遷移＋該当モード設定
+  - Firm編集中の Plan/早見表 ボタン → 先頭Planへ自動遷移
+  - `navigateTab(tabId, mode)` ヘルパ追加
+- **UI改善**
+  - PriceMatrixEditor の行削除「×」ボタンを右端→左端に移動（プラン数増加時に隠れない）
+- **プロンプト正本反映**
+  - リサーチプロンプト: プラン比較9行の内容を明示・不在表記を「ー」に統一
+  - プランプロンプト: 「※有」の詳細記述を「ルール全容を詳細列に書く」に強化
+  - 「詳細がルールの正本」原則を明文化（補足ではなく本文として書く）
+  - 攻略プロンプト最終チェックリストに「全角括弧」「不在表記区別」追加
+  - Firm収集項目から F21/F22（出力物）を除外
+- **ソース定義 v08 改訂**（commit `4e5738c`）
+  - テーブル5（プラン比較）: 価格行を除外しルール9行のみに
+  - テーブル7（早見表）: 5列定義（項目|C|F|差分|詳細）に統合・テーブル8は廃止
+- **サイトスキャナーパイプライン強化**（commit `ed2bb4b`）
+  - worker.js: `/scan` に LLM抽出（価格＋クーポン）統合・差分計算・firms保存・`/cleanup` 追加
+  - site-scanner.js: ローカル価格テーブル蓄積・送信前プレビューパネル・複数ページマージ
+- **補助ツール追加**（commit `ed2bb4b`）
+  - `01_tools/check-braces.js` — page-maker-v11.html の括弧バランス検査
+  - `01_tools/firm-tour.html` — Firm一覧俯瞰ビュー
+  - `01_tools/html文章掃除.html` — HTMLテキスト整形ツール
+  - `data/firm-urls.json` — スキャン対象URLリスト
+  - `data/pfdb.json` — ファームデータ蓄積（+3012行）
+
+---
+
+### ✅ 完了（2026-06-06 セッション7）
+
+**slug 不整合の根治＋全データクリーンアップ**
+
+- **問題特定**: `content/firms/{slug}` ↔ `data/firms/{file}.json` ↔ JSON 内 `firmSlug` の3者で slug が不一致
+  - 例: `alpha-capital/` ↔ `alphacapitalgroup.json` ↔ `firmSlug:"alphacapitalgroup"`
+  - 原因: 旧 exportHugo 時の firmName 入力が雑だった（"AlphaCapitalGroup" 等の空白なし形）
+  - 影響: `firms/list.html:25` の `.slug` 参照 + 個別ページの JSON 引き込みが両方破綻
+- **Page Maker の slug 決定ロジック確認**（`page-maker-v11.html:4196`）
+  - `const slug = slugify(firmName) || firm.id` の一本道
+  - `slugify()` (L185-187): lowercase → 空白→ハイフン → 英数_-以外削除 → ハイフン正規化
+  - 期待動作: "Alpha Capital Group" → `alpha-capital-group`
+- **全削除実行**（pfdb.json が正本として健全＝tabDataMap 61件・firms 33件保持を確認後）
+  - `data/firms/*.json` 34件全削除
+  - `data/plans/*.json` 27件全削除
+  - `content/firms/*/` 34フォルダ全削除（`_index.md` のみ残存）
+  - `content/firms/ftmo.md`（旧スケルトン重複）削除
+- **正式名称33件 固定**（`01_tools/firms-bulk-import.csv` 作成）
+  - 命名規則: firmName を英語空白区切りの正式名で入力 → slugify で URL生成
+  - 主な確定: Alpha Capital Group / Maven Trading / The5ers（%なし）/ Top One Trader 等
+  - Page Maker CSV format: `firmName,plan1,plan2,...`（1行1ファーム・カンマ区切り・ヘッダ無し）
+
+---
+
 ### ⬜ 次にやること（優先順）
 
-1. **【最優先】Page Maker 全プロンプトの正本反映** — MASTER_DEFS/GLOSSARY_BASE 導入後も残っているハードコード値を動的参照に更新（8箇所・詳細は下記セクション8参照）
-2. **ブックマークレット動作確認** — ブックマーク更新（`01_tools/site-scanner.js` 行13〜35）→ 対象サイトで実行 → `data/scans/` に JSON が届くか確認
-3. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— データ入力後すぐ表示可
-4. ❷ DBP_01 プランナビゲーション（firms/single.html）
-5. ❸ 実質最短日数タイムライン（Widget Maker 移植）
-6. Page Maker でデータ入力継続 → exportHugo
+1. **Page Maker で CSV 一括取込 → 正式 firmName で再構成** — `01_tools/firms-bulk-import.csv` をデータ▾→追加CSVに貼付け
+2. **exportHugo 再実行** — クリーンな slug で `data/firms/*.json` / `content/firms/{slug}/_index.md` 再生成
+3. **Hugo dev server で表示確認** — 一覧→個別ページのリンクが繋がるか
+4. **【継続】Obsidian 本格運用** — vault 構造設計・タスク管理プラグイン導入・テンプレ化（セッション7で公開サイト構造側の整地を優先したため次回繰越）
+5. **ブックマークレット動作確認** — `01_tools/site-scanner.js` 最新版で実機テスト → `data/scans/` に JSON 到達確認
+6. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— Hugo側テンプレ実装
+7. ❷ DBP_01 プランナビゲーション（firms/single.html）
+8. ❸ 実質最短日数タイムライン（Widget Maker 移植）
 
 ---
 
@@ -265,31 +333,45 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 
 ---
 
-## 8. 【次セッション】プロンプト正本反映タスク
+## 8. プロンプト正本反映（✅ 完了 セッション5〜6）
 
-> MASTER_DEFS/GLOSSARY_BASE 導入後も、各プロンプト内にハードコードが残っている。
-> 次セッションで全8箇所を動的参照に更新する。
-
-| # | 対象関数/箇所 | ハードコード内容 | 正本参照先 |
-|---|---|---|---|
-| 1 | `generateResearchPrompt` | `F01〜F22` 固定文字列 | `MASTER_DEFS.dbp01.filter(d=>d.fkey)` の先頭/末尾 fkey |
-| 2 | プランボタン（inline） | `上記19項目を各1行` | `MASTER_DEFS.dbp02.filter(d=>d.pkey)` の件数 |
-| 3 | プランボタン（inline） | `Static / Trailing系の6分類のみ` | `GLOSSARY_BASE` DD計算基準の件数+一覧 |
-| 4 | プランボタン（inline） | `EASE / TRAP / ー` | `GLOSSARY_BASE` 早見表差分 |
-| 5 | 自動取込プロンプト（inline） | `TRAP / EASE / ー` | `GLOSSARY_BASE` 早見表差分 |
-| 6 | `handleAIGenTable` system | `随時/毎週/隔週/月次` 4行 | `GLOSSARY_BASE` 出金頻度 terms |
-| 7 | `generateKoryakuPrompt` | `6分類` ×2箇所 | `GLOSSARY_BASE` DD計算基準の件数 |
-| 8 | `generateKoryakuPrompt` 断面③ | `最短合格/最速出金/トータル日数/着金目安` 列名 | `GLOSSARY_BASE` 計算結果 |
-
-**実装方針**: `glossaryRulesBlock` と同様に小さなヘルパー関数を追加し、各プロンプトから呼び出す。
-- `ddTypesCount(T)` → DD計算基準の件数
-- `diffTermLine(T)` → 早見表差分の EASE/TRAP/ー 表記
-- `freqCalcLines(T)` → 出金頻度×計算式の4行
-- `calcColNames(T)` → 計算結果の列名セット
+MASTER_DEFS/GLOSSARY_BASE への動的参照化が全箇所完了。ヘルパ関数（`ddTypesCount` / `ddTypesStr` / `diffTermLine` / `freqCalcLines` / `calcColNames`）と `glossaryRulesBlock` / `glossaryItemLines` 経由で全プロンプトが用語辞典を単一情報源として参照する設計が確立。
 
 ---
 
-## 9. 留意点・補足
+## 9. 【次セッション・別チャット】Obsidian 本格運用
+
+> Notion を Page Maker（構造化データ）と Obsidian（非構造ナレッジ）の2軸で完全代替する構想。
+> Page Maker 側はすでに正本管理・プレビュー・用語辞典動的注入で Notion を超えている。
+> 残るは Obsidian 側の運用基盤整備。
+
+### 構想
+
+```
+Page Maker v11        ← 構造化データ正本（JSON→Hugo直結）
+Obsidian             ← 非構造ナレッジ（メモ・タスク・設計・用語議論）
+```
+
+### Obsidian 担当領域
+
+| Notionで担っていた役割 | Obsidian での実現方法 |
+|---|---|
+| ナレッジ蓄積（用語・調査メモ・気付き） | `zz_notes/` 配下に Markdown・タグ・双方向リンク |
+| タスク管理（DB_100_Impl） | Tasks プラグイン or `02_docs/HANDOFF.md` のチェックボックス |
+| 設計ドキュメント（ポリシー・引き継ぎ） | `02_docs/` 配下に Markdown（gitで履歴管理） |
+| 用語辞典の議論・草案 | Obsidian で議論 → 確定したら Page Maker `GLOSSARY_BASE` へ反映 |
+
+### Obsidian 側でやること（次セッション）
+
+1. **vault 構造設計** — フォルダ階層・命名規則・テンプレ
+2. **必須プラグイン導入** — Tasks / Dataview / Templater / Git
+3. **テンプレート作成** — ファーム調査メモ・用語議論・タスク票
+4. **既存 HANDOFF.md と整合** — Obsidian で開いたときに自然に読める構造に
+5. **MOC（Map of Content）構築** — トピック横断のナビゲーションノート
+
+---
+
+## 10. 留意点・補足
 
 - Page Maker はファイル名「v11」だが内部表記は `APP_VERSION="v0.9"`（不一致・混乱注意）
 - LLM呼び出しは Cloudflare Worker プロキシ `/api/llm` 経由（APIキーは Worker Secrets に隔離）
