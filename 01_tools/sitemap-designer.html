@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Sitemap Designer — propfirm-database</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+:root {
+  --bg:#0a0e17; --surface:#111827; --surfaceAlt:#1a2332;
+  --border:#1e2d3d; --borderLight:#2a3a4d;
+  --accent:#00d4aa; --yellow:#f0b90b; --red:#ef4444;
+  --blue:#3b82f6; --purple:#a78bfa; --green:#22c55e;
+  --text:#c8d6e5; --textBright:#e2e8f0; --textDim:#636e7b;
+  --font:'JetBrains Mono','Fira Code',monospace;
+  --fontJp:'Noto Sans JP',-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);font-family:var(--fontJp);overflow:hidden}
+#root{height:100vh;display:flex;flex-direction:column}
+button{font-family:var(--font);cursor:pointer}
+input,textarea,select{font-family:var(--font);background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:3px;padding:4px 6px;font-size:0.75rem}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useRef, useCallback, useEffect, useMemo, useLayoutEffect } = React;
+
+const STORAGE_KEY = "pfd-sitemap-v2";
+
+const DEFAULT_TYPES = {
+  home:     {label:"ホーム",        color:"#00d4aa", icon:"🏠"},
+  list:     {label:"一覧ページ",    color:"#3b82f6", icon:"📋"},
+  detail:   {label:"詳細ページ",    color:"#a78bfa", icon:"📄"},
+  article:  {label:"記事",          color:"#f0b90b", icon:"📰"},
+  category: {label:"カテゴリ",      color:"#22c55e", icon:"📂"},
+  external: {label:"外部リンク",    color:"#ef4444", icon:"🔗"},
+  note:     {label:"メモ（非公開）",color:"#636e7b", icon:"📝"},
+};
+
+const DEFAULT_DATA = {
+  tree: {
+    id:"root", type:"home", label:"ホーム", note:"トップページ",
+    children:[
+      {id:"n1", type:"list", label:"ファーム一覧", note:"",
+        children:[
+          {id:"n11", type:"detail", label:"Firm個社ページ", note:"Firm情報+配下プラン", children:[]},
+        ]},
+      {id:"n2", type:"list", label:"プラン一覧", note:"全プラン横断比較", children:[]},
+      {id:"n3", type:"category", label:"攻略記事", note:"独自分析",
+        children:[
+          {id:"n31", type:"article", label:"記事ページ", note:"", children:[]},
+        ]},
+    ],
+  },
+  types: DEFAULT_TYPES,
+  blocks: {
+    "b1": {label:"ヘッダー", note:"全ページ共通", color:"#3b82f6"},
+    "b2": {label:"フッター", note:"全ページ共通", color:"#3b82f6"},
+    "b3": {label:"ファーム基本情報", note:"F01〜F22", color:"#00d4aa"},
+    "b4": {label:"価格表", note:"口座サイズ×プラン", color:"#f0b90b"},
+    "b5": {label:"プラン詳細", note:"早見表＋ルール詳細", color:"#a78bfa"},
+    "b6": {label:"攻略3断面", note:"DD/取引ルール/出金", color:"#ef4444"},
+    "b7": {label:"クーポンサイドバー", note:"全ページ共通", color:"#22c55e"},
+  },
+  pageBlocks: {
+    "root": ["b1","b7","b2"],
+    "n1":   ["b1","b7","b2"],
+    "n11":  ["b1","b3","b4","b5","b7","b2"],
+    "n2":   ["b1","b5","b7","b2"],
+    "n3":   ["b1","b7","b2"],
+    "n31":  ["b1","b6","b7","b2"],
+  },
+};
+
+function genId(){ return "n"+Math.floor(Math.random()*1e9).toString(36); }
+function genBlockId(){ return "b"+Math.floor(Math.random()*1e9).toString(36); }
+function ghostId(){ return "ghost-"+Math.floor(Math.random()*1e9).toString(36); }
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
+function findNode(tree, id, parent=null){
+  if(tree.id===id) return {node:tree, parent};
+  for(const c of (tree.children||[])){
+    const r=findNode(c, id, tree);
+    if(r) return r;
+  }
+  return null;
+}
+function removeNode(tree, id){
+  if(!tree.children) return tree;
+  tree.children = tree.children.filter(c=>c.id!==id).map(c=>removeNode(c, id));
+  return tree;
+}
+function isDescendant(node, targetId){
+  if(node.id===targetId) return true;
+  return (node.children||[]).some(c=>isDescendant(c, targetId));
+}
+function indexNodes(tree, acc={}){
+  acc[tree.id]=tree;
+  (tree.children||[]).forEach(c=>indexNodes(c, acc));
+  return acc;
+}
+function findGhosts(tree, refId, acc=[]){
+  if(tree.type==="ghost"&&tree.refId===refId) acc.push(tree);
+  (tree.children||[]).forEach(c=>findGhosts(c, refId, acc));
+  return acc;
+}
+function collectGhostPairs(tree, idx){
+  const out=[];
+  const walk=(n)=>{
+    if(n.type==="ghost"&&n.refId&&idx[n.refId]){ out.push({ghostId:n.id, refId:n.refId}); }
+    (n.children||[]).forEach(walk);
+  };
+  walk(tree);
+  return out;
+}
+function flatPageList(tree, depth=0, acc=[]){
+  acc.push({id:tree.id, label:tree.label, type:tree.type, depth, isGhost:tree.type==="ghost", refId:tree.refId});
+  (tree.children||[]).forEach(c=>flatPageList(c, depth+1, acc));
+  return acc;
+}
+
+function loadData(){ try{const r=localStorage.getItem(STORAGE_KEY); if(r){const o=JSON.parse(r); return {...DEFAULT_DATA, ...o};}}catch(e){} return DEFAULT_DATA; }
+function saveData(d){ try{localStorage.setItem(STORAGE_KEY, JSON.stringify(d));}catch(e){} }
+
+// ════════════════════════════════════════
+// タブ1: ページ構造（既存のサイトマップツリー）
+// ════════════════════════════════════════
+function PreviewNode({node, depth, types, idx, selectedId, onSelect, onDragStart, onDragOver, onDragLeave, onDrop, dragOverId, hoverPos, onAddChild, onDelete, onMakeGhost, registerCardRef}){
+  const isGhost = node.type==="ghost";
+  const realNode = isGhost ? (idx[node.refId]||null) : node;
+  const display = realNode || {label:"(本体が見つかりません)", type:"note", note:"参照先削除済み"};
+  const t = types[display.type]||{label:display.type, color:"#636e7b", icon:"❓"};
+  const isSelected=selectedId===node.id;
+  const isRoot=node.id==="root";
+  const isOver=dragOverId===node.id;
+  return (
+    <div style={{marginLeft:depth*22, position:"relative"}}>
+      {isOver&&hoverPos==="before"&&<div style={{height:3, background:"var(--yellow)", borderRadius:2, marginBottom:2}}/>}
+      <div
+        ref={el=>registerCardRef(node.id, el)}
+        draggable={!isRoot}
+        onDragStart={e=>onDragStart(e, node.id)}
+        onDragOver={e=>onDragOver(e, node.id)}
+        onDragLeave={e=>onDragLeave(e, node.id)}
+        onDrop={e=>onDrop(e, node.id)}
+        onClick={e=>{e.stopPropagation();onSelect(node.id)}}
+        style={{
+          display:"inline-flex", alignItems:"center", gap:8,
+          padding:"6px 12px",
+          background: isOver&&hoverPos==="inside" ? "#a78bfa33" : isSelected ? "#00d4aa22" : "var(--surfaceAlt)",
+          border:`1px ${isGhost?"dashed":"solid"} ${isSelected?"var(--accent)":t.color+"66"}`,
+          borderLeft:`5px ${isGhost?"dashed":"solid"} ${t.color}`,
+          borderRadius:4,
+          marginBottom:4,
+          cursor: isRoot ? "pointer" : "grab",
+          fontSize:"0.8rem",
+          minWidth:200,
+          userSelect:"none",
+          opacity: isGhost ? 0.55 : 1,
+        }}>
+        {isGhost && <span title="分身ノード" style={{fontSize:"0.7rem", color:"var(--purple)"}}>👥</span>}
+        <span style={{fontSize:"1rem"}}>{t.icon}</span>
+        <span style={{fontWeight:700, color:t.color, flex:1}}>{display.label||"(無題)"}</span>
+        {display.note&&<span style={{fontSize:"0.6rem", color:"var(--textDim)", fontStyle:"italic", maxWidth:180, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}} title={display.note}>{display.note}</span>}
+        {!isGhost && <button onClick={e=>{e.stopPropagation();onAddChild(node.id)}} title="子ノード追加"
+          style={{padding:"1px 6px", background:"transparent", color:"var(--accent)", border:"1px solid var(--accent)", borderRadius:3, fontSize:"0.65rem", fontWeight:700}}>+</button>}
+        {!isGhost && !isRoot && <button onClick={e=>{e.stopPropagation();onMakeGhost(node.id)}} title="分身を作る"
+          style={{padding:"1px 6px", background:"transparent", color:"var(--purple)", border:"1px solid var(--purple)", borderRadius:3, fontSize:"0.65rem", fontWeight:700}}>👥</button>}
+        {!isRoot&&<button onClick={e=>{e.stopPropagation();const msg=isGhost?`分身を削除？`:`「${display.label}」と配下を削除？`;if(confirm(msg))onDelete(node.id)}}
+          style={{padding:"1px 6px", background:"transparent", color:"var(--red)", border:"1px solid var(--red)", borderRadius:3, fontSize:"0.65rem", fontWeight:700}}>×</button>}
+      </div>
+      {isOver&&hoverPos==="after"&&<div style={{height:3, background:"var(--yellow)", borderRadius:2, marginTop:-2, marginBottom:4}}/>}
+      {(node.children||[]).map(c=>(
+        <PreviewNode key={c.id} node={c} depth={depth+1} types={types} idx={idx}
+          selectedId={selectedId} onSelect={onSelect}
+          onDragStart={onDragStart} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}
+          dragOverId={dragOverId} hoverPos={hoverPos}
+          onAddChild={onAddChild} onDelete={onDelete} onMakeGhost={onMakeGhost}
+          registerCardRef={registerCardRef}/>
+      ))}
+    </div>
+  );
+}
+
+function GhostConnections({pairs, cardRefs, containerRef, types, idx, isDragging, rev}){
+  const [paths, setPaths]=useState([]);
+  useLayoutEffect(()=>{
+    if(isDragging){ setPaths([]); return; }
+    const container=containerRef.current;
+    if(!container){ setPaths([]); return; }
+    const cRect=container.getBoundingClientRect();
+    const scrollLeft=container.scrollLeft, scrollTop=container.scrollTop;
+    const next=[];
+    pairs.forEach(({ghostId, refId})=>{
+      const a=cardRefs.current[refId];
+      const b=cardRefs.current[ghostId];
+      if(!a||!b) return;
+      const ar=a.getBoundingClientRect();
+      const br=b.getBoundingClientRect();
+      const x1=ar.right-cRect.left+scrollLeft;
+      const y1=ar.top+ar.height/2-cRect.top+scrollTop;
+      const x2=br.left-cRect.left+scrollLeft;
+      const y2=br.top+br.height/2-cRect.top+scrollTop;
+      const dx=Math.max(40, Math.abs(x2-x1)*0.4);
+      const real=idx[refId];
+      const color=real?(types[real.type]||{color:"#a78bfa"}).color:"#a78bfa";
+      next.push({d:`M ${x1} ${y1} C ${x1+dx} ${y1}, ${x2-dx} ${y2}, ${x2} ${y2}`, color});
+    });
+    setPaths(next);
+  },[pairs, isDragging, rev]);
+  if(isDragging) return null;
+  return (
+    <svg style={{position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", overflow:"visible"}}>
+      {paths.map((p,i)=>(
+        <path key={i} d={p.d} fill="none" stroke={p.color} strokeWidth="1.5" strokeDasharray="5 4" opacity="0.7"/>
+      ))}
+    </svg>
+  );
+}
+
+function TypeAddModal({show, onClose, onAdd}){
+  const [key, setKey]=useState("");
+  const [label, setLabel]=useState("");
+  const [color, setColor]=useState("#a78bfa");
+  const [icon, setIcon]=useState("📄");
+  if(!show) return null;
+  const submit=()=>{
+    const k=key.trim().toLowerCase().replace(/[^a-z0-9_-]/g,"");
+    if(!k){ alert("内部キーを入力"); return; }
+    if(!label.trim()){ alert("表示名を入力"); return; }
+    onAdd(k, {label:label.trim(), color, icon:icon.trim()||"📄"});
+    setKey("");setLabel("");setColor("#a78bfa");setIcon("📄");
+    onClose();
+  };
+  return (
+    <div onClick={onClose} style={{position:"fixed", inset:0, background:"#000a", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center"}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)", border:"1px solid var(--border)", borderRadius:6, padding:16, width:360, display:"flex", flexDirection:"column", gap:10}}>
+        <div style={{fontWeight:700, color:"var(--purple)"}}>新しい種別を追加</div>
+        <input value={key} onChange={e=>setKey(e.target.value)} placeholder="内部キー（半角英数）" style={{width:"100%"}}/>
+        <input value={label} onChange={e=>setLabel(e.target.value)} placeholder="表示名" style={{width:"100%"}}/>
+        <div style={{display:"flex", gap:8}}>
+          <input type="color" value={color} onChange={e=>setColor(e.target.value)} style={{width:80, height:28, padding:0}}/>
+          <input value={icon} onChange={e=>setIcon(e.target.value)} placeholder="📄" style={{flex:1}}/>
+        </div>
+        <div style={{display:"flex", gap:8, justifyContent:"flex-end"}}>
+          <button onClick={onClose} style={{padding:"4px 12px", background:"transparent", color:"var(--textDim)", border:"1px solid var(--border)", borderRadius:3, fontSize:"0.7rem"}}>キャンセル</button>
+          <button onClick={submit} style={{padding:"4px 12px", background:"var(--accent)", color:"var(--bg)", border:"none", borderRadius:3, fontSize:"0.7rem", fontWeight:700}}>追加</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NodeEditor({node, types, idx, onUpdate, onOpenTypeAdd, onDeleteType, onJumpTo, ghostCount}){
+  if(!node) return <div style={{padding:16, color:"var(--textDim)", fontSize:"0.75rem"}}>カードをクリックして選択</div>;
+  const isRoot=node.id==="root";
+  const isGhost=node.type==="ghost";
+  if(isGhost){
+    const real=idx[node.refId];
+    return (
+      <div style={{padding:14, display:"flex", flexDirection:"column", gap:10, height:"100%", overflow:"auto"}}>
+        <div style={{fontSize:"0.75rem", fontWeight:700, color:"var(--purple)"}}>👥 分身ノード</div>
+        {real?(<>
+          <div style={{padding:8, background:"var(--bg)", border:"1px solid var(--border)", borderRadius:3}}>
+            <div style={{fontSize:"0.62rem", color:"var(--textDim)", marginBottom:2}}>本体:</div>
+            <div style={{fontSize:"0.85rem", fontWeight:700, color:"var(--accent)"}}>{real.label}</div>
+            {real.note&&<div style={{fontSize:"0.7rem", color:"var(--text)", marginTop:4}}>{real.note}</div>}
+          </div>
+          <button onClick={()=>onJumpTo(real.id)} style={{padding:"5px 12px", background:"var(--accent)", color:"var(--bg)", border:"none", borderRadius:3, fontSize:"0.7rem", fontWeight:700}}>→ 本体を選択</button>
+        </>):(<div style={{padding:8, color:"var(--red)", fontSize:"0.7rem"}}>本体が見つかりません</div>)}
+      </div>
+    );
+  }
+  return (
+    <div style={{padding:14, display:"flex", flexDirection:"column", gap:10, height:"100%", overflow:"auto"}}>
+      <div style={{fontSize:"0.75rem", fontWeight:700, color:"var(--accent)"}}>選択ページ</div>
+      <div>
+        <label style={{display:"block", fontSize:"0.65rem", color:"var(--textDim)", marginBottom:3}}>表示名</label>
+        <input value={node.label||""} onChange={e=>onUpdate({...node, label:e.target.value})} style={{width:"100%"}}/>
+      </div>
+      <div>
+        <label style={{display:"block", fontSize:"0.65rem", color:"var(--textDim)", marginBottom:3}}>メモ</label>
+        <textarea value={node.note||""} onChange={e=>onUpdate({...node, note:e.target.value})} rows={6} style={{width:"100%", resize:"vertical"}}/>
+      </div>
+      <div>
+        <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:3}}>
+          <label style={{fontSize:"0.65rem", color:"var(--textDim)"}}>種別</label>
+          <button onClick={onOpenTypeAdd} style={{padding:"1px 6px", background:"transparent", color:"var(--purple)", border:"1px solid var(--purple)", borderRadius:3, fontSize:"0.6rem", fontWeight:700}}>+ 種別追加</button>
+        </div>
+        <select value={node.type} onChange={e=>onUpdate({...node, type:e.target.value})} style={{width:"100%"}} disabled={isRoot}>
+          {Object.entries(types).map(([k,v])=>(<option key={k} value={k}>{v.icon} {v.label}</option>))}
+        </select>
+        {!isRoot&&types[node.type]&&!DEFAULT_TYPES[node.type]&&(
+          <button onClick={()=>{if(confirm(`種別を削除？`))onDeleteType(node.type)}}
+            style={{marginTop:4, padding:"2px 8px", background:"transparent", color:"var(--red)", border:"1px solid var(--red)", borderRadius:3, fontSize:"0.6rem"}}>この種別を削除</button>
+        )}
+      </div>
+      {ghostCount>0&&<div style={{padding:6, background:"var(--surfaceAlt)", border:"1px dashed var(--purple)", borderRadius:3, fontSize:"0.65rem", color:"var(--purple)"}}>👥 分身: {ghostCount}個</div>}
+    </div>
+  );
+}
+
+// ════════════════════════════════════════
+// タブ2: ページ内容（ブロック編成）
+// ════════════════════════════════════════
+function PagesTab({tree, blocks, pageBlocks, types, selectedPageId, setSelectedPageId, setPageBlocks, blockUsage, onAddBlock, onUpdateBlock, onDeleteBlock, onAddNewBlock}){
+  const pages=useMemo(()=>flatPageList(tree).filter(p=>!p.isGhost),[tree]);
+  const blockIds=pageBlocks[selectedPageId]||[];
+
+  // ブロックDnD（順序入替）
+  const [dragBlockIdx, setDragBlockIdx]=useState(null);
+  const [dragOverIdx, setDragOverIdx]=useState(null);
+  const onDragStart=(i)=>setDragBlockIdx(i);
+  const onDragOver=(e, i)=>{ if(dragBlockIdx===null||dragBlockIdx===i)return; e.preventDefault(); setDragOverIdx(i); };
+  const onDrop=(e, i)=>{
+    e.preventDefault();
+    if(dragBlockIdx===null) return;
+    const next=[...blockIds];
+    const [moved]=next.splice(dragBlockIdx, 1);
+    next.splice(i, 0, moved);
+    setPageBlocks(prev=>({...prev, [selectedPageId]:next}));
+    setDragBlockIdx(null); setDragOverIdx(null);
+  };
+  const removeBlockFromPage=(idx)=>{
+    const next=blockIds.filter((_,i)=>i!==idx);
+    setPageBlocks(prev=>({...prev, [selectedPageId]:next}));
+  };
+
+  // ブロック追加プルダウン用
+  const [showAdd, setShowAdd]=useState(false);
+  const addExisting=(bid)=>{
+    setPageBlocks(prev=>({...prev, [selectedPageId]:[...(prev[selectedPageId]||[]), bid]}));
+    setShowAdd(false);
+  };
+
+  return (
+    <div style={{display:"grid", gridTemplateColumns:"260px 1fr 280px", gap:1, background:"var(--border)", height:"100%", overflow:"hidden"}}>
+      {/* 左: ページ一覧 */}
+      <div style={{background:"var(--surface)", overflow:"auto", padding:8}}>
+        <div style={{fontSize:"0.65rem", fontWeight:700, color:"var(--textDim)", padding:"4px 6px"}}>ページ一覧</div>
+        {pages.map(p=>{
+          const t=types[p.type]||{icon:"❓", color:"#636e7b"};
+          const sel=p.id===selectedPageId;
+          const cnt=(pageBlocks[p.id]||[]).length;
+          return (
+            <div key={p.id} onClick={()=>setSelectedPageId(p.id)} style={{
+              marginLeft:p.depth*12, padding:"4px 8px", cursor:"pointer",
+              background:sel?"#00d4aa22":"transparent",
+              borderLeft:`3px solid ${sel?"var(--accent)":"transparent"}`,
+              display:"flex", alignItems:"center", gap:6, fontSize:"0.72rem", marginBottom:1,
+            }}>
+              <span>{t.icon}</span>
+              <span style={{flex:1, color:t.color, fontWeight:sel?700:500}}>{p.label}</span>
+              <span style={{fontSize:"0.6rem", color:"var(--textDim)"}}>{cnt}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 中央: 選択ページのブロック一覧 */}
+      <div style={{background:"var(--surface)", overflow:"auto", padding:10}}>
+        <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8}}>
+          <div style={{fontSize:"0.75rem", fontWeight:700, color:"var(--accent)"}}>📌 含まれるブロック（上から順に表示）</div>
+          <div style={{position:"relative"}}>
+            <button onClick={()=>setShowAdd(v=>!v)} style={{padding:"3px 10px", background:"var(--accent)", color:"var(--bg)", border:"none", borderRadius:3, fontSize:"0.65rem", fontWeight:700}}>+ ブロック追加</button>
+            {showAdd&&(
+              <div style={{position:"absolute", top:"100%", right:0, marginTop:4, background:"var(--surface)", border:"1px solid var(--border)", borderRadius:4, padding:6, zIndex:10, minWidth:240, maxHeight:300, overflow:"auto"}}>
+                <div style={{fontSize:"0.62rem", color:"var(--textDim)", marginBottom:4}}>既存から選択:</div>
+                {Object.entries(blocks).map(([bid, b])=>(
+                  <div key={bid} onClick={()=>addExisting(bid)} style={{padding:"4px 8px", cursor:"pointer", fontSize:"0.7rem", borderLeft:`3px solid ${b.color||"var(--purple)"}`, marginBottom:2, background:"var(--bg)"}}>{b.label}</div>
+                ))}
+                <button onClick={()=>{onAddNewBlock(selectedPageId);setShowAdd(false)}} style={{marginTop:6, width:"100%", padding:"4px 10px", background:"var(--purple)", color:"var(--bg)", border:"none", borderRadius:3, fontSize:"0.65rem", fontWeight:700}}>+ 新規ブロックを作成して追加</button>
+              </div>
+            )}
+          </div>
+        </div>
+        {blockIds.length===0&&<div style={{fontSize:"0.7rem", color:"var(--textDim)", padding:8}}>このページにはブロックがありません</div>}
+        {blockIds.map((bid, i)=>{
+          const b=blocks[bid];
+          if(!b) return null;
+          return (
+            <div key={i}
+              draggable
+              onDragStart={()=>onDragStart(i)}
+              onDragOver={e=>onDragOver(e, i)}
+              onDrop={e=>onDrop(e, i)}
+              style={{
+                display:"flex", alignItems:"center", gap:8,
+                padding:"6px 10px",
+                background:dragOverIdx===i?"#a78bfa33":"var(--surfaceAlt)",
+                border:`1px solid ${b.color||"var(--purple)"}66`,
+                borderLeft:`5px solid ${b.color||"var(--purple)"}`,
+                borderRadius:3, marginBottom:4,
+                cursor:"grab",
+                fontSize:"0.75rem",
+              }}>
+              <span style={{color:"var(--textDim)", fontSize:"0.6rem", fontFamily:"var(--font)"}}>{i+1}</span>
+              <span style={{flex:1, fontWeight:700, color:b.color||"var(--purple)"}}>{b.label}</span>
+              {b.note&&<span style={{fontSize:"0.6rem", color:"var(--textDim)", fontStyle:"italic", maxWidth:180, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{b.note}</span>}
+              <span style={{fontSize:"0.6rem", color:"var(--textDim)"}}>使用: {blockUsage[bid]||0}ページ</span>
+              <button onClick={e=>{e.stopPropagation();removeBlockFromPage(i)}} style={{padding:"1px 6px", background:"transparent", color:"var(--red)", border:"1px solid var(--red)", borderRadius:3, fontSize:"0.6rem", fontWeight:700}}>×</button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 右: ブロック編集 */}
+      <BlockEditor blocks={blocks} blockUsage={blockUsage} pageBlocks={pageBlocks} pages={pages} types={types} tree={tree}
+        onUpdateBlock={onUpdateBlock} onDeleteBlock={onDeleteBlock}/>
+    </div>
+  );
+}
+
+function BlockEditor({blocks, blockUsage, pageBlocks, pages, types, tree, onUpdateBlock, onDeleteBlock}){
+  const [selectedBid, setSelectedBid]=useState(null);
+  const b=selectedBid?blocks[selectedBid]:null;
+  const usingPages=useMemo(()=>{
+    if(!selectedBid) return [];
+    return Object.entries(pageBlocks).filter(([_,ids])=>ids.includes(selectedBid)).map(([pid])=>pages.find(p=>p.id===pid)).filter(Boolean);
+  },[selectedBid, pageBlocks, pages]);
+
+  return (
+    <div style={{background:"var(--surface)", overflow:"auto", padding:10}}>
+      <div style={{fontSize:"0.75rem", fontWeight:700, color:"var(--purple)", marginBottom:6}}>🧩 全ブロック</div>
+      <div style={{marginBottom:8, maxHeight:200, overflow:"auto"}}>
+        {Object.entries(blocks).map(([bid, b])=>(
+          <div key={bid} onClick={()=>setSelectedBid(bid)} style={{
+            padding:"3px 6px", cursor:"pointer", fontSize:"0.7rem", marginBottom:1,
+            background:selectedBid===bid?"#00d4aa22":"transparent",
+            borderLeft:`3px solid ${b.color||"var(--purple)"}`,
+            display:"flex", justifyContent:"space-between"
+          }}>
+            <span style={{color:b.color||"var(--purple)", fontWeight:selectedBid===bid?700:500}}>{b.label}</span>
+            <span style={{fontSize:"0.6rem", color:"var(--textDim)"}}>{blockUsage[bid]||0}P</span>
+          </div>
+        ))}
+      </div>
+      {b ? (
+        <div style={{display:"flex", flexDirection:"column", gap:8, borderTop:"1px solid var(--border)", paddingTop:8}}>
+          <div style={{fontSize:"0.65rem", color:"var(--textDim)"}}>ブロック編集</div>
+          <input value={b.label} onChange={e=>onUpdateBlock(selectedBid, {...b, label:e.target.value})} placeholder="表示名" style={{width:"100%"}}/>
+          <textarea value={b.note||""} onChange={e=>onUpdateBlock(selectedBid, {...b, note:e.target.value})} placeholder="メモ" rows={3} style={{width:"100%", resize:"vertical"}}/>
+          <div style={{display:"flex", gap:4, alignItems:"center"}}>
+            <span style={{fontSize:"0.62rem", color:"var(--textDim)"}}>色:</span>
+            <input type="color" value={b.color||"#a78bfa"} onChange={e=>onUpdateBlock(selectedBid, {...b, color:e.target.value})} style={{width:36, height:24, padding:0}}/>
+          </div>
+          <div style={{fontSize:"0.62rem", color:"var(--textDim)", marginTop:4}}>使われているページ ({usingPages.length}):</div>
+          <div style={{display:"flex", flexDirection:"column", gap:2, maxHeight:120, overflow:"auto"}}>
+            {usingPages.map(p=>{
+              const t=types[p.type]||{icon:"❓"};
+              return <div key={p.id} style={{fontSize:"0.65rem", padding:"2px 4px", background:"var(--bg)", borderRadius:2}}>{t.icon} {p.label}</div>;
+            })}
+            {usingPages.length===0&&<div style={{fontSize:"0.65rem", color:"var(--textDim)"}}>（どこにも使われていません）</div>}
+          </div>
+          <button onClick={()=>{if(confirm(`「${b.label}」を削除？全ページから外れます`))onDeleteBlock(selectedBid)}}
+            style={{padding:"4px 10px", background:"transparent", color:"var(--red)", border:"1px solid var(--red)", borderRadius:3, fontSize:"0.65rem"}}>× ブロック削除</button>
+        </div>
+      ):<div style={{fontSize:"0.7rem", color:"var(--textDim)", padding:8}}>ブロックを選択</div>}
+    </div>
+  );
+}
+
+// ════════════════════════════════════════
+// メインApp
+// ════════════════════════════════════════
+function App(){
+  const [data, setData]=useState(()=>loadData());
+  const {tree, types, blocks, pageBlocks}=data;
+  const [activeTab, setActiveTab]=useState("pages"); // "structure" | "pages"
+  const [selectedId, setSelectedId]=useState("root");
+  const [selectedPageId, setSelectedPageId]=useState("root");
+  const [dragId, setDragId]=useState(null);
+  const [dragOverId, setDragOverId]=useState(null);
+  const [hoverPos, setHoverPos]=useState(null);
+  const [showTypeAdd, setShowTypeAdd]=useState(false);
+  const [rev, setRev]=useState(0);
+  const cardRefs=useRef({});
+  const containerRef=useRef(null);
+
+  useEffect(()=>{ saveData(data); setRev(r=>r+1); },[data]);
+
+  const setTree=useCallback(updater=>setData(d=>({...d, tree:typeof updater==="function"?updater(d.tree):updater})),[]);
+  const setTypes=useCallback(updater=>setData(d=>({...d, types:typeof updater==="function"?updater(d.types):updater})),[]);
+  const setBlocks=useCallback(updater=>setData(d=>({...d, blocks:typeof updater==="function"?updater(d.blocks):updater})),[]);
+  const setPageBlocks=useCallback(updater=>setData(d=>({...d, pageBlocks:typeof updater==="function"?updater(d.pageBlocks):updater})),[]);
+
+  const idx=useMemo(()=>indexNodes(tree),[tree]);
+  const ghostPairs=useMemo(()=>collectGhostPairs(tree, idx),[tree, idx]);
+  const selectedNode=useMemo(()=>idx[selectedId]||null,[idx, selectedId]);
+  const ghostCount=useMemo(()=>selectedNode?findGhosts(tree, selectedNode.id).length:0,[tree, selectedNode]);
+  const blockUsage=useMemo(()=>{
+    const u={};
+    Object.values(pageBlocks).forEach(arr=>arr.forEach(bid=>{ u[bid]=(u[bid]||0)+1; }));
+    return u;
+  },[pageBlocks]);
+
+  const registerCardRef=useCallback((id, el)=>{ if(el) cardRefs.current[id]=el; else delete cardRefs.current[id]; },[]);
+
+  // ── ページ構造側 ──
+  const updateNode=useCallback(updated=>{
+    setTree(prev=>{
+      const next=deepClone(prev);
+      const r=findNode(next, updated.id);
+      if(r) Object.assign(r.node, updated);
+      return next;
+    });
+  },[setTree]);
+  const deleteNode=useCallback(id=>{
+    if(id==="root") return;
+    setTree(prev=>{
+      const next=deepClone(prev);
+      const r=findNode(next, id);
+      if(r && r.node.type!=="ghost"){
+        const ghosts=findGhosts(next, id);
+        ghosts.forEach(g=>removeNode(next, g.id));
+      }
+      removeNode(next, id);
+      return next;
+    });
+    setPageBlocks(prev=>{ const n={...prev}; delete n[id]; return n; });
+    if(selectedId===id) setSelectedId("root");
+  },[selectedId, setTree, setPageBlocks]);
+  const addChild=useCallback(parentId=>{
+    setTree(prev=>{
+      const next=deepClone(prev);
+      const r=findNode(next, parentId);
+      if(r){
+        const newNode={id:genId(), type:"detail", label:"新規ページ", note:"", children:[]};
+        r.node.children=r.node.children||[];
+        r.node.children.push(newNode);
+        setSelectedId(newNode.id);
+      }
+      return next;
+    });
+  },[setTree]);
+  const makeGhost=useCallback(realId=>{
+    setTree(prev=>{
+      const next=deepClone(prev);
+      const r=findNode(next, realId);
+      if(!r) return prev;
+      const g={id:ghostId(), type:"ghost", refId:realId, children:[]};
+      next.children=next.children||[];
+      next.children.push(g);
+      setSelectedId(g.id);
+      return next;
+    });
+    alert("分身を作成しました（ルート直下）。ドラッグで配置先へ");
+  },[setTree]);
+  const addType=useCallback((k, v)=>{
+    if(types[k]){ alert("既に使用中のキー"); return; }
+    setTypes(prev=>({...prev, [k]:v}));
+  },[types, setTypes]);
+  const deleteType=useCallback(k=>{
+    if(DEFAULT_TYPES[k]) return;
+    setTypes(prev=>{ const n={...prev}; delete n[k]; return n; });
+    setTree(prev=>{
+      const next=deepClone(prev);
+      const walk=(n)=>{ if(n.type===k) n.type="detail"; (n.children||[]).forEach(walk); };
+      walk(next);
+      return next;
+    });
+  },[setTypes, setTree]);
+
+  // DnD（ページ構造）
+  const handleDragStart=useCallback((e, id)=>{
+    setDragId(id);
+    e.dataTransfer.effectAllowed="move";
+    try{e.dataTransfer.setData("text/plain", id);}catch(_){}
+  },[]);
+  const handleDragOver=useCallback((e, id)=>{
+    if(!dragId || dragId===id) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect="move";
+    const rect=e.currentTarget.getBoundingClientRect();
+    const y=e.clientY-rect.top;
+    const third=rect.height/3;
+    const pos = y<third ? "before" : y>third*2 ? "after" : "inside";
+    setDragOverId(id); setHoverPos(pos);
+  },[dragId]);
+  const handleDragLeave=useCallback((e, id)=>{ setDragOverId(o=>o===id?null:o); },[]);
+  const handleDragEnd=useCallback(()=>{ setDragId(null); setDragOverId(null); setHoverPos(null); },[]);
+  const handleDrop=useCallback((e, targetId)=>{
+    e.preventDefault();
+    const src=dragId;
+    const pos=hoverPos;
+    setDragId(null); setDragOverId(null); setHoverPos(null);
+    if(!src || src===targetId || src==="root") return;
+    setTree(prev=>{
+      const next=deepClone(prev);
+      const sr=findNode(next, src);
+      if(!sr) return prev;
+      if(sr.node.type!=="ghost" && isDescendant(sr.node, targetId)) return prev;
+      const movedNode=deepClone(sr.node);
+      removeNode(next, src);
+      const tr=findNode(next, targetId);
+      if(!tr) return prev;
+      if(tr.node.type==="ghost" && pos==="inside") return prev;
+      if(pos==="inside"){
+        tr.node.children=tr.node.children||[];
+        tr.node.children.push(movedNode);
+      } else {
+        const parent=tr.parent;
+        if(!parent){ tr.node.children=tr.node.children||[]; tr.node.children.push(movedNode); return next; }
+        const ii=parent.children.findIndex(c=>c.id===targetId);
+        const insertIdx=pos==="before"?ii:ii+1;
+        parent.children.splice(insertIdx, 0, movedNode);
+      }
+      return next;
+    });
+  },[dragId, hoverPos, setTree]);
+
+  // ── ブロック側 ──
+  const updateBlock=useCallback((bid, b)=>setBlocks(prev=>({...prev, [bid]:b})),[setBlocks]);
+  const deleteBlock=useCallback(bid=>{
+    setBlocks(prev=>{ const n={...prev}; delete n[bid]; return n; });
+    setPageBlocks(prev=>{
+      const next={};
+      Object.entries(prev).forEach(([pid, arr])=>{ next[pid]=arr.filter(x=>x!==bid); });
+      return next;
+    });
+  },[setBlocks, setPageBlocks]);
+  const addNewBlock=useCallback(pageId=>{
+    const bid=genBlockId();
+    const newB={label:"新規ブロック", note:"", color:"#a78bfa"};
+    setBlocks(prev=>({...prev, [bid]:newB}));
+    setPageBlocks(prev=>({...prev, [pageId]:[...(prev[pageId]||[]), bid]}));
+  },[setBlocks, setPageBlocks]);
+
+  // インポートエクスポート
+  const exportJSON=useCallback(()=>{
+    const blob=new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="sitemap.json"; a.click();
+  },[data]);
+  const importJSON=useCallback(()=>{
+    const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
+    inp.onchange=async e=>{
+      const f=e.target.files[0]; if(!f) return;
+      try{ setData(JSON.parse(await f.text())); }catch(err){ alert("読込エラー: "+err.message); }
+    };
+    inp.click();
+  },[]);
+  const exportPolicy=useCallback(()=>{
+    const walk=(n, depth=0)=>{
+      const isGhost=n.type==="ghost";
+      const real = isGhost ? idx[n.refId] : n;
+      const display = real || {label:"(参照先不明)", type:"note"};
+      const t=types[display.type]||{label:display.type, icon:"❓"};
+      const indent="  ".repeat(depth);
+      const ghostMark = isGhost ? " 👥" : "";
+      const bIds=pageBlocks[n.id]||[];
+      const bStr = bIds.length ? ` [${bIds.map(b=>blocks[b]?.label).filter(Boolean).join(" / ")}]` : "";
+      let s=`${indent}- ${t.icon} **${display.label}**${ghostMark} _${t.label}_${display.note?` — ${display.note}`:""}${bStr}\n`;
+      (n.children||[]).forEach(c=>{ s+=walk(c, depth+1); });
+      return s;
+    };
+    const md=`---
+state: 有効
+type: 決定事項
+must_read: true
+---
+
+## 要点
+サイトの公開ページ構造（ナビゲーション）とページ内コンテンツブロック編成の正本。\`01_tools/sitemap-designer.html\` で編集。
+
+## ページ構造（+各ページのブロック）
+
+${walk(tree)}
+
+## ブロック定義
+
+| ブロック名 | メモ | 利用ページ数 |
+|---|---|---|
+${Object.entries(blocks).map(([bid,b])=>`| ${b.label} | ${b.note||"—"} | ${blockUsage[bid]||0} |`).join("\n")}
+
+## 種別一覧
+
+| アイコン | 種別 |
+|---|---|
+${Object.entries(types).map(([k,v])=>`| ${v.icon} | ${v.label} |`).join("\n")}
+
+## 凡例
+- 👥 = 分身ノード（多重所属表現）
+- [ ] = そのページに含まれるコンテンツブロック
+`;
+    navigator.clipboard.writeText(md).then(()=>alert("P026形式のMarkdownをクリップボードへコピー")).catch(()=>{
+      const blob=new Blob([md],{type:"text/markdown"});
+      const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="P026-公開ページ構造.md"; a.click();
+    });
+  },[tree, types, blocks, pageBlocks, blockUsage, idx]);
+
+  useEffect(()=>{
+    const el=containerRef.current;
+    if(!el) return;
+    const onScroll=()=>setRev(r=>r+1);
+    el.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return ()=>{ el.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); };
+  },[activeTab]);
+
+  return (
+    <div style={{height:"100vh", display:"flex", flexDirection:"column"}} onDragEnd={handleDragEnd}>
+      <TypeAddModal show={showTypeAdd} onClose={()=>setShowTypeAdd(false)} onAdd={addType}/>
+
+      {/* Header */}
+      <div style={{background:"var(--surface)", borderBottom:"1px solid var(--border)", padding:"6px 10px", display:"flex", alignItems:"center", gap:8, flexShrink:0}}>
+        <span style={{fontWeight:700, color:"var(--purple)", fontFamily:"var(--font)", fontSize:"0.85rem"}}>🗺️ Sitemap Designer</span>
+        <div style={{display:"flex", gap:3, marginLeft:12}}>
+          <button onClick={()=>setActiveTab("structure")} style={{padding:"4px 12px", background:activeTab==="structure"?"var(--accent)":"transparent", color:activeTab==="structure"?"var(--bg)":"var(--textDim)", border:`1px solid ${activeTab==="structure"?"var(--accent)":"var(--border)"}`, borderRadius:3, fontSize:"0.7rem", fontWeight:700}}>📑 ページ構造</button>
+          <button onClick={()=>setActiveTab("pages")} style={{padding:"4px 12px", background:activeTab==="pages"?"var(--accent)":"transparent", color:activeTab==="pages"?"var(--bg)":"var(--textDim)", border:`1px solid ${activeTab==="pages"?"var(--accent)":"var(--border)"}`, borderRadius:3, fontSize:"0.7rem", fontWeight:700}}>🧩 ページ内容</button>
+        </div>
+        <div style={{flex:1}}/>
+        <button onClick={importJSON} style={{padding:"3px 10px", background:"transparent", color:"var(--blue)", border:"1px solid var(--blue)", borderRadius:3, fontSize:"0.65rem"}}>読込</button>
+        <button onClick={exportJSON} style={{padding:"3px 10px", background:"var(--green)", color:"var(--bg)", border:"none", borderRadius:3, fontSize:"0.65rem", fontWeight:700}}>JSON保存</button>
+        <button onClick={exportPolicy} style={{padding:"3px 10px", background:"var(--yellow)", color:"var(--bg)", border:"none", borderRadius:3, fontSize:"0.65rem", fontWeight:700}}>📋 P026書出</button>
+        <button onClick={()=>{if(confirm("デフォルトに戻す？"))setData(DEFAULT_DATA)}} style={{padding:"3px 10px", background:"transparent", color:"var(--red)", border:"1px solid var(--red)", borderRadius:3, fontSize:"0.65rem"}}>初期化</button>
+      </div>
+
+      {/* Body — タブ切替 */}
+      <div style={{flex:1, display:"flex", overflow:"hidden"}}>
+        {activeTab==="structure" ? (
+          <div style={{flex:1, display:"grid", gridTemplateColumns:"1fr 320px", gap:1, background:"var(--border)"}}>
+            <div ref={containerRef} style={{background:"var(--surface)", overflow:"auto", padding:16, position:"relative"}}>
+              <PreviewNode node={tree} depth={0} types={types} idx={idx}
+                selectedId={selectedId} onSelect={setSelectedId}
+                onDragStart={handleDragStart} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
+                dragOverId={dragOverId} hoverPos={hoverPos}
+                onAddChild={addChild} onDelete={deleteNode} onMakeGhost={makeGhost}
+                registerCardRef={registerCardRef}/>
+              <GhostConnections pairs={ghostPairs} cardRefs={cardRefs} containerRef={containerRef}
+                types={types} idx={idx} isDragging={!!dragId} rev={rev}/>
+            </div>
+            <div style={{background:"var(--surface)", overflow:"auto"}}>
+              <NodeEditor node={selectedNode} types={types} idx={idx}
+                onUpdate={updateNode}
+                onOpenTypeAdd={()=>setShowTypeAdd(true)} onDeleteType={deleteType}
+                onJumpTo={setSelectedId} ghostCount={ghostCount}/>
+            </div>
+          </div>
+        ) : (
+          <div style={{flex:1, overflow:"hidden"}}>
+            <PagesTab tree={tree} blocks={blocks} pageBlocks={pageBlocks} types={types}
+              selectedPageId={selectedPageId} setSelectedPageId={setSelectedPageId}
+              setPageBlocks={setPageBlocks} blockUsage={blockUsage}
+              onUpdateBlock={updateBlock} onDeleteBlock={deleteBlock} onAddNewBlock={addNewBlock}/>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

@@ -9,13 +9,15 @@
 </section>
 
 <!-- Stats -->
+{{ $firmCount := 0 }}{{ with hugo.Data.firms }}{{ $firmCount = len . }}{{ end }}
+{{ $planCount := 0 }}{{ with hugo.Data.plans }}{{ $planCount = len . }}{{ end }}
 <div class="stats-bar">
   <div class="stat-item">
-    <div class="stat-value">{{ len (index hugo.Data.firms) }}</div>
+    <div class="stat-value">{{ $firmCount }}</div>
     <div class="stat-label">掲載ファーム</div>
   </div>
   <div class="stat-item">
-    <div class="stat-value">{{ len (index hugo.Data.plans) }}</div>
+    <div class="stat-value">{{ $planCount }}</div>
     <div class="stat-label">掲載プラン</div>
   </div>
   <div class="stat-item">

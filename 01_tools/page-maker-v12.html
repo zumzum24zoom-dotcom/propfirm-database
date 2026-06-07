@@ -242,7 +242,7 @@ const MASTER_DEFS = {
     {pkey:null,  id:"challengeName",   term:"プラン名",             section:"タイトル",hint:"必須",                                     definition:null},
     {pkey:"P20", id:"steps",           term:"Steps",                section:"タイトル",hint:"1=1-Step / 2=2-Step / 0=Instant",          definition:"チャレンジのステップ数。Instant=0 / 1-Step=1 / 2-Step=2 等。"},
     {pkey:"P01", id:"rd_target",       term:"利益目標",             section:"詳細",    hint:"C=%目標, F=最小出金額(%or金額)。補足付き",  definition:"C列=Challengeフェーズの合格利益目標(%)。F列=Funded最低出金額（初期残高に対する%または固定額。ファームにより設定がない場合は—）。"},
-    {pkey:"P02", id:"rd_minDays",      term:"最低取引日数（合格）", section:"詳細",    hint:"日数",                                      definition:"チャレンジ合格に必要な最低取引日数。出金要件とは区別する。",
+    {pkey:"P02", id:"rd_minDays",      term:"最低取引日数",         section:"詳細",    hint:"日数",                                      definition:"チャレンジ合格に必要な最低取引日数。出金要件は別途「最低取引日数（出金）」で扱う。",
      extra:{pkey:"P02b",term:"最低取引日数（出金）",definition:"出金申請に必要な最低取引日数。合格要件とは区別する。"}},
     {pkey:"P03", id:"rd_dailyLoss",    term:"日次損失",             section:"詳細",    hint:"%",                                         definition:"1日あたりに許容される損失の上限（%または$）。"},
     {pkey:"P04", id:"rd_dailyLossType",term:"日次損失タイプ",       section:"詳細",    hint:"日本語変換済み",                            definition:"日次損失の計算基準。DD分類6パターンのいずれか。"},
@@ -250,12 +250,12 @@ const MASTER_DEFS = {
     {pkey:"P06", id:"rd_maxLossType",  term:"最大損失タイプ",       section:"詳細",    hint:"日本語変換済み",                            definition:"最大損失の計算基準。DD分類6パターンのいずれか。"},
     {pkey:"P07", id:"rd_consistency",  term:"一貫性ルール",         section:"詳細",    hint:"補足テキスト付き",                          definition:"特定の日の利益が総利益に占める比率を制限するルール（Best Day等）。"},
     {pkey:"P08", id:"rd_profitCap",    term:"利益上限",             section:"詳細",    hint:"補足テキスト付き",                          definition:"利益または出金額の上限。"},
-    {pkey:"P09", id:"rd_timeLimit",    term:"制限時間",             section:"詳細",    hint:"補足テキスト付き",                          definition:"チャレンジ合格までの期限（日数または無制限）。"},
+    {pkey:"P09", id:"rd_timeLimit",    term:"時間制限",             section:"詳細",    hint:"補足テキスト付き",                          definition:"チャレンジ合格までの期限（日数または無制限）。"},
     {pkey:"P10", id:"rd_news",         term:"ニュース取引制限",     section:"詳細",    hint:"補足テキスト付き",                          definition:"重要経済指標の発表前後における取引の制限。"},
-    {pkey:"P11", id:"rd_weekend",      term:"週末保有制限",         section:"詳細",    hint:"補足テキスト付き",                          definition:"金曜クローズ前にポジションを決済する義務の有無。"},
+    {pkey:"P11", id:"rd_weekend",      term:"週末トレード制限",     section:"詳細",    hint:"補足テキスト付き",                          definition:"週末の新規トレードおよび金曜クローズ越えのポジション保有に関する制限。"},
     {pkey:"P12", id:"rd_overnight",    term:"オーバーナイト制限",   section:"詳細",    hint:"補足テキスト付き",                          definition:"日をまたいでポジションを保有することへの制限。"},
     {pkey:"P13", id:"rd_ea",           term:"EA制限",               section:"詳細",    hint:"補足テキスト付き",                          definition:"自動売買プログラム（EA）の使用可否・条件。"},
-    {pkey:"P14", id:"rd_copyTrade",    term:"コピートレード制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"他口座・他者の取引を複写することへの制約。"},
+    {pkey:"P14", id:"rd_copyTrade",    term:"コピートレード制限",   section:"詳細",    hint:"補足テキスト付き",                          definition:"他口座・他者の取引を複写することへの制限。"},
     {pkey:"P15", id:"rd_scalping",     term:"スキャルピング制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"超短時間売買の可否・条件に関する制約。"},
     {pkey:"P16", id:"rd_stopLoss",     term:"ストップロス制約",     section:"詳細",    hint:"補足テキスト付き",                          definition:"損切り注文の設定義務や推奨に関する制約。"},
     {pkey:"P17", id:"rd_risk",         term:"リスクルール",         section:"詳細",    hint:"補足テキスト付き",                          definition:"含み損（未決済ポジションの評価損）に対する制限。"},
@@ -594,14 +594,23 @@ ${ruleDetailsList || "（ルール詳細リストが未格納です。先にPlan
 1. 冒頭説明文（1〜2文）
 2. Consistency Rule プラン別適用状況テーブル（Markdown table形式）
    - 列: プラン / Challenge / Funded / 備考
-3. 第1部. 全プラン共通の取引制限（200字以内）
-4. 第2部. プラン間で差分のあるルール（Markdown table形式・150字以内）
-5. 合格に向けての注意点（事実ベース。誘導表現禁止・150字以内）
-6. 出金に向けての注意点（事実ベース。誘導表現禁止・150字以内）
+3. C/F差分一覧テーブル（全プラン横断・Markdown table形式）
+   - 列: プラン / 項目 / Challenge / Funded
+   - 趣旨: どのプランのどのルールにC/F差分があるかを一覧把握するためのもの。具体値は各プランページの早見表・詳細を参照
+   - DD関連は含めない（断面①の範疇）
+4. 第1部. 全プラン共通の取引制限（200字以内・取引ルールのみ・禁止行為は除外）
+5. 第2部. プラン間で差分のあるルール（Markdown table形式・150字以内）
+6. 禁止行為への参照（1文のみ・例:「禁止行為の具体的な行為名は各プランページの『禁止行為』項目を参照」）
+7. 合格に向けての注意点（事実ベース。誘導表現禁止・150字以内）
+8. 出金に向けての注意点（事実ベース。誘導表現禁止・150字以内）
 
 ### 断面②固有の制約:
 - DD値・DD計算基準は断面①の範疇。断面②では触れない（差分テーブルでDD列を含めない）
 - Gain Limit等のDD以外の利益/損失制限ルールは断面②で扱う
+- 取引ルールと禁止行為の分離（厳守）:
+  ・「取引ルール」= 運用条件（最低保有時間、EA使用条件、ニュース取引可否、コピートレード可否、ロット制限、戦略リスク制限 等）
+  ・「禁止行為」= ソースで prohibited / forbidden / banned 等で具体的行為名が明示されたもの（HFT、高頻度スキャルピング、グリッド、ヘッジング、レイテンシーアービトラージ、IP共有、口座共有・代行、口座ローリング 等）
+  ・断面②の本文・テーブル（第1部・第2部・C/F差分一覧）に禁止行為を混入させない。禁止行為は構成6の1文参照のみで扱う
 
 ---
 
@@ -1562,7 +1571,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onFormatToTarget,onArchi
     setOcrStatus("OCR中...");
     try {
       const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
-      const data=await callAPI({model:MODEL,max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:file.type,data:b64}},{type:"text",text:"この画像内のテキストを全て抽出。テーブルはMarkdown形式。抽出テキストのみ出力。"}]}]});
+      const data=await callAPI({model:MODEL,max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:file.type,data:b64}},{type:"text",text:renderPrompt("ocr_image",{})}]}]});
       if(taRef.current){const ta=taRef.current;ta.value+=(ta.value?"\n\n--- OCR ---\n":"")+exText(data)}
       setOcrStatus("完了"); setTimeout(()=>setOcrStatus(""),2000);
     } catch(e){setOcrStatus("エラー: "+e.message)}
@@ -2178,7 +2187,9 @@ function PriceMatrixEditor({slotData,setSlotData,locks,setLocks,planNames}){
                 </td>
                 {cols.map(c=>{
                   const raw=(r.prices||{})[c]||"";
-                  const num=raw.replace(/^[$€¥]/,"");
+                  const stripped=raw.replace(/^[$€¥]/,"");
+                  // "—" / "ー" / "-" / "―" は空として表示（placeholderのみ）
+                  const num=/^[—ー\-―]$/.test(stripped)?"":stripped;
                   return(
                     <td key={c} style={td}>
                       <input disabled={locked} value={num}
@@ -2413,7 +2424,7 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
       const slot=currentSlots.find(s=>s.id===slotId);
       const texts=frags.filter(f=>!f.merged).map(f=>f.text);
       const data=await callAPI({model:MODEL,max_tokens:2000,
-        system:`プロップファーム情報ライター。「${slot?.label||slotId}」の断片を1つに整形。重複統合・数値保持。整形結果のみ出力。`,
+        system:renderPrompt("format_fragments",{slotLabel:slot?.label||slotId}),
         messages:[{role:"user",content:texts.map((t,i)=>`【${i+1}】\n${t}`).join("\n\n")}]});
       setSlotData(prev=>({...prev,[slotId]:[...frags.filter(f=>!f.merged),{text:exText(data),merged:true}]}));
     } catch(e){alert("整形エラー")}
@@ -2569,6 +2580,37 @@ ${slotList}
           ))}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:4}}>
+          {templateMode==="koryaku"&&(
+            <span onClick={async()=>{
+              let text="";
+              try{ text=(await navigator.clipboard.readText())||""; }catch(e){ text=prompt("クリップボード読込に失敗。NotebookLM出力を貼り付け:")||""; }
+              if(!text.trim()){ alert("テキストが空です"); return; }
+              // ## 断面① / ## 断面② / ## 断面③ で分割（番号は全角①〜⑨を許容、英数1〜9も許容）
+              const NUMS={"①":1,"②":2,"③":3,"1":1,"2":2,"3":3};
+              const re=/^##\s*断面\s*([①②③1-3])[^\n]*$/gm;
+              const matches=[];
+              let m;
+              while((m=re.exec(text))!==null){ matches.push({n:NUMS[m[1]],idx:m.index,headEnd:m.index+m[0].length}); }
+              if(matches.length<3){ alert(`断面見出しが${matches.length}個しか見つかりません。「## 断面① / ② / ③」が必要です`); return; }
+              const slots={1:"k_dd",2:"k_rules",3:"k_payout"};
+              const next={...slotData};
+              let filled=0;
+              matches.forEach((mt,i)=>{
+                const endIdx=i+1<matches.length?matches[i+1].idx:text.length;
+                let body=text.slice(mt.headEnd,endIdx).trim();
+                // 末尾の区切り線 --- を除去
+                body=body.replace(/\n---\s*$/,"").trim();
+                if(!body) return;
+                const key=slots[mt.n];
+                if(!key) return;
+                next[key]=[{text:body,merged:true}];
+                filled++;
+              });
+              if(!filled){ alert("分割本文が空です"); return; }
+              setSlotData(next);
+              alert(`攻略3断面を取込: ${filled}件\nk_dd / k_rules / k_payout に格納しました`);
+            }} style={{cursor:"pointer",color:C.purple,fontSize:"0.6rem",fontWeight:700,border:`1px solid ${C.purple}`,borderRadius:3,padding:"1px 6px"}} title="クリップボードからNotebookLM出力を分割取込（## 断面①/②/③で自動分割）">📋 NotebookLM取込</span>
+          )}
           <span onClick={()=>{if(confirm("全スロットクリア？"))setSlotData({})}} style={{cursor:"pointer",color:C.red,fontSize:"0.7rem",marginLeft:4}}>×</span>
         </div>
       </div>
@@ -3096,6 +3138,658 @@ function ConsolidateModal({show,onClose,firms,tabDataMap,initialKeepId,onApply})
 }
 
 // ═══════════════════════════════════════════════════
+// PROMPTS REGISTRY — 全API system prompt を中央化
+// 各テンプレートは {{var}} 形式のプレースホルダで動的値を表現
+// ═══════════════════════════════════════════════════
+const PROMPTS_REGISTRY = {
+  ocr_image: {
+    name: "OCR（画像→テキスト）",
+    description: "貼付パネルで画像をDropしたときの抽出指示（user content text）",
+    role: "user",
+    defaultTemplate: "この画像内のテキストを全て抽出。テーブルはMarkdown形式。抽出テキストのみ出力。",
+    vars: [],
+    maxTokens: 4000,
+    sampleVars: {},
+  },
+  ocr_child: {
+    name: "OCR（子ウィンドウ）",
+    description: "子ウィンドウから受信した画像のOCR指示",
+    role: "user",
+    defaultTemplate: "画像テキスト抽出。テーブルはMarkdown。抽出のみ出力。",
+    vars: [],
+    maxTokens: 4000,
+    sampleVars: {},
+  },
+  translate_en_ja: {
+    name: "翻訳 EN→JP",
+    description: "貼付テキストを日本語訳",
+    role: "system",
+    defaultTemplate: "プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",
+    vars: [],
+    maxTokens: 2000,
+    sampleVars: {},
+  },
+  format_fragments: {
+    name: "断片整形（複数→1）",
+    description: "1スロット内の複数断片を1つに統合",
+    role: "system",
+    defaultTemplate: "プロップファーム情報ライター。「{{slotLabel}}」の断片を1つに整形。重複統合・数値保持。整形結果のみ出力。",
+    vars: ["slotLabel"],
+    maxTokens: 2000,
+    sampleVars: {slotLabel: "ファームピッチ"},
+  },
+  glossary_register: {
+    name: "用語登録",
+    description: "貼付テキストから用語辞典エントリを抽出（JSON配列）",
+    role: "system",
+    defaultTemplate: "プロップファーム用語辞典編集者。JSON配列のみ出力。各要素:{term,category,definition,explanation,trivia}",
+    vars: [],
+    maxTokens: 2000,
+    sampleVars: {},
+  },
+  format_slot: {
+    name: "単スロット整形",
+    description: "貼付テキストから対象スロット情報を抽出・整形",
+    role: "system",
+    defaultTemplate: `あなたはプロップファーム情報の整形エンジンです。入力テキストから「{{currentName}}」に関する情報のみを抽出し、用語辞典の表記に従って指定フォーマットに整形してください。
+
+対象: {{currentName}}
+このFirm/Planの情報のみ抽出。他の情報が混在している場合は除外。
+
+{{glossaryRules}}
+
+■ スロット一覧
+{{slotList}}
+
+{{formatInstruction}}`,
+    vars: ["currentName","glossaryRules","slotList","formatInstruction"],
+    maxTokens: 4000,
+    sampleVars: {currentName:"FTMO",glossaryRules:"（用語辞典ルールブロック）",slotList:"- firmName: ファーム名",formatInstruction:"パイプ区切り表で出力"},
+  },
+  auto_assign: {
+    name: "自動振り分け（マルチスロット）",
+    description: "貼付テキストから複数スロットへJSON振り分け",
+    role: "system",
+    defaultTemplate: `あなたはプロップファーム情報の分類エンジンです。入力テキストから「{{currentName}}」に関する情報のみを抽出し、用語辞典の表記に従って各スロットに振り分けてください。
+
+{{contextInfo}}
+
+{{glossaryRules}}
+
+■ スロット一覧（"id" / 型 / ヒント / 定義）
+{{slotList}}
+
+■ 入力テキストの形式
+入力はタブ区切りテーブル、パイプ区切りテーブル、箇条書き、自由テキストのいずれかです。
+テーブルの場合、項目名列の値をスロットの「ラベル」または「定義」とマッチングして抽出してください。
+「項目 Challenge Funded 差分」のヘッダー行がある場合はそれに従って値を抽出。
+
+■ 格納ルール（全スロット共通）
+1. 入力テキストに該当情報がある項目のみ格納する。情報がない項目はJSONキーごと省略（「記載なし」キーを作らない）
+2. 他のプラン・Firmの情報は絶対に混入させない
+3. 日本語に翻訳してから格納（用語辞典の表記に準拠）
+4. 数値・%・$はそのまま保持。数値型スロットには必ず単位を付与
+5. フェーズ表記は用語辞典に従い {{phaseLabelCF}} に統一（Evaluation/Assessment/Master/Live等は変換）
+
+■ planList（プラン名リスト）の特殊ルール
+入力がカンマ区切りプラン名リストの場合、必ず "planList" キーに原文のまま格納してください。
+- 入力例: "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"
+- 出力: {"planList": "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"}
+
+■ ルールスロット(rd_*)の格納形式（厳守）
+"Challenge値|Funded値|差分|詳細"
+- 差分: {{diffTerms}}
+- C/Fが同一またはF非該当 → F列・差分は "—"（例 "値|—|—|詳細本文"）
+- Instantプラン → "ー|F値|—|詳細本文"
+- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。書き出し固定:
+  ・差分=ー（C/F同一またはF非該当）→「{{phaseLabelCFdot}}共に～。」
+  ・差分=EASE/TRAP（C/Fが異なる）→「Challengeでは～。Fundedでは～。」
+  ※ 禁止行為（rd_prohibited）はこのルール対象外（上記「型」の指示に従う）
+
+■ 数値型 (rd_target / rd_minDays / rd_dailyLoss / rd_maxLoss / rd_consistency) の特例
+- C値/F値部分には「8%」「10日」のように数値+単位のみ。「未設定」は "ー"
+- 差分・詳細は通常通り埋める
+
+■ Lossタイプ型 (rd_dailyLossType / rd_maxLossType) の特例
+- C値/F値部分は {{ddTypes}} の表記のみ
+- 詳細には「リセット時刻」「Balance/Equityの基準」等の補足を入れる
+
+■ 禁止
+- 差分列に「なし」は使わない。「—」を使う
+- CとFが同じ場合にFunded列にC値をコピーしない。「—」を使う
+- 他のプランのデータを混入させない
+- 主観形容詞・煽り（「重要」「厳格」「注意が必要」「鍵となる」等）は詳細列にも書かない
+
+■ 出力形式（厳守）
+純粋なJSONオブジェクトのみ。該当情報があるスロットの "id" キーのみ含める。
+- Markdownフェンス（\`\`\`json）禁止
+- 説明文・前置き・後書き禁止
+- 最初の文字は { 、最後の文字は }`,
+    vars: ["currentName","contextInfo","glossaryRules","slotList","phaseLabelCF","diffTerms","phaseLabelCFdot","ddTypes"],
+    maxTokens: 4000,
+    sampleVars: {currentName:"FTMO",contextInfo:"対象Firm: FTMO",glossaryRules:"（用語ルール）",slotList:"- firmName: ファーム名",phaseLabelCF:"Challenge / Funded",diffTerms:"ー / EASE / TRAP",phaseLabelCFdot:"Challenge・Funded",ddTypes:"Static / Trailing..."},
+  },
+  koryaku_3sections: {
+    name: "攻略3断面（DD/取引ルール/出金）",
+    description: "Firm+Planデータから攻略記事3断面を1回で生成",
+    role: "system",
+    defaultTemplate: `あなたはプロップトレーディングファームのルール分析専門AIです。FirmデータとPlanデータから3つの断面ブロック（DD / 取引ルール / 出金）を1回で生成してください。
+
+■ 出力形式（厳守・JSONのみ）
+{
+  "k_dd": "断面①全文（HTML）",
+  "k_rules": "断面②全文（HTML）",
+  "k_payout": "断面③全文（HTML）"
+}
+JSONフェンス（\`\`\`json）や説明文を前後に付けない。値内のダブルクオートは \\" でエスケープ。
+
+■ 出力ルール（厳守）
+- HTML形式で出力（テーブルは下記HTMLテーブル形式・本文の改行は <br> ではなく <p>段落</p> 推奨）
+- 主観形容詞・煽り文句・誘導表現・評価表現は一切禁止（例:「重要」「鍵となる」「注意が必要」「求められる」「厳格」「厳しい」等はNG）
+- 事実の記述のみ。「〜に注意が必要」→「〜という仕様である」に言い換え
+- 根拠URL・推測・補完禁止。ソースに記載がなければ用語辞典の不在表記に従う
+- 各断面はテーブルを必ず含むこと（テーブル無しの文章のみ出力は不合格）
+
+{{glossaryRules}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■ 各断面の構成（厳守）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【断面① k_dd: Drawdown】
+1. 冒頭説明文（プラン間のDD設計の違いを概説・2〜3文）
+2. DD比較HTMLテーブル（必須）
+   - 列: プラン名 / 日次損失上限 / 計算基準（日次） / 最大損失上限 / 計算基準（最大）
+   - フェーズ列ルール:
+     * C/FでDD値・計算基準が全て同一のプラン → 1行（フェーズ列不要）
+     * C/Fで差分があるプランのみChallenge/Fundedの2行に分ける
+     * Instant → 常に1行（Fundedのみ）
+     * 全プランがC/F同一 → フェーズ列自体を省略
+   - 計算基準列は {{ddTypesCount}}分類（用語辞典のDD計算基準）のみ記載
+3. 補足注記（リセット時刻、Trailing挙動の詳細、Static基準値の説明等・200字以内）
+4. 合格に向けての注意点（事実ベース・150字以内）
+5. 出金に向けての注意点（事実ベース・150字以内）
+6. 特殊ルール（あれば・100字以内）
+
+【断面② k_rules: 取引ルール】
+1. 冒頭説明文（1〜2文）
+2. Consistency Rule プラン別適用状況HTMLテーブル（必須）
+   - 列: プラン / Challenge / Funded / 備考
+3. C/F差分一覧HTMLテーブル（必須・全プラン横断）
+   - 列: プラン / 項目 / Challenge / Funded
+   - 趣旨: 全プラン横断でC/F差分の所在を一覧把握する用。具体値詳細は各プランページの早見表・詳細を参照する旨を直前に1文添える
+   - DD値・DD計算基準は含めない（断面①の範疇）
+   - C/F差分が一切ないプランは行不要
+4. 第1部. 全プラン共通の取引制限（200字以内・取引ルールのみ・禁止行為は記載しない）
+5. 第2部. プラン間で差分のあるルールHTMLテーブル（必須・DD値/DD計算基準は含めない・150字以内）
+6. 禁止行為への参照（1文のみ・例:「禁止行為の具体的な行為名は各プランページの『禁止行為』項目を参照」）
+7. 合格に向けての注意点（事実ベース・150字以内）
+8. 出金に向けての注意点（事実ベース・150字以内）
+
+■ 取引ルール／禁止行為の分離（断面②厳守）
+- 「取引ルール」= 運用条件（最低保有時間、EA使用条件、ニュース取引可否、コピートレード可否、ロット制限、戦略リスク制限 等）
+- 「禁止行為」= ソースで prohibited / forbidden / banned 等で具体的行為名が明示されたもの（HFT、高頻度スキャルピング、グリッド、ヘッジング、レイテンシーアービトラージ、IP共有、口座共有・代行、口座ローリング 等）
+- 第1部・第2部・C/F差分一覧テーブルに禁止行為を列挙しない。禁止行為は構成6の1文参照のみで扱う
+
+【断面③ k_payout: 出金までの流れ】
+1. 冒頭説明文（出金方式・最速/最遅プランの概要・2〜3文）
+2. 出金条件HTMLテーブル（必須）
+   - 列: プラン名 / 頻度 / 最低取引日数（出金） / 一貫性ルール / 最低利益 / 利益分配 / 備考
+3. 最速出金スケジュール（理論値）HTMLテーブル（必須）
+   - 列: プラン名 / {{colSteps}} / {{colPass}} / {{colPayout}} / {{colTotal}} / {{colArrival}} / 備考
+4. 補足事項（150字以内）
+
+■ 最短合格・最速出金・トータル日数の算出ロジック（厳守）
+
+【最短合格日数】
+- 各StepのMAX(最低取引日数(合格), 一貫性達成最速日数)の合計
+- 一貫性はBest Day系(X%)のみ ceil(100÷X%)で算出。時間制約系・Loss系は除外
+- 「条件として存在しない」項目はinputから除外（0で埋めない）
+- 全条件が不存在の場合 → フォールバック: 1日 × Step数
+- Instant Funding = 0日
+- 「0日」「制限なし」「即日理論値」は禁止。全条件不存在でも最低1日×Step数
+
+【最速出金日数】
+① X = MAX(最低取引日数(出金), 一貫性(F側))。全不存在→X=0
+② 出金頻度に応じて:
+{{freqCalcLines}}
+③ 初回限定特例あれば → 最速出金(初回) = X
+
+【トータル日数】
+トータル = 最短合格 + 最速出金
+
+【着金目安】
+出金処理時間（営業日）を最速出金に加算。ソース不明なら「記載なし」
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■ HTMLテーブル形式（厳守）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<table header-row="true" header-column="false">
+<tr><td>項目</td><td>プラン1</td><td>プラン2</td></tr>
+<tr><td>データ1</td><td>値1</td><td>値2</td></tr>
+</table>
+
+■ 最終チェック（出力前に必ず確認）
+□ k_dd / k_rules / k_payout の3キー全てに値がある
+□ 各断面に必須テーブル（HTML <table>）が含まれている
+□ 「Evaluation」「Master」等の表記が残っていない（{{phaseLabelCFslash}} に変換済み）
+□ 数値に単位が付与されている
+□ DD計算基準は{{ddTypesCount}}分類のみ使用
+□ JSON以外のテキスト（フェンス・前置き）を含まない`,
+    vars: ["glossaryRules","ddTypesCount","colSteps","colPass","colPayout","colTotal","colArrival","freqCalcLines","phaseLabelCFslash"],
+    maxTokens: 8000,
+    sampleVars: {glossaryRules:"（用語）",ddTypesCount:"6",colSteps:"Steps",colPass:"最短合格",colPayout:"最速出金",colTotal:"トータル日数",colArrival:"着金目安",freqCalcLines:"・随時→X日\n・毎週→MAX(7,X)日",phaseLabelCFslash:"Challenge/Funded"},
+  },
+  plan_comparison: {
+    name: "プラン比較テーブル",
+    description: "Firm配下の全Plan比較表を生成（DBP_01用）",
+    role: "system",
+    defaultTemplate: `プロップファーム プラン比較テーブル生成。Markdownテーブルのみ出力。
+
+列: 項目 | {{planColumnNames}}
+
+テーブルは2部構成:
+
+【上半分: ルール比較】
+以下の行を順に出力:
+1. ステップ（Challenge段階数）
+2. 利益目標
+3. 日次損失
+4. 最大損失
+5. 利益分配率
+6. 出金頻度
+7. 最短合格
+8. 最速出金
+9. トータル日数
+
+■ 最短合格・最速出金・トータル日数の算出ロジック（厳守）
+
+【最短合格日数】
+- 各StepのMAX(最低取引日数, 一貫性達成最速日数)の合計
+- 一貫性はBest Day系(X%)のみ ceil(100÷X%)で算出。時間制約系・Loss系は除外
+- 「条件として存在しない」項目はinputから除外（0で埋めない）
+- 全条件が不存在の場合 → フォールバック: 1日 × Step数
+- Instant Funding = 0日
+- 「0日」「制限なし」「即日理論値」は禁止。全条件不存在でも最低1日×Step数
+
+【最速出金日数】
+① X = MAX(最低取引日数(出金用), 一貫性(F側))。全不存在→X=0
+② 出金頻度に応じて:
+{{freqCalcLines}}
+③ 初回限定特例あれば → 最速出金(初回) = X
+
+【トータル日数】
+トータル = 最短合格 + 最速出金
+
+※ 価格テーブル（口座サイズ×価格）は別スロット priceTable の正本に格納済み。プラン比較テーブルには含めない。
+
+ルール:
+- 数値には必ず単位を付与（%、$、日）
+- Challenge/Funded値が異なる場合は「C: X / F: Y」形式で表記
+- 同じ場合はC値のみ記載
+- テーブルのみ出力。説明文は書かない`,
+    vars: ["planColumnNames","freqCalcLines"],
+    maxTokens: 4000,
+    sampleVars: {planColumnNames:"FTMO 10K | FTMO 25K",freqCalcLines:"・随時→X日"},
+  },
+};
+
+// ── localStorage オーバーライド層 ──
+const PROMPT_OVERRIDES_KEY = "pfm-prompt-overrides";
+const PROMPT_FIXTURES_KEY = "pfm-prompt-fixtures";
+
+function loadPromptOverrides(){
+  try{ return JSON.parse(localStorage.getItem(PROMPT_OVERRIDES_KEY)||"{}"); }catch(e){ return {}; }
+}
+function savePromptOverride(id, text){
+  const all=loadPromptOverrides();
+  if(text==null||text===PROMPTS_REGISTRY[id]?.defaultTemplate){ delete all[id]; }
+  else{ all[id]=text; }
+  try{ localStorage.setItem(PROMPT_OVERRIDES_KEY, JSON.stringify(all)); }catch(e){}
+}
+function getPromptTemplate(id){
+  return loadPromptOverrides()[id] ?? PROMPTS_REGISTRY[id]?.defaultTemplate ?? "";
+}
+function renderPrompt(id, vars){
+  const tpl=getPromptTemplate(id);
+  return tpl.replace(/\{\{(\w+)\}\}/g, (m,k)=> vars && vars[k]!==undefined ? String(vars[k]) : m);
+}
+function loadPromptFixtures(){
+  try{ return JSON.parse(localStorage.getItem(PROMPT_FIXTURES_KEY)||"{}"); }catch(e){ return {}; }
+}
+function savePromptFixtures(obj){
+  try{ localStorage.setItem(PROMPT_FIXTURES_KEY, JSON.stringify(obj)); }catch(e){}
+}
+
+// ── 自己リント: プロンプト内の禁止語を抽出 → 出力内マッチをハイライト ──
+function extractForbiddenWords(promptText){
+  if(!promptText) return [];
+  const words=new Set();
+  // 「禁止」「NG」「使わない」「書かない」周辺の引用語を抽出
+  const re=/[「『]([^」』]{1,20})[」』]/g;
+  const ctxRe=/(禁止|NG|使わない|書かない|変換)/;
+  const lines=promptText.split("\n");
+  lines.forEach(line=>{
+    if(!ctxRe.test(line)) return;
+    let m;
+    while((m=re.exec(line))!==null){
+      const w=m[1].trim();
+      if(w.length>=1&&w.length<=15&&!/^[0-9\-—ー]+$/.test(w)) words.add(w);
+    }
+  });
+  return Array.from(words);
+}
+function lintOutput(output, forbidden){
+  const hits=[];
+  forbidden.forEach(w=>{
+    if(!w) return;
+    const escaped=w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    const re=new RegExp(escaped,"g");
+    const c=(output.match(re)||[]).length;
+    if(c>0) hits.push({word:w,count:c});
+  });
+  return hits;
+}
+
+// ── 簡易行diff（LCSベース）──
+function lineDiff(a,b){
+  const A=a.split("\n"), B=b.split("\n");
+  const m=A.length, n=B.length;
+  const dp=Array.from({length:m+1},()=>new Array(n+1).fill(0));
+  for(let i=m-1;i>=0;i--) for(let j=n-1;j>=0;j--){
+    dp[i][j]= A[i]===B[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
+  }
+  const out=[];
+  let i=0,j=0;
+  while(i<m&&j<n){
+    if(A[i]===B[j]){ out.push({type:"=",text:A[i]}); i++;j++; }
+    else if(dp[i+1][j]>=dp[i][j+1]){ out.push({type:"-",text:A[i]}); i++; }
+    else{ out.push({type:"+",text:B[j]}); j++; }
+  }
+  while(i<m){ out.push({type:"-",text:A[i++]}); }
+  while(j<n){ out.push({type:"+",text:B[j++]}); }
+  return out;
+}
+
+// ═══════════════════════════════════════════════════
+// PromptManagerPage — プロンプト管理4ペインUI
+// ═══════════════════════════════════════════════════
+function PromptManagerPage({onClose}){
+  const ids=Object.keys(PROMPTS_REGISTRY);
+  const [activeId,setActiveId]=useState(ids[0]);
+  const [edited,setEdited]=useState("");
+  const [overrideMap,setOverrideMap]=useState(()=>loadPromptOverrides());
+  const [fixtures,setFixtures]=useState(()=>loadPromptFixtures());
+  const [userMessage,setUserMessage]=useState("");
+  const [varsJson,setVarsJson]=useState("{}");
+  const [outA,setOutA]=useState("");
+  const [outB,setOutB]=useState("");
+  const [running,setRunning]=useState(false);
+  const [showDiff,setShowDiff]=useState(false);
+  const [note,setNote]=useState("");
+  const [fixtureName,setFixtureName]=useState("");
+
+  const meta=PROMPTS_REGISTRY[activeId];
+  const currentText=overrideMap[activeId] ?? meta.defaultTemplate;
+  const hasOverride=overrideMap[activeId]!==undefined;
+  const forbidden=useMemo(()=>extractForbiddenWords(currentText),[currentText]);
+
+  // タブ切替時：編集領域を現在のテンプレで初期化、フィクスチャを最初の1件で初期化
+  useEffect(()=>{
+    setEdited(currentText);
+    setVarsJson(JSON.stringify(meta.sampleVars||{},null,2));
+    setUserMessage("");
+    setOutA("");setOutB("");setNote("");
+    const fxList=fixtures[activeId]||[];
+    if(fxList[0]){
+      setUserMessage(fxList[0].userMessage||"");
+      setVarsJson(JSON.stringify(fxList[0].vars||meta.sampleVars||{},null,2));
+      setFixtureName(fxList[0].name||"");
+    }
+  },[activeId]);
+
+  const applyOverride=()=>{
+    savePromptOverride(activeId, edited);
+    setOverrideMap(loadPromptOverrides());
+    alert("反映しました（次回API呼出から適用）");
+  };
+  const resetOverride=()=>{
+    if(!confirm("オーバーライドを削除してデフォルトに戻す？"))return;
+    savePromptOverride(activeId,null);
+    setOverrideMap(loadPromptOverrides());
+    setEdited(meta.defaultTemplate);
+  };
+  const saveFixture=()=>{
+    const nm=fixtureName.trim()||"fixture-"+Date.now();
+    let vars={};
+    try{ vars=JSON.parse(varsJson); }catch(e){ alert("変数JSONが不正"); return; }
+    const next={...fixtures};
+    const list=[...(next[activeId]||[])];
+    const idx=list.findIndex(f=>f.name===nm);
+    const entry={name:nm,vars,userMessage};
+    if(idx>=0) list[idx]=entry; else list.unshift(entry);
+    next[activeId]=list.slice(0,5);
+    setFixtures(next); savePromptFixtures(next);
+    alert("フィクスチャ保存: "+nm);
+  };
+  const loadFixture=(fx)=>{
+    setFixtureName(fx.name||"");
+    setUserMessage(fx.userMessage||"");
+    setVarsJson(JSON.stringify(fx.vars||{},null,2));
+  };
+  const deleteFixture=(nm)=>{
+    const next={...fixtures};
+    next[activeId]=(next[activeId]||[]).filter(f=>f.name!==nm);
+    setFixtures(next); savePromptFixtures(next);
+  };
+
+  const runABDryrun=async()=>{
+    let vars={};
+    try{ vars=JSON.parse(varsJson); }catch(e){ alert("変数JSONが不正: "+e.message); return; }
+    const renderWith=tpl=>tpl.replace(/\{\{(\w+)\}\}/g,(m,k)=>vars[k]!==undefined?String(vars[k]):m);
+    const promptA=renderWith(meta.defaultTemplate);
+    const promptB=renderWith(edited);
+    const baseBody=role=>role==="user"
+      ? {model:MODEL,max_tokens:meta.maxTokens,messages:[{role:"user",content:userMessage||"（入力なし）"}]}
+      : {model:MODEL,max_tokens:meta.maxTokens,messages:[{role:"user",content:userMessage||"（入力なし）"}]};
+    setRunning(true); setOutA("実行中..."); setOutB("実行中...");
+    try{
+      const bodyA={...baseBody(meta.role)};
+      const bodyB={...baseBody(meta.role)};
+      if(meta.role==="system"){ bodyA.system=promptA; bodyB.system=promptB; }
+      else{
+        bodyA.messages=[{role:"user",content:`${promptA}\n\n---\n${userMessage||""}`}];
+        bodyB.messages=[{role:"user",content:`${promptB}\n\n---\n${userMessage||""}`}];
+      }
+      const [rA,rB]=await Promise.allSettled([callAPI(bodyA),callAPI(bodyB)]);
+      setOutA(rA.status==="fulfilled"?exText(rA.value):"エラー: "+rA.reason.message);
+      setOutB(rB.status==="fulfilled"?exText(rB.value):"エラー: "+rB.reason.message);
+    }finally{ setRunning(false); }
+  };
+
+  const copyForConsult=async()=>{
+    const diff=lineDiff(meta.defaultTemplate, edited)
+      .filter(d=>d.type!=="=").map(d=>(d.type==="+"?"+ ":"- ")+d.text).join("\n");
+    const lintA=lintOutput(outA, forbidden);
+    const lintB=lintOutput(outB, forbidden);
+    const md=`# プロンプト相談: ${meta.name} (${activeId})
+
+## メタ
+- 説明: ${meta.description}
+- 役割: ${meta.role}
+- オーバーライド適用中: ${hasOverride?"はい":"いいえ"}
+
+## マスター所感
+${note||"（記入なし）"}
+
+## 現行プロンプト（デフォルト）
+\`\`\`
+${meta.defaultTemplate}
+\`\`\`
+
+## 編集中プロンプト
+\`\`\`
+${edited}
+\`\`\`
+
+## 差分（デフォルト → 編集）
+\`\`\`diff
+${diff||"（差分なし）"}
+\`\`\`
+
+## 入力フィクスチャ
+### 変数 (JSON)
+\`\`\`json
+${varsJson}
+\`\`\`
+### user message
+\`\`\`
+${userMessage||"（なし）"}
+\`\`\`
+
+## 出力A（現行プロンプト）
+\`\`\`
+${outA||"（未実行）"}
+\`\`\`
+
+## 出力B（編集プロンプト）
+\`\`\`
+${outB||"（未実行）"}
+\`\`\`
+
+## リント検知（プロンプト内禁止語との照合）
+- 出力A: ${lintA.length?lintA.map(h=>`「${h.word}」×${h.count}`).join(", "):"なし"}
+- 出力B: ${lintB.length?lintB.map(h=>`「${h.word}」×${h.count}`).join(", "):"なし"}
+`;
+    try{ await navigator.clipboard.writeText(md); alert("相談用Markdownをクリップボードにコピーしました"); }
+    catch(e){
+      const blob=new Blob([md],{type:"text/markdown"});
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob); a.download=`prompt-consult-${activeId}.md`; a.click();
+    }
+  };
+
+  const renderHighlightedOutput=(text)=>{
+    if(!forbidden.length) return text;
+    let html=text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    forbidden.forEach(w=>{
+      const esc=w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+      html=html.replace(new RegExp(esc,"g"),`<span style="background:#ef444466;color:#fff;padding:0 2px;border-radius:2px">${w}</span>`);
+    });
+    return html;
+  };
+
+  const ta={width:"100%",height:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:6,fontFamily:font,fontSize:"0.7rem",resize:"none",boxSizing:"border-box"};
+  const paneHdr={fontSize:"0.65rem",fontWeight:700,color:C.textDim,padding:"4px 6px",background:C.surface,borderBottom:`1px solid ${C.border}`};
+
+  return (
+    <div style={{position:"fixed",inset:0,zIndex:9999,background:C.bg,display:"flex",flexDirection:"column",fontFamily:font}}>
+      {/* Header */}
+      <div style={{background:C.surface,borderBottom:`1px solid ${C.border}`,padding:"6px 10px",display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+        <span style={{fontWeight:700,color:C.purple,fontSize:"0.85rem"}}>📝 プロンプト管理</span>
+        <div style={{display:"flex",gap:3,flexWrap:"wrap",flex:1}}>
+          {ids.map(id=>{
+            const m=PROMPTS_REGISTRY[id];
+            const has=overrideMap[id]!==undefined;
+            return <button key={id} onClick={()=>setActiveId(id)} style={{
+              padding:"3px 8px",fontSize:"0.62rem",fontWeight:700,cursor:"pointer",borderRadius:3,whiteSpace:"nowrap",
+              background:activeId===id?C.purple:"transparent",color:activeId===id?C.bg:C.textDim,
+              border:`1px solid ${activeId===id?C.purple:C.border}`}}>
+              {has?"●":"○"} {m.name}
+            </button>;
+          })}
+        </div>
+        <Btn color={C.red} onClick={onClose} style={{fontSize:"0.65rem"}}>× 閉じる</Btn>
+      </div>
+
+      {/* Meta line */}
+      <div style={{padding:"4px 10px",fontSize:"0.62rem",color:C.textDim,background:C.surface,borderBottom:`1px solid ${C.border}`}}>
+        {meta.description} ／ role: <span style={{color:C.accent}}>{meta.role}</span> ／ vars: <span style={{color:C.yellow}}>{(meta.vars||[]).join(", ")||"（なし）"}</span> ／ {hasOverride?<span style={{color:C.yellow}}>● オーバーライド適用中</span>:<span style={{color:C.textDim}}>○ デフォルト</span>}
+      </div>
+
+      {/* 4-pane grid */}
+      <div style={{flex:1,display:"grid",gridTemplateColumns:"1fr 1fr",gridTemplateRows:"1fr 1fr",gap:1,background:C.border,overflow:"hidden"}}>
+        {/* TL: 現行（read-only） */}
+        <div style={{background:C.surface,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+          <div style={paneHdr}>現行プロンプト（デフォルト）</div>
+          <textarea readOnly value={meta.defaultTemplate} style={{...ta,flex:1}} />
+        </div>
+        {/* TR: 編集 */}
+        <div style={{background:C.surface,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+          <div style={{...paneHdr,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <span>編集プロンプト</span>
+            <div style={{display:"flex",gap:4}}>
+              <button onClick={()=>setShowDiff(v=>!v)} style={{fontSize:"0.6rem",padding:"1px 6px",background:showDiff?C.blue:"transparent",color:showDiff?C.bg:C.textDim,border:`1px solid ${C.blue}`,borderRadius:3,cursor:"pointer"}}>diff {showDiff?"✓":""}</button>
+              <button onClick={applyOverride} style={{fontSize:"0.6rem",padding:"1px 6px",background:C.green,color:C.bg,border:"none",borderRadius:3,cursor:"pointer",fontWeight:700}}>反映</button>
+              <button onClick={resetOverride} style={{fontSize:"0.6rem",padding:"1px 6px",background:"transparent",color:C.red,border:`1px solid ${C.red}`,borderRadius:3,cursor:"pointer"}}>リセット</button>
+            </div>
+          </div>
+          {showDiff
+            ? <div style={{flex:1,overflow:"auto",padding:6,background:C.bg,fontSize:"0.65rem",fontFamily:font}}>
+                {lineDiff(meta.defaultTemplate, edited).map((d,i)=>(
+                  <div key={i} style={{
+                    background:d.type==="+"?"#22c55e22":d.type==="-"?"#ef444422":"transparent",
+                    color:d.type==="+"?C.green:d.type==="-"?C.red:C.textDim,
+                    whiteSpace:"pre-wrap"
+                  }}>{d.type==="="?" ":d.type} {d.text}</div>
+                ))}
+              </div>
+            : <textarea value={edited} onChange={e=>setEdited(e.target.value)} style={{...ta,flex:1}} />
+          }
+        </div>
+        {/* BL: 入力フィクスチャ */}
+        <div style={{background:C.surface,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+          <div style={{...paneHdr,display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
+            <span>入力フィクスチャ</span>
+            <div style={{display:"flex",gap:3,alignItems:"center"}}>
+              <input value={fixtureName} onChange={e=>setFixtureName(e.target.value)} placeholder="名前"
+                style={{fontSize:"0.6rem",padding:"1px 4px",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:2,width:80}}/>
+              <button onClick={saveFixture} style={{fontSize:"0.6rem",padding:"1px 6px",background:C.accent,color:C.bg,border:"none",borderRadius:3,cursor:"pointer",fontWeight:700}}>保存</button>
+            </div>
+          </div>
+          <div style={{padding:"4px 6px",display:"flex",gap:3,flexWrap:"wrap",borderBottom:`1px solid ${C.border}`,maxHeight:50,overflow:"auto"}}>
+            {(fixtures[activeId]||[]).map(fx=>(
+              <span key={fx.name} style={{display:"inline-flex",alignItems:"center",gap:2,background:C.bg,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 4px"}}>
+                <button onClick={()=>loadFixture(fx)} style={{fontSize:"0.6rem",background:"transparent",border:"none",color:C.text,cursor:"pointer"}}>{fx.name}</button>
+                <button onClick={()=>deleteFixture(fx.name)} style={{fontSize:"0.6rem",background:"transparent",border:"none",color:C.red,cursor:"pointer"}}>×</button>
+              </span>
+            ))}
+            {!(fixtures[activeId]||[]).length&&<span style={{fontSize:"0.6rem",color:C.textDim}}>（保存済みフィクスチャなし）</span>}
+          </div>
+          <div style={{flex:1,display:"flex",flexDirection:"column",gap:2,padding:4,overflow:"hidden"}}>
+            <div style={{fontSize:"0.6rem",color:C.textDim}}>変数（JSON）</div>
+            <textarea value={varsJson} onChange={e=>setVarsJson(e.target.value)} style={{...ta,height:90}}/>
+            <div style={{fontSize:"0.6rem",color:C.textDim}}>user message（テスト入力）</div>
+            <textarea value={userMessage} onChange={e=>setUserMessage(e.target.value)} style={{...ta,flex:1}}/>
+          </div>
+        </div>
+        {/* BR: 出力 A/B */}
+        <div style={{background:C.surface,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+          <div style={{...paneHdr,display:"flex",justifyContent:"space-between",alignItems:"center",gap:4}}>
+            <span>出力比較 A=現行 / B=編集</span>
+            <div style={{display:"flex",gap:3}}>
+              <button onClick={runABDryrun} disabled={running} style={{fontSize:"0.6rem",padding:"1px 8px",background:running?C.textDim:C.yellow,color:C.bg,border:"none",borderRadius:3,cursor:running?"wait":"pointer",fontWeight:700}}>{running?"実行中...":"▶ A/Bドライラン"}</button>
+              <button onClick={copyForConsult} style={{fontSize:"0.6rem",padding:"1px 8px",background:C.blue,color:C.bg,border:"none",borderRadius:3,cursor:"pointer",fontWeight:700}}>📋 相談用コピー</button>
+            </div>
+          </div>
+          <div style={{flex:1,display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:C.border,overflow:"hidden"}}>
+            <div style={{background:C.bg,overflow:"auto",padding:6,fontSize:"0.65rem",whiteSpace:"pre-wrap"}}
+              dangerouslySetInnerHTML={{__html:renderHighlightedOutput(outA||"（未実行）")}}/>
+            <div style={{background:C.bg,overflow:"auto",padding:6,fontSize:"0.65rem",whiteSpace:"pre-wrap"}}
+              dangerouslySetInnerHTML={{__html:renderHighlightedOutput(outB||"（未実行）")}}/>
+          </div>
+          <div style={{padding:"4px 6px",borderTop:`1px solid ${C.border}`,fontSize:"0.6rem",color:C.textDim,display:"flex",gap:8,alignItems:"center"}}>
+            リント語: <span style={{color:C.yellow}}>{forbidden.join(", ")||"（抽出なし）"}</span>
+          </div>
+          <textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="マスター所感（相談時メモ）"
+            style={{...ta,height:50,borderTop:`1px solid ${C.border}`,borderRadius:0}}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════════
 function App() {
@@ -3139,6 +3833,7 @@ function App() {
   const [slotLocks,setSlotLocks]=useState({}); // 明示ロックのみ保持。名前スロットは値が入った時点で自動ロック（isSlotLocked）
   const [showBackup,setShowBackup]=useState(false);
   const [showMerge,setShowMerge]=useState(false);
+  const [showPromptManager,setShowPromptManager]=useState(false);
   const [showDataMenu,setShowDataMenu]=useState(false); // false | "save" | "load"
   const [toastMsg,setToastMsg]=useState("");
   const showToast=useCallback((msg)=>{setToastMsg(msg);setTimeout(()=>setToastMsg(""),2500)},[]);
@@ -3256,7 +3951,7 @@ function App() {
   },[firms,tabDataMap]);
 
   const handleOCRFromChild=useCallback(async(b64,mt)=>{
-    try{const data=await callAPI({model:MODEL,max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mt||"image/png",data:b64}},{type:"text",text:"画像テキスト抽出。テーブルはMarkdown。抽出のみ出力。"}]}]});if(pasteAreaRef.current)pasteAreaRef.current.value+=(pasteAreaRef.current.value?"\n\n--- OCR ---\n":"")+exText(data)}catch(e){if(pasteAreaRef.current)pasteAreaRef.current.value+="\nOCRエラー: "+e.message}
+    try{const data=await callAPI({model:MODEL,max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mt||"image/png",data:b64}},{type:"text",text:renderPrompt("ocr_child",{})}]}]});if(pasteAreaRef.current)pasteAreaRef.current.value+=(pasteAreaRef.current.value?"\n\n--- OCR ---\n":"")+exText(data)}catch(e){if(pasteAreaRef.current)pasteAreaRef.current.value+="\nOCRエラー: "+e.message}
   },[]);
 
   // coupon-config.json に追記（Hugo出力先フォルダ経由）
@@ -3303,7 +3998,7 @@ function App() {
   // 貼り付け→翻訳→取り込み対象
   const handleTranslateToTarget=useCallback(async text=>{
     setTranslating(true); setTabField("targetText","翻訳中..."); setPasteH(100);
-    try{const data=await callAPI({model:MODEL,max_tokens:2000,system:"プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。",messages:[{role:"user",content:text}]});setTabField("targetText",exText(data))}
+    try{const data=await callAPI({model:MODEL,max_tokens:2000,system:renderPrompt("translate_en_ja",{}),messages:[{role:"user",content:text}]});setTabField("targetText",exText(data))}
     catch(e){setTabField("targetText","翻訳エラー: "+e.message)}
     setTranslating(false);
   },[setTabField]);
@@ -3354,21 +4049,17 @@ function App() {
 - 詳細列の書き出し:
   ・差分=— → 「Challenge・Funded共に〜。」
   ・差分=EASE/TRAP → 「Challengeでは〜。Fundedでは〜。」
+- 禁止行為（項目名=「禁止行為」）の特例（上記書き出しルールの対象外）:
+  ・C列=禁止行為の名称をカンマ区切りで列挙（例:「IP共有, 複数プロファイル作成, 口座共有, ヘッジング, ...」）
+  ・F列=「—」、差分列=「—」
+  ・詳細列=各行為を「名称：説明（処分：◯◯）」形式で全件記載し、項目間は「 / 」で区切る
+    例:「IP共有：他者とのIP共有や不審なIP変更（処分：アカウント停止） / 複数プロファイル作成：同一人物による複数アカウントの不正作成（処分：アカウント停止） / ...」
+  ・「Challenge・Funded共に〜。」の書き出しは付けない
 - 主観形容詞・煽り（「重要」「厳格」「注意が必要」等）禁止
 - 出力はパイプ表のみ。前置き・説明文・コードフェンス禁止`;
       }
       const data=await callAPI({model:MODEL,max_tokens:4000,
-        system:`あなたはプロップファーム情報の整形エンジンです。入力テキストから「${currentName}」に関する情報のみを抽出し、用語辞典の表記に従って指定フォーマットに整形してください。
-
-対象: ${currentName}
-このFirm/Planの情報のみ抽出。他の情報が混在している場合は除外。
-
-${glossaryRulesBlock(glossaryTerms)}
-
-■ スロット一覧
-${slotList}
-
-${formatInstruction}`,
+        system:renderPrompt("format_slot",{currentName,glossaryRules:glossaryRulesBlock(glossaryTerms),slotList,formatInstruction}),
         messages:[{role:"user",content:text}]});
       setTabField("targetText",exText(data));
     } catch(e){setTabField("targetText","整形エラー: "+e.message)}
@@ -3456,62 +4147,11 @@ ${formatInstruction}`,
         const def=_defByIdAA[s.id]||"";
         return `"${s.id}": [${s.section}] ${s.label}\n   型: ${_typeOf(s.id)}\n   ヒント: ${s.hint||"—"}${def?"\n   定義: "+def:""}`;
       }).join("\n");
+      const _phaseBook=(()=>{const T=Array.isArray(glossaryTerms)&&glossaryTerms.length?glossaryTerms:GLOSSARY_SEED;const b={};T.forEach(t=>{if(t.key)b[t.key]=t});return b})();
+      const _phaseCFslash=`${_phaseBook["PHASE_C"]?.term||"Challenge"} / ${_phaseBook["PHASE_F"]?.term||"Funded"}`;
+      const _phaseCFdot=`${_phaseBook["PHASE_C"]?.term||"Challenge"}・${_phaseBook["PHASE_F"]?.term||"Funded"}`;
       const data=await callAPI({model:MODEL,max_tokens:4000,
-        system:`あなたはプロップファーム情報の分類エンジンです。入力テキストから「${currentName}」に関する情報のみを抽出し、用語辞典の表記に従って各スロットに振り分けてください。
-
-${contextInfo}
-
-${glossaryRulesBlock(glossaryTerms)}
-
-■ スロット一覧（"id" / 型 / ヒント / 定義）
-${slotList}
-
-■ 入力テキストの形式
-入力はタブ区切りテーブル、パイプ区切りテーブル、箇条書き、自由テキストのいずれかです。
-テーブルの場合、項目名列の値をスロットの「ラベル」または「定義」とマッチングして抽出してください。
-「項目 Challenge Funded 差分」のヘッダー行がある場合はそれに従って値を抽出。
-
-■ 格納ルール（全スロット共通）
-1. 入力テキストに該当情報がある項目のみ格納する。情報がない項目はJSONキーごと省略（「記載なし」キーを作らない）
-2. 他のプラン・Firmの情報は絶対に混入させない
-3. 日本語に翻訳してから格納（用語辞典の表記に準拠）
-4. 数値・%・$はそのまま保持。数値型スロットには必ず単位を付与
-5. フェーズ表記は用語辞典に従い ${(()=>{const T=Array.isArray(glossaryTerms)&&glossaryTerms.length?glossaryTerms:GLOSSARY_SEED;const b={};T.forEach(t=>{if(t.key)b[t.key]=t});return `${b["PHASE_C"]?.term||"Challenge"} / ${b["PHASE_F"]?.term||"Funded"}`})()} に統一（Evaluation/Assessment/Master/Live等は変換）
-
-■ planList（プラン名リスト）の特殊ルール
-入力がカンマ区切りプラン名リストの場合、必ず "planList" キーに原文のまま格納してください。
-- 入力例: "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"
-- 出力: {"planList": "LITE 1-step CHALLENGE, LITE-2 step CHALLENGE, 1-Step Challenge + FREE RETRY"}
-
-■ ルールスロット(rd_*)の格納形式（厳守）
-"Challenge値|Funded値|差分|詳細"
-- 差分: ${diffTermLine(glossaryTerms)}
-- C/Fが同一またはF非該当 → F列・差分は "—"（例 "値|—|—|詳細本文"）
-- Instantプラン → "ー|F値|—|詳細本文"
-- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。書き出し固定:
-  ・差分=ー（C/F同一またはF非該当）→「${(()=>{const T=Array.isArray(glossaryTerms)&&glossaryTerms.length?glossaryTerms:GLOSSARY_SEED;const b={};T.forEach(t=>{if(t.key)b[t.key]=t});return `${b["PHASE_C"]?.term||"Challenge"}・${b["PHASE_F"]?.term||"Funded"}`})()}共に～。」
-  ・差分=EASE/TRAP（C/Fが異なる）→「Challengeでは～。Fundedでは～。」
-  ※ 禁止行為（rd_prohibited）はこのルール対象外（上記「型」の指示に従う）
-
-■ 数値型 (rd_target / rd_minDays / rd_dailyLoss / rd_maxLoss / rd_consistency) の特例
-- C値/F値部分には「8%」「10日」のように数値+単位のみ。「未設定」は "ー"
-- 差分・詳細は通常通り埋める
-
-■ Lossタイプ型 (rd_dailyLossType / rd_maxLossType) の特例
-- C値/F値部分は ${ddTypesStr(glossaryTerms)} の表記のみ
-- 詳細には「リセット時刻」「Balance/Equityの基準」等の補足を入れる
-
-■ 禁止
-- 差分列に「なし」は使わない。「—」を使う
-- CとFが同じ場合にFunded列にC値をコピーしない。「—」を使う
-- 他のプランのデータを混入させない
-- 主観形容詞・煽り（「重要」「厳格」「注意が必要」「鍵となる」等）は詳細列にも書かない
-
-■ 出力形式（厳守）
-純粋なJSONオブジェクトのみ。該当情報があるスロットの "id" キーのみ含める。
-- Markdownフェンス（\`\`\`json）禁止
-- 説明文・前置き・後書き禁止
-- 最初の文字は { 、最後の文字は }`,
+        system:renderPrompt("auto_assign",{currentName,contextInfo,glossaryRules:glossaryRulesBlock(glossaryTerms),slotList,phaseLabelCF:_phaseCFslash,diffTerms:diffTermLine(glossaryTerms),phaseLabelCFdot:_phaseCFdot,ddTypes:ddTypesStr(glossaryTerms)}),
         messages:[{role:"user",content:text}]});
       const raw=exText(data).replace(/```json|```/g,"").trim();
       console.log("=== 自動振り分けデバッグ ===");
@@ -3569,8 +4209,22 @@ ${slotList}
   // 表取込（決定的パーサ）— 価格表（独立「口座サイズ」表 or プラン比較内「下半分」埋込）→priceTable / F01〜F22→Firmスロット / 「項目|C|F|差分|詳細」→rd_* に格納
   const handleTableParse=useCallback(text=>{
     if(typeof text!=="string"||!text.trim()){alert("取込エリアが空です");return;}
+    // 全角通貨記号→半角に正規化（AI整形出力で ￥/＄ が来るケースに対応）
+    text=text.replace(/￥/g,"¥").replace(/＄/g,"$").replace(/€/g,"€");
     const parseRow=line=>{const c=line.split("|").map(c=>c.trim());if(c[0]==="")c.shift();if(c[c.length-1]==="")c.pop();return c;};
-    const allLines=text.split("\n").map(l=>l.trim()).filter(l=>l);
+    const rawLines=text.split("\n").map(l=>l.trim()).filter(l=>l);
+    // 表行のラップ修復: 行頭|で行末が|でない場合は次の行(複数)と結合（AI整形出力等で長いヘッダーが折り返されたケースに対応）
+    const allLines=[];
+    for(let i=0;i<rawLines.length;i++){
+      let line=rawLines[i];
+      if(line.startsWith("|")){
+        while(!line.endsWith("|") && i+1<rawLines.length){
+          i++;
+          line=line+" "+rawLines[i];
+        }
+      }
+      allLines.push(line);
+    }
     const tableLines=allLines.filter(l=>l.startsWith("|"));
 
     // ── 行区切りフォーマット（|なし）: 「Steps\n2\nー\nー\n詳細」形式 ──
@@ -3581,7 +4235,8 @@ ${slotList}
       const ltId={};
       SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{ltId[s.label]=s.id;});
       ltId["Steps"]="steps";
-      ltId["最低取引日数（合格）"]="rd_minDays";
+      ltId["最低取引日数"]="rd_minDays";
+      ltId["最低取引日数（合格）"]="rd_minDays"; // 後方互換
       ltId["最低取引日数（出金）"]="rd_minDays";
       const skipSet=new Set(["項目","C","F","差分","詳細","Challenge","Funded","項目名"]);
       const stripP=s=>s.replace(/^P\d+[a-z]*[:.．]\s*/,"").trim();
@@ -3777,99 +4432,10 @@ ${slotList}
 
       const _ddN2=ddTypesCount(glossaryTerms);
       const _cols2=calcColNames(glossaryTerms);
+      const _phaseBook2=(()=>{const T=Array.isArray(glossaryTerms)&&glossaryTerms.length?glossaryTerms:GLOSSARY_SEED;const b={};T.forEach(t=>{if(t.key)b[t.key]=t});return b})();
+      const _phaseCFslash2=`${_phaseBook2["PHASE_C"]?.term||"Challenge"}/${_phaseBook2["PHASE_F"]?.term||"Funded"}`;
       const data=await callAPI({model:MODEL,max_tokens:8000,
-        system:`あなたはプロップトレーディングファームのルール分析専門AIです。FirmデータとPlanデータから3つの断面ブロック（DD / 取引ルール / 出金）を1回で生成してください。
-
-■ 出力形式（厳守・JSONのみ）
-{
-  "k_dd": "断面①全文（HTML）",
-  "k_rules": "断面②全文（HTML）",
-  "k_payout": "断面③全文（HTML）"
-}
-JSONフェンス（\`\`\`json）や説明文を前後に付けない。値内のダブルクオートは \\\\\" でエスケープ。
-
-■ 出力ルール（厳守）
-- HTML形式で出力（テーブルは下記HTMLテーブル形式・本文の改行は <br> ではなく <p>段落</p> 推奨）
-- 主観形容詞・煽り文句・誘導表現・評価表現は一切禁止（例:「重要」「鍵となる」「注意が必要」「求められる」「厳格」「厳しい」等はNG）
-- 事実の記述のみ。「〜に注意が必要」→「〜という仕様である」に言い換え
-- 根拠URL・推測・補完禁止。ソースに記載がなければ用語辞典の不在表記に従う
-- 各断面はテーブルを必ず含むこと（テーブル無しの文章のみ出力は不合格）
-
-${glossaryRulesBlock(glossaryTerms)}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-■ 各断面の構成（厳守）
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-【断面① k_dd: Drawdown】
-1. 冒頭説明文（プラン間のDD設計の違いを概説・2〜3文）
-2. DD比較HTMLテーブル（必須）
-   - 列: プラン名 / 日次損失上限 / 計算基準（日次） / 最大損失上限 / 計算基準（最大）
-   - フェーズ列ルール:
-     * C/FでDD値・計算基準が全て同一のプラン → 1行（フェーズ列不要）
-     * C/Fで差分があるプランのみChallenge/Fundedの2行に分ける
-     * Instant → 常に1行（Fundedのみ）
-     * 全プランがC/F同一 → フェーズ列自体を省略
-   - 計算基準列は ${_ddN2}分類（用語辞典のDD計算基準）のみ記載
-3. 補足注記（リセット時刻、Trailing挙動の詳細、Static基準値の説明等・200字以内）
-4. 合格に向けての注意点（事実ベース・150字以内）
-5. 出金に向けての注意点（事実ベース・150字以内）
-6. 特殊ルール（あれば・100字以内）
-
-【断面② k_rules: 取引ルール】
-1. 冒頭説明文（1〜2文）
-2. Consistency Rule プラン別適用状況HTMLテーブル（必須）
-   - 列: プラン / Challenge / Funded / 備考
-3. 第1部. 全プラン共通の取引制限（200字以内）
-4. 第2部. プラン間で差分のあるルールHTMLテーブル（必須・DD値/DD計算基準は含めない・150字以内）
-5. 合格に向けての注意点（事実ベース・150字以内）
-6. 出金に向けての注意点（事実ベース・150字以内）
-
-【断面③ k_payout: 出金までの流れ】
-1. 冒頭説明文（出金方式・最速/最遅プランの概要・2〜3文）
-2. 出金条件HTMLテーブル（必須）
-   - 列: プラン名 / 頻度 / 最低取引日数（出金） / 一貫性ルール / 最低利益 / 利益分配 / 備考
-3. 最速出金スケジュール（理論値）HTMLテーブル（必須）
-   - 列: プラン名 / ${_cols2.steps} / ${_cols2.pass} / ${_cols2.payout} / ${_cols2.total} / ${_cols2.arrival} / 備考
-4. 補足事項（150字以内）
-
-■ 最短合格・最速出金・トータル日数の算出ロジック（厳守）
-
-【最短合格日数】
-- 各StepのMAX(最低取引日数(合格), 一貫性達成最速日数)の合計
-- 一貫性はBest Day系(X%)のみ ceil(100÷X%)で算出。時間制約系・Loss系は除外
-- 「条件として存在しない」項目はinputから除外（0で埋めない）
-- 全条件が不存在の場合 → フォールバック: 1日 × Step数
-- Instant Funding = 0日
-- 「0日」「制限なし」「即日理論値」は禁止。全条件不存在でも最低1日×Step数
-
-【最速出金日数】
-① X = MAX(最低取引日数(出金), 一貫性(F側))。全不存在→X=0
-② 出金頻度に応じて:
-${freqCalcLines(glossaryTerms)}
-③ 初回限定特例あれば → 最速出金(初回) = X
-
-【トータル日数】
-トータル = 最短合格 + 最速出金
-
-【着金目安】
-出金処理時間（営業日）を最速出金に加算。ソース不明なら「記載なし」
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-■ HTMLテーブル形式（厳守）
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-<table header-row="true" header-column="false">
-<tr><td>項目</td><td>プラン1</td><td>プラン2</td></tr>
-<tr><td>データ1</td><td>値1</td><td>値2</td></tr>
-</table>
-
-■ 最終チェック（出力前に必ず確認）
-□ k_dd / k_rules / k_payout の3キー全てに値がある
-□ 各断面に必須テーブル（HTML <table>）が含まれている
-□ 「Evaluation」「Master」等の表記が残っていない（${(()=>{const T=Array.isArray(glossaryTerms)&&glossaryTerms.length?glossaryTerms:GLOSSARY_SEED;const b={};T.forEach(t=>{if(t.key)b[t.key]=t});return `${b["PHASE_C"]?.term||"Challenge"}/${b["PHASE_F"]?.term||"Funded"}`})()} に変換済み）
-□ 数値に単位が付与されている
-□ DD計算基準は${_ddN2}分類のみ使用
-□ JSON以外のテキスト（フェンス・前置き）を含まない`,
+        system:renderPrompt("koryaku_3sections",{glossaryRules:glossaryRulesBlock(glossaryTerms),ddTypesCount:_ddN2,colSteps:_cols2.steps,colPass:_cols2.pass,colPayout:_cols2.payout,colTotal:_cols2.total,colArrival:_cols2.arrival,freqCalcLines:freqCalcLines(glossaryTerms),phaseLabelCFslash:_phaseCFslash2}),
         messages:[{role:"user",content:`【Firmデータ】\n${firmInfo}\n\n【Planデータ】\n${planTexts}`}]});
 
       const raw=exText(data).replace(/```json|```/g,"").trim();
@@ -3943,50 +4509,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         }).join("\n\n")+`\n\n【Firm共通 価格テーブル】\n${firmPriceData}`;
 
         const data=await callAPI({model:MODEL,max_tokens:4000,
-          system:`プロップファーム プラン比較テーブル生成。Markdownテーブルのみ出力。
-
-列: 項目 | ${planDataList.map(p=>p.name).join(" | ")}
-
-テーブルは2部構成:
-
-【上半分: ルール比較】
-以下の行を順に出力:
-1. ステップ（Challenge段階数）
-2. 利益目標
-3. 日次損失
-4. 最大損失
-5. 利益分配率
-6. 出金頻度
-7. 最短合格
-8. 最速出金
-9. トータル日数
-
-■ 最短合格・最速出金・トータル日数の算出ロジック（厳守）
-
-【最短合格日数】
-- 各StepのMAX(最低取引日数, 一貫性達成最速日数)の合計
-- 一貫性はBest Day系(X%)のみ ceil(100÷X%)で算出。時間制約系・Loss系は除外
-- 「条件として存在しない」項目はinputから除外（0で埋めない）
-- 全条件が不存在の場合 → フォールバック: 1日 × Step数
-- Instant Funding = 0日
-- 「0日」「制限なし」「即日理論値」は禁止。全条件不存在でも最低1日×Step数
-
-【最速出金日数】
-① X = MAX(最低取引日数(出金用), 一貫性(F側))。全不存在→X=0
-② 出金頻度に応じて:
-${freqCalcLines(glossaryTerms)}
-③ 初回限定特例あれば → 最速出金(初回) = X
-
-【トータル日数】
-トータル = 最短合格 + 最速出金
-
-※ 価格テーブル（口座サイズ×価格）は別スロット priceTable の正本に格納済み。プラン比較テーブルには含めない。
-
-ルール:
-- 数値には必ず単位を付与（%、$、日）
-- Challenge/Funded値が異なる場合は「C: X / F: Y」形式で表記
-- 同じ場合はC値のみ記載
-- テーブルのみ出力。説明文は書かない`,
+          system:renderPrompt("plan_comparison",{planColumnNames:planDataList.map(p=>p.name).join(" | "),freqCalcLines:freqCalcLines(glossaryTerms)}),
           messages:[{role:"user",content:planSummary}]});
         setTabField("slotData",prev=>({...prev,planComparison:[{text:exText(data)}]}));
       }
@@ -3998,7 +4521,7 @@ ${freqCalcLines(glossaryTerms)}
   const handleGlossaryAdd=useCallback(async text=>{
     setGlossaryGenerating(true);
     try{const data=await callAPI({model:MODEL,max_tokens:2000,
-      system:'プロップファーム用語辞典編集者。JSON配列のみ出力。各要素:{term,category,definition,explanation,trivia}',
+      system:renderPrompt("glossary_register",{}),
       messages:[{role:"user",content:text}]});
       const arr=JSON.parse(exText(data).replace(/```json|```/g,"").trim());
       const clean=(Array.isArray(arr)?arr:[arr]).map(({key,type,...rest})=>rest);
@@ -4333,6 +4856,10 @@ ${freqCalcLines(glossaryTerms)}
         fj["アフィリエイトURL"]=getSlotText(sd,"アフィリエイトURL")||"";
         fj["クーポン"]=[];
         fj["プラン一覧"]=(firm.plans||[]).map(p=>p.name);
+        // 攻略3断面（k_dd / k_rules / k_payout）— NotebookLM出力 or Sonnet生成のMarkdown/HTMLをそのまま格納
+        const kDd=getSlotText(sd,"k_dd"); if(kDd) fj["攻略_DD"]=kDd;
+        const kRules=getSlotText(sd,"k_rules"); if(kRules) fj["攻略_取引ルール"]=kRules;
+        const kPayout=getSlotText(sd,"k_payout"); if(kPayout) fj["攻略_出金"]=kPayout;
         // 価格マトリクス（構造化JSON）。prices のキーをプラン名→slug に変換して出力
         const ptRaw=getSlotText(sd,"priceTable");
         if(ptRaw){try{
@@ -4355,8 +4882,10 @@ ${freqCalcLines(glossaryTerms)}
         }catch(e){}}
         await writeHugoFile(hugoDir,["data","firms",`${slug}.json`],JSON.stringify(fj,null,2));
         count++;
-        if(fd.targetText){
-          const md=`---\ntype: firm\ntitle: "${firmName}"\nslug: "${slug}"\nfirm: "${slug}"\n---\n\n${fd.targetText}`;
+        // _index.md は targetText 有無に関わらず必ず出力（type: firm が無いと firm/list.html が選ばれない）
+        {
+          const body=fd.targetText||"";
+          const md=`---\ntype: firm\ntitle: "${firmName}"\nslug: "${slug}"\nfirm: "${slug}"\n---\n\n${body}`;
           await writeHugoFile(hugoDir,["content","firms",slug,"_index.md"],md);
           count++;
         }
@@ -4674,6 +5203,7 @@ ${freqCalcLines(glossaryTerms)}
       {toastMsg&&<div style={{position:"fixed",bottom:28,right:28,zIndex:99999,background:toastMsg.startsWith("✓")?C.green:C.red,color:C.bg,padding:"8px 16px",borderRadius:6,fontSize:"0.8rem",fontWeight:700,boxShadow:"0 4px 12px rgba(0,0,0,0.4)"}}>{toastMsg}</div>}
       <BackupModal show={showBackup} onClose={()=>setShowBackup(false)} getCurrentData={getCurrentData} onRestore={restoreData} />
       <MergeModal show={showMerge} onClose={()=>setShowMerge(false)} getCurrentData={getCurrentData} onApplyMerge={applyMerge} />
+      {showPromptManager&&<PromptManagerPage onClose={()=>setShowPromptManager(false)} />}
       <ConsolidateModal show={!!consolidateKeepId} onClose={()=>setConsolidateKeepId(null)} firms={firms} tabDataMap={tabDataMap} initialKeepId={consolidateKeepId} onApply={applyConsolidate} />
 
       {/* Header */}
@@ -4724,6 +5254,8 @@ ${freqCalcLines(glossaryTerms)}
           );
         })()}
         <div style={{flex:1}} />
+        {/* プロンプト管理 */}
+        <Btn color={C.purple} onClick={()=>setShowPromptManager(true)} style={{fontSize:"0.6rem"}} title="プロンプト管理ページ">📝 プロンプト</Btn>
         {/* 保存ドロップダウン */}
         <div style={{display:"flex",gap:1,alignItems:"center"}}>
           <div style={{position:"relative"}}>

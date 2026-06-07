@@ -1,5 +1,8 @@
 {{ define "main" }}
-{{ $slug := .Params.slug | default (path.Base .Path) }}
+{{/* slug 解決: Params.slug → ディレクトリ名 → File.Dir のいずれか */}}
+{{ $slug := .Params.slug }}
+{{ if not $slug }}{{ $slug = path.Base .File.Dir }}{{ end }}
+{{ if not $slug }}{{ $slug = path.Base .Path }}{{ end }}
 {{ $firm := index hugo.Data.firms $slug }}
 
 {{ if $firm }}
@@ -99,6 +102,28 @@
     </div>
   </div>
   {{ end }}
+{{ end }}
+
+{{/* 攻略3断面（NotebookLM/Sonnet出力のMarkdown/HTMLを描画） */}}
+{{ $koryaku := slice
+  (dict "key" "攻略_DD" "title" "Drawdown 攻略")
+  (dict "key" "攻略_取引ルール" "title" "取引ルール 攻略")
+  (dict "key" "攻略_出金" "title" "出金までの流れ 攻略")
+}}
+{{ $hasKoryaku := false }}
+{{ range $koryaku }}{{ if index $firm .key }}{{ $hasKoryaku = true }}{{ end }}{{ end }}
+{{ if $hasKoryaku }}
+<div class="koryaku-wrapper" style="margin-top:2rem">
+  {{ range $koryaku }}
+    {{ $title := .title }}
+    {{ with index $firm .key }}
+    <section class="koryaku-section info-block" style="margin-bottom:1.5rem">
+      <h2>{{ $title }}</h2>
+      <div class="koryaku-body">{{ . | markdownify }}</div>
+    </section>
+    {{ end }}
+  {{ end }}
+</div>
 {{ end }}
 
 {{ with .Content }}

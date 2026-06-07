@@ -1,7 +1,9 @@
 {{ define "main" }}
+{{ $plans := hugo.Data.plans }}
+{{ $count := 0 }}{{ with $plans }}{{ $count = len . }}{{ end }}
 <div class="page-heading">
   <h1>プラン一覧</h1>
-  <p>{{ len (index hugo.Data.plans) }}件のプランを掲載しています</p>
+  <p>{{ $count }}件のプランを掲載しています</p>
 </div>
 
 <div class="table-wrapper">

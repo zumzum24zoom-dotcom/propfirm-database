@@ -1,7 +1,9 @@
 {{ define "main" }}
+{{ $firms := hugo.Data.firms }}
+{{ $count := 0 }}{{ with $firms }}{{ $count = len . }}{{ end }}
 <div class="page-heading">
   <h1>プロップファーム一覧</h1>
-  <p>{{ len (index hugo.Data.firms) }}社のプロップファームを掲載しています</p>
+  <p>{{ $count }}社のプロップファームを掲載しています</p>
 </div>
 
 <div class="cards-grid">

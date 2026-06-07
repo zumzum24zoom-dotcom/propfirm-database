@@ -1,0 +1,238 @@
+{
+  "slug": "hantec-trader",
+  "ファーム名": "Hantec Trader",
+  "拠点国": "Mauritius",
+  "創業年": "2023年",
+  "公式URL": "https://hantectrader.com/",
+  "カテゴリ": "CFD／FX",
+  "日本対応": "日本語HP",
+  "ファームピッチ": "Hantec Marketsが提供するプロップファーム。最大$200,000の資金提供、最大95%の利益分配、リアル市場と同等の約定環境を提供。",
+  "リワードプログラム": "紹介したトレーダーの購入額の10%〜15%を報酬として受け取れるアフィリエイトプログラム（Silver, Gold, Platinumの3ティア制）。",
+  "スケールアップ": "Challenge合格時に元の口座サイズでスタートするか、無料で次の口座サイズへスケールアップ（再度Challenge受験）するかを選択可能。最大$200,000まで。",
+  "ブローカー": "Hantec Markets Mauritius",
+  "プラットフォーム": "MT4／MT5",
+  "Server Time": "GMT+3 (UTC+3, 日本時間-6時間)",
+  "DD Reset": "00:00 Server Time (日本時間 06:00)",
+  "レバレッジ": "テーブル3参照",
+  "手数料": "テーブル4参照",
+  "入金方法": "Bank transfer／Debit/Credit card／PayPal／Cryptocurrencies等",
+  "出金方法": "Bank transfer／Cryptocurrencies／PayPal等",
+  "出金ポリシー": "隔週出金（アドオンで毎週に短縮可能）。Instant24は24時間後から随時。最低出金額はExpress/Enhanced/Instant系で$20、EnhancedXは初期残高の2%、Instant24は3%。Dashboardから申請し1〜2営業日で処理。",
+  "Profit Split": "80%",
+  "※Profit Split": "アドオン（95/5 Profit Split）を購入することで、利益分配率を最大95%に引き上げ可能。",
+  "プラン名リスト": "Express | Enhanced | EnhancedX | Endurance | Instant24 | Instant Lite | Instant Funding |",
+  "プラン比較テーブル": "",
+  "メールアドレス": "",
+  "アフィリエイトURL": "",
+  "クーポン": [],
+  "プラン一覧": [
+    "Express | Enhanced | EnhancedX | Endurance | Instant24 | Instant Lite | Instant Funding |",
+    "",
+    ""
+  ],
+  "価格テーブル": {
+    "rows": [
+      {
+        "size": "$1,000",
+        "prices": {
+          "express": "—",
+          "enhanced": "—",
+          "enhancedx": "—",
+          "endurance": "—",
+          "instant24": "—",
+          "instant-lite": "$19",
+          "instant-funding": "$43"
+        }
+      },
+      {
+        "size": "$2,000",
+        "prices": {
+          "express": "$39",
+          "enhanced": "—",
+          "enhancedx": "—",
+          "endurance": "—",
+          "instant24": "$13",
+          "instant-lite": "$39",
+          "instant-funding": "$86"
+        }
+      },
+      {
+        "size": "$5,000",
+        "prices": {
+          "express": "$59",
+          "enhanced": "$59",
+          "enhancedx": "$49",
+          "endurance": "$29",
+          "instant24": "$17",
+          "instant-lite": "$79",
+          "instant-funding": "$214"
+        }
+      },
+      {
+        "size": "$10,000",
+        "prices": {
+          "express": "$99",
+          "enhanced": "$99",
+          "enhancedx": "$89",
+          "endurance": "$59",
+          "instant24": "$38",
+          "instant-lite": "$129",
+          "instant-funding": "$428"
+        }
+      },
+      {
+        "size": "$25,000",
+        "prices": {
+          "express": "$199",
+          "enhanced": "$219",
+          "enhancedx": "$179",
+          "endurance": "$109",
+          "instant24": "$89",
+          "instant-lite": "$239",
+          "instant-funding": "$1,069"
+        }
+      },
+      {
+        "size": "$50,000",
+        "prices": {
+          "express": "$319",
+          "enhanced": "$359",
+          "enhancedx": "$299",
+          "endurance": "$189",
+          "instant24": "$190",
+          "instant-lite": "$369",
+          "instant-funding": "$2,139"
+        }
+      },
+      {
+        "size": "$100,000",
+        "prices": {
+          "express": "$529",
+          "enhanced": "$599",
+          "enhancedx": "$499",
+          "endurance": "$299",
+          "instant24": "$299",
+          "instant-lite": "$699",
+          "instant-funding": "—"
+        }
+      },
+      {
+        "size": "$200,000",
+        "prices": {
+          "express": "$999",
+          "enhanced": "$1,169",
+          "enhancedx": "$969",
+          "endurance": "$499",
+          "instant24": "—",
+          "instant-lite": "—",
+          "instant-funding": "—"
+        }
+      },
+      {
+        "size": "$1,000",
+        "prices": {
+          "express": "—",
+          "enhanced": "—",
+          "enhancedx": "—",
+          "endurance": "—",
+          "instant24": "—",
+          "instant-lite": "$19",
+          "instant-funding": "$43"
+        }
+      },
+      {
+        "size": "$2,000",
+        "prices": {
+          "express": "$39",
+          "enhanced": "—",
+          "enhancedx": "—",
+          "endurance": "—",
+          "instant24": "$13",
+          "instant-lite": "$39",
+          "instant-funding": "$86"
+        }
+      },
+      {
+        "size": "$5,000",
+        "prices": {
+          "express": "$59",
+          "enhanced": "$59",
+          "enhancedx": "$49",
+          "endurance": "$29",
+          "instant24": "$17",
+          "instant-lite": "$79",
+          "instant-funding": "$214"
+        }
+      },
+      {
+        "size": "$10,000",
+        "prices": {
+          "express": "$99",
+          "enhanced": "$99",
+          "enhancedx": "$89",
+          "endurance": "$59",
+          "instant24": "$38",
+          "instant-lite": "$129",
+          "instant-funding": "$428"
+        }
+      },
+      {
+        "size": "$25,000",
+        "prices": {
+          "express": "$199",
+          "enhanced": "$219",
+          "enhancedx": "$179",
+          "endurance": "$109",
+          "instant24": "$89",
+          "instant-lite": "$239",
+          "instant-funding": "$1,069"
+        }
+      },
+      {
+        "size": "$50,000",
+        "prices": {
+          "express": "$319",
+          "enhanced": "$359",
+          "enhancedx": "$299",
+          "endurance": "$189",
+          "instant24": "$190",
+          "instant-lite": "$369",
+          "instant-funding": "$2,139"
+        }
+      },
+      {
+        "size": "$100,000",
+        "prices": {
+          "express": "$529",
+          "enhanced": "$599",
+          "enhancedx": "$499",
+          "endurance": "$299",
+          "instant24": "$299",
+          "instant-lite": "$699",
+          "instant-funding": "—"
+        }
+      },
+      {
+        "size": "$200,000",
+        "prices": {
+          "express": "$999",
+          "enhanced": "$1,169",
+          "enhancedx": "$969",
+          "endurance": "$499",
+          "instant24": "—",
+          "instant-lite": "—",
+          "instant-funding": "—"
+        }
+      }
+    ],
+    "planCols": [
+      "Express",
+      "Enhanced",
+      "EnhancedX",
+      "Endurance",
+      "Instant24",
+      "Instant Lite",
+      "Instant Funding"
+    ]
+  }
+}

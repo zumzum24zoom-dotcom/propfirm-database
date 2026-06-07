@@ -20,3 +20,11 @@ __pycache__/
 
 # チャットツリー（トークン含む可能性あり）
 99_chat-tree/
+
+# Node modules（一時的に入れた構文チェック用 acorn 等）
+01_tools/node_modules/
+01_tools/package.json
+01_tools/package-lock.json
+
+# Obsidian ワークスペース（個人作業状態）
+.obsidian/workspace.json

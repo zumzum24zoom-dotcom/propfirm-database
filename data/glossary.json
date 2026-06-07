@@ -1,5 +1,19 @@
 [
   {
+    "key": "F21",
+    "term": "プラン名リスト",
+    "type": "label",
+    "category": "Firm項目",
+    "definition": "配下プランの名称のみを列挙したリスト。説明・補足は不要。"
+  },
+  {
+    "key": "F22",
+    "term": "プラン比較テーブル",
+    "type": "label",
+    "category": "Firm項目",
+    "definition": "プラン間のルール・価格を比較したテーブル。"
+  },
+  {
     "key": "P20",
     "term": "Steps",
     "type": "label",
