@@ -251,15 +251,15 @@ const MASTER_DEFS = {
     {pkey:"P04", id:"rd_dailyLossType",term:"日次損失タイプ",       section:"詳細",    hint:"日本語変換済み",                            definition:"日次損失の計算基準。DD分類6パターンのいずれか。"},
     {pkey:"P05", id:"rd_maxLoss",      term:"最大損失",             section:"詳細",    hint:"%",                                         definition:"口座全体で許容される累積損失の上限（%または$）。"},
     {pkey:"P06", id:"rd_maxLossType",  term:"最大損失タイプ",       section:"詳細",    hint:"日本語変換済み",                            definition:"最大損失の計算基準。DD分類6パターンのいずれか。"},
-    {pkey:"P07", id:"rd_consistency",  term:"一貫性ルール",         section:"詳細",    hint:"補足テキスト付き",                          definition:"特定の日の利益が総利益に占める比率を制限するルール（Best Day等）。"},
+    {pkey:"P07", id:"rd_consistency",  term:"一貫性ルール",         section:"詳細",    hint:"補足テキスト付き",                          definition:"特定の日の利益や1回のトレードの利益が総利益に占める比率を制限するルール（Best Day等）。"},
     {pkey:"P08", id:"rd_profitCap",    term:"利益上限",             section:"詳細",    hint:"補足テキスト付き",                          definition:"利益または出金額の上限。"},
-    {pkey:"P09", id:"rd_timeLimit",    term:"時間制限",             section:"詳細",    hint:"補足テキスト付き",                          definition:"チャレンジ合格までの期限（日数または無制限）。"},
+    {pkey:"P09", id:"rd_timeLimit",    term:"時間制限",             section:"詳細",    hint:"補足テキスト付き",                          definition:"チャレンジ合格までの期限、または利益目標達成までの期限、Funded口座自体の有効期限など、トレード可能な期間に対する制限。"},
     {pkey:"P10", id:"rd_news",         term:"ニュース取引制限",     section:"詳細",    hint:"補足テキスト付き",                          definition:"重要経済指標の発表前後における取引の制限。"},
     {pkey:"P11", id:"rd_weekend",      term:"週末トレード制限",     section:"詳細",    hint:"補足テキスト付き",                          definition:"週末の新規トレードおよび金曜クローズ越えのポジション保有に関する制限。"},
     {pkey:"P12", id:"rd_overnight",    term:"オーバーナイト制限",   section:"詳細",    hint:"補足テキスト付き",                          definition:"日をまたいでポジションを保有することへの制限。"},
     {pkey:"P13", id:"rd_ea",           term:"EA制限",               section:"詳細",    hint:"補足テキスト付き",                          definition:"自動売買プログラム（EA）の使用可否・条件。"},
     {pkey:"P14", id:"rd_copyTrade",    term:"コピートレード制限",   section:"詳細",    hint:"補足テキスト付き",                          definition:"他口座・他者の取引を複写することへの制限。"},
-    {pkey:"P15", id:"rd_scalping",     term:"スキャルピング制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"超短時間売買の可否・条件に関する制約。"},
+    {pkey:"P15", id:"rd_scalping",     term:"スキャルピング制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"ポジションの保有時間に関する制約。"},
     {pkey:"P16", id:"rd_stopLoss",     term:"ストップロス制約",     section:"詳細",    hint:"補足テキスト付き",                          definition:"損切り注文の設定義務や推奨に関する制約。"},
     {pkey:"P17", id:"rd_risk",         term:"リスクルール",         section:"詳細",    hint:"補足テキスト付き",                          definition:"含み損（未決済ポジションの評価損）に対する制限。"},
     {pkey:"P18", id:"rd_maxPosition",  term:"最大ポジション制約",   section:"詳細",    hint:"補足テキスト付き",                          definition:"同時に保有できるポジション数やロット数の上限。"},
@@ -758,6 +758,26 @@ function glossaryRulesBlock(glossaryTerms) {
 
 // 辞典のlabelから項目リスト行を動的生成（カテゴリ指定）
 function glossaryItemLines(glossaryTerms, category) {
+  // Firm項目 / Plan項目 は MASTER_DEFS 由来の派生カテゴリ。用語辞典(glossaryTerms)が
+  // 古いラベルに drift していても、ここは必ず正本(MASTER_DEFS)から直接構築する。
+  // これにより prompt→NotebookLM→取込(labelToId)・プレビュー(SLOT_DEFS)のラベルが常に一致する。
+  if (category === "Firm項目" || category === "Plan項目") {
+    const items = [];
+    if (category === "Firm項目") {
+      MASTER_DEFS.dbp01.filter(d => d.fkey && d.definition)
+        .forEach(d => items.push({key:d.fkey, term:d.term, definition:d.definition}));
+    } else {
+      MASTER_DEFS.dbp02.forEach(d => {
+        if (d.pkey && d.definition) items.push({key:d.pkey, term:d.term, definition:d.definition});
+        if (d.extra?.pkey) items.push({key:d.extra.pkey, term:d.extra.term, definition:d.extra.definition});
+      });
+      items.sort((a,b) => {
+        const an = parseInt(a.key.replace(/[Pb]/g,"")), bn = parseInt(b.key.replace(/[Pb]/g,""));
+        return an !== bn ? an - bn : (a.key.includes("b") ? 1 : -1);
+      });
+    }
+    return items.map(t => `${t.key}. ${t.term}${t.definition ? " — " + t.definition : ""}`).join("\n");
+  }
   const T = Array.isArray(glossaryTerms) && glossaryTerms.length ? glossaryTerms : GLOSSARY_SEED;
   return T.filter(t => t.category === category && t.key)
     .map(t => `${t.key}. ${t.term}${t.definition ? " — " + t.definition : ""}`)
@@ -1006,7 +1026,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
       const planLine=plans.length?plans.map(n=>`- ${n}`).join("\n"):"（プラン未登録 — 公式サイトから全プランを収集すること）";
       return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
     }).join("\n\n");
-    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有 / ー（無=そのルールで縛られない＝公式が「なし」明記でも制限の記載が無くても共に「無」 / ※有=条件付き許可・条件の中身を詳細列に / ー=項目が構造上存在しない。「記載なし」「なし（明示）」は使わない）\n   ・C/Fが同値でも省略せず両列に同じ値を記載し差分は「ー」。F非該当（構造上存在しない）のみ F列「ー」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。常体（だ・である調・体言止め）で書き「です・ます」調は禁止。値が「無」の項目は「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」と書く\n  ・利益目標で複数ステップの合格目標が分かれる場合: C列・詳細とも「X% / Y% / Z%」のスラッシュ区切り（例:「8% / 5%」）で書き、「1次/2次/3次」ラベルは使わない\n  ・最低取引日数: C=合格/F=出金は列で自明なので詳細に「（合格）（出金）」括弧書きを付けない。ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは〜」/ F側記載なし→「〜。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」\n- 「禁止行為」は上記ルール表（項目|C|F|差分|詳細）に含めない（別シェイプ）。各プランのルール表の直後に、独立した禁止行為テーブルを追加: 列は必ず 行為名 | 備考 | 行為 | 処分。1行=1行為（行為名=名称 例:HFT / 行為=その行為の具体的説明 / 処分=違反時のペナルティ 例:即時失格 / 備考=極稀にC/Fで可否が異なる場合のみ・通常空）。禁止行為が無ければこのテーブルは省略\n\nプランごとに【ルール表＋（あれば）禁止行為テーブル】を出力。表記は用語辞典に厳密準拠。`;
+    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有 / ー（無=そのルールで縛られない＝公式が「なし」明記でも制限の記載が無くても共に「無」 / ※有=条件付き許可・条件の中身を詳細列に / ー=項目が構造上存在しない。「記載なし」「なし（明示）」は使わない）\n   ・C/Fが同値でも省略せず両列に同じ値を記載し差分は「ー」。F非該当（構造上存在しない）のみ F列「ー」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。常体（だ・である調・体言止め）で書き「です・ます」調は禁止。値が「無」の項目は「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」と書く\n  ・利益目標で複数ステップの合格目標が分かれる場合: C列・詳細とも「X% / Y% / Z%」のスラッシュ区切り（例:「8% / 5%」）で書き、「1次/2次/3次」ラベルは使わない\n  ・最低取引日数: P02（合格）=Challenge専用 / P02b（出金）=Funded専用。各行は自分のフェーズだけ書き反対フェーズに言及しない（P02のF=ー・P02bのC=ーは構造上自明なので打ち消し文「Fundedでは…記載はない」等は書かない）。括弧書き「（合格）（出金）」も不可。P02日数あり→「Challengeでは合格に〔N日〕の取引が必要。」/ P02無→「Challengeでは合格に必要な最低取引日数について明示的に制限する記載はない。」/ P02b日数あり→「Fundedでは出金に〔N日〕の取引が必要。」/ P02b無→「Fundedでは出金に必要な最低取引日数について明示的に制限する記載はない。」\n- 「禁止行為」は上記ルール表（項目|C|F|差分|詳細）に含めない（別シェイプ）。各プランのルール表の直後に、独立した禁止行為テーブルを追加: 列は必ず 行為名 | 備考 | 行為 | 処分。1行=1行為（行為名=名称 例:HFT / 行為=その行為の具体的説明 / 処分=違反時のペナルティ 例:即時失格 / 備考=極稀にC/Fで可否が異なる場合のみ・通常空）。禁止行為が無ければこのテーブルは省略\n\nプランごとに【ルール表＋（あれば）禁止行為テーブル】を出力。表記は用語辞典に厳密準拠。`;
     const done=()=>{setPlanCopied(true);setTimeout(()=>setPlanCopied(false),1500)};
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>{
@@ -1300,7 +1320,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                 const _pCount=MASTER_DEFS.dbp02.filter(d=>d.pkey).length;
                 const _ddStr=ddTypesStr(glossaryTerms);
                 const _diffLine=diffTermLine(glossaryTerms);
-                return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）。複数ステップで合格目標が分かれる場合 C列・詳細は「X% / Y% / Z%」スラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベル禁止\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身を含め、ルール全容を詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと\n  ・最低取引日数: C=合格/F=出金は列で自明。詳細に「（合格）（出金）」括弧書きを付けず、ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは〜」/ F側記載なし→「〜。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」\n- 「禁止行為」は上記ルール表に含めない（別シェイプ）。各プランのルール表の直後に独立した禁止行為テーブルを追加: 列は必ず 行為名 | 備考 | 行為 | 処分。1行=1行為（行為名=名称 / 行為=その行為の説明 / 処分=違反時のペナルティ / 備考=極稀なC/F差異のみ・通常空）。禁止行為が無ければ省略`;
+                return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）。複数ステップで合格目標が分かれる場合 C列・詳細は「X% / Y% / Z%」スラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベル禁止\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身を含め、ルール全容を詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと\n  ・最低取引日数: P02（合格）=Challenge専用 / P02b（出金）=Funded専用。各行は自分のフェーズだけ書き反対フェーズに言及しない（P02のF=ー・P02bのC=ーは構造上自明なので打ち消し文「Fundedでは…記載はない」等は書かない）。括弧書き「（合格）（出金）」も不可。P02日数あり→「Challengeでは合格に〔N日〕の取引が必要。」/ P02無→「Challengeでは合格に必要な最低取引日数について明示的に制限する記載はない。」/ P02b日数あり→「Fundedでは出金に〔N日〕の取引が必要。」/ P02b無→「Fundedでは出金に必要な最低取引日数について明示的に制限する記載はない。」\n- 「禁止行為」は上記ルール表に含めない（別シェイプ）。各プランのルール表の直後に独立した禁止行為テーブルを追加: 列は必ず 行為名 | 備考 | 行為 | 処分。1行=1行為（行為名=名称 / 行為=その行為の説明 / 処分=違反時のペナルティ / 備考=極稀なC/F差異のみ・通常空）。禁止行為が無ければ省略`;
               }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
               <div onClick={()=>setShowPromptMenu(false)}>
                 <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
@@ -3460,7 +3480,7 @@ const PROMPTS_REGISTRY = {
   ・差分=EASE/TRAP（C/Fが異なる）→「Challengeでは～。Fundedでは～」
   ・値が「無」の項目 →「{{phaseLabelCFdot}}共に〔ルール名〕について明示的に制限する記載はない」（片側のみ無なら「Challengeでは、〔ルール名〕について明示的に制限する記載はない」等）
   ・rd_target（利益目標）で複数ステップの合格目標が分かれる場合: C値・詳細とも「X% / Y% / Z%」スラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベルは使わない
-  ・rd_minDays（最低取引日数）: C=合格/F=出金は自明なので詳細に「（合格）（出金）」括弧書きを付けない。ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは～」/ F側記載なし→「～。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」
+  ・rd_minDays（最低取引日数）: P02（合格）=Challenge専用 / P02b（出金）=Funded専用。各行は自分のフェーズだけ書き反対フェーズに言及しない（P02のF=ー・P02bのC=ーは構造上自明なので打ち消し文は書かない）。括弧書き「（合格）（出金）」も不可。P02日数あり→「Challengeでは合格に〔N日〕の取引が必要。」/ P02無→「Challengeでは合格に必要な最低取引日数について明示的に制限する記載はない。」/ P02b日数あり→「Fundedでは出金に〔N日〕の取引が必要。」/ P02b無→「Fundedでは出金に必要な最低取引日数について明示的に制限する記載はない。」
   ※ 禁止行為（rd_prohibited）は上記「Challenge値|Funded値|差分|詳細」形式の対象外（別シェイプ）。slotListの "rd_prohibited" 型定義に従い JSON配列 [{"行為名","備考","行為","処分"}] で出力する。1要素=1行為（行為名=名称 / 行為=説明 / 処分=ペナルティ / 備考=極稀なC/F差異のみ・通常空）。rd_*の早見表・詳細には混在させない
 
 ■ 数値型 (rd_target / rd_minDays / rd_dailyLoss / rd_maxLoss / rd_consistency) の特例
@@ -4285,7 +4305,7 @@ function App() {
   ・差分=EASE/TRAP → 「Challengeでは〜。Fundedでは〜」
   ・値が「無」の項目 → 「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」（片側のみ無なら「Challengeでは、〜について明示的に制限する記載はない」等）
 - 利益目標: 複数ステップで合格目標が分かれる場合、C列は「X% / Y% / Z%」のスラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベルは使わない。詳細も「Challengeの合格目標は X% / Y% / Z%」と書きステップ番号ラベルを付けない
-- 最低取引日数: C=合格要件/F=出金要件は列で自明なので詳細に「（合格）（出金）」の括弧書きを付けない。ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは〜」/ F側記載なし→「〜。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」
+- 最低取引日数: P02（合格）=Challenge専用 / P02b（出金）=Funded専用。各行は自分のフェーズだけ書き、反対フェーズに言及しない（P02のF=ー・P02bのC=ーは構造上自明なので「Fundedでは…記載はない」等の打ち消し文は書かない）。括弧書き「（合格）（出金）」も付けない。P02日数あり→「Challengeでは合格に〔N日〕の取引が必要。」/ P02無→「Challengeでは合格に必要な最低取引日数について明示的に制限する記載はない。」/ P02b日数あり→「Fundedでは出金に〔N日〕の取引が必要。」/ P02b無→「Fundedでは出金に必要な最低取引日数について明示的に制限する記載はない。」
 - 禁止行為は上記ルール表（項目|C|F|差分|詳細）に含めない（別シェイプ）。ルール表の後に、独立した「禁止行為テーブル」を追加する:
   | 行為名 | 備考 | 行為 | 処分 |
   |------|------|------|------|

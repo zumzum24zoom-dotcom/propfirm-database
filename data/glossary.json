@@ -214,7 +214,7 @@
     "term": "一貫性ルール",
     "type": "label",
     "category": "Plan項目",
-    "definition": "特定の日の利益が総利益に占める比率を制限するルール（Best Day等）。"
+    "definition": "特定の日の利益や1回のトレードの利益が総利益に占める比率を制限するルール（Best Day等）。"
   },
   {
     "key": "P08",
@@ -228,7 +228,7 @@
     "term": "時間制限",
     "type": "label",
     "category": "Plan項目",
-    "definition": "チャレンジ合格までの期限（日数または無制限）。"
+    "definition": "チャレンジ合格までの期限、または利益目標達成までの期限、Funded口座自体の有効期限など、トレード可能な期間に対する制限。"
   },
   {
     "key": "P10",
@@ -270,7 +270,7 @@
     "term": "スキャルピング制約",
     "type": "label",
     "category": "Plan項目",
-    "definition": "超短時間売買の可否・条件に関する制約。"
+    "definition": "ポジションの保有時間に関する制約。"
   },
   {
     "key": "P16",
