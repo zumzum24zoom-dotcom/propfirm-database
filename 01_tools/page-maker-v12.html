@@ -980,10 +980,19 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   ];
   const hasSections=(sections||[]).length>0;
 
-  // 選択アイテム名を単純リストでコピー（種別問わず）
-  // 選択Firmのコピー
+  // 選択アイテムを Firm名＋配下Plan の階層テキストでクリップボードへコピー
+  // - Firmにチェック → そのFirm名＋全Planを出力
+  // - Plan単独チェック（親Firm未チェック）→ 親Firm名＋チェックしたPlanのみを出力
   const copyChecked=()=>{
-    const lines=firms.filter(f=>checked[f.id]).map(f=>getFirmName(f.id,tabDataMap)||f.name||"（未命名）");
+    const lines=[];
+    firms.forEach(f=>{
+      const firmChecked=!!checked[f.id];
+      const plans=f.plans||[];
+      const selPlans=firmChecked?plans:plans.filter(p=>checked[p.id]);
+      if(!firmChecked&&selPlans.length===0)return;
+      lines.push(getFirmName(f.id,tabDataMap)||f.name||"（未命名）");
+      selPlans.forEach(p=>lines.push(`  - ${p.name||"（未命名プラン）"}`));
+    });
     if(!lines.length)return;
     const text=lines.join("\n");
     const done=()=>{setCopied(true);setTimeout(()=>{setCopied(false);setChecked({})},1500)};
