@@ -31,3 +31,7 @@ __pycache__/
 
 # Obsidian ワークスペース（個人作業状態）
 .obsidian/workspace.json
+
+# 個人計算ツール（非公開: undisclosed リポジトリへ分離済み）
+01_tools/**/手取り逆算*.html
+01_tools/_archive/手取り逆算*.html
