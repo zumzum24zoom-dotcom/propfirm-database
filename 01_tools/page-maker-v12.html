@@ -2213,12 +2213,47 @@ function ProhibitEditor({items,setItems}){
   );
 }
 
-function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopyRuleSlot}){
+function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopyRuleSlot,allPlans,currentPlanId,onUpdatePlanSlot}){
   const [open,setOpen]=useState(null); // 編集中のslotId
   const [draft,setDraft]=useState({c:"",f:"",diff:"ー",note:""});
   const [prohibitItems,setProhibitItems]=useState([]); // 禁止行為（別シェイプ）編集用 items
   const [copySel,setCopySel]=useState({}); // コピー先プランID選択
   const [copied,setCopied]=useState(false);
+  const [cmpTab,setCmpTab]=useState("quick"); // 全プラン比較タブ: quick=早見表 / detail=詳細
+  const [rowDrafts,setRowDrafts]=useState({}); // 他プランのインライン編集ドラフト {planId:{c,f,diff,note}}
+  // 指定プランの指定スロットの値を取り出してパース（禁止行為は別シェイプ）
+  const planVal=(pl,sid)=>{
+    const fr=pl&&pl.slotData?pl.slotData[sid]:null;if(!fr||!fr.length)return null;
+    const m=fr.find(f=>f.merged);const txt=m?m.text:(fr[0]?.text||"");if(!txt)return null;
+    if(sid===PROHIBIT_ID){const its=parseProhibit(txt).items;return{prohibit:true,count:its.length,names:its.map(i=>i.行為名).filter(Boolean).join(" / ")};}
+    return parseRd(txt);
+  };
+  const cmpTh=(w)=>({padding:"3px 5px",textAlign:w?"center":"left",color:C.textDim,fontWeight:700,fontSize:"0.55rem",whiteSpace:"nowrap",borderBottom:`1px solid ${C.border}`,...(w?{width:w}:{})});
+  const cmpTd=(w)=>({padding:"3px 5px",color:C.text,verticalAlign:"top",fontSize:"0.6rem",...(w?{width:w,textAlign:"center"}:{})});
+  const cmpInp={background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 4px",fontSize:"0.6rem",fontFamily:font,outline:"none"};
+  // 比較表を開いたとき、他プランのインライン編集ドラフトを各プランの現在値で初期化（item切替時のみ）
+  useEffect(()=>{
+    if(!open||open===PROHIBIT_ID){setRowDrafts({});return;}
+    const d={};
+    (allPlans||[]).forEach(pl=>{
+      if(pl.id===currentPlanId)return;
+      const pv=planVal(pl,open);
+      d[pl.id]=(pv&&!pv.prohibit)?{c:pv.c||"",f:pv.f||"",diff:pv.diff||"ー",note:pv.note||""}:{c:"",f:"",diff:"ー",note:""};
+    });
+    setRowDrafts(d);
+  },[open]);
+  // インライン行ドラフト: 編集中プランは draft、他プランは rowDrafts
+  const rowOf=(pl)=>pl.id===currentPlanId?draft:(rowDrafts[pl.id]||{c:"",f:"",diff:"ー",note:""});
+  const setRowOf=(pl,patch)=>{
+    if(pl.id===currentPlanId){setDraft(p=>({...p,...patch}));}
+    else{setRowDrafts(prev=>({...prev,[pl.id]:{...(prev[pl.id]||{c:"",f:"",diff:"ー",note:""}),...patch}}));}
+  };
+  // 他プラン行を確定（編集中プランは下の「保存」で確定するためスキップ）
+  const commitRow=(pl)=>{
+    if(pl.id===currentPlanId||!onUpdatePlanSlot)return;
+    const d=rowDrafts[pl.id];if(!d)return;
+    onUpdatePlanSlot(pl.id,open,serializeRd(normalize(open,d)));
+  };
 
   const slots=SLOT_DEFS.dbp02.filter(s=>s.id.startsWith("rd_"));
   const getVal=id=>{
@@ -2356,23 +2391,68 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
                         {val&&<Btn color={C.red} onClick={()=>{setSlotData(p=>({...p,[slot.id]:[]}));cancel();}}
                           style={{padding:"2px 8px",fontSize:"0.65rem"}}>クリア</Btn>}
                       </div>
-                      {copyTargets&&copyTargets.length>0&&(
-                        <div style={{marginTop:8,paddingTop:8,borderTop:`1px dashed ${C.border}`,display:"flex",flexDirection:"column",gap:4}}>
-                          <span style={{fontSize:"0.6rem",color:C.textDim}}>この項目の値を他プランへコピー（現在の編集値を上書き）</span>
-                          <div style={{display:"flex",flexWrap:"wrap",gap:4,alignItems:"center"}}>
-                            {(()=>{const allOn=copyTargets.every(t=>copySel[t.id]);return(
-                              <span onClick={()=>{const n={};if(!allOn)copyTargets.forEach(t=>n[t.id]=true);setCopySel(n);}}
-                                style={{cursor:"pointer",fontSize:"0.58rem",color:allOn?C.accent:C.textDim,border:`1px solid ${allOn?C.accent:C.border}`,borderRadius:3,padding:"1px 6px"}}>{allOn?"全解除":"全選択"}</span>);})()}
-                            {copyTargets.map(t=>{const on=!!copySel[t.id];return(
-                              <span key={t.id} onClick={()=>setCopySel(p=>({...p,[t.id]:!p[t.id]}))}
-                                style={{cursor:"pointer",fontSize:"0.6rem",color:on?C.bg:C.text,background:on?C.accent:"transparent",border:`1px solid ${on?C.accent:C.border}`,borderRadius:3,padding:"1px 6px",whiteSpace:"nowrap"}}>{t.name||t.id}</span>);})}
+                      {allPlans&&allPlans.length>0&&(()=>{
+                        const others=allPlans.filter(pl=>pl.id!==currentPlanId);
+                        const allOn=others.length>0&&others.every(pl=>copySel[pl.id]);
+                        const isProhibitOpen=slot.id===PROHIBIT_ID;
+                        const editable=!isProhibitOpen; // 禁止行為（別シェイプ）はインライン編集対象外＝読取専用
+                        // 差分セレクトの即時コミット（onChangeで確定）
+                        const commitDiff=(pl,v)=>{if(pl.id===currentPlanId||!onUpdatePlanSlot)return;const d={...(rowDrafts[pl.id]||{c:"",f:"",diff:"ー",note:""}),diff:v};onUpdatePlanSlot(pl.id,open,serializeRd(normalize(open,d)));};
+                        return (
+                        <div style={{marginTop:8,paddingTop:8,borderTop:`1px dashed ${C.border}`,display:"flex",flexDirection:"column",gap:5}}>
+                          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:6,flexWrap:"wrap"}}>
+                            <span style={{fontSize:"0.6rem",color:C.textDim}}>全プランの「{slot.label}」 — {editable?"各セルを直接編集（他プランは自動保存）／":""}チェック → 現在の編集値で一括上書き</span>
+                            <div style={{display:"flex",gap:3}}>
+                              {[["quick","早見表"],["detail","詳細"]].map(([k,lbl])=>(
+                                <span key={k} onClick={()=>setCmpTab(k)} style={{cursor:"pointer",fontSize:"0.58rem",fontWeight:700,padding:"2px 9px",borderRadius:3,color:cmpTab===k?C.bg:C.textDim,background:cmpTab===k?C.accent:"transparent",border:`1px solid ${cmpTab===k?C.accent:C.border}`}}>{lbl}</span>
+                              ))}
+                            </div>
+                          </div>
+                          <div style={{border:`1px solid ${C.border}`,borderRadius:4,overflowX:"auto"}}>
+                            <table style={{width:"100%",borderCollapse:"collapse"}}>
+                              <thead><tr>
+                                <th style={cmpTh(22)}><span onClick={()=>{const n={...copySel};if(allOn)others.forEach(pl=>delete n[pl.id]);else others.forEach(pl=>n[pl.id]=true);setCopySel(n);}} style={{cursor:"pointer",color:allOn?C.accent:C.textDim}} title={allOn?"全解除":"全選択"}>{allOn?"☑":"☐"}</span></th>
+                                <th style={cmpTh()}>プラン</th>
+                                {cmpTab==="quick"
+                                  ?<React.Fragment><th style={cmpTh(74)}>C</th><th style={cmpTh(74)}>F</th><th style={cmpTh(66)}>差</th><th style={{...cmpTh(),width:"100%"}}/></React.Fragment>
+                                  :<th style={{...cmpTh(),width:"100%"}}>詳細</th>}
+                              </tr></thead>
+                              <tbody>
+                                {allPlans.map(pl=>{
+                                  const isCur=pl.id===currentPlanId;
+                                  const pv=planVal(pl,slot.id);
+                                  const on=!!copySel[pl.id];
+                                  const r=rowOf(pl);
+                                  const diffCol=v=>v==="EASE"?C.blue:v==="TRAP"?C.red:C.textDim;
+                                  return (
+                                  <tr key={pl.id} style={{borderTop:`1px solid ${C.border}`,background:isCur?C.accentDim:"transparent"}}>
+                                    <td style={{...cmpTd(22)}}>{isCur?<span style={{color:C.accent}}>●</span>:<span onClick={()=>setCopySel(p=>({...p,[pl.id]:!p[pl.id]}))} style={{cursor:"pointer",color:on?C.accent:C.textDim}}>{on?"☑":"☐"}</span>}</td>
+                                    <td style={{...cmpTd(),color:isCur?C.accent:C.text,fontWeight:isCur?700:400,whiteSpace:"nowrap"}}>{pl.name||pl.id}{isCur&&" ●"}</td>
+                                    {cmpTab==="quick"
+                                      ?(editable?<React.Fragment>
+                                        <td style={cmpTd(74)}><input value={r.c} onChange={e=>setRowOf(pl,{c:e.target.value})} onBlur={()=>commitRow(pl)} style={{...cmpInp,width:64}} placeholder="—"/></td>
+                                        <td style={cmpTd(74)}><input value={r.f} onChange={e=>setRowOf(pl,{f:e.target.value})} onBlur={()=>commitRow(pl)} style={{...cmpInp,width:64}} placeholder="—"/></td>
+                                        <td style={cmpTd(66)}><select value={r.diff||"ー"} onChange={e=>{setRowOf(pl,{diff:e.target.value});commitDiff(pl,e.target.value);}} style={{...cmpInp,width:58,color:diffCol(r.diff)}}>{["ー","EASE","TRAP"].map(o=><option key={o} value={o}>{o}</option>)}</select></td>
+                                        <td style={cmpTd()}/>
+                                      </React.Fragment>:<React.Fragment>
+                                        <td colSpan={3} style={{...cmpTd(),color:pv?C.text:C.textDim}}>{pv?(pv.prohibit?pv.count+"件":(pv.c||"—")):"（未）"}</td>
+                                        <td style={cmpTd()}/>
+                                      </React.Fragment>)
+                                      :(editable
+                                        ?<td style={{...cmpTd(),width:"100%"}}><textarea value={r.note} onChange={e=>setRowOf(pl,{note:e.target.value})} onBlur={()=>commitRow(pl)} rows={2} style={{...cmpInp,width:"100%",resize:"vertical",lineHeight:1.4}} placeholder="詳細…"/></td>
+                                        :<td style={{...cmpTd(),width:"100%",whiteSpace:"pre-wrap",lineHeight:1.5,color:pv?C.text:C.textDim}}>{pv?(pv.prohibit?(pv.names||"—"):(pv.note||"—")):"（未入力）"}</td>)}
+                                  </tr>);
+                                })}
+                              </tbody>
+                            </table>
                           </div>
                           <div>
                             <Btn color={C.accent} onClick={doCopy} disabled={!Object.values(copySel).some(Boolean)}
-                              style={{padding:"2px 10px",fontSize:"0.65rem"}}>{copied?"コピー済 ✓":"▷ 選択プランへコピー"}</Btn>
+                              style={{padding:"2px 10px",fontSize:"0.65rem"}}>{copied?"コピー済 ✓":"▷ 選択プランへ現在値をコピー"}</Btn>
                           </div>
                         </div>
-                      )}
+                        );
+                      })()}
                     </td>
                   </tr>
                 )}
@@ -2714,7 +2794,7 @@ function KoryakuPreview({slotData}){
   </div>;
 }
 
-function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans,planNames,parentFirmSlotData,parentPlanNames,activePlanName,activeType,parentFirmId,firstPlanId,activePlanId,copyTargets,onCopyRuleSlot,onNavigateTab}) {
+function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans,planNames,parentFirmSlotData,parentPlanNames,activePlanName,activeType,parentFirmId,firstPlanId,activePlanId,copyTargets,onCopyRuleSlot,onNavigateTab,allPlans,onUpdatePlanSlot}) {
   const [mergingSlot,setMergingSlot]=useState(null);
   const [editModal,setEditModal]=useState(null);
   const [showRuleTable,setShowRuleTable]=useState(false);
@@ -2977,7 +3057,7 @@ ${slotList}
           ?<PlanPreview slotData={slotData} planName={activePlanName} parentFirmSlotData={parentFirmSlotData} parentPlanNames={parentPlanNames}/>
           :<KoryakuPreview slotData={slotData}/>)
         :templateMode==="dbp02"&&showRuleTable
-        ?<RuleTableEditor key={activePlanId||"plan"} slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} copyTargets={copyTargets} onCopyRuleSlot={onCopyRuleSlot} />
+        ?<RuleTableEditor key={activePlanId||"plan"} slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} copyTargets={copyTargets} onCopyRuleSlot={onCopyRuleSlot} allPlans={allPlans} currentPlanId={activePlanId} onUpdatePlanSlot={onUpdatePlanSlot} />
         :templateMode==="dbp01"&&showPriceMatrix
         ?<PriceMatrixEditor slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} planNames={planNames} />
         :(<React.Fragment>
@@ -4245,6 +4325,16 @@ function App() {
         next[pid]={...cur,slotData:{...(cur.slotData||{}),[slotId]:[{text:value}]}};
       });
       return next;
+    });
+  },[]);
+  // 指定プランの指定スロットを直接更新（全プラン比較表のインライン編集用）
+  const updatePlanSlot=useCallback((planId,slotId,value)=>{
+    if(!planId||!slotId)return;
+    setTabDataMap(prev=>{
+      const cur=prev[planId]||{archives:[],targetText:"",slotData:{},templateMode:"dbp02"};
+      const sd={...(cur.slotData||{})};
+      if(value&&value.trim())sd[slotId]=[{text:value}];else sd[slotId]=[];
+      return {...prev,[planId]:{...cur,slotData:sd}};
     });
   },[]);
 
@@ -5786,6 +5876,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
             firstPlanId={(firms.find(f=>f.id===activeTabId)?.plans||[])[0]?.id||null}
             activePlanId={activeType==="plan"?activeTabId:null}
             copyTargets={(()=>{const pf=firms.find(f=>(f.plans||[]).some(p=>p.id===activeTabId));return pf?(pf.plans||[]).filter(p=>p.id!==activeTabId).map(p=>({id:p.id,name:p.name})):[];})()}
+            allPlans={(()=>{const pf=firms.find(f=>(f.plans||[]).some(p=>p.id===activeTabId));return pf?(pf.plans||[]).map(p=>({id:p.id,name:p.name,slotData:(tabDataMap[p.id]?.slotData||{})})):[];})()}
+            onUpdatePlanSlot={updatePlanSlot}
             onCopyRuleSlot={copyRuleSlotToPlans}
             onNavigateTab={navigateTab} />
         ):(
