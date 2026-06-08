@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <!--
 Page Maker v0.9
+2026-06-08 ver.39: 全プラン一括取込を追加 — Firmタブの取込エリアに「全プラン」ボタン新設。「## …（プラン名）」区切りの複数早見表を貼ると、各セクションからプランを生成（同名は上書き）し、Steps+P01〜P19のC|F|差分|詳細を各プランのrd_*へ一括投入。P02/P02bはrd_minDaysにマージ。既存単一テーブルパーサと同ロジックを純粋関数化して再利用。
+2026-06-08 ver.38: 早見表エディタの入力フォーカス外れを修正（ValueFieldをモジュールスコープへ引き上げ・1文字毎の再マウント解消）。プラン切替時に編集状態が残り保存で別プランを上書きするバグを修正（RuleTableEditorにプランIDのkeyを付与しリセット）。同バグを安全な機能に転用 — 編集中の項目値を「選択プランへコピー（複数可・全選択トグル付き）」する明示ボタンを追加。
+2026-06-08 ver.37: 早見表の値モデル簡素化＆配色刷新 — C/Fセルの値を「有/※有/無/ー」に整理（「記載なし」「なし（明示）」を廃止し"縛られない"は全て「無」に一本化）。「ー（同）」運用を廃止し同値でも両列に同じ値を素直に記載・差分は自動で「ー」。配色を基本白に変更し差分（EASE/TRAP）行のみ行全体を青/赤で着色。詳細列は常体（です・ます禁止）、「無」項目は「〜について明示的に制限する記載はない」で統一。NotebookLM出力プロンプト3系統＋用語辞典（不在表記/差分）を同方針に更新。ソース定義v09に対応。
 2026-06-06 ver.36: パネル表示トグル追加 — ヘッダーに3つのアイコン（縦3分割表現・左/中央/右）。各クリックで対応パネルの表示/非表示を切替。localStorage 永続化。中央と右の同時OFFはガード。価格テーブル「＋ 口座サイズ行」が直前行の size を初期値に引き継ぐよう修正。
 2026-06-06 ver.35: 取込ワークフロー再編 — 貼付エリアに「整形」ボタン追加（AIで格納用フォーマットに変換し取込エリアへ直送）。取込エリアに「⇧」ボタン追加（取込→貼付の差し戻し・整形/翻訳のやり直し用）。「表取込」を「格納」にリネーム。自動ボタンは保険として残置。整形プロンプトは Firm/Plan で出力形式を切替（Firmは F01〜F22 パイプ表、Planは 項目|C|F|差分|詳細 表）。
 2026-05-30 ver.34: Stepsスロット追加（DBP_02 P20）・ボタン整理（ヘッダーデータ管理ドロップダウン化・縦タブ選択/プロンプトバー統合・個別削除ボタン廃止→選択削除に統一・Plan行チェックボックス追加）
@@ -637,7 +640,7 @@ ${ruleDetailsList || "（ルール詳細リストが未格納です。先にPlan
 □ 「Evaluation」「Master」等の表記が残っていない（すべて「Challenge」「Funded」に変換済み）
 □ すべての数値に単位が付与されている
 □ 最低取引日数の括弧が全角（）になっている（合格要件・出金要件ともに）
-□ 不在表記（ー / 記載なし）が正しく区別されている
+□ 不在表記（無=縛られない / ー=構造上非該当）が正しく区別されている（「記載なし」は使わない）
 □ 主観形容詞・煽り文句・誘導表現が一切ない
 □ テーブルはMarkdown table形式（| 列1 | 列2 |）
 □ DD計算基準は${_ddN}分類のみ使用
@@ -670,12 +673,11 @@ const GLOSSARY_BASE = [
   {key:"DD_HIGHER",term:"Trailing（Higher B or E EOD）",type:"notation",category:"DD計算基準",definition:"前日終了時点の残高と有効証拠金のうち高い方を基準に追従するドローダウン方式。判定根拠: previous day's balance or equity / higher of balance or equity。"},
   {key:"PHASE_C",term:"Challenge",type:"notation",category:"フェーズ",definition:"評価フェーズの統一表記。Evaluation／Assessment／Phase／Step／審査段階は全てこれに変換する。"},
   {key:"PHASE_F",term:"Funded",type:"notation",category:"フェーズ",definition:"資金提供後フェーズの統一表記。Master／Live／Funded Account／Real Accountは全てこれに変換する。"},
-  {key:"ABS_NONE",term:"なし（明示）",type:"notation",category:"不在表記",definition:"ソースに「なし（No／None／0）」と明記されている状態。条件が存在しないと断定できる。"},
-  {key:"ABS_NA",term:"ー",type:"notation",category:"不在表記",definition:"その項目自体が構造上適用されない状態（N/A）。全角ハイフンで表記し、「記載なし」とは区別する。"},
-  {key:"ABS_UNKNOWN",term:"記載なし",type:"notation",category:"不在表記",definition:"一次ソースを調査したが該当情報が見つからない状態。条件不在の「ー」とは区別する。絵文字は付けない。"},
+  {key:"ABS_NONE",term:"無",type:"notation",category:"不在表記",definition:"そのルールで縛られない状態。公式が「なし」と明記している場合も、公式に制限の記載が見つからない場合も共に「無」に一本化する（旧「なし（明示）」「記載なし」は廃止）。詳細列の書き出しは「～について明示的に制限する記載はない」。"},
+  {key:"ABS_NA",term:"ー",type:"notation",category:"不在表記",definition:"その項目自体が構造上適用されない状態（N/A）。全角ハイフンで表記し、「無」とは区別する（例: Funded側に合格目標が存在しない）。"},
   {key:"DIFF_EASE",term:"EASE",type:"notation",category:"早見表差分",definition:"早見表でFunded側がChallenge側より緩い（トレーダーに有利な）ことを示す差分判定。"},
   {key:"DIFF_TRAP",term:"TRAP",type:"notation",category:"早見表差分",definition:"早見表でFunded側がChallenge側より厳しい（トレーダーに不利な）ことを示す差分判定。"},
-  {key:"DIFF_NONE",term:"ー",type:"notation",category:"早見表差分",definition:"早見表でChallenge／Fundedが同値、またはFunded側が「ー」で差分がないことを示す。"},
+  {key:"DIFF_NONE",term:"ー",type:"notation",category:"早見表差分",definition:"早見表でChallenge／Fundedが同値、またはFunded側が構造上非該当（ー）で差分がないことを示す。同値でも省略せず両列に同じ値を記載する。"},
   {key:"FREQ_ONDEMAND",term:"随時",type:"notation",category:"出金頻度",definition:"出金申請に頻度制約がない方式。最速出金計算では待機0日として扱う。"},
   {key:"FREQ_WEEKLY",term:"毎週",type:"notation",category:"出金頻度",definition:"週1回の出金頻度。最速出金計算では待機をMAX(7日, X)とする。"},
   {key:"FREQ_BIWEEKLY",term:"隔週",type:"notation",category:"出金頻度",definition:"2週に1回の出金頻度。最速出金計算では待機をMAX(14日, X)とする。"},
@@ -735,10 +737,11 @@ function glossaryRulesBlock(glossaryTerms) {
 - ${dd}
 - 括弧は全角（）。リセット時刻・計算詳細は補足注記に記載しテーブルの基準列には書かない。
 
-■ 不在表記（厳密に区別）
-- ${term("ABS_NONE")}: ソースに「なし」と明記されている（条件が存在しないと断定できる）
-- ${term("ABS_NA")}: 該当項目自体が構造上適用されない（全角ハイフン）
-- ${term("ABS_UNKNOWN")}: 一次ソースに記述がない。絵文字は付けない。「${term("ABS_NA")}」と混同しない。
+■ 制限ルールの有無表記（早見表C/Fセルの値）
+- 有: ファームが明示的に制限・条件を課している
+- ※有: 条件付きで許可（条件の中身は詳細列にルール全容を書く）
+- 無: そのルールで縛られない。公式が「なし」と明記している場合も、公式に制限の記載が見つからない場合も、共に「無」に一本化する（旧「なし（明示）」「記載なし」は廃止）
+- ${term("ABS_NA")}: 該当項目自体が構造上適用されない（全角ハイフン。例: Funded側に合格目標が存在しない）。「無」とは区別する
 
 ■ 最低取引日数の表記（全角括弧）
 - 合格要件: ${term("P02")}
@@ -746,6 +749,7 @@ function glossaryRulesBlock(glossaryTerms) {
 
 ■ 早見表の差分判定
 - ${diff}（EASE=Funded側が緩い／TRAP=Funded側が厳しい）
+- C/Fが同値なら差分は「ー」。同値でも省略せず両列に同じ値を素直に記載する（旧「F列をーにする」運用は廃止）
 
 ■ 出金頻度
 - ${freq}
@@ -1002,7 +1006,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
       const planLine=plans.length?plans.map(n=>`- ${n}`).join("\n"):"（プラン未登録 — 公式サイトから全プランを収集すること）";
       return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
     }).join("\n\n");
-    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身を含め、ルール全容を詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載\n\nテーブルのみ・プランごとに1枚ずつ出力。表記は用語辞典に厳密準拠。`;
+    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有 / ー（無=そのルールで縛られない＝公式が「なし」明記でも制限の記載が無くても共に「無」 / ※有=条件付き許可・条件の中身を詳細列に / ー=項目が構造上存在しない。「記載なし」「なし（明示）」は使わない）\n   ・C/Fが同値でも省略せず両列に同じ値を記載し差分は「ー」。F非該当（構造上存在しない）のみ F列「ー」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。常体（だ・である調・体言止め）で書き「です・ます」調は禁止。値が「無」の項目は「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」と書く\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / F列=「ー」・差分=「ー」（同値ルールの例外。C列の列挙をF列に複製しない） / 詳細列=各禁止行為を「名称：説明」形式で全件記載\n\nテーブルのみ・プランごとに1枚ずつ出力。表記は用語辞典に厳密準拠。`;
     const done=()=>{setPlanCopied(true);setTimeout(()=>setPlanCopied(false),1500)};
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>{
@@ -1632,7 +1636,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onFormatToTarget,onArchi
 // ═══════════════════════════════════════════════════
 // 取り込み対象エリア
 // ═══════════════════════════════════════════════════
-function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,onClear,onAdd,activeSlot,onSelectText,onSendToPaste}) {
+function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,onClear,onAdd,activeSlot,onSelectText,onSendToPaste,activeType,onImportPlanTables}) {
   // 取込エリア内で選択し終えた瞬間に文字を記憶（スロットclickで選択が消えても保持される）
   const captureSel=()=>{const s=window.getSelection()?.toString();if(s&&s.trim())onSelectText&&onSelectText(s);};
   return (
@@ -1651,6 +1655,8 @@ function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,o
           </Btn>
           <Btn color={C.green} disabled={!text} onClick={()=>onTableParse&&onTableParse(text)}
             style={{padding:"1px 8px",fontSize:"0.68rem"}} title="整形済み表を決定的にスロット格納（AI不使用・100%精度）">格納</Btn>
+          {activeType==="firm"&&<Btn color={C.blue} disabled={!text} onClick={()=>onImportPlanTables&&onImportPlanTables(text)}
+            style={{padding:"1px 8px",fontSize:"0.68rem"}} title="「## …（プラン名）」区切りの複数早見表から、プランを一括生成し各値まで投入">全プラン</Btn>}
           <Btn color={C.accent} disabled={!activeSlot} onClick={onAdd} title={activeSlot?`${activeSlot}に取り込み`:"スロットを選択してください"}>
             ⇨
           </Btn>
@@ -1887,9 +1893,9 @@ const NUM_IDS=new Set(["rd_target","rd_minDays","rd_dailyLoss","rd_maxLoss","rd_
 const UNIT_MAP={rd_target:"%",rd_minDays:"日",rd_dailyLoss:"%",rd_maxLoss:"%",rd_consistency:"%"};
 const LOSSTYPE_IDS=new Set(["rd_dailyLossType","rd_maxLossType"]); // 損失タイプ選択（DD6分類）
 const PROHIBIT_ID="rd_prohibited"; // 禁止行為＝行為名列挙
-const LOSSTYPE_OPTS=["Static","Trailing（Balance EOD）","Trailing（Balance HWM）","Trailing（Equity EOD）","Trailing（Equity HWM）","Trailing（Higher B or E EOD）","無","記載なし"];
-const YESNO3_OPTS=["有","無","※有","記載なし"]; // その他の制約
-const NUM_SPECIAL=["無","記載なし"]; // 数値型でも選べる特殊値
+const LOSSTYPE_OPTS=["Static","Trailing（Balance EOD）","Trailing（Balance HWM）","Trailing（Equity EOD）","Trailing（Equity HWM）","Trailing（Higher B or E EOD）","無","ー"];
+const YESNO3_OPTS=["有","無","※有","ー"]; // 制限ルールの有無（無=制限なし／※有=条件付き／ー=構造上非該当）
+const NUM_SPECIAL=["無","ー"]; // 数値型でも選べる特殊値（無=制限なし／ー=構造上非該当）
 const DIFF_OPTS=["ー","EASE","TRAP"];
 
 function parseRd(val){
@@ -1900,6 +1906,65 @@ function serializeRd({c,f,diff,note}){
   const parts=[c||"",f||"",diff||"",note||""];
   while(parts.length&&!parts[parts.length-1])parts.pop();
   return parts.join("|");
+}
+// 複数プラン早見表テキストを「## …（プラン名）」見出しで分割（全プラン一括取込用）
+function splitPlanSections(text){
+  const rawLines=(text||"").split("\n");
+  const sections=[];let cur=null;
+  for(const raw of rawLines){
+    const line=raw.trim();
+    const m=line.match(/^#{1,6}\s+(.*)$/);
+    if(m){
+      let name=m[1].trim();
+      const pm=name.match(/[（(]\s*([^）)]+?)\s*[）)]\s*$/); // 括弧内をプラン名に
+      if(pm)name=pm[1].trim();
+      else name=name.replace(/ルール早見表/g,"").replace(/^[-–—\s]+|[-–—\s]+$/g,"").trim();
+      cur={name,bodyLines:[]};sections.push(cur);
+    } else if(cur){
+      cur.bodyLines.push(raw);
+    }
+  }
+  return sections.filter(s=>s.name).map(s=>({name:s.name,body:s.bodyLines.join("\n")}));
+}
+// 1プラン分の早見表（項目|C|F|差分|詳細）を rd_* スロット値へ。handleTableParse の rd_* 分岐と同ロジック
+function parsePlanRuleTable(body){
+  const text=(body||"").replace(/￥/g,"¥").replace(/＄/g,"$");
+  const parseRow=line=>{const c=line.split("|").map(c=>c.trim());if(c[0]==="")c.shift();if(c[c.length-1]==="")c.pop();return c;};
+  const rawLines=text.split("\n").map(l=>l.trim()).filter(l=>l);
+  const allLines=[];
+  for(let i=0;i<rawLines.length;i++){let line=rawLines[i];if(line.startsWith("|")){while(!line.endsWith("|")&&i+1<rawLines.length){i++;line=line+" "+rawLines[i];}}allLines.push(line);}
+  const tableLines=allLines.filter(l=>l.startsWith("|"));
+  const labelToId={};
+  SLOT_DEFS.dbp02.filter(s=>s.section==="詳細").forEach(s=>{labelToId[s.label]=s.id;});
+  labelToId["Steps"]="steps";
+  labelToId["最低取引日数"]="rd_minDays";
+  labelToId["最低取引日数（合格）"]="rd_minDays";
+  labelToId["最低取引日数（出金）"]="rd_minDays";
+  const stripPKey=s=>s.replace(/^P\d+[a-z]*[:：.．]\s*/,"").trim();
+  const updates={};let stored=0;
+  tableLines.forEach(line=>{
+    const cells=parseRow(line);
+    if(cells.length<2)return;
+    const item=stripPKey(cells[0]);
+    if(item==="項目"||item==="項目名"||/^[-:\s]+$/.test(item))return;
+    const id=labelToId[item];
+    if(!id)return;
+    if(id==="steps"){updates[id]=(cells[1]||"").trim();}
+    else if(item==="最低取引日数（出金）"&&updates["rd_minDays"]){
+      const prev=updates["rd_minDays"].split("|");
+      const newF=(cells[2]||"—").trim();const newDiff=(cells[3]||"—").trim();
+      const newDetail=cells.slice(4).join("|").trim();
+      const prevDetail=prev.slice(3).join("|").trim();
+      const mergedDetail=prevDetail&&newDetail?`${prevDetail} / ${newDetail}`:prevDetail||newDetail;
+      updates["rd_minDays"]=`${prev[0]||"—"}|${newF}|${newDiff}|${mergedDetail}`;
+    } else {
+      const C=cells[1]||"—",F=cells[2]||"—",diff=cells[3]||"—";
+      const detail=cells.slice(4).join("|").trim();
+      updates[id]=`${C}|${F}|${diff}|${detail}`;
+    }
+    stored++;
+  });
+  return {updates,stored};
 }
 function rdBadge(v,yesno){
   if(!v||v==="記載なし"||v==="ー")return{color:C.textDim,bg:"transparent",text:v||"—"};
@@ -1916,9 +1981,41 @@ function diffStyle(d){
   return{color:C.textDim,fontWeight:400};
 }
 
-function RuleTableEditor({slotData,setSlotData,locks,setLocks}){
+// 入力欄コンポーネント（モジュールスコープに固定。RuleTableEditor内で定義すると
+// 1文字ごとの再描画で関数identityが変わり input が再マウント→フォーカスが外れるため）
+function ValueField({label,valKey,t,unit,draft,setDraft}){
+  const isF=valKey==="f";
+  return(
+    <div style={{display:"flex",flexDirection:"column",gap:2,flex:1,minWidth:120}}>
+      <span style={{fontSize:"0.6rem",color:C.textDim}}>{label}</span>
+      {t==="num"?(
+        <div style={{display:"flex",alignItems:"center",gap:3,flexWrap:"wrap"}}>
+          <input value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
+            inputMode="decimal" placeholder={isF?"値（同じなら同値・非該当はー）":"数値"}
+            style={{width:64,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,
+              padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
+          {unit&&<span style={{fontSize:"0.65rem",color:C.textDim}}>{unit}</span>}
+          {NUM_SPECIAL.map(s=>(
+            <span key={s} onClick={()=>setDraft(p=>({...p,[valKey]:s}))}
+              style={{cursor:"pointer",fontSize:"0.58rem",color:C.textDim,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 5px"}}>{s}</span>
+          ))}
+        </div>
+      ):(
+        <select value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
+          style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
+          <option value="">{isF?"—（未入力）":"—"}</option>
+          {(t==="loss"?LOSSTYPE_OPTS:YESNO3_OPTS).map(o=><option key={o} value={o}>{o}</option>)}
+        </select>
+      )}
+    </div>
+  );
+}
+
+function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopyRuleSlot}){
   const [open,setOpen]=useState(null); // 編集中のslotId
   const [draft,setDraft]=useState({c:"",f:"",diff:"ー",note:""});
+  const [copySel,setCopySel]=useState({}); // コピー先プランID選択
+  const [copied,setCopied]=useState(false);
 
   const slots=SLOT_DEFS.dbp02.filter(s=>s.id.startsWith("rd_"));
   const getVal=id=>{
@@ -1933,59 +2030,44 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks}){
   };
   const openRow=(slot)=>{
     if(locks[slot.id])return;
-    setDraft(parseRd(getVal(slot.id)));setOpen(slot.id);
+    setDraft(parseRd(getVal(slot.id)));setOpen(slot.id);setCopySel({});setCopied(false);
+  };
+  // 保存・コピー共通の値正規化（単位付与・差分自動・禁止行為特例）
+  const normalize=(id,src)=>{
+    const d={...src};
+    if(typeOf(id)==="num"){const u=UNIT_MAP[id]||"";d.c=withUnit(d.c,u);d.f=withUnit(d.f,u);}
+    // 同値・F未入力・F非該当（ー）は差分なし。EASE/TRAPはC/Fが異なる時のみ意味を持つ
+    if(!d.f||d.f==="ー"||d.c===d.f)d.diff="ー";
+    if(id===PROHIBIT_ID){d.f="";d.diff="ー";}
+    return d;
   };
   const save=()=>{
     if(!open)return;
-    const d={...draft};
-    if(typeOf(open)==="num"){const u=UNIT_MAP[open]||"";d.c=withUnit(d.c,u);d.f=withUnit(d.f,u);}
-    if(open===PROHIBIT_ID){d.f="";d.diff="ー";}
+    const d=normalize(open,draft);
     setSlotData(prev=>({...prev,[open]:[{text:serializeRd(d)}]}));
     setOpen(null);
   };
-  const cancel=()=>setOpen(null);
-
-  const cellColor=(t,v)=>{
-    if(!v||v==="記載なし"||v==="ー"||v==="—")return C.textDim;
-    // 無/有/※有 は型に依らず共通配色（無=緑=制約なし / 有=赤=制約あり / ※有=オレンジ=条件付き）
-    if(v==="無")return C.green;
-    if(v==="有")return C.red;
-    if(v==="※有")return C.yellow;
-    if(t==="num")return C.yellow; // 数値（閾値）= オレンジ（良し悪しの向きが項目で逆なので中立色）
-    return C.text;
+  const cancel=()=>{setOpen(null);setCopySel({});setCopied(false);};
+  // 編集中の項目値を選択した他プランへコピー（複数可）。現在のプランへは save() で別途反映する
+  const doCopy=()=>{
+    if(!open||!onCopyRuleSlot)return;
+    const ids=Object.keys(copySel).filter(k=>copySel[k]);
+    if(!ids.length)return;
+    onCopyRuleSlot(open,serializeRd(normalize(open,draft)),ids);
+    setCopied(true);setTimeout(()=>setCopied(false),1500);
   };
-  const Cell=({t,v})=>(
-    <span style={{fontSize:"0.7rem",color:cellColor(t,v),whiteSpace:"nowrap",overflow:"hidden",
+
+  // 基本は白。差分（EASE/TRAP）がある行のみその行全体を差分色で着色する
+  const rowColor=d=>d==="EASE"?C.blue:d==="TRAP"?C.red:C.text;
+  const cellColor=(v,rc)=>{
+    if(!v||v==="ー"||v==="—")return C.textDim;
+    return rc||C.text;
+  };
+  const Cell=({v,rc})=>(
+    <span style={{fontSize:"0.7rem",color:cellColor(v,rc),whiteSpace:"nowrap",overflow:"hidden",
       textOverflow:"ellipsis",maxWidth:170,display:"inline-block",verticalAlign:"bottom"}}>{v||"—"}</span>
   );
 
-  const ValueField=({label,valKey,t,unit})=>{
-    const isF=valKey==="f";
-    return(
-      <div style={{display:"flex",flexDirection:"column",gap:2,flex:1,minWidth:120}}>
-        <span style={{fontSize:"0.6rem",color:C.textDim}}>{label}</span>
-        {t==="num"?(
-          <div style={{display:"flex",alignItems:"center",gap:3,flexWrap:"wrap"}}>
-            <input value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
-              inputMode="decimal" placeholder={isF?"ー（同）":"数値"}
-              style={{width:64,background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,
-                padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"}} />
-            {unit&&<span style={{fontSize:"0.65rem",color:C.textDim}}>{unit}</span>}
-            {NUM_SPECIAL.map(s=>(
-              <span key={s} onClick={()=>setDraft(p=>({...p,[valKey]:s}))}
-                style={{cursor:"pointer",fontSize:"0.58rem",color:C.textDim,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 5px"}}>{s}</span>
-            ))}
-          </div>
-        ):(
-          <select value={draft[valKey]} onChange={e=>setDraft(p=>({...p,[valKey]:e.target.value}))}
-            style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
-            <option value="">{isF?"ー（同）":"—"}</option>
-            {(t==="loss"?LOSSTYPE_OPTS:YESNO3_OPTS).map(o=><option key={o} value={o}>{o}</option>)}
-          </select>
-        )}
-      </div>
-    );
-  };
 
   return(
     <div style={{overflow:"auto"}}>
@@ -2025,10 +2107,10 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks}){
                     {slot.label}
                   </td>
                   {isProhibit?(
-                    <td colSpan={3} style={{padding:"6px 6px"}}><Cell t="prohibit" v={p.c}/></td>
+                    <td colSpan={3} style={{padding:"6px 6px"}}><Cell v={p.c}/></td>
                   ):(<React.Fragment>
-                    <td style={{padding:"6px 6px"}}><Cell t={t} v={p.c}/></td>
-                    <td style={{padding:"6px 6px"}}><Cell t={t} v={p.f||"ー"}/></td>
+                    <td style={{padding:"6px 6px"}}><Cell v={p.c} rc={rowColor(p.diff)}/></td>
+                    <td style={{padding:"6px 6px"}}><Cell v={p.f} rc={rowColor(p.diff)}/></td>
                     <td style={{padding:"6px 6px"}}><span style={diffStyle(p.diff)}>{p.diff||"—"}</span></td>
                   </React.Fragment>)}
                 </tr>
@@ -2045,8 +2127,8 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks}){
                         </div>
                       ):(
                         <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
-                          <ValueField label="Challenge" valKey="c" t={t} unit={unit}/>
-                          <ValueField label="Funded" valKey="f" t={t} unit={unit}/>
+                          <ValueField label="Challenge" valKey="c" t={t} unit={unit} draft={draft} setDraft={setDraft}/>
+                          <ValueField label="Funded" valKey="f" t={t} unit={unit} draft={draft} setDraft={setDraft}/>
                           <div style={{display:"flex",flexDirection:"column",gap:2}}>
                             <span style={{fontSize:"0.6rem",color:C.textDim}}>差分</span>
                             <select value={draft.diff} onChange={e=>setDraft(p=>({...p,diff:e.target.value}))}
@@ -2057,7 +2139,7 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks}){
                         </div>
                       )}
                       <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
-                        <span style={{fontSize:"0.6rem",color:C.textDim}}>{isProhibit?"詳細（各行「名称：説明」で全件）":"詳細（書き出し固定: 差分=ー→「Challenge・Funded共に～。」/ EASE|TRAP→「Challengeでは～。Fundedでは～。」）"}</span>
+                        <span style={{fontSize:"0.6rem",color:C.textDim}}>{isProhibit?"詳細（各行「名称：説明」で全件）":"詳細（常体・です/ます禁止。書き出し固定: 差分=ー→「Challenge・Funded共に～」/ EASE|TRAP→「Challengeでは～。Fundedでは～」。無の項目は「～について明示的に制限する記載はない」）"}</span>
                         <textarea value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
                           placeholder={isProhibit?"両建て：同一銘柄の反対売買で…":"Challenge・Funded共に…"} rows={4}
                           style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
@@ -2069,6 +2151,23 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks}){
                         {val&&<Btn color={C.red} onClick={()=>{setSlotData(p=>({...p,[slot.id]:[]}));cancel();}}
                           style={{padding:"2px 8px",fontSize:"0.65rem"}}>クリア</Btn>}
                       </div>
+                      {copyTargets&&copyTargets.length>0&&(
+                        <div style={{marginTop:8,paddingTop:8,borderTop:`1px dashed ${C.border}`,display:"flex",flexDirection:"column",gap:4}}>
+                          <span style={{fontSize:"0.6rem",color:C.textDim}}>この項目の値を他プランへコピー（現在の編集値を上書き）</span>
+                          <div style={{display:"flex",flexWrap:"wrap",gap:4,alignItems:"center"}}>
+                            {(()=>{const allOn=copyTargets.every(t=>copySel[t.id]);return(
+                              <span onClick={()=>{const n={};if(!allOn)copyTargets.forEach(t=>n[t.id]=true);setCopySel(n);}}
+                                style={{cursor:"pointer",fontSize:"0.58rem",color:allOn?C.accent:C.textDim,border:`1px solid ${allOn?C.accent:C.border}`,borderRadius:3,padding:"1px 6px"}}>{allOn?"全解除":"全選択"}</span>);})()}
+                            {copyTargets.map(t=>{const on=!!copySel[t.id];return(
+                              <span key={t.id} onClick={()=>setCopySel(p=>({...p,[t.id]:!p[t.id]}))}
+                                style={{cursor:"pointer",fontSize:"0.6rem",color:on?C.bg:C.text,background:on?C.accent:"transparent",border:`1px solid ${on?C.accent:C.border}`,borderRadius:3,padding:"1px 6px",whiteSpace:"nowrap"}}>{t.name||t.id}</span>);})}
+                          </div>
+                          <div>
+                            <Btn color={C.accent} onClick={doCopy} disabled={!Object.values(copySel).some(Boolean)}
+                              style={{padding:"2px 10px",fontSize:"0.65rem"}}>{copied?"コピー済 ✓":"▷ 選択プランへコピー"}</Btn>
+                          </div>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 )}
@@ -2294,13 +2393,11 @@ function PlanPreview({slotData,planName,parentFirmSlotData,parentPlanNames}){
   const th={padding:"6px 10px",textAlign:"left",color:PV.textDim,fontWeight:700,fontSize:"0.62rem",letterSpacing:"0.05em",borderBottom:`2px solid ${PV.borderStrong}`,background:PV.surface,whiteSpace:"nowrap"};
   const td={padding:"6px 10px",borderBottom:`1px solid ${PV.border}`,fontSize:"0.7rem",fontFamily:PV.font,color:PV.text,verticalAlign:"top"};
   const diffColor=d=>d==="EASE"?PV.blue:d==="TRAP"?PV.red:PV.textDim;
-  const cellColor=v=>{
-    if(!v||v==="記載なし"||v==="ー"||v==="—")return PV.textDim;
-    if(v==="無")return PV.green;
-    if(v==="有")return PV.red;
-    if(v==="※有")return PV.yellow;
-    if(/\d/.test(v))return PV.yellow;
-    return PV.text;
+  // 基本は白。差分（EASE/TRAP）がある行のみその行全体を差分色で着色
+  const rowColor=d=>d==="EASE"?PV.blue:d==="TRAP"?PV.red:PV.text;
+  const cellColor=(v,rc)=>{
+    if(!v||v==="ー"||v==="—")return PV.textDim;
+    return rc||PV.text;
   };
   const parentPriceRaw=parentFirmSlotData?.priceTable?.[0]?.text||"";
   return <div style={{padding:14,background:PV.bg,color:PV.text,fontFamily:PV.fontJa,minHeight:"100%"}}>
@@ -2324,10 +2421,11 @@ function PlanPreview({slotData,planName,parentFirmSlotData,parentPlanNames}){
             {rdSlots.map(s=>{
               const v=g(s.id);if(!v)return null;
               const p=parseRd(v);
+              const rc=rowColor(p.diff);
               return <tr key={s.id}>
                 <td style={{...td,color:PV.textMid,fontFamily:PV.fontJa}}>{s.label}</td>
-                <td style={{...td,color:cellColor(p.c)}}>{p.c||"—"}</td>
-                <td style={{...td,color:cellColor(p.f)}}>{p.f||"—"}</td>
+                <td style={{...td,color:cellColor(p.c,rc)}}>{p.c||"—"}</td>
+                <td style={{...td,color:cellColor(p.f,rc)}}>{p.f||"—"}</td>
                 <td style={{...td,color:diffColor(p.diff),fontWeight:p.diff==="EASE"||p.diff==="TRAP"?700:400}}>{p.diff||"—"}</td>
               </tr>;
             })}
@@ -2375,7 +2473,7 @@ function KoryakuPreview({slotData}){
   </div>;
 }
 
-function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans,planNames,parentFirmSlotData,parentPlanNames,activePlanName,activeType,parentFirmId,firstPlanId,onNavigateTab}) {
+function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans,planNames,parentFirmSlotData,parentPlanNames,activePlanName,activeType,parentFirmId,firstPlanId,activePlanId,copyTargets,onCopyRuleSlot,onNavigateTab}) {
   const [mergingSlot,setMergingSlot]=useState(null);
   const [editModal,setEditModal]=useState(null);
   const [showRuleTable,setShowRuleTable]=useState(false);
@@ -2623,7 +2721,7 @@ ${slotList}
           ?<PlanPreview slotData={slotData} planName={activePlanName} parentFirmSlotData={parentFirmSlotData} parentPlanNames={parentPlanNames}/>
           :<KoryakuPreview slotData={slotData}/>)
         :templateMode==="dbp02"&&showRuleTable
-        ?<RuleTableEditor slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} />
+        ?<RuleTableEditor key={activePlanId||"plan"} slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} copyTargets={copyTargets} onCopyRuleSlot={onCopyRuleSlot} />
         :templateMode==="dbp01"&&showPriceMatrix
         ?<PriceMatrixEditor slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} planNames={planNames} />
         :sections.map(([sec,slots])=>{
@@ -3238,16 +3336,19 @@ const PROMPTS_REGISTRY = {
 
 ■ ルールスロット(rd_*)の格納形式（厳守）
 "Challenge値|Funded値|差分|詳細"
+- 値の型: 有 / ※有 / 無 / ー。「無」=そのルールで縛られない（公式が「なし」明記の場合も、制限の記載が見つからない場合も共に「無」）。「ー」=その項目が構造上存在しない（例: Funded側に合格目標なし）。旧「記載なし」「なし（明示）」は使わない
 - 差分: {{diffTerms}}
-- C/Fが同一またはF非該当 → F列・差分は "—"（例 "値|—|—|詳細本文"）
-- Instantプラン → "ー|F値|—|詳細本文"
-- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。書き出し固定:
-  ・差分=ー（C/F同一またはF非該当）→「{{phaseLabelCFdot}}共に～。」
-  ・差分=EASE/TRAP（C/Fが異なる）→「Challengeでは～。Fundedでは～。」
-  ※ 禁止行為（rd_prohibited）はこのルール対象外（上記「型」の指示に従う）
+- C/Fが同値でも省略せず両列に同じ値を素直に記載し、差分は "ー"（旧「F列を—にする」運用は廃止）
+- F非該当（構造上存在しない）のみ F列 "ー"、差分 "ー"
+- Instantプラン → "ー|F値|ー|詳細本文"
+- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。常体（だ・である調・体言止め）で書き、「です・ます」調は禁止。書き出し固定:
+  ・差分=ー（C/F同値またはF非該当）→「{{phaseLabelCFdot}}共に～」
+  ・差分=EASE/TRAP（C/Fが異なる）→「Challengeでは～。Fundedでは～」
+  ・値が「無」の項目 →「{{phaseLabelCFdot}}共に〔ルール名〕について明示的に制限する記載はない」（片側のみ無なら「Challengeでは、〔ルール名〕について明示的に制限する記載はない」等）
+  ※ 禁止行為（rd_prohibited）はこのルール対象外: C列=行為名を列挙 / F列="ー"・差分="ー"（同値ルールの例外。C列の列挙をF列に複製しない） / 詳細=各行為を「名称：説明 / ペナルティ」で全件
 
 ■ 数値型 (rd_target / rd_minDays / rd_dailyLoss / rd_maxLoss / rd_consistency) の特例
-- C値/F値部分には「8%」「10日」のように数値+単位のみ。「未設定」は "ー"
+- C値/F値部分には「8%」「10日」のように数値+単位のみ。制限自体が無い場合は "無"、項目が構造上存在しない場合は "ー"
 - 差分・詳細は通常通り埋める
 
 ■ Lossタイプ型 (rd_dailyLossType / rd_maxLossType) の特例
@@ -3255,8 +3356,10 @@ const PROMPTS_REGISTRY = {
 - 詳細には「リセット時刻」「Balance/Equityの基準」等の補足を入れる
 
 ■ 禁止
-- 差分列に「なし」は使わない。「—」を使う
-- CとFが同じ場合にFunded列にC値をコピーしない。「—」を使う
+- 差分列に「なし」は使わない。同値・F非該当は「ー」を使う
+- CとFが同値の場合もFunded列に同じ値を必ず記載する（省略・空欄・「—」化しない）
+- 「記載なし」「なし（明示）」は使わない。縛られないなら「無」に統一する
+- 詳細列で「です・ます」調を使わない（常体で統一）
 - 他のプランのデータを混入させない
 - 主観形容詞・煽り（「重要」「厳格」「注意が必要」「鍵となる」等）は詳細列にも書かない
 
@@ -3862,6 +3965,19 @@ function App() {
     });
   },[activeTabId,activeType]);
 
+  // 早見表の1項目（rd_*スロット）を他プランへ明示コピー（複数可）
+  const copyRuleSlotToPlans=useCallback((slotId,value,planIds)=>{
+    if(!slotId||!planIds?.length)return;
+    setTabDataMap(prev=>{
+      const next={...prev};
+      planIds.forEach(pid=>{
+        const cur=next[pid]||{archives:[],targetText:"",slotData:{},templateMode:"dbp02"};
+        next[pid]={...cur,slotData:{...(cur.slotData||{}),[slotId]:[{text:value}]}};
+      });
+      return next;
+    });
+  },[]);
+
   // 任意タブへのナビゲーション（クロスタブ遷移）
   // SlotPanel の Firm/価格/攻略/Plan/早見表 ボタンが現在のタブ種別に合わない場合に親Firm or 配下Planへ移動
   const navigateTab=useCallback((tabId,mode)=>{
@@ -4041,17 +4157,20 @@ function App() {
 
 - 項目ラベルは上記スロット一覧の「項目名」と完全一致させる
 - 該当情報がない項目は行ごと省略
-- 差分列: ${diffTermLine(glossaryTerms)}（同一またはF非該当→「—」、異なる→EASE/TRAP）
-- C/Fが同一またはF非該当 → F列・差分は「—」
-- Instantプラン → C列は「ー」、F列に値、差分は「—」
-- 数値型 (利益目標/最低取引日数/日次DD/最大DD/整合性): 数値+単位のみ（「8%」「10日」「$500」等）。未設定は「ー」
+- 値の型: 有 / ※有 / 無 / ー。「無」=そのルールで縛られない（公式が「なし」明記でも、制限の記載が無くても共に「無」）。「ー」=項目が構造上存在しない。「記載なし」「なし（明示）」は使わない
+- 差分列: ${diffTermLine(glossaryTerms)}（同値またはF非該当→「ー」、異なる→EASE/TRAP）
+- C/Fが同値でも省略せず両列に同じ値を記載し、差分は「ー」
+- F非該当（構造上存在しない）のみ F列「ー」・差分「ー」
+- Instantプラン → C列は「ー」、F列に値、差分は「ー」
+- 数値型 (利益目標/最低取引日数/日次DD/最大DD/整合性): 数値+単位のみ（「8%」「10日」「$500」等）。制限が無い場合は「無」、項目が構造上存在しない場合は「ー」
 - Lossタイプ型 (日次DD計算タイプ/最大DD計算タイプ): ${ddTypesStr(glossaryTerms)} のみ
-- 詳細列の書き出し:
-  ・差分=— → 「Challenge・Funded共に〜。」
-  ・差分=EASE/TRAP → 「Challengeでは〜。Fundedでは〜。」
-- 禁止行為（項目名=「禁止行為」）の特例（上記書き出しルールの対象外）:
+- 詳細列は常体（だ・である調・体言止め）。「です・ます」調は禁止。書き出し:
+  ・差分=ー → 「Challenge・Funded共に〜」
+  ・差分=EASE/TRAP → 「Challengeでは〜。Fundedでは〜」
+  ・値が「無」の項目 → 「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」（片側のみ無なら「Challengeでは、〜について明示的に制限する記載はない」等）
+- 禁止行為（項目名=「禁止行為」）の特例（上記書き出しルールの対象外・同値ルールの例外）:
   ・C列=禁止行為の名称をカンマ区切りで列挙（例:「IP共有, 複数プロファイル作成, 口座共有, ヘッジング, ...」）
-  ・F列=「—」、差分列=「—」
+  ・F列=「ー」、差分列=「ー」（C列の列挙をF列に複製しない）
   ・詳細列=各行為を「名称：説明（処分：◯◯）」形式で全件記載し、項目間は「 / 」で区切る
     例:「IP共有：他者とのIP共有や不審なIP変更（処分：アカウント停止） / 複数プロファイル作成：同一人物による複数アカウントの不正作成（処分：アカウント停止） / ...」
   ・「Challenge・Funded共に〜。」の書き出しは付けない
@@ -4113,6 +4232,38 @@ function App() {
       return next;
     });
   },[firms,activeTabId,activeType]);
+
+  // 全プラン一括取込 — 「## …（プラン名）」区切りの複数早見表から、プランを生成し各rd_*値まで投入
+  const importPlanTables=useCallback((text)=>{
+    if(activeType!=="firm"){alert("Firmタブで実行してください");return;}
+    if(typeof text!=="string"||!text.trim()){alert("取込エリアが空です");return;}
+    const firm=firms.find(f=>f.id===activeTabId);
+    if(!firm){alert("対象Firmが見つかりません");return;}
+    const parsed=splitPlanSections(text)
+      .map(s=>({name:s.name,...parsePlanRuleTable(s.body)}))
+      .filter(s=>s.stored>0);
+    if(!parsed.length){alert("「## …（プラン名）」見出し＋早見表（項目|C|F|差分|詳細）が見つかりませんでした");return;}
+    // プランID割り当て（同名は既存に上書き、なければ新規採番）
+    const assignments=parsed.map(sec=>{
+      const existing=(firm.plans||[]).find(p=>p.name===sec.name);
+      return {id:existing?existing.id:("p"+String(nextId.current++)),name:sec.name,isNew:!existing,updates:sec.updates,count:Object.keys(sec.updates).length};
+    });
+    const newOnes=assignments.filter(a=>a.isNew).map(a=>({id:a.id,name:a.name}));
+    if(newOnes.length)setFirms(p=>p.map(f=>f.id===activeTabId?{...f,plans:[...(f.plans||[]),...newOnes]}:f));
+    setTabDataMap(prev=>{
+      const next={...prev};
+      assignments.forEach(a=>{
+        const prevTab=next[a.id]||{archives:[],targetText:"",slotData:{},templateMode:"dbp02"};
+        const sd={...(prevTab.slotData||{})};
+        if(!(sd.challengeName&&sd.challengeName.length))sd.challengeName=[{text:firm.name+" - "+a.name}];
+        Object.entries(a.updates).forEach(([k,v])=>{sd[k]=[{text:v}];});
+        next[a.id]={...prevTab,slotData:sd,templateMode:"dbp02"};
+      });
+      return next;
+    });
+    const newN=newOnes.length,ovwN=assignments.length-newN;
+    alert(`全プラン一括取込: ${assignments.length}プラン（新規${newN} / 既存上書き${ovwN}）\n`+assignments.map(a=>`・${a.name}${a.isNew?"（新規）":"（上書き）"}: ${a.count}項目`).join("\n"));
+  },[activeType,firms,activeTabId]);
 
   // 自動振り分け
   const handleAutoAssign=useCallback(async text=>{
@@ -5317,6 +5468,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
               onClear={()=>{setTabField("targetText","");selectedTextRef.current=""}} onAdd={handleAdd}
               activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
               onSelectText={t=>{selectedTextRef.current=t}}
+              activeType={activeType} onImportPlanTables={importPlanTables}
               onSendToPaste={handleSendToPaste} />
           </div>
           {panelVis.right&&<ResizeHandle dir="x" onMouseDown={leftDrag} />}
@@ -5339,6 +5491,9 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
             activeType={activeType}
             parentFirmId={(()=>{const pf=firms.find(f=>(f.plans||[]).some(p=>p.id===activeTabId));return pf?.id||null;})()}
             firstPlanId={(firms.find(f=>f.id===activeTabId)?.plans||[])[0]?.id||null}
+            activePlanId={activeType==="plan"?activeTabId:null}
+            copyTargets={(()=>{const pf=firms.find(f=>(f.plans||[]).some(p=>p.id===activeTabId));return pf?(pf.plans||[]).filter(p=>p.id!==activeTabId).map(p=>({id:p.id,name:p.name})):[];})()}
+            onCopyRuleSlot={copyRuleSlotToPlans}
             onNavigateTab={navigateTab} />
         ):(
           <GlossaryPanel terms={glossaryTerms} setTerms={setGlossaryTerms} generating={glossaryGenerating} />
