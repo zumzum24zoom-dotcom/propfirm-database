@@ -1,7 +1,7 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-06-06（セッション7）
+> **最終更新**: 2026-06-08（セッション8）
 
 ---
 
@@ -228,14 +228,40 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 
 ---
 
+### ✅ 完了（2026-06-08 セッション8）
+
+**禁止行為(P19)を別シェイプの独立テーブルに分離**（commit `17529d6`）
+
+- データモデル変更: 禁止行為は比較テーブル(C|F|差分|詳細)に収まらないため分離。
+  形状 `禁止行為={items:[{行為名,備考,行為,処分}]}`（差分概念廃止・備考は極稀なC/F差異用）
+  - MASTER_DEFS.dbp02 には `rd_prohibited` を残置（一括抽出に乗せるため）。撲滅ではなく「別シェイプ型」の一点化
+  - ヘルパ `parseProhibit` / `serializeProhibit` / `parseProhibitTable` 追加
+- Page Maker: 専用 `ProhibitEditor`（行ごと4フィールド＋追加/削除）/ 取込3経路（全プラン一括・単一テーブル・auto_assign）/ exportHugo / PlanPreview を対応
+- 公開ページ `plans/single.html`: 禁止行為早見表（行為名|備考＝ルール早見表の直下）・禁止行為詳細（行為名|行為|処分＝ルール詳細の直下）。旧シェイプデータでも無害
+- ソース定義 v09・プロンプト・`preview-mockup.html` を新仕様に改訂、v08 削除
+- **一括取込バグ修正**: `### 禁止行為テーブル` 見出しが幽霊プラン化する問題を `splitPlanSections` で解消
+
+**抽出ルール改善・ラベルdrift根治・定義訂正**（commit `67b94f9`）
+
+- 最低取引日数: P02(合格)=Challenge専用 / P02b(出金)=Funded専用とし、各行は自フェーズのみ記述。構造上自明な反対フェーズの打ち消し文を排除
+- 利益目標 複数ステップ: 「X% / Y% / Z%」スラッシュ区切り（「1次/2次」ラベル廃止）
+- **ラベルdrift根治**: `glossaryItemLines` の Firm項目/Plan項目 を MASTER_DEFS 直参照に変更。
+  drift した用語辞典に依存せず prompt→NotebookLM→取込(labelToId)・プレビューのラベルが常に正本一致（ラベル不一致で取込不能だったバグの根治）
+- 定義訂正（P07 一貫性ルール / P09 時間制限 / P15 スキャルピング制約）を MASTER_DEFS・ソース定義v09・glossary.json・pfdb.json に反映
+- pfdb.json 用語辞典の stale な term/definition（P09/P11/P14）を正本へ再同期（差分0）
+
+> 検証: Page Maker は静的サーバ＋ブラウザでマウント確認・round-trip検証済み。Hugo は本環境で Application Control によりビルド不可のため、公開ページの最終見た目は hugo-dev スキルでマスター側ターミナル確認が必要。
+
+---
+
 ### ⬜ 次にやること（優先順）
 
-1. **Page Maker で CSV 一括取込 → 正式 firmName で再構成** — `01_tools/firms-bulk-import.csv` をデータ▾→追加CSVに貼付け
-2. **exportHugo 再実行** — クリーンな slug で `data/firms/*.json` / `content/firms/{slug}/_index.md` 再生成
-3. **Hugo dev server で表示確認** — 一覧→個別ページのリンクが繋がるか
-4. **【継続】Obsidian 本格運用** — vault 構造設計・タスク管理プラグイン導入・テンプレ化（セッション7で公開サイト構造側の整地を優先したため次回繰越）
-5. **ブックマークレット動作確認** — `01_tools/site-scanner.js` 最新版で実機テスト → `data/scans/` に JSON 到達確認
-6. ❷ DBP_02 ルール詳細テーブル（plans/single.html）— Hugo側テンプレ実装
+1. **E8 等を新ルールで再抽出 → 一括取込 → 表示確認** — 禁止行為別テーブル・最低取引日数の簡潔文・利益目標スラッシュ・正本ラベルが出るか実機確認
+2. **Hugo dev server で禁止行為2テーブルの見た目確認** — `plans/single.html` 禁止行為早見表/詳細のレンダリング（本環境ではHugo実行不可のため未確認）
+3. **Page Maker で CSV 一括取込 → 正式 firmName で再構成** — `01_tools/firms-bulk-import.csv` をデータ▾→追加CSVに貼付け
+4. **exportHugo 再実行** — クリーンな slug で `data/firms/*.json` / `content/firms/{slug}/_index.md` 再生成
+5. **【継続】Obsidian 本格運用** — vault 構造設計・タスク管理プラグイン導入・テンプレ化（公開サイト構造側の整地を優先したため繰越）
+6. **ブックマークレット動作確認** — `01_tools/site-scanner.js` 最新版で実機テスト → `data/scans/` に JSON 到達確認
 7. ❷ DBP_01 プランナビゲーション（firms/single.html）
 8. ❸ 実質最短日数タイムライン（Widget Maker 移植）
 
@@ -258,13 +284,12 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 
 ### ❶ 緊急修正（データ不整合）
 
-- [ ] **`plans/single.html` スキーマ修正** — 旧英語キー（`$plan.account_size` 等）を Page Maker 出力の日本語キー（`利益目標`・`rd_*` 等）に全面差し替え。現状でプランページは何も表示されない
+- [x] **`plans/single.html` スキーマ修正** — 日本語キー（`利益目標`・`rd_*` 等）に全面差し替え済（セッション3）。早見表＋ルール詳細＋禁止行為2テーブルを描画（セッション8で禁止行為分離対応）
 
 ### ❷ データ入力が揃えば実装できるもの
 
-- [ ] **DBP_02 ルール詳細テーブル** — plans/single.html に `rd_*` スロットを Challenge / Funded / 差分の3列テーブルで表示（転用: 旧ルール表ウィジェットのロジック）
+- [x] **DBP_02 ルール早見表＋ルール詳細＋禁止行為テーブル** — plans/single.html に実装済（rd_* を C/F/差分の早見表＋詳細リスト、禁止行為は別シェイプの専用2テーブル）
 - [ ] **DBP_01 プランナビゲーション** — firms/single.html に配下プランへのリンク一覧を追加
-- [ ] **ルール早見表** — plans/single.html に `ruleQuickRef` スロットを表示
 - [ ] **About Us / フッター整理** — baseof.html のフッターに情報追加、About ページ作成
 
 ### ❸ Widget Maker と連携（計算が必要）
