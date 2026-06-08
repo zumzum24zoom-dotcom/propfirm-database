@@ -15,6 +15,9 @@ public/
 __pycache__/
 *.pyc
 
+# エディタのスワップファイル
+*.crswap
+
 # Claudian セッション一時ファイル
 .claudian/sessions/
 
