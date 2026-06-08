@@ -2299,6 +2299,12 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
     if(!ids.length)return;
     const text=open===PROHIBIT_ID?serializeProhibit(prohibitItems):serializeRd(normalize(open,draft));
     onCopyRuleSlot(open,text,ids);
+    // 比較表のインライン表示も即同期（コピー先プランのrowDraftを上書き）。
+    // これが無いと slotData は更新されるのに入力欄が再オープンまで反映されず「コピーが効かない」ように見える。
+    if(open!==PROHIBIT_ID){
+      const pd=parseRd(text);
+      setRowDrafts(prev=>{const n={...prev};ids.forEach(id=>{if(id!==currentPlanId)n[id]={c:pd.c,f:pd.f,diff:pd.diff,note:pd.note};});return n;});
+    }
     setCopied(true);setTimeout(()=>setCopied(false),1500);
   };
 
