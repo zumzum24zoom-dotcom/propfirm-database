@@ -1006,7 +1006,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
       const planLine=plans.length?plans.map(n=>`- ${n}`).join("\n"):"（プラン未登録 — 公式サイトから全プランを収集すること）";
       return`【対象ファーム】${firmName}\n【対象プラン】\n${planLine}`;
     }).join("\n\n");
-    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有 / ー（無=そのルールで縛られない＝公式が「なし」明記でも制限の記載が無くても共に「無」 / ※有=条件付き許可・条件の中身を詳細列に / ー=項目が構造上存在しない。「記載なし」「なし（明示）」は使わない）\n   ・C/Fが同値でも省略せず両列に同じ値を記載し差分は「ー」。F非該当（構造上存在しない）のみ F列「ー」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。常体（だ・である調・体言止め）で書き「です・ます」調は禁止。値が「無」の項目は「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」と書く\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / F列=「ー」・差分=「ー」（同値ルールの例外。C列の列挙をF列に複製しない） / 詳細列=各禁止行為を「名称：説明」形式で全件記載\n\nテーブルのみ・プランごとに1枚ずつ出力。表記は用語辞典に厳密準拠。`;
+    const text=`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・数字型（利益目標%・最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有 / ー（無=そのルールで縛られない＝公式が「なし」明記でも制限の記載が無くても共に「無」 / ※有=条件付き許可・条件の中身を詳細列に / ー=項目が構造上存在しない。「記載なし」「なし（明示）」は使わない）\n   ・C/Fが同値でも省略せず両列に同じ値を記載し差分は「ー」。F非該当（構造上存在しない）のみ F列「ー」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと。常体（だ・である調・体言止め）で書き「です・ます」調は禁止。値が「無」の項目は「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」と書く\n  ・利益目標で複数ステップの合格目標が分かれる場合: C列・詳細とも「X% / Y% / Z%」のスラッシュ区切り（例:「8% / 5%」）で書き、「1次/2次/3次」ラベルは使わない\n  ・最低取引日数: C=合格/F=出金は列で自明なので詳細に「（合格）（出金）」括弧書きを付けない。ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは〜」/ F側記載なし→「〜。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」\n- 「禁止行為」は上記ルール表（項目|C|F|差分|詳細）に含めない（別シェイプ）。各プランのルール表の直後に、独立した禁止行為テーブルを追加: 列は必ず 行為名 | 備考 | 行為 | 処分。1行=1行為（行為名=名称 例:HFT / 行為=その行為の具体的説明 / 処分=違反時のペナルティ 例:即時失格 / 備考=極稀にC/Fで可否が異なる場合のみ・通常空）。禁止行為が無ければこのテーブルは省略\n\nプランごとに【ルール表＋（あれば）禁止行為テーブル】を出力。表記は用語辞典に厳密準拠。`;
     const done=()=>{setPlanCopied(true);setTimeout(()=>setPlanCopied(false),1500)};
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>{
@@ -1300,7 +1300,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                 const _pCount=MASTER_DEFS.dbp02.filter(d=>d.pkey).length;
                 const _ddStr=ddTypesStr(glossaryTerms);
                 const _diffLine=diffTermLine(glossaryTerms);
-                return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身を含め、ルール全容を詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと\n- ※「禁止行為」の行のみ特例: C列=禁止行為の名称を列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載`;
+                return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）。複数ステップで合格目標が分かれる場合 C列・詳細は「X% / Y% / Z%」スラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベル禁止\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身を含め、ルール全容を詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと\n  ・最低取引日数: C=合格/F=出金は列で自明。詳細に「（合格）（出金）」括弧書きを付けず、ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは〜」/ F側記載なし→「〜。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」\n- 「禁止行為」は上記ルール表に含めない（別シェイプ）。各プランのルール表の直後に独立した禁止行為テーブルを追加: 列は必ず 行為名 | 備考 | 行為 | 処分。1行=1行為（行為名=名称 / 行為=その行為の説明 / 処分=違反時のペナルティ / 備考=極稀なC/F差異のみ・通常空）。禁止行為が無ければ省略`;
               }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
               <div onClick={()=>setShowPromptMenu(false)}>
                 <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
@@ -1907,6 +1907,51 @@ function serializeRd({c,f,diff,note}){
   while(parts.length&&!parts[parts.length-1])parts.pop();
   return parts.join("|");
 }
+// ── 禁止行為（別シェイプ）── slotData["rd_prohibited"] には JSON文字列で {items:[{行為名,備考,行為,処分}]} を格納。
+// 他rd_*の "C|F|差分|詳細" とは構造が異なるため専用のparse/serializeで扱う（撲滅ではなく型の一点化）。
+function parseProhibit(text){
+  if(!text||!String(text).trim())return{items:[]};
+  try{
+    const o=JSON.parse(text);
+    if(o&&Array.isArray(o.items))return{items:o.items.map(it=>({
+      行為名:String(it.行為名||it.name||"").trim(),
+      備考:String(it.備考||"").trim(),
+      行為:String(it.行為||it.act||it.desc||"").trim(),
+      処分:String(it.処分||it.penalty||"").trim(),
+    }))};
+  }catch(e){}
+  return{items:[]};
+}
+function serializeProhibit(items){
+  const cleaned=(items||[]).map(it=>({
+    行為名:String(it.行為名||"").trim(),
+    備考:String(it.備考||"").trim(),
+    行為:String(it.行為||"").trim(),
+    処分:String(it.処分||"").trim(),
+  })).filter(it=>it.行為名||it.行為||it.処分||it.備考);
+  return cleaned.length?JSON.stringify({items:cleaned}):"";
+}
+// NotebookLM一括取込: プランbody内の禁止行為テーブル（| 行為名 | 備考 | 行為 | 処分 |）→ items[]
+function parseProhibitTable(body){
+  const lines=(body||"").split("\n").map(l=>l.trim());
+  const items=[];let colMap=null;
+  for(const line of lines){
+    if(!line.startsWith("|")){colMap=null;continue;}
+    const cells=line.replace(/^\||\|$/g,"").split("|").map(c=>c.trim());
+    if(/^[-:\s]*$/.test(cells.join("")))continue; // 区切り行
+    if(cells.includes("行為名")&&cells.includes("処分")){ // ヘッダ行
+      colMap={name:cells.indexOf("行為名"),note:cells.indexOf("備考"),act:cells.indexOf("行為"),pen:cells.indexOf("処分")};
+      continue;
+    }
+    if(colMap){
+      const get=i=>(i>=0&&i<cells.length)?cells[i]:"";
+      const name=get(colMap.name);
+      if(!name||name==="ー"||name==="—")continue;
+      items.push({行為名:name,備考:get(colMap.note),行為:get(colMap.act),処分:get(colMap.pen)});
+    }
+  }
+  return items;
+}
 // 複数プラン早見表テキストを「## …（プラン名）」見出しで分割（全プラン一括取込用）
 function splitPlanSections(text){
   const rawLines=(text||"").split("\n");
@@ -1914,7 +1959,8 @@ function splitPlanSections(text){
   for(const raw of rawLines){
     const line=raw.trim();
     const m=line.match(/^#{1,6}\s+(.*)$/);
-    if(m){
+    // 禁止行為テーブルの見出し（### …禁止行為…）は新プランとして扱わず、直前プランの本文に含める
+    if(m&&!/禁止行為/.test(m[1])){
       let name=m[1].trim();
       const pm=name.match(/[（(]\s*([^）)]+?)\s*[）)]\s*$/); // 括弧内をプラン名に
       if(pm)name=pm[1].trim();
@@ -1949,6 +1995,7 @@ function parsePlanRuleTable(body){
     if(item==="項目"||item==="項目名"||/^[-:\s]+$/.test(item))return;
     const id=labelToId[item];
     if(!id)return;
+    if(id==="rd_prohibited")return; // 禁止行為は別テーブル（parseProhibitTable）で処理
     if(id==="steps"){updates[id]=(cells[1]||"").trim();}
     else if(item==="最低取引日数（出金）"&&updates["rd_minDays"]){
       const prev=updates["rd_minDays"].split("|");
@@ -2011,9 +2058,38 @@ function ValueField({label,valKey,t,unit,draft,setDraft}){
   );
 }
 
+// 禁止行為 専用エディタ（行為名｜備考｜行為｜処分 の行配列）。モジュールスコープ固定でフォーカス維持
+function ProhibitEditor({items,setItems}){
+  const upd=(i,key,v)=>setItems(prev=>prev.map((it,idx)=>idx===i?{...it,[key]:v}:it));
+  const add=()=>setItems(prev=>[...prev,{行為名:"",備考:"",行為:"",処分:""}]);
+  const del=i=>setItems(prev=>prev.filter((_,idx)=>idx!==i));
+  const inp={background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"};
+  return(
+    <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:8}}>
+      <span style={{fontSize:"0.6rem",color:C.textDim}}>禁止行為（1行=1行為。行為名・行為(説明)・処分を入力。備考は極稀なC/F差異用）</span>
+      {items.map((it,i)=>(
+        <div key={i} style={{display:"flex",gap:4,alignItems:"flex-start",borderLeft:`2px solid ${C.border}`,paddingLeft:6}}>
+          <span onClick={()=>del(i)} title="この行為を削除"
+            style={{cursor:"pointer",color:C.red,fontSize:"0.8rem",lineHeight:"1.6",userSelect:"none"}}>×</span>
+          <div style={{display:"flex",flexDirection:"column",gap:3,flex:1}}>
+            <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+              <input value={it.行為名} onChange={e=>upd(i,"行為名",e.target.value)} placeholder="行為名（例: HFT）" style={{...inp,flex:"1 1 160px",minWidth:120}}/>
+              <input value={it.備考} onChange={e=>upd(i,"備考",e.target.value)} placeholder="備考（通常空欄）" style={{...inp,flex:"1 1 120px",minWidth:90,color:C.textDim}}/>
+            </div>
+            <input value={it.行為} onChange={e=>upd(i,"行為",e.target.value)} placeholder="行為（説明）" style={{...inp,width:"100%"}}/>
+            <input value={it.処分} onChange={e=>upd(i,"処分",e.target.value)} placeholder="処分（例: 即時失格）" style={{...inp,width:"100%"}}/>
+          </div>
+        </div>
+      ))}
+      <span onClick={add} style={{cursor:"pointer",fontSize:"0.65rem",color:C.accent,border:`1px dashed ${C.accent}`,borderRadius:3,padding:"3px 8px",alignSelf:"flex-start"}}>＋ 行為を追加</span>
+    </div>
+  );
+}
+
 function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopyRuleSlot}){
   const [open,setOpen]=useState(null); // 編集中のslotId
   const [draft,setDraft]=useState({c:"",f:"",diff:"ー",note:""});
+  const [prohibitItems,setProhibitItems]=useState([]); // 禁止行為（別シェイプ）編集用 items
   const [copySel,setCopySel]=useState({}); // コピー先プランID選択
   const [copied,setCopied]=useState(false);
 
@@ -2030,7 +2106,13 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
   };
   const openRow=(slot)=>{
     if(locks[slot.id])return;
-    setDraft(parseRd(getVal(slot.id)));setOpen(slot.id);setCopySel({});setCopied(false);
+    if(slot.id===PROHIBIT_ID){
+      const its=parseProhibit(getVal(slot.id)).items;
+      setProhibitItems(its.length?its:[{行為名:"",備考:"",行為:"",処分:""}]);
+    } else {
+      setDraft(parseRd(getVal(slot.id)));
+    }
+    setOpen(slot.id);setCopySel({});setCopied(false);
   };
   // 保存・コピー共通の値正規化（単位付与・差分自動・禁止行為特例）
   const normalize=(id,src)=>{
@@ -2043,8 +2125,8 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
   };
   const save=()=>{
     if(!open)return;
-    const d=normalize(open,draft);
-    setSlotData(prev=>({...prev,[open]:[{text:serializeRd(d)}]}));
+    const text=open===PROHIBIT_ID?serializeProhibit(prohibitItems):serializeRd(normalize(open,draft));
+    setSlotData(prev=>({...prev,[open]:text?[{text}]:[]}));
     setOpen(null);
   };
   const cancel=()=>{setOpen(null);setCopySel({});setCopied(false);};
@@ -2053,7 +2135,8 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
     if(!open||!onCopyRuleSlot)return;
     const ids=Object.keys(copySel).filter(k=>copySel[k]);
     if(!ids.length)return;
-    onCopyRuleSlot(open,serializeRd(normalize(open,draft)),ids);
+    const text=open===PROHIBIT_ID?serializeProhibit(prohibitItems):serializeRd(normalize(open,draft));
+    onCopyRuleSlot(open,text,ids);
     setCopied(true);setTimeout(()=>setCopied(false),1500);
   };
 
@@ -2090,6 +2173,7 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
             const isProhibit=slot.id===PROHIBIT_ID;
             const val=getVal(slot.id);
             const p=parseRd(val);
+            const prohNames=isProhibit?parseProhibit(val).items.map(i=>i.行為名).filter(Boolean).join(" / "):"";
             const isEmpty=!val;
             const isOpen=open===slot.id;
             const locked=!!locks[slot.id];
@@ -2107,7 +2191,7 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
                     {slot.label}
                   </td>
                   {isProhibit?(
-                    <td colSpan={3} style={{padding:"6px 6px"}}><Cell v={p.c}/></td>
+                    <td colSpan={3} style={{padding:"6px 6px"}}><Cell v={prohNames}/></td>
                   ):(<React.Fragment>
                     <td style={{padding:"6px 6px"}}><Cell v={p.c} rc={rowColor(p.diff)}/></td>
                     <td style={{padding:"6px 6px"}}><Cell v={p.f} rc={rowColor(p.diff)}/></td>
@@ -2118,14 +2202,8 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
                   <tr style={{background:C.surfaceAlt}}>
                     <td colSpan={4} style={{padding:"10px 8px"}}>
                       {isProhibit?(
-                        <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
-                          <span style={{fontSize:"0.6rem",color:C.textDim}}>禁止行為（名称を「/」または改行で列挙）</span>
-                          <textarea value={draft.c} onChange={e=>setDraft(p=>({...p,c:e.target.value}))}
-                            placeholder="両建て / アービトラージ / 指標一発 …" rows={2}
-                            style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
-                              borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none",resize:"vertical"}} />
-                        </div>
-                      ):(
+                        <ProhibitEditor items={prohibitItems} setItems={setProhibitItems}/>
+                      ):(<React.Fragment>
                         <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                           <ValueField label="Challenge" valKey="c" t={t} unit={unit} draft={draft} setDraft={setDraft}/>
                           <ValueField label="Funded" valKey="f" t={t} unit={unit} draft={draft} setDraft={setDraft}/>
@@ -2137,14 +2215,14 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
                             </select>
                           </div>
                         </div>
-                      )}
-                      <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
-                        <span style={{fontSize:"0.6rem",color:C.textDim}}>{isProhibit?"詳細（各行「名称：説明」で全件）":"詳細（常体・です/ます禁止。書き出し固定: 差分=ー→「Challenge・Funded共に～」/ EASE|TRAP→「Challengeでは～。Fundedでは～」。無の項目は「～について明示的に制限する記載はない」）"}</span>
-                        <textarea value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
-                          placeholder={isProhibit?"両建て：同一銘柄の反対売買で…":"Challenge・Funded共に…"} rows={4}
-                          style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
-                            borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none",resize:"vertical"}} />
-                      </div>
+                        <div style={{display:"flex",flexDirection:"column",gap:2,marginBottom:8}}>
+                          <span style={{fontSize:"0.6rem",color:C.textDim}}>詳細（常体・です/ます禁止。書き出し固定: 差分=ー→「Challenge・Funded共に～」/ EASE|TRAP→「Challengeでは～。Fundedでは～」。無の項目は「～について明示的に制限する記載はない」）</span>
+                          <textarea value={draft.note} onChange={e=>setDraft(p=>({...p,note:e.target.value}))}
+                            placeholder="Challenge・Funded共に…" rows={4}
+                            style={{width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,
+                              borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none",resize:"vertical"}} />
+                        </div>
+                      </React.Fragment>)}
                       <div style={{display:"flex",gap:4}}>
                         <Btn color={C.accent} onClick={save} style={{padding:"2px 10px",fontSize:"0.65rem"}}>保存</Btn>
                         <Btn color={C.textDim} onClick={cancel} style={{padding:"2px 10px",fontSize:"0.65rem"}}>取消</Btn>
@@ -2387,7 +2465,8 @@ function FirmPreview({slotData,planNames}){
 }
 function PlanPreview({slotData,planName,parentFirmSlotData,parentPlanNames}){
   const g=id=>{const fr=slotData[id];if(!fr?.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n");};
-  const rdSlots=SLOT_DEFS.dbp02.filter(s=>s.id.startsWith("rd_"));
+  const rdSlots=SLOT_DEFS.dbp02.filter(s=>s.id.startsWith("rd_")&&s.id!=="rd_prohibited"); // 禁止行為は別シェイプ＝別テーブル
+  const prohItems=parseProhibit(g("rd_prohibited")).items;
   const stepsVal=g("steps");
   // ルール早見表（rd_*から動的生成・5列）
   const th={padding:"6px 10px",textAlign:"left",color:PV.textDim,fontWeight:700,fontSize:"0.62rem",letterSpacing:"0.05em",borderBottom:`2px solid ${PV.borderStrong}`,background:PV.surface,whiteSpace:"nowrap"};
@@ -2434,6 +2513,23 @@ function PlanPreview({slotData,planName,parentFirmSlotData,parentPlanNames}){
         </table>
       </div>
     </PvSection>
+    {prohItems.length>0&&(
+    <PvSection title="禁止行為早見表">
+      <div style={{overflow:"auto"}}>
+        <table style={{borderCollapse:"collapse",width:"100%",fontFamily:PV.font}}>
+          <thead><tr><th style={th}>行為名</th><th style={th}>備考</th></tr></thead>
+          <tbody>
+            {prohItems.map((it,i)=>(
+              <tr key={i}>
+                <td style={{...td,color:PV.text,fontFamily:PV.fontJa}}>{it.行為名||"—"}</td>
+                <td style={{...td,color:it.備考?PV.text:PV.textDim,fontFamily:PV.fontJa}}>{it.備考||"—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </PvSection>
+    )}
     <PvSection title="ルール詳細">
       {rdSlots.map(s=>{
         const v=g(s.id);if(!v)return null;
@@ -2452,6 +2548,24 @@ function PlanPreview({slotData,planName,parentFirmSlotData,parentPlanNames}){
       })}
       {!rdSlots.some(s=>{const v=g(s.id);return v&&parseRd(v).note;})&&<p style={{color:PV.textDim,fontSize:"0.7rem"}}>※ 詳細未入力</p>}
     </PvSection>
+    {prohItems.length>0&&(
+    <PvSection title="禁止行為詳細">
+      <div style={{overflow:"auto"}}>
+        <table style={{borderCollapse:"collapse",width:"100%",fontFamily:PV.font}}>
+          <thead><tr><th style={th}>行為名</th><th style={th}>行為</th><th style={th}>処分</th></tr></thead>
+          <tbody>
+            {prohItems.map((it,i)=>(
+              <tr key={i}>
+                <td style={{...td,color:PV.accent,fontFamily:PV.fontJa,fontWeight:700,whiteSpace:"nowrap"}}>{it.行為名||"—"}</td>
+                <td style={{...td,color:PV.text,fontFamily:PV.fontJa}}>{it.行為||"—"}</td>
+                <td style={{...td,color:it.処分?PV.red:PV.textDim,fontFamily:PV.fontJa,whiteSpace:"nowrap"}}>{it.処分||"—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </PvSection>
+    )}
   </div>;
 }
 function KoryakuPreview({slotData}){
@@ -3345,7 +3459,9 @@ const PROMPTS_REGISTRY = {
   ・差分=ー（C/F同値またはF非該当）→「{{phaseLabelCFdot}}共に～」
   ・差分=EASE/TRAP（C/Fが異なる）→「Challengeでは～。Fundedでは～」
   ・値が「無」の項目 →「{{phaseLabelCFdot}}共に〔ルール名〕について明示的に制限する記載はない」（片側のみ無なら「Challengeでは、〔ルール名〕について明示的に制限する記載はない」等）
-  ※ 禁止行為（rd_prohibited）はこのルール対象外: C列=行為名を列挙 / F列="ー"・差分="ー"（同値ルールの例外。C列の列挙をF列に複製しない） / 詳細=各行為を「名称：説明 / ペナルティ」で全件
+  ・rd_target（利益目標）で複数ステップの合格目標が分かれる場合: C値・詳細とも「X% / Y% / Z%」スラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベルは使わない
+  ・rd_minDays（最低取引日数）: C=合格/F=出金は自明なので詳細に「（合格）（出金）」括弧書きを付けない。ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは～」/ F側記載なし→「～。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」
+  ※ 禁止行為（rd_prohibited）は上記「Challenge値|Funded値|差分|詳細」形式の対象外（別シェイプ）。slotListの "rd_prohibited" 型定義に従い JSON配列 [{"行為名","備考","行為","処分"}] で出力する。1要素=1行為（行為名=名称 / 行為=説明 / 処分=ペナルティ / 備考=極稀なC/F差異のみ・通常空）。rd_*の早見表・詳細には混在させない
 
 ■ 数値型 (rd_target / rd_minDays / rd_dailyLoss / rd_maxLoss / rd_consistency) の特例
 - C値/F値部分には「8%」「10日」のように数値+単位のみ。制限自体が無い場合は "無"、項目が構造上存在しない場合は "ー"
@@ -4168,12 +4284,15 @@ function App() {
   ・差分=ー → 「Challenge・Funded共に〜」
   ・差分=EASE/TRAP → 「Challengeでは〜。Fundedでは〜」
   ・値が「無」の項目 → 「Challenge・Funded共に〔ルール名〕について明示的に制限する記載はない」（片側のみ無なら「Challengeでは、〜について明示的に制限する記載はない」等）
-- 禁止行為（項目名=「禁止行為」）の特例（上記書き出しルールの対象外・同値ルールの例外）:
-  ・C列=禁止行為の名称をカンマ区切りで列挙（例:「IP共有, 複数プロファイル作成, 口座共有, ヘッジング, ...」）
-  ・F列=「ー」、差分列=「ー」（C列の列挙をF列に複製しない）
-  ・詳細列=各行為を「名称：説明（処分：◯◯）」形式で全件記載し、項目間は「 / 」で区切る
-    例:「IP共有：他者とのIP共有や不審なIP変更（処分：アカウント停止） / 複数プロファイル作成：同一人物による複数アカウントの不正作成（処分：アカウント停止） / ...」
-  ・「Challenge・Funded共に〜。」の書き出しは付けない
+- 利益目標: 複数ステップで合格目標が分かれる場合、C列は「X% / Y% / Z%」のスラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベルは使わない。詳細も「Challengeの合格目標は X% / Y% / Z%」と書きステップ番号ラベルを付けない
+- 最低取引日数: C=合格要件/F=出金要件は列で自明なので詳細に「（合格）（出金）」の括弧書きを付けない。ルール名は「最低取引日数」のみ。C側記載なし→「Challengeでは最低取引日数について明示的に制限する記載はない。Fundedでは〜」/ F側記載なし→「〜。Fundedでは最低取引日数について明示的に制限する記載はない」/ 両方なし→「Challenge・Funded共に最低取引日数について明示的に制限する記載はない」
+- 禁止行為は上記ルール表（項目|C|F|差分|詳細）に含めない（別シェイプ）。ルール表の後に、独立した「禁止行為テーブル」を追加する:
+  | 行為名 | 備考 | 行為 | 処分 |
+  |------|------|------|------|
+  | <名称> | <備考/通常空> | <行為の説明> | <違反時の処分> |
+  ・1行=1行為。行為名=名称（例: HFT, ヘッジング, レイテンシーアービトラージ）/ 行為=その行為の具体的説明 / 処分=違反時のペナルティ（例: 即時失格・利益没収）
+  ・備考は極稀にC/Fで可否が異なる場合のみ記載（例:「Cは許可/Fは禁止」）。通常は空欄
+  ・禁止行為が無ければこのテーブル自体を省略する
 - 主観形容詞・煽り（「重要」「厳格」「注意が必要」等）禁止
 - 出力はパイプ表のみ。前置き・説明文・コードフェンス禁止`;
       }
@@ -4240,7 +4359,12 @@ function App() {
     const firm=firms.find(f=>f.id===activeTabId);
     if(!firm){alert("対象Firmが見つかりません");return;}
     const parsed=splitPlanSections(text)
-      .map(s=>({name:s.name,...parsePlanRuleTable(s.body)}))
+      .map(s=>{
+        const r=parsePlanRuleTable(s.body);
+        const proh=parseProhibitTable(s.body); // 禁止行為テーブル（| 行為名 | 備考 | 行為 | 処分 |）
+        if(proh.length){r.updates["rd_prohibited"]=serializeProhibit(proh);r.stored++;}
+        return {name:s.name,...r};
+      })
       .filter(s=>s.stored>0);
     if(!parsed.length){alert("「## …（プラン名）」見出し＋早見表（項目|C|F|差分|詳細）が見つかりませんでした");return;}
     // プランID割り当て（同名は既存に上書き、なければ新規採番）
@@ -4290,7 +4414,7 @@ function App() {
         if(id==="planList") return "プラン名リスト（カンマ区切り）";
         if(NUM_IDS.has(id)) return "数値型（数値+単位。%/日/$等）";
         if(LOSSTYPE_IDS.has(id)) return `DD計算基準タイプ（${ddTypesStr(glossaryTerms)}）`;
-        if(id==="rd_prohibited") return "禁止行為（C列=名称列挙 / 詳細列=各禁止行為を「名称：説明」形式で全件記載）";
+        if(id==="rd_prohibited") return '禁止行為（別シェイプ）。JSON配列で出力: [{"行為名":"HFT","備考":"","行為":"高頻度自動取引による…","処分":"即時失格"}, ...]。1要素=1行為。行為名=名称 / 行為=その行為の説明 / 処分=違反ペナルティ / 備考=極稀なC/F差異のみ（通常空）';
         if(id&&id.startsWith("rd_")) return "ルール（C|F|差分|詳細 形式）";
         return "自由テキスト";
       };
@@ -4321,6 +4445,12 @@ function App() {
           console.log(`処理中 key=${k}, value=${v}, type=${typeof v}`);
           console.log(`  - currentSlotsに存在: ${currentSlots.some(s=>s.id===k)}`);
           console.log(`  - ロック状態: ${slotLocks[k]}`);
+          // 禁止行為（別シェイプ）: 配列 or {items:[...]} を serializeProhibit で格納
+          if(k==="rd_prohibited"&&v&&typeof v==="object"&&currentSlots.some(s=>s.id===k)&&!isSlotLocked(slotLocks,next,k)){
+            const text=serializeProhibit(Array.isArray(v)?v:(v.items||[]));
+            if(text)next[k]=[{text}];
+            continue;
+          }
           if(v&&typeof v==="string"&&currentSlots.some(s=>s.id===k)&&!isSlotLocked(slotLocks,next,k)){
             const existing=(next[k]||[]).filter(f=>!f.merged);
             // 既に同じテキストがあればスキップ
@@ -4405,6 +4535,7 @@ function App() {
         const detail=(allLines[i+4]||"").trim();
         const id=ltId[label];
         if(!id){skipped.push(label);i+=5;continue;}
+        if(id==="rd_prohibited"){i+=5;continue;} // 禁止行為は別シェイプ＝この行区切り形式では取り込まない
         if(slotLocks[id]){i+=5;continue;}
         if(id==="steps"){
           updates[id]=C;
@@ -4528,6 +4659,7 @@ function App() {
       if(item==="項目"||item==="項目名"||/^[-:\s]+$/.test(item))return;
       const id=labelToId[item];
       if(!id){if(item)skipped.push(item);return;}
+      if(id==="rd_prohibited")return; // 禁止行為は別テーブル（下のparseProhibitTable）で処理
       if(id==="steps"){
         updates[id]=(cells[1]||"").trim();
       } else if(item==="最低取引日数（出金）"&&updates["rd_minDays"]){
@@ -4546,6 +4678,9 @@ function App() {
       }
       stored++;
     });
+    // 禁止行為テーブル（| 行為名 | 備考 | 行為 | 処分 |）を別シェイプで取込
+    const prohSingle=parseProhibitTable(tableLines.join("\n"));
+    if(prohSingle.length){updates["rd_prohibited"]=serializeProhibit(prohSingle);stored++;}
     if(!stored){alert("「項目 | C | F | 差分 | 詳細」形式または「口座サイズ」価格表が見つかりませんでした");return;}
     let locked=0;
     setTabField("slotData",prev=>{
@@ -5050,7 +5185,11 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           const pj={slug:planSlug,"\u30d5\u30a1\u30fc\u30e0":slug};
           for(const[ek,jk]of Object.entries(PLAN_KEY_MAP)){
             const raw=getSlotText(psd,ek);
-            if(ek.startsWith("rd_")){
+            if(ek===PROHIBIT_ID){
+              // \u7981\u6b62\u884c\u70ba\uff08\u5225\u30b7\u30a7\u30a4\u30d7\uff09: {items:[{\u884c\u70ba\u540d,\u5099\u8003,\u884c\u70ba,\u51e6\u5206}]}
+              const pr=parseProhibit(raw);
+              if(pr.items.length)pj[jk]={items:pr.items};
+            } else if(ek.startsWith("rd_")){
               // \u65e9\u898b\u8868+\u8a73\u7d30\u306e\u7d71\u5408\u30ec\u30b3\u30fc\u30c9: "C|F|\u5dee\u5206|\u8a73\u7d30" \u2192 {C,F,\u5dee\u5206,\u8a73\u7d30}\uff08\u5148\u982d3\u5217\u56fa\u5b9a\u30fb\u6b8b\u308a\u3092\u8a73\u7d30\uff09
               if(raw&&raw.trim()){
                 const p=raw.split("|");

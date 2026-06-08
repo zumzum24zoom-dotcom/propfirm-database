@@ -12,7 +12,11 @@
   </div>
 </div>
 
-{{ $labels := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "時間制限" "ニュース取引制限" "週末トレード制限" "オーバーナイト制限" "EA制限" "コピートレード制限" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" "禁止行為" }}
+{{/* 禁止行為は別シェイプ（{items:[{行為名,備考,行為,処分}]}）のため $labels から除外し、専用テーブルで描画 */}}
+{{ $labels := slice "利益目標" "最低取引日数" "日次損失" "日次損失タイプ" "最大損失" "最大損失タイプ" "一貫性ルール" "利益上限" "時間制限" "ニュース取引制限" "週末トレード制限" "オーバーナイト制限" "EA制限" "コピートレード制限" "スキャルピング制約" "ストップロス制約" "リスクルール" "最大ポジション制約" }}
+{{ $prohibit := index $plan "禁止行為" }}
+{{ $prohItems := slice }}
+{{ if reflect.IsMap $prohibit }}{{ with index $prohibit "items" }}{{ $prohItems = . }}{{ end }}{{ end }}
 
 {{/* 価格（ファームの価格マトリクスからこのプラン(slug)の口座サイズ別価格を抽出） */}}
 {{ $firmData := index hugo.Data.firms .Params.firm }}
@@ -74,6 +78,24 @@
 </div>
 {{ end }}
 
+{{/* 禁止行為 早見表（ルール早見表の直下・行為名|備考） */}}
+{{ if $prohItems }}
+<div class="info-block" style="margin-bottom:1.5rem">
+  <h3>禁止行為 早見表</h3>
+  <table class="rule-table">
+    <thead><tr><th>行為名</th><th>備考</th></tr></thead>
+    <tbody>
+    {{ range $prohItems }}
+      <tr>
+        <td class="label">{{ with index . "行為名" }}{{ . }}{{ else }}—{{ end }}</td>
+        <td>{{ with index . "備考" }}{{ . }}{{ else }}—{{ end }}</td>
+      </tr>
+    {{ end }}
+    </tbody>
+  </table>
+</div>
+{{ end }}
+
 {{/* ルール詳細（新: rec.詳細 / 旧: 文字列値） */}}
 <div class="info-block stacked">
   <h3>ルール詳細</h3>
@@ -95,6 +117,27 @@
   <p style="color: var(--text-muted); font-size: 0.88rem;">ルールデータ収集中</p>
   {{ end }}
 </div>
+
+{{/* 禁止行為 詳細（ルール詳細の直下・行為名|行為|処分） */}}
+{{ if $prohItems }}
+<div class="info-block" style="margin-bottom:1.5rem">
+  <h3>禁止行為 詳細</h3>
+  <div class="table-wrapper">
+  <table class="rule-table">
+    <thead><tr><th>行為名</th><th>行為</th><th>処分</th></tr></thead>
+    <tbody>
+    {{ range $prohItems }}
+      <tr>
+        <td class="label">{{ with index . "行為名" }}{{ . }}{{ else }}—{{ end }}</td>
+        <td>{{ with index . "行為" }}{{ . }}{{ else }}—{{ end }}</td>
+        <td>{{ with index . "処分" }}{{ . }}{{ else }}—{{ end }}</td>
+      </tr>
+    {{ end }}
+    </tbody>
+  </table>
+  </div>
+</div>
+{{ end }}
 
 {{ with .Content }}
 <div class="plan-body">{{ . }}</div>

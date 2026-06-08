@@ -126,7 +126,17 @@
         <tr><td class="label">日次損失</td><td>5%</td><td>5%</td><td>ー</td></tr>
         <tr class="row-trap"><td class="label">最大損失</td><td>10%</td><td>6%</td><td><span class="badge-trap">TRAP</span></td></tr>
         <tr><td class="label">EA制限</td><td>※有</td><td>—</td><td>ー</td></tr>
-        <tr><td class="label">禁止行為</td><td>ヘッジング / HFT / 口座管理代行</td><td>—</td><td>ー</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>禁止行為 早見表</h3>
+    <table class="rule-table">
+      <thead><tr><th>行為名</th><th>備考</th></tr></thead>
+      <tbody>
+        <tr><td class="label">ヘッジング</td><td>—</td></tr>
+        <tr><td class="label">HFT</td><td>—</td></tr>
+        <tr><td class="label">口座管理代行</td><td>—</td></tr>
       </tbody>
     </table>
   </div>
@@ -135,9 +145,17 @@
     <div class="info-row row-ease"><span class="label">利益目標 <span class="badge-ease">EASE</span></span><span class="value">Challengeは口座残高に対し8%の利益達成が合格条件。Funded口座では利益目標は設定されない。</span></div>
     <div class="info-row row-trap"><span class="label">最大損失 <span class="badge-trap">TRAP</span></span><span class="value">Challengeは初期残高基準で10%（Static）。Funded移行後は6%に引き下げられ、超過時は口座失効。</span></div>
     <div class="info-row"><span class="label">EA制限</span><span class="value">リスク管理・分析補助の裁量EAのみ使用可。完全自動ボット・HFT・レイテンシーアービトラージは禁止。</span></div>
-    <div class="info-row"><span class="label">禁止行為：ヘッジング</span><span class="value">複数口座間の両建ては禁止。</span></div>
-    <div class="info-row"><span class="label">禁止行為：HFT</span><span class="value">超高速売買は禁止。</span></div>
-    <div class="info-row"><span class="label">禁止行為：口座管理代行</span><span class="value">第三者による運用代行は禁止。</span></div>
+  </div>
+  <div class="info-block" style="margin-bottom:1.5rem">
+    <h3>禁止行為 詳細</h3>
+    <table class="rule-table">
+      <thead><tr><th>行為名</th><th>行為</th><th>処分</th></tr></thead>
+      <tbody>
+        <tr><td class="label">ヘッジング</td><td>複数口座間の両建て。</td><td>即時失格</td></tr>
+        <tr><td class="label">HFT</td><td>超高速売買・高頻度自動取引。</td><td>即時失格</td></tr>
+        <tr><td class="label">口座管理代行</td><td>第三者による運用代行。</td><td>利益没収</td></tr>
+      </tbody>
+    </table>
   </div>
 
 </main>
