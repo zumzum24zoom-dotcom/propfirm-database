@@ -1972,6 +1972,19 @@ const LOSSTYPE_OPTS=["Static","Trailing（Balance EOD）","Trailing（Balance HW
 const YESNO3_OPTS=["有","無","※有","ー"]; // 制限ルールの有無（無=制限なし／※有=条件付き／ー=構造上非該当）
 const NUM_SPECIAL=["無","ー"]; // 数値型でも選べる特殊値（無=制限なし／ー=構造上非該当）
 const DIFF_OPTS=["ー","EASE","TRAP"];
+// ── 差分オート判定の方向定義 ──
+const DIFF_HIGH_EASY=new Set(["rd_dailyLoss","rd_maxLoss","rd_consistency","rd_profitCap"]); // 数値が高いほど緩い
+const DIFF_LOW_EASY=new Set(["rd_target","rd_minDays"]); // 数値が低いほど緩い（rd_targetは両方%のみ）
+const CAT_STRICT={"無":0,"※有":1,"有":2}; // カテゴリ厳しさ（無=最緩 < ※有 < 有=最厳）
+// DD計算タイプ 厳しさ順位（1易→6難・マスター確定）: EOD群<HWM群、各内でBalance<Equity、Equity HWMが最難
+const DD_DIFF_RANK={
+  "Static":1,
+  "Trailing（Balance EOD）":2,
+  "Trailing（Equity EOD）":3,
+  "Trailing（Higher B or E EOD）":4,
+  "Trailing（Balance HWM）":5,
+  "Trailing（Equity HWM）":6,
+};
 
 function parseRd(val){
   const p=(val||"").split("|");
@@ -2238,15 +2251,30 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
     (allPlans||[]).forEach(pl=>{
       if(pl.id===currentPlanId)return;
       const pv=planVal(pl,open);
-      d[pl.id]=(pv&&!pv.prohibit)?{c:pv.c||"",f:pv.f||"",diff:pv.diff||"ー",note:pv.note||""}:{c:"",f:"",diff:"ー",note:""};
+      if(pv&&!pv.prohibit){
+        const c=pv.c||"",f=pv.f||"";const ad=autoDiff(open,c,f);
+        d[pl.id]={c,f,diff:ad!=null?ad:(pv.diff||"ー"),note:pv.note||"",dm:false};
+      }else{
+        d[pl.id]={c:"",f:"",diff:"ー",note:"",dm:false};
+      }
     });
     setRowDrafts(d);
   },[open]);
   // インライン行ドラフト: 編集中プランは draft、他プランは rowDrafts
   const rowOf=(pl)=>pl.id===currentPlanId?draft:(rowDrafts[pl.id]||{c:"",f:"",diff:"ー",note:""});
   const setRowOf=(pl,patch)=>{
-    if(pl.id===currentPlanId){setDraft(p=>({...p,...patch}));}
-    else{setRowDrafts(prev=>({...prev,[pl.id]:{...(prev[pl.id]||{c:"",f:"",diff:"ー",note:""}),...patch}}));}
+    const apply=(prev)=>{
+      const base=prev||{c:"",f:"",diff:"ー",note:"",dm:false};
+      const merged={...base,...patch};
+      if("diff" in patch){merged.dm=true;} // 差分を手動変更
+      else if(("c" in patch||"f" in patch)&&!merged.dm){ // C/F変更→オート再計算
+        const ad=autoDiff(open,merged.c,merged.f);
+        if(ad!=null)merged.diff=ad;
+      }
+      return merged;
+    };
+    if(pl.id===currentPlanId){setDraft(p=>apply(p));}
+    else{setRowDrafts(prev=>({...prev,[pl.id]:apply(prev[pl.id])}));}
   };
   // 他プラン行を確定（編集中プランは下の「保存」で確定するためスキップ）
   const commitRow=(pl)=>{
@@ -2266,16 +2294,54 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
     if(!v||NUM_SPECIAL.includes(v)||v==="ー"||v==="—")return v;
     return unit&&!v.endsWith(unit)?v+unit:v;
   };
+  // ── 差分オート判定 ── F が C より緩い→EASE / 厳しい→TRAP / 同等or非該当→ー / 判定不能→null（手動）
+  const firstNum=s=>{const m=String(s||"").match(/-?\d+(?:\.\d+)?/);return m?parseFloat(m[0]):null;};
+  const isNAv=v=>{v=(v||"").trim();return !v||v==="ー"||v==="—";};
+  const autoDiff=(id,c,f)=>{
+    c=(c||"").trim();f=(f||"").trim();
+    if(isNAv(c)||isNAv(f))return "ー";
+    if(c===f)return "ー";
+    if(c==="無"&&f==="無")return "ー";
+    if(c==="無")return "TRAP"; // C=無(最緩)・F=制限あり → F厳しい
+    if(f==="無")return "EASE"; // F=無(最緩) → F緩い
+    if(LOSSTYPE_IDS.has(id)){ // DD計算タイプ（厳しさ順位）
+      const cr=DD_DIFF_RANK[c],fr=DD_DIFF_RANK[f];
+      if(cr==null||fr==null)return null;
+      return fr<cr?"EASE":fr>cr?"TRAP":"ー";
+    }
+    if(DIFF_HIGH_EASY.has(id)||DIFF_LOW_EASY.has(id)){ // 数値型
+      if(id==="rd_target"&&!(c.includes("%")&&f.includes("%")))return null; // 利益目標は両方%のみ
+      const cn=firstNum(c),fn=firstNum(f);
+      if(cn!=null&&fn!=null){
+        if(cn===fn)return "ー";
+        const fLooser=DIFF_HIGH_EASY.has(id)?fn>cn:fn<cn;
+        return fLooser?"EASE":"TRAP";
+      }
+    }
+    if(CAT_STRICT[c]!=null&&CAT_STRICT[f]!=null){ // カテゴリ（無<※有<有）
+      return CAT_STRICT[f]<CAT_STRICT[c]?"EASE":CAT_STRICT[f]>CAT_STRICT[c]?"TRAP":"ー";
+    }
+    return null; // 判定不能 → 手動
+  };
   const openRow=(slot)=>{
     if(locks[slot.id])return;
     if(slot.id===PROHIBIT_ID){
       const its=parseProhibit(getVal(slot.id)).items;
       setProhibitItems(its.length?its:[{行為名:"",備考:"",行為:"",処分:""}]);
     } else {
-      setDraft(parseRd(getVal(slot.id)));
+      setDraft({...parseRd(getVal(slot.id)),dm:false}); // dm=差分手動フラグ（false=オート）
     }
     setOpen(slot.id);setCopySel({});setCopied(false);
   };
+  // メイン編集: C/F変更で差分を自動再計算（手動上書き dm=true 時はスキップ）
+  useEffect(()=>{
+    if(!open||open===PROHIBIT_ID)return;
+    setDraft(p=>{
+      if(p.dm)return p;
+      const ad=autoDiff(open,p.c,p.f);
+      return (ad!=null&&ad!==p.diff)?{...p,diff:ad}:p;
+    });
+  },[draft.c,draft.f,open]);
   // 保存・コピー共通の値正規化（単位付与・差分自動・禁止行為特例）
   const normalize=(id,src)=>{
     const d={...src};
@@ -2376,8 +2442,12 @@ function RuleTableEditor({slotData,setSlotData,locks,setLocks,copyTargets,onCopy
                           <ValueField label="Challenge" valKey="c" t={t} unit={unit} draft={draft} setDraft={setDraft}/>
                           <ValueField label="Funded" valKey="f" t={t} unit={unit} draft={draft} setDraft={setDraft}/>
                           <div style={{display:"flex",flexDirection:"column",gap:2}}>
-                            <span style={{fontSize:"0.6rem",color:C.textDim}}>差分</span>
-                            <select value={draft.diff} onChange={e=>setDraft(p=>({...p,diff:e.target.value}))}
+                            <span style={{fontSize:"0.6rem",color:C.textDim,display:"flex",gap:5,alignItems:"center"}}>差分
+                              {draft.dm
+                                ?<span onClick={()=>setDraft(p=>{const ad=autoDiff(open,p.c,p.f);return{...p,dm:false,diff:ad!=null?ad:p.diff};})} title="オートに戻す" style={{cursor:"pointer",color:C.yellow,fontSize:"0.55rem",border:`1px solid ${C.yellow}`,borderRadius:2,padding:"0 4px"}}>手動 ↺auto</span>
+                                :<span title="C/Fから自動判定中" style={{color:C.green,fontSize:"0.55rem",border:`1px solid ${C.green}`,borderRadius:2,padding:"0 4px"}}>AUTO</span>}
+                            </span>
+                            <select value={draft.diff} onChange={e=>setDraft(p=>({...p,diff:e.target.value,dm:true}))}
                               style={{background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 5px",fontSize:"0.68rem"}}>
                               {DIFF_OPTS.map(o=><option key={o}>{o}</option>)}
                             </select>
