@@ -1706,22 +1706,68 @@ function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,o
 // ═══════════════════════════════════════════════════
 // ポップアップ編集モーダル
 // ═══════════════════════════════════════════════════
-function EditModal({show,text,onSave,onClose,label}) {
+function EditModal({show,text,onSave,onClose,label,slotId}) {
+  // rd_* スロット（禁止行為=別シェイプを除く）は C|F|差分|詳細 を構造化フィールドで編集。
+  // 詳細欄に「無|無|ー|」等の早見表値が混ざらないよう、parseRd で分離して表示する。
+  const isRd = !!slotId && slotId.startsWith("rd_") && slotId!=="rd_prohibited";
   const [val,setVal]=useState(text||"");
-  useEffect(()=>setVal(text||""),[text,show]);
+  const [rd,setRd]=useState({c:"",f:"",diff:"ー",note:""});
+  useEffect(()=>{
+    setVal(text||"");
+    if(isRd)setRd(parseRd(text||""));
+  },[text,show,slotId]);
   if(!show)return null;
+  const inp={background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:5,padding:"6px 8px",fontSize:"0.78rem",fontFamily:font,outline:"none"};
+  const fieldLabel={fontSize:"0.62rem",color:C.textDim,fontWeight:700,letterSpacing:"0.04em"};
+  const chip=v=>({cursor:"pointer",fontSize:"0.62rem",color:C.textDim,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 7px",whiteSpace:"nowrap"});
+  const cfRow=(valKey,labelTxt)=>(
+    <div style={{display:"flex",flexDirection:"column",gap:3,flex:1,minWidth:130}}>
+      <span style={fieldLabel}>{labelTxt}</span>
+      <input value={rd[valKey]} onChange={e=>setRd(p=>({...p,[valKey]:e.target.value}))} style={{...inp,width:"100%"}} placeholder="値（数値+単位 / 有・無・※有・ー）" />
+      <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+        {["有","無","※有","ー"].map(o=>(
+          <span key={o} onClick={()=>setRd(p=>({...p,[valKey]:o}))} style={chip(o)}>{o}</span>
+        ))}
+      </div>
+    </div>
+  );
   return (
     <div style={{position:"fixed",inset:0,zIndex:9998,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={onClose}>
-      <div onClick={e=>e.stopPropagation()} style={{width:"70vw",maxWidth:700,maxHeight:"80vh",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:16,display:"flex",flexDirection:"column",gap:8}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"70vw",maxWidth:700,maxHeight:"80vh",overflow:"auto",background:C.surface,border:`1px solid ${C.accent}`,borderRadius:8,padding:16,display:"flex",flexDirection:"column",gap:8}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span style={{fontSize:"0.82rem",fontWeight:700,color:C.accent}}>{label||"編集"}</span>
+          <span style={{fontSize:"0.82rem",fontWeight:700,color:C.accent}}>{label||"編集"}{isRd&&<span style={{fontSize:"0.6rem",color:C.textDim,marginLeft:8,fontWeight:400}}>（早見表と連動）</span>}</span>
           <span onClick={onClose} style={{cursor:"pointer",color:C.textDim,fontSize:"1.1rem"}}>✕</span>
         </div>
-        <textarea value={val} onChange={e=>setVal(e.target.value)} style={{flex:1,minHeight:200,background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:6,padding:10,fontSize:"0.82rem",fontFamily:font,lineHeight:1.6,resize:"vertical",outline:"none"}} />
-        <div style={{display:"flex",gap:6,justifyContent:"flex-end"}}>
-          <Btn color={C.accent} onClick={()=>{onSave(val);onClose()}}>保存</Btn>
-          <Btn color={C.textDim} onClick={onClose}>取消</Btn>
-        </div>
+        {isRd?(
+          <React.Fragment>
+            <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+              {cfRow("c","Challenge")}
+              {cfRow("f","Funded")}
+              <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                <span style={fieldLabel}>差分</span>
+                <select value={rd.diff} onChange={e=>setRd(p=>({...p,diff:e.target.value}))} style={{...inp,padding:"6px 5px"}}>
+                  {["ー","EASE","TRAP"].map(o=><option key={o} value={o}>{o}</option>)}
+                </select>
+              </div>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:3}}>
+              <span style={fieldLabel}>詳細（説明文のみ。早見表の「{rd.c||"—"}|{rd.f||"—"}|{rd.diff||"—"}」は含めない）</span>
+              <textarea value={rd.note} onChange={e=>setRd(p=>({...p,note:e.target.value}))} style={{minHeight:160,background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:6,padding:10,fontSize:"0.82rem",fontFamily:font,lineHeight:1.6,resize:"vertical",outline:"none"}} />
+            </div>
+            <div style={{display:"flex",gap:6,justifyContent:"flex-end"}}>
+              <Btn color={C.accent} onClick={()=>{onSave(serializeRd(rd));onClose()}}>保存</Btn>
+              <Btn color={C.textDim} onClick={onClose}>取消</Btn>
+            </div>
+          </React.Fragment>
+        ):(
+          <React.Fragment>
+            <textarea value={val} onChange={e=>setVal(e.target.value)} style={{flex:1,minHeight:200,background:C.bg,color:C.textBright,border:`1px solid ${C.border}`,borderRadius:6,padding:10,fontSize:"0.82rem",fontFamily:font,lineHeight:1.6,resize:"vertical",outline:"none"}} />
+            <div style={{display:"flex",gap:6,justifyContent:"flex-end"}}>
+              <Btn color={C.accent} onClick={()=>{onSave(val);onClose()}}>保存</Btn>
+              <Btn color={C.textDim} onClick={onClose}>取消</Btn>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     </div>
   );
@@ -2093,13 +2139,65 @@ function ProhibitEditor({items,setItems}){
   const add=()=>setItems(prev=>[...prev,{行為名:"",備考:"",行為:"",処分:""}]);
   const del=i=>setItems(prev=>prev.filter((_,idx)=>idx!==i));
   const inp={background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 6px",fontSize:"0.68rem",fontFamily:font,outline:"none"};
+  // コピー: NotebookLM互換テーブル形式（| 行為名 | 備考 | 行為 | 処分 |）→ 再取込・外部貼付け両対応
+  const [copiedFb,setCopiedFb]=useState(null); // null | "all" | "i{index}"
+  const toTable=(rows)=>{
+    const esc=s=>String(s||"").replace(/\|/g,"\\|").replace(/\r?\n/g," ");
+    const head="| 行為名 | 備考 | 行為 | 処分 |\n|---|---|---|---|";
+    const body=(rows||[]).map(it=>`| ${esc(it.行為名)} | ${esc(it.備考)} | ${esc(it.行為)} | ${esc(it.処分)} |`).join("\n");
+    return body?head+"\n"+body:"";
+  };
+  const doCopy=(rows,tag)=>{
+    const t=toTable(rows);if(!t)return;
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).catch(()=>{});
+    setCopiedFb(tag);setTimeout(()=>setCopiedFb(null),1200);
+  };
+  // 丸ごと貼り付け: file:// では clipboard.readText が不可なので、貼付け欄(Ctrl+V)→置換/追加 方式
+  const [pasteOpen,setPasteOpen]=useState(false);
+  const [pasteText,setPasteText]=useState("");
+  const applyPaste=(mode)=>{
+    const parsed=parseProhibitTable(pasteText);
+    if(!parsed.length){alert("禁止行為テーブル（| 行為名 | 備考 | 行為 | 処分 |）が見つかりません。\n丸ごとコピーした内容を貼り付けてください。");return;}
+    if(mode==="replace"){
+      if(items.length&&!window.confirm(`既存 ${items.length}件 を、貼り付けた ${parsed.length}件 で置き換えますか？`))return;
+      setItems(parsed);
+    }else{
+      setItems(prev=>[...prev,...parsed]);
+    }
+    setPasteText("");setPasteOpen(false);
+  };
   return(
     <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:8}}>
-      <span style={{fontSize:"0.6rem",color:C.textDim}}>禁止行為（1行=1行為。行為名・行為(説明)・処分を入力。備考は極稀なC/F差異用）</span>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+        <span style={{fontSize:"0.6rem",color:C.textDim}}>禁止行為（1行=1行為。行為名・行為(説明)・処分を入力。備考は極稀なC/F差異用）</span>
+        <div style={{display:"flex",gap:4,flexShrink:0}}>
+          {items.length>0&&<span onClick={()=>doCopy(items,"all")} title="全禁止行為をテーブル形式でクリップボードへコピー"
+            style={{cursor:"pointer",fontSize:"0.62rem",fontWeight:700,color:copiedFb==="all"?C.green:C.accent,border:`1px solid ${copiedFb==="all"?C.green:C.accent}`,borderRadius:3,padding:"2px 8px",whiteSpace:"nowrap"}}>{copiedFb==="all"?"✓ コピー済":"⧉ 丸ごとコピー"}</span>}
+          <span onClick={()=>setPasteOpen(o=>!o)} title="丸ごとコピーしたテーブルを貼り付けて置換/追加"
+            style={{cursor:"pointer",fontSize:"0.62rem",fontWeight:700,color:pasteOpen?C.bg:C.blue,background:pasteOpen?C.blue:"transparent",border:`1px solid ${C.blue}`,borderRadius:3,padding:"2px 8px",whiteSpace:"nowrap"}}>⤵ 丸ごと貼り付け</span>
+        </div>
+      </div>
+      {pasteOpen&&(
+        <div style={{display:"flex",flexDirection:"column",gap:5,padding:8,background:C.bg,border:`1px solid ${C.blue}55`,borderRadius:4}}>
+          <span style={{fontSize:"0.58rem",color:C.textDim}}>丸ごとコピーしたテーブルをここに貼り付け（Ctrl+V）→ 置換 または 追加</span>
+          <textarea value={pasteText} onChange={e=>setPasteText(e.target.value)} rows={3}
+            placeholder="| 行為名 | 備考 | 行為 | 処分 |&#10;|---|---|---|---|&#10;| HFT |  | … | … |"
+            style={{...inp,width:"100%",resize:"vertical",fontSize:"0.64rem"}} />
+          <div style={{display:"flex",gap:6}}>
+            <span onClick={()=>applyPaste("replace")} style={{cursor:"pointer",fontSize:"0.62rem",fontWeight:700,color:C.bg,background:C.yellow,borderRadius:3,padding:"3px 10px"}}>置換（全消去して貼付）</span>
+            <span onClick={()=>applyPaste("append")} style={{cursor:"pointer",fontSize:"0.62rem",fontWeight:700,color:C.bg,background:C.green,borderRadius:3,padding:"3px 10px"}}>追加（末尾に足す）</span>
+            <span onClick={()=>{setPasteOpen(false);setPasteText("")}} style={{cursor:"pointer",fontSize:"0.62rem",color:C.textDim,border:`1px solid ${C.border}`,borderRadius:3,padding:"3px 10px"}}>閉じる</span>
+          </div>
+        </div>
+      )}
       {items.map((it,i)=>(
         <div key={i} style={{display:"flex",gap:4,alignItems:"flex-start",borderLeft:`2px solid ${C.border}`,paddingLeft:6}}>
-          <span onClick={()=>del(i)} title="この行為を削除"
-            style={{cursor:"pointer",color:C.red,fontSize:"0.8rem",lineHeight:"1.6",userSelect:"none"}}>×</span>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:5,paddingTop:2}}>
+            <span onClick={()=>del(i)} title="この行為を削除"
+              style={{cursor:"pointer",color:C.red,fontSize:"0.8rem",lineHeight:1,userSelect:"none"}}>×</span>
+            <span onClick={()=>doCopy([it],"i"+i)} title="この1行為を全フィールドコピー"
+              style={{cursor:"pointer",color:copiedFb==="i"+i?C.green:C.textDim,fontSize:"0.74rem",lineHeight:1,userSelect:"none"}}>{copiedFb==="i"+i?"✓":"⧉"}</span>
+          </div>
           <div style={{display:"flex",flexDirection:"column",gap:3,flex:1}}>
             <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
               <input value={it.行為名} onChange={e=>upd(i,"行為名",e.target.value)} placeholder="行為名（例: HFT）" style={{...inp,flex:"1 1 160px",minWidth:120}}/>
@@ -2622,6 +2720,21 @@ function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlo
   const [showRuleTable,setShowRuleTable]=useState(false);
   const [showPriceMatrix,setShowPriceMatrix]=useState(false);
   const [showPreview,setShowPreview]=useState(false);
+  // スロット値クリップボード（アプリ内＋システム両取り / ペーストは同一スロット限定）。
+  // プラン切替で SlotPanel は remount しないため、別プランへ値を運べる。
+  const [slotClip,setSlotClip]=useState(null); // {slotId,label,value}
+  const [copiedSlotId,setCopiedSlotId]=useState(null); // ✓フィードバック用
+  const slotEffValue=(id)=>{const fr=slotData[id]||[];if(!fr.length)return"";const m=fr.find(f=>f.merged);return m?m.text:fr.map(f=>f.text).join("\n");};
+  const copySlot=(slot)=>{
+    const v=slotEffValue(slot.id);if(!v)return;
+    setSlotClip({slotId:slot.id,label:slot.label,value:v});
+    setCopiedSlotId(slot.id);setTimeout(()=>setCopiedSlotId(null),1200);
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).catch(()=>{});
+  };
+  const pasteSlot=(slot)=>{
+    if(!slotClip||slotClip.slotId!==slot.id||isLocked(slot.id))return;
+    setSlotData(prev=>({...prev,[slot.id]:[{text:slotClip.value}]}));
+  };
 
   const sections=useMemo(()=>{
     const m={};currentSlots.forEach(s=>{if(!m[s.section])m[s.section]=[];m[s.section].push(s)});return Object.entries(m);
@@ -2804,7 +2917,7 @@ ${slotList}
 
   return (
     <div style={{flex:1,overflow:"auto",padding:10,display:"flex",flexDirection:"column"}}>
-      <EditModal show={!!editModal} text={editModal?.text} label={editModal?.label}
+      <EditModal show={!!editModal} text={editModal?.text} label={editModal?.label} slotId={editModal?.slotId}
         onSave={handleEditSave} onClose={()=>setEditModal(null)} />
       <ReinvestigateModal show={showReinvestigateModal} onClose={()=>{setShowReinvestigateModal(false);setSelectedSlotsForReinvestigate([])}}
         currentSlots={currentSlots} slotData={slotData}
@@ -2867,7 +2980,16 @@ ${slotList}
         ?<RuleTableEditor key={activePlanId||"plan"} slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} copyTargets={copyTargets} onCopyRuleSlot={onCopyRuleSlot} />
         :templateMode==="dbp01"&&showPriceMatrix
         ?<PriceMatrixEditor slotData={slotData} setSlotData={setSlotData} locks={locks} setLocks={setLocks} planNames={planNames} />
-        :sections.map(([sec,slots])=>{
+        :(<React.Fragment>
+        {slotClip&&(
+          <div style={{display:"flex",alignItems:"center",gap:6,padding:"4px 8px",marginBottom:6,background:`${C.accent}18`,border:`1px solid ${C.accent}55`,borderRadius:4,fontSize:"0.62rem"}}>
+            <span style={{color:C.accent,fontWeight:700,whiteSpace:"nowrap"}}>⧉ コピー中</span>
+            <span style={{color:C.textDim,whiteSpace:"nowrap"}}>{slotClip.label}:</span>
+            <span style={{color:C.textBright,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{slotClip.value}</span>
+            <span onClick={()=>setSlotClip(null)} title="コピー解除" style={{cursor:"pointer",color:C.textDim,whiteSpace:"nowrap"}}>✕</span>
+          </div>
+        )}
+        {sections.map(([sec,slots])=>{
         const fc=slots.filter(s=>slotData[s.id]?.length>0).length;
         const allSectionLocked=slots.every(s=>isLocked(s.id));
         return (
@@ -2901,8 +3023,10 @@ ${slotList}
                     {!locked&&frags.length>0&&<span onClick={e=>{e.stopPropagation();setEditModal({slotId:slot.id,idx:merged?"merged":0,text:merged?merged.text:frags[0]?.text||"",label:slot.label})}} style={{cursor:"pointer",fontSize:"0.55rem",color:C.textDim,lineHeight:1}}>✎</span>}
                     {!locked&&frags.length>1&&!merged&&<span onClick={e=>{e.stopPropagation();handleMerge(slot.id)}} style={{cursor:"pointer",fontSize:"0.5rem",color:C.purple,lineHeight:1}}>{mergingSlot===slot.id?"…":"整"}</span>}
 
-                    {/* スロット名 */}
+                    {/* スロット名 + コピー/ペースト */}
                     <span style={{fontSize:"0.7rem",fontWeight:700,color:frags.length?C.accent:C.textDim}}>{slot.label}</span>
+                    {frags.length>0&&<span onClick={e=>{e.stopPropagation();copySlot(slot)}} title="値をコピー（別プランの同スロットへ貼付け可）" style={{cursor:"pointer",fontSize:"0.8rem",lineHeight:1,color:copiedSlotId===slot.id?C.green:C.textDim,border:`1px solid ${copiedSlotId===slot.id?C.green:C.border}`,borderRadius:3,padding:"2px 6px"}}>{copiedSlotId===slot.id?"✓":"⧉"}</span>}
+                    {!locked&&slotClip&&slotClip.slotId===slot.id&&<span onClick={e=>{e.stopPropagation();pasteSlot(slot)}} title={`「${slotClip.label}」の値を貼付け`} style={{cursor:"pointer",fontSize:"0.8rem",lineHeight:1,color:C.accent,border:`1px solid ${C.accent}`,borderRadius:3,padding:"2px 6px",background:`${C.accent}18`}}>⤵</span>}
                     {slot.hint&&<span style={{fontSize:"0.48rem",color:C.textDim,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{slot.hint}</span>}
 
                     {/* 右: AI作成 + Planタブ生成 + × */}
@@ -2936,6 +3060,7 @@ ${slotList}
           </div>
         );
       })}
+        </React.Fragment>)}
     </div>
   );
 }
