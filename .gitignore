@@ -29,8 +29,8 @@ __pycache__/
 01_tools/package.json
 01_tools/package-lock.json
 
-# Obsidian ワークスペース（個人作業状態）
-.obsidian/workspace.json
+# Obsidian 設定（undisclosed で管理）
+.obsidian/
 
 # 個人計算ツール（非公開: undisclosed リポジトリへ分離済み）
 01_tools/**/手取り逆算*.html
