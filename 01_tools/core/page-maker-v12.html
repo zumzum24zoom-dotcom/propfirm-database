@@ -240,6 +240,7 @@ const MASTER_DEFS = {
     {fkey:"F20",id:"profitSplitNote",term:"※Profit Split",     section:"入出金",  hint:"補足テキスト",                           definition:"利益分配率の変動条件やスケールアップ後の比率を補足する注記。"},
     {fkey:"F21",id:"planList",       term:"プラン名リスト",     section:"全プラン",hint:"名称のみ列挙",                           definition:"配下プランの名称のみを列挙したリスト。説明・補足は不要。"},
     {fkey:"F22",id:"planComparison", term:"プラン比較テーブル", section:"全プラン",hint:"Collectorと同じ項目",                    definition:"プラン間のルール・価格を比較したテーブル。"},
+    {id:"email",         term:"メールアドレス",     section:"アフィリエイト",hint:"内部手入力。メールクーポン受信用の登録アドレス（→サイドバーへ流す）",                 definition:"メール配信クーポンを受け取るための登録メールアドレス。Firm・アフィリエイトURLと紐づく内部データ。マスター手入力であり公式サイトから収集する項目ではない。"},
     {id:"affiliateUrl",  term:"アフィリエイトURL",  section:"アフィリエイト",hint:"内部手入力。表示時の「公式へ」リンク先（無ければ公式URLにフォールバック）", definition:"提携アフィリエイト計測リンク。マスター手入力の内部データであり公式サイトから収集する項目ではない。表示側の「公式へ」ボタンはこのURLを優先し、空なら officialUrl を使う。"},
     {id:"couponCode",    term:"クーポンコード",     section:"アフィリエイト",hint:"内部手入力。割引コード（例: 9HFH2XXC）",                                     definition:"提携クーポン／割引コード。マスター手入力の内部データであり公式サイトから収集する項目ではない。"},
   ],
@@ -5460,8 +5461,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
         const slug=slugify(firmName)||firm.id;
         const fj={slug};
         for(const[ek,jk]of Object.entries(FIRM_KEY_MAP))fj[jk]=getSlotText(sd,ek);
-        fj["メールアドレス"]=getSlotText(sd,"メールアドレス")||"";
-        // アフィリエイトURL / クーポンコード は MASTER_DEFS スロット由来のため上のループで出力済み
+        // メールアドレス / アフィリエイトURL / クーポンコード は MASTER_DEFS スロット由来のため上のループで出力済み
         fj["プラン一覧"]=(firm.plans||[]).map(p=>p.name);
         // 攻略3断面（k_dd / k_rules / k_payout）— NotebookLM出力 or Sonnet生成のMarkdown/HTMLをそのまま格納
         const kDd=getSlotText(sd,"k_dd"); if(kDd) fj["攻略_DD"]=kDd;

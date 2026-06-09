@@ -258,8 +258,9 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 
 **アフィリエイトURL・クーポンコード スロット追加（DBP_01）**
 
-- `MASTER_DEFS.dbp01` に2スロット追加（`page-maker-v12.html`）。新セクション「アフィリエイト」に配置。
-  - `affiliateUrl`（アフィリエイトURL）/ `couponCode`（クーポンコード）
+- `MASTER_DEFS.dbp01` に3スロット追加（`page-maker-v12.html`）。新セクション「アフィリエイト」に配置。
+  - `email`（メールアドレス）/ `affiliateUrl`（アフィリエイトURL）/ `couponCode`（クーポンコード）
+  - `email` はメール配信クーポン受信用の登録アドレス。Firm⟷アフィリエイトURL⟷メールクーポン（→サイドバーへ流す）を紐づける内部データ。旧 exportHugo のハードコード `fj["メールアドレス"]`（存在しないスロットid参照で常に空だった残骸）を削除し、スロット由来のループ出力に一本化。
   - **意図的に `fkey` 無し** — マスター手入力の内部データであり公式サイトから収集する項目ではないため、LLM収集プロンプト（fkey filter, L458）・定義注入から除外。編集UI表示・JSON出力・キーマップには `MASTER_DEFS` 経由で自動伝播。
 - F04 `officialUrl` を「公式URL（正本）」専用に修正（hint/definition から"アフィリエイト優先"を削除し、素の公式URLのみ格納する運用へ分離）。
 - 内部データ正本: アフィリエイトURL/クーポン一覧は [firm-url-list.md](firm-url-list.md)（The5ers クーポン `9HFH2XXC` 記録済・Coupon_Code 列新設）。
