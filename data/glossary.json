@@ -1,464 +1,151 @@
 [
-  {
-    "key": "F21",
-    "term": "プラン名リスト",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "配下プランの名称のみを列挙したリスト。説明・補足は不要。"
-  },
-  {
-    "key": "F22",
-    "term": "プラン比較テーブル",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "プラン間のルール・価格を比較したテーブル。"
-  },
-  {
-    "key": "P20",
-    "term": "Steps",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "チャレンジのステップ数。Instant=0 / 1-Step=1 / 2-Step=2 等。"
-  },
-  {
-    "key": "F01",
-    "term": "ファーム名",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "プロップファームの正式名称。"
-  },
-  {
-    "key": "F02",
-    "term": "拠点国",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "運営会社の本社所在地または法人登記国。"
-  },
-  {
-    "key": "F03",
-    "term": "創業年",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "ファームの設立年（西暦4桁）。"
-  },
-  {
-    "key": "F04",
-    "term": "公式URL",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "ファームの公式サイトURL。アフィリエイトURLがあれば優先する。"
-  },
-  {
-    "key": "F05",
-    "term": "カテゴリ",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "取り扱う商品区分。CFD／FXのいずれか。"
-  },
-  {
-    "key": "F06",
-    "term": "日本対応",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "日本居住者への対応状況。禁止／可能／日本語HP／日本語チャットのいずれかで示す。"
-  },
-  {
-    "key": "F07",
-    "term": "ファームピッチ",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "ファームが掲げる特徴・差別化ポイント。"
-  },
-  {
-    "key": "F08",
-    "term": "リワードプログラム",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "紹介報酬・ロイヤリティ等の還元制度。"
-  },
-  {
-    "key": "F09",
-    "term": "スケールアップ",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "口座サイズを段階的に拡大できる条件と上限額。"
-  },
-  {
-    "key": "F10",
-    "term": "ブローカー",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "約定を担う接続先ブローカー。"
-  },
-  {
-    "key": "F11",
-    "term": "プラットフォーム",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "取引に使う環境。MT4／MT5／cTrader等。"
-  },
-  {
-    "key": "F12",
-    "term": "Server Time",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "取引サーバーの基準時刻。タイムゾーン＋UTCオフセット＋日本時間換算を併記する。"
-  },
-  {
-    "key": "F13",
-    "term": "DD Reset",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "ドローダウン基準値がリセットされる時刻。日本時間換算を併記する。"
-  },
-  {
-    "key": "F14",
-    "term": "レバレッジ",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "資産クラス×プラン別の最大レバレッジ倍率。"
-  },
-  {
-    "key": "F15",
-    "term": "手数料",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "資産クラス別の取引手数料。往復／片道の別と通貨単位を明記する。"
-  },
-  {
-    "key": "F16",
-    "term": "入金方法",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "チャレンジ費用等の支払手段。カード／銀行／暗号通貨等。"
-  },
-  {
-    "key": "F17",
-    "term": "出金方法",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "利益分配金の受取手段。銀行／暗号通貨／PayPal等。"
-  },
-  {
-    "key": "F18",
-    "term": "出金ポリシー",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "出金頻度・最低出金額・申請方法・処理期間を定めた規定。"
-  },
-  {
-    "key": "F19",
-    "term": "Profit Split",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "Funded口座で得た利益のうちトレーダーに分配される割合。"
-  },
-  {
-    "key": "F20",
-    "term": "※Profit Split",
-    "type": "label",
-    "category": "Firm項目",
-    "definition": "利益分配率の変動条件やスケールアップ後の比率を補足する注記。"
-  },
-  {
-    "key": "P01",
-    "term": "利益目標",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "各フェーズの合格に必要な利益額または利益率。ChallengeとFundedで異なる場合がある。"
-  },
-  {
-    "key": "P02",
-    "term": "最低取引日数（合格）",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "チャレンジ合格に必要な最低取引日数。出金要件とは区別する。"
-  },
-  {
-    "key": "P02b",
-    "term": "最低取引日数（出金）",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "出金申請に必要な最低取引日数。合格要件とは区別する。"
-  },
-  {
-    "key": "P03",
-    "term": "日次損失",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "1日あたりに許容される損失の上限（%または$）。"
-  },
-  {
-    "key": "P04",
-    "term": "日次損失タイプ",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "日次損失の計算基準。DD分類6パターンのいずれか。"
-  },
-  {
-    "key": "P05",
-    "term": "最大損失",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "口座全体で許容される累積損失の上限（%または$）。"
-  },
-  {
-    "key": "P06",
-    "term": "最大損失タイプ",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "最大損失の計算基準。DD分類6パターンのいずれか。"
-  },
-  {
-    "key": "P07",
-    "term": "一貫性ルール",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "特定の日の利益や1回のトレードの利益が総利益に占める比率を制限するルール（Best Day等）。"
-  },
-  {
-    "key": "P08",
-    "term": "利益上限",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "利益または出金額の上限。"
-  },
-  {
-    "key": "P09",
-    "term": "時間制限",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "チャレンジ合格までの期限、または利益目標達成までの期限、Funded口座自体の有効期限など、トレード可能な期間に対する制限。"
-  },
-  {
-    "key": "P10",
-    "term": "ニュース取引制限",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "重要経済指標の発表前後における取引の制限。"
-  },
-  {
-    "key": "P11",
-    "term": "週末トレード制限",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "週末の新規トレードおよび金曜クローズ越えのポジション保有に関する制限。"
-  },
-  {
-    "key": "P12",
-    "term": "オーバーナイト制限",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "日をまたいでポジションを保有することへの制限。"
-  },
-  {
-    "key": "P13",
-    "term": "EA制限",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "自動売買プログラム（EA）の使用可否・条件。"
-  },
-  {
-    "key": "P14",
-    "term": "コピートレード制限",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "他口座・他者の取引を複写することへの制限。"
-  },
-  {
-    "key": "P15",
-    "term": "スキャルピング制約",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "ポジションの保有時間に関する制約。"
-  },
-  {
-    "key": "P16",
-    "term": "ストップロス制約",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "損切り注文の設定義務や推奨に関する制約。"
-  },
-  {
-    "key": "P17",
-    "term": "リスクルール",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "含み損（未決済ポジションの評価損）に対する制限。"
-  },
-  {
-    "key": "P18",
-    "term": "最大ポジション制約",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "同時に保有できるポジション数やロット数の上限。"
-  },
-  {
-    "key": "P19",
-    "term": "禁止行為",
-    "type": "label",
-    "category": "Plan項目",
-    "definition": "アカウント失格の対象となる禁止された取引手法・行為。"
-  },
-  {
-    "key": "DD_STATIC",
-    "term": "Static",
-    "type": "notation",
-    "category": "DD計算基準",
-    "definition": "初期残高（口座開設時の残高）を基準に固定するドローダウン方式。判定根拠: initial balance / fixed / starting balance。"
-  },
-  {
-    "key": "DD_BAL_EOD",
-    "term": "Trailing（Balance EOD）",
-    "type": "notation",
-    "category": "DD計算基準",
-    "definition": "日次終了時点の残高を基準に追従するドローダウン方式。判定根拠: end of day balance / daily reset balance。"
-  },
-  {
-    "key": "DD_BAL_HWM",
-    "term": "Trailing（Balance HWM）",
-    "type": "notation",
-    "category": "DD計算基準",
-    "definition": "記録した最高残高を基準に追従するドローダウン方式。判定根拠: highest balance / recorded highest balance。"
-  },
-  {
-    "key": "DD_EQ_EOD",
-    "term": "Trailing（Equity EOD）",
-    "type": "notation",
-    "category": "DD計算基準",
-    "definition": "日次終了時点の有効証拠金を基準に追従するドローダウン方式。判定根拠: end of day equity。"
-  },
-  {
-    "key": "DD_EQ_HWM",
-    "term": "Trailing（Equity HWM）",
-    "type": "notation",
-    "category": "DD計算基準",
-    "definition": "リアルタイムの最高有効証拠金を基準に追従するドローダウン方式。判定根拠: highest equity / real-time equity。"
-  },
-  {
-    "key": "DD_HIGHER",
-    "term": "Trailing（Higher B or E EOD）",
-    "type": "notation",
-    "category": "DD計算基準",
-    "definition": "前日終了時点の残高と有効証拠金のうち高い方を基準に追従するドローダウン方式。判定根拠: previous day's balance or equity / higher of balance or equity。"
-  },
-  {
-    "key": "PHASE_C",
-    "term": "Challenge",
-    "type": "notation",
-    "category": "フェーズ",
-    "definition": "評価フェーズの統一表記。Evaluation／Assessment／Phase／Step／審査段階は全てこれに変換する。"
-  },
-  {
-    "key": "PHASE_F",
-    "term": "Funded",
-    "type": "notation",
-    "category": "フェーズ",
-    "definition": "資金提供後フェーズの統一表記。Master／Live／Funded Account／Real Accountは全てこれに変換する。"
-  },
-  {
-    "key": "ABS_NONE",
-    "term": "なし（明示）",
-    "type": "notation",
-    "category": "不在表記",
-    "definition": "ソースに「なし（No／None／0）」と明記されている状態。条件が存在しないと断定できる。"
-  },
-  {
-    "key": "ABS_NA",
-    "term": "ー",
-    "type": "notation",
-    "category": "不在表記",
-    "definition": "その項目自体が構造上適用されない状態（N/A）。全角ハイフンで表記し、「記載なし」とは区別する。"
-  },
-  {
-    "key": "ABS_UNKNOWN",
-    "term": "記載なし",
-    "type": "notation",
-    "category": "不在表記",
-    "definition": "一次ソースを調査したが該当情報が見つからない状態。条件不在の「ー」とは区別する。絵文字は付けない。"
-  },
-  {
-    "key": "DIFF_EASE",
-    "term": "EASE",
-    "type": "notation",
-    "category": "早見表差分",
-    "definition": "早見表でFunded側がChallenge側より緩い（トレーダーに有利な）ことを示す差分判定。"
-  },
-  {
-    "key": "DIFF_TRAP",
-    "term": "TRAP",
-    "type": "notation",
-    "category": "早見表差分",
-    "definition": "早見表でFunded側がChallenge側より厳しい（トレーダーに不利な）ことを示す差分判定。"
-  },
-  {
-    "key": "DIFF_NONE",
-    "term": "ー",
-    "type": "notation",
-    "category": "早見表差分",
-    "definition": "早見表でChallenge／Fundedが同値、またはFunded側が「ー」で差分がないことを示す。"
-  },
-  {
-    "key": "FREQ_ONDEMAND",
-    "term": "随時",
-    "type": "notation",
-    "category": "出金頻度",
-    "definition": "出金申請に頻度制約がない方式。最速出金計算では待機0日として扱う。"
-  },
-  {
-    "key": "FREQ_WEEKLY",
-    "term": "毎週",
-    "type": "notation",
-    "category": "出金頻度",
-    "definition": "週1回の出金頻度。最速出金計算では待機をMAX(7日, X)とする。"
-  },
-  {
-    "key": "FREQ_BIWEEKLY",
-    "term": "隔週",
-    "type": "notation",
-    "category": "出金頻度",
-    "definition": "2週に1回の出金頻度。最速出金計算では待機をMAX(14日, X)とする。"
-  },
-  {
-    "key": "FREQ_MONTHLY",
-    "term": "月次",
-    "type": "notation",
-    "category": "出金頻度",
-    "definition": "月1回の出金頻度。最速出金計算では待機をMAX(30日, X)とする。"
-  },
-  {
-    "key": "CALC_PASS",
-    "term": "最短合格",
-    "type": "label",
-    "category": "計算結果",
-    "definition": "チャレンジに合格できる理論上の最短日数。各StepのMAX(最低取引日数, 一貫性達成最速日数)の合計（結果のみ）。"
-  },
-  {
-    "key": "CALC_PAYOUT",
-    "term": "最速出金",
-    "type": "label",
-    "category": "計算結果",
-    "definition": "Funded到達後に出金申請できる理論上の最短日数。出金頻度による待機を反映した結果（結果のみ）。"
-  },
-  {
-    "key": "CALC_TOTAL",
-    "term": "トータル日数",
-    "type": "label",
-    "category": "計算結果",
-    "definition": "最短合格と最速出金を合算した、申込から最初の出金申請までの理論最短日数。"
-  },
-  {
-    "key": "CALC_STEPS",
-    "term": "Steps",
-    "type": "label",
-    "category": "計算結果",
-    "definition": "プランの評価ステップ数。Instant=0／1-Step=1／2-Step=2等。"
-  },
-  {
-    "key": "CALC_ARRIVAL",
-    "term": "着金目安",
-    "type": "label",
-    "category": "計算結果",
-    "definition": "出金申請から実際の着金までの目安日数。処理時間を反映した値。"
-  }
+  {"term":"Account Size","category":"基本情報","definition":"初期口座金額（Challenge開始時の資金額）","description":"Challenge開始時にトレーダーに提供される口座の初期資金額。$10K、$25K、$100K等がある。","notes":""},
+  {"term":"Challenge Account","category":"基本情報","definition":"合格前の評価用口座","description":"トレーダーがスキルを証明するための評価段階の口座で、デモ資金を使用。利益目標とリスク制限を満たすとFunded Accountへ昇格。","notes":""},
+  {"term":"Challenge Name","category":"基本情報","definition":"チャレンジプログラムの名称","description":"形式はFirm Name – プラン名（全角ダッシュ使用）。","notes":""},
+  {"term":"Evaluation Account","category":"基本情報","definition":"合格前の評価段階","description":"Challenge Accountでトレードスキルとリスク管理能力を評価するフェーズ。Phase 1、Phase 2などの段階を経てFunded Accountへ進む。","notes":""},
+  {"term":"Firm Name","category":"基本情報","definition":"Prop Firmの正式名称","description":"会社名またはブランド名を指す。","notes":""},
+  {"term":"Funded Account","category":"基本情報","definition":"合格後の本番運用口座","description":"Challenge評価に合格したトレーダーに提供される実資金口座で、利益の一部をトレーダーが受け取れる（Profit Split）。Pro Account、Live Accountとも呼ばれる。","notes":""},
+  {"term":"Live Account","category":"基本情報","definition":"Funded Accountの別名、またはさらに上の段階","description":"意味①：Funded Accountと同義。意味②：Fundedで優秀な成績を修めたトレーダーをFirmが招待するガチ口座で、実資金（リアルマネー）を運用させる口座。","notes":"Payout拒否条件が薄いかどうかが本体。T&CのDefinitionsとPayout Termsを読んでからFAQのPayoutフローに戻るのが一番早い。"},
+  {"term":"Performance Account (PA)","category":"基本情報","definition":"先物系Prop Firmで、チャレンジ合格後に移行する模擬運用口座","description":"Apex Trader Funding, TopStep等で使われる用語。Evaluation（チャレンジ）に合格し、Activation Feeを支払うと「PA」に移行する。CFD Prop FirmのFunded Accountに相当。","notes":"先物PAでは「Trailing Max Drawdown がEOD基準で追従し、初期残高に到達したらロック」という仕様が標準。"},
+  {"term":"Phase","category":"基本情報","definition":"評価段階の区分","description":"Phase 1は第1評価段階、Phase 2は第2評価段階を指す。Instantプログラムにはphaseがない。","notes":""},
+  {"term":"Pro Account","category":"基本情報","definition":"合格後の段階を指す別名","description":"Funded Accountと同義で、Challenge評価合格後の本番運用段階を指す。","notes":""},
+  {"term":"Profit Target","category":"基本情報","definition":"利益目標","description":"合格に必要な利益率を指す。1st_Target、2nd_Target等がある。","notes":""},
+  {"term":"Program Name","category":"基本情報","definition":"各社のチャレンジプログラム名称","description":"各Prop Firmが提供するチャレンジプログラムの固有名称。Alpha Pro、Stellar、Evaluation等がある。","notes":""},
+  {"term":"Program Type","category":"基本情報","definition":"評価段階の種類（1-Step/2-Step等）","description":"Instant、1-Step、2-Step、3-Step等の評価段階の種類。Stepが少ないほど早くFunded Accountに到達できる。","notes":""},
+  {"term":"Prop Firm Name","category":"基本情報","definition":"Prop Firm会社の正式名称","description":"Prop Firmの正式な会社名またはブランド名。Alpha Capital、FundedNext、FTMO等がある。","notes":""},
+  {"term":"Server Time","category":"基本情報","definition":"取引サーバーの基準時刻。GMT+2（冬）/ GMT+3（夏）が業界標準","description":"ほとんどのFirmがGMT+2（冬時間）/ GMT+3（夏時間）を採用。NYクローズ（17:00 EST）を日付変更線に合わせるため。JST時差は冬＋7時間、夏＋6時間。","notes":"夏時間の切替は毎年3月第2日曜（米国DST開始）と11月第1日曜（米国DST終了）。"},
+  {"term":"Steps","category":"基本情報","definition":"評価段階の種類","description":"Instant、1-Step、2-Step、3-Step、4-Stepがある。","notes":""},
+  {"term":"Balance","category":"リスク・条件","definition":"残高","description":"確定残高（含み損益を除外）を基準にする計算方式。Drawdown Typeの一種。","notes":""},
+  {"term":"Breach","category":"リスク・条件","definition":"ルール／制限への抵触（しきい値到達）","description":"規約で定められたルールや制限に抵触した状態を指す総称。DD制限（Max/Daily）で使われることが多い。","notes":"Breachは「違反」ではなく「到達」で発動する。超えなくても水準にタッチした時点でアウトのファームが多い。"},
+  {"term":"Consistency Rule","category":"リスク・条件","definition":"一貫性ルール","description":"単一取引で総利益の一定割合（30%、40%等）を超える利益を禁止するルール。一発狙いを防ぐ目的。","notes":""},
+  {"term":"Daily Drawdown","category":"リスク・条件","definition":"1日の損失限度額まで許容される損失幅","description":"1日の損失限度額まで許容される損失幅（通常%表示）。初期口座金額に乗算された金額。","notes":""},
+  {"term":"Daily Drawdown Type","category":"リスク・条件","definition":"1日の損失幅の起点を決定する方法","description":"Static: 初期口座金額を基準に固定。Trailing: Balance Based / Equity Based / Balance/Equity – Highest at EOD / Interday の4種類。","notes":""},
+  {"term":"Daily Loss","category":"リスク・条件","definition":"1日の最大損失額（超過で失格）","description":"1日の最大損失額。これ以上の損失は失格（稀に同日取引停止・翌日取引可能も）。","notes":""},
+  {"term":"Daily Loss Limit","category":"リスク・条件","definition":"1日の最大損失限度額（超過で失格）","description":"1日の最大損失限度額。これ以上の損失は失格（稀に同日取引停止・翌日取引可能も）。","notes":""},
+  {"term":"DD Reset","category":"リスク・条件","definition":"Daily Drawdown（日次最大損失）の基準値がリセットされる時刻","description":"毎日サーバー時刻の00:00にDaily Drawdown上限が再計算される。Balance-BasedかEquity-Basedかで計算方法が異なる。","notes":"一部は「5pm EST」のようにEST基準で記載する（例: Top One Trader）。夏時間切替日（3月・11月）はリセット時刻がJSTで1時間ズレる。"},
+  {"term":"Drawdown","category":"リスク・条件","definition":"ドローダウン（損失幅）","description":"口座残高の減少幅を指す。Max DrawdownとDaily Drawdownがある。","notes":""},
+  {"term":"EOD Settlement","category":"リスク・条件","definition":"End of Day — 取引日終了時点でポジション損益を確定させる先物市場の決済方式","description":"先物市場では毎営業日の終値（Settlement Price）でポジションを値洗いし、証拠金口座に損益を反映する。CFD Prop FirmのTrailing DrawdownやDD Resetはこの思想を引き継いでいる。","notes":""},
+  {"term":"Equity","category":"リスク・条件","definition":"有効証拠金","description":"含み損益を含めた証拠金を基準にする計算方式。Drawdown Typeの一種。","notes":""},
+  {"term":"ESS","category":"リスク・条件","definition":"利益のブレ（安定性）を%で評価する指標","description":"Equity Stability Score（ESS）は、最大の勝ち日と最大の負け日（絶対値）を合算し、総利益に対する比率で安定性を測る指標。Best Day Rule（最大利益日/総利益）とは別方式の一貫性ルール。","notes":"Best Day Rule型の「100 ÷ 一貫性%」の理屈はESSには当てはまらない。"},
+  {"term":"High Water Mark (HWM)","category":"リスク・条件","definition":"口座の最高到達値。Trailing DDの基準点","description":"Trailing Drawdownの計算で使われる基準値で、口座が記録した最高のBalance・Equity・またはその両方の高い方を指す。HWMが更新されるとBreach水準も同額だけ引き上がる。","notes":"HWMは上がることはあっても下がることはない（一方通行）。"},
+  {"term":"Higher B or E","category":"リスク・条件","definition":"BalanceとEquityの高い方を基準とするDD計算方式","description":"EODスナップショット時点のBalanceとEquityを比較し、高い方の値でHigh Water Markを更新するDrawdown Type。トレーダーにとって不利な方で判定されるため厳しい。","notes":"多くのProp Firmが採用する標準的なTrailing DD方式。"},
+  {"term":"Interday","category":"リスク・条件","definition":"日中最高値基準","description":"含み損益込みでの日中最高値・最安値を基準にする計算方式。Drawdown Typeの中で最も厳しい。","notes":""},
+  {"term":"Mark-to-Market (MTM)","category":"リスク・条件","definition":"未決済ポジションを現在の市場価格で再評価し、日次で損益を確定する会計処理","description":"先物取引の根幹をなす仕組み。CFD Prop FirmのDaily Drawdown計算はこのMTMの簡易版と言える。","notes":""},
+  {"term":"Max Drawdown","category":"リスク・条件","definition":"損失限度額まで許容される最大の損失幅","description":"損失限度額まで許容される最大の損失幅（通常%表示）。初期口座金額に乗算された金額。","notes":""},
+  {"term":"Max Drawdown Type","category":"リスク・条件","definition":"最大損失幅の起点を決定する方法","description":"Static: 初期口座金額を基準に固定。Trailing: Balance Based / Equity Based / Balance/Equity – Highest at EOD / Interday の4種類。","notes":""},
+  {"term":"Max Loss","category":"リスク・条件","definition":"最大損失額（超過で失格）","description":"最大損失額。これ以上の損失は失格。Max loss Limit と同義。","notes":""},
+  {"term":"Max loss Limit","category":"リスク・条件","definition":"最大損失限度額（超過で失格）","description":"最大損失限度額。これ以上の損失は失格。","notes":""},
+  {"term":"Min Trading Days","category":"リスク・条件","definition":"合格・出金条件の1つ（最低取引日数）","description":"最低取引日数。合格・出金条件の1つ。","notes":"Trading dayが「取引した日」なのか「勝った日」なのかがFirmで違うことに注意。"},
+  {"term":"Static","category":"リスク・条件","definition":"固定型","description":"初期口座金額を基準に固定され、利益が出ても損失許容額が増えない計算方式。Drawdown Typeの一種。","notes":""},
+  {"term":"Time Limit","category":"リスク・条件","definition":"取引期間の制限（現在ほぼ無制限）","description":"Challenge完了までの取引期間の制限。現在はほぼすべてのFirmが無制限（Unlimited）に変更。","notes":""},
+  {"term":"Trailing","category":"リスク・条件","definition":"追従型","description":"利益が出ると損失許容ラインが追いかけてくる計算方式。Drawdown Typeの一種で、Static（固定型）の対義語。","notes":""},
+  {"term":"Account Rolling","category":"取引条件","definition":"複数口座を使った不正行為（禁止）","description":"複数のChallenge口座を同時に購入し、どれか1つが成功するまで試行し続ける行為。失敗した口座は放棄し、成功した口座のみを申請する不正行為。","notes":""},
+  {"term":"Arbitrage","category":"取引条件","definition":"価格差を利用した裁定取引（多くのFirmで禁止）","description":"異なるブローカー間やプラットフォーム間の価格差を利用して利益を得る手法。Latency Arbitrage（レイテンシーアービトラージ）も含まれる。","notes":""},
+  {"term":"commission","category":"取引条件","definition":"取引ごとに発生する手数料（例：$X/lot）","description":"スプレッドとは別に、約定ごとに課金されるコスト。資産クラス別（FX/Indices/Metals/Crypto/Energy/Others）に設定される。","notes":""},
+  {"term":"Contract Month (限月)","category":"取引条件","definition":"先物契約の受渡し・決済が行われる月","description":"先物は限月ごとに別の契約として取引される。例：ESH26 = S&P 500 E-mini、3月限、2026年。直近限月（Front Month）に出来高が集中する。","notes":"先物系Prop Firmでは「限月をまたいでポジション保有禁止」のルールがあることが多い。"},
+  {"term":"Contract Rollover","category":"取引条件","definition":"先物契約の限月（満期）到来時に、次の限月へポジションを乗り換えること","description":"先物には満期がありCFDにはない。ロールオーバー期間中はスプレッド拡大・流動性低下が起きやすい。","notes":""},
+  {"term":"Copy Trade","category":"取引条件","definition":"コピートレード","description":"他人の取引をコピーする行為。許可・条件付き許可・禁止の3パターンがある。","notes":""},
+  {"term":"Copy-Trading","category":"取引条件","definition":"他人の取引をコピーする手法の可否","description":"他人の取引をコピーする行為の可否。Signal ProviderやCopy Trading Platformを使用してコピーすること。許可・条件付き許可・禁止の3パターンがある。","notes":""},
+  {"term":"Crypto","category":"取引条件","definition":"暗号資産（仮想通貨）を指す資産クラス","description":"BTCUSDやETHUSD などの暗号資産ペアを指す。レバレッジ制限やスプレッド・手数料が他資産と異なることが多い。","notes":""},
+  {"term":"Currency Futures (通貨先物)","category":"取引条件","definition":"FX通貨ペアの先物版。シンボルは「6 + 通貨コード1文字」","description":"CMEで取引され、CFDのEUR/USDやUSD/JPY等と同じ通貨ペアを取引所経由で売買する。6E（Euro FX）= EUR/USD、6J = USD/JPY、6B = GBP/USD 等。","notes":""},
+  {"term":"E-mini / Mini Contract","category":"取引条件","definition":"フルサイズ先物契約の1/5（指数系）の小型契約。先物Prop Firmのメイン取引単位","description":"CMEが個人トレーダー向けに設計した小型契約。ES（S&P 500 E-mini）が代表格。CFDの「Standard Lot（1.0）」に近いポジション。","notes":""},
+  {"term":"EA","category":"取引条件","definition":"Expert Advisor（自動売買システム）","description":"MT4/MT5で動作する自動取引プログラム。許可・条件付き許可・禁止の3パターンがある。","notes":""},
+  {"term":"EA's","category":"取引条件","definition":"Expert Advisor（自動売買）の使用可否","description":"Expert Advisor（自動売買プログラム）の使用可否。許可・条件付き許可・禁止の3パターンがある。","notes":"Copy tradeやTrade copierがEA扱いになるケースに注意。"},
+  {"term":"Energy","category":"取引条件","definition":"エネルギー商品を指す資産クラス","description":"Crude Oil（原油）やNatural Gas（天然ガス）などを指す。指数やFXと別の手数料（commission）設定になることがある。","notes":""},
+  {"term":"External Signal Copy","category":"取引条件","definition":"外部シグナルをコピーする行為（禁止）","description":"外部のシグナルプロバイダーやコピートレードサービスからの取引シグナルをコピーする行為。Challenge段階では禁止される場合が多い。","notes":""},
+  {"term":"Futures Symbol (先物シンボル)","category":"取引条件","definition":"先物銘柄を特定するティッカーコード。銘柄コード＋月コード＋年2桁で構成される","description":"主要シンボル例：ES（S&P 500 E-mini）、NQ（Nasdaq 100 E-mini）、YM（Dow E-mini）、CL（WTI原油）、GC（Gold）、SI（Silver）、6E（Euro FX）。","notes":""},
+  {"term":"Gambling","category":"取引条件","definition":"戦略のない投機的・運任せの取引（禁止）","description":"市場分析やリスク管理を伴わない、運任せの投機的取引。過度なリスク設定、無計画な高レバレッジ取引などが含まれる。","notes":""},
+  {"term":"Grid Trading","category":"取引条件","definition":"一定間隔で複数注文を配置する手法（多くのFirmで禁止）","description":"価格の一定間隔ごとに買い注文・売り注文を配置する取引手法。リスク管理が難しく、多くのProp Firmで禁止されている。","notes":"Gridの定義がFirmごとに違う点に注意。"},
+  {"term":"Group Hedging","category":"取引条件","definition":"複数口座間での協調的な両建て取引（禁止）","description":"複数のChallenge口座やFunded口座間で協調的に反対方向のポジションを持つ行為。ほぼ全てのProp Firmで厳格に禁止されている。","notes":""},
+  {"term":"Group Trading","category":"取引条件","definition":"複数口座間での協調取引（禁止）","description":"複数のトレーダーが協調して複数口座間で取引を行う行為。Group Hedging（グループヘッジング）やAccount Rollingと関連。","notes":""},
+  {"term":"Hedging","category":"取引条件","definition":"両建てによるリスク回避手法（多くのFirmで禁止）","description":"同一または異なる口座間で反対方向のポジションを持つリスク回避手法。複数口座間でのHedging（Group Hedging）は禁止される場合が多い。","notes":""},
+  {"term":"High Frequency Trading (HFT)","category":"取引条件","definition":"アルゴリズムによる超高速・大量取引（禁止）","description":"アルゴリズムによる超高速・大量の取引手法。Tick Scalpingと併せて禁止されることが多い。","notes":""},
+  {"term":"Indices","category":"取引条件","definition":"株価指数（指数CFDなど）の資産クラス","description":"US30・US100・US500・GER40 などの指数を指す。","notes":""},
+  {"term":"Latency Arbitrage","category":"取引条件","definition":"価格配信の遅延を利用した裁定取引（禁止）","description":"プラットフォーム間の価格配信の遅延（レイテンシー）を利用して利益を得る手法。Arbitrageの一種。ほぼ全てのProp Firmで厳格に禁止されている。","notes":""},
+  {"term":"Lot Size (ロットサイズ)","category":"取引条件","definition":"CFDにおける取引量の単位。Standard (1.0) / Mini (0.1) / Micro (0.01)","description":"CFDでは0.01〜100.00まで細かくロットを調整できる。先物では「E-mini 1枚 or Micro 1枚」が基本単位で、CFDのような0.01刻みの柔軟性はない。","notes":"CFDは「連続的」、先物は「離散的」。この差がリスク管理の柔軟性を決定的に分ける。"},
+  {"term":"Martingale Strategy","category":"取引条件","definition":"損失後にロットサイズを倍増させる手法（禁止）","description":"損失が出た後、次の取引でロットサイズを倍増させて損失を取り戻そうとする手法。連続損失時に壊滅的な損失を招くため、多くのProp Firmで禁止されている。","notes":""},
+  {"term":"Max Leverage","category":"取引条件","definition":"取引で使用可能な最大レバレッジ","description":"取引で使用できる最大のレバレッジ倍率。30倍、100倍、200倍等がある。","notes":""},
+  {"term":"Metals","category":"取引条件","definition":"金属（主に貴金属）を指す資産クラス","description":"Gold（XAUUSD）やSilver（XAGUSD）などを指す。商品CFD（Commodities）の一部として扱われることもある。","notes":"MetalsがFX行に混ざってるFirmほど危ない。別ページにだけ制限が書いてあって見落としやすい。"},
+  {"term":"Micro Contract (マイクロ先物)","category":"取引条件","definition":"E-miniのさらに1/10サイズの極小契約。2019年CME導入","description":"MES（Micro E-mini S&P）、MNQ（Micro E-mini Nasdaq）、MYM（Micro E-mini Dow）等。先物Prop Firmの小資金アカウントでは、リスク管理上Micro契約が主力になることが多い。","notes":"E-mini 1枚 = Micro 10枚。"},
+  {"term":"Month Code (限月コード)","category":"取引条件","definition":"先物の限月を1文字のアルファベットで表す国際標準コード。F=1月〜Z=12月","description":"CME/CBOT/NYMEX共通の表記規則。シンボル＋月コード＋年2桁で契約を特定する（例：CLF26 = WTI原油・1月・2026年）。","notes":"実務では「H=3月、M=6月、U=9月、Z=12月」の四半期限月だけ覚えれば主要銘柄の9割はカバーできる。"},
+  {"term":"News Trading","category":"取引条件","definition":"ニュース時の取引","description":"経済指標発表時の取引を指す。High-impactニュース前後数分間を禁止する場合が多い。","notes":""},
+  {"term":"News-Trading","category":"取引条件","definition":"ニュース発表時の取引可否","description":"重要な経済指標発表時の取引の可否。NFP、FOMC、CPIなどが該当。","notes":""},
+  {"term":"Over Leveraging","category":"取引条件","definition":"無計画な過度のレバレッジ使用（禁止）","description":"市場分析やリスク管理を伴わない、無計画な高レバレッジ取引。Gamblingの一種として禁止される。","notes":""},
+  {"term":"Overnight Holding","category":"取引条件","definition":"オーバーナイト保有","description":"日をまたいでポジションを保有すること。許可・禁止の2パターンがある。","notes":"先物系Prop Firmではオーバーナイト保有はほぼ不可が業界標準。判定基準はServer Time（00:00）。"},
+  {"term":"Pip (ピップ)","category":"取引条件","definition":"FX/CFDにおける最小価格変動単位","description":"EUR/USD なら 0.0001 = 1 Pip、USD/JPY なら 0.01 = 1 Pip。先物には Pip の概念がなく、代わりに Tick を使う。","notes":""},
+  {"term":"Prohibited Strategies","category":"取引条件","definition":"Prop Firmが禁止する取引戦略の総称","description":"Arbitrage、Grid Trading、Hedging、Martingale、HFT、Tick Scalping、Gambling等が含まれる。違反すると即座に失格となる場合が多い。","notes":""},
+  {"term":"Prohibited Strategy Categories","category":"取引条件","definition":"プロップファームが禁止する取引手法カテゴリの共通ラベル","description":"各Firmの規約にある禁止行為を、比較・フィルタ用に同一のカテゴリ名へ正規化したもの。","notes":""},
+  {"term":"Scalping","category":"取引条件","definition":"スキャルピング","description":"数秒〜数分の超短期取引。Tick Scalping（ティックスキャルピング）は特に短い保有時間を指し禁止されることが多い。","notes":""},
+  {"term":"Stocks","category":"取引条件","definition":"個別株（株式）を指す資産クラス","description":"AAPL・TSLA などの個別株CFDや株式取引を指す。","notes":""},
+  {"term":"Stop-Loss Required","category":"取引条件","definition":"ストップロスの設定必須か否か","description":"すべてのポジションにストップロスの設定が必須かどうか。必須の場合、ストップロスなしでポジションを持つと失格になる。","notes":""},
+  {"term":"Tick (ティック)","category":"取引条件","definition":"先物における最小価格変動単位","description":"先物では銘柄ごとに1ティックの値幅と金額が固定されている（例：ES = 0.25pt = $12.50/tick）。CFDのPipと同じ役割。","notes":""},
+  {"term":"Tick Scalping","category":"取引条件","definition":"数秒以内の超短期取引（多くのFirmで禁止）","description":"数秒から数十秒以内にポジションを決済する超短期取引。多くのProp Firmで禁止されている。","notes":""},
+  {"term":"Tick size","category":"取引条件","definition":"先物で1ティックが動くときの最小値幅（価格の刻み幅）。銘柄ごとに固定","description":"先物では銘柄ごとに固定。ESは0.25ポイントが最小変動幅で、1ティックあたりの損益は$12.50。","notes":"Tick sizeとTick valueは別物。Tick sizeは値幅、Tick valueは金額。"},
+  {"term":"Tick Value (ティック値)","category":"取引条件","definition":"1ティック動いた時の損益金額。CFDの「Pip Value」に相当","description":"先物のTick Valueは銘柄ごとに固定。ES=$12.50、NQ=$5.00、CL=$10.00、GC=$10.00。Microは本体の1/10。","notes":""},
+  {"term":"Weekend Holding","category":"取引条件","definition":"週末持ち越し","description":"週末をまたいでポジションを保有すること。許可・禁止の2パターンがある。","notes":"先物系Prop Firmでは100%不可。CFD系では「Weekend Holding: Allowed」のFirmも普通にある。"},
+  {"term":"Buffer Zone","category":"ペイアウト","definition":"出金するための最低利益金額","description":"Funded Account段階で出金するために必要な最低利益金額。$100〜$500程度が一般的。","notes":""},
+  {"term":"Min Day_Payout","category":"ペイアウト","definition":"出金するための最低取引日数","description":"Funded Account段階で出金申請するために必要な最低取引日数。3日、5日、10日等がある。","notes":""},
+  {"term":"Payout Frequency","category":"ペイアウト","definition":"出金できる頻度（14日毎/オンデマンド等）","description":"出金頻度。14 Days / on demand / 10 Business days 等。","notes":""},
+  {"term":"Profit Split","category":"ペイアウト","definition":"利益配分率","description":"Funded Account段階でトレーダーが受け取れる利益の割合（80%、90%等）。残りはFirmが受け取る。","notes":""},
+  {"term":"Refundable Fee","category":"ペイアウト","definition":"受験料の返金有無","description":"Challenge合格時またはFunded段階で利益が出た際に、受験料（Buy Price）が返金されるかどうか。Refundable/Non-Refundableがある。","notes":""},
+  {"term":"CME Group","category":"評価・会社情報","definition":"世界最大のデリバティブ取引所グループ","description":"CME・CBOT・NYMEX・COMEXの4取引所を傘下に持つ。CME＝株価指数・通貨先物、CBOT＝穀物・金利先物、NYMEX＝エネルギー先物、COMEX＝貴金属先物。","notes":""},
+  {"term":"Country","category":"評価・会社情報","definition":"Prop Firmの拠点国（IL/GB/LC等）","description":"Prop Firmが拠点を置く国。IL（イスラエル）、GB（イギリス）、LC（セントルシア）等がある。","notes":""},
+  {"term":"Eurex","category":"評価・会社情報","definition":"欧州最大のデリバティブ取引所。DAX先物・EURO STOXX 50先物など欧州株価指数の本拠地","description":"ドイツ取引所グループ傘下。FDAX（DAX 40先物）、FESX（EURO STOXX 50先物）が主力商品。CFDの「GER40」「EU50」はEurexの価格を参照。","notes":""},
+  {"term":"Evaluation","category":"評価・会社情報","definition":"トレーダーを合否判定する評価プロセス（課題）","description":"プロップファームが、資金提供（Funded）前にトレーダーの実力とルール遵守を確認するための段階。","notes":""},
+  {"term":"ICE (Intercontinental Exchange)","category":"評価・会社情報","definition":"ロンドン拠点の国際取引所グループ。Brent原油・欧州エネルギーの中心","description":"CME Groupと並ぶ世界的デリバティブ取引所。CFDの「Brent Oil」はICEの価格を参照。NYSEの親会社でもある。","notes":""},
+  {"term":"Max Allocation per Challenge","category":"評価・会社情報","definition":"そのプログラムでの最大口座金額","description":"特定のチャレンジプログラムで提供される最大の口座金額。プログラムによって上限が異なる。","notes":""},
+  {"term":"Platform","category":"評価・会社情報","definition":"取引プラットフォームの総称","description":"MT5（MetaTrader 5）、cTrader、TradeLocker、MatchTrader、DXtrade等がある。","notes":""},
+  {"term":"Platform Available","category":"評価・会社情報","definition":"使用可能な取引プラットフォーム","description":"そのProp Firmが提供する取引プラットフォーム。複数のプラットフォームから選択できる場合もある。","notes":""},
+  {"term":"Prop Firm Match Score","category":"評価・会社情報","definition":"PropFirmMatchサイトでの評価スコア","description":"顧客レビューに基づく5段階評価スコア。信頼性の参考指標。","notes":""},
+  {"term":"Registered Office (Incorporation)","category":"評価・会社情報","definition":"企業の登記上の所在地（契約・紛争時の法域の基準点）","description":"Prop Firmの利用規約における契約主体（法人）と法域を判断するための情報。出金トラブル等の紛争時に準拠法・管轄の基準になる。","notes":"登記地と実態が一致しないことがある。"},
+  {"term":"Total Max Allocation","category":"評価・会社情報","definition":"1アカウントが所有可能な口座金額の合計最大値","description":"1つのアカウントで同時に所有できる口座金額の合計最大値。例えば$200Kの場合、$100K口座×2つまで持てる。","notes":"$200Kと書いてあっても、$100K×2が常にOKとは限らない。"},
+  {"term":"Trustpilot Score","category":"評価・会社情報","definition":"Trustpilotでの評価スコア","description":"顧客レビューに基づく5段階評価スコア。スコアが高いほどトレーダーからの評判が良い。","notes":""},
+  {"term":"Activation Fee","category":"価格関連","definition":"チャレンジ合格後、Funded口座を有効化するために支払う追加料金","description":"先物系Prop Firm（Apex, TopStep等）で一般的なモデル。チャレンジ費用を安く設定し、合格後にActivation Feeで回収する二段階課金。ATFunded Proなど一部のCFD Firmも採用。","notes":"比較する時はChallenge Fee + Activation Fee の合計で見るのが鉄則。"},
+  {"term":"Buy Price","category":"価格関連","definition":"チャレンジプログラムの購入価格","description":"チャレンジプログラムを購入する際に支払う金額。口座サイズが大きいほど購入価格も高くなる。セールやクーポンで割引される場合がある。","notes":""},
+  {"term":"6A","category":"先物取引","definition":"CMEの豪ドル先物（AUD/USD）シンボル","description":"CMEのAustralian Dollar Futures（AUD/USD）を表す銘柄コード。","notes":""},
+  {"term":"6B","category":"先物取引","definition":"CMEの英ポンド先物（GBP/USD）シンボル","description":"CMEのBritish Pound Futures（GBP/USD）を表す銘柄コード。","notes":""},
+  {"term":"6C","category":"先物取引","definition":"CMEのカナダドル先物（CAD/USD）シンボル","description":"CMEのCanadian Dollar Futures（CAD/USD）を表す銘柄コード。","notes":""},
+  {"term":"6E","category":"先物取引","definition":"CMEのユーロ先物（EUR/USD）シンボル","description":"CMEのEuro FX Futures（EUR/USD）を表す銘柄コード。","notes":""},
+  {"term":"6J","category":"先物取引","definition":"CMEの日本円先物（JPY/USD）シンボル","description":"CMEのJapanese Yen Futures（JPY/USD）を表す銘柄コード。","notes":""},
+  {"term":"6N","category":"先物取引","definition":"CMEのNZドル先物（NZD/USD）シンボル","description":"CMEのNew Zealand Dollar Futures（NZD/USD）を表す銘柄コード。","notes":""},
+  {"term":"6S","category":"先物取引","definition":"CMEのスイスフラン先物（CHF/USD）シンボル","description":"CMEのSwiss Franc Futures（CHF/USD）を表す銘柄コード。","notes":""},
+  {"term":"CL","category":"先物取引","definition":"NYMEXの原油先物（WTI）シンボル","description":"NYMEXのCrude Oil Futures（WTI）を表す銘柄コード。","notes":""},
+  {"term":"E7","category":"先物取引","definition":"CMEのE-miniユーロ先物（EUR/USD）シンボル","description":"CMEのE-mini Euro FX Futures（EUR/USD）を表す銘柄コード。","notes":""},
+  {"term":"ES","category":"先物取引","definition":"CMEのE-mini S&P 500先物シンボル","description":"CMEのE-mini S&P 500 Futuresを表す銘柄コード。1ティック=0.25ポイント=$12.50。","notes":""},
+  {"term":"ETHUSD","category":"先物取引","definition":"暗号資産ETHとUSDの通貨ペア表記","description":"現物/CFD/先物など、取引商品はブローカーや取引所によって異なる。","notes":""},
+  {"term":"GC","category":"先物取引","definition":"COMEXの金先物シンボル","description":"COMEXのGold Futuresを表す銘柄コード。","notes":""},
+  {"term":"HE","category":"先物取引","definition":"CMEの豚赤身肉先物シンボル","description":"CMEのLean Hog Futuresを表す銘柄コード。","notes":""},
+  {"term":"HG","category":"先物取引","definition":"COMEXの銅先物シンボル","description":"COMEXのCopper Futuresを表す銘柄コード。","notes":""},
+  {"term":"HO","category":"先物取引","definition":"NYMEXのULSD（軽油）先物シンボル","description":"NYMEXのNY Harbor ULSD Futuresを表す銘柄コード。","notes":""},
+  {"term":"LE","category":"先物取引","definition":"CMEの生牛先物シンボル","description":"CMEのLive Cattle Futuresを表す銘柄コード。","notes":""},
+  {"term":"M2K","category":"先物取引","definition":"CMEのマイクロE-mini ラッセル2000先物シンボル","description":"CMEのMicro E-mini Russell 2000 Index Futuresを表す銘柄コード。","notes":""},
+  {"term":"M6A","category":"先物取引","definition":"CMEのマイクロAUD/USD先物シンボル","description":"CMEのMicro AUD/USD Futuresを表す銘柄コード。","notes":""},
+  {"term":"M6E","category":"先物取引","definition":"CMEのマイクロEUR/USD先物シンボル","description":"CMEのMicro EUR/USD Futuresを表す銘柄コード。","notes":""},
+  {"term":"MBT","category":"先物取引","definition":"CMEのマイクロビットコイン先物シンボル","description":"CMEのMicro Bitcoin Futuresを表す銘柄コード。","notes":""},
+  {"term":"MCL","category":"先物取引","definition":"NYMEXのマイクロWTI原油先物シンボル","description":"NYMEXのMicro WTI Crude Oil Futuresを表す銘柄コード。","notes":""},
+  {"term":"MES","category":"先物取引","definition":"CMEのマイクロE-mini S&P 500先物シンボル","description":"CMEのMicro E-mini S&P 500 Index Futuresを表す銘柄コード。ティック値はESの1/10。","notes":""},
+  {"term":"MET","category":"先物取引","definition":"CMEのマイクロイーサ先物シンボル","description":"CMEのMicro Ether Futuresを表す銘柄コード。","notes":""},
+  {"term":"MGC","category":"先物取引","definition":"COMEXのマイクロ金先物シンボル","description":"COMEXのMicro Gold Futuresを表す銘柄コード。ティック値はGCの1/10。","notes":""},
+  {"term":"MNQ","category":"先物取引","definition":"CMEのマイクロE-mini NASDAQ100先物シンボル","description":"CMEのMicro E-mini Nasdaq-100 Index Futuresを表す銘柄コード。ティック値はNQの1/10。","notes":""},
+  {"term":"MYM","category":"先物取引","definition":"CBOTのマイクロE-mini ダウ先物シンボル","description":"CBOTのMicro E-mini Dow Jones Industrial Average Index Futuresを表す銘柄コード。ティック値はYMの1/10。","notes":""},
+  {"term":"NG","category":"先物取引","definition":"NYMEXの天然ガス先物（ヘンリーハブ）シンボル","description":"NYMEXのHenry Hub Natural Gas Futuresを表す銘柄コード。","notes":""},
+  {"term":"NQ","category":"先物取引","definition":"CMEのE-mini NASDAQ100先物シンボル","description":"CMEのE-mini Nasdaq-100 Futuresを表す銘柄コード。","notes":""},
+  {"term":"QI","category":"先物取引","definition":"COMEXのE-mini 銀先物シンボル","description":"COMEXのE-mini Silver Futuresを表す銘柄コード。","notes":""},
+  {"term":"QM","category":"先物取引","definition":"NYMEXのE-mini原油先物シンボル","description":"NYMEXのE-mini Crude Oil Futuresを表す銘柄コード。","notes":""},
+  {"term":"QO","category":"先物取引","definition":"COMEXのE-mini金先物シンボル","description":"COMEXのE-mini Gold Futuresを表す銘柄コード。","notes":""},
+  {"term":"RB","category":"先物取引","definition":"NYMEXのRBOBガソリン先物シンボル","description":"NYMEXのRBOB Gasoline Futuresを表す銘柄コード。","notes":""},
+  {"term":"RTY","category":"先物取引","definition":"CMEのE-mini ラッセル2000先物シンボル","description":"CMEのE-mini Russell 2000 Index Futuresを表す銘柄コード。","notes":""},
+  {"term":"SI","category":"先物取引","definition":"COMEXの銀先物シンボル","description":"COMEXのSilver Futuresを表す銘柄コード。","notes":""},
+  {"term":"Ticker","category":"先物取引","definition":"先物のティッカー表記規則（ルート＋限月コード）","description":"先物シンボルは「ルート（商品コード）＋限月（月コード）＋年コード」で表す。CBOT系ではZB/ZN/ZC/ZSのように先頭にZが付くルートがある。","notes":""},
+  {"term":"UB","category":"先物取引","definition":"CBOTの超長期米国債先物（ウルトラTボンド）シンボル","description":"CBOTのUltra U.S. Treasury Bond Futuresを表す銘柄コード。","notes":""},
+  {"term":"YM","category":"先物取引","definition":"CBOTのE-mini ダウ先物（5ドル）シンボル","description":"CBOTのE-mini Dow ($5) Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZB","category":"先物取引","definition":"CBOTの米国債先物（30年）シンボル","description":"CBOTのU.S. Treasury Bond Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZC","category":"先物取引","definition":"CBOTのトウモロコシ先物シンボル","description":"CBOTのCorn Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZF","category":"先物取引","definition":"CBOTの米国債先物（5年）シンボル","description":"CBOTの5-Year T-Note Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZL","category":"先物取引","definition":"CBOTの大豆油先物シンボル","description":"CBOTのSoybean Oil Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZN","category":"先物取引","definition":"CBOTの米国債先物（10年）シンボル","description":"CBOTの10-Year T-Note Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZQ","category":"先物取引","definition":"CBOTのFF金利先物（30日）シンボル","description":"CBOTの30 Day Federal Funds Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZS","category":"先物取引","definition":"CBOTの大豆先物シンボル","description":"CBOTのSoybean Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZT","category":"先物取引","definition":"CBOTの米国債先物（2年）シンボル","description":"CBOTの2-Year T-Note Futuresを表す銘柄コード。","notes":""},
+  {"term":"ZW","category":"先物取引","definition":"CBOTの小麦先物（シカゴ）シンボル","description":"CBOTのChicago SRW Wheat Futuresを表す銘柄コード。","notes":""}
 ]
