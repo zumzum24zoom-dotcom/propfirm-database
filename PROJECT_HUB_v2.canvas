@@ -1,0 +1,41 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","text":"# 🗺️ PFD ハブ v2（縦フロー版）\n\n上から下へデータの流れ","x":-600,"y":-1100,"width":800,"height":100,"color":"6"},
+		{"id":"phase-collect","type":"text","text":"# 1️⃣ 収集","x":-1300,"y":-950,"width":2600,"height":70,"color":"5"},
+		{"id":"btn-notebooklm","type":"text","text":"# 📚\n# NotebookLM\n## [▶ 起動](https://notebooklm.google.com/)","x":-1300,"y":-840,"width":320,"height":280,"color":"1"},
+		{"id":"btn-site-scanner","type":"text","text":"# 🔖\n# site-scanner\n## [▶ ソース](01_tools/utils/site-scanner.js)","x":-940,"y":-840,"width":320,"height":280,"color":"1"},
+		{"id":"btn-dom-scanner","type":"text","text":"# 🍪\n# Dom Scanner\n## [▶ フォルダ](01_tools/coupon/Dom%20scanner%20BMT)","x":-580,"y":-840,"width":320,"height":280,"color":"1"},
+		{"id":"phase-process","type":"text","text":"# 2️⃣ 加工","x":-1300,"y":-510,"width":2600,"height":70,"color":"5"},
+		{"id":"btn-page-maker","type":"text","text":"# 🛠️\n# Page Maker v12\n## [▶ 起動](01_tools/core/page-maker-v12.html)","x":-1300,"y":-400,"width":320,"height":280,"color":"4"},
+		{"id":"btn-sitemap-designer","type":"text","text":"# 🗺️\n# Sitemap Designer\n## [▶ 起動](01_tools/core/sitemap-designer.html)","x":-940,"y":-400,"width":320,"height":280,"color":"4"},
+		{"id":"btn-widget-maker","type":"text","text":"# ⚙️\n# Widget Maker\n## [▶ 起動](01_tools/core/widget-maker.html)","x":-580,"y":-400,"width":320,"height":280,"color":"4"},
+		{"id":"btn-firm-tour","type":"text","text":"# 🎯\n# Firm Tour\n## [▶ 起動](01_tools/core/firm-tour.html)","x":-220,"y":-400,"width":320,"height":280,"color":"4"},
+		{"id":"phase-output","type":"text","text":"# 3️⃣ 出力","x":-1300,"y":-70,"width":2600,"height":70,"color":"5"},
+		{"id":"btn-pfdb","type":"text","text":"# 💾\n# pfdb.json\n## [▶ 開く](data/pfdb.json)","x":-1300,"y":40,"width":320,"height":280,"color":"3"},
+		{"id":"btn-glossary","type":"text","text":"# 📖\n# glossary.json\n## [▶ 開く](data/glossary.json)","x":-940,"y":40,"width":320,"height":280,"color":"3"},
+		{"id":"btn-data-firms","type":"text","text":"# 📂\n# data/firms\n## [▶ 開く](data/firms)","x":-580,"y":40,"width":320,"height":280,"color":"3"},
+		{"id":"btn-data-plans","type":"text","text":"# 📂\n# data/plans\n## [▶ 開く](data/plans)","x":-220,"y":40,"width":320,"height":280,"color":"3"},
+		{"id":"btn-content-firms","type":"text","text":"# 📂\n# content/firms\n## [▶ 開く](content/firms)","x":140,"y":40,"width":320,"height":280,"color":"3"},
+		{"id":"phase-publish","type":"text","text":"# 4️⃣ 公開","x":-1300,"y":370,"width":2600,"height":70,"color":"5"},
+		{"id":"btn-hugo","type":"text","text":"# ⚡\n# Hugo build\n## [▶ themes](themes/pfd/layouts)","x":-1300,"y":480,"width":320,"height":280,"color":"2"},
+		{"id":"btn-github","type":"text","text":"# 🐙\n# GitHub\n## [▶ リポ](https://github.com/zumzum24zoom-dotcom/propfirm-database)","x":-940,"y":480,"width":320,"height":280,"color":"2"},
+		{"id":"btn-netlify","type":"text","text":"# 🌍\n# Netlify\n## [▶ 管理](https://app.netlify.com/)","x":-580,"y":480,"width":320,"height":280,"color":"2"},
+		{"id":"btn-undisclosed","type":"text","text":"# 🔒\n# undisclosed\n## [▶ private](https://github.com/zumzum24zoom-dotcom/undisclosed)","x":-220,"y":480,"width":320,"height":280,"color":"0"},
+		{"id":"docs","type":"text","text":"## 📋 ドキュメント\n\n- [HANDOFF.md](02_docs/HANDOFF.md)\n- [CLAUDE_CONTEXT.md](02_docs/CLAUDE_CONTEXT.md)\n- [policy/](zz_notes/policy)","x":500,"y":-840,"width":360,"height":280,"color":"6"},
+		{"id":"now","type":"text","text":"## 🔵 現在地\n\n- 攻略3断面の見た目調整中\n- プラン横断ページ未着手\n- Netlifyデプロイ未\n\n_編集して更新_","x":500,"y":-400,"width":360,"height":280,"color":"5"},
+		{"id":"label-embed","type":"text","text":"## 🌍 公開サイト 埋込ビュー（PinP）\n`hugo server -D` 起動中に表示される（localhost:1313）","x":-1300,"y":870,"width":2600,"height":80,"color":"6"},
+		{"id":"embed-site","type":"link","url":"http://localhost:1313/","x":-1300,"y":980,"width":2600,"height":900,"color":"2"}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"btn-notebooklm","fromSide":"bottom","toNode":"btn-page-maker","toSide":"top","label":"攻略3断面.md"},
+		{"id":"e2","fromNode":"btn-site-scanner","fromSide":"bottom","toNode":"btn-page-maker","toSide":"top","label":"DOM JSON"},
+		{"id":"e3","fromNode":"btn-dom-scanner","fromSide":"bottom","toNode":"btn-page-maker","toSide":"top","label":"クーポン"},
+		{"id":"e4","fromNode":"btn-page-maker","fromSide":"bottom","toNode":"btn-pfdb","toSide":"top","label":"自動保存"},
+		{"id":"e5","fromNode":"btn-page-maker","fromSide":"bottom","toNode":"btn-data-firms","toSide":"top","label":"🚀 exportHugo"},
+		{"id":"e8","fromNode":"btn-page-maker","fromSide":"bottom","toNode":"btn-glossary","toSide":"top","label":"用語辞典"},
+		{"id":"e9","fromNode":"btn-data-firms","fromSide":"bottom","toNode":"btn-hugo","toSide":"top"},
+		{"id":"e12","fromNode":"btn-hugo","fromSide":"bottom","toNode":"btn-github","toSide":"top","label":"git push"},
+		{"id":"e13","fromNode":"btn-github","fromSide":"right","toNode":"btn-netlify","toSide":"left","label":"auto deploy"},
+		{"id":"e14","fromNode":"btn-sitemap-designer","fromSide":"bottom","toNode":"btn-content-firms","toSide":"top","label":"構造設計"}
+	]
+}

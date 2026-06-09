@@ -1,0 +1,915 @@
+// ============================================================
+// Cloudflare Worker: PFC API (misty-term-6eac) v22
+// 変更点 (v21→v22):
+//   ① DDTYPE_MAP を6パターン体系に更新（旧語彙は後方互換で新表記に変換）
+//   ② ltS 配点関数をDB_04_Score仕様定義に準拠した配点に修正
+//      Static=1, Balance EOD=2, Equity EOD=4, Higher B or E EOD=5,
+//      Balance HWM=6, Equity HWM(=旧Interday)=10
+// ============================================================
+
+const DB_01_ID  = "2bb660a5-29e2-8036-a10c-ebfc7cc9596f";
+const DB_02_ID  = "f75a002b-bc8a-4f49-9754-c62517ce9cf4";
+const DB_06_ID  = "4ca0e3b8-ee7b-4e55-bd1f-2bcd3f653870"; // ★ v21
+const DB_07_ID  = "64840357-fffc-492f-b9b3-f46f312786f4";
+const DB_10_ID  = "1143ef27-163a-4696-bb43-b5bab5c1d173";
+const DBP_01_ID = "0bd9934b-f0e3-4f5a-acd0-9853b0f53f52";
+const DBP_02_ID = "8b52c16f-30ec-4432-81c2-ec0d2c4d0a35";
+
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+const KV_TTL = 300;
+
+const KV_KEYS = {
+  TABLES:      "tables_v7",
+  DB02_BODIES: "db02_bodies_v2",
+  DB10:        "db10_v2",
+  SCORES:      "api_scores_v7",
+  PLANS:       "api_plans_v4",
+  COUPONS:     "api_coupons_v2",
+};
+
+async function kvGet(env, key) {
+  if (!env.PEF_CACHE) return null;
+  try { return await env.PEF_CACHE.get(key, "json"); } catch (e) { return null; }
+}
+async function kvPut(env, key, value) {
+  if (!env.PEF_CACHE) return;
+  try { await env.PEF_CACHE.put(key, JSON.stringify(value), { expirationTtl: KV_TTL }); } catch (e) { console.error("KV put failed:", key, e.message); }
+}
+async function kvDelete(env, key) {
+  if (!env.PEF_CACHE) return;
+  try { await env.PEF_CACHE.delete(key); } catch (e) {}
+}
+
+const DB02_KEY_MAP = {
+  "1st Target (%)":        { key: "profit_target",        type: "pct" },
+  "2nd Target (%)":        { key: "profit_target_2",      type: "pct" },
+  "3rd Target (%)":        { key: "profit_target_3",      type: "pct" },
+  "4th Target (%)":        { key: "profit_target_4",      type: "pct" },
+  "Steps":                 { key: "step",                 type: "step" },
+  "Account Sizes":         { key: "account_sizes",        type: "sizes" },
+  "Price List":            { key: "price_list",           type: "price_list" },
+  "Min Days":              { key: "min_days",             type: "num" },
+  "Time Limit":            { key: "time_limit",           type: "str" },
+  "F_Time Limit":          { key: "f_time_limit",         type: "str_or_same" },
+  "Minimum payout":        { key: "min_payout",           type: "num_dollar" },
+  "Min Day Payout":        { key: "payout_days",          type: "num" },
+  "Payout Frequency":      { key: "payout_freq",          type: "str" },
+  "Profit Split":          { key: "profit_split",         type: "pct" },
+  "Daily Loss":            { key: "daily_loss",           type: "pct" },
+  "Daily Loss Type":       { key: "daily_loss_type",      type: "ddtype" },
+  "Max Loss":              { key: "max_loss",             type: "pct" },
+  "Max Loss Type":         { key: "max_loss_type",        type: "ddtype" },
+  "F_Daily Loss":          { key: "f_daily_loss",         type: "pct_or_same" },
+  "F_Daily Loss Type":     { key: "f_daily_loss_type",    type: "ddtype_or_same" },
+  "F_Max Loss":            { key: "f_max_loss",           type: "pct_or_same" },
+  "F_Max Loss Type":       { key: "f_max_loss_type",      type: "ddtype_or_same" },
+  "Consistency Rule":      { key: "consistency",          type: "rule" },
+  "Risk Rule":             { key: "risk_rule",            type: "rule" },
+  "Max Position Rule":     { key: "max_position",         type: "rule" },
+  "Stop-Loss Rule":        { key: "stop_loss",            type: "rule" },
+  "Scalping Rule":         { key: "scalping",             type: "rule" },
+  "News Trading Rule":     { key: "news",                 type: "rule" },
+  "Overnight Rule":        { key: "overnight",            type: "rule" },
+  "Weekend Holding Rule":  { key: "weekend",              type: "rule" },
+  "EA Rule":               { key: "ea",                   type: "rule" },
+  "Copy Trading Rule":     { key: "copy_trade",           type: "rule" },
+  "Banned Strategies":     { key: "banned_raw",           type: "str" },
+  "F_Consistency Rule":    { key: "f_consistency",        type: "rule_or_same" },
+  "F_Risk Rule":           { key: "f_risk_rule",          type: "rule_or_same" },
+  "F_Max Position Rule":   { key: "f_max_position",       type: "rule_or_same" },
+  "F_Stop-Loss Rule":      { key: "f_stop_loss",          type: "rule_or_same" },
+  "F_Scalping Rule":       { key: "f_scalping",           type: "rule_or_same" },
+  "F_News Trading Rule":   { key: "f_news",               type: "rule_or_same" },
+  "F_Overnight Rule":      { key: "f_overnight",          type: "rule_or_same" },
+  "F_Weekend Holding Rule":{ key: "f_weekend",            type: "rule_or_same" },
+  "F_EA Rule":             { key: "f_ea",                 type: "rule_or_same" },
+  "F_Copy Trading Rule":   { key: "f_copy_trade",         type: "rule_or_same" },
+  "F_Banned Strategies":   { key: "f_banned_raw",         type: "str_or_same" },
+  "※Target":              { key: "note_target",          type: "str" },
+  "※Min_Days":            { key: "note_min_days",        type: "str" },
+  "※Time Limit":          { key: "note_time_limit",      type: "str" },
+  "※F_Time Limit":        { key: "note_f_time_limit",    type: "str" },
+  "※Minimum payout":      { key: "note_min_payout",      type: "str" },
+  "※Min Day_Payout":      { key: "note_payout_days",     type: "str" },
+  "※Payout Frequency":    { key: "note_payout_freq",     type: "str" },
+  "※Daily_Loss":          { key: "note_daily_loss",      type: "str" },
+  "※Daily loss_Type":     { key: "note_daily_loss_type", type: "str" },
+  "※Max loss":            { key: "note_max_loss",        type: "str" },
+  "※Max loss_Type":       { key: "note_max_loss_type",   type: "str" },
+  "※F_Daily_Loss":        { key: "note_f_daily_loss",    type: "str" },
+  "※F_Daily loss_Type":   { key: "note_f_daily_loss_type", type: "str" },
+  "※F_Max loss":          { key: "note_f_max_loss",      type: "str" },
+  "※F_Max loss_Type":     { key: "note_f_max_loss_type", type: "str" },
+  "※Consistency Rule":    { key: "note_consistency",     type: "str" },
+  "※Risk Rule":           { key: "note_risk_rule",       type: "str" },
+  "※Max Position Rule":   { key: "note_max_position",    type: "str" },
+  "※Stop-Loss Rule":      { key: "note_stop_loss",       type: "str" },
+  "※Scalping Rule":       { key: "note_scalping",        type: "str" },
+  "※News Trading Rule":   { key: "note_news",            type: "str" },
+  "※Overnight Rule":      { key: "note_overnight",       type: "str" },
+  "※Weekend Holding Rule":{ key: "note_weekend",         type: "str" },
+  "※EA Rule":             { key: "note_ea",              type: "str" },
+  "※Copy Trading Rule":   { key: "note_copy_trade",      type: "str" },
+  "※Banned":              { key: "note_banned",          type: "str" },
+  "※F_Consistency Rule":  { key: "note_f_consistency",   type: "str" },
+  "※F_Risk Rule":         { key: "note_f_risk_rule",     type: "str" },
+  "※F_Max Position Rule": { key: "note_f_max_position",  type: "str" },
+  "※F_Stop-Loss Rule":    { key: "note_f_stop_loss",     type: "str" },
+  "※F_Scalping Rule":     { key: "note_f_scalping",      type: "str" },
+  "※F_News Trading Rule": { key: "note_f_news",          type: "str" },
+  "※F_Overnight Rule":    { key: "note_f_overnight",     type: "str" },
+  "※F_Weekend Holding Rule":{ key:"note_f_weekend",      type: "str" },
+  "※F_EA Rule":           { key: "note_f_ea",            type: "str" },
+  "※F_Copy Trading Rule": { key: "note_f_copy_trade",    type: "str" },
+  "※F_Banned":            { key: "note_f_banned",        type: "str" },
+  "※Profit Split":        { key: "note_profit_split",    type: "str" },
+};
+
+const DDTYPE_MAP = {
+  "none": "None", "static": "Static",
+  "balance eod": "Balance EOD", "balance hwm": "Balance HWM",
+  "equity eod": "Equity EOD", "equity hwm": "Equity HWM",
+  "higher of balance or equity eod": "Higher B or E EOD",
+  "higher b or e eod": "Higher B or E EOD",
+  "balance": "Balance EOD", "equity": "Equity EOD",
+  "higher b or e": "Higher B or E EOD",
+  "highest b or e": "Higher B or E EOD",
+  "higher of b or e": "Higher B or E EOD",
+  "higher of balance or equity": "Higher B or E EOD",
+  "interday": "Equity HWM",
+  "trailing": "Trailing",
+  "highest b or e (trailing)": "Trailing",
+  "trailing (high water mark)": "Trailing",
+};
+
+function propTxtCompat(props, oldName, newName) {
+  return txt(props[oldName]) || txt(props[newName]);
+}
+function propSelCompat(props, oldName, newName) {
+  return sel(props[oldName]) || sel(props[newName]);
+}
+
+function parseDb02Body(blocks) {
+  const tableBlock = blocks.find(b => b.type === "table");
+  if (!tableBlock) return null;
+  const rows = tableBlock.children || [];
+  if (rows.length < 2) return null;
+  const headerCells = rows[0].table_row?.cells || [];
+  let db02ColIdx = 2;
+  headerCells.forEach((cell, idx) => {
+    const t = (cell[0]?.plain_text || "").trim().toLowerCase();
+    if (t === "db_02" || t === "db02" || t === "値" || t === "value") db02ColIdx = idx;
+  });
+  let itemColIdx = 1;
+  headerCells.forEach((cell, idx) => {
+    const t = (cell[0]?.plain_text || "").trim().toLowerCase();
+    if (t === "item name" || t === "item" || t === "項目") itemColIdx = idx;
+  });
+  const raw = {};
+  rows.slice(1).forEach(row => {
+    const cells = row.table_row?.cells || [];
+    const itemName = (cells[itemColIdx]?.[0]?.plain_text || "").trim();
+    const db02Val  = (cells[db02ColIdx]?.[0]?.plain_text || "").trim();
+    if (itemName && db02Val) raw[itemName] = db02Val;
+  });
+  const result = {};
+  for (const [itemName, def] of Object.entries(DB02_KEY_MAP)) {
+    const rawVal = raw[itemName];
+    if (!rawVal) continue;
+    result[def.key] = convertDb02Val(rawVal, def.type, result);
+  }
+  for (const [itemName, def] of Object.entries(DB02_KEY_MAP)) {
+    if (!def.type.endsWith("_or_same") && !def.type.endsWith("_same")) continue;
+    const v = result[def.key];
+    if (v === "C_項目と同じ" || v === "same") {
+      const cKey = def.key.replace(/^f_/, "");
+      result[def.key] = result[cKey] ?? v;
+    }
+  }
+  return result;
+}
+
+function convertDb02Val(v, type, ctx) {
+  if (!v) return null;
+  const s = v.trim();
+  if (type === "pct" || type === "pct_or_same") {
+    if (s === "C_項目と同じ") return "C_項目と同じ";
+    const m = s.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (m) return parseFloat(m[1]) / 100;
+    const n = parseFloat(s);
+    if (!isNaN(n)) return n > 1 ? n / 100 : n;
+    return null;
+  }
+  if (type === "num" || type === "num_dollar") {
+    const m = s.match(/\$?([\d,]+(?:\.\d+)?)/);
+    if (m) return parseFloat(m[1].replace(/,/g, ""));
+    return null;
+  }
+  if (type === "rule" || type === "rule_or_same") {
+    if (s === "C_項目と同じ") return "C_項目と同じ";
+    if (["有", "無", "※有", "記載なし"].includes(s)) return s;
+    const l = s.toLowerCase();
+    if (l === "yes" || l === "required") return "有";
+    if (l === "no" || l === "not required" || l === "none") return "無";
+    if (l.startsWith("※") || l.includes("conditional") || l.includes("optional")) return "※有";
+    if (l.includes("not mentioned") || l.includes("n/a")) return "記載なし";
+    if (s.includes("有") || s.includes("無")) return s.slice(0, 3);
+    return "記載なし";
+  }
+  if (type === "ddtype" || type === "ddtype_or_same") {
+    if (s === "C_項目と同じ") return "C_項目と同じ";
+    const norm = DDTYPE_MAP[s.toLowerCase()];
+    if (norm) return norm;
+    const l = s.toLowerCase();
+    for (const [k, v2] of Object.entries(DDTYPE_MAP)) { if (l.includes(k)) return v2; }
+    return s;
+  }
+  if (type === "str" || type === "str_or_same") {
+    if (s === "C_項目と同じ") return "C_項目と同じ";
+    return s;
+  }
+  if (type === "step") return classifyStep(s);
+  if (type === "sizes") {
+    return s.split(/[,/、]/).map(x => {
+      const m = x.trim().replace(/\$/g, "").replace(/,/g, "");
+      const n = parseFloat(m);
+      if (isNaN(n)) return null;
+      if (n >= 1000000) return (n/1000000).toFixed(0).replace(/\.0$/,"") + "M";
+      if (n >= 1000)    return (n/1000).toFixed(n%1000===0?0:1).replace(/\.0$/,"") + "K";
+      return String(n);
+    }).filter(Boolean);
+  }
+  if (type === "price_list") {
+    return s.split("/").map(part => {
+      const m = part.trim().match(/(\S+)\s*:\s*\$?([\d,]+(?:\.\d+)?)/);
+      if (!m) return null;
+      return { size: m[1].trim(), price: parseFloat(m[2].replace(/,/g, "")) };
+    }).filter(Boolean);
+  }
+  return s;
+}
+
+async function fetchDb02Bodies(env, db02Pages) {
+  const hit = await kvGet(env, KV_KEYS.DB02_BODIES);
+  if (hit) return hit;
+  const key = env.NOTION_API_KEY;
+  const BATCH_SIZE = 5;
+  const map = {};
+  for (let i = 0; i < db02Pages.length; i += BATCH_SIZE) {
+    const batch = db02Pages.slice(i, i + BATCH_SIZE);
+    const results = await Promise.all(
+      batch.map(async p => {
+        try {
+          const blocks = await getChildBlocks(key, p.id);
+          const parsed = parseDb02Body(blocks);
+          return { id: p.id, data: parsed };
+        } catch (e) { return { id: p.id, data: null }; }
+      })
+    );
+    results.forEach(r => { map[r.id] = r.data; });
+  }
+  await kvPut(env, KV_KEYS.DB02_BODIES, map);
+  return map;
+}
+
+function getPropData(props) {
+  return {
+    profit_target: num(props["1次目標"]), daily_loss: num(props["日次損失"]),
+    daily_loss_type: sel(props["日次損失タイプ"]), max_loss: num(props["最大損失"]),
+    max_loss_type: sel(props["最大損失タイプ"]), f_daily_loss: num(props["F_日次損失"]),
+    f_daily_loss_type: sel(props["F_日次損失タイプ"]), f_max_loss: num(props["F_最大損失"]),
+    f_max_loss_type: sel(props["F_最大損失タイプ"]), f_time_limit: txt(props["F_制限時間"]),
+    profit_split: num(props["Profit_Split"]), min_days: num(props["取引日数_合格要件"]),
+    time_limit: txt(props["制限時間"]), min_payout: num(props["最小出金額"]),
+    payout_days: num(props["取引日数_出金要件"]), payout_freq: txt(props["出金頻度"]),
+    consistency: txt(props["一貫性ルール"]), risk_rule: sel(props["リスクルール"]),
+    max_position: sel(props["最大ポジション制約"]), stop_loss: sel(props["ストップロス制約"]),
+    scalping: sel(props["スキャルピング制約"]), news: sel(props["ニュース取引制限"]),
+    overnight: sel(props["オーバーナイト制限"]), weekend: sel(props["週末保有制限"]),
+    ea: sel(props["EA制限"]), copy_trade: sel(props["コピートレード制約"]),
+    f_consistency: txt(props["F_一貫性ルール"]), f_risk_rule: sel(props["F_リスクルール"]),
+    f_max_position: propSelCompat(props, "F_最大ポジション制限", "F_最大ポジション制約"),
+    f_stop_loss: sel(props["F_ストップロス制約"]), f_scalping: sel(props["F_スキャルピング制約"]),
+    f_news: sel(props["F_ニュース取引制限"]), f_overnight: sel(props["F_オーバーナイト制限"]),
+    f_weekend: sel(props["F_週末保有制限"]), f_ea: sel(props["F_EA制限"]),
+    f_copy_trade: sel(props["F_コピートレード制約"]),
+    account_sizes: msel(props["口座サイズ"]), banned: msel(props["禁止行為"]),
+    f_banned: txt(props["F_禁止行為"]),
+    note_daily_loss: txt(props["※日次損失"]), note_daily_loss_type: txt(props["※日次損失タイプ"]),
+    note_max_loss: txt(props["※最大損失"]), note_max_loss_type: txt(props["※最大損失タイプ"]),
+    note_consistency: txt(props["※一貫性ルール"]), note_risk_rule: txt(props["※リスクルール"]),
+    note_max_position: txt(props["※最大ポジション制約"]), note_stop_loss: txt(props["※ストップロス制約"]),
+    note_scalping: txt(props["※スキャルピング制約"]), note_news: txt(props["※ニュース取引制限"]),
+    note_overnight: txt(props["※オーバーナイト制限"]), note_weekend: txt(props["※週末保有制限"]),
+    note_ea: txt(props["※EA制限"]), note_copy_trade: txt(props["※コピートレード制約"]),
+    note_target: txt(props["※目標"]), note_min_days: txt(props["※取引日数_合格要件"]),
+    note_time_limit: txt(props["※ 制限時間"]), note_f_time_limit: txt(props["※F_制限時間"]),
+    note_min_payout: txt(props["※最小出金額"]), note_payout_days: txt(props["※取引日数_出金要件"]),
+    note_payout_freq: txt(props["※出金頻度"]),
+    note_f_daily_loss: txt(props["※F_日次損失"]), note_f_daily_loss_type: txt(props["※F_日次損失タイプ"]),
+    note_f_max_loss: txt(props["※F_最大損失"]), note_f_max_loss_type: txt(props["※F_最大損失タイプ"]),
+    note_f_consistency: txt(props["※F_一貫性ルール"]), note_f_risk_rule: txt(props["※F_リスクルール"]),
+    note_f_max_position: txt(props["※F_最大ポジション制限"]),
+    note_f_stop_loss: txt(props["※F_ストップロス制約"]), note_f_scalping: txt(props["※F_スキャルピング制約"]),
+    note_f_news: txt(props["※F_ニュース取引制限"]), note_f_overnight: txt(props["※F_オーバーナイト制限"]),
+    note_f_weekend: txt(props["※F_週末保有制限"]), note_f_ea: txt(props["※F_EA制限"]),
+    note_f_copy_trade: txt(props["※F_コピートレード制約"]),
+    note_banned: propTxtCompat(props, "※禁止手法", "※禁止行為"),
+    note_f_banned: propTxtCompat(props, "※F_禁止手法", "※F_禁止行為"),
+    note_profit_split: txt(props["※Profit_Split"]),
+  };
+}
+
+function parseBanned(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
+  return raw.split(/[,、\/]/).map(s => s.trim()).filter(Boolean);
+}
+
+function calcScoreFromBd(bd, props) {
+  const step = bd.step ?? classifyStep(sel(props["ステップ"]));
+  const c_profit=tgS(bd.profit_target??num(props["1次目標"]));const c_min_days=mdS(bd.min_days??num(props["取引日数_合格要件"]));const c_time=tlS(bd.time_limit??txt(props["制限時間"]));const c_cons=cS(bd.consistency??txt(props["一貫性ルール"]));const c_dl=lS(bd.daily_loss??num(props["日次損失"]));const c_dlt=ltS(bd.daily_loss_type??sel(props["日次損失タイプ"]));const c_ml=lS(bd.max_loss??num(props["最大損失"]));const c_mlt=ltS(bd.max_loss_type??sel(props["最大損失タイプ"]));const c_rr=rS(bd.risk_rule??sel(props["リスクルール"]));const c_mp=rS(bd.max_position??sel(props["最大ポジション制約"]));const c_sl=rS(bd.stop_loss??sel(props["ストップロス制約"]));const c_sc=rS(bd.scalping??sel(props["スキャルピング制約"]));const c_nw=rS(bd.news??sel(props["ニュース取引制限"]));const c_on=rS(bd.overnight??sel(props["オーバーナイト制限"]));const c_wk=rS(bd.weekend??sel(props["週末保有制限"]));const c_ea=rS(bd.ea??sel(props["EA制限"]));const c_ct=rS(bd.copy_trade??sel(props["コピートレード制約"]));const c_bn=bS(bd.banned_raw?parseBanned(bd.banned_raw):msel(props["禁止行為"]));
+  const f_time=tlS(bd.f_time_limit??txt(props["F_制限時間"]));const f_cons=cS(bd.f_consistency??txt(props["F_一貫性ルール"]));const f_bu=buS(bd.min_payout??num(props["最小出金額"]));const f_pd=mdS(bd.payout_days??num(props["取引日数_出金要件"]));const f_pf=pfS(bd.payout_freq??txt(props["出金頻度"]));const f_dl=lS(bd.f_daily_loss??num(props["F_日次損失"]));const f_dlt=ltS(bd.f_daily_loss_type??sel(props["F_日次損失タイプ"]));const f_ml=lS(bd.f_max_loss??num(props["F_最大損失"]));const f_mlt=ltS(bd.f_max_loss_type??sel(props["F_最大損失タイプ"]));const f_rr=rS(bd.f_risk_rule??sel(props["F_リスクルール"]));const f_mp=rS(bd.f_max_position??propSelCompat(props,"F_最大ポジション制限","F_最大ポジション制約"));const f_sl=rS(bd.f_stop_loss??sel(props["F_ストップロス制約"]));const f_sc=rS(bd.f_scalping??sel(props["F_スキャルピング制約"]));const f_nw=rS(bd.f_news??sel(props["F_ニュース取引制限"]));const f_on=rS(bd.f_overnight??sel(props["F_オーバーナイト制限"]));const f_wk=rS(bd.f_weekend??sel(props["F_週末保有制限"]));const f_ea=rS(bd.f_ea??sel(props["F_EA制限"]));const f_ct=rS(bd.f_copy_trade??sel(props["F_コピートレード制約"]));const f_bn=bS(bd.f_banned_raw?parseBanned(bd.f_banned_raw):[]);
+  const profit=c_profit+c_min_days+c_time+c_cons+f_time+f_cons+f_bu+f_pd+f_pf;const loss=c_dl+c_dlt+c_ml+c_mlt+f_dl+f_dlt+f_ml+f_mlt;const restrict=c_rr+c_mp+c_sl+c_sc+c_nw+c_on+c_wk+c_ea+c_ct+f_rr+f_mp+f_sl+f_sc+f_nw+f_on+f_wk+f_ea+f_ct;const tactic=c_bn+f_bn;
+  const phases = genPhases(step).map(phase => {
+    if (phase === "Funded") {
+      return { phase, profit: f_time+f_cons+f_bu+f_pd+f_pf, loss: f_dl+f_dlt+f_ml+f_mlt, restrict: f_rr+f_mp+f_sl+f_sc+f_nw+f_on+f_wk+f_ea+f_ct, tactic: f_bn, c_score: 0, f_score: f_time+f_cons+f_bu+f_pd+f_pf+f_dl+f_dlt+f_ml+f_mlt+f_rr+f_mp+f_sl+f_sc+f_nw+f_on+f_wk+f_ea+f_ct+f_bn };
+    }
+    const stepCount = genPhases(step).filter(p => p !== "Funded").length || 1;
+    const c_sub = (c_profit+c_min_days+c_time+c_cons+c_dl+c_dlt+c_ml+c_mlt+c_rr+c_mp+c_sl+c_sc+c_nw+c_on+c_wk+c_ea+c_ct+c_bn)/stepCount;
+    return { phase, profit:(c_profit+c_min_days+c_time+c_cons)/stepCount, loss:(c_dl+c_dlt+c_ml+c_mlt)/stepCount, restrict:(c_rr+c_mp+c_sl+c_sc+c_nw+c_on+c_wk+c_ea+c_ct)/stepCount, tactic:c_bn/stepCount, c_score:c_sub, f_score:0 };
+  });
+  const c_score = phases.filter(p=>p.phase!=="Funded").reduce((s,p)=>s+p.c_score,0);
+  const f_score = phases.find(p=>p.phase==="Funded")?.f_score||0;
+  return { c_score, f_score, total: c_score+f_score, profit, loss, restrict, tactic, phases };
+}
+
+function genPhases(step) {
+  switch(step){case"instant":return["Funded"];case"1":return["P1","Funded"];case"2":return["P1","P2","Funded"];case"3":return["P1","P2","P3","Funded"];case"4":return["P1","P2","P3","P4","Funded"];default:return["P1","Funded"];}
+}
+
+function buildDbp02ToDb02Map(dbp02Pages) { const map={};dbp02Pages.forEach(p=>{const id=p.id.replace(/-/g,"");const rel=p.properties["DB_02_Challenge"]?.relation;if(rel&&rel.length>0)map[id]=rel[0].id;});return map; }
+function buildDb02ToDbp02Map(dbp02Pages) { const map={};dbp02Pages.forEach(p=>{const id=p.id.replace(/-/g,"");const rel=p.properties["DB_02_Challenge"]?.relation;if(rel&&rel.length>0){const d=rel[0].id;map[d]=id;map[d.replace(/-/g,"")]=id;}});return map; }
+function buildDbp02DataMap(dbp02Pages) { const map={};dbp02Pages.forEach(p=>{const rel=p.properties["DB_02_Challenge"]?.relation;if(!rel||rel.length===0)return;const d=rel[0].id;const q=p.properties["最短合格"]?.number??p.properties["実質最短_合格日数"]?.number??null;const po=p.properties["最速出金"]?.number??p.properties["実質最短_出金日数"]?.number??null;map[d]={min_qualify_days:q,min_payout_days:po};});return map; }
+function buildPlatformMap(db07Pages) { const map={};db07Pages.forEach(p=>{const name=p.properties["Platform Name"]?.title?.[0]?.plain_text||"";const logo_url=p.properties["Logo_URL"]?.rich_text?.[0]?.plain_text||"";map[p.id]={name,logo_url};});return map; }
+
+async function fetchAllTables(env) {
+  const hit = await kvGet(env, KV_KEYS.TABLES);
+  if (hit) return hit;
+  const key = env.NOTION_API_KEY;
+  const [db01Pages,db02Pages,db07Pages,dbp01Pages,dbp02Pages] = await Promise.all([queryAll(key,DB_01_ID),queryAll(key,DB_02_ID),queryAll(key,DB_07_ID),queryAll(key,DBP_01_ID),queryAll(key,DBP_02_ID)]);
+  const logoMap={};dbp01Pages.forEach(dbp01=>{const db01Rel=dbp01.properties["DB_01_Company"]?.relation;if(!db01Rel||db01Rel.length===0)return;const db01Id=db01Rel[0].id;const logo=fileUrl(dbp01.properties["Logo"]);if(logo)logoMap[db01Id]=logo;});
+  const dbp01Map={};db01Pages.forEach(p=>{const rel=p.properties["DBP_01データ反映"]?.relation;if(rel&&rel.length>0)dbp01Map[p.id]=rel[0].id.replace(/-/g,"");});
+  const result={db01Pages,db02Pages,db07Pages,dbp01Pages,dbp02Pages,logoMap,dbp01Map};
+  await kvPut(env,KV_KEYS.TABLES,result);return result;
+}
+
+async function fetchDb10Pages(env) {
+  const hit = await kvGet(env, KV_KEYS.DB10);
+  if (hit) return hit;
+  const db10Pages = await queryAll(env.NOTION_API_KEY, DB_10_ID);
+  await kvPut(env, KV_KEYS.DB10, db10Pages);
+  return db10Pages;
+}
+
+function buildRuleItems(bd, props) {
+  function cv(bdKey, propFallback) { return bd[bdKey] ?? propFallback; }
+  function dash(v) { return (!v || v === "C_項目と同じ") ? "—" : v; }
+  const targets = [bd.profit_target??num(props["1次目標"]),bd.profit_target_2??num(props["2次目標"]),bd.profit_target_3??num(props["3次目標"]),bd.profit_target_4??num(props["4次目標"])].filter(v=>v!==null&&v!==undefined);
+  const targetStr = targets.map(v=>fmtPct(v)).join(" → ") || "";
+  return [
+    { key:"利益目標",c:"profit",cv:targetStr||null,fv:fmtMin(cv("min_payout",num(props["最小出金額"]))),note_c:cv("note_target",txt(props["※目標"])),note_f:cv("note_min_payout",txt(props["※最小出金額"])) },
+    { key:"最低取引日数",c:"profit",cv:fmtDays(cv("min_days",num(props["取引日数_合格要件"]))),fv:fmtDays(cv("payout_days",num(props["取引日数_出金要件"]))),note_c:cv("note_min_days",txt(props["※取引日数_合格要件"])),note_f:cv("note_payout_days",txt(props["※取引日数_出金要件"])) },
+    { key:"制限時間",c:"profit",cv:cv("time_limit",txt(props["制限時間"])),fv:dash(cv("f_time_limit",txt(props["F_制限時間"]))),note_c:cv("note_time_limit",txt(props["※ 制限時間"])),note_f:cv("note_f_time_limit",txt(props["※F_制限時間"])) },
+    { key:"一貫性ルール",c:"profit",cv:cv("consistency",txt(props["一貫性ルール"])),fv:dash(cv("f_consistency",txt(props["F_一貫性ルール"]))),note_c:cv("note_consistency",txt(props["※一貫性ルール"])),note_f:cv("note_f_consistency",txt(props["※F_一貫性ルール"])) },
+    { key:"日次損失",c:"loss",cv:fmtPct(cv("daily_loss",num(props["日次損失"]))),fv:fmtPct(cv("f_daily_loss",num(props["F_日次損失"]))),note_c:cv("note_daily_loss",txt(props["※日次損失"])),note_f:cv("note_f_daily_loss",txt(props["※F_日次損失"])) },
+    { key:"日次損失タイプ",c:"loss",cv:cv("daily_loss_type",sel(props["日次損失タイプ"])),fv:dash(cv("f_daily_loss_type",sel(props["F_日次損失タイプ"]))),note_c:cv("note_daily_loss_type",txt(props["※日次損失タイプ"])),note_f:cv("note_f_daily_loss_type",txt(props["※F_日次損失タイプ"])) },
+    { key:"最大損失",c:"loss",cv:fmtPct(cv("max_loss",num(props["最大損失"]))),fv:fmtPct(cv("f_max_loss",num(props["F_最大損失"]))),note_c:cv("note_max_loss",txt(props["※最大損失"])),note_f:cv("note_f_max_loss",txt(props["※F_最大損失"])) },
+    { key:"最大損失タイプ",c:"loss",cv:cv("max_loss_type",sel(props["最大損失タイプ"])),fv:dash(cv("f_max_loss_type",sel(props["F_最大損失タイプ"]))),note_c:cv("note_max_loss_type",txt(props["※最大損失タイプ"])),note_f:cv("note_f_max_loss_type",txt(props["※F_最大損失タイプ"])) },
+    { key:"リスクルール",c:"restrict",cv:cv("risk_rule",sel(props["リスクルール"])),fv:dash(cv("f_risk_rule",sel(props["F_リスクルール"]))),note_c:cv("note_risk_rule",txt(props["※リスクルール"])),note_f:cv("note_f_risk_rule",txt(props["※F_リスクルール"])) },
+    { key:"最大ポジション制約",c:"restrict",cv:cv("max_position",sel(props["最大ポジション制約"])),fv:dash(cv("f_max_position",propSelCompat(props,"F_最大ポジション制限","F_最大ポジション制約"))),note_c:cv("note_max_position",txt(props["※最大ポジション制約"])),note_f:cv("note_f_max_position",txt(props["※F_最大ポジション制限"])) },
+    { key:"ストップロス制約",c:"restrict",cv:cv("stop_loss",sel(props["ストップロス制約"])),fv:dash(cv("f_stop_loss",sel(props["F_ストップロス制約"]))),note_c:cv("note_stop_loss",txt(props["※ストップロス制約"])),note_f:cv("note_f_stop_loss",txt(props["※F_ストップロス制約"])) },
+    { key:"スキャルピング制約",c:"restrict",cv:cv("scalping",sel(props["スキャルピング制約"])),fv:dash(cv("f_scalping",sel(props["F_スキャルピング制約"]))),note_c:cv("note_scalping",txt(props["※スキャルピング制約"])),note_f:cv("note_f_scalping",txt(props["※F_スキャルピング制約"])) },
+    { key:"ニュース取引制限",c:"restrict",cv:cv("news",sel(props["ニュース取引制限"])),fv:dash(cv("f_news",sel(props["F_ニュース取引制限"]))),note_c:cv("note_news",txt(props["※ニュース取引制限"])),note_f:cv("note_f_news",txt(props["※F_ニュース取引制限"])) },
+    { key:"オーバーナイト制限",c:"restrict",cv:cv("overnight",sel(props["オーバーナイト制限"])),fv:dash(cv("f_overnight",sel(props["F_オーバーナイト制限"]))),note_c:cv("note_overnight",txt(props["※オーバーナイト制限"])),note_f:cv("note_f_overnight",txt(props["※F_オーバーナイト制限"])) },
+    { key:"週末保有制限",c:"restrict",cv:cv("weekend",sel(props["週末保有制限"])),fv:dash(cv("f_weekend",sel(props["F_週末保有制限"]))),note_c:cv("note_weekend",txt(props["※週末保有制限"])),note_f:cv("note_f_weekend",txt(props["※F_週末保有制限"])) },
+    { key:"EA制限",c:"restrict",cv:cv("ea",sel(props["EA制限"])),fv:dash(cv("f_ea",sel(props["F_EA制限"]))),note_c:cv("note_ea",txt(props["※EA制限"])),note_f:cv("note_f_ea",txt(props["※F_EA制限"])) },
+    { key:"コピートレード制約",c:"restrict",cv:cv("copy_trade",sel(props["コピートレード制約"])),fv:dash(cv("f_copy_trade",sel(props["F_コピートレード制約"]))),note_c:cv("note_copy_trade",txt(props["※コピートレード制約"])),note_f:cv("note_f_copy_trade",txt(props["※F_コピートレード制約"])) },
+    { key:"禁止行為",c:"tactic",cv:bd.banned_raw||msel(props["禁止行為"]).join("、")||null,fv:dash(bd.f_banned_raw||txt(props["F_禁止行為"])||null),note_c:cv("note_banned",propTxtCompat(props,"※禁止手法","※禁止行為")),note_f:cv("note_f_banned",propTxtCompat(props,"※F_禁止手法","※F_禁止行為")) },
+  ];
+}
+
+function calcPerItemScores(bd, props) {
+  function cv(k,f){return bd[k]??f;}
+  const c=[tgS(cv("profit_target",num(props["1次目標"]))),mdS(cv("min_days",num(props["取引日数_合格要件"]))),tlS(cv("time_limit",txt(props["制限時間"]))),cS(cv("consistency",txt(props["一貫性ルール"]))),lS(cv("daily_loss",num(props["日次損失"]))),ltS(cv("daily_loss_type",sel(props["日次損失タイプ"]))),lS(cv("max_loss",num(props["最大損失"]))),ltS(cv("max_loss_type",sel(props["最大損失タイプ"]))),rS(cv("risk_rule",sel(props["リスクルール"]))),rS(cv("max_position",sel(props["最大ポジション制約"]))),rS(cv("stop_loss",sel(props["ストップロス制約"]))),rS(cv("scalping",sel(props["スキャルピング制約"]))),rS(cv("news",sel(props["ニュース取引制限"]))),rS(cv("overnight",sel(props["オーバーナイト制限"]))),rS(cv("weekend",sel(props["週末保有制限"]))),rS(cv("ea",sel(props["EA制限"]))),rS(cv("copy_trade",sel(props["コピートレード制約"]))),bS(bd.banned_raw?parseBanned(bd.banned_raw):msel(props["禁止行為"]))];
+  const f=[buS(cv("min_payout",num(props["最小出金額"]))),mdS(cv("payout_days",num(props["取引日数_出金要件"]))),tlS(cv("f_time_limit",txt(props["F_制限時間"]))),cS(cv("f_consistency",txt(props["F_一貫性ルール"]))),lS(cv("f_daily_loss",num(props["F_日次損失"]))),ltS(cv("f_daily_loss_type",sel(props["F_日次損失タイプ"]))),lS(cv("f_max_loss",num(props["F_最大損失"]))),ltS(cv("f_max_loss_type",sel(props["F_最大損失タイプ"]))),rS(cv("f_risk_rule",sel(props["F_リスクルール"]))),rS(cv("f_max_position",propSelCompat(props,"F_最大ポジション制限","F_最大ポジション制約"))),rS(cv("f_stop_loss",sel(props["F_ストップロス制約"]))),rS(cv("f_scalping",sel(props["F_スキャルピング制約"]))),rS(cv("f_news",sel(props["F_ニュース取引制限"]))),rS(cv("f_overnight",sel(props["F_オーバーナイト制限"]))),rS(cv("f_weekend",sel(props["F_週末保有制限"]))),rS(cv("f_ea",sel(props["F_EA制限"]))),rS(cv("f_copy_trade",sel(props["F_コピートレード制約"]))),bS(bd.f_banned_raw?parseBanned(bd.f_banned_raw):[])];
+  return {c,f};
+}
+
+function generateWidgetHtml({name,step,stepLabel,stepColor,rank,rankTotal,scores,perItemScores,ITEMS,priceRows,site_url}) {
+  const COUPON_URL="https://www.propfirm-challengers.jp/336660a529e281d0a7f5cb77fce3447b";
+  const chartTop=20,chartBottom=160,chartBaseline=195,chartRange=chartBottom-chartTop;
+  const xStart=60,xEnd=723,itemCount=18,xStep=(xEnd-xStart)/(itemCount-1);
+  function sY(s){return chartBottom-(s/10)*chartRange;}
+  const chartLabels=["利益目標","取引日数","制限時間","一貫性","日次損失","DD Type","最大損失","ML Type","リスク","ポジション","SL","スキャル","ニュース","ON保有","週末保有","EA","コピー","禁止行為"];
+  const fPts=perItemScores.f.map((s,i)=>`${Math.round(xStart+i*xStep)},${sY(s)}`).join(" ");
+  const cPts=perItemScores.c.map((s,i)=>`${Math.round(xStart+i*xStep)},${sY(s)}`).join(" ");
+  const xLabels=chartLabels.map((l,i)=>{const x=Math.round(xStart+i*xStep);const cs=perItemScores.c[i]||0;const fs=perItemScores.f[i]||0;let st="";if(fs>cs)st=' style="fill:#ef4444"';else if(cs>fs)st=' style="fill:#00d4aa"';return`<text x="${x}" y="208" class="pfc-area-label" transform="rotate(-45,${x},208)"${st}>${l}</text>`;}).join("\n");
+  const ruleRows=ITEMS.map(item=>{const cvS=item.cv||"—";const fvS=item.fv||"—";let tc="",badge="";if(item.diff==="trap"){tc=' class="diff-trap"';badge='<span class="pfc-diff-badge trap">▲ TRAP</span>';}else if(item.diff==="ease"){tc=' class="diff-ease"';badge='<span class="pfc-diff-badge ease">▼ EASE</span>';}return`<tr${tc}><td class="pfc-rule-key">${item.key}${badge}</td><td class="pfc-rule-cv">${cvS}</td><td class="pfc-rule-fv">${fvS}</td></tr>`;}).join("\n");
+  const priceCards=priceRows.map(p=>`<div class="pfc-price-card"><div class="pfc-price-size">${p.size}</div><div class="pfc-price-amount">${p.display_price}</div></div>`).join("\n");
+  const rankStr=rank?`Rank ${rank} / ${rankTotal}`:"";
+  return `<style>
+:root{--bg:#0a0e17;--surface:#131722;--surface2:#1a1e2e;--border:#1e2d3d;--accent:#00d4aa;--yellow:#f0b90b;--red:#ef4444;--blue:#2962ff;--text:#c8d6e5;--text-bright:#e2e8f0;--text-dim:#636e7b;--ease:#00d4aa;--trap:#ef4444}
+.pfc-widget-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden}
+.pfc-widget-header{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);font-size:.85rem;font-weight:700;color:var(--text-bright)}
+.pfc-tag{font-size:.65rem;padding:2px 8px;border-radius:3px;font-weight:600}
+.pfc-chart-body{padding:16px}.pfc-score-summary{display:flex;gap:16px;margin-bottom:14px}
+.pfc-score-card{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;text-align:center}
+.pfc-score-label{font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.pfc-score-val{font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.pfc-score-val.c{color:#2962ff}.pfc-score-val.f{color:#ef4444}.pfc-score-val.total{color:var(--text-bright)}
+.pfc-area-chart{position:relative;width:100%;height:280px;overflow-x:auto;overflow-y:hidden}
+.pfc-area-svg{width:100%;min-width:700px;height:100%}
+.pfc-area-c{fill:url(#gradC)}.pfc-area-f{fill:url(#gradF)}
+.pfc-area-grid{stroke:var(--border);stroke-width:.5}
+.pfc-area-label{font-size:9px;fill:var(--text-dim);text-anchor:end}
+.pfc-area-label-y{font-size:9px;fill:var(--text-dim);text-anchor:end;dominant-baseline:middle}
+.pfc-chart-legend{display:flex;gap:20px;justify-content:center;margin-top:10px}
+.pfc-chart-legend-item{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--text-dim)}
+.pfc-chart-legend-dot{width:12px;height:8px;border-radius:1px}
+.pfc-rule-body{padding:0}.pfc-rule-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.pfc-rule-table th,.pfc-rule-table td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:middle}
+.pfc-rule-table th{background:var(--surface2);color:var(--text-dim);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.3px}
+.pfc-rule-key{font-weight:700;color:var(--text-bright);white-space:nowrap;width:140px}
+.pfc-rule-cv,.pfc-rule-fv{color:var(--text)}
+tr.diff-ease{background:rgba(0,212,170,.05)}tr.diff-ease td{border-left:3px solid var(--ease)}tr.diff-ease td:first-child{padding-left:9px}
+tr.diff-trap{background:rgba(239,68,68,.05)}tr.diff-trap td{border-left:3px solid var(--trap)}tr.diff-trap td:first-child{padding-left:9px}
+.pfc-diff-badge{display:inline-block;font-size:.6rem;font-weight:700;margin-left:6px;vertical-align:middle}
+.pfc-diff-badge.ease{color:var(--ease)}.pfc-diff-badge.trap{color:var(--trap)}
+.pfc-price-body{padding:16px}.pfc-price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:12px}
+.pfc-price-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;transition:border-color .2s}
+.pfc-price-card:hover{border-color:var(--accent)}
+.pfc-price-size{font-size:.75rem;font-weight:700;color:var(--text-dim);margin-bottom:4px}
+.pfc-price-amount{font-size:1.1rem;font-weight:800;color:var(--text-bright);font-variant-numeric:tabular-nums}
+.pfc-cta-wrap{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.pfc-cta-btn{display:inline-block;background:transparent;color:#4dabf7;font-weight:700;font-size:.85rem;padding:8px 24px;border-radius:4px;border:1px solid #4dabf7;text-decoration:none;transition:all .2s;cursor:pointer}
+.pfc-cta-btn:hover{background:rgba(77,171,247,.1)}
+.pfc-coupon-btn{display:inline-block;background:transparent;color:var(--accent);font-weight:700;font-size:.85rem;padding:8px 24px;border-radius:4px;border:1px solid var(--accent);text-decoration:none;transition:all .2s;cursor:pointer}
+.pfc-coupon-btn:hover{background:rgba(0,212,170,.1)}
+@media(max-width:600px){.pfc-score-summary{flex-direction:column;gap:8px}.pfc-price-grid{grid-template-columns:repeat(2,1fr)}.pfc-rule-table{font-size:.72rem}.pfc-rule-table th,.pfc-rule-table td{padding:6px 8px}.pfc-area-chart{height:220px}}
+</style>
+<div class="pfc-widget-section" id="pfc-price">
+<div class="pfc-widget-header">${name}<span class="pfc-tag" style="background:${stepColor}22;color:${stepColor}">${stepLabel}</span></div>
+<div class="pfc-price-body">
+<div class="pfc-price-grid">${priceCards}</div>
+<div class="pfc-cta-wrap">
+<a class="pfc-coupon-btn" href="${COUPON_URL}" target="_blank" rel="noopener">クーポン</a>
+<a class="pfc-cta-btn" href="${site_url}" target="_blank" rel="noopener">公式サイト</a>
+</div></div></div>
+<div class="pfc-widget-section" id="pfc-chart">
+<div class="pfc-widget-header">ルール比較チャート<span class="pfc-tag" style="background:${stepColor}22;color:${stepColor}">${stepLabel}</span><span style="flex:1"></span><span style="font-size:.7rem;color:var(--text-dim);font-weight:400">${rankStr}</span></div>
+<div class="pfc-chart-body">
+<div class="pfc-score-summary">
+<div class="pfc-score-card"><div class="pfc-score-label">Challenge</div><div class="pfc-score-val c">${scores.c_score}</div></div>
+<div class="pfc-score-card"><div class="pfc-score-label">Funded</div><div class="pfc-score-val f">${scores.f_score}</div></div>
+<div class="pfc-score-card"><div class="pfc-score-label">Total</div><div class="pfc-score-val total">${scores.total}</div></div>
+</div>
+<div class="pfc-area-chart">
+<svg class="pfc-area-svg" viewBox="0 0 760 250" preserveAspectRatio="xMidYMid meet">
+<defs><linearGradient id="gradC" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5b8aff" stop-opacity=".55"/><stop offset="60%" stop-color="#2962ff" stop-opacity=".3"/><stop offset="100%" stop-color="#2962ff" stop-opacity=".08"/></linearGradient>
+<linearGradient id="gradF" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff7b7b" stop-opacity=".45"/><stop offset="60%" stop-color="#ef4444" stop-opacity=".22"/><stop offset="100%" stop-color="#ef4444" stop-opacity=".06"/></linearGradient></defs>
+<line x1="50" y1="20" x2="740" y2="20" class="pfc-area-grid"/><line x1="50" y1="48" x2="740" y2="48" class="pfc-area-grid"/><line x1="50" y1="76" x2="740" y2="76" class="pfc-area-grid"/><line x1="50" y1="104" x2="740" y2="104" class="pfc-area-grid"/><line x1="50" y1="132" x2="740" y2="132" class="pfc-area-grid"/><line x1="50" y1="160" x2="740" y2="160" class="pfc-area-grid"/>
+<text x="45" y="20" class="pfc-area-label-y">10</text><text x="45" y="48" class="pfc-area-label-y">8</text><text x="45" y="76" class="pfc-area-label-y">6</text><text x="45" y="104" class="pfc-area-label-y">4</text><text x="45" y="132" class="pfc-area-label-y">2</text><text x="45" y="160" class="pfc-area-label-y">0</text>
+<polygon class="pfc-area-f" points="${fPts} ${xEnd},${chartBaseline} ${xStart},${chartBaseline}"/>
+<polygon class="pfc-area-c" points="${cPts} ${xEnd},${chartBaseline} ${xStart},${chartBaseline}"/>
+${xLabels}
+</svg></div>
+<div class="pfc-chart-legend">
+<div class="pfc-chart-legend-item"><div class="pfc-chart-legend-dot" style="background:rgba(41,98,255,.6)"></div>Challenge</div>
+<div class="pfc-chart-legend-item"><div class="pfc-chart-legend-dot" style="background:rgba(239,68,68,.5)"></div>Funded</div>
+</div></div></div>
+<div class="pfc-widget-section" id="pfc-rules">
+<div class="pfc-widget-header">ルール表<span style="flex:1"></span><span style="font-size:.65rem;color:var(--text-dim);font-weight:400">Challenge vs Funded 比較</span></div>
+<div class="pfc-rule-body">
+<table class="pfc-rule-table">
+<thead><tr><th>項目</th><th>Challenge</th><th>Funded</th></tr></thead>
+<tbody>${ruleRows}</tbody>
+</table></div></div>`;
+}
+
+// ★ v21: 攻略記事テーブルパース関連関数
+async function fetchPage(key, pageId) {
+  const r = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
+    headers: { Authorization: `Bearer ${key}`, "Notion-Version": "2022-06-28" },
+  });
+  if (!r.ok) return null;
+  return await r.json();
+}
+
+function extractDays(cellText) {
+  if (!cellText) return null;
+  const m = cellText.match(/(\d+)\s*日/);
+  return m ? parseInt(m[1]) : null;
+}
+
+function parseTimelineTable(blocks) {
+  const tables = blocks.filter(b => b.type === "table");
+  if (tables.length === 0) return null;
+  const lastTable = tables[tables.length - 1];
+  const rows = lastTable.children || [];
+  if (rows.length < 2) return null;
+
+  const headerCells = rows[0].table_row?.cells || [];
+  let planIdx = -1, qualifyIdx = -1, payoutIdx = -1, totalIdx = -1;
+  headerCells.forEach((cell, idx) => {
+    const t = (cell[0]?.plain_text || "").replace(/\*/g, "").trim();
+    if (t.includes("プラン名")) planIdx = idx;
+    if (t.includes("最短合格")) qualifyIdx = idx;
+    if (t.includes("最速出金")) payoutIdx = idx;
+    if (t.includes("トータル")) totalIdx = idx;
+  });
+  if (planIdx < 0 || qualifyIdx < 0 || payoutIdx < 0) return null;
+
+  const result = [];
+  rows.slice(1).forEach(row => {
+    const cells = row.table_row?.cells || [];
+    const planName = (cells[planIdx]?.[0]?.plain_text || "").replace(/\*/g, "").trim();
+    const qualifyDays = extractDays(cells[qualifyIdx]?.[0]?.plain_text || "");
+    const payoutDays = extractDays(cells[payoutIdx]?.[0]?.plain_text || "");
+    const totalDays = totalIdx >= 0 ? extractDays(cells[totalIdx]?.[0]?.plain_text || "") : null;
+    if (planName && (qualifyDays !== null || payoutDays !== null)) {
+      result.push({ planName, qualifyDays, payoutDays, totalDays });
+    }
+  });
+  return result.length > 0 ? result : null;
+}
+
+function matchPlanName(db02Name, articlePlanName) {
+  if (!db02Name || !articlePlanName) return false;
+  if (db02Name === articlePlanName) return true;
+  const stripped = db02Name.replace(/^.+?\s*[-–—]\s*/, "").trim();
+  if (stripped === articlePlanName) return true;
+  if (articlePlanName.includes(stripped)) return true;
+  if (stripped.includes(articlePlanName)) return true;
+  return false;
+}
+
+async function updateMinDaysFromArticle(env, db02Page, dbp02PageId) {
+  const key = env.NOTION_API_KEY;
+  const fail = (reason) => ({ success: false, reason, plan: "", matched_to: "", min_qualify_days: null, min_payout_days: null });
+
+  const db01RelInDb02 = db02Page.properties["DB01"]?.relation;
+  if (!db01RelInDb02 || db01RelInDb02.length === 0) {
+    return fail("DB_01 relation not found on DB_02");
+  }
+  const db01Id = db01RelInDb02[0].id;
+
+  const db01Page = await fetchPage(key, db01Id);
+  const dbp01Rel = db01Page?.properties?.["DBP_01データ反映"]?.relation;
+  const dbp01Id = dbp01Rel && dbp01Rel.length > 0 ? dbp01Rel[0].id : null;
+  if (!dbp01Id) {
+    return fail("DBP_01 not found for this Firm");
+  }
+
+  const db06Pages = await queryAll(key, DB_06_ID);
+  const articlePage = db06Pages.find(p => {
+    const rel = p.properties["DBP_01"]?.relation;
+    return rel && rel.some(r => r.id === dbp01Id);
+  });
+  if (!articlePage) {
+    return fail("攻略記事 not found for this Firm");
+  }
+
+  const articleBlocks = await getChildBlocks(key, articlePage.id);
+  const timelineData = parseTimelineTable(articleBlocks);
+  if (!timelineData) {
+    return fail("最速出金スケジュールテーブル not found in article");
+  }
+
+  const challengeName = db02Page.properties["チャレンジ名"]?.title?.[0]?.plain_text || "";
+  const matched = timelineData.find(row => matchPlanName(challengeName, row.planName));
+  if (!matched) {
+    return fail(`プラン名マッチ失敗: "${challengeName}" vs [${timelineData.map(r => r.planName).join(", ")}]`);
+  }
+
+  const updateProps = {};
+  if (matched.qualifyDays !== null) updateProps["最短合格"] = { number: matched.qualifyDays };
+  if (matched.payoutDays !== null) updateProps["最速出金"] = { number: matched.payoutDays };
+  if (Object.keys(updateProps).length === 0) {
+    return fail("No values to update");
+  }
+
+  const updateRes = await fetch(`https://api.notion.com/v1/pages/${dbp02PageId}`, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", "Notion-Version": "2022-06-28" },
+    body: JSON.stringify({ properties: updateProps }),
+  });
+  if (!updateRes.ok) {
+    return fail(`Notion update failed: ${await updateRes.text()}`);
+  }
+
+  return {
+    success: true,
+    reason: "",
+    plan: challengeName,
+    matched_to: matched.planName,
+    min_qualify_days: matched.qualifyDays,
+    min_payout_days: matched.payoutDays,
+  };
+}
+// ★ v21 end
+
+export default {
+  async fetch(request, env) {
+    if (request.method === "OPTIONS") return new Response(null, { headers: CORS });
+    const url = new URL(request.url);
+    const p   = url.pathname;
+    if (request.method === "GET"  && p === "/api/scores")       return handleScores(env);
+    if (request.method === "GET"  && p === "/api/chart")        return handleChart(env, url.searchParams.get("id"));
+    if (request.method === "GET"  && p === "/api/rules")        return handleRules(env, url.searchParams.get("id"));
+    if (request.method === "GET"  && p === "/api/price-cta")    return handlePriceCta(env, url.searchParams.get("id"));
+    if (request.method === "GET"  && p === "/api/coupons")      return handleCoupons(env);
+    if (request.method === "GET"  && p === "/api/firms")        return handleFirms(env);
+    if (request.method === "GET"  && p === "/api/prices")       return handlePrices(env);
+    if (request.method === "GET"  && p === "/api/firms-list")   return handleFirmsList(env);
+    if (request.method === "GET"  && p === "/api/plans")        return handlePlans(env);
+    if (request.method === "POST" && p === "/api/rules-write")  return handleRulesWrite(env, url.searchParams.get("id"));
+    if (request.method === "POST" && p === "/api/expand_plan")  return handleExpandPlan(env, url.searchParams.get("id"));
+    if (request.method === "POST" && p === "/api/llm")          return handleLLM(request, env);
+    if (request.method === "GET" && p === "/admin/prewarm") {
+      const auth = url.searchParams.get("key");
+      const expected = (env.NOTION_API_KEY || "").slice(-4);
+      if (!auth || auth !== expected) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...CORS, "Content-Type": "application/json" } });
+      const t0 = Date.now();
+      try { await prewarmCaches(env); return jsonRes({ message: "Prewarm complete", elapsed_ms: Date.now() - t0, timestamp: now() }); } catch (e) { return errRes(e); }
+    }
+    const body = await request.json();
+    const res = await fetch("https://api.notion.com/v1/pages", { method: "POST", headers: { Authorization: `Bearer ${env.NOTION_API_KEY}`, "Content-Type": "application/json", "Notion-Version": "2022-06-28" }, body: JSON.stringify(body) });
+    const data = await res.json();
+    return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json", ...CORS } });
+  },
+  async scheduled(event, env, ctx) { ctx.waitUntil(prewarmCaches(env)); },
+};
+
+// ── LLMプロキシ：ブラウザはキーを持たず、ここでenv.ANTHROPIC_KEYを付けてAnthropicに中継 ──
+async function handleLLM(request, env) {
+  try {
+    if (!env.ANTHROPIC_KEY) {
+      return new Response(JSON.stringify({ error: "ANTHROPIC_KEY not configured on Worker" }), { status: 500, headers: { ...CORS, "Content-Type": "application/json" } });
+    }
+    const body = await request.json();
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.ANTHROPIC_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify(body),
+    });
+    const text = await resp.text();
+    // Anthropicのstatus・本文をそのまま透過（400の理由もブラウザで読める）
+    return new Response(text, { status: resp.status, headers: { ...CORS, "Content-Type": "application/json" } });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { ...CORS, "Content-Type": "application/json" } });
+  }
+}
+
+async function prewarmCaches(env) {
+  try {
+    await kvDelete(env,KV_KEYS.TABLES);const tables=await fetchAllTables(env);
+    await kvDelete(env,KV_KEYS.DB02_BODIES);await fetchDb02Bodies(env,tables.db02Pages);
+    await kvDelete(env,KV_KEYS.DB10);await fetchDb10Pages(env);
+    await kvDelete(env,KV_KEYS.SCORES);await kvDelete(env,KV_KEYS.PLANS);
+    await handleScores(env);await handlePlans(env);
+  } catch(e){console.error("prewarmCaches error:",e.message);}
+}
+
+async function handleExpandPlan(env, planId) {
+  if (!planId) return errRes(new Error("id required: ?id={DBP_02_page_id}"), 400);
+  try {
+    const key=env.NOTION_API_KEY;const clean=planId.replace(/-/g,"");
+    const dbp02Pages=await queryAll(key,DBP_02_ID);const dbp02Page=dbp02Pages.find(p=>p.id.replace(/-/g,"")===clean);
+    if(!dbp02Page)return errRes(new Error("DBP_02 not found: "+clean),404);
+    const db02Rel=dbp02Page.properties["DB_02_Challenge"]?.relation;
+    if(!db02Rel||db02Rel.length===0)return errRes(new Error("DB_02 relation not set on DBP_02"),400);
+    const db02Id=db02Rel[0].id;const blocks=await getChildBlocks(key,db02Id);const bd=parseDb02Body(blocks);
+    if(!bd)return errRes(new Error("DB_02 body table not found or empty"),400);
+    const priceList=bd.price_list||[];const sizes=bd.account_sizes||[];
+    if(priceList.length===0&&sizes.length===0)return errRes(new Error("No Price List or Account Sizes found in DB_02 body table"),400);
+    const db10Pages=await queryAll(key,DB_10_ID);
+    const existingRels=new Set(db10Pages.filter(p=>{const rel=p.properties["DBP_02"]?.relation;return rel&&rel.some(r=>r.id.replace(/-/g,"")===clean);}).map(p=>{const size=sel(p.properties["サイズ"]);const cur=sel(p.properties["通貨"]);return`${size}_${cur}`;}));
+    const rowsToCreate=[];
+    if(priceList.length>0){for(const{size,price}of priceList){const k=`${size}_USD`;if(existingRels.has(k))continue;rowsToCreate.push({size,currency:"USD",price});}}else{for(const size of sizes){const k=`${size}_USD`;if(existingRels.has(k))continue;rowsToCreate.push({size,currency:"USD",price:null});}}
+    if(rowsToCreate.length===0)return jsonRes({message:"All rows already exist",created:0});
+    const dbp02IdHyphened=dbp02Page.id;
+    const created=await Promise.all(rowsToCreate.map(async({size,currency,price})=>{const db02Pages=await queryAll(key,DB_02_ID);const db02Page=db02Pages.find(p=>p.id===db02Id);const planName=db02Page?.properties["チャレンジ名"]?.title?.[0]?.plain_text||db02Id;const title=`${planName} (${size} ${currency})`;const body={parent:{database_id:DB_10_ID},properties:{"価格アイテム":{title:[{text:{content:title}}]},"DBP_02":{relation:[{id:dbp02IdHyphened}]},"サイズ":{select:{name:size}},"通貨":{select:{name:currency}},...(price!==null?{"定価":{number:price}}:{})}};const r=await fetch("https://api.notion.com/v1/pages",{method:"POST",headers:{Authorization:`Bearer ${key}`,"Content-Type":"application/json","Notion-Version":"2022-06-28"},body:JSON.stringify(body)});if(!r.ok)throw new Error(`DB_10 create failed: ${await r.text()}`);return await r.json();}));
+    await kvDelete(env,KV_KEYS.DB10);
+    return jsonRes({message:"DB_10 rows created",created:created.length,rows:rowsToCreate.map(r=>`${r.size} ${r.currency}${r.price?` $${r.price}`:""}`),dbp02_id:clean,db02_id:db02Id.replace(/-/g,"")});
+  }catch(e){return errRes(e);}
+}
+
+async function handleScores(env) {
+  try {
+    const hit=await kvGet(env,KV_KEYS.SCORES);if(hit)return jsonRes(hit);
+    const{db02Pages,dbp02Pages,logoMap,dbp01Map}=await fetchAllTables(env);
+    const db02ToDbp02=buildDb02ToDbp02Map(dbp02Pages);const dbp02Data=buildDbp02DataMap(dbp02Pages);const db02Bodies=await fetchDb02Bodies(env,db02Pages);
+    const plans=db02Pages.map(p=>{const props=p.properties;const name=props["チャレンジ名"]?.title?.[0]?.plain_text||"";if(!name)return null;const bd=db02Bodies[p.id]||getPropData(props);const scores=calcScoreFromBd(bd,props);if(!scores.c_score&&!scores.f_score)return null;const step=bd.step??classifyStep(sel(props["ステップ"]));const firm=name.split(/\s*[-–—]\s*/)[0].trim();const db01Rel=props["DB01"]?.relation;const db01Id=db01Rel&&db01Rel.length>0?db01Rel[0].id:null;const logo=(db01Id&&logoMap&&logoMap[db01Id])?logoMap[db01Id]:"";const dayData=dbp02Data[p.id]||{};return{name,firm,step,logo,c_score:scores.c_score||0,f_score:scores.f_score||0,total:scores.total||0,min_qualify_days:dayData.min_qualify_days??null,min_payout_days:dayData.min_payout_days??null,page_id:db02ToDbp02[p.id]||db02ToDbp02[p.id.replace(/-/g,"")]||p.id.replace(/-/g,""),dbp01_id:db01Id?(dbp01Map[db01Id]||""):""};}).filter(Boolean);
+    const result={updated:now(),count:plans.length,plans};await kvPut(env,KV_KEYS.SCORES,result);return jsonRes(result);
+  }catch(e){return errRes(e);}
+}
+
+async function handleChart(env, planId) {
+  try {
+    const{db02Pages,dbp02Pages}=await fetchAllTables(env);const db02ToDbp02=buildDb02ToDbp02Map(dbp02Pages);const db02Bodies=await fetchDb02Bodies(env,db02Pages);
+    let plans=db02Pages.map(p=>{const props=p.properties;const name=props["チャレンジ名"]?.title?.[0]?.plain_text||"";if(!name)return null;const firm=name.split(/\s*[-–—]\s*/)[0].trim();const bd=db02Bodies[p.id]||getPropData(props);const step=bd.step??classifyStep(sel(props["ステップ"]));const scores=calcScoreFromBd(bd,props);const dbp02Id=db02ToDbp02[p.id]||db02ToDbp02[p.id.replace(/-/g,"")]||null;
+    return{name,firm,step,page_id:p.id.replace(/-/g,""),dbp02_id:dbp02Id,c_score:scores.c_score||0,f_score:scores.f_score||0,total:scores.total||0,s_profit:scores.profit??null,s_loss:scores.loss??null,s_restrict:scores.restrict??null,s_tactic:scores.tactic??null,phases:scores.phases.map(ph=>({phase:ph.phase,profit:ph.profit,loss:ph.loss,restrict:ph.restrict,tactic:ph.tactic,c_score:ph.c_score,f_score:ph.f_score})),target_1:bd.profit_target??num(props["1次目標"]),target_2:bd.profit_target_2??num(props["2次目標"]),target_3:bd.profit_target_3??num(props["3次目標"]),target_4:bd.profit_target_4??num(props["4次目標"]),min_days:bd.min_days??num(props["取引日数_合格要件"]),time_limit:bd.time_limit??txt(props["制限時間"]),consistency:bd.consistency??txt(props["一貫性ルール"]),daily_loss:bd.daily_loss??num(props["日次損失"]),daily_loss_type:bd.daily_loss_type??sel(props["日次損失タイプ"]),max_loss:bd.max_loss??num(props["最大損失"]),max_loss_type:bd.max_loss_type??sel(props["最大損失タイプ"]),risk_rule:bd.risk_rule??sel(props["リスクルール"]),max_position:bd.max_position??sel(props["最大ポジション制約"]),stop_loss:bd.stop_loss??sel(props["ストップロス制約"]),scalping:bd.scalping??sel(props["スキャルピング制約"]),news:bd.news??sel(props["ニュース取引制限"]),overnight:bd.overnight??sel(props["オーバーナイト制限"]),weekend:bd.weekend??sel(props["週末保有制限"]),ea:bd.ea??sel(props["EA制限"]),copy_trade:bd.copy_trade??sel(props["コピートレード制約"]),banned:bd.banned_raw?parseBanned(bd.banned_raw):msel(props["禁止行為"]),f_daily_loss:bd.f_daily_loss??num(props["F_日次損失"]),f_daily_loss_type:bd.f_daily_loss_type??sel(props["F_日次損失タイプ"]),f_max_loss:bd.f_max_loss??num(props["F_最大損失"]),f_max_loss_type:bd.f_max_loss_type??sel(props["F_最大損失タイプ"]),f_time_limit:bd.f_time_limit??txt(props["F_制限時間"]),f_consistency:bd.f_consistency??txt(props["F_一貫性ルール"]),f_risk_rule:bd.f_risk_rule??sel(props["F_リスクルール"]),f_max_position:bd.f_max_position??propSelCompat(props,"F_最大ポジション制限","F_最大ポジション制約"),f_stop_loss:bd.f_stop_loss??sel(props["F_ストップロス制約"]),f_scalping:bd.f_scalping??sel(props["F_スキャルピング制約"]),f_news:bd.f_news??sel(props["F_ニュース取引制限"]),f_overnight:bd.f_overnight??sel(props["F_オーバーナイト制限"]),f_weekend:bd.f_weekend??sel(props["F_週末保有制限"]),f_ea:bd.f_ea??sel(props["F_EA制限"]),f_copy_trade:bd.f_copy_trade??sel(props["F_コピートレード制約"]),f_banned:bd.f_banned_raw?parseBanned(bd.f_banned_raw):txt(props["F_禁止行為"]),payout_days:bd.payout_days??num(props["取引日数_出金要件"]),payout_freq:bd.payout_freq??txt(props["出金頻度"]),min_payout:bd.min_payout??num(props["最小出金額"]),account_sizes:bd.account_sizes??msel(props["口座サイズ"]),overview:txt(props["チャレンジ概要"]),note_target:bd.note_target??txt(props["※目標"]),note_min_days:bd.note_min_days??txt(props["※取引日数_合格要件"]),note_time_limit:bd.note_time_limit??txt(props["※ 制限時間"]),note_f_time_limit:bd.note_f_time_limit??txt(props["※F_制限時間"]),note_min_payout:bd.note_min_payout??txt(props["※最小出金額"]),note_payout_days:bd.note_payout_days??txt(props["※取引日数_出金要件"]),note_payout_freq:bd.note_payout_freq??txt(props["※出金頻度"]),note_daily_loss:bd.note_daily_loss??txt(props["※日次損失"]),note_daily_loss_type:bd.note_daily_loss_type??txt(props["※日次損失タイプ"]),note_max_loss:bd.note_max_loss??txt(props["※最大損失"]),note_max_loss_type:bd.note_max_loss_type??txt(props["※最大損失タイプ"]),note_consistency:bd.note_consistency??txt(props["※一貫性ルール"]),note_risk_rule:bd.note_risk_rule??txt(props["※リスクルール"]),note_max_position:bd.note_max_position??txt(props["※最大ポジション制約"]),note_stop_loss:bd.note_stop_loss??txt(props["※ストップロス制約"]),note_scalping:bd.note_scalping??txt(props["※スキャルピング制約"]),note_news:bd.note_news??txt(props["※ニュース取引制限"]),note_overnight:bd.note_overnight??txt(props["※オーバーナイト制限"]),note_weekend:bd.note_weekend??txt(props["※週末保有制限"]),note_ea:bd.note_ea??txt(props["※EA制限"]),note_copy_trade:bd.note_copy_trade??txt(props["※コピートレード制約"]),note_banned:bd.note_banned??propTxtCompat(props,"※禁止手法","※禁止行為"),note_f_consistency:bd.note_f_consistency??txt(props["※F_一貫性ルール"]),note_f_risk_rule:bd.note_f_risk_rule??txt(props["※F_リスクルール"]),note_f_max_position:bd.note_f_max_position??txt(props["※F_最大ポジション制限"]),note_f_stop_loss:bd.note_f_stop_loss??txt(props["※F_ストップロス制約"]),note_f_scalping:bd.note_f_scalping??txt(props["※F_スキャルピング制約"]),note_f_news:bd.note_f_news??txt(props["※F_ニュース取引制限"]),note_f_overnight:bd.note_f_overnight??txt(props["※F_オーバーナイト制限"]),note_f_weekend:bd.note_f_weekend??txt(props["※F_週末保有制限"]),note_f_ea:bd.note_f_ea??txt(props["※F_EA制限"]),note_f_copy_trade:bd.note_f_copy_trade??txt(props["※F_コピートレード制約"]),note_f_banned:bd.note_f_banned??propTxtCompat(props,"※F_禁止手法","※F_禁止行為"),note_profit_split:bd.note_profit_split??txt(props["※Profit_Split"]),discount:num(props["割引率"]),notes:txt(props["特記事項"])};}).filter(Boolean);
+    const stepGroups={};plans.forEach(p=>{if(!stepGroups[p.step])stepGroups[p.step]=[];stepGroups[p.step].push(p);});Object.values(stepGroups).forEach(group=>{const sorted=[...group].sort((a,b)=>a.total-b.total);sorted.forEach((p,i)=>{p.rank=i+1;p.rank_total=sorted.length;});});
+    if(planId){const clean=planId.replace(/-/g,"");const plan=plans.find(p=>p.dbp02_id===clean||p.page_id===clean);if(!plan)return errRes(new Error("Plan not found: "+clean),404);return jsonRes(plan);}
+    return jsonRes({updated:now(),count:plans.length,plans});
+  }catch(e){return errRes(e);}
+}
+
+async function handleRules(env, planId) {
+  if (!planId) return errRes(new Error("id required"), 400);
+  try {
+    const{db02Pages,dbp02Pages}=await fetchAllTables(env);const dbp02ToDb02=buildDbp02ToDb02Map(dbp02Pages);const clean=planId.replace(/-/g,"");const db02Id=dbp02ToDb02[clean];if(!db02Id)return errRes(new Error("Plan not found"),404);
+    const db02Page=db02Pages.find(p=>p.id===db02Id);if(!db02Page)return errRes(new Error("DB_02 page not found"),404);
+    const props=db02Page.properties;const blocks=await getChildBlocks(env.NOTION_API_KEY,db02Page.id);const bd=parseDb02Body(blocks)||getPropData(props);const step=bd.step??classifyStep(sel(props["ステップ"]));const scores=calcScoreFromBd(bd,props);const phases=scores.phases;
+    const ITEMS = buildRuleItems(bd, props);
+    const perItemScores = calcPerItemScores(bd, props);
+    calcDiffs(ITEMS, perItemScores);
+    return jsonRes({name:props["チャレンジ名"]?.title?.[0]?.plain_text||"",step,phases:phases.map(ph=>ph.phase),items:ITEMS});
+  }catch(e){return errRes(e);}
+}
+
+// ★ v21: handleRulesWrite に updateMinDaysFromArticle を追加
+async function handleRulesWrite(env, planId) {
+  if (!planId) return errRes(new Error("id required"), 400);
+  try {
+    const key=env.NOTION_API_KEY;const clean=planId.replace(/-/g,"");
+    const{db01Pages,db02Pages,dbp02Pages}=await fetchAllTables(env);
+    const dbp02Page=dbp02Pages.find(p=>p.id.replace(/-/g,"")===clean);if(!dbp02Page)return errRes(new Error("DBP_02 not found"),404);
+    const dbp02PageId=dbp02Page.id;const dbp02ToDb02=buildDbp02ToDb02Map(dbp02Pages);const db02Id=dbp02ToDb02[clean];if(!db02Id)return errRes(new Error("DB_02 not found"),404);
+    const db02Page=db02Pages.find(p=>p.id===db02Id);if(!db02Page)return errRes(new Error("DB_02 page not found"),404);
+    const blocks=await getChildBlocks(key,db02Page.id);const bd=parseDb02Body(blocks)||getPropData(db02Page.properties);const props=db02Page.properties;
+    const step=bd.step??classifyStep(sel(props["ステップ"]));const name=props["チャレンジ名"]?.title?.[0]?.plain_text||"";
+    const ITEMS=buildRuleItems(bd,props);const perItemScores=calcPerItemScores(bd,props);const scores=calcScoreFromBd(bd,props);
+    calcDiffs(ITEMS,perItemScores);
+    const db10Rel=dbp02Page.properties["DB_10_Price"]?.relation;const db10Ids=db10Rel?db10Rel.map(r=>r.id):[];const db10Pages=await fetchDb10Pages(env);
+    const priceRows=db10Pages.filter(p=>db10Ids.includes(p.id)).map(p=>{const pr=p.properties;return{size:sel(pr["サイズ"]),currency:sel(pr["通貨"]),display_price:fStr(pr["表示価格"])||("$"+(num(pr["定価"])||0))};}).sort((a,b)=>sizeOrd(a.size)-sizeOrd(b.size));
+    let site_url="";const db01RelInDb02=db02Page.properties["DB01"]?.relation;
+    if(db01RelInDb02&&db01RelInDb02.length>0){const db01Id=db01RelInDb02[0].id;const db01Page=db01Pages.find(p=>p.id===db01Id);if(db01Page){site_url=fStr(db01Page.properties["サイトURL"])||db01Page.properties["Official URL"]?.url||"";}}
+    const stepColors={instant:"#00897B","1":"#2962FF","2":"#FFB300","3":"#FF6D00","4":"#E91E63"};const stepColor=stepColors[step]||"#2962FF";const stepLabel=step==="instant"?"Instant":step+"-Step";
+    const db02Bodies=await fetchDb02Bodies(env,db02Pages);
+    const sameStepPages=db02Pages.filter(p=>classifyStep(sel(p.properties["ステップ"]))===step);
+    const ranked=sameStepPages.map(p=>{const b=db02Bodies[p.id]||getPropData(p.properties);const sc=calcScoreFromBd(b,p.properties);return{id:p.id,total:sc.total};}).sort((a,b)=>a.total-b.total);
+    const rankIdx=ranked.findIndex(r=>r.id===db02Page.id);const rank=rankIdx>=0?rankIdx+1:null;const rankTotal=ranked.length;
+    const widgetHtml=generateWidgetHtml({name,step,stepLabel,stepColor,rank,rankTotal,scores,perItemScores,ITEMS,priceRows,site_url});
+    function makeRow(c1,c2,c3,color){const ann=color?{bold:true,color:color}:{};return{object:"block",type:"table_row",table_row:{cells:[[{type:"text",text:{content:c1},annotations:ann}],[{type:"text",text:{content:c2||""}}],[{type:"text",text:{content:c3||""}}]]}};}
+    const tableRows=[];tableRows.push(makeRow("項目","Challenge","Funded"));tableRows.push(makeRow("説明","Funded列が — の項目はChallengeと同じルールが適用されます","—"));
+    ITEMS.forEach(item=>{const c=item.note_c||item.cv||"";const f=(item.fv==="—"||!item.note_f)?"—":(item.note_f||item.fv||"");if(!c&&f==="—")return;const diffMark=item.diff==="trap"?" ▲TRAP":item.diff==="ease"?" ▼EASE":"";const color=item.diff==="trap"?"red":item.diff==="ease"?"green":null;tableRows.push(makeRow(item.key+diffMark,c,f,color));});
+    const children=[];
+    children.push({object:"block",type:"code",code:{rich_text:chunkText(widgetHtml,2000),language:"html"}});
+    children.push({object:"block",type:"heading_3",heading_3:{rich_text:[{type:"text",text:{content:"ルール詳細"}}],color:"default"}});
+    children.push({object:"block",type:"paragraph",paragraph:{rich_text:[{type:"text",text:{content:"以下の表はChallenge期とFunded期を並列表示しています。Funded行が記載されていない項目は、Challenge期と同一条件です。"}}]}});
+    children.push({object:"block",type:"table",table:{table_width:3,has_column_header:true,has_row_header:false,children:tableRows}});
+    const existingBlocks=await getChildBlocks(key,dbp02PageId);
+    for(const block of existingBlocks){await deleteBlock(key,block.id);}
+    const appendRes=await fetch(`https://api.notion.com/v1/blocks/${dbp02PageId}/children`,{method:"PATCH",headers:{Authorization:`Bearer ${key}`,"Content-Type":"application/json","Notion-Version":"2022-06-28"},body:JSON.stringify({children})});
+    if(!appendRes.ok)return errRes(new Error("Notion append failed: "+await appendRes.text()));
+
+    // ★ v21: 攻略記事から最短合格・最速出金を取得→DBP_02プロパティ書き込み
+    let minDaysResult = { success: false, reason: "skipped", plan: "", matched_to: "", min_qualify_days: null, min_payout_days: null };
+    try {
+      minDaysResult = await updateMinDaysFromArticle(env, db02Page, dbp02PageId);
+    } catch (e) {
+      minDaysResult = { success: false, reason: e.message, plan: "", matched_to: "", min_qualify_days: null, min_payout_days: null };
+    }
+
+    return jsonRes({
+      success: true,
+      blocks_written: children.length,
+      dbp02_id: clean,
+      widget: true,
+      min_days_update: minDaysResult, // ★ v21
+    });
+  }catch(e){return errRes(e);}
+}
+
+async function handlePriceCta(env, planId) {
+  if(!planId)return errRes(new Error("id required"),400);
+  try{const clean=planId.replace(/-/g,"");const cacheKey=`api_price_cta_v3_${clean}`;const hit=await kvGet(env,cacheKey);if(hit)return jsonRes(hit);
+  const{db01Pages,db02Pages,dbp02Pages}=await fetchAllTables(env);const dbp02Page=dbp02Pages.find(p=>p.id.replace(/-/g,"")===clean);if(!dbp02Page)return errRes(new Error("DBP_02 not found"),404);
+  const db02Rel=dbp02Page.properties["DB_02_Challenge"]?.relation;const db10Rel=dbp02Page.properties["DB_10_Price"]?.relation;const db10Ids=db10Rel?db10Rel.map(r=>r.id):[];
+  const db10Pages=await fetchDb10Pages(env);const priceRows=db10Pages.filter(p=>db10Ids.includes(p.id)).map(p=>{const pr=p.properties;return{size:sel(pr["サイズ"]),currency:sel(pr["通貨"]),base_price:num(pr["定価"]),discounted:fNum(pr["割引後価格"]),discounted_jpy:fNum(pr["割引後価格(JPY)"]),display_price:fStr(pr["表示価格"])};}).sort((a,b)=>sizeOrd(a.size)-sizeOrd(b.size));
+  let site_url="";if(db02Rel&&db02Rel.length>0){const db02Id=db02Rel[0].id;const db02Page=db02Pages.find(p=>p.id===db02Id);if(db02Page){const db01RelInDb02=db02Page.properties["DB01"]?.relation;if(db01RelInDb02&&db01RelInDb02.length>0){const db01Id=db01RelInDb02[0].id;const db01Page=db01Pages.find(p=>p.id===db01Id);if(db01Page){site_url=fStr(db01Page.properties["サイトURL"])||db01Page.properties["Official URL"]?.url||"";}}}}
+  const result={prices:priceRows,site_url,coupon_url:""};await kvPut(env,cacheKey,result);return jsonRes(result);
+  }catch(e){return errRes(e);}
+}
+
+const COUPON_PAGE_URL="https://www.propfirm-challengers.jp/336660a529e281d0a7f5cb77fce3447b";
+
+async function handleFirmsList(env) {
+  try{const{db01Pages,db02Pages,db07Pages,dbp02Pages,logoMap}=await fetchAllTables(env);const platformMap=buildPlatformMap(db07Pages);const db02Bodies=await fetchDb02Bodies(env,db02Pages);
+  const dbp02DataMap={};dbp02Pages.forEach(p=>{const rel=p.properties["DB_02_Challenge"]?.relation;if(!rel||rel.length===0)return;const db02Id=rel[0].id;dbp02DataMap[db02Id]={min_payout_days:num(p.properties["最速出金"])??num(p.properties["実質最短_出金日数"])??null,min_qualify_days:num(p.properties["最短合格"])??num(p.properties["実質最短_合格日数"])??null};});
+  const db02ToDb01={};const db02Info={};db02Pages.forEach(p=>{const rel=p.properties["DB01"]?.relation;if(rel&&rel.length>0)db02ToDb01[p.id]=rel[0].id;const bd=db02Bodies[p.id]||getPropData(p.properties);const step=bd.step??classifyStep(sel(p.properties["ステップ"]));const dbpData=dbp02DataMap[p.id]||{};db02Info[p.id]={step,stepNum:stepToNum(step),payout_freq:bd.payout_freq??txt(p.properties["出金頻度"]),min_payout_days:dbpData.min_payout_days??null,min_qualify_days:dbpData.min_qualify_days??null};});
+  const dbp01Map={};db01Pages.forEach(p=>{const rel=p.properties["DBP_01データ反映"]?.relation;if(rel&&rel.length>0)dbp01Map[p.id]=rel[0].id.replace(/-/g,"");});
+  const firmPlans={};db02Pages.forEach(p=>{const db01Id=db02ToDb01[p.id];if(!db01Id)return;const d=db02Info[p.id];if(!d||d.min_payout_days===null)return;if(!firmPlans[db01Id])firmPlans[db01Id]=[];firmPlans[db01Id].push({db02Id:p.id,...d});});
+  const repPlanMap={};for(const[db01Id,plans]of Object.entries(firmPlans)){const sorted=plans.sort((a,b)=>{if(a.min_payout_days!==b.min_payout_days)return a.min_payout_days-b.min_payout_days;return a.stepNum-b.stepNum;});repPlanMap[db01Id]=sorted[0];}
+  const firms=db01Pages.map(p=>{const pr=p.properties;const name=pr["Firm Name"]?.title?.[0]?.plain_text||"";if(!name)return null;const platRel=pr["Platform_Logo "]?.relation||[];const platforms=platRel.map(r=>platformMap[r.id]).filter(Boolean);const rep=repPlanMap[p.id]||{};const dbp01Id=dbp01Map[p.id]||"";const dbp01Url=dbp01Id?`https://www.propfirm-challengers.jp/${dbp01Id}`:"";const established=num(pr["Established"]);const years_in_biz=established?(new Date().getFullYear()-established+1):null;return{name,logo_url:logoMap[p.id]||"",years_in_biz,platforms,profit_split:num(pr["Profit split"]),official_url:fStr(pr["サイトURL"])||pr["Official URL"]?.url||"",dbp01_url:dbp01Url,coupon_url:COUPON_PAGE_URL,payout_freq:rep.payout_freq||"",min_payout_days:rep.min_payout_days??null,min_qualify_days:rep.min_qualify_days??null};}).filter(Boolean);
+  return jsonRes({updated:now(),count:firms.length,firms});
+  }catch(e){return errRes(e);}
+}
+
+function stepToNum(s){return{instant:0,"1":1,"2":2,"3":3,"4":4,unknown:99}[s]??99;}
+
+async function handlePlans(env) {
+  try{const hit=await kvGet(env,KV_KEYS.PLANS);if(hit)return jsonRes(hit);
+  const{db02Pages,dbp02Pages,logoMap,dbp01Map}=await fetchAllTables(env);const db10Pages=await fetchDb10Pages(env);const db02ToDbp02=buildDb02ToDbp02Map(dbp02Pages);const dbp02Data=buildDbp02DataMap(dbp02Pages);const db02Bodies=await fetchDb02Bodies(env,db02Pages);
+  const priceMap={};db10Pages.forEach(p=>{const pr=p.properties;const size=sel(pr["サイズ"]);if(!size)return;const rel=pr["DBP_02"]?.relation;if(!rel||rel.length===0)return;const dbp02Id=rel[0].id.replace(/-/g,"");if(!priceMap[dbp02Id])priceMap[dbp02Id]={};priceMap[dbp02Id][size]={base_price:num(pr["定価"]),currency:sel(pr["通貨"]),discounted:fNum(pr["割引後価格"]),display_price:fStr(pr["表示価格"])};});
+  const plans=db02Pages.map(p=>{const props=p.properties;const name=props["チャレンジ名"]?.title?.[0]?.plain_text||"";if(!name)return null;const bd=db02Bodies[p.id]||getPropData(props);const step=bd.step??classifyStep(sel(props["ステップ"]));const dbp02Id=db02ToDbp02[p.id]||db02ToDbp02[p.id.replace(/-/g,"")]||null;const db01Rel=props["DB01"]?.relation;const db01Id=db01Rel&&db01Rel.length>0?db01Rel[0].id:null;const logo=(db01Id&&logoMap[db01Id])?logoMap[db01Id]:"";const dbp01Id=(db01Id&&dbp01Map[db01Id])?dbp01Map[db01Id]:null;const firm=name.split(/\s*[-–—]\s*/)[0].trim();const scores=calcScoreFromBd(bd,props);const dayData=dbp02Data[p.id]||{};const pricesBySz=dbp02Id?(priceMap[dbp02Id]||{}):{};const firstCur=Object.values(pricesBySz)[0]?.currency||null;
+  return{name,firm,step,logo,page_id:dbp02Id||p.id.replace(/-/g,""),dbp01_id:dbp01Id||null,profit_target:bd.profit_target??num(props["1次目標"]),daily_loss:bd.daily_loss??num(props["日次損失"]),daily_loss_type:bd.daily_loss_type??sel(props["日次損失タイプ"]),max_loss:bd.max_loss??num(props["最大損失"]),max_loss_type:bd.max_loss_type??sel(props["最大損失タイプ"]),profit_split:bd.profit_split??num(props["Profit_Split"]),profit_split_note:bd.note_profit_split??txt(props["※Profit_Split"]),payout_freq:bd.payout_freq??txt(props["出金頻度"]),prices:pricesBySz,currency:firstCur,account_sizes:bd.account_sizes??msel(props["口座サイズ"]),consistency:bd.consistency??txt(props["一貫性ルール"]),risk_rule:bd.risk_rule??sel(props["リスクルール"]),max_position:bd.max_position??sel(props["最大ポジション制約"]),stop_loss:bd.stop_loss??sel(props["ストップロス制約"]),scalping:bd.scalping??sel(props["スキャルピング制約"]),news:bd.news??sel(props["ニュース取引制限"]),overnight:bd.overnight??sel(props["オーバーナイト制限"]),weekend:bd.weekend??sel(props["週末保有制限"]),ea:bd.ea??sel(props["EA制限"]),copy_trade:bd.copy_trade??sel(props["コピートレード制約"]),f_consistency:bd.f_consistency??txt(props["F_一貫性ルール"]),f_risk_rule:bd.f_risk_rule??sel(props["F_リスクルール"]),f_max_position:bd.f_max_position??propSelCompat(props,"F_最大ポジション制限","F_最大ポジション制約"),f_stop_loss:bd.f_stop_loss??sel(props["F_ストップロス制約"]),f_scalping:bd.f_scalping??sel(props["F_スキャルピング制約"]),f_news:bd.f_news??sel(props["F_ニュース取引制限"]),f_overnight:bd.f_overnight??sel(props["F_オーバーナイト制限"]),f_weekend:bd.f_weekend??sel(props["F_週末保有制限"]),f_ea:bd.f_ea??sel(props["F_EA制限"]),f_copy_trade:bd.f_copy_trade??sel(props["F_コピートレード制約"]),c_score:scores.c_score||0,f_score:scores.f_score||0,min_qualify_days:dayData.min_qualify_days??null,min_payout_days:dayData.min_payout_days??null,banned:bd.banned_raw?parseBanned(bd.banned_raw):msel(props["禁止行為"]),f_banned:bd.f_banned_raw?parseBanned(bd.f_banned_raw):txt(props["F_禁止行為"]),banned_note:bd.note_banned??propTxtCompat(props,"※禁止手法","※禁止行為")};}).filter(Boolean);
+  plans.sort((a,b)=>{const ord={instant:0,"1":1,"2":2,"3":3,"4":4,unknown:9};const so=(ord[a.step]??9)-(ord[b.step]??9);return so!==0?so:a.name.localeCompare(b.name);});
+  const result={updated:now(),count:plans.length,plans};await kvPut(env,KV_KEYS.PLANS,result);return jsonRes(result);
+  }catch(e){return errRes(e);}
+}
+
+async function handleFirms(env) {
+  try{const{db01Pages,logoMap}=await fetchAllTables(env);const firms=db01Pages.map(p=>{const pr=p.properties;const name=pr["Firm Name"]?.title?.[0]?.plain_text||"";if(!name)return null;return{name,page_id:p.id.replace(/-/g,""),site_url:fStr(pr["サイトURL"])||pr["Official URL"]?.url||"",country:txt(pr["Country"]),established:num(pr["Established"]),japan:sel(pr["日本対応"]),profit_split:num(pr["Profit split"]),leverage:txt(pr["leverage"]),commission:txt(pr["commission"]),logo:logoMap[p.id]||""};}).filter(Boolean);return jsonRes({updated:now(),count:firms.length,firms});}catch(e){return errRes(e);}
+}
+
+async function handlePrices(env) {
+  try{const pages=await fetchDb10Pages(env);const prices=pages.map(p=>{const pr=p.properties;const name=pr["価格アイテム"]?.title?.[0]?.plain_text||"";if(!name)return null;return{name,page_id:p.id.replace(/-/g,""),size:sel(pr["サイズ"]),currency:sel(pr["通貨"]),base_price:num(pr["定価"]),discount_rate:num(pr["割引率"]),jpy_rate:num(pr["JPYレート"]),coupon_note:txt(pr["クーポンメモ"]),discounted:fNum(pr["割引後価格"]),discounted_jpy:fNum(pr["割引後価格(JPY)"]),display_price:fStr(pr["表示価格"])};}).filter(Boolean);return jsonRes({updated:now(),count:prices.length,prices});}catch(e){return errRes(e);}
+}
+
+const DB_05_ID="4bd9ae843c31412b962c792e3b17af62";
+async function handleCoupons(env) {
+  try{const hit=await kvGet(env,KV_KEYS.COUPONS);if(hit)return jsonRes(hit);
+  const{db01Pages,logoMap}=await fetchAllTables(env);const db05Pages=await queryAll(env.NOTION_API_KEY,DB_05_ID);
+  const db01Map={};db01Pages.forEach(p=>{const name=p.properties["Firm Name"]?.title?.[0]?.plain_text||"";const siteUrl=fStr(p.properties["サイトURL"])||p.properties["Official URL"]?.url||"";db01Map[p.id]={name,site_url:siteUrl,logo:logoMap[p.id]||""};});
+  const coupons=db05Pages.filter(p=>{const props=p.properties;const mailType=props["Mail_Type"]?.select?.name||"";const couponCode=props["Coupon_Code"]?.rich_text?.[0]?.plain_text||"";const discount=props["Discount"]?.rich_text?.[0]?.plain_text||"";const status=props["Status"]?.status?.name||"";return mailType==="クーポン"&&(couponCode||discount)&&status==="Done";}).map(p=>{const props=p.properties;const db01Rel=props["DB_01"]?.relation;const db01Id=db01Rel&&db01Rel.length>0?db01Rel[0].id:null;const firm=db01Id?(db01Map[db01Id]||{}):{};return{firm:firm.name||"",site_url:firm.site_url||"",logo:firm.logo||"",coupon_code:props["Coupon_Code"]?.rich_text?.[0]?.plain_text||"",discount:props["Discount"]?.rich_text?.[0]?.plain_text||"",expiry:props["Expiry"]?.date?.start||null,summary:props["Summary"]?.rich_text?.[0]?.plain_text||"",subject:props["Subject"]?.title?.[0]?.plain_text||"",received:props["Received"]?.created_time||""};}).sort((a,b)=>new Date(b.received).getTime()-new Date(a.received).getTime());
+  const result={updated:now(),count:coupons.length,coupons};await kvPut(env,KV_KEYS.COUPONS,result);return jsonRes(result);
+  }catch(e){return errRes(e);}
+}
+
+function rS(v){if(!v)return 0;if(v==="有")return 5;if(v==="※有")return 3;if(v==="無")return 0;if(v==="記載なし")return 1;return 0;}
+function ltS(v){const m={
+  "none":0,"static":1,
+  "balance eod":2,"equity eod":4,"higher of balance or equity eod":5,"higher b or e eod":5,
+  "balance hwm":6,"equity hwm":10,
+  "balance":2,"equity":4,"higher b or e":5,"highest b or e":5,"higher of balance or equity":5,
+  "interday":10,"trailing":8
+};return m[(v||"").toLowerCase()]||0;}
+function cS(v){if(!v||v==="None"||v==="none")return 0;const n=parseFloat(v);if(isNaN(n)||n===0)return 0;if(n<=10)return 2;if(n<=20)return 4;if(n<=30)return 6;if(n<=50)return 8;return 10;}
+function tlS(v){if(!v||v==="None"||v==="none"||(v+"").toLowerCase().indexOf("no")>=0)return 0;return 3;}
+function bS(a){if(!a)return 0;const c=Array.isArray(a)?a.length:(a?1:0);return Math.min(c*3,15);}
+function tgS(p){if(!p||p===0)return 0;const v=p>1?p:p*100;if(v<=3)return 1;if(v<=5)return 3;if(v<=8)return 5;if(v<=10)return 7;return 10;}
+function lS(p){if(!p||p===0)return 0;const v=p>1?p:p*100;if(v>=10)return 1;if(v>=8)return 2;if(v>=5)return 4;if(v>=4)return 5;if(v>=3)return 7;if(v>=2)return 9;return 10;}
+function pfS(v){if(!v)return 0;const l=v.toLowerCase();if(l.indexOf("on-demand")>=0)return 0;if(l.indexOf("weekly")>=0||l.indexOf("7")>=0)return 2;if(l.indexOf("bi-weekly")>=0||l.indexOf("14")>=0)return 3;if(l.indexOf("monthly")>=0||l.indexOf("30")>=0)return 5;return 3;}
+function buS(v){if(!v||v===0)return 0;if(v<=50)return 2;if(v<=100)return 4;return 6;}
+function mdS(v){if(!v||v===0)return 0;if(v<=3)return 2;if(v<=5)return 4;return 6;}
+function fmtPct(v){if(v===null||v===undefined)return"";if(v>1)return v+"%";return(v*100).toFixed(1).replace(/\.0$/,"")+"%";}
+function fmtDays(v){if(v===null||v===undefined||v===0)return"なし";return v+"日";}
+function fmtMin(v){if(v===null||v===undefined||v===0)return"";return"$"+v;}
+function sizeOrd(s){const m={"625":0,"1.25K":1,"2K":2,"2.5K":3,"3k":4,"5K":5,"6K":6,"7K":7,"10K":10,"15k":15,"20k":20,"25K":25,"40K":40,"50K":50,"60K":60,"75K":75,"80K":80,"100K":100,"120K":120,"125K":125,"150K":150,"200K":200,"250K":250,"300k":300,"400k":400,"500K":500,"1M":1000,"2M":2000};return m[s]??999;}
+function classifyStep(s){const l=(s||"").toLowerCase().trim();if(/instant/.test(l))return"instant";if(l==="4"||/4.?step/.test(l))return"4";if(l==="3"||/3.?step/.test(l))return"3";if(l==="2"||/2.?step/.test(l))return"2";if(l==="1"||/1.?step/.test(l))return"1";return"unknown";}
+function sel(p){return p?.select?.name||"";}
+function msel(p){return p?.multi_select?.map(o=>o.name)||[];}
+function num(p){return p?.number??null;}
+function txt(p){if(!p)return"";if(p.type==="rich_text")return p.rich_text?.map(r=>r.plain_text).join("")||"";return"";}
+function fNum(p){if(!p||p.type!=="formula")return 0;const f=p.formula;if(f.type==="number")return f.number??0;return parseFloat(f.string)||0;}
+function fStr(p){if(!p||p.type!=="formula")return"";return p.formula.string||"";}
+function fileUrl(p){if(!p||!p.files||p.files.length===0)return"";const f=p.files[0];return f.file?.url||f.external?.url||"";}
+function now(){return new Date().toISOString();}
+
+async function queryAll(key,dbId){let all=[],hasMore=true,cursor;while(hasMore){const body={page_size:100};if(cursor)body.start_cursor=cursor;const r=await fetch(`https://api.notion.com/v1/databases/${dbId}/query`,{method:"POST",headers:{Authorization:`Bearer ${key}`,"Notion-Version":"2022-06-28","Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok)throw new Error(`Notion ${r.status}: ${await r.text()}`);const d=await r.json();all=all.concat(d.results);hasMore=d.has_more;cursor=d.next_cursor;}return all;}
+
+async function getChildBlocks(key,blockId){const r=await fetch(`https://api.notion.com/v1/blocks/${blockId}/children?page_size=100`,{headers:{Authorization:`Bearer ${key}`,"Notion-Version":"2022-06-28"}});if(!r.ok)return[];const data=await r.json();const blocks=data.results||[];for(const block of blocks){if(block.type==="table"){const rowsRes=await fetch(`https://api.notion.com/v1/blocks/${block.id}/children?page_size=100`,{headers:{Authorization:`Bearer ${key}`,"Notion-Version":"2022-06-28"}});if(rowsRes.ok){const rowsData=await rowsRes.json();block.children=rowsData.results||[];}}}return blocks;}
+
+async function deleteBlock(key,blockId){await fetch(`https://api.notion.com/v1/blocks/${blockId}`,{method:"DELETE",headers:{Authorization:`Bearer ${key}`,"Notion-Version":"2022-06-28"}});}
+function chunkText(str,max){const chunks=[];for(let i=0;i<str.length;i+=max){chunks.push({type:"text",text:{content:str.slice(i,i+max)}});}return chunks;}
+function calcDiffs(ITEMS,perItemScores){
+  const ruleOrd={"無":0,"なし":0,"none":0,"None":0,"記載なし":1,"※有":3,"有":5};
+  function ruleVal(v){if(v===null||v===undefined||v===""||v==="—")return null;const o=ruleOrd[v];if(o!==undefined)return o;const n=parseFloat(v);if(!isNaN(n)&&n>0)return 5;return null;}
+  ITEMS.forEach((item,i)=>{
+    if(item.cv===null||item.fv===null){item.diff="none";return;}
+    if(item.fv==="—"){item.diff="none";return;}
+    const cs=perItemScores.c[i]||0;const fs=perItemScores.f[i]||0;
+    if(cs!==fs){item.diff=cs>fs?"ease":"trap";return;}
+    const cv=ruleVal(item.cv);const fv=ruleVal(item.fv);
+    if(cv!==null&&fv!==null&&cv!==fv){item.diff=fv>cv?"trap":"ease";return;}
+    if(item.cv!==item.fv){
+      const cn=parseFloat(String(item.cv));const fn=parseFloat(String(item.fv));
+      if(!isNaN(cn)&&!isNaN(fn)&&cn!==fn){item.diff=fn>cn?"trap":"ease";return;}
+    }
+    item.diff="none";
+  });
+}
+function jsonRes(data){return new Response(JSON.stringify(data),{headers:{...CORS,"Content-Type":"application/json","Cache-Control":"public, max-age=60"}});}
+function errRes(e,status=500){return new Response(JSON.stringify({error:e.message,stack:e.stack}),{status,headers:{...CORS,"Content-Type":"application/json"}});}

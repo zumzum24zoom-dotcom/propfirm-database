@@ -1,0 +1,43 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","text":"# 🗺️ PFD プロジェクトハブ\n\nクリックでツール起動・データ参照・公開URL。各カードはマスター作業の入口。","x":-600,"y":-700,"width":700,"height":130,"color":"6"},
+		{"id":"phase-collect","type":"text","text":"## 1️⃣ 収集","x":-1400,"y":-500,"width":250,"height":60,"color":"5"},
+		{"id":"phase-process","type":"text","text":"## 2️⃣ 加工・整形","x":-700,"y":-500,"width":250,"height":60,"color":"5"},
+		{"id":"phase-output","type":"text","text":"## 3️⃣ 出力","x":0,"y":-500,"width":250,"height":60,"color":"5"},
+		{"id":"phase-publish","type":"text","text":"## 4️⃣ 公開","x":700,"y":-500,"width":250,"height":60,"color":"5"},
+		{"id":"notebooklm","type":"text","text":"### 📚 NotebookLM\n\n公式サイトの情報を構造化\n攻略3断面を生成\n\n[🔗 開く](https://notebooklm.google.com/)","x":-1400,"y":-350,"width":260,"height":180,"color":"1"},
+		{"id":"site-scanner","type":"text","text":"### 🔖 site-scanner BMT\n\nブックマークレットでDOM抽出\n→ Worker経由でJSON保存\n\n[📄 ソース](01_tools/utils/site-scanner.js)","x":-1400,"y":-120,"width":260,"height":180,"color":"1"},
+		{"id":"page-maker","type":"text","text":"### 🛠️ Page Maker v12\n**メインエンジン**\n\n- スロット入力\n- 自動振り分け\n- 攻略3断面取込\n- プロンプト管理\n- Hugo出力\n\n[▶ 起動](01_tools/core/page-maker-v12.html)","x":-700,"y":-350,"width":280,"height":290,"color":"4"},
+		{"id":"sitemap-designer","type":"text","text":"### 🗺️ Sitemap Designer\n\nサイト構造設計\n分身ノード+点線\nP026書出\n\n[▶ 起動](01_tools/core/sitemap-designer.html)","x":-700,"y":-30,"width":280,"height":200,"color":"4"},
+		{"id":"widget-maker","type":"text","text":"### ⚙️ Widget Maker\n（試作v0.1）\n\nウィジェット生成\n\n[▶ 起動](01_tools/core/widget-maker.html)","x":-700,"y":200,"width":280,"height":200,"color":"4"},
+		{"id":"firm-tour","type":"text","text":"### 🎯 firm-tour\n\nFirm一覧俯瞰ビュー\n\n[▶ 起動](01_tools/core/firm-tour.html)","x":-700,"y":390,"width":280,"height":140,"color":"4"},
+		{"id":"pfdb-json","type":"text","text":"### 💾 pfdb.json\n**ローカル正本**\n\n全Firm/Planデータ\n用語辞典\n\n[📄 開く](data/pfdb.json)","x":0,"y":-350,"width":260,"height":200,"color":"3"},
+		{"id":"glossary-json","type":"text","text":"### 📖 glossary.json\n\n用語辞典\nDD計算基準6分類\n表記ルール\n\n[📄 開く](data/glossary.json)","x":0,"y":-120,"width":260,"height":180,"color":"3"},
+		{"id":"data-firms","type":"text","text":"### 📂 data/firms/\n\n各Firm出力JSON\n（33ファーム）\n\n[📂 開く](data/firms)","x":0,"y":90,"width":260,"height":150,"color":"3"},
+		{"id":"data-plans","type":"text","text":"### 📂 data/plans/\n\n各Plan出力JSON\n\n[📂 開く](data/plans)","x":0,"y":270,"width":260,"height":130,"color":"3"},
+		{"id":"content-firms","type":"text","text":"### 📂 content/firms/\n\n各Firmの _index.md\nプラン配下も格納\n\n[📂 開く](content/firms)","x":0,"y":430,"width":260,"height":160,"color":"3"},
+		{"id":"hugo-build","type":"text","text":"### ⚡ Hugo build\n\nテーマ: themes/pfd\nlocalhost:1313\n\nコマンド: `hugo server -D`\n\n[📂 themes/pfd/layouts](themes/pfd/layouts)","x":700,"y":-350,"width":260,"height":200,"color":"2"},
+		{"id":"github","type":"text","text":"### 🐙 GitHub\n\npropfirm-database (public)\n\n[🔗 リポジトリ](https://github.com/zumzum24zoom-dotcom/propfirm-database)","x":700,"y":-120,"width":260,"height":160,"color":"2"},
+		{"id":"netlify","type":"text","text":"### 🌍 Netlify\n\n自動デプロイ\n\n[🔗 管理画面](https://app.netlify.com/)\n[🔗 公開URL](#)","x":700,"y":60,"width":260,"height":170,"color":"2"},
+		{"id":"undisclosed","type":"text","text":"### 🔒 undisclosed\n（private repo）\n\n非公開個人ツール\n\n[🔗 リポジトリ](https://github.com/zumzum24zoom-dotcom/undisclosed)","x":700,"y":250,"width":260,"height":170,"color":"0"},
+		{"id":"docs","type":"text","text":"## 📋 ドキュメント\n\n- [HANDOFF.md](02_docs/HANDOFF.md) — Claude Code継承\n- [CLAUDE_CONTEXT.md](02_docs/CLAUDE_CONTEXT.md) — Claude.ai共有\n- [zz_notes/policy/](zz_notes/policy) — 設計方針正本","x":-700,"y":570,"width":700,"height":160,"color":"6"},
+		{"id":"now","type":"text","text":"## 🔵 現在地メモ\n\n- 攻略3断面の見た目調整中\n- プラン横断ページ未着手\n- Netlifyデプロイ未\n\n_このカードを編集して現在地を更新_","x":100,"y":570,"width":600,"height":160,"color":"5"},
+		{"id":"dom-scanner","type":"text","text":"### 🍪 Dom scanner BMT\n\nクーポンコード抽出BMT\n\n[📂 開く](01_tools/coupon/Dom%20scanner%20BMT)","x":-1440,"y":195,"width":260,"height":170,"color":"1"}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"notebooklm","fromSide":"right","toNode":"page-maker","toSide":"left","label":"攻略3断面.md"},
+		{"id":"e2","fromNode":"site-scanner","fromSide":"right","toNode":"page-maker","toSide":"left","label":"DOM JSON"},
+		{"id":"e3","fromNode":"dom-scanner","fromSide":"right","toNode":"page-maker","toSide":"left","label":"クーポン"},
+		{"id":"e4","fromNode":"page-maker","fromSide":"right","toNode":"pfdb-json","toSide":"left","label":"自動保存"},
+		{"id":"e5","fromNode":"page-maker","fromSide":"right","toNode":"data-firms","toSide":"left","label":"🚀 exportHugo"},
+		{"id":"e6","fromNode":"page-maker","fromSide":"right","toNode":"data-plans","toSide":"left"},
+		{"id":"e7","fromNode":"page-maker","fromSide":"right","toNode":"content-firms","toSide":"left"},
+		{"id":"e8","fromNode":"page-maker","fromSide":"right","toNode":"glossary-json","toSide":"left","label":"用語辞典"},
+		{"id":"e9","fromNode":"data-firms","fromSide":"right","toNode":"hugo-build","toSide":"left"},
+		{"id":"e10","fromNode":"data-plans","fromSide":"right","toNode":"hugo-build","toSide":"left"},
+		{"id":"e11","fromNode":"content-firms","fromSide":"right","toNode":"hugo-build","toSide":"left"},
+		{"id":"e12","fromNode":"hugo-build","fromSide":"right","toNode":"github","toSide":"left","label":"git push"},
+		{"id":"e13","fromNode":"github","fromSide":"bottom","toNode":"netlify","toSide":"top","label":"auto deploy"},
+		{"id":"e14","fromNode":"sitemap-designer","fromSide":"right","toNode":"content-firms","toSide":"left","label":"構造設計"}
+	]
+}
