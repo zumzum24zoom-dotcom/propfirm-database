@@ -35,11 +35,11 @@ URL: https://app.notion.com/p/f63bfd09a1e54949998117bf868cd0f7
 
 ## アフィリエイトURL
 
-| Firm_Name | Affiliate_URL |
-|---|---|
-| AquaFunded | https://www.aquafunded.com/?afmc=46x |
-| City Traders Imperium | https://app.citytradersimperium.com/user-auth/register?referral_code=defc4d |
-| For Traders | https://app.fortraders.com/trading/new-challenge?affiliateCode=A9GU28LVD8 |
-| FundedElite | https://app.fundedelite.com?aff=AFF3027003 |
-| Funding Pips | https://app.fundingpips.com/register?ref=44D53534 |
-| The5ers | https://www.the5ers.com/?afmc=14ky |
+| Firm_Name | Affiliate_URL | Coupon_Code |
+|---|---|---|
+| AquaFunded | https://www.aquafunded.com/?afmc=46x |  |
+| City Traders Imperium | https://app.citytradersimperium.com/user-auth/register?referral_code=defc4d |  |
+| For Traders | https://app.fortraders.com/trading/new-challenge?affiliateCode=A9GU28LVD8 |  |
+| FundedElite | https://app.fundedelite.com?aff=AFF3027003 |  |
+| Funding Pips | https://app.fundingpips.com/register?ref=44D53534 |  |
+| The5ers | https://www.the5ers.com/?afmc=14ky | 9HFH2XXC |

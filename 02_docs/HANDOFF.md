@@ -1,7 +1,7 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-06-08（セッション8）
+> **最終更新**: 2026-06-09（セッション9）
 
 ---
 
@@ -251,6 +251,29 @@ const WIDGETS = [ PAYOUT_TIMELINE, /* ここに足すだけで増える */ ];
 - pfdb.json 用語辞典の stale な term/definition（P09/P11/P14）を正本へ再同期（差分0）
 
 > 検証: Page Maker は静的サーバ＋ブラウザでマウント確認・round-trip検証済み。Hugo は本環境で Application Control によりビルド不可のため、公開ページの最終見た目は hugo-dev スキルでマスター側ターミナル確認が必要。
+
+---
+
+### ✅ 完了（2026-06-09 セッション9）
+
+**アフィリエイトURL・クーポンコード スロット追加（DBP_01）**
+
+- `MASTER_DEFS.dbp01` に2スロット追加（`page-maker-v12.html`）。新セクション「アフィリエイト」に配置。
+  - `affiliateUrl`（アフィリエイトURL）/ `couponCode`（クーポンコード）
+  - **意図的に `fkey` 無し** — マスター手入力の内部データであり公式サイトから収集する項目ではないため、LLM収集プロンプト（fkey filter, L458）・定義注入から除外。編集UI表示・JSON出力・キーマップには `MASTER_DEFS` 経由で自動伝播。
+- F04 `officialUrl` を「公式URL（正本）」専用に修正（hint/definition から"アフィリエイト優先"を削除し、素の公式URLのみ格納する運用へ分離）。
+- 内部データ正本: アフィリエイトURL/クーポン一覧は [firm-url-list.md](firm-url-list.md)（The5ers クーポン `9HFH2XXC` 記録済・Coupon_Code 列新設）。
+
+**既存アフィリエイトデータ充填＋スキーマ正規化（data/firms/*.json 全33件）**
+
+- exportHugo の不具合修正（`page-maker-v12.html` L5463付近）: 新スロット追加で `fj["アフィリエイトURL"]` がループ出力と重複し、直後の旧ハードコード行が空で上書きしていた。旧 `fj["アフィリエイトURL"]=…` と `fj["クーポン"]=[]` の2行を削除し、MASTER_DEFS スロット由来のループ出力に一本化。
+- 全 firm JSON のキー `クーポン`(配列・旧箱) → `クーポンコード`(文字列) へ改名統一（昔の紛らわしい箱を撲滅）。
+- アフィリエイトURL 充填6社: aquafunded / city-traders-imperium / for-traders / fundedelite / fundingpips / the5ers（出典: [firm-url-list.md](firm-url-list.md)）。The5ers は `クーポンコード` = `9HFH2XXC` も投入。
+- 注意: これらは exportHugo 再実行で再生成される。正本運用は Page Maker スロット入力（firm JSON のスロット取込 round-trip で保持）。
+
+**【未実装・次セッション】表示側フォールバック仕様**
+- 公開ページの「公式へ」ボタンのリンク先は **`affiliateUrl | default officialUrl`**（アフィリエイト優先、空なら公式URL）。
+- 適用先: Hugo `firms/single.html` 実装時（現状レイアウト未実装）。`preview-mockup.html` の「公式サイト →」は現状 `href="#"` プレースホルダ。
 
 ---
 
