@@ -1697,7 +1697,26 @@ function TargetPanel({text,onAutoAssign,autoAssigning,onTableParse,translating,o
       </div>
       <div onMouseUp={captureSel} onKeyUp={captureSel} style={{flex:1,overflow:"auto",background:C.bg,border:`1px solid ${C.border}`,borderRadius:6,padding:8,
         fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,color:C.textBright,whiteSpace:"pre-wrap",userSelect:"text"}}>
-        {text||<span style={{color:C.textDim}}>貼り付けエリアから「翻訳→対象」または「→対象」で送る</span>}
+        {text ? text.split("\n").map((line, i) => {
+          const hasContent = line.trim().length > 0;
+          return (
+            <div key={i}
+              onClick={hasContent ? e => {
+                const sel = window.getSelection();
+                if (!sel) return;
+                sel.removeAllRanges();
+                const r = document.createRange();
+                r.selectNodeContents(e.currentTarget);
+                sel.addRange(r);
+                captureSel();
+              } : undefined}
+              title={hasContent ? "クリックで行を選択 → スロットclickで格納" : undefined}
+              style={{cursor: hasContent ? "pointer" : "default", padding: "0 2px", borderRadius: 2, minHeight: "1em"}}
+            >
+              {line || " "}
+            </div>
+          );
+        }) : <span style={{color:C.textDim}}>貼り付けエリアから「翻訳→対象」または「→対象」で送る</span>}
       </div>
       <div style={{fontSize:"0.62rem",color:C.textDim}}>
         {activeSlot?`選択中: ${activeSlot}`:"テキスト選択 ⇄ スロット選択（順不同）→ ⇨ で格納"}
@@ -3191,7 +3210,7 @@ ${slotList}
                     {/* 右: AI作成 + Planタブ生成 + × */}
                     <div style={{flex:slot.hint?0:1}} />
                     {slot.id==="planList"&&!locked&&frags.length>0&&(
-                      <span onClick={e=>{e.stopPropagation();const text=merged?merged.text:frags.map(f=>f.text).join(", ");syncPlansFromList(text)}} style={{cursor:"pointer",fontSize:"0.5rem",color:C.green,border:`1px solid ${C.green}`,borderRadius:2,padding:"0 3px"}}>Planタブ生成</span>
+                      <span onClick={e=>{e.stopPropagation();const text=merged?merged.text:frags.map(f=>f.text).join(", ");syncPlansFromList(text)}} style={{cursor:"pointer",fontSize:"0.72rem",fontWeight:700,color:C.bg,background:C.green,borderRadius:4,padding:"3px 10px",whiteSpace:"nowrap"}} title="プラン名リストからプランタブを自動生成">▶ Planタブ生成</span>
                     )}
                     {isAiTarget&&!locked&&(
                       (templateMode==="koryaku"&&onAIGenKoryaku)?(
@@ -5942,7 +5961,23 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
             onAIGenKoryaku={td.templateMode==="koryaku"?handleAIGenKoryaku:null} aiGenKoryaku={aiGenKoryaku}
             onAIGenTable={handleAIGenTable} aiGenTable={aiGenTable}
             locks={slotLocks} setLocks={setSlotLocks}
-            activeSlotId={activeSlotId} setActiveSlotId={setActiveSlotId}
+            activeSlotId={activeSlotId} setActiveSlotId={(slotId)=>{
+              setActiveSlotId(slotId);
+              // 取込エリアでテキスト選択済みなら、スロットclick だけで自動格納（⇨ ボタン省略）
+              const live=window.getSelection()?.toString()?.trim();
+              const sel=live||(selectedTextRef.current||"").trim();
+              if(sel&&slotId){
+                setTabField("slotData",prev=>{
+                  const locked=isSlotLocked(slotLocks,prev,slotId);
+                  if(locked)return prev;
+                  return{...prev,[slotId]:[...(prev[slotId]||[]).filter(f=>!f.merged),{text:sel}]};
+                });
+                selectedTextRef.current="";
+                if(slotId==="planList"&&activeType==="firm"){
+                  setTimeout(()=>syncPlansFromList(sel),100);
+                }
+              }
+            }}
             onSyncPlans={syncPlansFromList}
             planNames={(firms.find(f=>f.id===activeTabId)||{plans:[]}).plans.map(p=>p.name)}
             parentFirmSlotData={(()=>{const pf=firms.find(f=>(f.plans||[]).some(p=>p.id===activeTabId));return pf?(tabDataMap[pf.id]?.slotData||{}):null;})()}

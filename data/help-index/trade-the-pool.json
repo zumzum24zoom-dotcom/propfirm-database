@@ -1,0 +1,22 @@
+{
+  "firm": "trade-the-pool",
+  "official_url": "https://tradethepool.com/",
+  "help_base_url": "https://tradethepool.com/the-program/#faqs",
+  "platform": "inline_anchor",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "structure": "single-page inline accordion FAQ (184 accordion elements on /the-program/)",
+  "collections": [
+    {
+      "title": "Program Features & FAQ (inline accordion)",
+      "url": "https://tradethepool.com/the-program/",
+      "article_count": 0,
+      "articles": [],
+      "notes": "184 accordion items present in DOM. For DBP_02 extraction, fetch /the-program/ and expand all accordions via browser_evaluate('document.querySelectorAll(\\'details\\').forEach(d => d.open = true)') then read innerText."
+    }
+  ],
+  "related_pages": [
+    {"title": "Program details", "url": "https://tradethepool.com/the-program/"}
+  ],
+  "notes": "No dedicated help center. All content lives on /the-program/ as inline accordion. data/scans/tradethepool.json pageText (25K chars) is incomplete because scanner did not expand accordions — re-scrape needed when normalizing this firm."
+}

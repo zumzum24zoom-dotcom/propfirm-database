@@ -1,0 +1,135 @@
+{
+  "slug": "1-step",
+  "ファーム": "city-traders-imperium",
+  "プラン名": "City Traders Imperium - 1-Step Challenge",
+  "Steps": "1",
+  "利益目標": {
+    "C": "8%",
+    "F": "ー",
+    "差分": "EASE",
+    "詳細": "Phase 1で口座残高比+8%（CTIの最低profit target）。Fundedでは利益目標なし（10%到達時にスケーリング機会）。"
+  },
+  "最低取引日数": {
+    "C": "3日",
+    "F": "ー",
+    "差分": "ー",
+    "詳細": "Challenge: Min 3 Profitable Days。Funded（初回出金条件）: 7 Profitable Trading Days かつ 2%純益 or $100（高い方）。"
+  },
+  "日次損失": {
+    "C": "無",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共に1-Stepには日次損失上限なし（No Max Daily Drawdown limit）。"
+  },
+  "日次損失タイプ": {
+    "C": "ー",
+    "F": "ー",
+    "差分": "ー",
+    "詳細": "日次損失制限自体が存在しない。"
+  },
+  "最大損失": {
+    "C": "5%",
+    "F": "5%",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共に5% Max Trailing Drawdown（初期残高比5%）。"
+  },
+  "最大損失タイプ": {
+    "C": "Trailing（Balance-based）",
+    "F": "Trailing（Balance-based）",
+    "差分": "ー",
+    "詳細": "CTIはbalance-based DD採用。ピーク残高ではなく口座残高を基準にDDが計算される（CTIの主要な差別化要素）。"
+  },
+  "一貫性ルール": {
+    "C": "無",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共に一貫性スコアの明示的な要件は1-Stepにない（Instant Funding系では20%が必要）。"
+  },
+  "利益上限": {
+    "C": "ー",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Challenge: 利益上限なし。Funded: 出金上限なし。スケーリングで最大$200K/口座（合計$400K）まで拡張可能。"
+  },
+  "時間制限": {
+    "C": "無",
+    "F": "ー",
+    "差分": "ー",
+    "詳細": "Challenge: Unlimited Time（無制限）。ただし30日無活動で口座停止（小取引1回で更新可、または事前連絡で最長2か月凍結可能）。"
+  },
+  "ニュース取引制限": {
+    "C": "無",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共にNews Trading: Allowed with no restrictions（無制限許可）。"
+  },
+  "週末トレード制限": {
+    "C": "無",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共に週末ポジション保有OK（gap riskは自己責任）。仮想通貨は24/7取引可。"
+  },
+  "オーバーナイト制限": {
+    "C": "無",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共にオーバーナイト保有許可。"
+  },
+  "EA制限": {
+    "C": "※有",
+    "F": "※有",
+    "差分": "ー",
+    "詳細": "1-Stepは第三者EA（ソースコード非所有でも）使用可。ただし広く流通するEAは他トレーダーと取引が酷似した場合「coordinated trading violation」リスクあり。禁止EA: HFT・ティックスキャルピング・マイクロスキャルピング・エミュレーター・全アービトラージ系・ロールオーバー時刻スキャルピング・ニューススキャルピング・価格フィード遅延悪用系。"
+  },
+  "コピートレード制限": {
+    "C": "※有",
+    "F": "※有",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共に許可: CTI口座をMaster Account として個人口座/他プロップ口座/複数CTI口座へコピー可。禁止: 他プロップ→CTI、個人口座→CTI、外部signal/social trading、challenge pass service、他者とのEA共有。"
+  },
+  "スキャルピング制約": {
+    "C": "※有",
+    "F": "※有",
+    "差分": "ー",
+    "詳細": "通常のスキャルピング許可。禁止: HFT、tick-scalping、micro-scalping、エミュレーター、極高頻度発注、ロールオーバー時刻（00:00サーバー時刻）スキャルピング、ニューススパイク即時開閉。"
+  },
+  "ストップロス制約": {
+    "C": "有",
+    "F": "有",
+    "差分": "ー",
+    "詳細": "Challenge・Funded共にSL必須。エントリーから60秒以内にSL設定が必要、Stealth SL（隠しSL）禁止。プラットフォーム上で可視であること。違反時はsoft breach扱いで、1分後に自動決済され、SLなしで得た利益はprofit targetに算入されない。"
+  },
+  "リスクルール": {
+    "C": "※有",
+    "F": "※有",
+    "差分": "ー",
+    "詳細": "Margin Level 150%以下は「over-leveraging」とみなされgambling違反。Risk-per-trade-idea上限なし（通常時）だが、フラグ時はper-trade-idea最大1%に制限される場合あり。Martingaleは1-Stepのみ許可、ただしtotal risk per idea 2%以下。最大3ポジションまでの段階エントリーは可（合計2%以下）、4ポジション以上はMartingale扱い。"
+  },
+  "最大ポジション制約": {
+    "C": "※有",
+    "F": "※有",
+    "差分": "ー",
+    "詳細": "明示的なポジション数上限はないが、Martingaleルールにより1取引アイデアあたり最大3ポジション（合計2%リスク以下）。Grid Trading全面禁止。"
+  },
+  "禁止行為": {
+    "C": "Grid Trading, ヘッジング, 口座共有, アカウント転売, challenge pass service, 一方向ベット, ギャンブル行為, ブラケット戦略, IP/デバイス/取引マスキング, VPN使用, 3人以上のデバイス使用, 同一IP内複数口座, 価格フィード/レイテンシー/HFT/アービトラージ系EA",
+    "F": "ー",
+    "差分": "ー",
+    "詳細": "Grid Trading: 1-Step含む全プログラムで禁止 / ヘッジング: 全面禁止（同銘柄両建て、口座間両建て、相関銘柄での回避含む。処分: 即時口座閉鎖・利益没収・重度時は永久BAN） / 口座共有・転売・運用代行: 永久BAN対象 / 一方向ベット: 警告→Phase 1再開→利益没収→チャレンジ失格→口座停止→永久閉鎖 / ギャンブル行為（Margin Level 150%以下、ランダム巨大ロット、単一アイデアでターゲット達成試行）: 警告→無料リトライ→レバ削減→1日トレード数制限→1%リスク上限→失格 / ブラケット戦略（Buy-Stop+Sell-Stop両建て）禁止 / IP共有禁止（1世帯1口座）、VPN禁止、VPS可（要事前承認、VPN/proxy併用不可）、最大2デバイス（PC1+モバイル1）、海外渡航時は事前申告必須"
+  },
+  "_meta": {
+    "source": "https://helpcenter.citytradersimperium.com/en (Essential Rules & Guidelines × 12 articles + Choose a Funding Program / 1-Step Challenge)",
+    "scanned_at": "2026-06-10",
+    "normalized_by": "ソートー（LLM）",
+    "confidence": {
+      "high": ["利益目標", "最低取引日数", "日次損失", "最大損失", "最大損失タイプ", "時間制限", "ニュース取引制限", "週末トレード制限", "オーバーナイト制限", "EA制限", "コピートレード制限", "ストップロス制約", "Steps"],
+      "medium": ["スキャルピング制約", "リスクルール", "最大ポジション制約", "禁止行為"],
+      "low_or_unknown": ["一貫性ルール（明示記載なし→無と推定）"]
+    },
+    "notes": [
+      "1-Stepのみmartingale許可（他プランは禁止）— 大きな差別化",
+      "balance-based DD はCTI特有の表記。一般的なequity-basedとの違いを早見表外でも訴求すべき",
+      "コピートレード方向の制約が独特（自分のCTIをMaster→外がOK、逆はNG）"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "firm": "audacity-capital",
+  "official_url": "https://audacity.capital/",
+  "help_base_url": "https://audacity.capital/knowledge-center/",
+  "platform": "wordpress_kb",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "structure": "single-page-per-category with #anchor sub-questions (WordPress KB pattern)",
+  "collections": [
+    {"title": "Getting Started", "url": "https://audacity.capital/knowledge-center/getting-started/", "article_count": 0, "articles": [],
+     "sample_anchors": ["#are-there-monthly-fees?", "#what-are-the-account-sizes-i-can-purchase?"]},
+    {"title": "General", "url": "https://audacity.capital/knowledge-center/general/", "article_count": 0, "articles": [],
+     "sample_anchors": ["#how-do-i-scale-up-to-$2-million?"]},
+    {"title": "Trading Guidelines", "url": "https://audacity.capital/knowledge-center/trading-guidelines/", "article_count": 0, "articles": [],
+     "sample_anchors": ["#what-is-the-minimum-trading-days?", "#what-is-the-consistency-rule?"]},
+    {"title": "Ability One (1-Step)", "url": "https://audacity.capital/knowledge-center/ability-one/", "article_count": 0, "articles": []},
+    {"title": "Ability Challenge (2-Step)", "url": "https://audacity.capital/knowledge-center/ability-challenge/", "article_count": 0, "articles": [],
+     "sample_anchors": ["#what-is-the-profit-target-on-the-ability-challenge?"]},
+    {"title": "FTP (Instant Funding)", "url": "https://audacity.capital/knowledge-center/ftp/", "article_count": 0, "articles": []}
+  ],
+  "related_pages": [
+    {"title": "Prohibited Trading Practices", "url": "https://audacity.capital/prohibited-trading-practices/"},
+    {"title": "Code of Conduct", "url": "https://audacity.capital/code-of-conduct/"},
+    {"title": "Terms of Use", "url": "https://audacity.capital/terms-and-conditions/"},
+    {"title": "AML Policy", "url": "https://audacity.capital/anti-money-laundering/"},
+    {"title": "Responsible Trading", "url": "https://audacity.capital/responsible-trading/"}
+  ],
+  "languages": ["en", "tr", "es", "fr", "it", "pt", "de", "tl", "ru", "ar", "hi", "ja"],
+  "notes": "WordPress KB. 6 categories, each is a long-form page with #anchor jumps. For DBP_02 extraction, fetch Trading Guidelines + Ability Challenge + Ability One + FTP. 'Prohibited Trading Practices' on main domain (not knowledge-center) is also critical."
+}

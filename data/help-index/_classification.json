@@ -1,0 +1,342 @@
+{
+  "_meta": {
+    "generated_at": "2026-06-10",
+    "total_firms": 33,
+    "discovered": 32,
+    "blocked_or_unknown": 0,
+    "out_of_scope": 1,
+    "method": "WebFetch + Playwright browser_evaluate to find help center links from official site nav/footer"
+  },
+  "by_platform": {
+    "intercom": [
+      "city-traders-imperium",
+      "the5ers",
+      "fundednext",
+      "fundedelite",
+      "top-one-trader",
+      "fintokei",
+      "alpha-capital",
+      "e8-markets",
+      "brightfunded",
+      "blueberry-funded",
+      "aquafunded",
+      "for-traders",
+      "lark-funding",
+      "qt-funded",
+      "finotive-funding",
+      "moneta-funded",
+      "atmos-funded",
+      "funded-trading-plus",
+      "fundingpips"
+    ],
+    "wordpress_faq": [
+      "ftmo",
+      "maven",
+      "bem-funding",
+      "hantec-trader",
+      "fxify",
+      "thinkcapital",
+      "nordic-funder",
+      "hola-prime",
+      "instant-funding"
+    ],
+    "wordpress_kb": [
+      "audacity-capital"
+    ],
+    "hubspot_kb": [
+      "the-trading-pit"
+    ],
+    "inline_anchor": [
+      "trade-the-pool",
+      "ment-funding"
+    ],
+    "out_of_scope": [
+      "atfunded"
+    ]
+  },
+  "firms": [
+    {
+      "slug": "city-traders-imperium",
+      "official_url": "https://citytradersimperium.com/",
+      "help_base_url": "https://helpcenter.citytradersimperium.com/en",
+      "platform": "intercom",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "8 collections, ~52 articles total. Essential Rules + Funding Programs fully enumerated."
+    },
+    {
+      "slug": "ftmo",
+      "official_url": "https://ftmo.com/en/",
+      "help_base_url": "https://ftmo.com/en/faq/",
+      "platform": "wordpress_faq",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "60 flat articles, no collections."
+    },
+    {
+      "slug": "the5ers",
+      "official_url": "https://www.the5ers.com/",
+      "help_base_url": "https://help.the5ers.com/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "Also has https://futures-help.the5ers.com/futures/ for futures product."
+    },
+    {
+      "slug": "fundingpips",
+      "official_url": "https://fundingpips.com/",
+      "help_base_url": "https://help.fundingpips.com/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "WebFetch 403, used Playwright."
+    },
+    {
+      "slug": "fundednext",
+      "official_url": "https://fundednext.com/",
+      "help_base_url": "https://help.fundednext.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "fundedelite",
+      "official_url": "https://fundedelite.com/",
+      "help_base_url": "https://faq.fundedelite.com/en",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "top-one-trader",
+      "official_url": "https://www.toponetrader.com/",
+      "help_base_url": "https://help.toponetrader.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "instant-funding",
+      "official_url": "https://instantfunding.com/",
+      "help_base_url": "https://instantfunding.com/help/",
+      "platform": "wordpress_faq",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Re-classified from same_domain_help_path to wordpress_faq. 49+ flat articles under /help/{slug}/. Uses FTMO-style pattern."
+    },
+    {
+      "slug": "fintokei",
+      "official_url": "https://www.fintokei.com/",
+      "help_base_url": "https://support.fintokei.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "hantec-trader",
+      "official_url": "https://htrader.hmarkets.com/",
+      "help_base_url": "https://htrader.hmarkets.com/jp/company/faqs/",
+      "platform": "wordpress_faq",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "Original hantectrader.com redirects to htrader.com → htrader.hmarkets.com (Hantec Markets subdomain)."
+    },
+    {
+      "slug": "alpha-capital",
+      "official_url": "https://www.alphacapitalgroup.uk/",
+      "help_base_url": "https://help.alphacapitalgroup.uk/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "e8-markets",
+      "official_url": "https://e8markets.com/",
+      "help_base_url": "https://help.e8markets.com/en",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "WebFetch 403, used Playwright."
+    },
+    {
+      "slug": "maven",
+      "official_url": "https://maventrading.com/",
+      "help_base_url": "https://maventrading.com/faqs",
+      "platform": "wordpress_faq",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "bem-funding",
+      "official_url": "https://bemfunding.com/",
+      "help_base_url": "https://bemfunding.com/en/faq",
+      "platform": "wordpress_faq",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "7 prefix-categorized sections, 50 articles. Same-page accordion + dedicated detail URLs."
+    },
+    {
+      "slug": "brightfunded",
+      "official_url": "https://brightfunded.com/",
+      "help_base_url": "https://help.brightfunded.com/en/",
+      "platform": "intercom",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "10 collections, ~104 articles. 3 critical collections fully enumerated."
+    },
+    {
+      "slug": "blueberry-funded",
+      "official_url": "https://blueberryfunded.com/",
+      "help_base_url": "https://help.blueberryfunded.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "aquafunded",
+      "official_url": "https://aquafunded.com/",
+      "help_base_url": "https://help.aquafunded.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "for-traders",
+      "official_url": "https://fortraders.com/",
+      "help_base_url": "https://help.fortraders.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "lark-funding",
+      "official_url": "https://www.larkfunding.com/",
+      "help_base_url": "https://helpdesk.larkfunding.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "qt-funded",
+      "official_url": "https://qtfunded.quanttekel.com/",
+      "help_base_url": "http://support.qtfunded.com/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "qtfunded.com redirects to qtfunded.quanttekel.com. Support subdomain on http."
+    },
+    {
+      "slug": "audacity-capital",
+      "official_url": "https://audacity.capital/",
+      "help_base_url": "https://audacity.capital/knowledge-center/",
+      "platform": "wordpress_kb",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "WordPress KB. 6 categories, each is a long-form page with #anchor sub-questions. Plus standalone /prohibited-trading-practices/ page on main domain."
+    },
+    {
+      "slug": "moneta-funded",
+      "official_url": "https://www.monetafunded.com/",
+      "help_base_url": "https://help.monetafunded.com/en/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "WebFetch 403, used Playwright."
+    },
+    {
+      "slug": "atmos-funded",
+      "official_url": "https://atmosfunded.com/",
+      "help_base_url": "https://help.atmosfunded.com/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "WebFetch 403, used Playwright."
+    },
+    {
+      "slug": "atfunded",
+      "official_url": "https://atfunded.com/",
+      "help_base_url": null,
+      "platform": "out_of_scope",
+      "fetch_status": "out_of_scope",
+      "indexed": false,
+      "notes": "BUSINESS PAUSED. Notice: 'ATFunded has made the decision to pause operations while we conduct a full review of the business and our current offerings.' Site only shows announcement page. Exclude from current data collection."
+    },
+    {
+      "slug": "finotive-funding",
+      "official_url": "https://finotivefunding.com/",
+      "help_base_url": "https://help.finotivefunding.com/en",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "trade-the-pool",
+      "official_url": "https://tradethepool.com/",
+      "help_base_url": "https://tradethepool.com/the-program/#faqs",
+      "platform": "inline_anchor",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Inline accordion on /the-program/ — 184 accordion items. Expand all before scraping. scan pageText incomplete (accordions not expanded)."
+    },
+    {
+      "slug": "thinkcapital",
+      "official_url": "https://www.thinkcapital.com/",
+      "help_base_url": "https://www.thinkcapital.com/faqs/",
+      "platform": "wordpress_faq",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "funded-trading-plus",
+      "official_url": "https://www.fundedtradingplus.com/",
+      "help_base_url": "https://help.fundedtradingplus.com/",
+      "platform": "intercom",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "WebFetch 403, used Playwright."
+    },
+    {
+      "slug": "nordic-funder",
+      "official_url": "https://nordicfunder.com/",
+      "help_base_url": "https://nordicfunder.com/faq/",
+      "platform": "wordpress_faq",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "fxify",
+      "official_url": "https://fxify.com/",
+      "help_base_url": "https://fxify.com/faqs/",
+      "platform": "wordpress_faq",
+      "fetch_status": "discovered",
+      "indexed": false
+    },
+    {
+      "slug": "the-trading-pit",
+      "official_url": "https://www.thetradingpit.com/",
+      "help_base_url": "https://support.thetradingpit.com/",
+      "platform": "hubspot_kb",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "HubSpot KB (?hsLang= param signature). 8 single-page categories with #anchor sub-sections. 12 languages incl. Japanese."
+    },
+    {
+      "slug": "ment-funding",
+      "official_url": "https://mentfunding.com/",
+      "help_base_url": "https://mentfunding.com/#rules",
+      "platform": "inline_anchor",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Inline rules at /#rules. scan pageText 8/16 keyword hits — sufficient baseline. Discord + Mentbot chatbot alternatives available."
+    },
+    {
+      "slug": "hola-prime",
+      "official_url": "https://holaprime.com/",
+      "help_base_url": "https://holaprime.com/forex/faq/",
+      "platform": "wordpress_faq",
+      "fetch_status": "discovered",
+      "indexed": false,
+      "notes": "Forex FAQ. Also has https://holaprime.com/futures/faq/ for futures product."
+    }
+  ]
+}

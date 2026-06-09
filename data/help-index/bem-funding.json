@@ -1,0 +1,110 @@
+{
+  "firm": "bem-funding",
+  "official_url": "https://bemfunding.com/",
+  "help_base_url": "https://bemfunding.com/en/faq",
+  "platform": "wordpress_faq",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {
+      "title": "General",
+      "url": "https://bemfunding.com/en/faq#general",
+      "article_count": 4,
+      "articles": [
+        {"title": "What is BEM Funding?", "url": "https://bemfunding.com/en/faq/general-what-is-bem-funding"},
+        {"title": "What are the BEM Funding Evaluation Programs?", "url": "https://bemfunding.com/en/faq/general-what-are-the-bem-funding-evaluation-programs"},
+        {"title": "Who can join BEM Funding?", "url": "https://bemfunding.com/en/faq/general-who-can-join-bem-funding"},
+        {"title": "What is the legal relationship between a BEM Trader and BEM Funding?", "url": "https://bemfunding.com/en/faq/general-what-is-the-legal-relationship-between-a-bem-trader-and-bem-funding"}
+      ]
+    },
+    {
+      "title": "Common Questions",
+      "url": "https://bemfunding.com/en/faq#common-questions",
+      "article_count": 9,
+      "articles": [
+        {"title": "Who should I contact for technical and trading support?", "url": "https://bemfunding.com/en/faq/common-questions-who-should-i-contact-for-technical-and-trading-support"},
+        {"title": "Which broker do we trade with?", "url": "https://bemfunding.com/en/faq/common-questions-which-broker-do-we-trade-with"},
+        {"title": "What happens if I breach an objective?", "url": "https://bemfunding.com/en/faq/common-questions-what-happens-if-i-breach-an-objective"},
+        {"title": "Do I need to complete identity verification (KYC)?", "url": "https://bemfunding.com/en/faq/common-questions-do-i-need-to-complete-identity-verification-kyc"},
+        {"title": "Do you offer an evaluation fee refund?", "url": "https://bemfunding.com/en/faq/common-questions-do-you-offer-an-evaluation-fee-refund"},
+        {"title": "What are the spreads and commissions?", "url": "https://bemfunding.com/en/faq/common-questions-what-are-the-spreads-and-commissions"},
+        {"title": "How to check contract sizes and swap rates?", "url": "https://bemfunding.com/en/faq/common-questions-how-to-check-contract-sizes-and-swap-rates"},
+        {"title": "Can I change my platform?", "url": "https://bemfunding.com/en/faq/common-questions-can-i-change-my-platform"},
+        {"title": "Can I merge multiple accounts?", "url": "https://bemfunding.com/en/faq/common-questions-can-i-merge-multiple-accounts"}
+      ]
+    },
+    {
+      "title": "BEM One (1-Step Plan)",
+      "url": "https://bemfunding.com/en/faq#bem-one",
+      "article_count": 8,
+      "articles": [
+        {"title": "What is BEM - One?", "url": "https://bemfunding.com/en/faq/bem-one-what-is-bem-one"},
+        {"title": "What are the rules for the BEM - One?", "url": "https://bemfunding.com/en/faq/bem-one-what-are-the-rules-for-the-bem-one"},
+        {"title": "What is the maximum simulated daily loss?", "url": "https://bemfunding.com/en/faq/bem-one-what-is-the-maximum-simulated-daily-loss"},
+        {"title": "What is the maximum simulated drawdown?", "url": "https://bemfunding.com/en/faq/bem-one-what-is-the-maximum-simulated-drawdown"},
+        {"title": "Can I trade news?", "url": "https://bemfunding.com/en/faq/bem-one-can-i-trade-news"},
+        {"title": "Can I hold positions over the weekend?", "url": "https://bemfunding.com/en/faq/bem-one-can-i-hold-positions-over-the-weekend"},
+        {"title": "Available Instruments & Leverage", "url": "https://bemfunding.com/en/faq/bem-one-available-instruments-leverage"},
+        {"title": "What is Reward on Demand?", "url": "https://bemfunding.com/en/faq/bem-one-what-is-reward-on-demand"}
+      ]
+    },
+    {
+      "title": "BEM Classic - Normal (2-Step Plan)",
+      "url": "https://bemfunding.com/en/faq#bem-classic-normal",
+      "article_count": 7,
+      "articles": [
+        {"title": "What is BEM Classic - Normal?", "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-is-bem-classic-normal"},
+        {"title": "What are the rules for the BEM Classic - Normal?", "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-are-the-rules-for-the-bem-classic-normal"},
+        {"title": "What is the Maximum Simulated Daily Loss?", "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-is-the-maximum-simulated-daily-loss"},
+        {"title": "What is the Maximum Simulated Drawdown?", "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-is-the-maximum-simulated-drawdown"},
+        {"title": "Can I trade news?", "url": "https://bemfunding.com/en/faq/bem-classic-normal-can-i-trade-news"},
+        {"title": "Can I hold my trades over the weekend?", "url": "https://bemfunding.com/en/faq/bem-classic-normal-can-i-hold-my-trades-over-the-weekend"},
+        {"title": "Available Instruments & Leverage", "url": "https://bemfunding.com/en/faq/bem-classic-normal-available-instruments-leverage"}
+      ]
+    },
+    {
+      "title": "BEM Classic - Swing (2-Step Swing Plan)",
+      "url": "https://bemfunding.com/en/faq#bem-classic-swing",
+      "article_count": 7,
+      "articles": [
+        {"title": "What are the rules for BEM Classic – Swing?", "url": "https://bemfunding.com/en/faq/bem-classic-swing-what-are-the-rules-for-bem-classic-swing"},
+        {"title": "How does the BEM Classic - Swing evaluation work?", "url": "https://bemfunding.com/en/faq/bem-classic-swing-how-does-the-bem-classic-swing-evaluation-work"},
+        {"title": "What is the Maximum Simulated Daily Loss?", "url": "https://bemfunding.com/en/faq/bem-classic-swing-what-is-the-maximum-simulated-daily-loss"},
+        {"title": "What is the Maximum Simulated Drawdown?", "url": "https://bemfunding.com/en/faq/bem-classic-swing-what-is-the-maximum-simulated-drawdown"},
+        {"title": "Can I trade news?", "url": "https://bemfunding.com/en/faq/bem-classic-swing-can-i-trade-news"},
+        {"title": "Can I hold my trades over the weekend?", "url": "https://bemfunding.com/en/faq/bem-classic-swing-can-i-hold-my-trades-over-the-weekend"},
+        {"title": "Available Instruments & Leverage", "url": "https://bemfunding.com/en/faq/bem-classic-swing-available-instruments-leverage"}
+      ]
+    },
+    {
+      "title": "BEM Extended (Extended Plan)",
+      "url": "https://bemfunding.com/en/faq#bem-extended",
+      "article_count": 7,
+      "articles": [
+        {"title": "What is BEM - Extended?", "url": "https://bemfunding.com/en/faq/bem-extended-what-is-bem-extended"},
+        {"title": "What are the rules for the BEM - Extended?", "url": "https://bemfunding.com/en/faq/bem-extended-what-are-the-rules-for-the-bem-extended"},
+        {"title": "What is the Maximum Simulated Daily Loss?", "url": "https://bemfunding.com/en/faq/bem-extended-what-is-the-maximum-simulated-daily-loss"},
+        {"title": "What is the Maximum Simulated Drawdown?", "url": "https://bemfunding.com/en/faq/bem-extended-what-is-the-maximum-simulated-drawdown"},
+        {"title": "Can I trade news?", "url": "https://bemfunding.com/en/faq/bem-extended-can-i-trade-news"},
+        {"title": "Can I hold my trades over the weekend?", "url": "https://bemfunding.com/en/faq/bem-extended-can-i-hold-my-trades-over-the-weekend"},
+        {"title": "Available Instruments & Leverages", "url": "https://bemfunding.com/en/faq/bem-extended-available-instruments-leverages"}
+      ]
+    },
+    {
+      "title": "Rewards",
+      "url": "https://bemfunding.com/en/faq#rewards",
+      "article_count": 8,
+      "articles": [
+        {"title": "How do rewards work?", "url": "https://bemfunding.com/en/faq/rewards-how-do-rewards-work"},
+        {"title": "When and how often can I request my reward?", "url": "https://bemfunding.com/en/faq/rewards-when-and-how-often-can-i-request-my-reward"},
+        {"title": "How do I get my rewards?", "url": "https://bemfunding.com/en/faq/rewards-how-do-i-get-my-rewards"},
+        {"title": "How long does it take to get my reward?", "url": "https://bemfunding.com/en/faq/rewards-how-long-does-it-take-to-get-my-reward"},
+        {"title": "What payout methods are available?", "url": "https://bemfunding.com/en/faq/rewards-what-payout-methods-are-available"},
+        {"title": "How do Rise Works rewards work?", "url": "https://bemfunding.com/en/faq/rewards-how-do-rise-works-rewards-work"},
+        {"title": "How do Cryptocurrency rewards work?", "url": "https://bemfunding.com/en/faq/rewards-how-do-cryptocurrency-rewards-work"},
+        {"title": "Are there any fees or limits on rewards?", "url": "https://bemfunding.com/en/faq/rewards-are-there-any-fees-or-limits-on-rewards"}
+      ]
+    }
+  ],
+  "notes": "WordPress-based FAQ with semantic URL prefix as virtual collection (general-/common-questions-/bem-one-/bem-classic-normal-/bem-classic-swing-/bem-extended-/rewards-). 50 articles total. Single-page accordion on /faq with each anchor leading to dedicated detail URL."
+}

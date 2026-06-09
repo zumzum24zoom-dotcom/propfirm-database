@@ -1,0 +1,28 @@
+{
+  "firm": "the-trading-pit",
+  "official_url": "https://www.thetradingpit.com/",
+  "help_base_url": "https://support.thetradingpit.com/",
+  "platform": "hubspot_kb",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "structure": "single-page-per-category (no article-level URLs; each category is a long-form document with #anchor sections)",
+  "collections": [
+    {"title": "Getting Started", "url": "https://support.thetradingpit.com/getting-started?hsLang=en", "article_count": 0, "articles": []},
+    {"title": "Trading Rules", "url": "https://support.thetradingpit.com/trading-rules?hsLang=en", "article_count": 0, "articles": [],
+     "sections": [
+       "Basic Rules for CFD, Futures & Stocks",
+       "CFD",
+       "Futures",
+       "Stocks"
+     ]
+    },
+    {"title": "Rewards", "url": "https://support.thetradingpit.com/rewards?hsLang=en", "article_count": 0, "articles": []},
+    {"title": "CFDs", "url": "https://support.thetradingpit.com/cfds?hsLang=en", "article_count": 0, "articles": []},
+    {"title": "Futures", "url": "https://support.thetradingpit.com/futures?hsLang=en", "article_count": 0, "articles": []},
+    {"title": "Stocks", "url": "https://support.thetradingpit.com/stocks?hsLang=en", "article_count": 0, "articles": []},
+    {"title": "Affiliate Program", "url": "https://support.thetradingpit.com/affiliate-program?hsLang=en", "article_count": 0, "articles": []},
+    {"title": "Status Updates", "url": "https://support.thetradingpit.com/status-updates?hsLang=en", "article_count": 0, "articles": []}
+  ],
+  "languages": ["en", "ms", "de", "es", "it", "pt-pt", "vi", "tr", "ar-eg", "ja", "zh-cn"],
+  "notes": "HubSpot Knowledge Base (?hsLang= param identifies HubSpot). Each category is a single long-form document with #anchor jumps — no separate article URLs. For DBP_02 extraction, fetch the Trading Rules category page directly. Japanese version available at /ja/."
+}

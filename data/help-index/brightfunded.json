@@ -1,0 +1,110 @@
+{
+  "firm": "brightfunded",
+  "official_url": "https://brightfunded.com/",
+  "help_base_url": "https://help.brightfunded.com/en/",
+  "platform": "intercom",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {
+      "title": "About BrightFunded",
+      "url": "https://help.brightfunded.com/en/collections/5447117-about-brightfunded",
+      "article_count": 9,
+      "articles": [
+        {"title": "What is BrightFunded?", "url": "https://help.brightfunded.com/en/articles/8205788-what-is-brightfunded"},
+        {"title": "How to start?", "url": "https://help.brightfunded.com/en/articles/8204620-how-to-start"},
+        {"title": "What capital will I trade at BrightFunded?", "url": "https://help.brightfunded.com/en/articles/9241621-what-capital-will-i-trade-at-brightfunded"},
+        {"title": "What countries are restricted at BrightFunded?", "url": "https://help.brightfunded.com/en/articles/9286630-what-countries-are-restricted-at-brightfunded"},
+        {"title": "Is BrightFunded a serious company?", "url": "https://help.brightfunded.com/en/articles/8205812-is-brightfunded-a-serious-company"},
+        {"title": "Why should I join BrightFunded?", "url": "https://help.brightfunded.com/en/articles/8204986-why-should-i-join-brightfunded"},
+        {"title": "Who can join BrightFunded?", "url": "https://help.brightfunded.com/en/articles/8205805-who-can-join-brightfunded"},
+        {"title": "Is BrightFunded the best trading solution that I can find?", "url": "https://help.brightfunded.com/en/articles/9241724-is-brightfunded-the-best-trading-solution-that-i-can-find"},
+        {"title": "Should BrightFunded be regulated?", "url": "https://help.brightfunded.com/en/articles/11790762-should-brightfunded-be-regulated"}
+      ]
+    },
+    {
+      "title": "Trading Rules & Guidelines",
+      "url": "https://help.brightfunded.com/en/collections/9320061-trading-rules-guidelines",
+      "article_count": 16,
+      "articles": [
+        {"title": "Single Account Policy", "url": "https://help.brightfunded.com/en/articles/11079360-single-account-policy-important-for-all-our-users"},
+        {"title": "Inactivity Rule Policy", "url": "https://help.brightfunded.com/en/articles/11774572-inactivity-rule-policy"},
+        {"title": "Confidentiality Policy", "url": "https://help.brightfunded.com/en/articles/10717719-confidentiality-policy"},
+        {"title": "Non-authorized Practices at BrightFunded", "url": "https://help.brightfunded.com/en/articles/9268742-non-authorized-practices-at-brightfunded"},
+        {"title": "What are the current rules for the evaluation process?", "url": "https://help.brightfunded.com/en/articles/9241611-what-are-the-current-rules-for-the-evaluation-process"},
+        {"title": "Which strategies are prohibited at BrightFunded?", "url": "https://help.brightfunded.com/en/articles/9241704-which-strategies-are-prohibited-at-brightfunded"},
+        {"title": "Can I trade news?", "url": "https://help.brightfunded.com/en/articles/9241694-can-i-trade-news"},
+        {"title": "How Does My Daily Permitted Loss Work?", "url": "https://help.brightfunded.com/en/articles/12291765-how-does-my-daily-permitted-loss-work"},
+        {"title": "How does the Hedging Rule work?", "url": "https://help.brightfunded.com/en/articles/9680850-how-does-the-hedging-rule-work"},
+        {"title": "Can I use EA?", "url": "https://help.brightfunded.com/en/articles/9241699-can-i-use-ea"},
+        {"title": "Is copy-trading allowed?", "url": "https://help.brightfunded.com/en/articles/9241709-is-copy-trading-allowed"},
+        {"title": "Do I need to close my positions overnight?", "url": "https://help.brightfunded.com/en/articles/9268424-do-i-need-to-close-my-positions-overnight"},
+        {"title": "Is it allowed to hold positions over the weekend?", "url": "https://help.brightfunded.com/en/articles/9268323-is-it-allowed-to-hold-positions-over-the-weekend"},
+        {"title": "What happens if I breach the rules?", "url": "https://help.brightfunded.com/en/articles/9241613-what-happens-if-i-breach-the-rules"},
+        {"title": "Is it permitted to use a VPN/VPS at BrightFunded?", "url": "https://help.brightfunded.com/en/articles/9436443-is-it-permitted-to-use-a-vpn-vps-at-brightfunded"},
+        {"title": "Does BrightFunded have a consistency rule?", "url": "https://help.brightfunded.com/en/articles/12577176-does-brightfunded-have-a-consistency-rule"}
+      ]
+    },
+    {
+      "title": "BrightFunded Plans & Challenge Essentials",
+      "url": "https://help.brightfunded.com/en/collections/5623136-brightfunded-plans-challenge-essentials",
+      "article_count": 11,
+      "articles": [
+        {"title": "BrightFunded 1-Step", "url": "https://help.brightfunded.com/en/articles/14284743-brightfunded-1-step"},
+        {"title": "BrightFunded 2-Step – Bright", "url": "https://help.brightfunded.com/en/articles/14284817-brightfunded-2-step-bright"},
+        {"title": "BrightFunded 2-Step – Classic", "url": "https://help.brightfunded.com/en/articles/14284844-brightfunded-2-step-classic"},
+        {"title": "BrightFunded Original Accounts", "url": "https://help.brightfunded.com/en/articles/14285762-brightfunded-original-accounts"},
+        {"title": "How do I get funded?", "url": "https://help.brightfunded.com/en/articles/9241590-how-do-i-get-funded"},
+        {"title": "How do I obtain my Funded Account?", "url": "https://help.brightfunded.com/en/articles/9268287-how-do-i-obtain-my-funded-account"},
+        {"title": "How long does the evaluation process take?", "url": "https://help.brightfunded.com/en/articles/9241600-how-long-does-the-evaluation-process-take"},
+        {"title": "How to check your BrightFunded credentials in MT5?", "url": "https://help.brightfunded.com/en/articles/12333004-how-to-check-your-brightfunded-credentials-in-mt5"},
+        {"title": "How do I log in to cTrader after purchasing an account?", "url": "https://help.brightfunded.com/en/articles/10866181-how-do-i-log-in-to-ctrader-after-purchasing-an-account"},
+        {"title": "How to check your BrightFunded credentials in cTrader?", "url": "https://help.brightfunded.com/en/articles/10865649-how-to-check-your-brightfunded-credentials-in-ctrader"},
+        {"title": "How to check your BrightFunded credentials in DXTrade?", "url": "https://help.brightfunded.com/en/articles/9286733-how-to-check-your-brightfunded-credentials-in-dxtrade"}
+      ]
+    },
+    {
+      "title": "General FAQ",
+      "url": "https://help.brightfunded.com/en/collections/9387066-general-faq",
+      "article_count": 19,
+      "articles": []
+    },
+    {
+      "title": "Trading Platforms",
+      "url": "https://help.brightfunded.com/en/collections/13055489-trading-platforms",
+      "article_count": 9,
+      "articles": []
+    },
+    {
+      "title": "Billing and Payouts",
+      "url": "https://help.brightfunded.com/en/collections/9320037-billing-and-payouts",
+      "article_count": 10,
+      "articles": []
+    },
+    {
+      "title": "Trade2Earn & Scaling Plan",
+      "url": "https://help.brightfunded.com/en/collections/9320008-trade2earn-scaling-plan",
+      "article_count": 8,
+      "articles": []
+    },
+    {
+      "title": "Affiliate Program",
+      "url": "https://help.brightfunded.com/en/collections/9990702-affiliate-program",
+      "article_count": 5,
+      "articles": []
+    },
+    {
+      "title": "Trading Basics",
+      "url": "https://help.brightfunded.com/en/collections/9320085-trading-basics",
+      "article_count": 6,
+      "articles": []
+    },
+    {
+      "title": "Video Tutorials",
+      "url": "https://help.brightfunded.com/en/collections/13055626-video-tutorials",
+      "article_count": 11,
+      "articles": []
+    }
+  ],
+  "notes": "Intercom platform. Same JS pattern as CTI works (browser_evaluate same-origin fetch loop). 10 collections, ~104 articles total. Critical 3 collections (About / Trading Rules / Plans) fully enumerated; others kept as collection-level only for token efficiency — articles can be re-enumerated on demand."
+}

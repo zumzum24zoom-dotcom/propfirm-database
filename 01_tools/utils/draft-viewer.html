@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Draft Viewer — propfirm-database</title>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg2: #131826;
+    --bg3: #1a2032;
+    --border: #2a3145;
+    --txt: #e6e9f0;
+    --muted: #8a92a8;
+    --high: #2dd4bf;
+    --medium: #facc15;
+    --low: #f87171;
+    --notdisc: #a78bfa;
+    --oos: #94a3b8;
+    --accent: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--txt);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Meiryo", sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  header h1 { margin: 0; font-size: 16px; color: var(--accent); }
+  header .info { color: var(--muted); font-size: 11px; }
+  .controls {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  button, .btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--txt);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  button:hover { background: var(--border); }
+  button.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  main { padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    color: var(--muted);
+    background: var(--bg2);
+    margin-bottom: 16px;
+  }
+  .drop-zone.over { border-color: var(--accent); background: var(--bg3); }
+  .drop-zone code {
+    background: var(--bg3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .file-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .file-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .file-card:hover { border-color: var(--accent); }
+  .file-card.active { border-color: var(--accent); background: var(--bg3); }
+  .file-card .name { font-weight: 600; }
+  .file-card .meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .file-card .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 9px;
+    margin-right: 4px;
+  }
+  .badge.firm { background: var(--accent); color: var(--bg); }
+  .badge.plan { background: var(--high); color: var(--bg); }
+  .summary-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    flex: 0 0 auto;
+  }
+  .stat .num { font-size: 20px; font-weight: 700; }
+  .stat .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+  .stat.high .num { color: var(--high); }
+  .stat.medium .num { color: var(--medium); }
+  .stat.low .num { color: var(--low); }
+  .stat.notdisc .num { color: var(--notdisc); }
+  .stat.oos .num { color: var(--oos); }
+  table.slots {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  table.slots th, table.slots td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.slots th {
+    background: var(--bg3);
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    width: 160px;
+    white-space: nowrap;
+  }
+  table.slots td { font-size: 12px; word-break: break-word; }
+  table.slots tr.high td { border-left: 3px solid var(--high); }
+  table.slots tr.medium td { border-left: 3px solid var(--medium); }
+  table.slots tr.low td { border-left: 3px solid var(--low); }
+  table.slots tr.notdisc td { border-left: 3px solid var(--notdisc); color: var(--notdisc); }
+  table.slots tr.oos td { border-left: 3px solid var(--oos); color: var(--oos); }
+  table.slots tr.empty td { color: var(--low); font-style: italic; }
+  table.slots .slot-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .confidence-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+  .dot-high { background: var(--high); }
+  .dot-medium { background: var(--medium); }
+  .dot-low { background: var(--low); }
+  .dot-notdisc { background: var(--notdisc); }
+  .dot-oos { background: var(--oos); }
+  .panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .panel h2 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .panel .meta-row {
+    display: flex;
+    margin-bottom: 4px;
+    font-size: 11px;
+  }
+  .panel .meta-row .k {
+    color: var(--muted);
+    width: 100px;
+    flex: 0 0 auto;
+  }
+  .panel .meta-row .v { word-break: break-word; }
+  .panel pre {
+    background: var(--bg3);
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 11px;
+    overflow-x: auto;
+    margin: 4px 0;
+  }
+  .legend {
+    display: flex;
+    gap: 12px;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px;
+  }
+  /* plan slot table — has C/F/差分/詳細 */
+  table.slots td.cf-cell {
+    padding: 6px 8px;
+  }
+  .cf-row {
+    display: grid;
+    grid-template-columns: 50px 50px 60px 1fr;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .cf-row .label {
+    color: var(--muted);
+    text-align: right;
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+  .cf-row .val { color: var(--txt); font-weight: 500; }
+  .cf-row .detail {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 2px;
+    padding-top: 4px;
+    border-top: 1px dashed var(--border);
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>📋 Draft Viewer</h1>
+  <span class="info">data/firms/*.draft · data/plans/*.draft · DBP_01/DBP_02</span>
+  <div class="controls">
+    <button id="btnPickDir">📁 フォルダ選択</button>
+    <button id="btnPickFiles">📄 ファイル選択</button>
+    <button id="btnClear">クリア</button>
+  </div>
+</header>
+<main>
+  <div id="dropZone" class="drop-zone">
+    <p>.draft ファイルをここにドラッグ&ドロップ<br>
+    または <code>data/firms/</code> / <code>data/plans/</code> をフォルダ選択<br>
+    （複数ファイル同時選択可・サブフォルダも自動探索）</p>
+  </div>
+
+  <div class="legend">
+    <span><span class="confidence-dot dot-high"></span>high（明示記載）</span>
+    <span><span class="confidence-dot dot-medium"></span>medium（推測）</span>
+    <span><span class="confidence-dot dot-low"></span>low_or_unknown（要追加調査）</span>
+    <span><span class="confidence-dot dot-notdisc"></span>not_disclosed（公開なし）</span>
+    <span><span class="confidence-dot dot-oos"></span>out_of_scope（対象外）</span>
+  </div>
+
+  <div id="fileList" class="file-list"></div>
+  <div id="content"></div>
+</main>
+
+<script>
+const state = {
+  files: [],     // [{name, path, type:'firm'|'plan', data}]
+  activeIdx: -1
+};
+
+const FIRM_SLOTS = [
+  "slug","ファーム名","拠点国","創業年","公式URL","カテゴリ","日本対応",
+  "ファームピッチ","リワードプログラム","スケールアップ","ブローカー","プラットフォーム",
+  "Server Time","DD Reset","レバレッジ","手数料","入金方法","出金方法","出金ポリシー",
+  "Profit Split","※Profit Split","プラン名リスト","プラン比較テーブル",
+  "メールアドレス","アフィリエイトURL","クーポンコード"
+];
+
+const PLAN_SLOTS = [
+  "slug","ファーム","プラン名","Steps",
+  "利益目標","最低取引日数","日次損失","日次損失タイプ","最大損失","最大損失タイプ",
+  "一貫性ルール","利益上限","時間制限","ニュース取引制限","週末トレード制限","オーバーナイト制限",
+  "EA制限","コピートレード制限","スキャルピング制約","ストップロス制約",
+  "リスクルール","最大ポジション制約","禁止行為"
+];
+
+function classifySlot(slotName, val, conf) {
+  if (conf?.not_disclosed?.some(s => s.startsWith(slotName) || s === slotName)) return 'notdisc';
+  if (conf?.out_of_scope?.some(s => s.startsWith(slotName) || s === slotName)) return 'oos';
+  if (conf?.high?.includes(slotName)) return 'high';
+  if (conf?.medium?.includes(slotName)) return 'medium';
+  if (conf?.low_or_unknown?.some(s => s.startsWith(slotName) || s === slotName)) return 'low';
+  // fallback: check value
+  if (val === "" || val == null || (Array.isArray(val) && val.length === 0)) return 'empty';
+  return 'high';
+}
+
+function renderFirm(data) {
+  const conf = data._meta?.confidence || {};
+  let counts = { high:0, medium:0, low:0, notdisc:0, oos:0, empty:0 };
+  let rows = '';
+  for (const slot of FIRM_SLOTS) {
+    if (!(slot in data)) continue;
+    const val = data[slot];
+    const cls = classifySlot(slot, val, conf);
+    counts[cls]++;
+    const valDisplay = (val === "" || val == null) ? '（空）' :
+      (Array.isArray(val) ? JSON.stringify(val) : escapeHtml(String(val)));
+    rows += `<tr class="${cls}">
+      <th><div class="slot-name"><span class="confidence-dot dot-${cls === 'empty' ? 'low' : cls}"></span>${slot}</div></th>
+      <td>${valDisplay}</td>
+    </tr>`;
+  }
+  return { html: `
+    <div class="summary-row">
+      <div class="stat high"><div class="num">${counts.high}</div><div class="lbl">High</div></div>
+      <div class="stat medium"><div class="num">${counts.medium}</div><div class="lbl">Medium</div></div>
+      <div class="stat low"><div class="num">${counts.low + counts.empty}</div><div class="lbl">Low/Empty</div></div>
+      <div class="stat notdisc"><div class="num">${counts.notdisc}</div><div class="lbl">公開なし</div></div>
+      <div class="stat oos"><div class="num">${counts.oos}</div><div class="lbl">対象外</div></div>
+    </div>
+    <table class="slots">${rows}</table>
+    ${renderMeta(data._meta)}
+  ` };
+}
+
+function renderPlan(data) {
+  const conf = data._meta?.confidence || {};
+  let counts = { high:0, medium:0, low:0, notdisc:0, oos:0, empty:0 };
+  let rows = '';
+  for (const slot of PLAN_SLOTS) {
+    if (!(slot in data)) continue;
+    const val = data[slot];
+    const cls = classifySlot(slot, val, conf);
+    counts[cls]++;
+    let cellHtml;
+    if (val && typeof val === 'object' && !Array.isArray(val) && ('C' in val || 'F' in val)) {
+      // C/F structured slot
+      cellHtml = `<div class="cf-row">
+        <span class="label">C</span><span class="val">${escapeHtml(String(val.C || ''))}</span>
+        <span class="label">F</span><span class="val">${escapeHtml(String(val.F || ''))}</span>
+        <span class="label">差分</span><span class="val">${escapeHtml(String(val['差分'] || ''))}</span>
+        <span></span><span></span>
+        ${val['詳細'] ? `<div class="detail">${escapeHtml(String(val['詳細']))}</div>` : ''}
+      </div>`;
+    } else {
+      const valDisplay = (val === "" || val == null) ? '（空）' : escapeHtml(String(val));
+      cellHtml = valDisplay;
+    }
+    rows += `<tr class="${cls}">
+      <th><div class="slot-name"><span class="confidence-dot dot-${cls === 'empty' ? 'low' : cls}"></span>${slot}</div></th>
+      <td class="cf-cell">${cellHtml}</td>
+    </tr>`;
+  }
+  return { html: `
+    <div class="summary-row">
+      <div class="stat high"><div class="num">${counts.high}</div><div class="lbl">High</div></div>
+      <div class="stat medium"><div class="num">${counts.medium}</div><div class="lbl">Medium</div></div>
+      <div class="stat low"><div class="num">${counts.low + counts.empty}</div><div class="lbl">Low/Empty</div></div>
+      <div class="stat notdisc"><div class="num">${counts.notdisc}</div><div class="lbl">公開なし</div></div>
+      <div class="stat oos"><div class="num">${counts.oos}</div><div class="lbl">対象外</div></div>
+    </div>
+    <table class="slots">${rows}</table>
+    ${renderMeta(data._meta)}
+  ` };
+}
+
+function renderMeta(meta) {
+  if (!meta) return '';
+  let html = '<div class="panel"><h2>_meta</h2>';
+  for (const [k, v] of Object.entries(meta)) {
+    if (k === 'confidence') continue;
+    if (Array.isArray(v)) {
+      html += `<div class="meta-row"><div class="k">${escapeHtml(k)}</div><div class="v">${v.map(escapeHtml).join('<br>')}</div></div>`;
+    } else if (typeof v === 'object') {
+      html += `<div class="meta-row"><div class="k">${escapeHtml(k)}</div><div class="v"><pre>${escapeHtml(JSON.stringify(v, null, 2))}</pre></div></div>`;
+    } else {
+      html += `<div class="meta-row"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(String(v))}</div></div>`;
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function detectType(filename, data) {
+  if (filename.includes('--')) return 'plan';
+  if ('プラン名' in data || 'Steps' in data) return 'plan';
+  if ('ファーム名' in data) return 'firm';
+  return 'firm';
+}
+
+function addFile(name, content, path = '') {
+  try {
+    const data = JSON.parse(content);
+    const type = detectType(name, data);
+    state.files.push({ name, path, type, data });
+  } catch (e) {
+    console.error(`Failed to parse ${name}:`, e);
+  }
+}
+
+function renderFileList() {
+  const el = document.getElementById('fileList');
+  if (state.files.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+  // sort: firm first, then plan, then alphabetically
+  const sorted = [...state.files].map((f, i) => ({...f, idx: i}))
+    .sort((a, b) => a.type === b.type ? a.name.localeCompare(b.name) : (a.type === 'firm' ? -1 : 1));
+  el.innerHTML = sorted.map(f => {
+    const conf = f.data._meta?.confidence || {};
+    const high = conf.high?.length || 0;
+    const total = (f.type === 'firm' ? FIRM_SLOTS : PLAN_SLOTS).length;
+    return `<div class="file-card ${f.idx === state.activeIdx ? 'active' : ''}" onclick="selectFile(${f.idx})">
+      <div class="name"><span class="badge ${f.type}">${f.type}</span>${escapeHtml(f.name)}</div>
+      <div class="meta">${high}/${total} high · ${f.data._meta?.normalized_at || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectFile(idx) {
+  state.activeIdx = idx;
+  const f = state.files[idx];
+  if (!f) return;
+  const r = f.type === 'firm' ? renderFirm(f.data) : renderPlan(f.data);
+  document.getElementById('content').innerHTML = `<h2 style="margin:0 0 12px;font-size:16px">${escapeHtml(f.name)}</h2>` + r.html;
+  renderFileList();
+}
+
+// File picker
+document.getElementById('btnPickFiles').onclick = async () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.multiple = true;
+  input.accept = '.json,.draft';
+  input.onchange = async (e) => {
+    for (const f of e.target.files) {
+      const content = await f.text();
+      addFile(f.name, content);
+    }
+    renderFileList();
+    if (state.files.length > 0 && state.activeIdx < 0) selectFile(0);
+  };
+  input.click();
+};
+
+document.getElementById('btnPickDir').onclick = async () => {
+  if (!window.showDirectoryPicker) {
+    alert('Directory picker は Chrome / Edge のみ対応');
+    return;
+  }
+  try {
+    const dirHandle = await window.showDirectoryPicker();
+    await walkDir(dirHandle, '');
+    renderFileList();
+    if (state.files.length > 0 && state.activeIdx < 0) selectFile(0);
+  } catch (e) {
+    if (e.name !== 'AbortError') alert('エラー: ' + e.message);
+  }
+};
+
+async function walkDir(handle, path) {
+  for await (const entry of handle.values()) {
+    if (entry.kind === 'file' && (entry.name.endsWith('.draft') || entry.name.endsWith('.json.draft'))) {
+      const file = await entry.getFile();
+      const content = await file.text();
+      addFile(entry.name, content, path);
+    } else if (entry.kind === 'directory') {
+      await walkDir(entry, path + entry.name + '/');
+    }
+  }
+}
+
+// Drag-drop
+const dropZone = document.getElementById('dropZone');
+['dragover', 'dragenter'].forEach(ev => {
+  dropZone.addEventListener(ev, e => {
+    e.preventDefault();
+    dropZone.classList.add('over');
+  });
+});
+['dragleave', 'drop'].forEach(ev => {
+  dropZone.addEventListener(ev, e => {
+    e.preventDefault();
+    dropZone.classList.remove('over');
+  });
+});
+dropZone.addEventListener('drop', async e => {
+  const items = e.dataTransfer.items;
+  for (const item of items) {
+    const entry = item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
+    if (entry) {
+      await processEntry(entry);
+    } else {
+      const f = item.getAsFile();
+      if (f) {
+        const content = await f.text();
+        addFile(f.name, content);
+      }
+    }
+  }
+  renderFileList();
+  if (state.files.length > 0 && state.activeIdx < 0) selectFile(0);
+});
+
+async function processEntry(entry) {
+  if (entry.isFile) {
+    if (entry.name.endsWith('.draft') || entry.name.endsWith('.json.draft') || entry.name.endsWith('.json')) {
+      await new Promise(res => entry.file(async f => {
+        const content = await f.text();
+        addFile(entry.name, content);
+        res();
+      }));
+    }
+  } else if (entry.isDirectory) {
+    const reader = entry.createReader();
+    await new Promise(res => {
+      reader.readEntries(async entries => {
+        for (const e of entries) await processEntry(e);
+        res();
+      });
+    });
+  }
+}
+
+document.getElementById('btnClear').onclick = () => {
+  state.files = [];
+  state.activeIdx = -1;
+  document.getElementById('content').innerHTML = '';
+  renderFileList();
+};
+
+// Initial empty state
+document.getElementById('content').innerHTML = '<div class="empty-state">ドラフトファイルを読み込むと、ここに22スロットの内訳が表示されます。</div>';
+</script>
+</body>
+</html>

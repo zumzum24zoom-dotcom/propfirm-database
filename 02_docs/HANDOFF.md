@@ -1,7 +1,101 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-06-09（セッション9）
+> **最終更新**: 2026-06-10（セッション10）
+
+---
+
+## 【セッション10・2026-06-10】データ収集パイプライン基盤
+
+### 追加・変更したファイル（自己説明化＋ヘルプセンター構造化）
+
+| ファイル | 内容 |
+|---------|------|
+| `data/help-index/_README.md`（新） | ヘルプインデックスの仕様 |
+| `data/help-index/_classification.json`（新） | 全33ファームのHelp Center URL+platform分類 |
+| `data/help-index/city-traders-imperium.json`（新） | CTI 8コレクション・全52記事の構造 |
+| `data/help-index/ftmo.json`（新） | FTMO 60記事フラット構造 |
+| `data/plans/city-traders-imperium--1-step.json.draft`（新） | CTI 1-StepプランのDBP_02 22スロット |
+| `data/plans/city-traders-imperium--2-step.json.draft`（新） | CTI 2-StepプランのDBP_02 22スロット |
+| `data/plans/city-traders-imperium--instant.json.draft`（新） | CTI InstantプランのDBP_02 22スロット |
+
+### 確立したパイプライン
+
+```
+data/scans/ (DOM Scanner出力・既存33件)
+   + 
+data/help-index/ (Help Center構造インデックス・1回きり)
+   ↓
+LLM正規化スキル `/normalize-firm <slug>` (Phase 2で実装予定)
+   ↓
+data/firms/{slug}.json.draft  +  data/plans/{firm}--{plan}.json.draft
+   ↓ マスター承認
+data/firms/{slug}.json  +  data/plans/{firm}--{plan}.json
+```
+
+### Help Center分類結果（33社中）
+
+- **intercom系**: 19社（最多。helpcenter.*/help.*/support.*サブドメイン）
+- **wordpress_faq系**: 8社（/faq/ /faqs/ パス）
+- **zendesk_or_other_kb**: 2社（the-trading-pit, audacity-capital）
+- **same_domain_help_path**: 1社（instant-funding）
+- **inline_anchor**: 2社（trade-the-pool, ment-funding — 専用ページなし）
+- **out_of_scope**: 1社（**atfunded** — 事業停止中）
+
+### CTI正規化の実証結果
+
+ヘルプセンター12記事（Essential Rules & Guidelines）+ プログラム別4記事から、DBP_02の22スロットを以下精度で正規化：
+- high confidence: 13項目
+- medium confidence: 4項目
+- low_or_unknown: 1項目（一貫性ルール明示なし→「無」推定）
+
+**主要発見**: 1-Stepのみmartingale許可、CTI特有balance-based DD、SL 60秒以内必須、Margin Level 150%以下gambling違反、コピー方向制限など、差別化訴求材料を多数抽出。
+
+### 次のアクション候補
+
+- a) 残り30社の help-index articles 列挙（Phase 1b）
+- b) `/normalize-firm` スキル設計・実装（Phase 2）
+- c) ATFunded を `data/firm-urls.json` から除外検討
+- d) inline_anchor（trade-the-pool, ment-funding）の正規化戦略確定
+
+---
+
+## 【セッション10・2026-06-10】リポジトリ自己説明化
+
+### 背景
+新セッション開始時にClaudeが構造を毎回探って質問する非効率を解消するため、自己説明型リポジトリ化を実施。
+
+### 追加・変更したファイル
+
+| ファイル | 内容 |
+|---------|------|
+| `PROJECT_MAP.md`（新） | リポジトリ構造の正本。データフロー・テンプレ対応表・やってはいけない事を集約 |
+| `data/firms/_README.md`（新） | Firmデータ仕様・DBP_01スロット |
+| `data/plans/_README.md`（新） | Planデータ仕様・DBP_02スロット |
+| `themes/pfd/layouts/_README.md`（新） | Hugoテンプレ対応表 |
+| `02_docs/_README.md`（新） | ドキュメント一覧 |
+| `01_tools/_README.md`（新） | ツール構成 |
+| `CLAUDE.md`（更新） | 古い「未実装」記述削除、PROJECT_MAP必読指定、薄く整理 |
+| `scripts/record-check.py`（新） | Stop hookで記録もれを検知するスクリプト |
+| `.claude/settings.local.json`（更新） | Stop hook 追加（記録チェック自動化） |
+
+### 確立した運用ルール（覆さない）
+
+- **起動時必読順**: `CLAUDE.md` → `PROJECT_MAP.md` → `HANDOFF.md` → メモリ
+- **構造の正本**: `PROJECT_MAP.md`（重複させない）
+- **進捗・決定の正本**: `HANDOFF.md`（本ファイル）
+- **AI用の仕組み整備**: ソートーが選択肢を問わず判断・実装する（メモリ `feedback-autonomy`）
+- **Stop hook**: ターン終了時に git status を見て、レイアウト/データ/構造を変更したのに該当ドキュメント未更新ならClaudeに通知
+
+### Git pull で取り込んだもの（リモート→ローカル）
+
+- `.obsidian/` 配下・workspace.json 等の削除（gitignore追加に伴う整理）
+- `content/guide/` 3記事（drawdown / consistency / max-loss）
+- `content/ranking/payout-speed.md`
+- `02_docs/N089-SMC_Daily_Bias_*.md` / `N091-CryptoCompare_API_*.md`
+- `02_docs/firm-url-list.md`
+- `data/firms/*.json` 約30件の微修正、`data/glossary.json` 大幅更新、`data/pfdb.json` 大幅更新
+- `01_tools/core/page-maker-v12.html` 微修正、`PROJECT_HUB.canvas` 更新
 
 ---
 

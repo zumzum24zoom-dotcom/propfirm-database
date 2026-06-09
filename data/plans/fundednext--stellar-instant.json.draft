@@ -1,0 +1,145 @@
+{
+  "slug": "stellar-instant",
+  "ファーム": "fundednext",
+  "プラン名": "FundedNext - Stellar Instant Account",
+  "Steps": "0",
+  "利益目標": {
+    "C": "ー",
+    "F": "なし（cycle単位で1%以上の成長で出金可・10%でscale-up）",
+    "差分": "ー",
+    "詳細": "Challenge phase なし。Funded: profit target不在。ただし出金請求には現cycleで最低1%成長必要。Scale-upは累積10%成長 + 1回以上の出金で次tier。"
+  },
+  "最低取引日数": {
+    "C": "ー",
+    "F": "なし",
+    "差分": "ー",
+    "詳細": "Challenge非該当。Funded: 最低取引日数なし。eligibility達成次第、即時 Performance Reward 請求可。"
+  },
+  "日次損失": {
+    "C": "ー",
+    "F": "なし",
+    "差分": "ー",
+    "詳細": "Stellar Instant には Daily Loss Limit なし（他Stellar系プランと異なる）。"
+  },
+  "日次損失タイプ": {
+    "C": "ー",
+    "F": "ー",
+    "差分": "ー",
+    "詳細": "Daily Loss制限自体が存在しない。"
+  },
+  "最大損失": {
+    "C": "ー",
+    "F": "6%（Trailing）",
+    "差分": "TRAP",
+    "詳細": "初期残高比6% Trailing Maximum Loss Limit。$10K口座→初期MLL=$9,400。利益で上昇するが初期残高を超えない（capped at initial balance）。損失では下がらない。例: $10K→$200利益→balance=$10,200・MLL level=$10,200-$600=$9,600 にup。$11K利益でMLL level=$11,100-$600=$10,500計算だがinitial balance $10,000でcap → MLL=$10,000上限。"
+  },
+  "最大損失タイプ": {
+    "C": "ー",
+    "F": "Trailing（capped at initial balance）",
+    "差分": "ー",
+    "詳細": "Stellar 1/2/Lite の Static型と異なる Trailing方式。News window時は1% equity buffer 適用で誤breach防止。"
+  },
+  "一貫性ルール": {
+    "C": "ー",
+    "F": "なし",
+    "差分": "ー",
+    "詳細": "Stellar Instant には Consistency Rule なし。lot size・トレード頻度・日別パフォーマンスに制約なし。"
+  },
+  "利益上限": {
+    "C": "ー",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Lifetime Payout。Scale-Up Planで最大10× tier成長可能。"
+  },
+  "時間制限": {
+    "C": "ー",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "Challenge非該当。Funded: time limitなし。60日無活動で口座不活性化（リセット可）。"
+  },
+  "ニュース取引制限": {
+    "C": "ー",
+    "F": "※有（News Profit Split Rule + 1% Equity Buffer）",
+    "差分": "ー",
+    "詳細": "News窓: 高インパクトニュース前後5分（計10分）。利益40%のみカウント、損失100%適用。Market・Pending（SL/TP triggers）含む。Partial closeでも全体に適用。News profit はcycle終了後に計算。Trailing MLL に1% equity buffer 追加（news起因のbreach防止）。"
+  },
+  "週末トレード制限": {
+    "C": "ー",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "週末ポジション保有可。Swap適用（Wed:Forex/Commodities 3x, Fri:Indices/Crypto 3x）。"
+  },
+  "オーバーナイト制限": {
+    "C": "ー",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "オーバーナイト保有可。Swap適用。"
+  },
+  "EA制限": {
+    "C": "ー",
+    "F": "※有（厳格）",
+    "差分": "ー",
+    "詳細": "MT4/MT5のみ EA・bot許可（要EA usage fee add-on・Free/BOGO口座では別途課金）。要件: カスタマイズ・戦略独自性。最大$300K割当/EA。禁止EAリスト適用。"
+  },
+  "コピートレード制限": {
+    "C": "ー",
+    "F": "※有（厳格・他プラン間NG）",
+    "差分": "ー",
+    "詳細": "許可: 同一トレーダー所有の Stellar Instant 口座間のみ。禁止: 他人間／同一トレーダーでも Stellar 1-Step / 2-Step / Lite との間（Challenge・Funded問わず）／cloud-based copier。"
+  },
+  "スキャルピング制約": {
+    "C": "ー",
+    "F": "※有",
+    "差分": "ー",
+    "詳細": "通常scalping許可。Tick scalping全面禁止（firm-wide）。"
+  },
+  "ストップロス制約": {
+    "C": "ー",
+    "F": "有",
+    "差分": "ー",
+    "詳細": "Funded: SL必須（No SL Trade は Risk Violation type）。Trailing MLL のため特に重要。"
+  },
+  "リスクルール": {
+    "C": "ー",
+    "F": "※有",
+    "差分": "ー",
+    "詳細": "Funded: 1トレード最大Risk 3%・Margin 70%超でgambling。Risk Violation 3種適用。1st violation = 警告 + 違反利益没収。"
+  },
+  "最大ポジション制約": {
+    "C": "ー",
+    "F": "無",
+    "差分": "ー",
+    "詳細": "上限なし、ただしMargin 70%上限。"
+  },
+  "禁止行為": {
+    "C": "ー",
+    "F": "Gambling Behavior, HFT, Group Hedging, Arbitrage, Tick Scalping, Grid Trading, Account Rolling, One-sided Betting, Hyperactivity, Account/Device Sharing, Pass Your Challenge service, Copy Trading services, Signal services, Challenge合格専用EA, Stellar Instant 以外との混在コピー, 60日無活動",
+    "差分": "ー",
+    "詳細": "firm-wide prohibitions + Instant特有のコピー方向制限（他Stellar系との混在禁止）。"
+  },
+  "_meta": {
+    "source": [
+      "data/scans/fundednext.json",
+      "data/help-index/fundednext.json",
+      "Help Center articles: Stellar Instant Overview / Rules / Daily Max Loss / Min Trading Day / Consistency / Overnight Weekend / News Trading / Leverage / Scale-up / Performance Reward / Copy Trading / EA Use + firm-wide rules"
+    ],
+    "scanned_at": "2026-06-04T17:45:14.891Z",
+    "normalized_at": "2026-06-10",
+    "normalized_by": "ソートー（LLM）",
+    "confidence": {
+      "high": ["Steps", "利益目標", "最低取引日数", "日次損失", "日次損失タイプ", "最大損失", "最大損失タイプ", "一貫性ルール", "利益上限", "時間制限", "ニュース取引制限", "週末トレード制限", "オーバーナイト制限", "EA制限", "コピートレード制限", "スキャルピング制約", "ストップロス制約", "リスクルール", "最大ポジション制約", "禁止行為"],
+      "medium": [],
+      "low_or_unknown": [],
+      "not_disclosed": [],
+      "out_of_scope": []
+    },
+    "notes": [
+      "**Stellar系で唯一の Trailing MLL** — 他は Static。早見表で要強調",
+      "**Daily Loss なし・Consistency なし** — 他Stellarと最大の差別化",
+      "Leverage が低い: FX 1:30 / Commodities 1:7.5 / Indices 1:5 / Crypto 1:1（他Stellar 1-Step/2-Step は 1:100）",
+      "Performance Reward: Tier 1-2=70% / Tier 3+=80%（最大80%・他Stellar 80-90%より低い）",
+      "Scale-up: 累積10%成長 + 1回以上出金で次tier・最大10× initial balance",
+      "コピー方向制限が特殊: 他Stellar系（1-Step/2-Step/Lite）との混在禁止"
+    ]
+  }
+}
