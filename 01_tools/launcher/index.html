@@ -243,7 +243,10 @@
     </div>
     <div class="field">
       <label>パス *</label>
-      <input id="f_path" type="text" placeholder="/01_tools/core/page-maker-v12.html">
+      <div style="display:flex; gap:6px;">
+        <input id="f_path" type="text" placeholder="/01_tools/core/page-maker-v12.html" style="flex:1;">
+        <button type="button" class="btn" id="browseBtn" title="ファイル選択" style="padding:6px 10px;">📁</button>
+      </div>
       <div class="hint">サーバルート起点（例: /01_tools/core/xxx.html）または http(s)://...</div>
     </div>
     <div class="field">
@@ -425,10 +428,34 @@ const onDelete = async () => {
   }
 };
 
+const onBrowse = async () => {
+  const btn = $('browseBtn');
+  btn.disabled = true;
+  const orig = btn.textContent;
+  btn.textContent = '…';
+  try {
+    const res = await fetch('/api/browse?t=' + Date.now());
+    const r = await res.json();
+    if (r.cancelled) return;
+    if (!r.ok) { toast(r.error || '選択に失敗'); return; }
+    $('f_path').value = r.path;
+    if (!$('f_name').value.trim() && r.name) {
+      $('f_name').value = r.name;
+    }
+    $('f_name').focus();
+  } catch (e) {
+    toast('選択に失敗: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
+};
+
 $('addBtn').addEventListener('click', openAddModal);
 $('cancelBtn').addEventListener('click', closeModal);
 $('saveBtn').addEventListener('click', onSave);
 $('deleteBtn').addEventListener('click', onDelete);
+$('browseBtn').addEventListener('click', onBrowse);
 $('search').addEventListener('input', e => { query = e.target.value; render(); });
 $('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
 document.addEventListener('keydown', e => {

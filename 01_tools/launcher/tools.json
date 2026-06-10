@@ -1,12 +1,29 @@
 {
-  "$schema_comment": "name=表示名 / path=サーバルート起点の絶対パス / category=core|coupon|analysis|chat|utils|misc / description=短い説明 / hidden=trueで非表示",
   "categories": {
-    "core": { "label": "Core", "order": 1 },
-    "coupon": { "label": "Coupon", "order": 2 },
-    "analysis": { "label": "Analysis", "order": 3 },
-    "chat": { "label": "Chat", "order": 4 },
-    "utils": { "label": "Utils", "order": 5 },
-    "misc": { "label": "Misc", "order": 9 }
+    "core": {
+      "label": "Core",
+      "order": 1
+    },
+    "coupon": {
+      "label": "Coupon",
+      "order": 2
+    },
+    "analysis": {
+      "label": "Analysis",
+      "order": 3
+    },
+    "chat": {
+      "label": "Chat",
+      "order": 4
+    },
+    "utils": {
+      "label": "Utils",
+      "order": 5
+    },
+    "misc": {
+      "label": "Misc",
+      "order": 9
+    }
   },
   "tools": [
     {
@@ -20,6 +37,12 @@
       "path": "/01_tools/core/widget-maker.html",
       "category": "core",
       "description": "data/*.json → SVG/HTML 生成"
+    },
+    {
+      "name": "firm-tour",
+      "path": "/01_tools/core/firm-tour.html",
+      "category": "core",
+      "description": "firmi"
     }
   ]
 }
