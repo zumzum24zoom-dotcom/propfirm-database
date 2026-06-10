@@ -1,0 +1,144 @@
+{
+  "firm": "the5ers",
+  "official_url": "https://www.the5ers.com/",
+  "help_base_url": "https://help.the5ers.com/",
+  "platform": "wordpress_faq",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {
+      "title": "General",
+      "url": "https://help.the5ers.com/general/",
+      "article_count": 17,
+      "articles": [
+        {"title": "Is there anything else I should know about risk management?", "url": "https://help.the5ers.com/is-there-anything-else-i-should-know-about-risk-management/"},
+        {"title": "Who can join The5ers?", "url": "https://help.the5ers.com/who-can-join-the5ers/"},
+        {"title": "What instruments can I trade with The5ers?", "url": "https://help.the5ers.com/what-instruments-can-i-trade-with-the5ers/"},
+        {"title": "Do I get access to extra resources?", "url": "https://help.the5ers.com/do-i-get-access-to-extra-resources/"},
+        {"title": "Where is The5ers registered?", "url": "https://help.the5ers.com/where-is-the5ers-registered/"},
+        {"title": "Are The5ers regulated?", "url": "https://help.the5ers.com/are-the5ers-regulated/"},
+        {"title": "Who legally owns the trading accounts that traders use?", "url": "https://help.the5ers.com/who-legally-owns-the-trading-accounts-that-traders-use/"},
+        {"title": "Do I have to trade under my legal name?", "url": "https://help.the5ers.com/do-i-have-to-trade-under-my-legal-name/"},
+        {"title": "Can I have more than one email address registered with The5ers?", "url": "https://help.the5ers.com/can-i-have-more-than-one-email-address-registered-with-the5ers/"},
+        {"title": "Do I have to close my trades over the weekend?", "url": "https://help.the5ers.com/do-i-have-to-close-my-trades-over-the-weekend/"},
+        {"title": "Prohibited Trading Practices", "url": "https://help.the5ers.com/prohibited-trading-practices/"},
+        {"title": "New Technology migration", "url": "https://help.the5ers.com/new-technology-migration/"},
+        {"title": "Payment Compliance", "url": "https://help.the5ers.com/payment-compliance/"},
+        {"title": "How do I get my funded Bootcamp account after completing all 3 evaluations?", "url": "https://help.the5ers.com/how-do-i-get-my-funded-bootcamp-account-after-completing-all-3-evaluations/"},
+        {"title": "Trade Management From All Angles", "url": "https://help.the5ers.com/trade-management-from-all-angles/"},
+        {"title": "What is hub credits", "url": "https://help.the5ers.com/what-is-hub-credits/"},
+        {"title": "Weekly Trading Contest", "url": "https://help.the5ers.com/weekly-trading-contest/"}
+      ]
+    },
+    {
+      "title": "FAQ",
+      "url": "https://help.the5ers.com/faq/",
+      "article_count": 28,
+      "articles": [
+        {"title": "Who should I contact for technical and trading support?", "url": "https://help.the5ers.com/who-should-i-contact-for-technical-and-trading-support/"},
+        {"title": "Can I use an EA (Expert Advisor)? Can I set a 'stealth mode' stop-loss?", "url": "https://help.the5ers.com/can-i-use-an-ea-expert-advisor-can-i-set-a-stealth-mode-stop-loss/"},
+        {"title": "Which trading platform do you use?", "url": "https://help.the5ers.com/which-trading-platform-do-you-use/"},
+        {"title": "Which broker do we trade with?", "url": "https://help.the5ers.com/which-broker-do-we-trade-with/"},
+        {"title": "Market Trading Hours", "url": "https://help.the5ers.com/market-trading-hours/"},
+        {"title": "Can I trade during news?", "url": "https://help.the5ers.com/can-i-trade-during-news/"},
+        {"title": "Do I have to close my positions overnight?", "url": "https://help.the5ers.com/do-i-have-to-close-my-positions-overnight/"},
+        {"title": "What payment methods are available?", "url": "https://help.the5ers.com/what-payment-methods-are-available/"},
+        {"title": "What is 'stop loss order' and how is it calculated?", "url": "https://help.the5ers.com/what-is-stop-loss-order-and-how-is-it-calculated/"},
+        {"title": "What payout methods are available?", "url": "https://help.the5ers.com/what-payout-methods-are-available/"},
+        {"title": "Can I use multiple IP addresses for the same account?", "url": "https://help.the5ers.com/can-i-use-multiple-ip-addresses-for-the-same-account/"},
+        {"title": "Do The5ers have a Discord group?", "url": "https://help.the5ers.com/do-the5ers-have-a-discord-group/"},
+        {"title": "Can I copy my own trades?", "url": "https://help.the5ers.com/can-i-copy-my-own-trades/"},
+        {"title": "What is the KYC verification? Who has to do one and what documents are needed?", "url": "https://help.the5ers.com/what-is-the-kyc-verification-who-has-to-do-one-and-what-documents-are-needed/"},
+        {"title": "What is the inactivity rule account feature?", "url": "https://help.the5ers.com/what-is-the-inactivity-rule-account-feature/"},
+        {"title": "How much is the profit split in The5ers?", "url": "https://help.the5ers.com/how-much-is-the-profit-split-in-the5ers/"},
+        {"title": "Does The5ers offer Swap Free accounts (Islamic accounts)?", "url": "https://help.the5ers.com/does-the5ers-offer-swap-free-accounts-islamic-accounts/"},
+        {"title": "Does The5ers have an affiliate program?", "url": "https://help.the5ers.com/does-the5ers-have-an-affiliate-program/"},
+        {"title": "Are there any hidden fees or recurring fees?", "url": "https://help.the5ers.com/are-there-any-hidden-fees-or-recurring-fees/"},
+        {"title": "How many The5ers accounts can I have?", "url": "https://help.the5ers.com/how-many-the5ers-accounts-can-i-have/"},
+        {"title": "What are the spreads and commissions?", "url": "https://help.the5ers.com/what-are-the-spreads-and-commissions/"},
+        {"title": "What is drawdown and how is it calculated?", "url": "https://help.the5ers.com/what-is-drawdown-and-how-is-it-calculated/"},
+        {"title": "Do we offer a trading platform for mobile devices?", "url": "https://help.the5ers.com/do-we-offer-a-trading-platform-for-mobile-devices/"},
+        {"title": "Is there a minimum trading day or minimum position requirement?", "url": "https://help.the5ers.com/is-there-a-minimum-trading-day-or-minimum-position-requirement/"},
+        {"title": "Is there a time limit?", "url": "https://help.the5ers.com/is-there-a-time-limit/"},
+        {"title": "Withdrawals – Everything You Need to Know", "url": "https://help.the5ers.com/withdrawals-everything-you-need-to-know/"},
+        {"title": "How to Log In to cTrader account After Purchase?", "url": "https://help.the5ers.com/how-to-log-in-to-ctrader-account-after-purchase/"},
+        {"title": "How to switch between multiple accounts on cTrader", "url": "https://help.the5ers.com/how-to-switch-between-multiple-accounts-on-ctrader/"}
+      ]
+    },
+    {
+      "title": "High Stakes",
+      "url": "https://help.the5ers.com/high-stakes/",
+      "article_count": 12,
+      "articles": [
+        {"title": "What is the High Stakes program?", "url": "https://help.the5ers.com/what-is-the-high-stakes-program/"},
+        {"title": "What are the general rules for the High Stakes Program?", "url": "https://help.the5ers.com/what-are-the-general-rules-for-the-high-stakes-program/"},
+        {"title": "What are the key benefits of the High Stakes program?", "url": "https://help.the5ers.com/what-are-the-key-benefits-of-the-high-stakes-program/"},
+        {"title": "What is the drawdown rule for High Stakes?", "url": "https://help.the5ers.com/what-is-the-drawdown-rule-for-high-stakes/"},
+        {"title": "What is the maximum loss and the maximum daily loss in the High Stakes program?", "url": "https://help.the5ers.com/what-is-the-maximum-loss-and-the-maximum-daily-loss-in-the-high-stakes-program/"},
+        {"title": "How does scaling & monthly fixed payout work?", "url": "https://help.the5ers.com/how-does-scaling-monthly-fixed-payout-work/"},
+        {"title": "How does growth work in the High Stakes Program?", "url": "https://help.the5ers.com/how-does-growth-work-in-the-high-stakes-program/"},
+        {"title": "How many High Stakes accounts can I have?", "url": "https://help.the5ers.com/how-many-high-stakes-accounts-can-i-have/"},
+        {"title": "Payout policy and hub credit in the High Stakes program", "url": "https://help.the5ers.com/payout-policy-and-hub-credit-in-the-high-stakes-program/"},
+        {"title": "Is news trading allowed in the High Stakes program?", "url": "https://help.the5ers.com/is-news-trading-allowed-in-the-high-stakes-program/"},
+        {"title": "How do you define a profitable day in the High Stakes program?", "url": "https://help.the5ers.com/how-do-you-define-a-profitable-day-in-the-high-stakes-program/"},
+        {"title": "What is the leverage in the High Stakes program?", "url": "https://help.the5ers.com/what-is-the-leverage-in-the-high-stakes-program/"}
+      ]
+    },
+    {
+      "title": "Hyper Growth",
+      "url": "https://help.the5ers.com/hyper-growth/",
+      "article_count": 8,
+      "articles": [
+        {"title": "What is the leverage in the Hyper Growth program?", "url": "https://help.the5ers.com/what-is-the-leverage-in-the-hyper-growth-program/"},
+        {"title": "How does the Hyper Growth Program work?", "url": "https://help.the5ers.com/how-does-the-hyper-growth-program-work/"},
+        {"title": "What are the key benefits of the Hyper Growth program?", "url": "https://help.the5ers.com/what-are-the-key-benefits-of-the-hyper-growth-program/"},
+        {"title": "How does the daily pause work?", "url": "https://help.the5ers.com/how-does-the-daily-pause-work/"},
+        {"title": "What are the bonuses in the Hyper Growth program?", "url": "https://help.the5ers.com/what-are-the-bonuses-in-the-hyper-growth-program/"},
+        {"title": "How many Hyper Growth accounts I can have?", "url": "https://help.the5ers.com/how-many-hyper-growth-accounts-i-can-have/"},
+        {"title": "How does the Hyper Growth scaling plan work?", "url": "https://help.the5ers.com/how-does-the-hyper-growth-scaling-plan-work/"},
+        {"title": "Is copy trading allowed in the Hyper Growth program?", "url": "https://help.the5ers.com/is-copy-trading-allowed-in-the-hyper-growth-program/"}
+      ]
+    },
+    {
+      "title": "Bootcamp",
+      "url": "https://help.the5ers.com/bootcamp/",
+      "article_count": 5,
+      "articles": [
+        {"title": "How does the Bootcamp Program work?", "url": "https://help.the5ers.com/how-does-the-bootcamp-program-work/"},
+        {"title": "How many Bootcamp accounts can I have?", "url": "https://help.the5ers.com/how-many-bootcamp-accounts-can-i-have/"},
+        {"title": "How much does the Bootcamp cost in total and how much is it to start?", "url": "https://help.the5ers.com/how-much-does-the-bootcamp-cost-in-total-and-how-much-is-it-to-start/"},
+        {"title": "How does the Bootcamp scaling plan work?", "url": "https://help.the5ers.com/how-does-the-bootcamp-scaling-plan-work/"},
+        {"title": "What is the leverage in the Bootcamp program?", "url": "https://help.the5ers.com/what-is-the-leverage-in-the-bootcamp-program/"}
+      ]
+    },
+    {
+      "title": "Payouts",
+      "url": "https://help.the5ers.com/payouts/",
+      "article_count": 1,
+      "articles": [
+        {"title": "Crypto Withdrawals", "url": "https://help.the5ers.com/crypto-withdrawals/"}
+      ]
+    },
+    {
+      "title": "New Program: ProGrowth",
+      "url": "https://help.the5ers.com/new-program-progrowth/",
+      "article_count": 4,
+      "articles": [
+        {"title": "How Many ProGrowth Accounts Can I Have?", "url": "https://help.the5ers.com/how-many-progrowth-accounts-can-i-have/"},
+        {"title": "What is the drawdown rule for ProGrowth?", "url": "https://help.the5ers.com/what-is-the-drawdown-rule-for-progrowth/"},
+        {"title": "How do you define a profitable day in the ProGrowth program?", "url": "https://help.the5ers.com/how-do-you-define-a-profitable-day-in-the-progrowth-program/"},
+        {"title": "What is the leverage in the ProGrowth program?", "url": "https://help.the5ers.com/what-is-the-leverage-in-the-progrowth-program/"}
+      ]
+    },
+    {
+      "title": "Trading World Championship",
+      "url": "https://help.the5ers.com/trading-world-championship/",
+      "article_count": 2,
+      "articles": [
+        {"title": "Trading World Championship: The Ultimate Guide", "url": "https://help.the5ers.com/trading-world-championship-the-ultimate-guide/"},
+        {"title": "Trading World Championship: The Ultimate Guide PRIZES", "url": "https://help.the5ers.com/trading-world-championship-the-ultimate-guide-prizes/"}
+      ]
+    }
+  ],
+  "notes": "NOT intercom — flat WordPress-style help site at help.the5ers.com/{slug}/. 8 categories, 77 articles total. Platform re-classified from intercom to wordpress_faq."
+}

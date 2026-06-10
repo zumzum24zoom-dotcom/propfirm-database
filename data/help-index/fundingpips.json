@@ -1,0 +1,10 @@
+{
+  "firm": "fundingpips",
+  "official_url": "https://fundingpips.com/",
+  "help_base_url": "https://help.fundingpips.com/",
+  "platform": "intercom",
+  "fetch_status": "blocked",
+  "fetched_at": "2026-06-10",
+  "collections": [],
+  "notes": "WebFetch returns 403 on all fundingpips.com domains. Browser MCP blocks navigation to this site. Cannot enumerate collections. Enumerate manually or retry with Playwright at normalize-firm time."
+}

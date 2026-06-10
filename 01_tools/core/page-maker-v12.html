@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
 Page Maker v0.9
+2026-06-10 ver.40: Firm単位保存・選択読込を追加 — 保存▾に「この1社」（アクティブFirmのみpfdb.jsonへ差し込み）、選択バーに「保存」ボタン（チェックした社だけ保存）、読込▾に「選択読込」（pfdb.jsonの中からFirmを選んでセッションにマージ）。全保存を全件読み書きしている運用から、完成済みFirmを触らずに1社ずつ出し入れできる運用に切り替え可能。
 2026-06-08 ver.39: 全プラン一括取込を追加 — Firmタブの取込エリアに「全プラン」ボタン新設。「## …（プラン名）」区切りの複数早見表を貼ると、各セクションからプランを生成（同名は上書き）し、Steps+P01〜P19のC|F|差分|詳細を各プランのrd_*へ一括投入。P02/P02bはrd_minDaysにマージ。既存単一テーブルパーサと同ロジックを純粋関数化して再利用。
 2026-06-08 ver.38: 早見表エディタの入力フォーカス外れを修正（ValueFieldをモジュールスコープへ引き上げ・1文字毎の再マウント解消）。プラン切替時に編集状態が残り保存で別プランを上書きするバグを修正（RuleTableEditorにプランIDのkeyを付与しリセット）。同バグを安全な機能に転用 — 編集中の項目値を「選択プランへコピー（複数可・全選択トグル付き）」する明示ボタンを追加。
 2026-06-08 ver.37: 早見表の値モデル簡素化＆配色刷新 — C/Fセルの値を「有/※有/無/ー」に整理（「記載なし」「なし（明示）」を廃止し"縛られない"は全て「無」に一本化）。「ー（同）」運用を廃止し同値でも両列に同じ値を素直に記載・差分は自動で「ー」。配色を基本白に変更し差分（EASE/TRAP）行のみ行全体を青/赤で着色。詳細列は常体（です・ます禁止）、「無」項目は「〜について明示的に制限する記載はない」で統一。NotebookLM出力プロンプト3系統＋用語辞典（不在表記/差分）を同方針に更新。ソース定義v09に対応。
@@ -911,7 +912,7 @@ function ResizeHandle({dir,onMouseDown}) {
 // ═══════════════════════════════════════════════════
 // 縦タブ（Firm→Plan階層）
 // ═══════════════════════════════════════════════════
-function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRename,width,onBulkImport,onReorder,tabDataMap,glossaryTerms,onMergeFirm,onDeleteMany,onTogglePin,sections,onAddSection,onRenameSection,onDeleteSection,onToggleCompleted,onMoveFirmToSection,sessionName,onSessionNameChange}) {
+function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRename,width,onBulkImport,onReorder,tabDataMap,glossaryTerms,onMergeFirm,onDeleteMany,onTogglePin,sections,onAddSection,onRenameSection,onDeleteSection,onToggleCompleted,onMoveFirmToSection,onReorderSection,sessionName,onSessionNameChange,onSaveSelected}) {
   const [collapsed,setCollapsed]=useState({});
   const [secCollapsed,setSecCollapsed]=useState({});
   const [editSecId,setEditSecId]=useState(null);
@@ -937,6 +938,8 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   useEffect(()=>{const h=()=>setShowImport(true);document.addEventListener("pfd-csv-open",h);return()=>document.removeEventListener("pfd-csv-open",h)},[]);
   const [csvText,setCsvText]=useState("");
   const [dragId,setDragId]=useState(null);
+  const [dragSecId,setDragSecId]=useState(null);
+  const [sortAlpha,setSortAlpha]=useState(false);
   const [checked,setChecked]=useState({}); // クリック選択 {firmId:true}
   const [copied,setCopied]=useState(false);
   const [hideActive,setHideActive]=useState(true);
@@ -976,11 +979,19 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
   const selectAll=()=>{const n={};firms.forEach(f=>{if(!f.completed)n[f.id]=true});setChecked(n)};
 
   // グループ内ソート: ピン済(非完了) → 通常(非完了) → 完了
-  const sortGroup=(list)=>[
-    ...list.filter(f=>f.pinned&&!f.completed),
-    ...list.filter(f=>!f.pinned&&!f.completed),
-    ...list.filter(f=>f.completed),
-  ];
+  const sortGroup=(list)=>{
+    const byName=(a,b)=>{
+      const na=getFirmName(a.id,tabDataMap)||a.name||"";
+      const nb=getFirmName(b.id,tabDataMap)||b.name||"";
+      return na.localeCompare(nb,"ja");
+    };
+    const maySort=arr=>sortAlpha?[...arr].sort(byName):arr;
+    return[
+      ...maySort(list.filter(f=>f.pinned&&!f.completed)),
+      ...maySort(list.filter(f=>!f.pinned&&!f.completed)),
+      ...list.filter(f=>f.completed),
+    ];
+  };
   const hasSections=(sections||[]).length>0;
 
   // 選択アイテムを Firm名＋配下Plan の階層テキストでクリップボードへコピー
@@ -1065,9 +1076,12 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
     const isOver=dragSecOver===sec.id;
     return (
       <div
-        onDragOver={e=>{if(dragId){e.preventDefault();setDragSecOver(sec.id)}}}
+        draggable={!isUnsectioned}
+        onDragStart={e=>{if(!isUnsectioned){e.stopPropagation();setDragSecId(sec.id)}}}
+        onDragEnd={()=>setDragSecId(null)}
+        onDragOver={e=>{if(dragId||dragSecId){e.preventDefault();setDragSecOver(sec.id)}}}
         onDragLeave={()=>setDragSecOver(null)}
-        onDrop={e=>{e.preventDefault();if(dragId){onMoveFirmToSection&&onMoveFirmToSection(dragId,isUnsectioned?null:sec.id);setDragId(null);setDragSecOver(null)}}}
+        onDrop={e=>{e.preventDefault();if(dragSecId&&!isUnsectioned&&dragSecId!==sec.id){onReorderSection&&onReorderSection(dragSecId,sec.id);setDragSecId(null);setDragSecOver(null);}else if(dragId){onMoveFirmToSection&&onMoveFirmToSection(dragId,isUnsectioned?null:sec.id);setDragId(null);setDragSecOver(null);}}}
         style={{padding:"4px 7px",
           background:isOver?`${C.blue}22`:C.surfaceAlt,
           borderBottom:`1px solid ${isOver?C.blue:C.border}`,
@@ -1452,6 +1466,7 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
               <span style={{opacity:0.7}}>×</span><span>{checkedCount}件</span><span style={{opacity:0.7}}>選択解除</span>
             </Btn>
             <Btn color={C.accent} onClick={copyChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>{copied?"✓":"コピー"}</Btn>
+            <Btn color={C.green} onClick={()=>{const ids=Object.keys(checked).filter(id=>checked[id]&&firms.some(f=>f.id===id));if(ids.length){onSaveSelected&&onSaveSelected(ids);setChecked({});}}} style={{padding:"1px 6px",fontSize:"0.6rem"}}>保存</Btn>
             <Btn color={C.red} onClick={deleteChecked} style={{padding:"1px 6px",fontSize:"0.6rem"}}>削除</Btn>
           </React.Fragment>
         ):(
@@ -1478,6 +1493,11 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
               style={{padding:"1px 5px",fontSize:"0.68rem",flexShrink:0,
                 background:showAddSec?C.borderLight:"transparent",
                 border:`1px solid ${C.border}`,color:C.textDim}}>§</Btn>
+            <Btn onClick={()=>setSortAlpha(v=>!v)} title={sortAlpha?"手動順に戻す":"A→Z ソート"}
+              style={{padding:"1px 5px",fontSize:"0.68rem",flexShrink:0,
+                background:sortAlpha?C.blue:"transparent",
+                border:`1px solid ${sortAlpha?C.blue:C.border}`,
+                color:sortAlpha?C.bg:C.textDim}}>↕</Btn>
           </React.Fragment>
         )}
       </div>
@@ -4384,6 +4404,7 @@ function App() {
   const [slotLocks,setSlotLocks]=useState({}); // 明示ロックのみ保持。名前スロットは値が入った時点で自動ロック（isSlotLocked）
   const [showBackup,setShowBackup]=useState(false);
   const [showMerge,setShowMerge]=useState(false);
+  const [firmPicker,setFirmPicker]=useState(null); // null | {list,checked,fileTabDataMap}
   const [showPromptManager,setShowPromptManager]=useState(false);
   const [showDataMenu,setShowDataMenu]=useState(false); // false | "save" | "load"
   const [toastMsg,setToastMsg]=useState("");
@@ -5209,6 +5230,17 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   const togglePin=useCallback(firmId=>{
     setFirms(p=>p.map(f=>f.id===firmId?{...f,pinned:!f.pinned}:f));
   },[]);
+  const reorderSections=useCallback((fromId,toId)=>{
+    setSections(p=>{
+      const arr=[...p];
+      const fi=arr.findIndex(s=>s.id===fromId);
+      const ti=arr.findIndex(s=>s.id===toId);
+      if(fi<0||ti<0)return p;
+      const[item]=arr.splice(fi,1);
+      arr.splice(arr.findIndex(s=>s.id===toId),0,item);
+      return arr;
+    });
+  },[]);
   const deleteTab=useCallback(id=>{
     // Firm削除
     const firmIdx=firms.findIndex(f=>f.id===id);
@@ -5402,6 +5434,45 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
     dirtyRef.current=false;
   },[firms,tabDataMap,glossaryTerms,hugoDir,getPmFile,showToast]);
 
+  // Firm単位保存 — 指定IDの社だけpfdb.jsonへ差し込む（他社は一切触らない）
+  const exportFirms=useCallback(async(firmIds)=>{
+    const idSet=new Set(firmIds);
+    const targetFirms=firms.filter(f=>idSet.has(f.id));
+    if(!targetFirms.length){showToast("対象Firmがありません");return;}
+    if(!window.showSaveFilePicker||location.protocol==="file:"){
+      // フォールバック: 対象社だけ含む部分JSONをダウンロード（追加JSONで取り込み可）
+      const partialTdm={};
+      targetFirms.forEach(f=>{[f.id,...(f.plans||[]).map(p=>p.id)].forEach(id=>{if(tabDataMap[id])partialTdm[id]=tabDataMap[id];});});
+      exportJSON({firms:targetFirms,tabDataMap:partialTdm},`pfdb-${targetFirms.map(f=>f.id).join("-")}.json`);
+      return;
+    }
+    let fh=await loadSaveHandle();
+    if(fh&&!(await ensureRW(fh)))fh=null;
+    if(!fh){
+      try{
+        fh=await window.showSaveFilePicker({suggestedName:"pfdb.json",types:[{description:"JSON",accept:{"application/json":[".json"]}}]});
+        await saveSaveHandle(fh);setSaveFileName(fh.name);
+      }catch(e){if(e.name!=="AbortError")showToast("✗ 保存先選択エラー: "+e.message);return;}
+    }
+    let base={firms:[],tabDataMap:{},glossaryTerms:[]};
+    try{const txt=await (await fh.getFile()).text();if(txt.trim())base=JSON.parse(txt);}catch(e){}
+    // 対象社だけ上書き、他は温存
+    const baseMap=new Map((base.firms||[]).map(f=>[f.id,f]));
+    for(const f of targetFirms)baseMap.set(f.id,f);
+    const targetIds=new Set();
+    targetFirms.forEach(f=>{targetIds.add(f.id);(f.plans||[]).forEach(p=>targetIds.add(p.id));});
+    const mergedTdm={...(base.tabDataMap||{})};
+    for(const id of targetIds)if(tabDataMap[id])mergedTdm[id]=tabDataMap[id];
+    const merged={...base,firms:[...baseMap.values()],tabDataMap:mergedTdm};
+    try{
+      const w=await fh.createWritable();await w.write(JSON.stringify(merged,null,2));await w.close();
+      const cur=loadedIdsRef.current||new Set();
+      for(const id of targetIds)cur.add(id);
+      loadedIdsRef.current=cur;
+      showToast(`✓ 保存完了（${targetFirms.length}社）`);
+    }catch(e){showToast("✗ 保存エラー: "+e.message);}
+  },[firms,tabDataMap,showToast]);
+
   // Hugo出力
   const [hugoDir,setHugoDir]=useState(null);
   const [hugoDirName,setHugoDirName]=useState("");
@@ -5580,6 +5651,63 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       loadedIdsRef.current=ids; // 読込台帳を確定（差分反映保存の基準）
     }
   },[]);
+
+  // pfdb.json のFirm一覧を表示してセッションへ選択マージ
+  const buildPickerList=(data)=>(data.firms||[]).map(f=>({
+    id:f.id,
+    name:getFirmName(f.id,data.tabDataMap||{})||f.name||f.id,
+    firm:f,
+    planCount:(f.plans||[]).length,
+  }));
+  const openFirmPicker=useCallback(async()=>{
+    const apply=(data)=>{
+      if(!data||!Array.isArray(data.firms)){showToast("このファイルにはfirmsデータがありません");return;}
+      const list=buildPickerList(data);
+      if(!list.length){showToast("ファイルにFirmデータがありません");return;}
+      setFirmPicker({list,checked:Object.fromEntries(list.map(f=>[f.id,false])),fileTabDataMap:data.tabDataMap||{}});
+    };
+    if(location.protocol==="file:"){importJSON(apply);return;}
+    let fh=await loadSaveHandle();
+    if(fh&&!(await ensureRW(fh,"read")))fh=null;
+    if(!fh){
+      if(window.showOpenFilePicker){
+        try{const [picked]=await window.showOpenFilePicker({types:[{description:"JSON",accept:{"application/json":[".json"]}}]});fh=picked;}
+        catch(e){if(e.name!=="AbortError")showToast("✗ ファイル選択エラー: "+e.message);return;}
+      }else{importJSON(apply);return;}
+    }
+    try{apply(JSON.parse(await (await fh.getFile()).text()));}catch(e){showToast("✗ 読込エラー: "+e.message);}
+  },[showToast]);
+
+  const applyFirmPicker=useCallback(()=>{
+    if(!firmPicker)return;
+    const selected=firmPicker.list.filter(item=>firmPicker.checked[item.id]);
+    if(!selected.length){showToast("Firmを選択してください");return;}
+    setFirms(prev=>{
+      const m=new Map(prev.map(f=>[f.id,f]));
+      for(const item of selected)m.set(item.id,item.firm);
+      return [...m.values()];
+    });
+    setTabDataMap(prev=>{
+      const next={...prev};
+      for(const item of selected){
+        [item.id,...(item.firm.plans||[]).map(p=>p.id)].forEach(id=>{if(firmPicker.fileTabDataMap[id])next[id]=firmPicker.fileTabDataMap[id];});
+      }
+      return next;
+    });
+    // nextId を最大IDより大きい値に更新
+    let maxId=nextId.current-1;
+    for(const item of selected){
+      const fn=parseInt(item.id.replace(/\D/g,""))||0;if(fn>maxId)maxId=fn;
+      (item.firm.plans||[]).forEach(p=>{const pn=parseInt(p.id.replace(/\D/g,""))||0;if(pn>maxId)maxId=pn;});
+    }
+    nextId.current=Math.max(nextId.current,maxId+1);
+    // loadedIdsRef に追加
+    const cur=loadedIdsRef.current||new Set();
+    for(const item of selected){cur.add(item.id);(item.firm.plans||[]).forEach(p=>cur.add(p.id));}
+    loadedIdsRef.current=cur;
+    showToast(`✓ ${selected.length}社をセッションに追加`);
+    setFirmPicker(null);
+  },[firmPicker,showToast]);
 
   // 全件読込 = 保存と同一の pfdb.json から読む（記憶ハンドル優先・初回は選択して記憶）
   const importAll=useCallback(async()=>{
@@ -5833,6 +5961,31 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       {toastMsg&&<div style={{position:"fixed",bottom:28,right:28,zIndex:99999,background:toastMsg.startsWith("✓")?C.green:C.red,color:C.bg,padding:"8px 16px",borderRadius:6,fontSize:"0.8rem",fontWeight:700,boxShadow:"0 4px 12px rgba(0,0,0,0.4)"}}>{toastMsg}</div>}
       <BackupModal show={showBackup} onClose={()=>setShowBackup(false)} getCurrentData={getCurrentData} onRestore={restoreData} />
       <MergeModal show={showMerge} onClose={()=>setShowMerge(false)} getCurrentData={getCurrentData} onApplyMerge={applyMerge} />
+      {firmPicker&&(
+        <div style={{position:"fixed",inset:0,zIndex:9000,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={e=>{if(e.target===e.currentTarget)setFirmPicker(null)}}>
+          <div style={{background:C.surface,border:`1px solid ${C.border}`,borderRadius:6,padding:16,width:300,maxHeight:"70vh",display:"flex",flexDirection:"column",gap:8}}>
+            <div style={{fontWeight:700,fontSize:"0.78rem",color:C.text}}>選択読込</div>
+            <div style={{fontSize:"0.62rem",color:C.textDim}}>選んだFirmだけ現在のセッションにマージします</div>
+            <div style={{display:"flex",gap:4}}>
+              <Btn color={C.textDim} onClick={()=>setFirmPicker(p=>({...p,checked:Object.fromEntries(p.list.map(f=>[f.id,true]))}))} style={{fontSize:"0.58rem",padding:"1px 6px"}}>全選択</Btn>
+              <Btn color={C.textDim} onClick={()=>setFirmPicker(p=>({...p,checked:Object.fromEntries(p.list.map(f=>[f.id,false]))}))} style={{fontSize:"0.58rem",padding:"1px 6px"}}>全解除</Btn>
+            </div>
+            <div style={{overflowY:"auto",flex:1,display:"flex",flexDirection:"column",gap:2,maxHeight:340}}>
+              {firmPicker.list.map(item=>(
+                <label key={item.id} style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",padding:"3px 6px",borderRadius:3,background:firmPicker.checked[item.id]?`${C.accent}22`:"transparent"}}>
+                  <input type="checkbox" checked={!!firmPicker.checked[item.id]} onChange={e=>setFirmPicker(p=>({...p,checked:{...p.checked,[item.id]:e.target.checked}}))} />
+                  <span style={{fontSize:"0.7rem",color:C.text,flex:1}}>{item.name}</span>
+                  <span style={{fontSize:"0.58rem",color:C.textDim}}>{item.planCount}P</span>
+                </label>
+              ))}
+            </div>
+            <div style={{display:"flex",gap:6,marginTop:2}}>
+              <Btn color={C.accent} onClick={applyFirmPicker} style={{flex:1,fontSize:"0.7rem",padding:"5px"}}>追加</Btn>
+              <Btn color={C.textDim} onClick={()=>setFirmPicker(null)} style={{padding:"5px 12px",fontSize:"0.7rem"}}>キャンセル</Btn>
+            </div>
+          </div>
+        </div>
+      )}
       {showPromptManager&&<PromptManagerPage onClose={()=>setShowPromptManager(false)} />}
       <ConsolidateModal show={!!consolidateKeepId} onClose={()=>setConsolidateKeepId(null)} firms={firms} tabDataMap={tabDataMap} initialKeepId={consolidateKeepId} onApply={applyConsolidate} />
 
@@ -5892,8 +6045,10 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
             {showDataMenu==="save"&&<div style={{position:"fixed",inset:0,zIndex:199}} onClick={()=>setShowDataMenu(false)}/>}
             <Btn color={C.green} onClick={()=>setShowDataMenu(v=>v==="save"?false:"save")} style={{fontSize:"0.6rem"}} title={saveFileName||"ファイル未選択"}>保存 ▾</Btn>
             {showDataMenu==="save"&&(
-              <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:90,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
-                <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} title="差分反映マージで pfdb.json へ保存（同一ファイル上書き・未読込ファームは温存）">保存</Btn>
+              <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:100,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
+                <Btn color={C.green} onClick={()=>{exportFirms([activeTabId]);setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} title="アクティブなFirmだけpfdb.jsonへ差し込む（他社は一切変更しない）">この1社</Btn>
+                <div style={{borderTop:`1px solid ${C.border}`,margin:"2px 0"}}/>
+                <Btn color={C.green} onClick={()=>{exportAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} title="差分反映マージで pfdb.json へ保存（同一ファイル上書き・未読込ファームは温存）">全保存</Btn>
               </div>
             )}
           </div>
@@ -5906,6 +6061,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           {showDataMenu==="load"&&(
             <div style={{position:"absolute",top:"calc(100% + 3px)",right:0,zIndex:200,background:C.surface,border:`1px solid ${C.border}`,borderRadius:4,padding:4,display:"flex",flexDirection:"column",gap:2,minWidth:100,boxShadow:"0 4px 12px rgba(0,0,0,0.5)"}}>
               <Btn color={C.blue} onClick={()=>{importAll();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>全件</Btn>
+              <Btn color={C.blue} onClick={()=>{openFirmPicker();setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} title="pfdb.jsonからFirmを選んでセッションにマージ">選択読込</Btn>
               <div style={{borderTop:`1px solid ${C.border}`,margin:"2px 0"}}/>
               <Btn color={C.blue} onClick={()=>{setShowDataMenu(false);document.dispatchEvent(new CustomEvent("pfd-csv-open"))}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>追加 CSV</Btn>
               <Btn color={C.blue} onClick={()=>{setShowMerge(true);setShowDataMenu(false)}} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>追加 JSON</Btn>
@@ -5927,8 +6083,8 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <VerticalTabs firms={firms} activeId={activeTabId} onSelect={setActiveTabId}
             onAddFirm={addFirm} onAddPlan={addPlan} onDelete={deleteTab} onRename={renameTab}
             width={vtabW} onBulkImport={bulkImport} onReorder={reorderFirms} tabDataMap={tabDataMap} glossaryTerms={glossaryTerms} onMergeFirm={openConsolidate} onDeleteMany={deleteMany} onTogglePin={togglePin}
-            sections={sections} onAddSection={addSection} onRenameSection={renameSection} onDeleteSection={deleteSection} onToggleCompleted={toggleCompleted} onMoveFirmToSection={moveFirmToSection}
-            sessionName={sessionName} onSessionNameChange={setSessionName} />
+            sections={sections} onAddSection={addSection} onRenameSection={renameSection} onDeleteSection={deleteSection} onToggleCompleted={toggleCompleted} onMoveFirmToSection={moveFirmToSection} onReorderSection={reorderSections}
+            sessionName={sessionName} onSessionNameChange={setSessionName} onSaveSelected={exportFirms} />
           <ResizeHandle dir="x" onMouseDown={vtabDrag} />
         </>}
 

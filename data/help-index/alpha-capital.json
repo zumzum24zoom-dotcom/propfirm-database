@@ -1,0 +1,21 @@
+{
+  "firm": "alpha-capital",
+  "official_url": "https://www.alphacapitalgroup.uk/",
+  "help_base_url": "https://help.alphacapitalgroup.uk/en/",
+  "platform": "intercom",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {"title": "General", "url": "https://help.alphacapitalgroup.uk/en/collections/3826555-general", "article_count": 19, "articles": []},
+    {"title": "Dashboard", "url": "https://help.alphacapitalgroup.uk/en/collections/3848046-dashboard", "article_count": 13, "articles": []},
+    {"title": "Evaluation", "url": "https://help.alphacapitalgroup.uk/en/collections/3848050-evaluation", "article_count": 8, "articles": []},
+    {"title": "Alpha Plans", "url": "https://help.alphacapitalgroup.uk/en/collections/11007442-alpha-plans", "article_count": 6, "articles": []},
+    {"title": "Qualified Trader", "url": "https://help.alphacapitalgroup.uk/en/collections/3848053-qualified-trader", "article_count": 21, "articles": []},
+    {"title": "Important Trading Terms", "url": "https://help.alphacapitalgroup.uk/en/collections/3848057-important-trading-terms", "article_count": 1, "articles": []},
+    {"title": "Alpha Prime", "url": "https://help.alphacapitalgroup.uk/en/collections/12685392-alpha-prime", "article_count": 1, "articles": []},
+    {"title": "Monthly Trading Comp. & Free Trial Info", "url": "https://help.alphacapitalgroup.uk/en/collections/6279778-monthly-trading-comp-free-trial-info", "article_count": 4, "articles": []},
+    {"title": "Free Account December Promo", "url": "https://help.alphacapitalgroup.uk/en/collections/7256963-free-account-december-promo", "article_count": 1, "articles": []},
+    {"title": "Affiliate Marketing", "url": "https://help.alphacapitalgroup.uk/en/collections/14093970-affiliate-marketing", "article_count": 1, "articles": []}
+  ],
+  "notes": "10 collections, ~75 articles total. articles[] empty — enumerate at normalize-firm time. Critical: General(19), Qualified Trader(21), Evaluation(8)."
+}

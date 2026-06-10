@@ -1,0 +1,17 @@
+{
+  "firm": "nordic-funder",
+  "official_url": "https://nordicfunder.com/",
+  "help_base_url": "https://nordicfunder.com/faq/",
+  "platform": "wordpress_faq",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {
+      "title": "FAQ (inline)",
+      "url": "https://nordicfunder.com/faq/",
+      "article_count": 0,
+      "articles": []
+    }
+  ],
+  "notes": "Single-page inline accordion FAQ. No individual article URLs. Related pages: /funded-trader-program-rules/, /how-it-works/. Content readable via WebFetch."
+}

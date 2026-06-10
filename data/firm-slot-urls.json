@@ -1,0 +1,1992 @@
+{
+  "generated_at": "2026-06-10",
+  "firms": {
+    "city-traders-imperium": {
+      "slot_urls": [
+        {
+          "url": "https://citytradersimperium.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://citytradersimperium.com/funded-account-challenge-funding-program/",
+          "label": "Challenge Funding Program (1-Step & 2-Step)",
+          "slots": "F07,F08,F09,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://citytradersimperium.com/forex-funded-trader-accounts/",
+          "label": "Instant Funding Program",
+          "slots": "F07,F08,F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://citytradersimperium.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F21,F22"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://citytradersimperium.com/funded-account-challenge-funding-program/",
+          "plan_name": "1-Step Challenge"
+        },
+        {
+          "url": "https://citytradersimperium.com/funded-account-challenge-funding-program/",
+          "plan_name": "2-Step Challenge"
+        },
+        {
+          "url": "https://citytradersimperium.com/forex-funded-trader-accounts/",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://citytradersimperium.com/direct-funding-program/",
+          "plan_name": "Direct Funding"
+        }
+      ]
+    },
+    "ftmo": {
+      "slot_urls": [
+        {
+          "url": "https://ftmo.com/en/about/",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://ftmo.com/en/how-it-works/",
+          "label": "How It Works",
+          "slots": "F07,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://ftmo.com/en/reward-growth-and-scaling-plan/",
+          "label": "Reward & Scaling Plan",
+          "slots": "F08,F09,F19,F20"
+        },
+        {
+          "url": "https://ftmo.com/en/trading-objectives/",
+          "label": "Trading Objectives",
+          "slots": "F10,F11,F12,F13"
+        },
+        {
+          "url": "https://ftmo.com/en/trading-platforms/",
+          "label": "Trading Platforms",
+          "slots": "F11"
+        },
+        {
+          "url": "https://ftmo.com/en/symbols/",
+          "label": "Tradable Symbols",
+          "slots": "F14,F15"
+        },
+        {
+          "url": "https://ftmo.com/en/",
+          "label": "Homepage (Pricing Section)",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://ftmo.com/en/faq/",
+          "label": "FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://ftmo.com/en/premium-programme/",
+          "label": "Premium Programme",
+          "slots": "F08"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://ftmo.com/en/ftmo-challenge/",
+          "plan_name": "FTMO Challenge"
+        },
+        {
+          "url": "https://ftmo.com/en/ftmo-free-trial/",
+          "plan_name": "FTMO Free Trial"
+        },
+        {
+          "url": "https://ftmo.com/en/reward-growth-and-scaling-plan/",
+          "plan_name": "Reward Growth & Scaling plan"
+        },
+        {
+          "url": "https://ftmo.com/en/premium-programme/",
+          "plan_name": "FTMO Premium Programme"
+        }
+      ]
+    },
+    "the5ers": {
+      "slot_urls": [
+        {
+          "url": "https://www.the5ers.com/about-the5ers/",
+          "label": "About/Company",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://www.the5ers.com/hyper-growth/",
+          "label": "Hyper Growth Plan (1-Step)",
+          "slots": "F07,F08,F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.the5ers.com/high-stakes/",
+          "label": "High Stakes Plan (2-Step)",
+          "slots": "F07,F08,F09,F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.the5ers.com/bootcamp/",
+          "label": "Bootcamp Plan (3-Step)",
+          "slots": "F07,F08,F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.the5ers.com/asset-specifications/",
+          "label": "Trading Assets Specifications",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://www.the5ers.com/faqs/",
+          "label": "FAQs",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://www.the5ers.com/",
+          "label": "Homepage",
+          "slots": "F07,F16,F17,F18"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.the5ers.com/hyper-growth/",
+          "plan_name": "Hyper Growth"
+        },
+        {
+          "url": "https://www.the5ers.com/high-stakes/",
+          "plan_name": "High Stakes"
+        },
+        {
+          "url": "https://www.the5ers.com/bootcamp/",
+          "plan_name": "Bootcamp"
+        },
+        {
+          "url": "https://www.the5ers.com/futures/",
+          "plan_name": "Futures"
+        }
+      ]
+    },
+    "fundingpips": {
+      "slot_urls": [
+        {
+          "url": "https://fundingpips.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F19,F20"
+        },
+        {
+          "url": "https://fundingpips.com/trading-objectives",
+          "label": "Trading Objectives / Plans Comparison",
+          "slots": "F21,F22,F10,F11,F12,F13,F14,F15,F19,F20"
+        },
+        {
+          "url": "https://fundingpips.com/trading-rules/fp-evaluation/",
+          "label": "Trading Rules",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://fundingpips.com/rewards",
+          "label": "Rewards Program",
+          "slots": "F08,F19,F20"
+        },
+        {
+          "url": "https://fundingpips.com/prime",
+          "label": "Prime / Scale-Up Program",
+          "slots": "F09"
+        },
+        {
+          "url": "https://fundingpips.com/faq",
+          "label": "FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://fundingpips.com/2-step-standard",
+          "label": "2-Step Standard Plan",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://fundingpips.com/terms-and-conditions",
+          "label": "Terms and Conditions",
+          "slots": "F02,F03,F16,F17,F18"
+        },
+        {
+          "url": "https://help.fundingpips.com/hc/en-us",
+          "label": "Help Center",
+          "slots": "FAQ,F10,F11,F12,F13"
+        },
+        {
+          "url": "https://help.fundingpips.com/en/collections/6747457-payouts",
+          "label": "Payouts / Withdrawal Help Center",
+          "slots": "F16,F17,F18"
+        },
+        {
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34501809112081-2-Step-Model",
+          "label": "2-Step Model Details",
+          "slots": "F21,F22,F10,F11,F12,F13"
+        },
+        {
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34502027344017-2-Step-Pro-Model",
+          "label": "2-Step Pro Model Details",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34502157694865-FundingPips-Zero",
+          "label": "FundingPips Zero Model",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34504564970385-Your-Rewards-Your-Way",
+          "label": "Rewards Payout Methods",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34447308895889-Prime-Account",
+          "label": "Prime Account Scale-Up Details",
+          "slots": "F09"
+        },
+        {
+          "url": "https://help.fundingpips.com/hc/en-us/articles/44559256768529-Understanding-Trading-Mechanics",
+          "label": "Trading Mechanics (Broker/Platform)",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://fundingpips.com/blog/funding-pips-new-chapter",
+          "label": "Company / About Blog",
+          "slots": "F02,F03"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://fundingpips.com/2-step-standard",
+          "plan_name": "2 Step Standard Challenge"
+        },
+        {
+          "url": "https://fundingpips.com/2-step-pro",
+          "plan_name": "2 Step Pro Challenge"
+        },
+        {
+          "url": "https://fundingpips.com/zero",
+          "plan_name": "Zero"
+        },
+        {
+          "url": "https://fundingpips.com/free-trial",
+          "plan_name": "Free Trial"
+        }
+      ]
+    },
+    "fundednext": {
+      "slot_urls": [
+        {
+          "url": "https://fundednext.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F10,F14,F16,F19,F20"
+        },
+        {
+          "url": "https://fundednext.com/pricing",
+          "label": "Pricing / Plans",
+          "slots": "F21,F22,F19,F20"
+        },
+        {
+          "url": "https://fundednext.com/package-comparison",
+          "label": "Package Comparison",
+          "slots": "F21,F22,F14,F15,F19,F20"
+        },
+        {
+          "url": "https://help.fundednext.com/en/articles/8016279-where-are-you-located",
+          "label": "Where Are You Located (About/Company)",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://help.fundednext.com/en/collections/4303829-about-fundednext",
+          "label": "About FundedNext (Help Center)",
+          "slots": "F02,F03,F07"
+        },
+        {
+          "url": "https://help.fundednext.com/en/articles/8224149-which-broker-does-fundednext-use",
+          "label": "Broker Info",
+          "slots": "F10"
+        },
+        {
+          "url": "https://help.fundednext.com/en/articles/8019808-which-platforms-can-i-use-for-trading-at-fundednext",
+          "label": "Trading Platforms",
+          "slots": "F11"
+        },
+        {
+          "url": "https://help.fundednext.com/en/articles/8019672-what-is-fundednext-s-server-time",
+          "label": "Server Time",
+          "slots": "F12"
+        },
+        {
+          "url": "https://help.fundednext.com/en/articles/8019669-what-is-the-leverage-of-the-trading-account",
+          "label": "Leverage",
+          "slots": "F14"
+        },
+        {
+          "url": "https://help.fundednext.com/en/articles/8020089-what-are-the-available-payment-methods",
+          "label": "Payment Methods",
+          "slots": "F16,F17"
+        },
+        {
+          "url": "https://help.fundednext.com/en/collections/4303681-general-faq",
+          "label": "General FAQ",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18"
+        },
+        {
+          "url": "https://help.fundednext.com/en/collections/11026230-trading-rules-guidelines",
+          "label": "Trading Rules and Guidelines",
+          "slots": "F10,F11,F12,F13"
+        },
+        {
+          "url": "https://help.fundednext.com/en/collections/9545740-fundednext-features",
+          "label": "FundedNext Features",
+          "slots": "F07,F08,F09"
+        },
+        {
+          "url": "https://help.fundednext.com/en/",
+          "label": "Help Center / FAQ",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://fundednext.com/stellar-model",
+          "plan_name": "Stellar Challenge"
+        },
+        {
+          "url": "https://fundednext.com/stellar-instant",
+          "plan_name": "Stellar Instant"
+        },
+        {
+          "url": "https://fundednext.com/futures/bolt",
+          "plan_name": "Bolt Challenge"
+        },
+        {
+          "url": "https://fundednext.com/futures/flex",
+          "plan_name": "Flex Challenge"
+        }
+      ]
+    },
+    "fundedelite": {
+      "slot_urls": [
+        {
+          "url": "https://fundedelite.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://fundedelite.com/about",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://fundedelite.com/challenges/catalyst",
+          "label": "Catalyst Challenge (Plans/Pricing)",
+          "slots": "F21,F22,F19,F20,F08,F09"
+        },
+        {
+          "url": "https://fundedelite.com/challenges/flash-activation",
+          "label": "Flash Activation Challenge",
+          "slots": "F21,F22,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://fundedelite.com/challenges/instant-funding",
+          "label": "Instant Funding Challenge",
+          "slots": "F21,F22,F10,F11,F12,F13,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://fundedelite.com/challenges/lite-account",
+          "label": "Lite Account Challenge",
+          "slots": "F21,F22,F10,F11,F12,F13,F19,F20"
+        },
+        {
+          "url": "https://faq.fundedelite.com/en",
+          "label": "FAQ",
+          "slots": "FAQ,F10,F11,F12,F13,F14,F15,F16,F17,F18"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://fundedelite.com/challenges/catalyst",
+          "plan_name": "The Catalyst"
+        },
+        {
+          "url": "https://fundedelite.com/challenges/flash-activation",
+          "plan_name": "Flash Activation Challenge"
+        },
+        {
+          "url": "https://fundedelite.com/challenges/instant-funding",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://fundedelite.com/challenges/lite-account",
+          "plan_name": "The Lite Account"
+        }
+      ]
+    },
+    "top-one-trader": {
+      "slot_urls": [
+        {
+          "url": "https://www.toponetrader.com/",
+          "label": "Homepage / Pricing",
+          "slots": "F21,F22,F19,F20"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/",
+          "label": "Help Center / FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/collections/10463659-general-rules",
+          "label": "General Rules",
+          "slots": "FAQ,F16,F17,F18"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/collections/5647340-trading-rules",
+          "label": "Trading Rules",
+          "slots": "FAQ,F10,F11,F14,F15"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/collections/10463382-trading-platforms",
+          "label": "Trading Platforms",
+          "slots": "F10,F11,F12"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/10912482-comparison-of-account-types",
+          "label": "Account Types Comparison",
+          "slots": "F21,F22,F19,F20"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/8318931-what-are-the-leverage-ratios-and-calculations-for-top-one-trader-accounts",
+          "label": "Leverage Ratios",
+          "slots": "F14"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/8495817-what-are-the-trading-commissions",
+          "label": "Trading Commissions",
+          "slots": "F15"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/9081039-what-trading-platforms-are-available-at-top-one-trader",
+          "label": "Available Trading Platforms",
+          "slots": "F10,F11,F12,F13"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/8466922-what-are-the-payout-methods",
+          "label": "Payout Methods",
+          "slots": "F17,F18"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/8491578-how-does-the-scaling-plan-work",
+          "label": "Scaling Plan",
+          "slots": "F09"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/8502135-what-are-the-spreads-in-the-trading-account",
+          "label": "Spreads",
+          "slots": "F15"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/8477370-countries-with-limitations-and-restrictions",
+          "label": "Countries / Restrictions",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/articles/8318925-which-instruments-can-i-trade",
+          "label": "Tradable Instruments",
+          "slots": "F10"
+        },
+        {
+          "url": "https://help.toponetrader.com/en/collections/7436296-brand-ambassador-affiliate-program",
+          "label": "F08",
+          "slots": "F08"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.toponetrader.com/home#pricing",
+          "plan_name": "One-Step Challenge"
+        },
+        {
+          "url": "https://www.toponetrader.com/home#pricing",
+          "plan_name": "Two-Step PRO"
+        },
+        {
+          "url": "https://www.toponetrader.com/home#pricing",
+          "plan_name": "Two-Step PLUS"
+        },
+        {
+          "url": "https://www.toponetrader.com/home#pricing",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://www.toponetrader.com/home#pricing",
+          "plan_name": "Instant Prime"
+        },
+        {
+          "url": "https://www.toponetrader.com/nova",
+          "plan_name": "Nova Challenge"
+        }
+      ]
+    },
+    "instant-funding": {
+      "slot_urls": [
+        {
+          "url": "https://instantfunding.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://instantfunding.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://instantfunding.com/instant-funding-accounts/",
+          "label": "Instant Funding Plans & Pricing",
+          "slots": "F21,F22,F19,F20,F14,F15,F16,F17,F18"
+        },
+        {
+          "url": "https://instantfunding.com/trading-rules/",
+          "label": "Trading Rules",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://instantfunding.com/loyalty-program/",
+          "label": "Loyalty Program (Plus)",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://instantfunding.com/one-phase-challenge/",
+          "label": "One-Phase Challenge Plans",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://instantfunding.com/two-phase-challenge/",
+          "label": "Two-Phase Challenge Plans",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://instantfunding.com/help/",
+          "label": "Help / FAQ",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://instantfunding.com/instant-funding-accounts/",
+          "plan_name": "Instant Funding Account"
+        },
+        {
+          "url": "https://instantfunding.com/one-phase-challenge/",
+          "plan_name": "One-Phase Challenge"
+        },
+        {
+          "url": "https://instantfunding.com/two-phase-challenge/",
+          "plan_name": "Two-Phase Challenge"
+        }
+      ]
+    },
+    "fintokei": {
+      "slot_urls": [
+        {
+          "url": "https://www.fintokei.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03,F07"
+        },
+        {
+          "url": "https://www.fintokei.com/protrader/",
+          "label": "ProTrader Program",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.fintokei.com/starttrader/",
+          "label": "StartTrader Program",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://www.fintokei.com/swifttrader/",
+          "label": "SwiftTrader Program",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://www.fintokei.com/protrader-swing/",
+          "label": "ProTrader Swing Program",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://www.fintokei.com/loyalty-program/",
+          "label": "Loyalty Program",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://www.fintokei.com/payouts/",
+          "label": "Payouts",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://support.fintokei.com/en/",
+          "label": "FAQ / Support",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.fintokei.com/starttrader/",
+          "plan_name": "StartTrader"
+        },
+        {
+          "url": "https://www.fintokei.com/swifttrader/",
+          "plan_name": "SwiftTrader"
+        },
+        {
+          "url": "https://www.fintokei.com/protrader/",
+          "plan_name": "ProTrader"
+        },
+        {
+          "url": "https://www.fintokei.com/protrader-swing/",
+          "plan_name": "ProTrader Swing"
+        }
+      ]
+    },
+    "hantec-trader": {
+      "slot_urls": [
+        {
+          "url": "https://htrader.hmarkets.com/jp/company/about-hantec-trader/",
+          "label": "About Hantec Trader",
+          "slots": "F02,F03,F07,F08,F09"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/jp/trading/product-specifications/",
+          "label": "Product Specifications (Trading Conditions)",
+          "slots": "F10,F11,F12,F14,F15"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/jp/programs/rules/",
+          "label": "Rules",
+          "slots": "F10,F12,F13,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/jp/programs/enhanced-challenge/",
+          "label": "Enhanced Challenge (Plans/Pricing)",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/jp/programs/scaling-plan/",
+          "label": "Scaling Plan",
+          "slots": "F09"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "label": "FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/",
+          "label": "Homepage",
+          "slots": "F07,F16,F17,F19,F21"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://htrader.hmarkets.com/programs/instant24/",
+          "plan_name": "Instant24"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/programs/instant-lite/",
+          "plan_name": "Instant Lite"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/programs/instant-funding/",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/programs/express-challenge/",
+          "plan_name": "Express Challenge"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/programs/enhanced-challenge/",
+          "plan_name": "Enhanced Challenge"
+        },
+        {
+          "url": "https://htrader.hmarkets.com/programs/enhancedx/",
+          "plan_name": "EnhancedX"
+        }
+      ]
+    },
+    "alpha-capital": {
+      "slot_urls": [
+        {
+          "url": "https://www.alphacapitalgroup.uk/about",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://www.alphacapitalgroup.uk/product",
+          "label": "Plans / Pricing",
+          "slots": "F07,F08,F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.alphacapitalgroup.uk/platforms",
+          "label": "Trading Platforms & Conditions",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://www.alphacapitalgroup.uk/",
+          "label": "Homepage (overview, profit split, payout)",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.alphacapitalgroup.uk/en/",
+          "label": "Help Center / FAQ & Rules",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.alphacapitalgroup.uk/product",
+          "plan_name": "1 Step"
+        },
+        {
+          "url": "https://www.alphacapitalgroup.uk/product",
+          "plan_name": "2 Step"
+        },
+        {
+          "url": "https://www.alphacapitalgroup.uk/product",
+          "plan_name": "3 Step"
+        },
+        {
+          "url": "https://www.alphacapitalgroup.uk/product",
+          "plan_name": "Alpha Swing"
+        }
+      ]
+    },
+    "e8-markets": {
+      "slot_urls": [
+        {
+          "url": "https://e8markets.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09"
+        },
+        {
+          "url": "https://e8markets.com/compare-account-challenges",
+          "label": "Compare Account Challenges (Pricing/Plans)",
+          "slots": "F21,F22,F19,F20"
+        },
+        {
+          "url": "https://e8markets.com/best-simfi-funded-program-e8pro",
+          "label": "E8 Pro Plan Page",
+          "slots": "F10,F11,F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://help.e8markets.com/en/articles/14124293-about-e8-markets",
+          "label": "About E8 Markets (Help Center Article)",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://help.e8markets.com/en/collections/3103954-trading-platforms",
+          "label": "Trading Platforms Help Section",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://help.e8markets.com/en/articles/9799834-available-trading-platforms",
+          "label": "Available Trading Platforms Article",
+          "slots": "F10,F11"
+        },
+        {
+          "url": "https://help.e8markets.com/en/articles/5514982-how-much-leverage-do-you-offer",
+          "label": "Leverage Article",
+          "slots": "F14"
+        },
+        {
+          "url": "https://help.e8markets.com/en/articles/5514977-what-instruments-are-allowed-to-be-traded-spreads",
+          "label": "Instruments and Spreads (Commissions)",
+          "slots": "F15"
+        },
+        {
+          "url": "https://help.e8markets.com/en/collections/10983501-payouts",
+          "label": "Payouts Help Section",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.e8markets.com/en/articles/15272556-everything-about-payouts-when-how-how-fast",
+          "label": "Everything About Payouts Article",
+          "slots": "F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.e8markets.com/en/collections/3103579-orders-billings",
+          "label": "Orders and Billings (Payment Methods)",
+          "slots": "F16"
+        },
+        {
+          "url": "https://help.e8markets.com/en/articles/5515027-how-to-pay-for-our-challenge-accounts",
+          "label": "How to Pay (Payment Methods Article)",
+          "slots": "F16"
+        },
+        {
+          "url": "https://help.e8markets.com/en/collections/10983534-products-rules",
+          "label": "Products and Rules Help Section",
+          "slots": "F07,F08,F09,F21,F22"
+        },
+        {
+          "url": "https://help.e8markets.com/en/",
+          "label": "Help Center Home (FAQ/Rules)",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://e8markets.com/compare-account-challenges",
+          "plan_name": "E8 Signature"
+        },
+        {
+          "url": "https://e8markets.com/compare-account-challenges",
+          "plan_name": "E8 One"
+        },
+        {
+          "url": "https://e8markets.com/best-simfi-funded-program-e8pro",
+          "plan_name": "E8 Pro"
+        }
+      ]
+    },
+    "maven": {
+      "slot_urls": [
+        {
+          "url": "https://maventrading.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://maventrading.com/about",
+          "label": "About",
+          "slots": "F02,F03,F10,F11"
+        },
+        {
+          "url": "https://maventrading.com/pricing",
+          "label": "Pricing / Plans",
+          "slots": "F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://maventrading.com/faqs",
+          "label": "FAQ",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://maventrading.com/pricing",
+          "plan_name": "1-Step Challenge"
+        },
+        {
+          "url": "https://maventrading.com/pricing",
+          "plan_name": "2-Step Challenge"
+        },
+        {
+          "url": "https://maventrading.com/pricing",
+          "plan_name": "3-Step Challenge"
+        },
+        {
+          "url": "https://maventrading.com/pricing",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://maventrading.com/pricing",
+          "plan_name": "Buy Now, Pay Later Challenge"
+        },
+        {
+          "url": "https://maventrading.com/pricing",
+          "plan_name": "OMO 2-Step Challenge"
+        }
+      ]
+    },
+    "bem-funding": {
+      "slot_urls": [
+        {
+          "url": "https://bemfunding.com/en/",
+          "label": "Homepage (Plans & Pricing, Features, Trading Conditions Overview)",
+          "slots": "F07,F08,F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://bemfunding.com/en/about",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://bemfunding.com/en/faq",
+          "label": "FAQ / Rules",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18"
+        },
+        {
+          "url": "https://bemfunding.com/en/symbols",
+          "label": "Symbols (Trading Instruments, Leverage, Commissions)",
+          "slots": "F14,F15"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://bemfunding.com/en/terms-of-use/bem-classic-normal",
+          "plan_name": "BEM Classic Normal"
+        },
+        {
+          "url": "https://bemfunding.com/en/terms-of-use/bem-classic-swing",
+          "plan_name": "BEM Classic Swing"
+        },
+        {
+          "url": "https://bemfunding.com/en/terms-of-use/bem-extended",
+          "plan_name": "BEM Extended"
+        },
+        {
+          "url": "https://bemfunding.com/en/terms-of-use/bem-one",
+          "plan_name": "BEM One"
+        },
+        {
+          "url": "https://bemfunding.com/en/terms-of-use/bem-ascend",
+          "plan_name": "BEM Ascend"
+        }
+      ]
+    },
+    "brightfunded": {
+      "slot_urls": [
+        {
+          "url": "https://brightfunded.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F10,F14,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://brightfunded.com/about",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://brightfunded.com/trading-platforms",
+          "label": "Trading Platforms",
+          "slots": "F10,F11,F12,F13"
+        },
+        {
+          "url": "https://brightfunded.com/trade-to-earn",
+          "label": "Trade2Earn Loyalty Program",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://help.brightfunded.com/en/",
+          "label": "Help Center / FAQ",
+          "slots": "FAQ,F10,F14,F15,F16,F17,F18,F19,F20"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://brightfunded.com/",
+          "plan_name": "1-Step"
+        },
+        {
+          "url": "https://brightfunded.com/",
+          "plan_name": "2-Step Bright"
+        },
+        {
+          "url": "https://brightfunded.com/",
+          "plan_name": "2-Step Classic"
+        }
+      ]
+    },
+    "blueberry-funded": {
+      "slot_urls": [
+        {
+          "url": "https://blueberryfunded.com/",
+          "label": "Homepage (Features, Trading Conditions, Pricing, Profit Split, Payouts)",
+          "slots": "F07,F08,F09,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://blueberryfunded.com/about/",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://blueberryfunded.com/faq/",
+          "label": "FAQ (empty at time of fetch)",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://help.blueberryfunded.com/en/",
+          "label": "Help Center / Rules (403 at time of fetch)",
+          "slots": "FAQ,Rules"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://blueberryfunded.com/prime/",
+          "plan_name": "Blueberry Prime Challenge"
+        },
+        {
+          "url": "https://blueberryfunded.com/instant-funding/",
+          "plan_name": "Instant Funding"
+        }
+      ]
+    },
+    "aquafunded": {
+      "slot_urls": [
+        {
+          "url": "https://aquafunded.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://aquafunded.com/about-us",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://aquafunded.com/how-it-works",
+          "label": "How It Works",
+          "slots": "F09,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://aquafunded.com/forex-rules",
+          "label": "Forex Rules",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://aquafunded.com/trader-plan",
+          "label": "Trader Plan (Scaling)",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://aquafunded.com/rewards",
+          "label": "Rewards",
+          "slots": "F07,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.aquafunded.com/en/",
+          "label": "FAQ / Help Center",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://aquafunded.com/",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://aquafunded.com/",
+          "plan_name": "One Step"
+        },
+        {
+          "url": "https://aquafunded.com/",
+          "plan_name": "Two Step"
+        },
+        {
+          "url": "https://aquafunded.com/",
+          "plan_name": "Three Step"
+        },
+        {
+          "url": "https://aquafunded.com/",
+          "plan_name": "Aqua Man"
+        }
+      ]
+    },
+    "for-traders": {
+      "slot_urls": [
+        {
+          "url": "https://fortraders.com/about",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://fortraders.com/how-it-works",
+          "label": "How It Works",
+          "slots": "F07,F08,F09,F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://fortraders.com/our-rules",
+          "label": "Our Rules",
+          "slots": "F10,F11,F12,F13,F14,F15,F19,F20"
+        },
+        {
+          "url": "https://fortraders.com/rewards-and-testimonials",
+          "label": "Rewards & Testimonials",
+          "slots": "F07,F08,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://fortraders.com/loyalty",
+          "label": "Loyalty Club",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://fortraders.com/",
+          "label": "Homepage (Pricing Section)",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://help.fortraders.com/en/",
+          "label": "FAQ / Help Center",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://fortraders.com/fast-one-step",
+          "plan_name": "Fast Challenge - One-step"
+        },
+        {
+          "url": "https://fortraders.com/instant-pro",
+          "plan_name": "Instant Pro"
+        }
+      ]
+    },
+    "lark-funding": {
+      "slot_urls": [
+        {
+          "url": "https://www.larkfunding.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F10,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.larkfunding.com/trader-rewards",
+          "label": "Trader Rewards (Earn in Drawdown)",
+          "slots": "F08,F19,F20"
+        },
+        {
+          "url": "https://helpdesk.larkfunding.com/en/",
+          "label": "Help Center / FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://www.larkfunding.com/terms-of-use",
+          "label": "Terms of Use",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://www.larkfunding.com/refund-policy",
+          "label": "Refund Policy",
+          "slots": "F16,F17,F18"
+        },
+        {
+          "url": "https://helpdesk.larkfunding.com/en/articles/11739114-what-is-lark-funding",
+          "label": "F02/F03 - About/Company page (What is Lark Funding?)",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://helpdesk.larkfunding.com/en/articles/11738989-what-trading-platform-does-lark-funding-offer",
+          "label": "F11 - Trading platform (DXTrade, cTrader, Match-Trader)",
+          "slots": "F11"
+        },
+        {
+          "url": "https://www.larkfunding.com/terms",
+          "label": "F12/F13 - Server/balance calculation time (5 PM EST in Terms of Use)",
+          "slots": "F12,F13"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://larkfunding.com/",
+          "plan_name": "Instant"
+        },
+        {
+          "url": "https://larkfunding.com/",
+          "plan_name": "1-Step"
+        },
+        {
+          "url": "https://larkfunding.com/",
+          "plan_name": "3-Step"
+        },
+        {
+          "url": "https://larkfunding.com/trader-rewards",
+          "plan_name": "Lark Base (1-Step Rewards)"
+        }
+      ]
+    },
+    "qt-funded": {
+      "slot_urls": [
+        {
+          "url": "https://qtfunded.quanttekel.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F10,F11,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/about/",
+          "label": "About / Company",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/evaluations/",
+          "label": "Plans / Pricing",
+          "slots": "F21,F22,F14,F15,F19,F20"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/qt-capital/",
+          "label": "QT Capital (Scale-Up / Reward Program)",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/futures/",
+          "label": "Futures (Payment Methods)",
+          "slots": "F16,F17,F18"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://qtfunded.quanttekel.com/evaluations/",
+          "plan_name": "QT 2 Step"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/evaluations/",
+          "plan_name": "QT 2 Step Elite"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/evaluations/",
+          "plan_name": "QT Instant"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/evaluations/",
+          "plan_name": "QT 1 Step"
+        },
+        {
+          "url": "https://qtfunded.quanttekel.com/evaluations/",
+          "plan_name": "QT Power"
+        }
+      ]
+    },
+    "audacity-capital": {
+      "slot_urls": [
+        {
+          "url": "https://audacity.capital/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F19,F20,F21"
+        },
+        {
+          "url": "https://audacity.capital/about/",
+          "label": "About",
+          "slots": "F02,F03,F10"
+        },
+        {
+          "url": "https://audacity.capital/funded-trader-program/",
+          "label": "Funded Trader Program (Plans & Pricing)",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://audacity.capital/knowledge-center/",
+          "label": "Knowledge Center (FAQ & Rules)",
+          "slots": "FAQ,F07,F08,F09,F10,F12,F13"
+        },
+        {
+          "url": "https://audacity.capital/support/",
+          "label": "Support / FAQ",
+          "slots": "FAQ,F10"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://audacity.capital/funded-trader-program/",
+          "plan_name": "Ability Challenge"
+        },
+        {
+          "url": "https://audacity.capital/funded-trader-program/",
+          "plan_name": "Ability One"
+        },
+        {
+          "url": "https://audacity.capital/funded-trader-program/",
+          "plan_name": "FTP"
+        }
+      ]
+    },
+    "moneta-funded": {
+      "slot_urls": [
+        {
+          "url": "https://www.monetafunded.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03,F07"
+        },
+        {
+          "url": "https://www.monetafunded.com/two-step/",
+          "label": "Plans & Pricing (Challenge Builder)",
+          "slots": "F10,F11,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.monetafunded.com/compare-challenges/",
+          "label": "Compare Challenges",
+          "slots": "F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.monetafunded.com/compare-platforms/",
+          "label": "Compare Platforms",
+          "slots": "F10,F11,F12"
+        },
+        {
+          "url": "https://www.monetafunded.com/general-rules/",
+          "label": "General Rules",
+          "slots": "F10,F11,F12,F13"
+        },
+        {
+          "url": "https://help.monetafunded.com/en/",
+          "label": "Help Center / FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://www.monetafunded.com/phoenix/",
+          "label": "Phoenix Instant (Scale-up Program)",
+          "slots": "F09"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.monetafunded.com/one-step/",
+          "plan_name": "One-Step Challenge"
+        },
+        {
+          "url": "https://www.monetafunded.com/two-step/",
+          "plan_name": "Two-Step Challenge"
+        },
+        {
+          "url": "https://www.monetafunded.com/instant-funding/",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://www.monetafunded.com/instant-funding-pro/",
+          "plan_name": "Instant Pro"
+        },
+        {
+          "url": "https://www.monetafunded.com/phoenix/",
+          "plan_name": "Phoenix Instant"
+        },
+        {
+          "url": "https://www.monetafunded.com/sprint-challenge/",
+          "plan_name": "Sprint Challenge"
+        }
+      ]
+    },
+    "atmos-funded": {
+      "slot_urls": [
+        {
+          "url": "https://atmosfunded.com/",
+          "label": "Homepage (Plans/Pricing, Features, Profit Split)",
+          "slots": "F07,F08,F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://atmosfunded.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://atmosfunded.com/atmos-program/",
+          "label": "Atmos Program (Scale-up, Reward Program)",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://atmosfunded.com/rules/",
+          "label": "Rules (Trading Conditions, Leverage, Drawdown)",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://atmosfunded.com/atmos-funded/",
+          "label": "Atmos Elevate (Payouts, Profit Split, Taurex Transfer)",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.atmosfunded.com/en/",
+          "label": "Help Center (Main FAQ)",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://help.atmosfunded.com/en/collections/15519934-rules-trading-conditions",
+          "label": "Help: Rules & Trading Conditions",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://help.atmosfunded.com/en/collections/15519935-funding-payouts",
+          "label": "Help: Funding & Payouts",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.atmosfunded.com/en/collections/15519948-payments-billing",
+          "label": "Help: Payments & Billing",
+          "slots": "F16,F17,F18"
+        },
+        {
+          "url": "https://help.atmosfunded.com/en/collections/15520714-trading-platforms",
+          "label": "Help: Trading Platforms",
+          "slots": "F10,F11,F14"
+        },
+        {
+          "url": "https://help.atmosfunded.com/en/collections/15519923-challenges-products",
+          "label": "Help: Challenges & Products",
+          "slots": "F21,F22"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://atmosfunded.com/nova-challenge/",
+          "plan_name": "Atmos Nova"
+        },
+        {
+          "url": "https://atmosfunded.com/atmos-program/",
+          "plan_name": "Atmos Program"
+        }
+      ]
+    },
+    "finotive-funding": {
+      "slot_urls": [
+        {
+          "url": "https://finotivefunding.com/",
+          "label": "Homepage",
+          "slots": "F02,F03,F07,F08,F16,F17,F18"
+        },
+        {
+          "url": "https://finotivefunding.com/accounts",
+          "label": "Accounts Overview",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://finotivefunding.com/compare",
+          "label": "Compare Accounts",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://finotivefunding.com/challenge",
+          "label": "Challenge Plans",
+          "slots": "F09,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://finotivefunding.com/instant-funding",
+          "label": "Instant Funding Plan",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://finotivefunding.com/finotive-pro",
+          "label": "Pro Plan",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://finotivefunding.com/trading",
+          "label": "Trading Conditions",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://finotivefunding.com/rules",
+          "label": "Trading Rules",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://finotivefunding.com/payouts",
+          "label": "Payouts / Payment Methods",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://help.finotivefunding.com/en",
+          "label": "FAQ / Help Center",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://finotivefunding.com/challenge",
+          "plan_name": "Challenge"
+        },
+        {
+          "url": "https://finotivefunding.com/instant-funding",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://finotivefunding.com/finotive-pro",
+          "plan_name": "Finotive Pro"
+        }
+      ]
+    },
+    "trade-the-pool": {
+      "slot_urls": [
+        {
+          "url": "https://tradethepool.com/about/",
+          "label": "About",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://tradethepool.com/the-program/",
+          "label": "The Program (Plans, Conditions, Profit Split, Rules)",
+          "slots": "F07,F08,F09,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://tradethepool.com/funded-phase/",
+          "label": "Funded Phase (Profit Split, Scale-Up, Payout)",
+          "slots": "F08,F09,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://tradethepool.com/the-program/#faqs",
+          "label": "FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://tradethepool.com/",
+          "label": "Homepage (Payment methods, Plans overview)",
+          "slots": "F16,F21,F22"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://tradethepool.com/the-program/",
+          "plan_name": "Flex Evaluation"
+        },
+        {
+          "url": "https://tradethepool.com/the-program/",
+          "plan_name": "Max Evaluation"
+        }
+      ]
+    },
+    "thinkcapital": {
+      "slot_urls": [
+        {
+          "url": "https://www.thinkcapital.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.thinkcapital.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://www.thinkcapital.com/lightning/",
+          "label": "Lightning Program (Plans/Pricing)",
+          "slots": "F10,F11,F12,F13,F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.thinkcapital.com/dual-step/",
+          "label": "Dual Step Program",
+          "slots": "F10,F11,F12,F13,F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.thinkcapital.com/nexus/",
+          "label": "Nexus Program",
+          "slots": "F10,F11,F12,F13,F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.thinkcapital.com/instant-funding/",
+          "label": "Bolt Instant Funding Program",
+          "slots": "F10,F11,F12,F13,F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.thinkcapital.com/how-it-works/",
+          "label": "How It Works",
+          "slots": "F07,F08,F09,F16,F17,F18"
+        },
+        {
+          "url": "https://www.thinkcapital.com/faqs/",
+          "label": "FAQ",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.thinkcapital.com/lightning/",
+          "plan_name": "Lightning"
+        },
+        {
+          "url": "https://www.thinkcapital.com/dual-step/",
+          "plan_name": "Dual Step"
+        },
+        {
+          "url": "https://www.thinkcapital.com/nexus/",
+          "plan_name": "Nexus"
+        },
+        {
+          "url": "https://www.thinkcapital.com/instant-funding/",
+          "plan_name": "Bolt"
+        }
+      ]
+    },
+    "funded-trading-plus": {
+      "slot_urls": [
+        {
+          "url": "https://www.fundedtradingplus.com/about-us",
+          "label": "About Us",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/",
+          "label": "Homepage (firm pitch, features, plans overview)",
+          "slots": "F07,F08,F09,F21,F22"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/prop-trading-challenges/compare-challenges",
+          "label": "Compare Challenges (plans comparison table)",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/prop-trading-challenges/one-step",
+          "label": "1-Step Challenge",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/prop-trading-challenges/two-step",
+          "label": "2-Step Challenge",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/prop-trading-challenges/instant-funding",
+          "label": "Instant Funding",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/trading-rules/",
+          "label": "Trading Rules (broker, platform, rules)",
+          "slots": "F10,F11,F12,F13"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/ft-leverage/",
+          "label": "FT+ Leverage",
+          "slots": "F14,F15"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/withdrawals/",
+          "label": "Withdrawals (hub page)",
+          "slots": "F16,F17,F18"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/withdrawals-overview/",
+          "label": "Withdrawals Overview (payment/payout policy)",
+          "slots": "F16,F17,F18"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/withdrawal-methods-offered/",
+          "label": "Withdrawal Methods Offered",
+          "slots": "F16,F17"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/profit-split/",
+          "label": "Profit Split",
+          "slots": "F19,F20"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/faqs/",
+          "label": "FAQs",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://help.fundedtradingplus.com/",
+          "label": "Help Center (main hub)",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/available-markets",
+          "label": "Available Markets (instruments, broker/platform context)",
+          "slots": "F10,F11"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.fundedtradingplus.com/prop-trading-challenges/instant-funding",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/prop-trading-challenges/one-step",
+          "plan_name": "1-Step Express"
+        },
+        {
+          "url": "https://www.fundedtradingplus.com/prop-trading-challenges/two-step",
+          "plan_name": "2-Step Classic"
+        }
+      ]
+    },
+    "nordic-funder": {
+      "slot_urls": [
+        {
+          "url": "https://nordicfunder.com/",
+          "label": "Homepage",
+          "slots": "F07,F08,F09,F19,F20"
+        },
+        {
+          "url": "https://nordicfunder.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://nordicfunder.com/accounts/",
+          "label": "Programs / Pricing",
+          "slots": "F21,F22,F14,F15,F19,F20"
+        },
+        {
+          "url": "https://nordicfunder.com/how-it-works/",
+          "label": "How It Works",
+          "slots": "F07,F08,F09,F16,F17,F18"
+        },
+        {
+          "url": "https://nordicfunder.com/faq/",
+          "label": "FAQ",
+          "slots": "F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://nordicfunder.com/accounts/",
+          "plan_name": "One-Stage Challenge"
+        },
+        {
+          "url": "https://nordicfunder.com/accounts/",
+          "plan_name": "Two-Stage Challenge"
+        },
+        {
+          "url": "https://nordicfunder.com/accounts/",
+          "plan_name": "Three-Stage Challenge"
+        }
+      ]
+    },
+    "fxify": {
+      "slot_urls": [
+        {
+          "url": "https://fxify.com/",
+          "label": "Homepage",
+          "slots": "F07,F08"
+        },
+        {
+          "url": "https://fxify.com/how-it-works/",
+          "label": "How It Works",
+          "slots": "F02,F03,F07,F08,F09"
+        },
+        {
+          "url": "https://fxify.com/backed-by-a-broker/",
+          "label": "Backed by a Broker (Trading Conditions)",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://fxify.com/programs/",
+          "label": "Programs Overview",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://fxify.com/programs/two-phase/",
+          "label": "Two Phase Program",
+          "slots": "F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://fxify.com/programs/one-phase/",
+          "label": "One Phase Program",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://fxify.com/programs/three-phase-challenge/",
+          "label": "Three Phase Program",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://fxify.com/programs/instant-funding/",
+          "label": "Instant Funding Program",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://fxify.com/programs/lightning-challenge/",
+          "label": "Lightning Challenge Program",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://fxify.com/fast-payouts/",
+          "label": "Fast Payouts",
+          "slots": "F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://fxify.com/faqs/",
+          "label": "FAQ",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://fxify.com/programs/one-phase/",
+          "plan_name": "One Phase"
+        },
+        {
+          "url": "https://fxify.com/programs/two-phase/",
+          "plan_name": "Two Phase"
+        },
+        {
+          "url": "https://fxify.com/programs/three-phase-challenge/",
+          "plan_name": "Three Phase"
+        },
+        {
+          "url": "https://fxify.com/programs/instant-funding/",
+          "plan_name": "Instant Funding"
+        },
+        {
+          "url": "https://fxify.com/programs/lightning-challenge/",
+          "plan_name": "Lightning Challenge"
+        },
+        {
+          "url": "https://fxify.com/programs/crypto",
+          "plan_name": "Crypto Funding Programs"
+        }
+      ]
+    },
+    "the-trading-pit": {
+      "slot_urls": [
+        {
+          "url": "https://www.thetradingpit.com/about-us",
+          "label": "About / Company",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://www.thetradingpit.com/cfds-prop-trading",
+          "label": "CFDs Prop Trading (features, conditions, profit split, plans)",
+          "slots": "F07,F08,F09,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://www.thetradingpit.com/futures",
+          "label": "Futures (plans, trading conditions, profit split)",
+          "slots": "F21,F22,F19,F20,F10,F11,F12,F13"
+        },
+        {
+          "url": "https://www.thetradingpit.com/lp/all-rewards",
+          "label": "All Rewards (reward/scale-up program)",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://support.thetradingpit.com/trading-rules",
+          "label": "Trading Rules (FAQ/rules)",
+          "slots": "FAQ,Rules"
+        },
+        {
+          "url": "https://support.thetradingpit.com/getting-started",
+          "label": "Getting Started Help Center (payments, platform, leverage, commissions)",
+          "slots": "F14,F15,F16,F17,F18"
+        },
+        {
+          "url": "https://support.thetradingpit.com/",
+          "label": "Help Center (main FAQ/rules hub)",
+          "slots": "FAQ"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://www.thetradingpit.com/cfds-prop-trading",
+          "plan_name": "CFDs Prop Trading"
+        },
+        {
+          "url": "https://www.thetradingpit.com/futures",
+          "plan_name": "Futures"
+        },
+        {
+          "url": "https://info.thetradingpit.com/en-gb/the-stocks-challenge",
+          "plan_name": "Stocks Challenge"
+        }
+      ]
+    },
+    "ment-funding": {
+      "slot_urls": [
+        {
+          "url": "https://mentfunding.com/",
+          "label": "Homepage (Plans, Rules, About, Features)",
+          "slots": "F02,F03,F07,F08,F09,F10,F11,F12,F13,F16,F17,F18,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://mentfunding.com/commissions-and-products/",
+          "label": "Commissions and Products",
+          "slots": "F14,F15"
+        },
+        {
+          "url": "https://mentfunding.com/terms-and-conditions/",
+          "label": "Terms and Conditions",
+          "slots": "F02,F03,F16,F18"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://dashboard.mentfunding.com/evaluation",
+          "plan_name": "1-Step Evaluation"
+        }
+      ]
+    },
+    "hola-prime": {
+      "slot_urls": [
+        {
+          "url": "https://holaprime.com/about-us/",
+          "label": "About Us",
+          "slots": "F02,F03"
+        },
+        {
+          "url": "https://holaprime.com/",
+          "label": "Homepage (features, profit split, payment overview)",
+          "slots": "F07,F08,F16,F17,F18,F19,F20"
+        },
+        {
+          "url": "https://holaprime.com/forex/",
+          "label": "Forex Plans Overview",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://holaprime.com/forex/pro-challenge/",
+          "label": "Pro Challenge Plan",
+          "slots": "F10,F11,F12,F14,F15,F19,F20,F21,F22"
+        },
+        {
+          "url": "https://holaprime.com/forex/prime-challenge/",
+          "label": "Prime Challenge Plan",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://holaprime.com/forex/one-challenge/",
+          "label": "One Challenge Plan",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://holaprime.com/forex/direct-account/",
+          "label": "Direct Account Plan",
+          "slots": "F21,F22"
+        },
+        {
+          "url": "https://holaprime.com/forex/forex-trading-rules/",
+          "label": "Forex Trading Rules",
+          "slots": "F10,F11,F12,F13,F14,F15"
+        },
+        {
+          "url": "https://holaprime.com/forex/scaling/",
+          "label": "Scaling Plan (scale-up program)",
+          "slots": "F08,F09"
+        },
+        {
+          "url": "https://holaprime.com/prime-circle/",
+          "label": "Prime Circle (reward program)",
+          "slots": "F07,F08"
+        },
+        {
+          "url": "https://holaprime.com/forex/trading-platforms/",
+          "label": "Trading Platforms",
+          "slots": "F11,F12"
+        },
+        {
+          "url": "https://holaprime.com/forex/faq/",
+          "label": "Forex FAQ",
+          "slots": "FAQ"
+        },
+        {
+          "url": "https://holaprime.com/payout-transparency-report/",
+          "label": "Payout Transparency Report",
+          "slots": "F16,F17,F18"
+        }
+      ],
+      "plan_urls": [
+        {
+          "url": "https://holaprime.com/forex/pro-challenge/",
+          "plan_name": "Pro Challenge"
+        },
+        {
+          "url": "https://holaprime.com/forex/prime-challenge/",
+          "plan_name": "Prime Challenge"
+        },
+        {
+          "url": "https://holaprime.com/forex/one-challenge/",
+          "plan_name": "ONE"
+        },
+        {
+          "url": "https://holaprime.com/forex/direct-account/",
+          "plan_name": "Direct Account"
+        },
+        {
+          "url": "https://holaprime.com/forex/scaling/",
+          "plan_name": "Scaling Plan"
+        },
+        {
+          "url": "https://holaprime.com/futures/1-step-prime/",
+          "plan_name": "1 Step Prime Challenge"
+        },
+        {
+          "url": "https://holaprime.com/futures/direct-account/",
+          "plan_name": "Direct Account"
+        }
+      ]
+    }
+  }
+}

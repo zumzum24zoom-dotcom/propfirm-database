@@ -1,0 +1,103 @@
+{
+  "firm": "funded-trading-plus",
+  "official_url": "https://www.fundedtradingplus.com/",
+  "help_base_url": "https://help.fundedtradingplus.com/",
+  "platform": "wordpress_faq",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {
+      "title": "Getting Started",
+      "url": "https://help.fundedtradingplus.com/",
+      "article_count": 3,
+      "articles": [
+        {"title": "What is Funded Trading Plus?", "url": "https://help.fundedtradingplus.com/what-is-funded-trading-plus/"},
+        {"title": "Trading Rules", "url": "https://help.fundedtradingplus.com/trading-rules/"},
+        {"title": "Account Scaling", "url": "https://help.fundedtradingplus.com/account-scaling/"}
+      ]
+    },
+    {
+      "title": "Program Information",
+      "url": "https://help.fundedtradingplus.com/",
+      "article_count": 8,
+      "articles": [
+        {"title": "Getting Started", "url": "https://help.fundedtradingplus.com/getting-started/"},
+        {"title": "FT+ Program Information (New)", "url": "https://help.fundedtradingplus.com/ft-program-information-new/"},
+        {"title": "1-Step Express Program Information", "url": "https://help.fundedtradingplus.com/1-step-express-program-information/"},
+        {"title": "2-Step Classic Program Information", "url": "https://help.fundedtradingplus.com/2-step-classic-program-information/"},
+        {"title": "Instant Program Information", "url": "https://help.fundedtradingplus.com/instant-program-information/"},
+        {"title": "Experienced Trader Program Information", "url": "https://help.fundedtradingplus.com/experienced-trader-program-information/"},
+        {"title": "Advanced Trader Program Information", "url": "https://help.fundedtradingplus.com/advanced-trader-program-information/"},
+        {"title": "Premium Trader Program Information", "url": "https://help.fundedtradingplus.com/premium-trader-program-information/"},
+        {"title": "FT+ Programs (Legacy)", "url": "https://help.fundedtradingplus.com/ft-programs-legacy/"}
+      ]
+    },
+    {
+      "title": "Trading Rules & Drawdown",
+      "url": "https://help.fundedtradingplus.com/",
+      "article_count": 11,
+      "articles": [
+        {"title": "FT+ Account Rules", "url": "https://help.fundedtradingplus.com/ft-account-rules/"},
+        {"title": "Symbol Loss Limit", "url": "https://help.fundedtradingplus.com/symbol-loss-limit/"},
+        {"title": "Copy Trading Rules", "url": "https://help.fundedtradingplus.com/copy-trading-rules/"},
+        {"title": "Consistency Rule", "url": "https://help.fundedtradingplus.com/consistency-rule/"},
+        {"title": "Daily Drawdown (Daily Simulated Loss)", "url": "https://help.fundedtradingplus.com/daily-drawdown-daily-simulated-loss-equity-or-balanced-based/"},
+        {"title": "What is Drawdown? (Simulated Loss)", "url": "https://help.fundedtradingplus.com/what-is-drawdown-simulated-loss/"},
+        {"title": "Relative Drawdown (Maximum Simulated Loss)", "url": "https://help.fundedtradingplus.com/relative-drawdown-maximum-simulated-loss/"},
+        {"title": "Drawdown Information", "url": "https://help.fundedtradingplus.com/drawdown-information/"},
+        {"title": "Prohibited Trading & Account Restrictions", "url": "https://help.fundedtradingplus.com/prohibited-trading-account-restrictions/"},
+        {"title": "Risk Review Policy", "url": "https://help.fundedtradingplus.com/risk-review-policy/"},
+        {"title": "Copy Trading is Prohibited", "url": "https://help.fundedtradingplus.com/copy-trading-is-prohibited/"}
+      ]
+    },
+    {
+      "title": "General Knowledge",
+      "url": "https://help.fundedtradingplus.com/",
+      "article_count": 4,
+      "articles": [
+        {"title": "General Knowledge about FT+", "url": "https://help.fundedtradingplus.com/general-knowledge-about-ft/"},
+        {"title": "FT+ Leverage", "url": "https://help.fundedtradingplus.com/ft-leverage/"},
+        {"title": "FT+ Swap Free Accounts (2026)", "url": "https://help.fundedtradingplus.com/ft-swap-free-accounts-2026/"},
+        {"title": "Accounts Under Management (AUM)", "url": "https://help.fundedtradingplus.com/accounts-under-management-aum/"}
+      ]
+    },
+    {
+      "title": "Trading Platforms",
+      "url": "https://help.fundedtradingplus.com/",
+      "article_count": 6,
+      "articles": [
+        {"title": "Match Trader Overview", "url": "https://help.fundedtradingplus.com/match-trader-overview/"},
+        {"title": "How to Log into Match-Trader", "url": "https://help.fundedtradingplus.com/how-to-log-into-match-trader/"},
+        {"title": "How to Place a Trade in Match Trader", "url": "https://help.fundedtradingplus.com/how-to-place-a-trade-in-match-trader/"},
+        {"title": "Match-Trader", "url": "https://help.fundedtradingplus.com/match-trader/"},
+        {"title": "How to Log in to MT5", "url": "https://help.fundedtradingplus.com/how-to-log-in-to-mt5/"},
+        {"title": "MT5", "url": "https://help.fundedtradingplus.com/mt5/"}
+      ]
+    },
+    {
+      "title": "Withdrawals & Payouts",
+      "url": "https://help.fundedtradingplus.com/",
+      "article_count": 4,
+      "articles": [
+        {"title": "Withdrawals Overview", "url": "https://help.fundedtradingplus.com/withdrawals-overview/"},
+        {"title": "Profit Split", "url": "https://help.fundedtradingplus.com/profit-split/"},
+        {"title": "Withdrawal Methods Offered", "url": "https://help.fundedtradingplus.com/withdrawal-methods-offered/"},
+        {"title": "Withdrawals", "url": "https://help.fundedtradingplus.com/withdrawals/"}
+      ]
+    },
+    {
+      "title": "FAQ & Compliance",
+      "url": "https://help.fundedtradingplus.com/",
+      "article_count": 6,
+      "articles": [
+        {"title": "Am I Liable for Losses?", "url": "https://help.fundedtradingplus.com/am-i-liable-for-losses-as-an-ft-trader-on-my-simulated-live-account/"},
+        {"title": "Identity Checks (KYC)", "url": "https://help.fundedtradingplus.com/identity-checks-kyc-know-your-customer/"},
+        {"title": "Does FT+ Support EAs/Algos/Bots?", "url": "https://help.fundedtradingplus.com/does-your-simulated-live-environment-support-the-use-of-eas-algos-or-bots/"},
+        {"title": "FAQ's", "url": "https://help.fundedtradingplus.com/faqs/"},
+        {"title": "KYC Verification Process", "url": "https://help.fundedtradingplus.com/kyc-verification-process/"},
+        {"title": "Getting Verified", "url": "https://help.fundedtradingplus.com/getting-verified/"}
+      ]
+    }
+  ],
+  "notes": "WordPress flat KB. 43 articles total, grouped into 7 logical categories. Full article list enumerated. Critical: Trading Rules & Drawdown(11), Program Information(9)."
+}

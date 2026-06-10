@@ -1,0 +1,28 @@
+{
+  "firmSlug": "bemfunding",
+  "公式URL": "https://bemfunding.com/faq",
+  "extractedAt": "2026-06-10T16:41:52.626Z",
+  "クーポン": [
+    {
+      "code": "ONE",
+      "discount": "30%割引",
+      "expires": null
+    }
+  ],
+  "slotData": {
+    "priceTable": [
+      {
+        "text": "{\"rows\":[]}"
+      }
+    ],
+    "planList": [
+      {
+        "text": ""
+      }
+    ]
+  },
+  "diff": {
+    "summary": "new",
+    "changes": []
+  }
+}

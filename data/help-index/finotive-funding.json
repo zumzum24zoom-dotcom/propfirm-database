@@ -1,0 +1,19 @@
+{
+  "firm": "finotive-funding",
+  "official_url": "https://finotivefunding.com/",
+  "help_base_url": "https://help.finotivefunding.com/en",
+  "platform": "intercom",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {"title": "What is Finotive Funding?", "url": "https://help.finotivefunding.com/en/collections/1-what-is-finotive-funding", "article_count": 8, "articles": []},
+    {"title": "Account Management & Types", "url": "https://help.finotivefunding.com/en/collections/2-account-management-and-types", "article_count": 14, "articles": []},
+    {"title": "Affiliates & Promotions", "url": "https://help.finotivefunding.com/en/collections/3-affiliates-and-promotions", "article_count": 27, "articles": []},
+    {"title": "Compliance & Legal", "url": "https://help.finotivefunding.com/en/collections/4-compliance-and-legal", "article_count": 11, "articles": []},
+    {"title": "Payouts & Refunds", "url": "https://help.finotivefunding.com/en/collections/6-payouts-and-refunds", "article_count": 7, "articles": []},
+    {"title": "Support & Troubleshooting", "url": "https://help.finotivefunding.com/en/collections/7-support-and-troubleshooting", "article_count": 8, "articles": []},
+    {"title": "Trading Rules & Risk", "url": "https://help.finotivefunding.com/en/collections/8-trading-rules-and-risk", "article_count": 31, "articles": []},
+    {"title": "Prohibited Trading Strategies", "url": "https://help.finotivefunding.com/en/collections/13-prohibited-trading-strategies", "article_count": 12, "articles": []}
+  ],
+  "notes": "8 collections, ~118 articles total. articles[] empty — enumerate at normalize-firm time. Critical: Trading Rules & Risk(31), Affiliates & Promotions(27), Prohibited Trading Strategies(12)."
+}

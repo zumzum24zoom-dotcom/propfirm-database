@@ -3,14 +3,13 @@
     "generated_at": "2026-06-10",
     "total_firms": 33,
     "discovered": 32,
-    "blocked_or_unknown": 0,
+    "blocked_or_unknown": 1,
     "out_of_scope": 1,
     "method": "WebFetch + Playwright browser_evaluate to find help center links from official site nav/footer"
   },
   "by_platform": {
     "intercom": [
       "city-traders-imperium",
-      "the5ers",
       "fundednext",
       "fundedelite",
       "top-one-trader",
@@ -22,12 +21,13 @@
       "aquafunded",
       "for-traders",
       "lark-funding",
-      "qt-funded",
       "finotive-funding",
       "moneta-funded",
       "atmos-funded",
-      "funded-trading-plus",
       "fundingpips"
+    ],
+    "zendesk_or_other_kb": [
+      "qt-funded"
     ],
     "wordpress_faq": [
       "ftmo",
@@ -38,7 +38,9 @@
       "thinkcapital",
       "nordic-funder",
       "hola-prime",
-      "instant-funding"
+      "instant-funding",
+      "the5ers",
+      "funded-trading-plus"
     ],
     "wordpress_kb": [
       "audacity-capital"
@@ -77,43 +79,46 @@
       "slug": "the5ers",
       "official_url": "https://www.the5ers.com/",
       "help_base_url": "https://help.the5ers.com/",
-      "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "Also has https://futures-help.the5ers.com/futures/ for futures product."
+      "platform": "wordpress_faq",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Re-classified from intercom to wordpress_faq. 8 categories, 77 articles fully enumerated."
     },
     {
       "slug": "fundingpips",
       "official_url": "https://fundingpips.com/",
       "help_base_url": "https://help.fundingpips.com/",
       "platform": "intercom",
-      "fetch_status": "discovered",
+      "fetch_status": "blocked",
       "indexed": false,
-      "notes": "WebFetch 403, used Playwright."
+      "notes": "WebFetch 403 + browser MCP blocked. Cannot enumerate. Retry manually at normalize-firm time."
     },
     {
       "slug": "fundednext",
       "official_url": "https://fundednext.com/",
       "help_base_url": "https://help.fundednext.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "15 collections, ~292 articles. Shallow index."
     },
     {
       "slug": "fundedelite",
       "official_url": "https://fundedelite.com/",
       "help_base_url": "https://faq.fundedelite.com/en",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "8 collections, ~73 articles. Shallow index."
     },
     {
       "slug": "top-one-trader",
       "official_url": "https://www.toponetrader.com/",
       "help_base_url": "https://help.toponetrader.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "15 collections, ~187 articles. Shallow index."
     },
     {
       "slug": "instant-funding",
@@ -129,42 +134,45 @@
       "official_url": "https://www.fintokei.com/",
       "help_base_url": "https://support.fintokei.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "11 collections, ~135 articles. Shallow index."
     },
     {
       "slug": "hantec-trader",
       "official_url": "https://htrader.hmarkets.com/",
       "help_base_url": "https://htrader.hmarkets.com/jp/company/faqs/",
       "platform": "wordpress_faq",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "Original hantectrader.com redirects to htrader.com → htrader.hmarkets.com (Hantec Markets subdomain)."
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Inline accordion FAQ (Japanese). Original hantectrader.com redirects to htrader.hmarkets.com."
     },
     {
       "slug": "alpha-capital",
       "official_url": "https://www.alphacapitalgroup.uk/",
       "help_base_url": "https://help.alphacapitalgroup.uk/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "10 collections, ~75 articles. Shallow index."
     },
     {
       "slug": "e8-markets",
       "official_url": "https://e8markets.com/",
       "help_base_url": "https://help.e8markets.com/en",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "WebFetch 403, used Playwright."
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "9 collections, ~84 articles. Shallow index."
     },
     {
       "slug": "maven",
       "official_url": "https://maventrading.com/",
       "help_base_url": "https://maventrading.com/faqs",
       "platform": "wordpress_faq",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Inline accordion FAQ. No article URLs."
     },
     {
       "slug": "bem-funding",
@@ -189,41 +197,45 @@
       "official_url": "https://blueberryfunded.com/",
       "help_base_url": "https://help.blueberryfunded.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "16 collections, ~109 articles. Shallow index."
     },
     {
       "slug": "aquafunded",
       "official_url": "https://aquafunded.com/",
       "help_base_url": "https://help.aquafunded.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "9 collections, ~68 articles. Shallow index."
     },
     {
       "slug": "for-traders",
       "official_url": "https://fortraders.com/",
       "help_base_url": "https://help.fortraders.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "9 collections, ~107 articles. Shallow index."
     },
     {
       "slug": "lark-funding",
       "official_url": "https://www.larkfunding.com/",
       "help_base_url": "https://helpdesk.larkfunding.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "9 collections, ~60 articles. Shallow index."
     },
     {
       "slug": "qt-funded",
       "official_url": "https://qtfunded.quanttekel.com/",
-      "help_base_url": "http://support.qtfunded.com/",
-      "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "qtfunded.com redirects to qtfunded.quanttekel.com. Support subdomain on http."
+      "help_base_url": "https://support.qtfunded.com/hc/en-gb",
+      "platform": "zendesk_or_other_kb",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Zendesk KB. 6 categories confirmed. article_count=0 — Zendesk /sections/ enumeration at normalize-firm time."
     },
     {
       "slug": "audacity-capital",
@@ -239,18 +251,18 @@
       "official_url": "https://www.monetafunded.com/",
       "help_base_url": "https://help.monetafunded.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "WebFetch 403, used Playwright."
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "9 collections, ~60 articles. Shallow index."
     },
     {
       "slug": "atmos-funded",
       "official_url": "https://atmosfunded.com/",
-      "help_base_url": "https://help.atmosfunded.com/",
+      "help_base_url": "https://help.atmosfunded.com/en/",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "WebFetch 403, used Playwright."
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "8 collections, ~51 articles. Shallow index."
     },
     {
       "slug": "atfunded",
@@ -266,8 +278,9 @@
       "official_url": "https://finotivefunding.com/",
       "help_base_url": "https://help.finotivefunding.com/en",
       "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "8 collections, ~118 articles. Shallow index."
     },
     {
       "slug": "trade-the-pool",
@@ -283,33 +296,36 @@
       "official_url": "https://www.thinkcapital.com/",
       "help_base_url": "https://www.thinkcapital.com/faqs/",
       "platform": "wordpress_faq",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "9 categories, ~64 articles. WordPress /tc-faqs/ pattern."
     },
     {
       "slug": "funded-trading-plus",
       "official_url": "https://www.fundedtradingplus.com/",
       "help_base_url": "https://help.fundedtradingplus.com/",
-      "platform": "intercom",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "WebFetch 403, used Playwright."
+      "platform": "wordpress_faq",
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Re-classified from intercom to wordpress_faq. 43 articles flat. 7 logical categories. Full article list enumerated."
     },
     {
       "slug": "nordic-funder",
       "official_url": "https://nordicfunder.com/",
       "help_base_url": "https://nordicfunder.com/faq/",
       "platform": "wordpress_faq",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "Inline accordion FAQ."
     },
     {
       "slug": "fxify",
       "official_url": "https://fxify.com/",
       "help_base_url": "https://fxify.com/faqs/",
       "platform": "wordpress_faq",
-      "fetch_status": "discovered",
-      "indexed": false
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "7 categories (incl. All FAQs aggregate), ~165 unique articles. Shallow index."
     },
     {
       "slug": "the-trading-pit",
@@ -334,9 +350,9 @@
       "official_url": "https://holaprime.com/",
       "help_base_url": "https://holaprime.com/forex/faq/",
       "platform": "wordpress_faq",
-      "fetch_status": "discovered",
-      "indexed": false,
-      "notes": "Forex FAQ. Also has https://holaprime.com/futures/faq/ for futures product."
+      "fetch_status": "ok",
+      "indexed": true,
+      "notes": "WordPress multilingual FAQ. 8 categories, ~51 articles. Also has /futures/faq/."
     }
   ]
 }
