@@ -5,6 +5,32 @@
 
 ---
 
+## 【セッション11・2026-06-10】normalize-firm --all 完了
+
+### 作業内容
+
+`normalize-firm --all` を実行。全30社（out_of_scope 1 + blocked 1 + own_site 1 除く）の `data/firms/{slug}.pipe.md` を生成。
+
+| 状態 | 件数 |
+|------|------|
+| 新規生成 | 30社 |
+| 既存（スキップ） | 1社（city-traders-imperium） |
+| 対象外 | atfunded（out_of_scope）、fundingpips（blocked）、trading（own_site） |
+
+ソース: `data/scans/*.json` + `data/help-index/*.json` のみ（ライブフェッチなし）。
+
+### 次のアクション
+
+1. **Page Maker 取込** — 各社 `.pipe.md` を Page Maker に貼付→格納→▶Planタブ生成→全プラン→Hugoエクスポート
+2. **verify-firm** — エクスポート後、スラッグ単位でデータ品質チェック
+3. **fundingpips 手動確認** — ブラウザで直接アクセスしてコレクション列挙後 normalize-firm 実行
+
+### ファイル変更
+
+- `data/firms/*.pipe.md` — 30件新規作成（commit 49bd664）
+
+---
+
 ## 【セッション11・2026-06-10】enumerate-help-index --all 完了
 
 ### 作業内容
