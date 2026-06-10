@@ -110,7 +110,8 @@ Hugo に貼る（計算ロジックは持たせない）
 |----------|----------|
 | `CLAUDE.md` | 役割・指示形式・起動時アクション |
 | `PROJECT_MAP.md` | **本ファイル**（構造の正本） |
-| `02_docs/HANDOFF.md` | 進捗・設計判断の正本（毎セッション読む） |
+| `02_docs/HANDOFF.md` | 現在地（進捗・設計判断）の正本（毎セッション読む。常に上書き） |
+| `02_docs/HANDOFF_archive.md` | 過去セッションログ・旧仕様。通常は読まない |
 | `02_docs/page-maker-v11-analysis.md` | Page Maker詳細仕様 |
 | `02_docs/用語辞典キー設計_v1.md` | glossary構造 |
 | `02_docs/計算定義_v1.md` | Widget Maker計算式定義 |

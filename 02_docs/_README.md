@@ -6,7 +6,7 @@
 
 | ファイル | 内容 |
 |---------|------|
-| `HANDOFF.md` | **進捗・設計判断の正本**。毎セッション開始時に読む |
+| `HANDOFF.md` | **現在地（進捗・設計判断）の正本**。毎セッション開始時に読む。常に上書き、追記しない |
 | `CLAUDE_CONTEXT.md` | 大方針・運用ルール |
 | `page-maker-v11-analysis.md` | Page Maker 構造分析（スロット・MASTER_DEFS仕様） |
 | `用語辞典キー設計_v1.md` | glossary 設計 |
@@ -23,6 +23,7 @@
 | `NotebookLM_アフィリエイト調査_v01.md` | アフィリエイト調査 |
 | `N089-SMC_Daily_Bias_*.md` | SMC分析ツール仕様 |
 | `N091-CryptoCompare_API_*.md` | 暗号資産API仕様 |
+| `HANDOFF_archive.md` | 過去セッションログ・旧仕様（Page Maker v11/Widget Maker期）。通常は読まなくてよい |
 
 ## 命名規則
 
