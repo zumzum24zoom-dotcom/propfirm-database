@@ -74,6 +74,7 @@ Hugo に貼る（計算ロジックは持たせない）
 | `01_tools/analysis/` | 分析系ツール |
 | `01_tools/chat/` | チャット系 |
 | `01_tools/utils/` | ユーティリティ |
+| `01_tools/launcher/` | 自作HTMLランチャー（port 8765 / ELECOMボタン起動想定） |
 | `01_tools/_archive/` | 旧バージョン保管 |
 | `02_docs/` | 全ドキュメント（HANDOFF, 分析レポート, ブリーフ） |
 | `03_intake/` | 新規ファーム取り込み用テンプレ・素材 |
@@ -81,6 +82,8 @@ Hugo に貼る（計算ロジックは持たせない）
 | `zz_notes/` | Obsidian Base / 雑メモ |
 | `scripts/` | Node.js スクリプト（クーポン抽出等） |
 | `PROJECT_HUB.canvas` / `PROJECT_HUB_v2.canvas` | Obsidian Canvas プロジェクトハブ |
+| `start-server.bat` | 加工ツール用ローカルサーバー起動（port 8080）。Canvas の🚀ボタンから起動 |
+| `01_tools/launcher/start.vbs` | ランチャー起動（port 8765・コンソール非表示）。ELECOMトラックボール等の1ボタン起動先 |
 
 ---
 
@@ -138,3 +141,4 @@ Hugo に貼る（計算ロジックは持たせない）
 ## 8. 更新履歴
 
 - 2026-06-10: 初版作成（リポジトリ自己説明化の起点）
+- 2026-06-11: `01_tools/launcher/` 追加（自作ランチャー / port 8765 / ELECOMボタン起動想定）

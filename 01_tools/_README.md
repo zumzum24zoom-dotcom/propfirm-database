@@ -11,6 +11,7 @@
 | `analysis/` | 分析系ツール |
 | `chat/` | チャット系ツール |
 | `utils/` | ユーティリティ（小物） |
+| `launcher/` | 自作HTMLランチャー（port 8765・ELECOM 1ボタン起動想定）。詳細は `launcher/_README.md` |
 | `_archive/` | 旧バージョン保管（参照のみ） |
 | `node_modules/` | スクリプト用依存（gitignoreで除外推奨） |
 

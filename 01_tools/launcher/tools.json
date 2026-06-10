@@ -1,0 +1,25 @@
+{
+  "$schema_comment": "name=表示名 / path=サーバルート起点の絶対パス / category=core|coupon|analysis|chat|utils|misc / description=短い説明 / hidden=trueで非表示",
+  "categories": {
+    "core": { "label": "Core", "order": 1 },
+    "coupon": { "label": "Coupon", "order": 2 },
+    "analysis": { "label": "Analysis", "order": 3 },
+    "chat": { "label": "Chat", "order": 4 },
+    "utils": { "label": "Utils", "order": 5 },
+    "misc": { "label": "Misc", "order": 9 }
+  },
+  "tools": [
+    {
+      "name": "Page Maker v12",
+      "path": "/01_tools/core/page-maker-v12.html",
+      "category": "core",
+      "description": "データ入力・MASTER_DEFS正本・Hugoエクスポート"
+    },
+    {
+      "name": "Widget Maker",
+      "path": "/01_tools/core/widget-maker.html",
+      "category": "core",
+      "description": "data/*.json → SVG/HTML 生成"
+    }
+  ]
+}
