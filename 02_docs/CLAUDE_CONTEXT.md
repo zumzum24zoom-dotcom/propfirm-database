@@ -97,7 +97,7 @@ MASTER_DEFS
 - `coupon/` — クーポン関連（Coupon Sidebar, coupon-fetcher, Dom scanner BMT）
 - `analysis/` — トレード分析・計算ツール（Consistency Planner等）
 - `chat/` — テキスト・LLM補助（chat-tree, text-structurer）
-- `utils/` — 開発ユーティリティ（site-scanner, check-braces, BLT等）
+- `utils/` — 開発ユーティリティ（BLT＝ブックマークレット集、html文章掃除、draft-viewer等）
 - `_archive/` — propfirm-database非関連のアーカイブ
 
 | ファイル | 用途 |

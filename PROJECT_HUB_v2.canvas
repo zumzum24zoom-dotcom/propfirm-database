@@ -3,7 +3,7 @@
 		{"id":"title","type":"text","text":"# 🗺️ PFD ハブ v2（縦フロー版）\n\n上から下へデータの流れ","x":-600,"y":-1100,"width":800,"height":100,"color":"6"},
 		{"id":"phase-collect","type":"text","text":"# 1️⃣ 収集","x":-1300,"y":-950,"width":2600,"height":70,"color":"5"},
 		{"id":"btn-notebooklm","type":"text","text":"# 📚\n# NotebookLM\n## [▶ 起動](https://notebooklm.google.com/)","x":-1300,"y":-840,"width":320,"height":280,"color":"1"},
-		{"id":"btn-site-scanner","type":"text","text":"# 🔖\n# site-scanner\n## [▶ ソース](01_tools/utils/site-scanner.js)","x":-940,"y":-840,"width":320,"height":280,"color":"1"},
+		{"id":"btn-site-scanner","type":"text","text":"# 🔖\n# site-scanner\n## [▶ ソース](01_tools/utils/BLT/price-scanner.js)","x":-940,"y":-840,"width":320,"height":280,"color":"1"},
 		{"id":"btn-dom-scanner","type":"text","text":"# 🍪\n# Dom Scanner\n## [▶ フォルダ](01_tools/coupon/Dom%20scanner%20BMT)","x":-580,"y":-840,"width":320,"height":280,"color":"1"},
 		{"id":"phase-process","type":"text","text":"# 2️⃣ 加工","x":-1300,"y":-510,"width":2600,"height":70,"color":"5"},
 		{"id":"btn-server","type":"text","text":"# 🚀\n# サーバー起動\n## [▶ 起動](start-server.bat)\n_先にクリック_","x":140,"y":-400,"width":320,"height":280,"color":"0"},
