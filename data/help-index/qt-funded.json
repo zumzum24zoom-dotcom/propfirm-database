@@ -1,0 +1,17 @@
+{
+  "firm": "qt-funded",
+  "official_url": "https://qtfunded.quanttekel.com/",
+  "help_base_url": "https://support.qtfunded.com/hc/en-gb",
+  "platform": "zendesk_or_other_kb",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {"title": "GETTING STARTED", "url": "https://support.qtfunded.com/hc/en-gb/categories/5394175828255-Getting-Started", "article_count": 0, "articles": []},
+    {"title": "ACCOUNT TYPES & PLANS", "url": "https://support.qtfunded.com/hc/en-gb/categories/5394122051871-Account-Types-Plans", "article_count": 0, "articles": []},
+    {"title": "TRADING RULES & RISK MANAGEMENT", "url": "https://support.qtfunded.com/hc/en-gb/categories/5394121828639-Trading-Rules-Risk-Management", "article_count": 0, "articles": []},
+    {"title": "FEES, PAYOUTS & PAYMENTS", "url": "https://support.qtfunded.com/hc/en-gb/categories/5394153626143-Fees-Payouts-Payments", "article_count": 0, "articles": []},
+    {"title": "COMPLIANCE & SECURITY", "url": "https://support.qtfunded.com/hc/en-gb/categories/5394153074975-Compliance-Security", "article_count": 0, "articles": []},
+    {"title": "COMPANY & PARTNERSHIPS", "url": "https://support.qtfunded.com/hc/en-gb/categories/5295580531231-Company-Partnerships", "article_count": 0, "articles": []}
+  ],
+  "notes": "Zendesk KB (http→https redirect). 6 categories confirmed. article_count=0 (not fetched — Zendesk /sections/ enumeration needed at normalize-firm time). Critical: Trading Rules & Risk Management, Account Types & Plans."
+}

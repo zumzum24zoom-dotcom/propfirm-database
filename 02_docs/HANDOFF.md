@@ -1,7 +1,43 @@
 # 引き継ぎ資料 — Prop Firm Challengers / propfirm-database
 
 > **運用ルール**: このファイル1枚を上書き更新する。セッション開始時はまずこれを読む。
-> **最終更新**: 2026-06-10（セッション10）
+> **最終更新**: 2026-06-10（セッション11）
+
+---
+
+## 【セッション11・2026-06-10】enumerate-help-index --all 完了
+
+### 作業内容
+
+`enumerate-help-index --all` スキルを完全実行。全33社中32社の `data/help-index/{slug}.json` を生成。
+
+| 状態 | 件数 | ファーム |
+|------|------|---------|
+| 新規インデックス完了 | 23社 | maven, hantec-trader, nordic-funder, the5ers, fundednext, fundedelite, top-one-trader, fintokei, alpha-capital, e8-markets, blueberry-funded, aquafunded, for-traders, lark-funding, qt-funded, moneta-funded, atmos-funded, finotive-funding, funded-trading-plus, thinkcapital, fxify, hola-prime, fundingpips(blocked) |
+| 既存（セッション10完了） | 9社 | city-traders-imperium, ftmo, brightfunded, instant-funding, bem-funding, audacity-capital, trade-the-pool, ment-funding, the-trading-pit |
+| out_of_scope | 1社 | atfunded（事業停止） |
+
+### 重要な再分類
+
+| ファーム | 旧分類 | 新分類 | 理由 |
+|---------|--------|--------|------|
+| the5ers | intercom | wordpress_faq | /collections/ 0件。実態は help.the5ers.com フラットWP構造 |
+| funded-trading-plus | intercom | wordpress_faq | help.fundedtradingplus.com は /collections/ 0件。フラットWPナレッジベース |
+| qt-funded | intercom | zendesk_or_other_kb | support.qtfunded.com → /hc/en-gb Zendesk構造 |
+
+### ブロック1件
+
+- **fundingpips**: WebFetch 403 + Browser MCP blocked。`fetch_status: "blocked"` で JSON 保存。normalize-firm 時に手動確認要。
+
+### ファイル変更
+
+- `data/help-index/*.json` — 23件新規作成
+- `data/help-index/_classification.json` — 全件 `indexed` / `platform` 更新、by_platform 修正、blocked_or_unknown=1
+
+### 次のアクション
+
+1. **`normalize-firm --all`** — `data/help-index/` を参照して `data/firms/{slug}.pipe.md` を生成（Phase 2開始）
+2. **fundingpips 手動確認** — ブラウザで直接アクセスしてコレクション列挙
 
 ---
 

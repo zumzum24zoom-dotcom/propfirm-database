@@ -1,0 +1,17 @@
+{
+  "firm": "maven",
+  "official_url": "https://maventrading.com/",
+  "help_base_url": "https://maventrading.com/faqs",
+  "platform": "wordpress_faq",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {
+      "title": "FAQ (inline)",
+      "url": "https://maventrading.com/faqs",
+      "article_count": 0,
+      "articles": []
+    }
+  ],
+  "notes": "Single-page inline accordion FAQ. Sections: Welcome to Maven, Trading Rules, Challenge Phase, Funded Phase. No individual article URLs. Content readable via WebFetch/pageText."
+}

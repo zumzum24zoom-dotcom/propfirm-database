@@ -1,0 +1,19 @@
+{
+  "firm": "atmos-funded",
+  "official_url": "https://atmosfunded.com/",
+  "help_base_url": "https://help.atmosfunded.com/en/",
+  "platform": "intercom",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {"title": "Getting Started with Atmos Funded", "url": "https://help.atmosfunded.com/en/collections/15519919-getting-started-with-atmos-funded", "article_count": 3, "articles": []},
+    {"title": "Challenges & Products", "url": "https://help.atmosfunded.com/en/collections/15519923-challenges-products", "article_count": 9, "articles": []},
+    {"title": "Rules & Trading Conditions", "url": "https://help.atmosfunded.com/en/collections/15519934-rules-trading-conditions", "article_count": 18, "articles": []},
+    {"title": "Funding & Payouts", "url": "https://help.atmosfunded.com/en/collections/15519935-funding-payouts", "article_count": 7, "articles": []},
+    {"title": "Payments & Billing", "url": "https://help.atmosfunded.com/en/collections/15519948-payments-billing", "article_count": 4, "articles": []},
+    {"title": "Trading Platforms", "url": "https://help.atmosfunded.com/en/collections/15520714-trading-platforms", "article_count": 5, "articles": []},
+    {"title": "Affiliates", "url": "https://help.atmosfunded.com/en/collections/10873576-affiliates", "article_count": 4, "articles": []},
+    {"title": "Discount Codes", "url": "https://help.atmosfunded.com/en/collections/13814314-discount-codes", "article_count": 1, "articles": []}
+  ],
+  "notes": "8 collections, ~51 articles total. articles[] empty — enumerate at normalize-firm time. Critical: Rules & Trading Conditions(18), Challenges & Products(9), Funding & Payouts(7)."
+}

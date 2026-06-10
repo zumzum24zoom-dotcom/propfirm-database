@@ -1,0 +1,27 @@
+{
+  "firm": "blueberry-funded",
+  "official_url": "https://blueberryfunded.com/",
+  "help_base_url": "https://help.blueberryfunded.com/en/",
+  "platform": "intercom",
+  "fetch_status": "ok",
+  "fetched_at": "2026-06-10",
+  "collections": [
+    {"title": "Getting Started / General Information", "url": "https://help.blueberryfunded.com/en/collections/14861508-getting-started-general-information", "article_count": 16, "articles": []},
+    {"title": "Prime Challenge (2-Step)", "url": "https://help.blueberryfunded.com/en/collections/15056548-prime-challenge-2-step", "article_count": 8, "articles": []},
+    {"title": "Instant Access Sim Accounts", "url": "https://help.blueberryfunded.com/en/collections/14280254-instant-access-sim-accounts", "article_count": 6, "articles": []},
+    {"title": "1-Step Challenge", "url": "https://help.blueberryfunded.com/en/collections/14856457-1-step-challenge", "article_count": 2, "articles": []},
+    {"title": "2-Step Challenge", "url": "https://help.blueberryfunded.com/en/collections/14857516-2-step-challenge", "article_count": 2, "articles": []},
+    {"title": "3-Step Challenge", "url": "https://help.blueberryfunded.com/en/collections/14866223-3-step-challenge", "article_count": 6, "articles": []},
+    {"title": "Synthetic Challenge", "url": "https://help.blueberryfunded.com/en/collections/14857703-synthetic-challenge", "article_count": 9, "articles": []},
+    {"title": "Trading Rules & Guidelines", "url": "https://help.blueberryfunded.com/en/collections/14861030-trading-rules-guidelines", "article_count": 20, "articles": []},
+    {"title": "Evaluation", "url": "https://help.blueberryfunded.com/en/collections/9737769-evaluation", "article_count": 3, "articles": []},
+    {"title": "Payouts", "url": "https://help.blueberryfunded.com/en/collections/9737770-payouts", "article_count": 16, "articles": []},
+    {"title": "Affiliates", "url": "https://help.blueberryfunded.com/en/collections/9762747-affiliates", "article_count": 11, "articles": []},
+    {"title": "Competitions", "url": "https://help.blueberryfunded.com/en/collections/10892162-competitions", "article_count": 1, "articles": []},
+    {"title": "Payments", "url": "https://help.blueberryfunded.com/en/collections/11366496-payments", "article_count": 5, "articles": []},
+    {"title": "Promotions", "url": "https://help.blueberryfunded.com/en/collections/14863157-promotions", "article_count": 2, "articles": []},
+    {"title": "KYC Verification", "url": "https://help.blueberryfunded.com/en/collections/11787808-kyc-verification", "article_count": 1, "articles": []},
+    {"title": "Announcements", "url": "https://help.blueberryfunded.com/en/collections/19567091-announcements", "article_count": 1, "articles": []}
+  ],
+  "notes": "16 collections, ~109 articles total. articles[] empty — enumerate at normalize-firm time. Critical: Trading Rules & Guidelines(20), Payouts(16), Getting Started(16)."
+}
