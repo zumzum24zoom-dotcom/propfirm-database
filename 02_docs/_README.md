@@ -30,4 +30,11 @@
 - 必読系はプレフィックスなし（HANDOFF, CLAUDE_CONTEXT等）
 - `N{番号}-` は NotebookLM由来の番号付き
 - バージョン付きは `_v{n}` サフィックス
+- **構想・未実装は `_proposal` サフィックス**（例: `discord-collector_v1_proposal.md`）。実装着手＆承認で `_proposal` を外す
 - 旧版は基本的に上書き（ドラフトが必要なら別ファイル）
+
+## 構想（未実装）
+
+| ファイル | 概要 |
+|---------|------|
+| `discord-collector_v1_proposal.md` | Discord公式チャンネルからクーポン・出金情報を定期収集する仕組み |

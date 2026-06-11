@@ -53,6 +53,7 @@ data/scans/ + data/help-index/ → /normalize-firm → data/firms/{slug}.pipe.md
 5. **normalize-firm draft → Page Maker取込 → exportHugo**（セッション11から持ち越し） — 30社の `.pipe.md` をPage Makerに取り込み、`data/firms/*.json` / `data/plans/*.json` を再生成
 6. **fundingpips 手動確認** — bot対策のためブラウザ手動操作でhelp-index/normalize-firm実施
 7. **定期巡回・差分検知システムの設計** — `data/firm-slot-urls.json` をURLレジストリとして利用する構想
+8. **Discord収集システム実装** — 設計: [`discord-collector_v1_proposal.md`](discord-collector_v1_proposal.md)（クーポン・出金情報を32ファームのDiscord公式チャンネルから定期収集）
 
 ---
 

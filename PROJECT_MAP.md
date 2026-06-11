@@ -76,7 +76,7 @@ Hugo に貼る（計算ロジックは持たせない）
 | `01_tools/utils/` | ユーティリティ |
 | `01_tools/launcher/` | 自作HTMLランチャー（port 8765 / ELECOMボタン起動想定） |
 | `01_tools/_archive/` | 旧バージョン保管 |
-| `02_docs/` | 全ドキュメント（HANDOFF, 分析レポート, ブリーフ） |
+| `02_docs/` | 全ドキュメント（HANDOFF, 分析レポート, ブリーフ）。`_proposal` 接尾辞=構想・未実装 / なし=実装済み正本 |
 | `03_intake/` | 新規ファーム取り込み用テンプレ・素材 |
 | `99_chat-tree/` | Obsidian会話ログ（自動生成） |
 | `zz_notes/` | Obsidian Base / 雑メモ |
