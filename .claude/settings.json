@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PYTHONUTF8=1 python \"${CLAUDE_PROJECT_DIR}/scripts/inject-handoff-context.py\"",
+            "timeout": 10,
+            "statusMessage": "HANDOFF.md読込中..."
+          }
+        ]
+      }
+    ]
+  }
+}
