@@ -51,7 +51,7 @@ def main():
         if warning:
             msg += " [HANDOFF未更新]"
         run(["git", "commit", "-m", msg], cwd=repo_root)
-        run(["git", "push"], cwd=repo_root)
+        run(["git", "push", "-u", "origin", "HEAD"], cwd=repo_root)
 
     return 0
 
