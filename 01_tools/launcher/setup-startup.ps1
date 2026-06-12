@@ -1,4 +1,4 @@
-# PFD Launcher — スタートアップ常駐の登録/解除（マシン毎に一度実行）
+﻿# PFD Launcher — スタートアップ常駐の登録/解除（マシン毎に一度実行）
 #
 #   登録:   powershell -ExecutionPolicy Bypass -File setup-startup.ps1
 #   解除:   powershell -ExecutionPolicy Bypass -File setup-startup.ps1 -Remove
