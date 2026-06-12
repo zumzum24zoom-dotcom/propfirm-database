@@ -43,6 +43,17 @@
       "path": "/01_tools/core/firm-tour.html",
       "category": "core",
       "description": "ファーム別スロットURL一覧ビューア"
+    },
+    {
+      "name": "firm-urls",
+      "path": "/01_tools/core/firm-urls.html",
+      "category": "core"
+    },
+    {
+      "name": "NotebookLM",
+      "path": "https://notebooklm.google.com/",
+      "category": "analysis",
+      "description": "ファーム資料のソース化・要約・Q&A"
     }
   ]
 }

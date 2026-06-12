@@ -173,6 +173,33 @@
   .field textarea { resize: vertical; min-height: 50px; }
   .field .hint { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
+  /* Segmented type toggle */
+  .seg { display: flex; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden; }
+  .seg-btn {
+    flex: 1;
+    padding: 6px 0;
+    border: none;
+    background: var(--bg);
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+  }
+  .seg-btn + .seg-btn { border-left: 1px solid var(--line-strong); }
+  .seg-btn.active { background: var(--accent); color: #fff; }
+  .seg-btn:not(.active):hover { background: var(--hover); }
+
+  /* App row marker */
+  .row .open .name .badge {
+    font-size: 9px; font-weight: 600;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    padding: 0 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.06em;
+  }
+
   .modal-actions {
     display: flex; gap: 8px; margin-top: 14px;
     justify-content: flex-end;
@@ -238,6 +265,13 @@
   <div class="modal">
     <h3 id="modalTitle">ツールを追加</h3>
     <div class="field">
+      <label>種類</label>
+      <div class="seg" id="typeSeg">
+        <button type="button" class="seg-btn active" data-type="web">Web / URL</button>
+        <button type="button" class="seg-btn" data-type="app">アプリ (.exe/.lnk)</button>
+      </div>
+    </div>
+    <div class="field">
       <label>名前 *</label>
       <input id="f_name" type="text" placeholder="Page Maker v12">
     </div>
@@ -247,7 +281,7 @@
         <input id="f_path" type="text" placeholder="/01_tools/core/page-maker-v12.html" style="flex:1;">
         <button type="button" class="btn" id="browseBtn" title="ファイル選択" style="padding:6px 10px;">📁</button>
       </div>
-      <div class="hint">サーバルート起点（例: /01_tools/core/xxx.html）または http(s)://...</div>
+      <div class="hint" id="pathHint">サーバルート起点（例: /01_tools/core/xxx.html）または http(s)://...</div>
     </div>
     <div class="field">
       <label>カテゴリ</label>
@@ -274,6 +308,25 @@ const escapeHtml = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<'
 let data = { categories: {}, tools: [] };
 let query = '';
 let editingIdx = -1;
+let formType = 'web';   // 'web' | 'app' — current add/edit modal type
+
+const HINTS = {
+  web: 'サーバルート起点（例: /01_tools/core/xxx.html）または http(s)://...',
+  app: 'アプリ(.exe)やショートカット(.lnk)の絶対パス。📁はスタートメニュー起点で開きます（インストール済みアプリ/PWAもそこ）',
+};
+const PLACEHOLDERS = {
+  web: '/01_tools/core/page-maker-v12.html',
+  app: 'C:\\Users\\...\\App.lnk',
+};
+
+const setType = (type) => {
+  formType = (type === 'app') ? 'app' : 'web';
+  document.querySelectorAll('#typeSeg .seg-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.type === formType);
+  });
+  $('pathHint').textContent = HINTS[formType];
+  $('f_path').placeholder = PLACEHOLDERS[formType];
+};
 
 const toast = (msg) => {
   const el = $('toast');
@@ -349,23 +402,52 @@ const render = () => {
 
   main.innerHTML = catOrder.map(c => {
     const label = data.categories[c]?.label || c;
-    const rows = groups[c].map(({ t, idx }) => `
+    const rows = groups[c].map(({ t, idx }) => {
+      const isApp = t.type === 'app';
+      const inner = `
+          <div class="name">${escapeHtml(t.name)}${isApp ? '<span class="badge">APP</span>' : ''}</div>
+          ${t.description ? `<div class="desc">${escapeHtml(t.description)}</div>` : ''}`;
+      const opener = isApp
+        ? `<div class="open" data-launch="${idx}" role="button" tabindex="0" title="アプリを起動">${inner}</div>`
+        : `<a class="open" href="${escapeHtml(t.path)}" target="_blank" rel="noopener">${inner}</a>`;
+      return `
       <div class="row">
-        <a class="open" href="${escapeHtml(t.path)}" target="_blank" rel="noopener">
-          <div class="name">${escapeHtml(t.name)}</div>
-          ${t.description ? `<div class="desc">${escapeHtml(t.description)}</div>` : ''}
-        </a>
+        ${opener}
         <button class="edit" data-idx="${idx}" title="編集">⋯</button>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
     return `<section class="cat-section"><h2>${escapeHtml(label)}</h2>${rows}</section>`;
   }).join('');
 
   main.querySelectorAll('.edit').forEach(btn => {
     btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.idx, 10)));
   });
+  main.querySelectorAll('[data-launch]').forEach(el => {
+    const idx = parseInt(el.dataset.launch, 10);
+    el.addEventListener('click', () => launchApp(idx));
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); launchApp(idx); }
+    });
+  });
 
   $('footerInfo').textContent = filtered.length + ' / ' + visible.length;
+};
+
+const launchApp = async (idx) => {
+  const t = data.tools[idx];
+  if (!t) return;
+  try {
+    const res = await fetch('/api/launch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: t.path }),
+    });
+    const r = await res.json();
+    if (!r.ok) throw new Error(r.error || '起動失敗');
+    toast('起動しました');
+  } catch (e) {
+    toast('起動失敗: ' + e.message);
+  }
 };
 
 const openAddModal = () => {
@@ -376,6 +458,7 @@ const openAddModal = () => {
   $('f_path').value = '';
   $('f_category').value = Object.keys(data.categories)[0] || 'misc';
   $('f_description').value = '';
+  setType('web');
   $('modal').classList.add('open');
   setTimeout(() => $('f_name').focus(), 50);
 };
@@ -389,6 +472,7 @@ const openEditModal = (idx) => {
   $('f_path').value = t.path || '';
   $('f_category').value = t.category || 'misc';
   $('f_description').value = t.description || '';
+  setType(t.type === 'app' ? 'app' : 'web');
   $('modal').classList.add('open');
   setTimeout(() => $('f_name').focus(), 50);
 };
@@ -405,6 +489,7 @@ const onSave = async () => {
     category: $('f_category').value || 'misc',
     description: $('f_description').value.trim(),
   };
+  if (formType === 'app') tool.type = 'app';   // 'web' is the default → omit to keep json lean
   if (!tool.description) delete tool.description;
 
   if (editingIdx >= 0) {
@@ -434,11 +519,13 @@ const onBrowse = async () => {
   const orig = btn.textContent;
   btn.textContent = '…';
   try {
-    const res = await fetch('/api/browse?t=' + Date.now());
+    const kind = formType === 'app' ? 'app' : 'html';
+    const res = await fetch('/api/browse?kind=' + kind + '&t=' + Date.now());
     const r = await res.json();
     if (r.cancelled) return;
     if (!r.ok) { toast(r.error || '選択に失敗'); return; }
     $('f_path').value = r.path;
+    if (r.type) setType(r.type);
     if (!$('f_name').value.trim() && r.name) {
       $('f_name').value = r.name;
     }
@@ -451,6 +538,9 @@ const onBrowse = async () => {
   }
 };
 
+document.querySelectorAll('#typeSeg .seg-btn').forEach(btn => {
+  btn.addEventListener('click', () => setType(btn.dataset.type));
+});
 $('addBtn').addEventListener('click', openAddModal);
 $('cancelBtn').addEventListener('click', closeModal);
 $('saveBtn').addEventListener('click', onSave);

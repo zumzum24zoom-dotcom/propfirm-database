@@ -2,51 +2,51 @@
 setlocal
 set PORT=8765
 set DIR=%~dp0
-set URL=http://localhost:%PORT%/01_tools/launcher/
+set URL=http://127.0.0.1:%PORT%/01_tools/launcher/
 
-REM 1) Probe /api/tools — if it returns valid JSON, our serve.py is already up.
-powershell -nologo -noprofile -command "try { (Invoke-WebRequest -UseBasicParsing -TimeoutSec 1 'http://localhost:%PORT%/api/tools').Content | ConvertFrom-Json | Out-Null; exit 0 } catch { exit 1 }" >nul 2>&1
+REM 1) Already running? Check LISTENING state first — a closed loopback port does NOT
+REM    refuse instantly on this OS (SYN dropped -> ~1-2s hang), so an HTTP probe here
+REM    would cost a full timeout every cold start. netstat reads state in ~35ms instead.
+REM    LISTENING-limited match ignores lingering TIME_WAIT sockets from a prior run.
+netstat -ano | findstr "LISTENING" | findstr /c:"127.0.0.1:%PORT% " >nul
+if %errorlevel% neq 0 goto start_server
+
+REM    Something is listening — confirm it's OUR serve.py answering (warm curl ~26ms).
+REM    Use 127.0.0.1 (not localhost) to skip the IPv6 ::1 fallback (~200ms).
+curl.exe -s -o NUL --connect-timeout 2 --max-time 3 http://127.0.0.1:%PORT%/api/tools
 if %errorlevel% equ 0 goto launch_browser
 
-REM 2) Not responding properly. If port is held by python/pythonw (e.g. old plain http.server), stop it. Otherwise warn.
+REM 2) Listening but not answering. If port is held by python/pythonw (e.g. old plain http.server), stop it. Otherwise warn.
 powershell -nologo -noprofile -command "$c = Get-NetTCPConnection -LocalPort %PORT% -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if ($c) { $p = Get-Process -Id $c.OwningProcess -ErrorAction SilentlyContinue; if ($p -and $p.ProcessName -in @('python','pythonw')) { Stop-Process -Id $p.Id -Force } elseif ($p) { exit 3 } }; exit 0"
 if %errorlevel% equ 3 (
     powershell -nologo -noprofile -command "Add-Type -AssemblyName PresentationFramework; [System.Windows.MessageBox]::Show('Port %PORT% is held by a non-Python process. Close it then retry.', 'PFD Launcher')" >nul 2>&1
     exit /b 1
 )
 
-REM 3) Port free (or freed). Start our server.
-start "" /min pythonw "%DIR%serve.py"
+REM 3) Port free (or freed). Start our server detached (pythonw = no console window).
+REM    Probe with `where` first so we can fall back to python and warn if neither exists.
+:start_server
+where pythonw >nul 2>&1
+if %errorlevel% equ 0 (
+    start "" /min pythonw "%DIR%serve.py"
+    goto server_started
+)
+where python >nul 2>&1
+if %errorlevel% equ 0 (
+    start "" /min python "%DIR%serve.py"
+    goto server_started
+)
+powershell -nologo -noprofile -command "Add-Type -AssemblyName PresentationFramework; [System.Windows.MessageBox]::Show('Python が見つかりません. python.org からインストールして PATH に追加してください.', 'PFD Launcher')" >nul 2>&1
+exit /b 1
+
+:server_started
 powershell -nologo -noprofile -command "Start-Sleep -Milliseconds 800" >nul 2>&1
 
 :launch_browser
-set EDGE=
-if exist "%ProgramFiles%\Microsoft\Edge\Application\msedge.exe" set EDGE=%ProgramFiles%\Microsoft\Edge\Application\msedge.exe
-if exist "%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe" set EDGE=%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe
+REM Startup-only mode: server is up, do NOT open the window (e.g. boot auto-start).
+if /i "%~1"=="server" exit /b 0
 
-set CHROME=
-if exist "%ProgramFiles%\Google\Chrome\Application\chrome.exe" set CHROME=%ProgramFiles%\Google\Chrome\Application\chrome.exe
-if exist "%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe" set CHROME=%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe
-
-set UDIR=%LOCALAPPDATA%\PFDLauncher\edge-profile
-
-REM Pre-create sentinel files so Edge/Chrome skip the first-run welcome flow
-if not exist "%UDIR%" mkdir "%UDIR%" >nul 2>&1
-if not exist "%UDIR%\First Run" type nul > "%UDIR%\First Run"
-if not exist "%UDIR%\Default" mkdir "%UDIR%\Default" >nul 2>&1
-if not exist "%UDIR%\Default\Preferences" (
-    >"%UDIR%\Default\Preferences" echo {"profile":{"exit_type":"Normal","exited_cleanly":true},"browser":{"has_seen_welcome_page":true,"show_home_button":false}}
-)
-
-set FLAGS=--app=%URL% --window-size=520,760 --user-data-dir="%UDIR%" --no-first-run --no-default-browser-check --no-service-autorun --disable-sync --disable-features=msEdgeFirstRunExperience,EdgeWelcomeEnabled,WelcomeExperienceEnabled,msUndersideButton
-
-if defined CHROME (
-    start "" "%CHROME%" %FLAGS%
-    exit /b 0
-)
-if defined EDGE (
-    start "" "%EDGE%" %FLAGS%
-    exit /b 0
-)
-
-start "" %URL%
+REM Hand window control to panel.ps1 — docks to the right edge, pins always-on-top,
+REM and toggles (open if closed / close if already open).
+powershell -nologo -noprofile -ExecutionPolicy Bypass -File "%DIR%panel.ps1" -Action toggle
+exit /b 0
