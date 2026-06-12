@@ -6,13 +6,13 @@
 - セッション終了時: 「現在地」「確定した設計判断」「次にやること」を最新化。詳細な作業ログを残したい場合のみ archive 末尾に追記。
 - 起動時必読順: `CLAUDE.md` → `PROJECT_MAP.md` → `HANDOFF.md`（本ファイル） → メモリ`MEMORY.md`
 
-最終更新: 2026-06-11（セッション14）
+最終更新: 2026-06-12（セッション15）
 
 ---
 
 ## 現在地
 
-**フェーズ: データ収集パイプライン稼働中**
+**フェーズ: データ収集パイプライン稼働中 ＋ ランチャー整備完了**
 
 ```
 data/scans/ + data/help-index/ → /normalize-firm → data/firms/{slug}.pipe.md
@@ -23,6 +23,14 @@ data/scans/ + data/help-index/ → /normalize-firm → data/firms/{slug}.pipe.md
 - normalize-firm: 30社の `.pipe.md` 生成済み。**Page Maker取込・exportHugo はまだ未実施**
 - `data/firm-slot-urls.json`: 32社分の slot_urls/plan_urls 完成済み
 - `01_tools/core/firm-tour.html`: 上記JSONを表示するビューア。今セッションで `SLOT_URL` 参照を修正（`../../data/firm-slot-urls.json` 相対パス化）し、32/32社の表示を確認済み
+
+### ランチャー（セッション15で整備完了・push済み）
+- `panel.ps1` 新規追加 — 右端ドックサイドバー・常に最前面・トグル開閉
+- `server.vbs` 新規追加 — スタートアップ常駐用
+- `serve.py` 更新 — `/api/launch`（アプリ起動）・ブラウズ種別分岐（html/app）追加
+- `index.html` 更新 — APP種別・バッジ・セグメントトグル追加
+- `tools.json` 更新 — firm-urls・NotebookLM 追加
+- **未コミット**: AutoHotKey ホットキースクリプト（自宅のみ存在。次回帰宅時にコミット要）
 
 **進行中の構想（master発案）**: URL自動取得 → 直送保存 → 再利用 → ページ内容をPage Makerスロットにマッピング保存 → 定期巡回 → 差分検知。
 - 既存パーツ: `01_tools/utils/BLT/URL taker`（収集ブックマークレット）/ `firm-tour.html`（閲覧ビューア）/ `data/firm-slot-urls.json`（URLレジストリ候補）
@@ -46,6 +54,7 @@ data/scans/ + data/help-index/ → /normalize-firm → data/firms/{slug}.pipe.md
 
 ## 次にやること（要再確認・優先順）
 
+0. **AutoHotKey ホットキースクリプトのコミット** — 自宅帰宅時に `01_tools/launcher/hotkey.ahk` を git add してプッシュ
 1. **`data/scans/` の `.gitignore` 追加** — 決定済み・未実施
 2. **未コミット変更の整理**（`firm-tour.html`修正、`01_tools/utils/`再編、URL taker追加、price-scanner.js追加など） — コミットタイミングを master に確認
 3. **firm-tour.html の仕事場動作確認** — `start-server.bat`経由か`file://`か未確認。`file://`の場合は要対策
