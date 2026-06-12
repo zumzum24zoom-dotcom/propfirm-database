@@ -109,7 +109,7 @@ window.__pfmPasteWindowHTML = [
 '<div class="url-bar"><span style="color:#636e7b;font-size:0.68rem">URL</span>',
 '<input type="text" class="url-input" id="urlInput" placeholder="ソースURL">',
 '<button class="btn-sm" id="pasteUrlBtn">📋</button></div>',
-'<textarea id="ta" placeholder="テキスト貼り付け or 画像ドロップ/ペースト"></textarea>',
+'<textarea id="ta" placeholder="テキスト貼り付け or 画像ドロップ/ペースト" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>',
 '<div id="transResult" style="display:none;border-top:1px solid #1e2d3d;background:#1a2332;overflow:auto;padding:0;position:relative"><button id="transClose" style="position:absolute;top:2px;right:4px;background:transparent;color:#ef4444;border:none;cursor:pointer;font-size:0.8rem;z-index:1">×</button><div id="transText" style="padding:8px;font-size:0.8rem;line-height:1.5;white-space:pre-wrap;user-select:text"></div></div>',
 '<div class="drop-overlay" id="dropOverlay" style="display:none"><span>画像をドロップ → OCR</span></div>',
 '<scr'+'ipt>',
@@ -1662,6 +1662,7 @@ function PastePanel({onSendToTarget,onTranslateToTarget,onFormatToTarget,onArchi
           if(txt.trim())onTextPasted&&onTextPasted();
         }}
           placeholder="テキスト貼り付け / 画像ドロップ・ペースト"
+          autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false}
           style={{width:"100%",height:"100%",resize:"none",background:C.bg,color:C.text,border:"none",padding:8,fontSize:"0.8rem",fontFamily:font,lineHeight:1.6,outline:"none"}} />
         {dragOver&&<div style={{position:"absolute",inset:0,background:C.accentDim,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none"}}><span style={{color:C.accent,fontWeight:700}}>画像ドロップ → OCR</span></div>}
       </div>
@@ -2625,13 +2626,26 @@ function PriceMatrixEditor({slotData,setSlotData,locks,setLocks,planNames}){
     const toNum=r=>parseFloat((r.size||"").replace(/^[$€¥]/,"").replace(/,/g,""))||0;
     commit({...matrix,rows:[...matrix.rows].sort((a,b)=>toNum(a)-toNum(b))});
   };
+  // テーブル書き出し: fmt="md"(Markdown表) / "tsv"(タブ区切り=表計算セル貼付)
+  const buildTable=fmt=>{
+    if(!matrix.rows.length||!cols.length)return"";
+    const fmtCell=v=>{if(!v||CURRENCIES.includes(v))return"—";const s=v.replace(/^[$€¥]/,"");return /^[—ー\-―]+$/.test(s)?"—":v;};
+    const header=["口座サイズ",...cols];
+    const body=matrix.rows.map(r=>[r.size||"—",...cols.map(c=>fmtCell((r.prices||{})[c]||""))]);
+    if(fmt==="tsv")return [header,...body].map(row=>row.join("\t")).join("\n");
+    return ["| "+header.join(" | ")+" |","|"+header.map(()=>" --- ").join("|")+"|",...body.map(row=>"| "+row.join(" | ")+" |")].join("\n");
+  };
   const th={padding:"4px 6px",textAlign:"left",color:C.textDim,fontWeight:700,fontSize:"0.6rem",whiteSpace:"nowrap",borderBottom:`2px solid ${C.border}`};
   const td={padding:"3px 4px",borderBottom:`1px solid ${C.border}`};
   const inp={width:"100%",background:C.bg,color:C.text,border:`1px solid ${C.border}`,borderRadius:3,padding:"2px 5px",fontSize:"0.66rem",fontFamily:font,outline:"none"};
   const curSel={background:C.surface,color:C.accent,border:`1px solid ${C.border}`,borderRadius:3,padding:"1px 2px",fontSize:"0.62rem",fontFamily:font,outline:"none",cursor:"pointer",width:32,minWidth:32};
   return(
     <div style={{overflow:"auto"}}>
-      <div style={{display:"flex",justifyContent:"flex-end",marginBottom:4}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4,gap:6}}>
+        <span style={{display:"inline-flex",gap:6}}>
+          <CopyBtn color={C.blue} label="⧉ MD表" getText={()=>buildTable("md")} style={{padding:"2px 10px",fontSize:"0.65rem"}}/>
+          <CopyBtn color={C.green} label="⧉ TSV" getText={()=>buildTable("tsv")} style={{padding:"2px 10px",fontSize:"0.65rem"}}/>
+        </span>
         {setLocks&&<span onClick={()=>setLocks(p=>({...p,priceTable:!locked}))} style={{cursor:"pointer",fontSize:"0.65rem",color:locked?C.yellow:C.textDim,userSelect:"none"}} title={locked?"ロック解除":"ロック"}>{locked?"🔒 ロック中":"🔓 編集可"}</span>}
       </div>
       <table style={{borderCollapse:"collapse",fontSize:"0.68rem"}}>
@@ -2912,11 +2926,11 @@ function KoryakuPreview({slotData}){
   </div>;
 }
 
-function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans,planNames,parentFirmSlotData,parentPlanNames,activePlanName,activeType,parentFirmId,firstPlanId,activePlanId,copyTargets,onCopyRuleSlot,onNavigateTab,allPlans,onUpdatePlanSlot}) {
+function SlotPanel({templateMode,setTemplateMode,slotData,setSlotData,currentSlots,availableTemplates,showPriceMatrix,setShowPriceMatrix,onAIGenKoryaku,aiGenKoryaku,onAIGenTable,aiGenTable,locks,setLocks,activeSlotId,setActiveSlotId,onSyncPlans,planNames,parentFirmSlotData,parentPlanNames,activePlanName,activeType,parentFirmId,firstPlanId,activePlanId,copyTargets,onCopyRuleSlot,onNavigateTab,allPlans,onUpdatePlanSlot}) {
   const [mergingSlot,setMergingSlot]=useState(null);
   const [editModal,setEditModal]=useState(null);
   const [showRuleTable,setShowRuleTable]=useState(false);
-  const [showPriceMatrix,setShowPriceMatrix]=useState(false);
+  // showPriceMatrix は App から props で受け取る（取込エリアの断面切替と同期するため）
   const [showPreview,setShowPreview]=useState(false);
   // スロット値クリップボード（アプリ内＋システム両取り / ペーストは同一スロット限定）。
   // プラン切替で SlotPanel は remount しないため、別プランへ値を運べる。
@@ -3225,6 +3239,7 @@ ${slotList}
                     <span style={{fontSize:"0.7rem",fontWeight:700,color:frags.length?C.accent:C.textDim}}>{slot.label}</span>
                     {frags.length>0&&<span onClick={e=>{e.stopPropagation();copySlot(slot)}} title="値をコピー（別プランの同スロットへ貼付け可）" style={{cursor:"pointer",fontSize:"0.8rem",lineHeight:1,color:copiedSlotId===slot.id?C.green:C.textDim,border:`1px solid ${copiedSlotId===slot.id?C.green:C.border}`,borderRadius:3,padding:"2px 6px"}}>{copiedSlotId===slot.id?"✓":"⧉"}</span>}
                     {!locked&&slotClip&&slotClip.slotId===slot.id&&<span onClick={e=>{e.stopPropagation();pasteSlot(slot)}} title={`「${slotClip.label}」の値を貼付け`} style={{cursor:"pointer",fontSize:"0.8rem",lineHeight:1,color:C.accent,border:`1px solid ${C.accent}`,borderRadius:3,padding:"2px 6px",background:`${C.accent}18`}}>⤵</span>}
+                    {(()=>{const _m=(merged?merged.text:(frags[0]?.text||"")).match(/https?:\/\/[^\s]+/);return _m?<a href={_m[0]} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} title={"サイトを開く: "+_m[0]} style={{cursor:"pointer",fontSize:"0.8rem",lineHeight:1,textDecoration:"none",color:C.blue,border:`1px solid ${C.blue}`,borderRadius:3,padding:"2px 6px"}}>↗</a>:null;})()}
                     {slot.hint&&<span style={{fontSize:"0.48rem",color:C.textDim,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{slot.hint}</span>}
 
                     {/* 右: AI作成 + Planタブ生成 + × */}
@@ -4412,8 +4427,10 @@ function App() {
   const [couponModal,setCouponModal]=useState({show:false,config:null,slug:""});
   const [consolidateKeepId,setConsolidateKeepId]=useState(null);
   const [activeSlotId,setActiveSlotId]=useState(null); // 選択中スロット
+  const [showPriceMatrix,setShowPriceMatrix]=useState(false); // SlotPanelから持ち上げ（取込エリアを断面別に切替えるため App 側で保持）
   const pasteAreaRef=useRef(null);
   const selectedTextRef=useRef("");
+  const facetRef=useRef({key:"firm",isMain:true}); // 現在の断面（取込エリアの書込先＝targetText or facetText[key] を決める）
 
   // ── 自動保存（ドラフト）用 ──
   const DRAFT_KEY="pfm-intake-draft";
@@ -4433,6 +4450,19 @@ function App() {
       return {...prev,[activeTabId]:{...cur,[field]:typeof value==="function"?value(cur[field]):value}};
     });
   },[activeTabId,activeType]);
+
+  // 取込エリアの書込先を断面別に振り分ける。
+  // - Firm/Plan断面(isMain) → targetText（＝Hugo出力本文。従来どおり）
+  // - 価格/攻略断面 → facetText[key]（出力本文にはせず、その断面の格納元データとして保持）
+  const writeFacetText=useCallback((facet,value)=>{
+    if(facet.isMain){setTabField("targetText",value);return;}
+    setTabField("facetText",prev=>{
+      const cur={...(prev||{})};
+      const old=cur[facet.key]||"";
+      cur[facet.key]=typeof value==="function"?value(old):value;
+      return cur;
+    });
+  },[setTabField]);
 
   // 早見表の1項目（rd_*スロット）を他プランへ明示コピー（複数可）
   const copyRuleSlotToPlans=useCallback((slotId,value,planIds)=>{
@@ -4489,6 +4519,12 @@ function App() {
   },[activeSlotId,setTabField,slotLocks,activeType,syncPlansFromList]);
 
   const td=getTabData(activeTabId);
+  // 現在の断面（Firm/価格/攻略/Plan）を算出 → 取込エリアの表示元・書込先を決める
+  const facetKey=activeType==="plan"?"plan":(td.templateMode==="koryaku"?"koryaku":(showPriceMatrix?"price":"firm"));
+  const facetIsMain=facetKey==="firm"||facetKey==="plan";
+  facetRef.current={key:facetKey,isMain:facetIsMain};
+  // 取込エリアに表示するテキスト（断面別）。Firm/Plan→targetText、価格/攻略→facetText[key]
+  const targetDisplay=facetIsMain?(td.targetText||""):((td.facetText||{})[facetKey]||"");
   // Firm選択時はdbp01/koryaku、Plan選択時はdbp02のみ
   const availableTemplates=activeType==="firm"?[["dbp01","01"],["koryaku","攻略"]]:[["dbp02","02"]];
   // templateModeが不一致の場合補正
@@ -4577,11 +4613,12 @@ function App() {
   const handleTargetFocus=useCallback(()=>setPasteH(100),[setPasteH]);
 
   // 貼り付け→取り込み対象（そのまま）
-  const handleSendToTarget=useCallback(text=>{setTabField("targetText",text);setPasteH(100)},[setTabField,setPasteH]);
+  const handleSendToTarget=useCallback(text=>{writeFacetText(facetRef.current,text);setPasteH(100)},[writeFacetText,setPasteH]);
 
   // 取り込み対象→貼り付け（差し戻し・整形/翻訳のやり直し用）
   const handleSendToPaste=useCallback(()=>{
-    const text=getTabData(activeTabId)?.targetText||"";
+    const f=facetRef.current; const t2=getTabData(activeTabId)||{};
+    const text=f.isMain?(t2.targetText||""):((t2.facetText||{})[f.key]||"");
     if(!text)return;
     if(pasteAreaRef.current){
       const ta=pasteAreaRef.current;
@@ -4592,16 +4629,18 @@ function App() {
 
   // 貼り付け→翻訳→取り込み対象
   const handleTranslateToTarget=useCallback(async text=>{
-    setTranslating(true); setTabField("targetText","翻訳中..."); setPasteH(100);
-    try{const data=await callAPI({model:MODEL,max_tokens:2000,system:renderPrompt("translate_en_ja",{}),messages:[{role:"user",content:text}]});setTabField("targetText",exText(data))}
-    catch(e){setTabField("targetText","翻訳エラー: "+e.message)}
+    const f=facetRef.current; // 非同期中に断面が変わっても開始時の断面へ書く
+    setTranslating(true); writeFacetText(f,"翻訳中..."); setPasteH(100);
+    try{const data=await callAPI({model:MODEL,max_tokens:2000,system:renderPrompt("translate_en_ja",{}),messages:[{role:"user",content:text}]});writeFacetText(f,exText(data))}
+    catch(e){writeFacetText(f,"翻訳エラー: "+e.message)}
     setTranslating(false);
-  },[setTabField]);
+  },[writeFacetText]);
 
   // 貼り付け→整形→取り込み対象（AI整形・格納フォーマットに変換）
   const handleFormat=useCallback(async text=>{
     if(!text)return;
-    setTranslating(true); setTabField("targetText","整形中..."); setPasteH(100);
+    const f=facetRef.current; // 非同期中に断面が変わっても開始時の断面へ書く
+    setTranslating(true); writeFacetText(f,"整形中..."); setPasteH(100);
     try{
       let currentName="";
       let formatInstruction="";
@@ -4662,10 +4701,10 @@ function App() {
       const data=await callAPI({model:MODEL,max_tokens:4000,
         system:renderPrompt("format_slot",{currentName,glossaryRules:glossaryRulesBlock(glossaryTerms),slotList,formatInstruction}),
         messages:[{role:"user",content:text}]});
-      setTabField("targetText",exText(data));
-    } catch(e){setTabField("targetText","整形エラー: "+e.message)}
+      writeFacetText(f,exText(data));
+    } catch(e){writeFacetText(f,"整形エラー: "+e.message)}
     setTranslating(false);
-  },[setTabField,setPasteH,activeType,activeTabId,firms,glossaryTerms]);
+  },[writeFacetText,setPasteH,activeType,activeTabId,firms,glossaryTerms]);
 
   // 保管
   const handleArchive=useCallback(text=>{setTabField("archives",prev=>[...prev,text])},[setTabField]);
@@ -6098,9 +6137,9 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
               height={pasteH} onOpenChild={openPasteWindow} onOpenQuickRef={openQuickRef}
               onTextPasted={handlePasteExpand} />
             <ResizeHandle dir="y" onMouseDown={pasteDrag} />
-            <TargetPanel text={td.targetText} onAutoAssign={handleAutoAssign}
+            <TargetPanel text={targetDisplay} onAutoAssign={handleAutoAssign}
               autoAssigning={autoAssigning} onTableParse={handleTableParse} translating={translating}
-              onClear={()=>{setTabField("targetText","");selectedTextRef.current=""}} onAdd={handleAdd}
+              onClear={()=>{writeFacetText(facetRef.current,"");selectedTextRef.current=""}} onAdd={handleAdd}
               activeSlot={activeSlotId?currentSlots.find(s=>s.id===activeSlotId)?.label:null}
               onSelectText={t=>{selectedTextRef.current=t}}
               activeType={activeType} onImportPlanTables={importPlanTables}
@@ -6114,6 +6153,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
           <SlotPanel templateMode={td.templateMode} setTemplateMode={m=>setTabField("templateMode",m)}
             slotData={td.slotData} setSlotData={v=>setTabField("slotData",v)} currentSlots={currentSlots}
             availableTemplates={availableTemplates}
+            showPriceMatrix={showPriceMatrix} setShowPriceMatrix={setShowPriceMatrix}
             onAIGenKoryaku={td.templateMode==="koryaku"?handleAIGenKoryaku:null} aiGenKoryaku={aiGenKoryaku}
             onAIGenTable={handleAIGenTable} aiGenTable={aiGenTable}
             locks={slotLocks} setLocks={setSlotLocks}
