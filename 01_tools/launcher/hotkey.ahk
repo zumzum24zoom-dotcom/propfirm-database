@@ -24,9 +24,9 @@ TogglePanel() {
     id := WinExist(TITLE)
     if (id) {
         if DllCall("IsWindowVisible", "Ptr", id)
-            WinHide("ahk_id " id)        ; 表示中 → 隠す（破棄しない＝次回が一瞬）
+            HideDocked(id)               ; 表示中 → スライドアウトしてから隠す
         else
-            ShowDocked(id)               ; 隠れている → 出してドック
+            ShowDocked(id)               ; 隠れている → 出してスライドイン
     } else {
         LaunchPanel()                    ; 無ければ初回起動
     }
@@ -35,10 +35,20 @@ TogglePanel() {
 ShowDocked(id) {
     global WIDTH
     MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
-    WinShow("ahk_id " id)
     WinMove(R - WIDTH, T, WIDTH, B - T, "ahk_id " id)
+    WinShow("ahk_id " id)                ; 表示 → ページの visibilitychange がスライドイン
     WinSetAlwaysOnTop(1, "ahk_id " id)
     try WinActivate("ahk_id " id)
+    Sleep 60                             ; フォーカス安定を待ち…
+    try Send("{F13}")                    ; …F13 も best-effort 送出（届けば即スライド）
+}
+
+HideDocked(id) {
+    try WinActivate("ahk_id " id)        ; キーがページに届くよう前面化
+    Sleep 40
+    try Send("{F14}")                    ; ページにスライドアウト指示
+    Sleep 230                            ; アニメ完了を待ってから隠す
+    WinHide("ahk_id " id)
 }
 
 LaunchPanel() {

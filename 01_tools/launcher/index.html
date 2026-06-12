@@ -875,28 +875,28 @@ document.querySelectorAll('.tab').forEach(t =>
 $('clipClear').addEventListener('click', clearClip);
 
 load();
+// First launch: slide the content in on load.
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
 
-// Re-play the slide when the panel is re-shown. The hotkey hides/shows the
-// window instead of reloading, so 'load' fires only once. WinHide/WinShow flips
-// the document's visibility, so visibilitychange is the reliable trigger; focus
-// is a fallback. A short time-guard de-dups when both fire together.
-let _lastSlide = 0;
-const replaySlide = () => {
-  const now = performance.now();
-  if (now - _lastSlide < 250) return;
-  _lastSlide = now;
-  document.body.classList.remove('ready');
-  void document.body.offsetWidth;   // force reflow so the transition restarts
-  requestAnimationFrame(() => document.body.classList.add('ready'));
-};
+// The slide animates BOTH ways while the window stays on the primary monitor
+// (a window-position slide would cross onto monitor 2 which sits to the right,
+// and Chrome clamps the min window width so a width-drawer is out — instead the
+// content slides inside a fixed-size window):
+//  • Slide out: the hotkey sends F14 → content slides out; it then hides the
+//    window only after the animation finishes (the page can't know it's about to
+//    be hidden). This also parks the content off-screen.
+//  • Slide in: the hotkey just shows the window; visibilitychange→visible slides
+//    the content back in. It looks clean because the prior slide-out parked it
+//    off-screen. (Sending a key right after showing a hidden window is unreliable
+//    — the web content isn't focused yet — so we rely on visibilitychange here.)
+const slideIn  = () => requestAnimationFrame(() => document.body.classList.add('ready'));
+const slideOut = () => document.body.classList.remove('ready');
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') replaySlide();
+  if (document.visibilityState === 'visible') slideIn();
 });
-let _focusArmed = false;
-window.addEventListener('focus', () => {
-  if (_focusArmed) replaySlide();
-  _focusArmed = true;   // skip the first focus (initial load already slid)
+window.addEventListener('keydown', e => {
+  if (e.key === 'F13') { e.preventDefault(); slideIn(); }        // best-effort (faster when it lands)
+  else if (e.key === 'F14') { e.preventDefault(); slideOut(); }
 });
 </script>
 </body>
