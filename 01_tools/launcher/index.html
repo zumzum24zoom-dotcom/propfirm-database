@@ -19,17 +19,24 @@
   html, body {
     margin: 0; padding: 0;
     height: 100%;
-    background: var(--bg);
     color: var(--fg);
     font-family: -apple-system, "Segoe UI", "Yu Gothic UI", "Hiragino Sans", system-ui, sans-serif;
     font-size: 13px;
     line-height: 1.45;
     overflow: hidden;
   }
-  body { display: flex; flex-direction: column; height: 100vh; }
-  /* The open/close slide is done by the hotkey clipping the window region from
-     the right edge (so the whole panel — background included — slides, staying on
-     the primary monitor). No CSS transform here. */
+  /* The content slides via CSS transform (GPU = smooth). The hotkey clips the
+     window region in lockstep so the white window area the content vacates is
+     hidden (otherwise it would show as a popping white panel). translateX and the
+     clip both run linearly over the same 200ms so they stay aligned. */
+  html, body { background: var(--bg); }
+  body {
+    display: flex; flex-direction: column; height: 100vh;
+    transform: translateX(100%);
+    transition: transform 0.2s linear;
+  }
+  body.ready { transform: translateX(0); }
+  @media (prefers-reduced-motion: reduce) { body { transition: none; } }
 
   header {
     flex-shrink: 0;
@@ -870,8 +877,22 @@ document.querySelectorAll('.tab').forEach(t =>
 $('clipClear').addEventListener('click', clearClip);
 
 load();
-// The open/close slide is driven entirely by the hotkey (it clips the window
-// region from the right edge), so the page itself needs no slide logic.
+// First launch: slide in on load.
+requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
+
+// CSS transform slides the panel (GPU = smooth). The hotkey just shows/hides the
+// window; the page animates. Slide in: visibilitychange→visible (fires when the
+// window is re-shown). Slide out: the hotkey sends F14, then hides the window only
+// after the animation finishes (the page can't know it's about to be hidden).
+const slideIn  = () => requestAnimationFrame(() => document.body.classList.add('ready'));
+const slideOut = () => document.body.classList.remove('ready');
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') slideIn();
+});
+window.addEventListener('keydown', e => {
+  if (e.key === 'F13') { e.preventDefault(); slideIn(); }
+  else if (e.key === 'F14') { e.preventDefault(); slideOut(); }
+});
 </script>
 </body>
 </html>

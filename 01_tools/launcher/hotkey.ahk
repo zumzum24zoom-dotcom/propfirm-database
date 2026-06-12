@@ -4,11 +4,12 @@
 ;
 ;   Insert : 右端サイドバーをトグル開閉（ネイティブ実装＝高速）
 ;
-; 仕組み: しまう時はウィンドウを破棄せず「非表示(WinHide)」。開閉アニメは、ウィンドウの
-;         可視リージョン(SetWindowRgn)を右端から伸縮させて実現する。背景パネルごと右から
-;         開く/閉じる。ウィンドウは動かさず幅も変えないので、右の2枚目モニターにはみ出さず、
-;         Chromeの最小幅制限にも当たらない。初回だけブラウザ(--app)を起動。ページは再読込
-;         されないので履歴等も保持。
+; 仕組み: しまう時はウィンドウを破棄せず「非表示(WinHide)」。スライドは CSS transform
+;         (GPUで滑らか)がページ側で中身を動かし、AHKは同時にウィンドウの可視リージョンを
+;         同じ時間配分でクリップして「中身が退避した白いウィンドウ領域」を隠す。両者は
+;         時間ベース(200ms linear)で同期するので、白枠が出ずに中身ごと右へスライドして
+;         見える。ウィンドウは動かさない＝Chromeの再描画が走らずカクつかない。右の2枚目
+;         モニターにもはみ出さない。初回だけブラウザ(--app)を起動。
 ; A_ScriptDir 起点でブラウザ/URLを解決 → 自宅/職場でクローン先パスが違っても動く。
 ; 常駐させるには setup-startup.ps1 を一度実行（shell:startup に登録）。
 ; Insert は一部エディタで挿入/上書き切替に使われるため、変えたい場合は下の Insert:: を変更。
@@ -19,8 +20,7 @@ DetectHiddenWindows true
 TITLE := "PFD Launcher"
 URL   := "http://127.0.0.1:8765/01_tools/launcher/"
 WIDTH := 360
-STEPS := 16        ; スライドの分割数
-STEP_MS := 7       ; 1コマの待ち(ms) → 16*7≈112ms
+DUR   := 200        ; スライド時間(ms)。CSSの transition と一致させること
 
 Insert:: TogglePanel()
 
@@ -29,66 +29,68 @@ TogglePanel() {
     id := WinExist(TITLE)
     if (id) {
         if DllCall("IsWindowVisible", "Ptr", id)
-            HidePanel(id)                ; 表示中 → 右へ閉じてから隠す
+            HidePanel(id)                ; 表示中 → スライドアウトして隠す
         else
-            ShowPanel(id)                ; 隠れている → 右から開く
+            ShowPanel(id)                ; 隠れている → スライドイン
     } else {
         LaunchPanel()                    ; 無ければ初回起動
     }
 }
 
-; 可視リージョンを「左から幅 w 分」に設定。ウィンドウを右へ動かしたとき、画面右端
-; (= 2枚目モニター境界)を越えた部分を隠すために使う。w<=0 なら空＝不可視。
-SetClipW(id, w, h) {
-    if (w <= 0)
-        rgn := DllCall("gdi32\CreateRectRgn", "Int", 0, "Int", 0, "Int", 0, "Int", 0, "Ptr")
-    else
-        rgn := DllCall("gdi32\CreateRectRgn", "Int", 0, "Int", 0, "Int", w, "Int", h, "Ptr")
-    DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", rgn, "Int", 1)   ; 以後 rgn はOSが管理
+; 可視リージョンを [leftX, 0, WIDTH, h]（右側 WIDTH-leftX 分が見える）に設定。
+SetClip(id, leftX) {
+    global WIDTH
+    MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
+    rgn := DllCall("gdi32\CreateRectRgn", "Int", leftX, "Int", 0, "Int", WIDTH, "Int", (B - T), "Ptr")
+    DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", rgn, "Int", 1)
 }
 ClearClip(id) {
-    DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", 0, "Int", 1)     ; クリップ解除＝全面
+    DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", 0, "Int", 1)
 }
 
-; 右からスライドイン。ウィンドウを画面右端の外(x=R)から定位置(x=R-WIDTH)へ動かし、
-; 右端を越える分はクリップで隠す → パネルが剛体のまま右から入ってくる。
-ShowPanel(id) {
-    global WIDTH, STEPS, STEP_MS
+; CSSの translateX(0↔100%)に合わせて leftX(0↔WIDTH)を時間ベースで動かす。
+Animate(id, opening) {
+    global WIDTH, DUR
+    DllCall("winmm\timeBeginPeriod", "UInt", 1)   ; Sleep精度を1msに（カクつき防止）
+    t0 := A_TickCount
+    Loop {
+        el := A_TickCount - t0
+        if (el >= DUR)
+            break
+        f := el / DUR                              ; 0→1
+        leftX := opening ? (WIDTH * (1 - f)) : (WIDTH * f)
+        SetClip(id, Round(leftX))
+        Sleep 5
+    }
+    SetClip(id, opening ? 0 : WIDTH)               ; 最終コマ
+    DllCall("winmm\timeEndPeriod", "UInt", 1)
+}
+
+Dock(id) {
+    global WIDTH
     MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
-    h  := B - T
-    x0 := R - WIDTH
-    SetClipW(id, 0, h)                              ; まず不可視
-    WinMove(R, T, WIDTH, h, "ahk_id " id)           ; 右端の外へ
+    WinMove(R - WIDTH, T, WIDTH, B - T, "ahk_id " id)
+}
+
+ShowPanel(id) {
+    global WIDTH
+    Dock(id)
+    SetClip(id, WIDTH)                   ; まず不可視（中身も translateX(100%) で退避中）
     WinShow("ahk_id " id)
     WinSetAlwaysOnTop(1, "ahk_id " id)
     try WinActivate("ahk_id " id)
-    Loop STEPS {
-        p := (STEPS - A_Index) / STEPS              ; 1→0
-        x := x0 + Round(WIDTH * p)
-        SetClipW(id, R - x, h)                      ; 先にクリップ(右はみ出しを隠す)
-        WinMove(x, T, WIDTH, h, "ahk_id " id)       ; 後で移動 → 2枚目にチラ見えしない
-        Sleep STEP_MS
-    }
+    try Send("{F13}")                    ; CSSスライドイン開始（visibilitychangeでも保険）
+    Animate(id, true)                    ; リージョンを同期で開く
     ClearClip(id)
-    WinMove(x0, T, WIDTH, h, "ahk_id " id)
 }
 
-; 右へスライドアウトしてから隠す。
 HidePanel(id) {
-    global WIDTH, STEPS, STEP_MS
-    MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
-    h  := B - T
-    x0 := R - WIDTH
-    Loop STEPS {
-        p := A_Index / STEPS                        ; 0→1
-        x := x0 + Round(WIDTH * p)
-        SetClipW(id, R - x, h)
-        WinMove(x, T, WIDTH, h, "ahk_id " id)
-        Sleep STEP_MS
-    }
+    try WinActivate("ahk_id " id)        ; キーがページに届くよう前面化
+    Sleep 20
+    try Send("{F14}")                    ; CSSスライドアウト開始
+    Animate(id, false)                   ; リージョンを同期で閉じる
     WinHide("ahk_id " id)
     ClearClip(id)
-    WinMove(x0, T, WIDTH, h, "ahk_id " id)          ; 次回のため定位置へ戻す
 }
 
 LaunchPanel() {
@@ -106,9 +108,9 @@ LaunchPanel() {
         . ' --disable-features=msEdgeFirstRunExperience,EdgeWelcomeEnabled,WelcomeExperienceEnabled,msUndersideButton',
         URL, udir, x, T, WIDTH, B - T)
     Run('"' browser '" ' flags)
-    if WinWait(TITLE, , 6) {              ; 初回はそのまま全面表示（1回だけポップ）
+    if WinWait(TITLE, , 6) {
         id := WinExist(TITLE)
-        WinMove(R - WIDTH, T, WIDTH, B - T, "ahk_id " id)
+        Dock(id)
         WinSetAlwaysOnTop(1, "ahk_id " id)
         try WinActivate("ahk_id " id)
     }
