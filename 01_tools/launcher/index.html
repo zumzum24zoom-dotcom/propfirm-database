@@ -877,22 +877,25 @@ document.querySelectorAll('.tab').forEach(t =>
 $('clipClear').addEventListener('click', clearClip);
 
 load();
-// First launch: slide in on load.
-requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
 
-// CSS transform slides the panel (GPU = smooth). The hotkey just shows/hides the
-// window; the page animates. Slide in: visibilitychange→visible (fires when the
-// window is re-shown). Slide out: the hotkey sends F14, then hides the window only
-// after the animation finishes (the page can't know it's about to be hidden).
-const slideIn  = () => requestAnimationFrame(() => document.body.classList.add('ready'));
-const slideOut = () => document.body.classList.remove('ready');
+// The hotkey just shows/hides the window (WinShow/WinHide); the slide is pure CSS
+// here (GPU = smooth). The window's hide/show flips document visibility:
+//  • becoming hidden  → park the content off-screen with NO transition (invisible,
+//    since the window is hidden) so the next show starts from off-screen.
+//  • becoming visible → restore the transition and slide the content in from the
+//    right. Because it was parked off-screen, this is a clean slide every time.
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') slideIn();
+  if (document.visibilityState === 'hidden') {
+    document.body.style.transition = 'none';
+    document.body.classList.remove('ready');     // park off-screen, no animation
+  } else {
+    document.body.style.transition = '';         // back to the CSS transition
+    void document.body.offsetWidth;              // reflow so it restarts
+    requestAnimationFrame(() => document.body.classList.add('ready'));   // slide in
+  }
 });
-window.addEventListener('keydown', e => {
-  if (e.key === 'F13') { e.preventDefault(); slideIn(); }
-  else if (e.key === 'F14') { e.preventDefault(); slideOut(); }
-});
+// First launch (no prior hidden event): slide in on load.
+requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
 </script>
 </body>
 </html>
