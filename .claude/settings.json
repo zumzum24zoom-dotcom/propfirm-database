@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PYTHONUTF8=1 python \"${CLAUDE_PROJECT_DIR}/scripts/session-stop.py\"",
+            "timeout": 30,
+            "statusMessage": "セッション終了処理中（自動コミット・HANDOFF確認）..."
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [
