@@ -1,6 +1,6 @@
 # 01_tools/launcher/
 
-**自作ランチャー。ボタンで画面右端に縦長サイドバーがトグル表示 → ツール一覧 / 追加 / 編集 / 削除。**
+**自作ランチャー。ボタン/Insertキーで画面右端に縦長サイドバーがスライド表示 → ツール一覧 / 番号起動 / 追加 / 編集 / 削除 / クリップボード履歴。**
 
 ## 構成
 
@@ -9,10 +9,21 @@
 | `start.vbs` | ELECOMボタン等から呼ぶ入口。コンソール窓を出さずに start.bat を起動 |
 | `start.bat` | port 8765 で `serve.py` を確保 → `panel.ps1` に窓制御を委譲。引数 `server` でサーバのみ起動（窓を開かない）|
 | `panel.ps1` | サイドバー窓の制御。Chrome/Edge `--app` を**右端ドック・縦フル・常に最前面**で起動し、開/閉を**トグル**（`-Action toggle\|open\|close`）|
-| `serve.py` | カスタム HTTP サーバ。`GET/POST /api/tools`(tools.json読み書き) / `GET /api/browse`(ファイル選択ダイアログ) / `POST /api/launch`(ローカルアプリ起動)。静的配信はリポジトリルート起点 |
+| `hotkey.ahk` | AutoHotkey v2常駐スクリプト。**Insert** でサイドバーをトグル開閉（`A_ScriptDir`起点で `start.vbs` を呼ぶ＝クローン先パス非依存）|
+| `serve.py` | カスタム HTTP サーバ。`GET/POST /api/tools` / `GET /api/browse` / `POST /api/launch` / **クリップボード履歴API** (`GET /api/clipboard`, `GET /api/clipboard/img/<id>`, `POST /api/clipboard/use`, `POST /api/clipboard/clear`)。静的配信はリポジトリルート起点 |
+| `clip-watcher.ps1` | クリップボード監視ワーカー。シーケンス番号をポーリングし変化時のみ内容を読んで serve.py へ JSON 行で渡す（画像は PNG 保存）。serve.py が起動時に子プロセスとして起動 |
 | `server.vbs` | スタートアップ用。窓を開かずサーバだけ常駐させる（`start.bat server` を窓なしで呼ぶ）|
-| `index.html` | サイドバーUI（検索・カテゴリ別表示・行クリック起動・⋯から編集・＋から追加） |
+| `index.html` | サイドバーUI（検索・カテゴリ別表示・**番号バッジ**・行クリック/番号起動・⋯から編集・＋から追加・**📋履歴タブ**・**D&D登録**） |
 | `tools.json` | ツール登録（永続データ） |
+
+## 主な機能
+
+- **Insert開閉**: `hotkey.ahk` 常駐で Insert トグル（ELECOMボタンと同じ動作）
+- **右からスライド表示**: 開いた瞬間にCSSで右からスライドイン（デュアルモニター安全）
+- **番号起動**: パネル表示中に **1〜9** でスロット割当ツールを起動（入力中は無効）
+- **2画面起動**: **Shift+番号** で、そのツールの「組合せ(combo)」相手も同時起動（例：チャート＋DOM）
+- **D&D登録**: URL/リンクをドロップ→完全自動取込／ファイルをドロップ→確定ダイアログ（ブラウザはドロップファイルの絶対パスを取得できないため）
+- **クリップボード履歴**: テキスト＋画像を最大50件保持。📋タブでクリック→再コピー、クリアボタンで全消去
 
 ## 設計のポイント
 
@@ -82,7 +93,9 @@
       "path": "/01_tools/core/page-maker-v12.html",
       "category": "core",
       "description": "短い説明（省略可）",
-      "hidden": false
+      "hidden": false,
+      "slot": 1,
+      "combo": ["firm-tour"]
     },
     {
       "name": "Excel",
@@ -96,12 +109,23 @@
 
 - `type` 省略時は `web`（ブラウザで開く）。`type: "app"` で**ローカル起動**（path は絶対パス）。
 - `hidden: true` で一時非表示。`web` の `path` は外部URL（`https://...`）も可。
+- `slot`（1〜9）: パネル表示中に**その数字キー**でこのツールを起動（1画面起動）。番号は全ツールで一意（UIで重複指定すると旧スロットは自動解除）。
+- `combo`（ツール名の配列）: **Shift+番号**でこのツールと一緒に起動する相手（2画面起動）。
 - `app` 起動はローカルでexeを実行するため、`serve.py` は **127.0.0.1限定 + 存在する絶対パスのファイルのみ**に制限してガードしている。
+
+## クリップボード履歴
+
+- `serve.py` が起動時に `clip-watcher.ps1` を子プロセスで起動。**クリップボードのシーケンス番号**（変更カウンタ）を 500ms ポーリングし、変化時だけ内容を読む（軽量）。
+- テキストはメモリ保持、画像は `%LOCALAPPDATA%\PFDLauncher\clip\*.png` に保存。最大50件、古いものから破棄（画像ファイルも連動削除）。
+- **重複除去**: テキストは内容一致、画像は内容ハッシュ(MD5)一致で直前と同じなら捨てる（Windowsクラウドクリップボードが同一内容を複数回セットするため）。
+- 📋履歴タブでクリック→OSクリップボードへ再コピー（テキストは `Set-Clipboard`、画像は `Clipboard::SetImage`）。
+- `clip-watcher.ps1` は stdout が閉じる（serve.py終了）と自動終了 → 孤児プロセスを残さない。
 
 ## 環境前提
 
 - **Python 3.x** が PATH に通っていること（`pythonw -m http.server` 系の serve.py を実行）
 - **Microsoft Edge** または **Google Chrome**（ポップアップ窓化のため。無くてもブラウザタブで動作はする）
+- **AutoHotkey v2**（任意・Insert開閉を使う場合。`winget install AutoHotkey.AutoHotkey`）。`hotkey.ahk` のショートカットを `shell:startup` に置くと常駐
 - 自宅/職場ともに同じ git リポジトリをクローンしてあること
 - ELECOM側設定はマシン毎 → 各マシンで一度 `start.vbs` のフルパスを指定
 
