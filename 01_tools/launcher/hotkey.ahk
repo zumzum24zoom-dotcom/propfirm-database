@@ -37,47 +37,58 @@ TogglePanel() {
     }
 }
 
-; 可視リージョンを [leftX, 0, WIDTH, height] に設定（右側 WIDTH-leftX 分だけ見える）。
-SetClip(id, leftX) {
-    global WIDTH
-    MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
-    rgn := DllCall("gdi32\CreateRectRgn", "Int", leftX, "Int", 0, "Int", WIDTH, "Int", (B - T), "Ptr")
+; 可視リージョンを「左から幅 w 分」に設定。ウィンドウを右へ動かしたとき、画面右端
+; (= 2枚目モニター境界)を越えた部分を隠すために使う。w<=0 なら空＝不可視。
+SetClipW(id, w, h) {
+    if (w <= 0)
+        rgn := DllCall("gdi32\CreateRectRgn", "Int", 0, "Int", 0, "Int", 0, "Int", 0, "Ptr")
+    else
+        rgn := DllCall("gdi32\CreateRectRgn", "Int", 0, "Int", 0, "Int", w, "Int", h, "Ptr")
     DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", rgn, "Int", 1)   ; 以後 rgn はOSが管理
 }
 ClearClip(id) {
     DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", 0, "Int", 1)     ; クリップ解除＝全面
 }
 
-Dock(id) {
-    global WIDTH
-    MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
-    WinMove(R - WIDTH, T, WIDTH, B - T, "ahk_id " id)
-}
-
+; 右からスライドイン。ウィンドウを画面右端の外(x=R)から定位置(x=R-WIDTH)へ動かし、
+; 右端を越える分はクリップで隠す → パネルが剛体のまま右から入ってくる。
 ShowPanel(id) {
     global WIDTH, STEPS, STEP_MS
-    Dock(id)
-    SetClip(id, WIDTH)                    ; 先に「幅0」にクリップ（チラ見え防止）
+    MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
+    h  := B - T
+    x0 := R - WIDTH
+    SetClipW(id, 0, h)                              ; まず不可視
+    WinMove(R, T, WIDTH, h, "ahk_id " id)           ; 右端の外へ
     WinShow("ahk_id " id)
     WinSetAlwaysOnTop(1, "ahk_id " id)
     try WinActivate("ahk_id " id)
-    Loop STEPS {                          ; 右端から左へ開く
-        leftX := Round(WIDTH * (STEPS - A_Index) / STEPS)
-        SetClip(id, leftX)
+    Loop STEPS {
+        p := (STEPS - A_Index) / STEPS              ; 1→0
+        x := x0 + Round(WIDTH * p)
+        SetClipW(id, R - x, h)                      ; 先にクリップ(右はみ出しを隠す)
+        WinMove(x, T, WIDTH, h, "ahk_id " id)       ; 後で移動 → 2枚目にチラ見えしない
         Sleep STEP_MS
     }
     ClearClip(id)
+    WinMove(x0, T, WIDTH, h, "ahk_id " id)
 }
 
+; 右へスライドアウトしてから隠す。
 HidePanel(id) {
     global WIDTH, STEPS, STEP_MS
-    Loop STEPS {                          ; 左から右へ閉じる
-        leftX := Round(WIDTH * A_Index / STEPS)
-        SetClip(id, leftX)
+    MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
+    h  := B - T
+    x0 := R - WIDTH
+    Loop STEPS {
+        p := A_Index / STEPS                        ; 0→1
+        x := x0 + Round(WIDTH * p)
+        SetClipW(id, R - x, h)
+        WinMove(x, T, WIDTH, h, "ahk_id " id)
         Sleep STEP_MS
     }
     WinHide("ahk_id " id)
-    ClearClip(id)                         ; 隠している間は全面に戻しておく
+    ClearClip(id)
+    WinMove(x0, T, WIDTH, h, "ahk_id " id)          ; 次回のため定位置へ戻す
 }
 
 LaunchPanel() {
@@ -97,7 +108,7 @@ LaunchPanel() {
     Run('"' browser '" ' flags)
     if WinWait(TITLE, , 6) {              ; 初回はそのまま全面表示（1回だけポップ）
         id := WinExist(TITLE)
-        Dock(id)
+        WinMove(R - WIDTH, T, WIDTH, B - T, "ahk_id " id)
         WinSetAlwaysOnTop(1, "ahk_id " id)
         try WinActivate("ahk_id " id)
     }
