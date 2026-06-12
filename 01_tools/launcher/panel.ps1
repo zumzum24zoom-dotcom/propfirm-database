@@ -29,42 +29,46 @@ public class PfdWin {
   [DllImport("user32.dll")] public static extern bool SetWindowPos(IntPtr h, IntPtr after, int x, int y, int cx, int cy, uint flags);
   [DllImport("user32.dll")] public static extern IntPtr SendMessageTimeout(IntPtr h, uint msg, IntPtr w, IntPtr l, uint flags, uint timeout, out IntPtr res);
   [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr h);
+  [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr h, int cmd);
 }
 "@ | Out-Null
 
 function Find-PanelWindow {
+  # Find the panel window whether shown or hidden (we hide instead of closing,
+  # so a previous instance may be sitting hidden and ready to re-show instantly).
   $script:found = [IntPtr]::Zero
   $cb = [PfdWin+EnumProc] {
     param($h, $p)
-    if ([PfdWin]::IsWindowVisible($h)) {
-      $sb = New-Object System.Text.StringBuilder 256
-      [PfdWin]::GetWindowText($h, $sb, 256) | Out-Null
-      if ($sb.ToString().StartsWith($TITLE)) { $script:found = $h; return $false }
-    }
+    $sb = New-Object System.Text.StringBuilder 256
+    [PfdWin]::GetWindowText($h, $sb, 256) | Out-Null
+    if ($sb.ToString().StartsWith($TITLE)) { $script:found = $h; return $false }
     return $true
   }
   [PfdWin]::EnumWindows($cb, [IntPtr]::Zero) | Out-Null
   return $script:found
 }
 
+$SW_HIDE = 0
+$SW_SHOW = 5
+
 function Dock-And-Pin([IntPtr]$h) {
   $wa = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
   $HWND_TOPMOST   = [IntPtr](-1)
   $SWP_SHOWWINDOW = 0x0040
+  [PfdWin]::ShowWindow($h, $SW_SHOW) | Out-Null
   [PfdWin]::SetWindowPos($h, $HWND_TOPMOST, ($wa.Right - $WIDTH), $wa.Top, $WIDTH, $wa.Height, $SWP_SHOWWINDOW) | Out-Null
 }
 
 $hwnd = Find-PanelWindow
 
 if ($Action -eq 'toggle') {
-  if ($hwnd -ne [IntPtr]::Zero) { $Action = 'close' } else { $Action = 'open' }
+  # Hide instead of close, so the next open is instant (no browser relaunch).
+  if ($hwnd -ne [IntPtr]::Zero -and [PfdWin]::IsWindowVisible($hwnd)) { $Action = 'close' } else { $Action = 'open' }
 }
 
 if ($Action -eq 'close') {
   if ($hwnd -ne [IntPtr]::Zero) {
-    $WM_CLOSE = 0x0010
-    $r = [IntPtr]::Zero
-    [PfdWin]::SendMessageTimeout($hwnd, $WM_CLOSE, [IntPtr]::Zero, [IntPtr]::Zero, 0, 2000, [ref]$r) | Out-Null
+    [PfdWin]::ShowWindow($hwnd, $SW_HIDE) | Out-Null
   }
   return
 }

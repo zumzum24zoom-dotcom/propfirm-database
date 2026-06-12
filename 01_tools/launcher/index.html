@@ -876,6 +876,19 @@ $('clipClear').addEventListener('click', clearClip);
 
 load();
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
+
+// Re-play the slide when the panel is re-shown (hotkey hides/shows the window
+// instead of reloading, so 'load' fires only once — replay on focus).
+let _slideArmed = false;
+const replaySlide = () => {
+  document.body.classList.remove('ready');
+  void document.body.offsetWidth;   // force reflow so the transition restarts
+  requestAnimationFrame(() => document.body.classList.add('ready'));
+};
+window.addEventListener('focus', () => {
+  if (_slideArmed) replaySlide();
+  _slideArmed = true;   // skip the very first focus (initial load already slid)
+});
 </script>
 </body>
 </html>
