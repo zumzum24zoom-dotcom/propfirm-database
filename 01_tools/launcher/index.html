@@ -208,6 +208,49 @@
     letter-spacing: 0.06em;
   }
 
+  /* Slot number badge (left of row) */
+  .row .slot {
+    flex-shrink: 0;
+    width: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent);
+    border-right: 1px solid var(--line);
+    background: var(--hover);
+    user-select: none;
+  }
+  .row .slot.empty { color: transparent; background: transparent; border-right: none; width: 0; }
+
+  /* Combo (2-screen) checklist inside modal */
+  #comboField { display: none; }
+  #comboField.show { display: block; }
+  .combo-list {
+    max-height: 130px; overflow-y: auto;
+    border: 1px solid var(--line-strong); border-radius: 4px;
+    padding: 4px 6px;
+  }
+  .combo-list label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--fg); padding: 3px 2px;
+    cursor: pointer; letter-spacing: 0;
+  }
+  .combo-list label:hover { color: var(--accent); }
+  .combo-list input { width: auto; margin: 0; }
+  .combo-list .none { color: var(--muted); font-size: 11px; padding: 4px 2px; }
+
+  /* Drag & drop overlay */
+  body.dragover::after {
+    content: 'ドロップで登録';
+    position: fixed; inset: 8px;
+    border: 2px dashed var(--accent);
+    border-radius: 8px;
+    background: rgba(37,99,235,0.06);
+    color: var(--accent);
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 150; pointer-events: none;
+  }
+
   .modal-actions {
     display: flex; gap: 8px; margin-top: 14px;
     justify-content: flex-end;
@@ -299,6 +342,20 @@
       <label>説明</label>
       <textarea id="f_description" placeholder="短い説明（省略可）"></textarea>
     </div>
+    <div class="field">
+      <label>ホットキー番号（パネル表示中に押すと起動）</label>
+      <select id="f_slot">
+        <option value="">なし</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+      </select>
+    </div>
+    <div class="field" id="comboField">
+      <label>2画面起動（Shift+番号で一緒に開く）</label>
+      <div class="combo-list" id="f_combo"></div>
+      <div class="hint">チェックしたツールを、このツールと同時に起動します。</div>
+    </div>
     <div class="modal-actions">
       <button class="btn danger" id="deleteBtn" style="display:none">削除</button>
       <button class="btn" id="cancelBtn">キャンセル</button>
@@ -382,6 +439,24 @@ const populateCatSelect = () => {
     + '<option value="misc">misc</option>';
 };
 
+// Build the combo checklist (every tool except the one being edited).
+const populateCombo = (selected, selfName) => {
+  const box = $('f_combo');
+  const sel = new Set(selected || []);
+  const others = data.tools.filter(t => t.name && t.name !== selfName);
+  box.innerHTML = others.length
+    ? others.map(t => `<label><input type="checkbox" value="${escapeHtml(t.name)}"${sel.has(t.name) ? ' checked' : ''}>${escapeHtml(t.name)}</label>`).join('')
+    : '<div class="none">他のツールがありません</div>';
+};
+
+const getComboSelection = () =>
+  [...$('f_combo').querySelectorAll('input:checked')].map(i => i.value);
+
+// Show the combo field only when a slot number is chosen.
+const syncComboVisibility = () => {
+  $('comboField').classList.toggle('show', !!$('f_slot').value);
+};
+
 const render = () => {
   const main = $('main');
   const q = query.trim().toLowerCase();
@@ -412,6 +487,11 @@ const render = () => {
     const label = data.categories[c]?.label || c;
     const rows = groups[c].map(({ t, idx }) => {
       const isApp = t.type === 'app';
+      const hasCombo = Array.isArray(t.combo) && t.combo.length > 0;
+      const slotTitle = t.slot ? `${t.slot} を押して起動` + (hasCombo ? ` / Shift+${t.slot} で2画面` : '') : '';
+      const slot = t.slot
+        ? `<div class="slot" title="${escapeHtml(slotTitle)}">${t.slot}${hasCombo ? '<span style="font-size:8px">⊞</span>' : ''}</div>`
+        : `<div class="slot empty"></div>`;
       const inner = `
           <div class="name">${escapeHtml(t.name)}${isApp ? '<span class="badge">APP</span>' : ''}</div>
           ${t.description ? `<div class="desc">${escapeHtml(t.description)}</div>` : ''}`;
@@ -420,6 +500,7 @@ const render = () => {
         : `<a class="open" href="${escapeHtml(t.path)}" target="_blank" rel="noopener">${inner}</a>`;
       return `
       <div class="row">
+        ${slot}
         ${opener}
         <button class="edit" data-idx="${idx}" title="編集">⋯</button>
       </div>`;
@@ -443,18 +524,41 @@ const render = () => {
 
 const launchApp = async (idx) => {
   const t = data.tools[idx];
+  if (t) launchTool(t);
+};
+
+// Launch one tool by type: app → local via server, web → open URL/HTML.
+const launchTool = async (t) => {
   if (!t) return;
-  try {
-    const res = await fetch('/api/launch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path: t.path }),
+  if (t.type === 'app') {
+    try {
+      const res = await fetch('/api/launch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: t.path }),
+      });
+      const r = await res.json();
+      if (!r.ok) throw new Error(r.error || '起動失敗');
+      toast('起動: ' + t.name);
+    } catch (e) {
+      toast('起動失敗: ' + e.message);
+    }
+  } else {
+    window.open(t.path, '_blank', 'noopener');
+    toast('起動: ' + t.name);
+  }
+};
+
+// Number key → slot's tool (1画面). Shift → also launch its combo partners (2画面).
+const launchSlot = (n, dual) => {
+  const t = data.tools.find(x => !x.hidden && Number(x.slot) === n);
+  if (!t) return;
+  launchTool(t);
+  if (dual && Array.isArray(t.combo)) {
+    t.combo.forEach(name => {
+      const partner = data.tools.find(x => x.name === name);
+      if (partner) launchTool(partner);
     });
-    const r = await res.json();
-    if (!r.ok) throw new Error(r.error || '起動失敗');
-    toast('起動しました');
-  } catch (e) {
-    toast('起動失敗: ' + e.message);
   }
 };
 
@@ -466,6 +570,9 @@ const openAddModal = () => {
   $('f_path').value = '';
   $('f_category').value = Object.keys(data.categories)[0] || 'misc';
   $('f_description').value = '';
+  $('f_slot').value = '';
+  populateCombo([], '');
+  syncComboVisibility();
   setType('web');
   $('modal').classList.add('open');
   setTimeout(() => $('f_name').focus(), 50);
@@ -480,6 +587,9 @@ const openEditModal = (idx) => {
   $('f_path').value = t.path || '';
   $('f_category').value = t.category || 'misc';
   $('f_description').value = t.description || '';
+  $('f_slot').value = t.slot ? String(t.slot) : '';
+  populateCombo(t.combo || [], t.name);
+  syncComboVisibility();
   setType(t.type === 'app' ? 'app' : 'web');
   $('modal').classList.add('open');
   setTimeout(() => $('f_name').focus(), 50);
@@ -499,6 +609,20 @@ const onSave = async () => {
   };
   if (formType === 'app') tool.type = 'app';   // 'web' is the default → omit to keep json lean
   if (!tool.description) delete tool.description;
+
+  const slot = parseInt($('f_slot').value, 10);
+  if (slot >= 1 && slot <= 9) {
+    tool.slot = slot;
+    const combo = getComboSelection();
+    if (combo.length) tool.combo = combo;
+    // Enforce slot uniqueness: clear this number from any other tool.
+    data.tools.forEach((other, i) => {
+      if (i !== editingIdx && Number(other.slot) === slot) {
+        delete other.slot;
+        delete other.combo;
+      }
+    });
+  }
 
   if (editingIdx >= 0) {
     data.tools[editingIdx] = tool;
@@ -555,9 +679,67 @@ $('saveBtn').addEventListener('click', onSave);
 $('deleteBtn').addEventListener('click', onDelete);
 $('browseBtn').addEventListener('click', onBrowse);
 $('search').addEventListener('input', e => { query = e.target.value; render(); });
+$('f_slot').addEventListener('change', syncComboVisibility);
 $('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+const isModalOpen = () => $('modal').classList.contains('open');
+const isTyping = () => {
+  const el = document.activeElement;
+  return el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
+};
+
+// Number keys launch slots while the panel is open (② = panel-focused only).
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Escape') { closeModal(); return; }
+  if (isModalOpen() || isTyping()) return;
+  if (e.ctrlKey || e.altKey || e.metaKey) return;
+  if (e.code >= 'Digit1' && e.code <= 'Digit9') {
+    const n = Number(e.code.slice(5));
+    e.preventDefault();
+    launchSlot(n, e.shiftKey);
+  }
+});
+
+// --- Drag & drop registration (④) ---
+// URL/link drop → prefill web modal (full auto). File drop → open the confirm
+// picker, because the browser sandbox never exposes a dropped file's real path.
+const extractUrl = (dt) => {
+  const uri = dt.getData('text/uri-list') || dt.getData('text/plain') || '';
+  const line = uri.split('\n').map(s => s.trim()).find(s => /^https?:\/\//i.test(s));
+  return line || '';
+};
+document.addEventListener('dragover', e => {
+  if (isModalOpen()) return;
+  e.preventDefault();
+  document.body.classList.add('dragover');
+});
+document.addEventListener('dragleave', e => {
+  if (e.relatedTarget === null) document.body.classList.remove('dragover');
+});
+document.addEventListener('drop', async e => {
+  e.preventDefault();
+  document.body.classList.remove('dragover');
+  if (isModalOpen()) return;
+  const dt = e.dataTransfer;
+  const url = extractUrl(dt);
+  if (url) {
+    openAddModal();
+    setType('web');
+    $('f_path').value = url;
+    try { $('f_name').value = new URL(url).hostname.replace(/^www\./, ''); } catch {}
+    $('f_name').focus();
+    toast('URLを取り込みました');
+    return;
+  }
+  if (dt.files && dt.files.length) {
+    const fname = dt.files[0].name || '';
+    const isHtml = /\.html?$/i.test(fname);
+    openAddModal();
+    setType(isHtml ? 'web' : 'app');
+    if (!isHtml && fname) $('f_name').value = fname.replace(/\.[^.]+$/, '');
+    toast('パス確定のためファイルを選択してください');
+    onBrowse();   // browser can't read the path → confirm via native picker
+  }
 });
 
 load();
