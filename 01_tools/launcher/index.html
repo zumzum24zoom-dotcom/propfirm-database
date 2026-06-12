@@ -26,15 +26,10 @@
     line-height: 1.45;
     overflow: hidden;
   }
-  body {
-    display: flex; flex-direction: column; height: 100vh;
-    transform: translateX(100%);
-    transition: transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1);
-  }
-  body.ready { transform: translateX(0); }
-  @media (prefers-reduced-motion: reduce) {
-    body { transition: none; transform: translateX(0); }
-  }
+  body { display: flex; flex-direction: column; height: 100vh; }
+  /* The open/close slide is done by the hotkey clipping the window region from
+     the right edge (so the whole panel — background included — slides, staying on
+     the primary monitor). No CSS transform here. */
 
   header {
     flex-shrink: 0;
@@ -875,29 +870,8 @@ document.querySelectorAll('.tab').forEach(t =>
 $('clipClear').addEventListener('click', clearClip);
 
 load();
-// First launch: slide the content in on load.
-requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
-
-// The slide animates BOTH ways while the window stays on the primary monitor
-// (a window-position slide would cross onto monitor 2 which sits to the right,
-// and Chrome clamps the min window width so a width-drawer is out — instead the
-// content slides inside a fixed-size window):
-//  • Slide out: the hotkey sends F14 → content slides out; it then hides the
-//    window only after the animation finishes (the page can't know it's about to
-//    be hidden). This also parks the content off-screen.
-//  • Slide in: the hotkey just shows the window; visibilitychange→visible slides
-//    the content back in. It looks clean because the prior slide-out parked it
-//    off-screen. (Sending a key right after showing a hidden window is unreliable
-//    — the web content isn't focused yet — so we rely on visibilitychange here.)
-const slideIn  = () => requestAnimationFrame(() => document.body.classList.add('ready'));
-const slideOut = () => document.body.classList.remove('ready');
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') slideIn();
-});
-window.addEventListener('keydown', e => {
-  if (e.key === 'F13') { e.preventDefault(); slideIn(); }        // best-effort (faster when it lands)
-  else if (e.key === 'F14') { e.preventDefault(); slideOut(); }
-});
+// The open/close slide is driven entirely by the hotkey (it clips the window
+// region from the right edge), so the page itself needs no slide logic.
 </script>
 </body>
 </html>

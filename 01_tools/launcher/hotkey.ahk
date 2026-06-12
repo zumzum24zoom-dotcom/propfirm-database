@@ -4,8 +4,11 @@
 ;
 ;   Insert : 右端サイドバーをトグル開閉（ネイティブ実装＝高速）
 ;
-; 仕組み: 閉じる＝ウィンドウ破棄ではなく「非表示(WinHide)」。再表示は WinShow + ドックで
-;         一瞬。初回だけブラウザ(--app)を起動する。ページは再読込されないので履歴等も保持。
+; 仕組み: しまう時はウィンドウを破棄せず「非表示(WinHide)」。開閉アニメは、ウィンドウの
+;         可視リージョン(SetWindowRgn)を右端から伸縮させて実現する。背景パネルごと右から
+;         開く/閉じる。ウィンドウは動かさず幅も変えないので、右の2枚目モニターにはみ出さず、
+;         Chromeの最小幅制限にも当たらない。初回だけブラウザ(--app)を起動。ページは再読込
+;         されないので履歴等も保持。
 ; A_ScriptDir 起点でブラウザ/URLを解決 → 自宅/職場でクローン先パスが違っても動く。
 ; 常駐させるには setup-startup.ps1 を一度実行（shell:startup に登録）。
 ; Insert は一部エディタで挿入/上書き切替に使われるため、変えたい場合は下の Insert:: を変更。
@@ -16,6 +19,8 @@ DetectHiddenWindows true
 TITLE := "PFD Launcher"
 URL   := "http://127.0.0.1:8765/01_tools/launcher/"
 WIDTH := 360
+STEPS := 16        ; スライドの分割数
+STEP_MS := 7       ; 1コマの待ち(ms) → 16*7≈112ms
 
 Insert:: TogglePanel()
 
@@ -24,31 +29,55 @@ TogglePanel() {
     id := WinExist(TITLE)
     if (id) {
         if DllCall("IsWindowVisible", "Ptr", id)
-            HideDocked(id)               ; 表示中 → スライドアウトしてから隠す
+            HidePanel(id)                ; 表示中 → 右へ閉じてから隠す
         else
-            ShowDocked(id)               ; 隠れている → 出してスライドイン
+            ShowPanel(id)                ; 隠れている → 右から開く
     } else {
         LaunchPanel()                    ; 無ければ初回起動
     }
 }
 
-ShowDocked(id) {
+; 可視リージョンを [leftX, 0, WIDTH, height] に設定（右側 WIDTH-leftX 分だけ見える）。
+SetClip(id, leftX) {
+    global WIDTH
+    MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
+    rgn := DllCall("gdi32\CreateRectRgn", "Int", leftX, "Int", 0, "Int", WIDTH, "Int", (B - T), "Ptr")
+    DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", rgn, "Int", 1)   ; 以後 rgn はOSが管理
+}
+ClearClip(id) {
+    DllCall("user32\SetWindowRgn", "Ptr", id, "Ptr", 0, "Int", 1)     ; クリップ解除＝全面
+}
+
+Dock(id) {
     global WIDTH
     MonitorGetWorkArea(MonitorGetPrimary(), &L, &T, &R, &B)
     WinMove(R - WIDTH, T, WIDTH, B - T, "ahk_id " id)
-    WinShow("ahk_id " id)                ; 表示 → ページの visibilitychange がスライドイン
-    WinSetAlwaysOnTop(1, "ahk_id " id)
-    try WinActivate("ahk_id " id)
-    Sleep 60                             ; フォーカス安定を待ち…
-    try Send("{F13}")                    ; …F13 も best-effort 送出（届けば即スライド）
 }
 
-HideDocked(id) {
-    try WinActivate("ahk_id " id)        ; キーがページに届くよう前面化
-    Sleep 40
-    try Send("{F14}")                    ; ページにスライドアウト指示
-    Sleep 230                            ; アニメ完了を待ってから隠す
+ShowPanel(id) {
+    global WIDTH, STEPS, STEP_MS
+    Dock(id)
+    SetClip(id, WIDTH)                    ; 先に「幅0」にクリップ（チラ見え防止）
+    WinShow("ahk_id " id)
+    WinSetAlwaysOnTop(1, "ahk_id " id)
+    try WinActivate("ahk_id " id)
+    Loop STEPS {                          ; 右端から左へ開く
+        leftX := Round(WIDTH * (STEPS - A_Index) / STEPS)
+        SetClip(id, leftX)
+        Sleep STEP_MS
+    }
+    ClearClip(id)
+}
+
+HidePanel(id) {
+    global WIDTH, STEPS, STEP_MS
+    Loop STEPS {                          ; 左から右へ閉じる
+        leftX := Round(WIDTH * A_Index / STEPS)
+        SetClip(id, leftX)
+        Sleep STEP_MS
+    }
     WinHide("ahk_id " id)
+    ClearClip(id)                         ; 隠している間は全面に戻しておく
 }
 
 LaunchPanel() {
@@ -66,8 +95,12 @@ LaunchPanel() {
         . ' --disable-features=msEdgeFirstRunExperience,EdgeWelcomeEnabled,WelcomeExperienceEnabled,msUndersideButton',
         URL, udir, x, T, WIDTH, B - T)
     Run('"' browser '" ' flags)
-    if WinWait(TITLE, , 6)
-        ShowDocked(WinExist(TITLE))
+    if WinWait(TITLE, , 6) {              ; 初回はそのまま全面表示（1回だけポップ）
+        id := WinExist(TITLE)
+        Dock(id)
+        WinSetAlwaysOnTop(1, "ahk_id " id)
+        try WinActivate("ahk_id " id)
+    }
 }
 
 FindBrowser() {
