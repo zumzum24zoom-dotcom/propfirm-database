@@ -877,17 +877,26 @@ $('clipClear').addEventListener('click', clearClip);
 load();
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
 
-// Re-play the slide when the panel is re-shown (hotkey hides/shows the window
-// instead of reloading, so 'load' fires only once — replay on focus).
-let _slideArmed = false;
+// Re-play the slide when the panel is re-shown. The hotkey hides/shows the
+// window instead of reloading, so 'load' fires only once. WinHide/WinShow flips
+// the document's visibility, so visibilitychange is the reliable trigger; focus
+// is a fallback. A short time-guard de-dups when both fire together.
+let _lastSlide = 0;
 const replaySlide = () => {
+  const now = performance.now();
+  if (now - _lastSlide < 250) return;
+  _lastSlide = now;
   document.body.classList.remove('ready');
   void document.body.offsetWidth;   // force reflow so the transition restarts
   requestAnimationFrame(() => document.body.classList.add('ready'));
 };
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') replaySlide();
+});
+let _focusArmed = false;
 window.addEventListener('focus', () => {
-  if (_slideArmed) replaySlide();
-  _slideArmed = true;   // skip the very first focus (initial load already slid)
+  if (_focusArmed) replaySlide();
+  _focusArmed = true;   // skip the first focus (initial load already slid)
 });
 </script>
 </body>
