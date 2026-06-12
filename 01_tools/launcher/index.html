@@ -5,79 +5,114 @@
 <title>PFD Launcher</title>
 <style>
   :root {
-    --bg: #ffffff;
-    --fg: #1a1a1a;
-    --muted: #888;
-    --line: #ececec;
-    --line-strong: #ccc;
-    --accent: #2563eb;
-    --hover: #f5f7fb;
-    --danger: #dc2626;
-    --overlay: rgba(0,0,0,0.4);
+    --bg: #0d0221;
+    --bg-elev: #1a0f33;
+    --fg: #e3ddff;
+    --muted: #7a6bb0;
+    --line: #2a1a4d;
+    --line-strong: #4a2d80;
+    --accent: #00e5ff;
+    --accent2: #ff2e97;
+    --hover: rgba(0, 229, 255, 0.08);
+    --danger: #ff3864;
+    --overlay: rgba(8, 2, 20, 0.78);
+    --glow: 0 0 6px rgba(0, 229, 255, 0.55);
+    --glow2: 0 0 6px rgba(255, 46, 151, 0.55);
   }
   * { box-sizing: border-box; }
+  @keyframes fadeScaleIn {
+    from { opacity: 0; transform: scale(0.96) translateY(6px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   html, body {
     margin: 0; padding: 0;
     height: 100%;
+    background: var(--bg);
     color: var(--fg);
     font-family: -apple-system, "Segoe UI", "Yu Gothic UI", "Hiragino Sans", system-ui, sans-serif;
     font-size: 13px;
     line-height: 1.45;
     overflow: hidden;
   }
-  /* The content slides via CSS transform (GPU = smooth). The hotkey clips the
-     window region in lockstep so the white window area the content vacates is
-     hidden (otherwise it would show as a popping white panel). translateX and the
-     clip both run linearly over the same 200ms so they stay aligned. */
-  html, body { background: var(--bg); }
   body {
     display: flex; flex-direction: column; height: 100vh;
-    transform: translateX(100%);
-    transition: transform 0.2s linear;
+    background-image: linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+    background-size: 100% 3px;
   }
-  body.ready { transform: translateX(0); }
-  @media (prefers-reduced-motion: reduce) { body { transition: none; } }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
   header {
     flex-shrink: 0;
     padding: 12px 14px 8px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--line-strong);
+    box-shadow: 0 1px 8px rgba(0, 229, 255, 0.12);
+    background: linear-gradient(180deg, rgba(74, 45, 128, 0.25), transparent);
+    backdrop-filter: blur(6px);
   }
   .titlebar {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 8px;
   }
-  .titlebar h1 {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-  .titlebar h1 .accent { color: var(--accent); }
   .icon-btn {
-    border: 1px solid var(--line);
-    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    background: var(--bg-elev);
     color: var(--fg);
-    width: 26px; height: 26px;
-    border-radius: 4px;
+    width: 28px; height: 28px;
+    border-radius: 7px;
     cursor: pointer;
-    font-size: 16px;
     line-height: 1;
     display: inline-flex; align-items: center; justify-content: center;
     padding: 0;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
-  .icon-btn:hover { background: var(--hover); border-color: var(--accent); color: var(--accent); }
+  .icon-btn svg { width: 15px; height: 15px; display: block; }
+  .icon-btn:hover { background: var(--hover); border-color: var(--accent); color: var(--accent); box-shadow: var(--glow); transform: translateY(-1px); }
+  .icon-btn:active { transform: translateY(0) scale(0.95); }
+  .icon-btn.active { background: var(--accent); border-color: var(--accent); color: #021018; box-shadow: var(--glow); }
+  .tabs { display: flex; gap: 4px; margin-top: 8px; }
+  .tab {
+    flex: 1;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-elev);
+    color: var(--muted);
+    border-radius: 6px;
+    padding: 5px 0;
+    font: inherit;
+    font-family: "Consolas", "Cascadia Mono", monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .tab.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+    box-shadow: var(--glow);
+    background: linear-gradient(180deg, rgba(0, 229, 255, 0.14), rgba(0, 229, 255, 0.02));
+  }
+  .tab:hover { background: var(--hover); }
   #search {
     width: 100%;
     padding: 7px 10px;
-    border: 1px solid var(--line);
-    border-radius: 4px;
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
     font: inherit;
     color: var(--fg);
-    background: var(--bg);
+    background: var(--bg-elev);
     outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  #search:focus { border-color: var(--accent); }
+  #search::placeholder { color: var(--muted); }
+  #search:focus { border-color: var(--accent); box-shadow: var(--glow); }
 
   main {
     flex: 1;
@@ -87,21 +122,27 @@
   .cat-section { margin-bottom: 14px; }
   .cat-section h2 {
     margin: 6px 0 6px;
+    padding-left: 8px;
     font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.14em;
+    font-family: "Consolas", "Cascadia Mono", monospace;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--accent2);
+    border-left: 2px solid var(--accent2);
+    box-shadow: -1px 0 6px rgba(255, 46, 151, 0.4);
   }
   .row {
     display: flex; align-items: stretch;
     border: 1px solid var(--line);
-    border-radius: 5px;
+    border-radius: 7px;
     margin-bottom: 5px;
     overflow: hidden;
-    background: var(--bg);
+    background: linear-gradient(135deg, var(--bg-elev), rgba(74, 45, 128, 0.18));
+    animation: slideUp 0.25s ease both;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
-  .row:hover { border-color: var(--accent); }
+  .row:hover { border-color: var(--accent); box-shadow: var(--glow); transform: translateY(-1px); }
   .row .open {
     flex: 1;
     padding: 9px 11px;
@@ -111,17 +152,33 @@
     min-width: 0;
   }
   .row .open:hover { background: var(--hover); }
-  .row .name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row .name {
+    display: flex; align-items: center; gap: 6px;
+    font-weight: 600; white-space: nowrap; overflow: hidden;
+  }
+  .row .name .name-text { overflow: hidden; text-overflow: ellipsis; }
   .row .desc { color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .row .edit {
     border: none; border-left: 1px solid var(--line);
-    background: var(--bg);
+    background: var(--bg-elev);
     color: var(--muted);
     cursor: pointer;
     padding: 0 11px;
     font-size: 13px;
+    transition: background 0.15s ease, color 0.15s ease;
   }
   .row .edit:hover { background: var(--hover); color: var(--accent); }
+  .num-badge {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px;
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    font-size: 10px;
+    font-family: "Consolas", "Cascadia Mono", monospace;
+    border-radius: 2px;
+    box-shadow: var(--glow2);
+  }
 
   .empty {
     color: var(--muted);
@@ -132,8 +189,9 @@
   footer {
     flex-shrink: 0;
     padding: 6px 14px;
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--line-strong);
     color: var(--muted);
+    font-family: "Consolas", "Cascadia Mono", monospace;
     font-size: 10px;
     display: flex; justify-content: space-between;
   }
@@ -148,18 +206,25 @@
   }
   .overlay.open { display: flex; }
   .modal {
-    background: var(--bg);
-    border-radius: 8px;
+    background: linear-gradient(160deg, var(--bg-elev), rgba(74, 45, 128, 0.3));
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
     width: 92%; max-width: 420px;
     max-height: 90vh;
     overflow-y: auto;
     padding: 16px 18px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+    box-shadow: 0 0 24px rgba(0, 229, 255, 0.25), 0 12px 32px rgba(0,0,0,0.5);
+    animation: fadeScaleIn 0.18s ease both;
   }
   .modal h3 {
     margin: 0 0 12px;
     font-size: 13px;
     font-weight: 600;
+    font-family: "Consolas", "Cascadia Mono", monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-shadow: var(--glow);
   }
   .field { margin-bottom: 10px; }
   .field label {
@@ -173,85 +238,16 @@
     width: 100%;
     padding: 6px 9px;
     border: 1px solid var(--line-strong);
-    border-radius: 4px;
+    border-radius: 5px;
     font: inherit;
     color: var(--fg);
     background: var(--bg);
     outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); box-shadow: var(--glow); }
   .field textarea { resize: vertical; min-height: 50px; }
   .field .hint { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-  /* Segmented type toggle */
-  .seg { display: flex; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden; }
-  .seg-btn {
-    flex: 1;
-    padding: 6px 0;
-    border: none;
-    background: var(--bg);
-    color: var(--muted);
-    font: inherit;
-    cursor: pointer;
-  }
-  .seg-btn + .seg-btn { border-left: 1px solid var(--line-strong); }
-  .seg-btn.active { background: var(--accent); color: #fff; }
-  .seg-btn:not(.active):hover { background: var(--hover); }
-
-  /* App row marker */
-  .row .open .name .badge {
-    font-size: 9px; font-weight: 600;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 3px;
-    padding: 0 4px;
-    margin-left: 6px;
-    vertical-align: middle;
-    letter-spacing: 0.06em;
-  }
-
-  /* Slot number badge (left of row) */
-  .row .slot {
-    flex-shrink: 0;
-    width: 22px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700;
-    color: var(--accent);
-    border-right: 1px solid var(--line);
-    background: var(--hover);
-    user-select: none;
-  }
-  .row .slot.empty { color: transparent; background: transparent; border-right: none; width: 0; }
-
-  /* Combo (2-screen) checklist inside modal */
-  #comboField { display: none; }
-  #comboField.show { display: block; }
-  .combo-list {
-    max-height: 130px; overflow-y: auto;
-    border: 1px solid var(--line-strong); border-radius: 4px;
-    padding: 4px 6px;
-  }
-  .combo-list label {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--fg); padding: 3px 2px;
-    cursor: pointer; letter-spacing: 0;
-  }
-  .combo-list label:hover { color: var(--accent); }
-  .combo-list input { width: auto; margin: 0; }
-  .combo-list .none { color: var(--muted); font-size: 11px; padding: 4px 2px; }
-
-  /* Drag & drop overlay */
-  body.dragover::after {
-    content: 'ドロップで登録';
-    position: fixed; inset: 8px;
-    border: 2px dashed var(--accent);
-    border-radius: 8px;
-    background: rgba(37,99,235,0.06);
-    color: var(--accent);
-    font-size: 14px; font-weight: 600;
-    display: flex; align-items: center; justify-content: center;
-    z-index: 150; pointer-events: none;
-  }
 
   .modal-actions {
     display: flex; gap: 8px; margin-top: 14px;
@@ -260,91 +256,64 @@
   .btn {
     padding: 7px 14px;
     border: 1px solid var(--line-strong);
-    background: var(--bg);
+    background: var(--bg-elev);
     color: var(--fg);
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
-  .btn:hover { background: var(--hover); }
+  .btn:hover { background: var(--hover); border-color: var(--accent); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
   .btn.primary {
     background: var(--accent);
-    color: white;
+    color: #021018;
     border-color: var(--accent);
+    font-weight: 600;
   }
-  .btn.primary:hover { opacity: 0.9; background: var(--accent); }
+  .btn.primary:hover { opacity: 0.9; background: var(--accent); box-shadow: var(--glow); }
   .btn.danger {
     color: var(--danger);
     border-color: var(--danger);
     margin-right: auto;
   }
-  .btn.danger:hover { background: #fef2f2; }
+  .btn.danger:hover { background: rgba(255, 56, 100, 0.1); box-shadow: 0 0 6px rgba(255, 56, 100, 0.5); }
 
   .toast {
     position: fixed; bottom: 16px; left: 50%;
     transform: translateX(-50%);
-    background: #1a1a1a; color: white;
+    background: var(--bg-elev); color: var(--accent);
+    border: 1px solid var(--accent);
     padding: 8px 16px;
     border-radius: 4px;
     font-size: 12px;
+    font-family: "Consolas", "Cascadia Mono", monospace;
+    box-shadow: var(--glow);
     opacity: 0;
     transition: opacity 0.2s;
     pointer-events: none;
     z-index: 200;
   }
   .toast.show { opacity: 1; }
-
-  /* Tab bar (Tools / Clipboard) */
-  .tabs { display: flex; gap: 0; margin-top: 8px; }
-  .tab {
-    flex: 1; padding: 6px 0; text-align: center;
-    border: none; border-bottom: 2px solid transparent;
-    background: var(--bg); color: var(--muted);
-    font: inherit; font-size: 12px; cursor: pointer;
-  }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-  .tab:not(.active):hover { background: var(--hover); }
-
-  /* Clipboard view */
-  #clipMain { flex: 1; overflow-y: auto; padding: 8px 14px 14px; }
-  .clip-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .clip-head .lbl { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-  .clip-clear {
-    border: 1px solid var(--line); background: var(--bg); color: var(--muted);
-    border-radius: 4px; padding: 2px 8px; font: inherit; font-size: 11px; cursor: pointer;
-  }
-  .clip-clear:hover { color: var(--danger); border-color: var(--danger); }
-  .clip-item {
-    border: 1px solid var(--line); border-radius: 5px;
-    margin-bottom: 5px; padding: 7px 9px;
-    cursor: pointer; background: var(--bg);
-    display: flex; gap: 8px; align-items: flex-start;
-  }
-  .clip-item:hover { border-color: var(--accent); background: var(--hover); }
-  .clip-item .kind { flex-shrink: 0; font-size: 12px; opacity: 0.7; }
-  .clip-item .body { min-width: 0; flex: 1; }
-  .clip-item .txt {
-    font-size: 12px; white-space: pre-wrap; word-break: break-word;
-    max-height: 56px; overflow: hidden;
-  }
-  .clip-item .meta { font-size: 10px; color: var(--muted); margin-top: 3px; }
-  .clip-item img {
-    max-width: 100%; max-height: 120px; border-radius: 3px;
-    border: 1px solid var(--line); display: block;
-  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="titlebar">
-    <h1>PFD <span class="accent">Launcher</span></h1>
-    <button id="addBtn" class="icon-btn" title="ツールを追加">＋</button>
+    <button id="pinBtn" class="icon-btn" title="最前面に固定">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 3h6l1.2 6.5L19 12v2H5v-2l2.8-2.5z"/></svg>
+    </button>
+    <div style="display:flex; gap:6px;">
+      <button id="addBtn" class="icon-btn" title="ツールを追加">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
   </div>
-  <input id="search" type="text" placeholder="検索" autofocus>
+  <input id="search" type="text" placeholder="検索">
   <div class="tabs">
-    <button class="tab active" id="tabTools" data-view="tools">ツール</button>
-    <button class="tab" id="tabClip" data-view="clip">📋 履歴</button>
+    <button class="tab active" data-tab="tools">Tools</button>
+    <button class="tab" data-tab="clipboard">Clipboard</button>
   </div>
 </header>
 
@@ -353,11 +322,10 @@
 </main>
 
 <main id="clipMain" style="display:none">
-  <div class="clip-head">
-    <span class="lbl">クリップボード履歴</span>
-    <button class="clip-clear" id="clipClear">クリア</button>
+  <div style="display:flex; justify-content:flex-end; margin-bottom:6px;">
+    <button class="btn" id="clipClearBtn" style="font-size:11px; padding:4px 10px;">全削除</button>
   </div>
-  <div id="clipList"><div class="empty">—</div></div>
+  <div id="clipList"></div>
 </main>
 
 <footer>
@@ -369,23 +337,28 @@
   <div class="modal">
     <h3 id="modalTitle">ツールを追加</h3>
     <div class="field">
-      <label>種類</label>
-      <div class="seg" id="typeSeg">
-        <button type="button" class="seg-btn active" data-type="web">Web / URL</button>
-        <button type="button" class="seg-btn" data-type="app">アプリ (.exe/.lnk)</button>
-      </div>
-    </div>
-    <div class="field">
       <label>名前 *</label>
       <input id="f_name" type="text" placeholder="Page Maker v12">
     </div>
     <div class="field">
+      <label>種別</label>
+      <select id="f_type">
+        <option value="html">ページ（HTML / URL）</option>
+        <option value="exe">アプリ（exe・ファイル）</option>
+        <option value="pwa">インストール済みアプリ（PWA等）</option>
+      </select>
+    </div>
+    <div class="field" id="pathField">
       <label>パス *</label>
       <div style="display:flex; gap:6px;">
         <input id="f_path" type="text" placeholder="/01_tools/core/page-maker-v12.html" style="flex:1;">
         <button type="button" class="btn" id="browseBtn" title="ファイル選択" style="padding:6px 10px;">📁</button>
       </div>
       <div class="hint" id="pathHint">サーバルート起点（例: /01_tools/core/xxx.html）または http(s)://...</div>
+    </div>
+    <div class="field" id="pwaField" style="display:none;">
+      <label>アプリ選択 *</label>
+      <select id="f_pwa"></select>
     </div>
     <div class="field">
       <label>カテゴリ</label>
@@ -394,20 +367,6 @@
     <div class="field">
       <label>説明</label>
       <textarea id="f_description" placeholder="短い説明（省略可）"></textarea>
-    </div>
-    <div class="field">
-      <label>ホットキー番号（パネル表示中に押すと起動）</label>
-      <select id="f_slot">
-        <option value="">なし</option>
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-      </select>
-    </div>
-    <div class="field" id="comboField">
-      <label>2画面起動（Shift+番号で一緒に開く）</label>
-      <div class="combo-list" id="f_combo"></div>
-      <div class="hint">チェックしたツールを、このツールと同時に起動します。</div>
     </div>
     <div class="modal-actions">
       <button class="btn danger" id="deleteBtn" style="display:none">削除</button>
@@ -426,24 +385,43 @@ const escapeHtml = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<'
 let data = { categories: {}, tools: [] };
 let query = '';
 let editingIdx = -1;
-let formType = 'web';   // 'web' | 'app' — current add/edit modal type
+let quickList = [];
 
-const HINTS = {
-  web: 'サーバルート起点（例: /01_tools/core/xxx.html）または http(s)://...',
-  app: 'アプリ(.exe)やショートカット(.lnk)の絶対パス。📁はスタートメニュー起点で開きます（インストール済みアプリ/PWAもそこ）',
-};
-const PLACEHOLDERS = {
-  web: '/01_tools/core/page-maker-v12.html',
-  app: 'C:\\Users\\...\\App.lnk',
-};
+// 分割表示中のウィンドウ参照（順序に関わらず左右に並べるため）
+const paneWindows = { left: null, right: null };
 
-const setType = (type) => {
-  formType = (type === 'app') ? 'app' : 'web';
-  document.querySelectorAll('#typeSeg .seg-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.type === formType);
-  });
-  $('pathHint').textContent = HINTS[formType];
-  $('f_path').placeholder = PLACEHOLDERS[formType];
+const launchTool = async (t, pane = 'left') => {
+  if (t.type === 'exe' || t.type === 'pwa') {
+    try {
+      const res = await fetch('/api/launch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: t.path, type: t.type }),
+      });
+      const r = await res.json();
+      if (!r.ok) toast('起動失敗: ' + r.error);
+    } catch (err) {
+      toast('起動失敗: ' + err.message);
+    }
+  } else {
+    // サイドバー(画面右端 360px)を除いた領域に開く。右半分が開いていれば左も半分にして並べる
+    const SIDEBAR_WIDTH = 360;
+    const avail = window.screen.availWidth - SIDEBAR_WIDTH;
+    const half = Math.floor(avail / 2);
+    const h = window.screen.availHeight;
+    const rightOpen = paneWindows.right && !paneWindows.right.closed;
+    const leftOpen = paneWindows.left && !paneWindows.left.closed;
+
+    if (pane === 'right') {
+      paneWindows.right = window.open(t.path, '_blank', `width=${half},height=${h},left=${half},top=0`);
+      if (leftOpen) {
+        try { paneWindows.left.resizeTo(half, h); paneWindows.left.moveTo(0, 0); } catch {}
+      }
+    } else {
+      const w = rightOpen ? half : Math.max(avail, 600);
+      paneWindows.left = window.open(t.path, '_blank', `width=${w},height=${h},left=0,top=0`);
+    }
+  }
 };
 
 const toast = (msg) => {
@@ -492,24 +470,6 @@ const populateCatSelect = () => {
     + '<option value="misc">misc</option>';
 };
 
-// Build the combo checklist (every tool except the one being edited).
-const populateCombo = (selected, selfName) => {
-  const box = $('f_combo');
-  const sel = new Set(selected || []);
-  const others = data.tools.filter(t => t.name && t.name !== selfName);
-  box.innerHTML = others.length
-    ? others.map(t => `<label><input type="checkbox" value="${escapeHtml(t.name)}"${sel.has(t.name) ? ' checked' : ''}>${escapeHtml(t.name)}</label>`).join('')
-    : '<div class="none">他のツールがありません</div>';
-};
-
-const getComboSelection = () =>
-  [...$('f_combo').querySelectorAll('input:checked')].map(i => i.value);
-
-// Show the combo field only when a slot number is chosen.
-const syncComboVisibility = () => {
-  $('comboField').classList.toggle('show', !!$('f_slot').value);
-};
-
 const render = () => {
   const main = $('main');
   const q = query.trim().toLowerCase();
@@ -536,27 +496,26 @@ const render = () => {
   const catOrder = Object.keys(groups).sort((a, b) =>
     (data.categories[a]?.order ?? 99) - (data.categories[b]?.order ?? 99));
 
+  quickList = [];
+  catOrder.forEach(c => groups[c].forEach(({ t }) => quickList.push(t)));
+  quickList = quickList.slice(0, 9);
+
   main.innerHTML = catOrder.map(c => {
     const label = data.categories[c]?.label || c;
     const rows = groups[c].map(({ t, idx }) => {
-      const isApp = t.type === 'app';
-      const hasCombo = Array.isArray(t.combo) && t.combo.length > 0;
-      const slotTitle = t.slot ? `${t.slot} を押して起動` + (hasCombo ? ` / Shift+${t.slot} で2画面` : '') : '';
-      const slot = t.slot
-        ? `<div class="slot" title="${escapeHtml(slotTitle)}">${t.slot}${hasCombo ? '<span style="font-size:8px">⊞</span>' : ''}</div>`
-        : `<div class="slot empty"></div>`;
-      const inner = `
-          <div class="name">${escapeHtml(t.name)}${isApp ? '<span class="badge">APP</span>' : ''}</div>
-          ${t.description ? `<div class="desc">${escapeHtml(t.description)}</div>` : ''}`;
-      const opener = isApp
-        ? `<div class="open" data-launch="${idx}" role="button" tabindex="0" title="アプリを起動">${inner}</div>`
+      const qn = quickList.indexOf(t);
+      const badge = qn >= 0 ? `<span class="num-badge" title="数字キー${qn + 1}で起動">${qn + 1}</span>` : '';
+      const inner = `<div class="name">${badge}<span class="name-text">${escapeHtml(t.name)}</span></div>${t.description ? `<div class="desc">${escapeHtml(t.description)}</div>` : ''}`;
+      const isApp = t.type === 'exe' || t.type === 'pwa';
+      const open = isApp
+        ? `<a class="open" href="#" data-launch="${idx}">${inner}</a>`
         : `<a class="open" href="${escapeHtml(t.path)}" target="_blank" rel="noopener">${inner}</a>`;
       return `
       <div class="row">
-        ${slot}
-        ${opener}
+        ${open}
         <button class="edit" data-idx="${idx}" title="編集">⋯</button>
-      </div>`;
+      </div>
+    `;
     }).join('');
     return `<section class="cat-section"><h2>${escapeHtml(label)}</h2>${rows}</section>`;
   }).join('');
@@ -565,55 +524,44 @@ const render = () => {
     btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.idx, 10)));
   });
   main.querySelectorAll('[data-launch]').forEach(el => {
-    const idx = parseInt(el.dataset.launch, 10);
-    el.addEventListener('click', () => launchApp(idx));
-    el.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); launchApp(idx); }
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      launchTool(data.tools[parseInt(el.dataset.launch, 10)]);
     });
   });
 
   $('footerInfo').textContent = filtered.length + ' / ' + visible.length;
 };
 
-const launchApp = async (idx) => {
-  const t = data.tools[idx];
-  if (t) launchTool(t);
+const PWA_HINTS = {
+  html: 'サーバルート起点（例: /01_tools/core/xxx.html）または http(s)://...',
+  exe: 'ローカルのファイルパス（例: C:\\Apps\\foo.exe）',
+  pwa: '',
 };
 
-// Launch one tool by type: app → local via server, web → open URL/HTML.
-const launchTool = async (t) => {
-  if (!t) return;
-  if (t.type === 'app') {
-    try {
-      const res = await fetch('/api/launch', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: t.path }),
-      });
-      const r = await res.json();
-      if (!r.ok) throw new Error(r.error || '起動失敗');
-      toast('起動: ' + t.name);
-    } catch (e) {
-      toast('起動失敗: ' + e.message);
-    }
-  } else {
-    window.open(t.path, '_blank', 'noopener');
-    toast('起動: ' + t.name);
+let pwaApps = null;
+
+const loadPwaApps = async () => {
+  if (pwaApps) return pwaApps;
+  try {
+    const res = await fetch('/api/apps');
+    const r = await res.json();
+    pwaApps = r.ok ? r.apps : [];
+  } catch (e) {
+    pwaApps = [];
   }
+  $('f_pwa').innerHTML = pwaApps.map(a => `<option value="${escapeHtml(a.appid)}">${escapeHtml(a.name)}</option>`).join('');
+  return pwaApps;
 };
 
-// Number key → slot's tool (1画面). Shift → also launch its combo partners (2画面).
-const launchSlot = (n, dual) => {
-  const t = data.tools.find(x => !x.hidden && Number(x.slot) === n);
-  if (!t) return;
-  launchTool(t);
-  if (dual && Array.isArray(t.combo)) {
-    t.combo.forEach(name => {
-      const partner = data.tools.find(x => x.name === name);
-      if (partner) launchTool(partner);
-    });
-  }
+const applyTypeUI = async (type) => {
+  $('pathField').style.display = type === 'pwa' ? 'none' : '';
+  $('pwaField').style.display = type === 'pwa' ? '' : 'none';
+  $('pathHint').textContent = PWA_HINTS[type] || '';
+  if (type === 'pwa') await loadPwaApps();
 };
+
+$('f_type').addEventListener('change', () => applyTypeUI($('f_type').value));
 
 const openAddModal = () => {
   editingIdx = -1;
@@ -621,29 +569,26 @@ const openAddModal = () => {
   $('deleteBtn').style.display = 'none';
   $('f_name').value = '';
   $('f_path').value = '';
+  $('f_type').value = 'html';
   $('f_category').value = Object.keys(data.categories)[0] || 'misc';
   $('f_description').value = '';
-  $('f_slot').value = '';
-  populateCombo([], '');
-  syncComboVisibility();
-  setType('web');
+  applyTypeUI('html');
   $('modal').classList.add('open');
   setTimeout(() => $('f_name').focus(), 50);
 };
 
-const openEditModal = (idx) => {
+const openEditModal = async (idx) => {
   editingIdx = idx;
   const t = data.tools[idx];
   $('modalTitle').textContent = 'ツールを編集';
   $('deleteBtn').style.display = '';
   $('f_name').value = t.name || '';
   $('f_path').value = t.path || '';
+  $('f_type').value = t.type || 'html';
   $('f_category').value = t.category || 'misc';
   $('f_description').value = t.description || '';
-  $('f_slot').value = t.slot ? String(t.slot) : '';
-  populateCombo(t.combo || [], t.name);
-  syncComboVisibility();
-  setType(t.type === 'app' ? 'app' : 'web');
+  await applyTypeUI($('f_type').value);
+  if ($('f_type').value === 'pwa') $('f_pwa').value = t.path || '';
   $('modal').classList.add('open');
   setTimeout(() => $('f_name').focus(), 50);
 };
@@ -652,30 +597,18 @@ const closeModal = () => $('modal').classList.remove('open');
 
 const onSave = async () => {
   const name = $('f_name').value.trim();
-  const path = $('f_path').value.trim();
+  const type = $('f_type').value;
+  const path = type === 'pwa' ? $('f_pwa').value : $('f_path').value.trim();
   if (!name || !path) { toast('名前とパスは必須'); return; }
   const tool = {
     name,
     path,
+    type,
     category: $('f_category').value || 'misc',
     description: $('f_description').value.trim(),
   };
-  if (formType === 'app') tool.type = 'app';   // 'web' is the default → omit to keep json lean
+  if (type === 'html') delete tool.type;
   if (!tool.description) delete tool.description;
-
-  const slot = parseInt($('f_slot').value, 10);
-  if (slot >= 1 && slot <= 9) {
-    tool.slot = slot;
-    const combo = getComboSelection();
-    if (combo.length) tool.combo = combo;
-    // Enforce slot uniqueness: clear this number from any other tool.
-    data.tools.forEach((other, i) => {
-      if (i !== editingIdx && Number(other.slot) === slot) {
-        delete other.slot;
-        delete other.combo;
-      }
-    });
-  }
 
   if (editingIdx >= 0) {
     data.tools[editingIdx] = tool;
@@ -704,13 +637,12 @@ const onBrowse = async () => {
   const orig = btn.textContent;
   btn.textContent = '…';
   try {
-    const kind = formType === 'app' ? 'app' : 'html';
-    const res = await fetch('/api/browse?kind=' + kind + '&t=' + Date.now());
+    const htmlFilter = $('f_type').value === 'html' ? '&html=1' : '';
+    const res = await fetch('/api/browse?t=' + Date.now() + htmlFilter);
     const r = await res.json();
     if (r.cancelled) return;
     if (!r.ok) { toast(r.error || '選択に失敗'); return; }
     $('f_path').value = r.path;
-    if (r.type) setType(r.type);
     if (!$('f_name').value.trim() && r.name) {
       $('f_name').value = r.name;
     }
@@ -723,179 +655,134 @@ const onBrowse = async () => {
   }
 };
 
-document.querySelectorAll('#typeSeg .seg-btn').forEach(btn => {
-  btn.addEventListener('click', () => setType(btn.dataset.type));
+// -- Clipboard panel --------------------------------------------------
+let clipPoll = null;
+
+const loadClipboard = async () => {
+  try {
+    const res = await fetch('/api/clipboard?t=' + Date.now());
+    const r = await res.json();
+    renderClipboard(r.items || []);
+  } catch (e) {
+    $('clipList').innerHTML = '<div class="empty">読み込み失敗: ' + escapeHtml(e.message) + '</div>';
+  }
+};
+
+const renderClipboard = (items) => {
+  const list = $('clipList');
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty">履歴なし</div>';
+    return;
+  }
+  list.innerHTML = items.map(it => {
+    const body = it.type === 'image'
+      ? `<img src="/api/clipboard/image/${escapeHtml(it.image_file)}" style="max-width:100%; max-height:120px; display:block; border-radius:3px; object-fit:contain;">`
+      : `<div class="desc" style="white-space:pre-wrap; -webkit-line-clamp:3; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden; color:var(--fg);">${escapeHtml(it.preview)}</div>`;
+    return `
+      <div class="row" style="flex-direction:column; align-items:stretch;">
+        <div style="padding:8px 11px;">${body}</div>
+        <div style="display:flex; border-top:1px solid var(--line);">
+          <button class="edit" style="flex:1; border-left:none;" data-restore="${it.id}">コピー</button>
+          <button class="edit" data-delete="${it.id}">削除</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('[data-restore]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const res = await fetch('/api/clipboard/restore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: btn.dataset.restore }),
+      });
+      const r = await res.json();
+      toast(r.ok ? 'コピーしました' : '失敗: ' + r.error);
+    });
+  });
+  list.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await fetch('/api/clipboard/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: btn.dataset.delete }),
+      });
+      loadClipboard();
+    });
+  });
+};
+
+$('clipClearBtn').addEventListener('click', async () => {
+  if (!confirm('クリップボード履歴を全削除しますか？')) return;
+  await fetch('/api/clipboard/clear', { method: 'POST' });
+  loadClipboard();
 });
+
+// -- Tabs ---------------------------------------------------------------
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
+    const isClipboard = btn.dataset.tab === 'clipboard';
+    $('main').style.display = isClipboard ? 'none' : '';
+    $('clipMain').style.display = isClipboard ? '' : 'none';
+    $('search').style.display = isClipboard ? 'none' : '';
+    if (isClipboard) {
+      loadClipboard();
+      if (!clipPoll) clipPoll = setInterval(loadClipboard, 3000);
+    } else if (clipPoll) {
+      clearInterval(clipPoll);
+      clipPoll = null;
+    }
+  });
+});
+
+// -- Pin (always-on-top) -------------------------------------------------
+let pinned = false;
+$('pinBtn').addEventListener('click', async () => {
+  const next = !pinned;
+  try {
+    const res = await fetch('/api/window/topmost', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ on: next }),
+    });
+    const r = await res.json();
+    if (!r.ok) { toast('失敗: ' + r.error); return; }
+    pinned = next;
+    $('pinBtn').classList.toggle('active', pinned);
+  } catch (e) {
+    toast('失敗: ' + e.message);
+  }
+});
+
 $('addBtn').addEventListener('click', openAddModal);
 $('cancelBtn').addEventListener('click', closeModal);
 $('saveBtn').addEventListener('click', onSave);
 $('deleteBtn').addEventListener('click', onDelete);
 $('browseBtn').addEventListener('click', onBrowse);
 $('search').addEventListener('input', e => { query = e.target.value; render(); });
-$('f_slot').addEventListener('change', syncComboVisibility);
 $('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
-
-const isModalOpen = () => $('modal').classList.contains('open');
-const isTyping = () => {
-  const el = document.activeElement;
-  return el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
-};
-
-// Number keys launch slots while the panel is open (② = panel-focused only).
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeModal(); return; }
-  if (isModalOpen() || isTyping()) return;
-  if (e.ctrlKey || e.altKey || e.metaKey) return;
-  if (e.code >= 'Digit1' && e.code <= 'Digit9') {
-    const n = Number(e.code.slice(5));
-    e.preventDefault();
-    launchSlot(n, e.shiftKey);
-  }
-});
-
-// --- Drag & drop registration (④) ---
-// URL/link drop → prefill web modal (full auto). File drop → open the confirm
-// picker, because the browser sandbox never exposes a dropped file's real path.
-const extractUrl = (dt) => {
-  const uri = dt.getData('text/uri-list') || dt.getData('text/plain') || '';
-  const line = uri.split('\n').map(s => s.trim()).find(s => /^https?:\/\//i.test(s));
-  return line || '';
-};
-document.addEventListener('dragover', e => {
-  if (isModalOpen()) return;
-  e.preventDefault();
-  document.body.classList.add('dragover');
-});
-document.addEventListener('dragleave', e => {
-  if (e.relatedTarget === null) document.body.classList.remove('dragover');
-});
-document.addEventListener('drop', async e => {
-  e.preventDefault();
-  document.body.classList.remove('dragover');
-  if (isModalOpen()) return;
-  const dt = e.dataTransfer;
-  const url = extractUrl(dt);
-  if (url) {
-    openAddModal();
-    setType('web');
-    $('f_path').value = url;
-    try { $('f_name').value = new URL(url).hostname.replace(/^www\./, ''); } catch {}
-    $('f_name').focus();
-    toast('URLを取り込みました');
+  if (e.key === 'Escape') {
+    closeModal();
+    document.activeElement?.blur();
     return;
   }
-  if (dt.files && dt.files.length) {
-    const fname = dt.files[0].name || '';
-    const isHtml = /\.html?$/i.test(fname);
-    openAddModal();
-    setType(isHtml ? 'web' : 'app');
-    if (!isHtml && fname) $('f_name').value = fname.replace(/\.[^.]+$/, '');
-    toast('パス確定のためファイルを選択してください');
-    onBrowse();   // browser can't read the path → confirm via native picker
-  }
-});
-
-// --- Clipboard history (③) ---
-let clipTimer = null;
-let currentView = 'tools';
-
-const switchView = (v) => {
-  currentView = v;
-  const isClip = v === 'clip';
-  $('main').style.display = isClip ? 'none' : '';
-  $('clipMain').style.display = isClip ? '' : 'none';
-  $('search').style.visibility = isClip ? 'hidden' : 'visible';
-  $('tabTools').classList.toggle('active', !isClip);
-  $('tabClip').classList.toggle('active', isClip);
-  if (isClip) { loadClip(); startClipPoll(); } else { stopClipPoll(); }
-};
-
-const startClipPoll = () => { stopClipPoll(); clipTimer = setInterval(loadClip, 1500); };
-const stopClipPoll = () => { if (clipTimer) { clearInterval(clipTimer); clipTimer = null; } };
-
-const loadClip = async () => {
-  try {
-    const res = await fetch('/api/clipboard?t=' + Date.now());
-    const r = await res.json();
-    renderClip(r.items || []);
-  } catch (e) {
-    $('clipList').innerHTML = '<div class="empty">取得失敗</div>';
-  }
-};
-
-const renderClip = (items) => {
-  const box = $('clipList');
-  if (!items.length) {
-    box.innerHTML = '<div class="empty">履歴なし<br><br>コピーするとここに溜まります</div>';
-    return;
-  }
-  box.innerHTML = items.map(it => {
-    if (it.type === 'image') {
-      return `<div class="clip-item" data-id="${it.id}" title="クリックで再コピー">
-        <span class="kind">🖼</span>
-        <div class="body"><img src="/api/clipboard/img/${it.id}" alt="">
-        <div class="meta">${it.w}×${it.h}</div></div></div>`;
+  // 入力欄にフォーカス中は数字をそのまま入力させる
+  const tag = document.activeElement?.tagName;
+  const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+  const isDigit = (e.code >= 'Digit1' && e.code <= 'Digit9') || (e.code >= 'Numpad1' && e.code <= 'Numpad9');
+  if (!typing && !e.ctrlKey && !e.altKey && !e.metaKey && isDigit) {
+    const n = e.code.startsWith('Numpad') ? e.code.slice(6) : e.code.slice(5);
+    const t = quickList[parseInt(n, 10) - 1];
+    if (t) {
+      e.preventDefault();
+      // 数字キー = 左側(右側未使用なら全幅), Shift+数字キー = 右半分。順序に関わらず両方開いていれば左右に並ぶ
+      launchTool(t, e.shiftKey ? 'right' : 'left');
     }
-    const more = it.len > it.preview.length ? ` …(${it.len}字)` : '';
-    return `<div class="clip-item" data-id="${it.id}" title="クリックで再コピー">
-      <span class="kind">📝</span>
-      <div class="body"><div class="txt">${escapeHtml(it.preview)}</div>
-      <div class="meta">${it.len}字${more ? '' : ''}</div></div></div>`;
-  }).join('');
-  box.querySelectorAll('.clip-item').forEach(el => {
-    el.addEventListener('click', () => useClip(el.dataset.id));
-  });
-};
-
-const useClip = async (id) => {
-  try {
-    const res = await fetch('/api/clipboard/use', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-    const r = await res.json();
-    if (!r.ok) throw new Error(r.error || '失敗');
-    toast('クリップボードにコピー');
-  } catch (e) {
-    toast('コピー失敗: ' + e.message);
   }
-};
-
-const clearClip = async () => {
-  if (!confirm('クリップボード履歴をすべて消去しますか？')) return;
-  try {
-    await fetch('/api/clipboard/clear', { method: 'POST' });
-    loadClip();
-    toast('履歴を消去しました');
-  } catch (e) {
-    toast('消去失敗: ' + e.message);
-  }
-};
-
-document.querySelectorAll('.tab').forEach(t =>
-  t.addEventListener('click', () => switchView(t.dataset.view)));
-$('clipClear').addEventListener('click', clearClip);
+});
 
 load();
-
-// The hotkey just shows/hides the window (WinShow/WinHide); the slide is pure CSS
-// here (GPU = smooth). The window's hide/show flips document visibility:
-//  • becoming hidden  → park the content off-screen with NO transition (invisible,
-//    since the window is hidden) so the next show starts from off-screen.
-//  • becoming visible → restore the transition and slide the content in from the
-//    right. Because it was parked off-screen, this is a clean slide every time.
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
-    document.body.style.transition = 'none';
-    document.body.classList.remove('ready');     // park off-screen, no animation
-  } else {
-    document.body.style.transition = '';         // back to the CSS transition
-    void document.body.offsetWidth;              // reflow so it restarts
-    requestAnimationFrame(() => document.body.classList.add('ready'));   // slide in
-  }
-});
-// First launch (no prior hidden event): slide in on load.
-requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
 </script>
 </body>
 </html>
