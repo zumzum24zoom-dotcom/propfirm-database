@@ -80,7 +80,8 @@ Hugo に貼る（計算ロジックは持たせない）
 | `03_intake/` | 新規ファーム取り込み用テンプレ・素材 |
 | `99_chat-tree/` | Obsidian会話ログ（自動生成） |
 | `zz_notes/` | Obsidian Base / 雑メモ |
-| `scripts/` | Node.js スクリプト（クーポン抽出等） |
+| `data/price-collect/` | 価格テーブル収集生データ（`{firm}_price.md`）。`wide/` に Page Maker取込用の横持ち変換結果 |
+| `scripts/` | Node.js スクリプト（クーポン抽出・価格テーブル変換/検証等）。共通処理は `scripts/lib/` |
 | `PROJECT_HUB.canvas` / `PROJECT_HUB_v2.canvas` | Obsidian Canvas プロジェクトハブ |
 | `start-server.bat` | 加工ツール用ローカルサーバー起動（port 8080）。Canvas の🚀ボタンから起動 |
 | `01_tools/launcher/start.vbs` | ランチャー起動（port 8765・コンソール非表示）。ELECOMトラックボール等の1ボタン起動先 |
@@ -143,3 +144,4 @@ Hugo に貼る（計算ロジックは持たせない）
 
 - 2026-06-10: 初版作成（リポジトリ自己説明化の起点）
 - 2026-06-11: `01_tools/launcher/` 追加（自作ランチャー / port 8765 / ELECOMボタン起動想定）
+- 2026-06-12: `data/price-collect/`・`scripts/lib/` 追加（価格テーブル変換/検証パイプライン）
