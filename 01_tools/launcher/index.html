@@ -180,6 +180,52 @@
     box-shadow: var(--glow2);
   }
 
+  .row.cursor {
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 1px var(--accent2), var(--glow2);
+  }
+  .row.cursor .open { background: rgba(255, 46, 151, 0.10); }
+
+  /* Memo / Paste panes */
+  #memoMain, #pasteMain { display: flex; flex-direction: column; gap: 8px; }
+  .pane-ta {
+    width: 100%;
+    flex: 1;
+    min-height: 120px;
+    resize: none;
+    padding: 9px 11px;
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    font: inherit;
+    font-family: "Consolas", "Cascadia Mono", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--fg);
+    background: var(--bg-elev);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pane-ta:focus { border-color: var(--accent); box-shadow: var(--glow); }
+  .pane-toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .pane-toolbar .spacer { flex: 1; }
+  .pane-status { font-size: 10px; color: var(--muted); font-family: "Consolas", "Cascadia Mono", monospace; }
+  .paste-result {
+    flex: 1;
+    min-height: 80px;
+    overflow-y: auto;
+    padding: 9px 11px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--bg);
+    font-family: "Consolas", "Cascadia Mono", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    color: var(--fg);
+  }
+  .paste-result:empty::before { content: "翻訳結果 / OCR結果"; color: var(--muted); }
+  .drop-hot { border-color: var(--accent) !important; box-shadow: var(--glow) !important; }
+
   .empty {
     color: var(--muted);
     padding: 24px;
@@ -313,7 +359,9 @@
   <input id="search" type="text" placeholder="検索">
   <div class="tabs">
     <button class="tab active" data-tab="tools">Tools</button>
-    <button class="tab" data-tab="clipboard">Clipboard</button>
+    <button class="tab" data-tab="clipboard">Clip</button>
+    <button class="tab" data-tab="memo">Memo</button>
+    <button class="tab" data-tab="paste">Paste</button>
   </div>
 </header>
 
@@ -326,6 +374,29 @@
     <button class="btn" id="clipClearBtn" style="font-size:11px; padding:4px 10px;">全削除</button>
   </div>
   <div id="clipList"></div>
+</main>
+
+<main id="memoMain" style="display:none">
+  <div class="pane-toolbar">
+    <span class="pane-status" id="memoStatus">メモ（自動保存）</span>
+    <span class="spacer"></span>
+    <button class="btn" id="memoCopyBtn" style="font-size:11px; padding:4px 10px;">コピー</button>
+    <button class="btn" id="memoClearBtn" style="font-size:11px; padding:4px 10px;">クリア</button>
+  </div>
+  <textarea class="pane-ta" id="memoText" placeholder="メモ… 自動保存されます"></textarea>
+</main>
+
+<main id="pasteMain" style="display:none">
+  <div class="pane-toolbar">
+    <button class="btn primary" id="translateBtn" style="font-size:11px; padding:4px 10px;">翻訳 EN→JP</button>
+    <button class="btn" id="ocrBtn" style="font-size:11px; padding:4px 10px;">📷 画像→テキスト</button>
+    <span class="spacer"></span>
+    <span class="pane-status" id="pasteStatus"></span>
+    <button class="btn" id="pasteClearBtn" style="font-size:11px; padding:4px 10px;">クリア</button>
+  </div>
+  <textarea class="pane-ta" id="pasteText" placeholder="テキストを貼り付け／画像をドロップ・ペーストでOCR"></textarea>
+  <div class="paste-result" id="pasteResult"></div>
+  <input type="file" id="ocrFile" accept="image/*" style="display:none">
 </main>
 
 <footer>
@@ -386,6 +457,8 @@ let data = { categories: {}, tools: [] };
 let query = '';
 let editingIdx = -1;
 let quickList = [];
+let navList = [];      // 表示順のツール index 一覧（PageUp/Down カーソル用）
+let cursorIdx = -1;    // navList 内の現在カーソル位置
 
 const launchTool = async (t, pane = 'left') => {
   if (t.type === 'exe' || t.type === 'pwa') {
@@ -488,7 +561,8 @@ const render = () => {
     (data.categories[a]?.order ?? 99) - (data.categories[b]?.order ?? 99));
 
   quickList = [];
-  catOrder.forEach(c => groups[c].forEach(({ t }) => quickList.push(t)));
+  navList = [];
+  catOrder.forEach(c => groups[c].forEach(({ t, idx }) => { quickList.push(t); navList.push(idx); }));
   quickList = quickList.slice(0, 9);
 
   main.innerHTML = catOrder.map(c => {
@@ -518,7 +592,29 @@ const render = () => {
     });
   });
 
+  if (cursorIdx >= navList.length) cursorIdx = navList.length - 1;
+  applyCursor();
   $('footerInfo').textContent = filtered.length + ' / ' + visible.length;
+};
+
+// -- Tools cursor (PageUp/PageDown) -------------------------------------
+const applyCursor = () => {
+  const main = $('main');
+  main.querySelectorAll('.row.cursor').forEach(r => r.classList.remove('cursor'));
+  if (cursorIdx < 0 || cursorIdx >= navList.length) return;
+  const link = main.querySelector(`[data-launch="${navList[cursorIdx]}"]`);
+  const row = link && link.closest('.row');
+  if (row) { row.classList.add('cursor'); row.scrollIntoView({ block: 'nearest' }); }
+};
+const moveCursor = (delta) => {
+  if (!navList.length) return;
+  cursorIdx = cursorIdx < 0
+    ? (delta > 0 ? 0 : navList.length - 1)
+    : Math.max(0, Math.min(navList.length - 1, cursorIdx + delta));
+  applyCursor();
+};
+const launchCursor = (pane) => {
+  if (cursorIdx >= 0 && cursorIdx < navList.length) launchTool(data.tools[navList[cursorIdx]], pane);
 };
 
 const PWA_HINTS = {
@@ -706,22 +802,37 @@ $('clipClearBtn').addEventListener('click', async () => {
 });
 
 // -- Tabs ---------------------------------------------------------------
+const TAB_KEYS = ['tools', 'clipboard', 'memo', 'paste'];
+let activeTab = 'tools';
+
+const activateTab = (key) => {
+  if (!TAB_KEYS.includes(key)) return;
+  activeTab = key;
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === key));
+  $('main').style.display      = key === 'tools'     ? '' : 'none';
+  $('clipMain').style.display  = key === 'clipboard' ? '' : 'none';
+  $('memoMain').style.display  = key === 'memo'      ? '' : 'none';
+  $('pasteMain').style.display = key === 'paste'     ? '' : 'none';
+  $('search').style.display    = key === 'tools'     ? '' : 'none';
+  if (key === 'clipboard') {
+    loadClipboard();
+    if (!clipPoll) clipPoll = setInterval(loadClipboard, 3000);
+  } else if (clipPoll) {
+    clearInterval(clipPoll);
+    clipPoll = null;
+  }
+  if (key === 'memo') setTimeout(() => $('memoText').focus(), 0);
+};
+
 document.querySelectorAll('.tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
-    const isClipboard = btn.dataset.tab === 'clipboard';
-    $('main').style.display = isClipboard ? 'none' : '';
-    $('clipMain').style.display = isClipboard ? '' : 'none';
-    $('search').style.display = isClipboard ? 'none' : '';
-    if (isClipboard) {
-      loadClipboard();
-      if (!clipPoll) clipPoll = setInterval(loadClipboard, 3000);
-    } else if (clipPoll) {
-      clearInterval(clipPoll);
-      clipPoll = null;
-    }
-  });
+  btn.addEventListener('click', () => activateTab(btn.dataset.tab));
 });
+
+// Home = 前のタブ / End = 次のタブ（巡回）
+const cycleTab = (dir) => {
+  const i = TAB_KEYS.indexOf(activeTab);
+  activateTab(TAB_KEYS[(i + dir + TAB_KEYS.length) % TAB_KEYS.length]);
+};
 
 // -- Pin (always-on-top) -------------------------------------------------
 let pinned = false;
@@ -766,16 +877,32 @@ document.addEventListener('keydown', e => {
     document.activeElement?.blur();
     return;
   }
-  // 入力欄にフォーカス中は数字をそのまま入力させる
   const tag = document.activeElement?.tagName;
   const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+  const inTextarea = tag === 'TEXTAREA';
+
+  // Home = 前のタブ / End = 次のタブ（テキスト入力中は文字カーソル移動を優先）
+  if (!typing && (e.key === 'Home' || e.key === 'End')) {
+    e.preventDefault();
+    cycleTab(e.key === 'Home' ? -1 : 1);
+    return;
+  }
+
+  // Tools: PageUp/PageDown でカーソル上下、Enter で起動（Alt+Enter=右分割）
+  if (activeTab === 'tools' && !inTextarea) {
+    if (e.key === 'PageDown') { e.preventDefault(); moveCursor(1); return; }
+    if (e.key === 'PageUp')   { e.preventDefault(); moveCursor(-1); return; }
+    if (e.key === 'Enter' && cursorIdx >= 0) { e.preventDefault(); launchCursor(e.altKey ? 'right' : 'left'); return; }
+  }
+
+  // 数字キー = 起動（入力欄にフォーカス中はそのまま入力させる）
   const isDigit = (e.code >= 'Digit1' && e.code <= 'Digit9') || (e.code >= 'Numpad1' && e.code <= 'Numpad9');
   if (!typing && !e.ctrlKey && !e.metaKey && isDigit) {
     const n = e.code.startsWith('Numpad') ? e.code.slice(6) : e.code.slice(5);
     const t = quickList[parseInt(n, 10) - 1];
     if (t) {
       e.preventDefault();
-      // 数字キー = 左側(右側未使用なら全幅), Alt+数字キー = 右半分。順序に関わらず両方開いていれば左右に並ぶ
+      // 数字キー = 左側(右側未使用なら全幅), Alt+数字キー = 右半分
       launchTool(t, e.altKey ? 'right' : 'left');
     }
   }
@@ -791,7 +918,121 @@ window.addEventListener('focus', () => {
   try { document.body && document.body.focus({ preventScroll: true }); } catch {}
 });
 
+// -- Memo (auto-saved to agent) -----------------------------------------
+let memoSaveT = null;
+const loadMemo = async () => {
+  try {
+    const r = await (await fetch('/api/memo?t=' + Date.now())).json();
+    $('memoText').value = r.text || '';
+  } catch (e) { $('memoStatus').textContent = '読込失敗'; }
+};
+const saveMemo = () => {
+  clearTimeout(memoSaveT);
+  memoSaveT = setTimeout(async () => {
+    try {
+      await fetch('/api/memo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: $('memoText').value }),
+      });
+      $('memoStatus').textContent = '保存済み ✓';
+    } catch (e) { $('memoStatus').textContent = '保存失敗'; }
+  }, 500);
+};
+$('memoText').addEventListener('input', () => { $('memoStatus').textContent = '…'; saveMemo(); });
+$('memoCopyBtn').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText($('memoText').value); toast('コピーしました'); }
+  catch (e) { toast('コピー失敗'); }
+});
+$('memoClearBtn').addEventListener('click', () => {
+  if (!$('memoText').value || confirm('メモを全消去しますか？')) {
+    $('memoText').value = ''; saveMemo();
+  }
+});
+
+// -- Paste area: translate (EN→JP) + image OCR via Worker proxy ---------
+const LLM_PROXY = 'https://misty-term-6eac.purple-voice-a554.workers.dev/api/llm';
+const LLM_MODEL = 'claude-sonnet-4-20250514';
+const llmText = (d) => (d.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+const callLLM = async (body) => {
+  const resp = await fetch(LLM_PROXY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!resp.ok) {
+    let detail = '';
+    try { const j = await resp.json(); detail = j?.error?.message || j?.error || JSON.stringify(j); }
+    catch (_) { try { detail = await resp.text(); } catch (__) {} }
+    throw new Error('HTTP ' + resp.status + (detail ? ' — ' + detail : ''));
+  }
+  return resp.json();
+};
+const pasteStatus = (m) => { $('pasteStatus').textContent = m; };
+const doTranslate = async () => {
+  const ta = $('pasteText');
+  const sel = ta.value.substring(ta.selectionStart, ta.selectionEnd).trim();
+  const text = sel || ta.value.trim();
+  if (!text) { pasteStatus('テキストなし'); return; }
+  pasteStatus('翻訳中…'); $('translateBtn').disabled = true;
+  try {
+    const d = await callLLM({
+      model: LLM_MODEL, max_tokens: 2000,
+      system: 'プロップファーム翻訳者。EN→JP。用語正確。テーブル保持。数値保持。翻訳のみ出力。',
+      messages: [{ role: 'user', content: text }],
+    });
+    $('pasteResult').textContent = llmText(d);
+    pasteStatus('翻訳完了');
+  } catch (e) { pasteStatus('エラー: ' + e.message); }
+  finally { $('translateBtn').disabled = false; }
+};
+const doOCR = async (file) => {
+  if (!file || !file.type.startsWith('image/')) return;
+  pasteStatus('OCR中…');
+  try {
+    const b64 = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result.split(',')[1]);
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+    const d = await callLLM({
+      model: LLM_MODEL, max_tokens: 4000,
+      messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: file.type, data: b64 } },
+        { type: 'text', text: 'この画像内のテキストを全て抽出。テーブルはMarkdown形式。抽出テキストのみ出力。' },
+      ] }],
+    });
+    const ta = $('pasteText');
+    ta.value += (ta.value ? '\n\n--- OCR ---\n' : '') + llmText(d);
+    pasteStatus('OCR完了');
+  } catch (e) { pasteStatus('OCRエラー: ' + e.message); }
+};
+$('translateBtn').addEventListener('click', doTranslate);
+$('ocrBtn').addEventListener('click', () => $('ocrFile').click());
+$('ocrFile').addEventListener('change', (e) => { if (e.target.files[0]) doOCR(e.target.files[0]); e.target.value = ''; });
+$('pasteClearBtn').addEventListener('click', () => {
+  $('pasteText').value = ''; $('pasteResult').textContent = ''; pasteStatus('');
+});
+$('pasteText').addEventListener('paste', (e) => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+  for (const it of items) {
+    if (it.type.indexOf('image/') === 0) { e.preventDefault(); doOCR(it.getAsFile()); return; }
+  }
+});
+const pasteMainEl = $('pasteMain');
+pasteMainEl.addEventListener('dragover', (e) => { e.preventDefault(); $('pasteText').classList.add('drop-hot'); });
+pasteMainEl.addEventListener('dragleave', () => $('pasteText').classList.remove('drop-hot'));
+pasteMainEl.addEventListener('drop', (e) => {
+  e.preventDefault();
+  $('pasteText').classList.remove('drop-hot');
+  const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (f) doOCR(f);
+});
+
 load();
+loadMemo();
 </script>
 </body>
 </html>

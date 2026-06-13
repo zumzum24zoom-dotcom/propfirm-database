@@ -512,6 +512,103 @@ ${planLines}
   return prompt;
 }
 
+// ソース取得状況テーブル — 各項目(F01〜/P01〜/価格)がどのソースファイルに根拠を持つかを出力させる
+// 趣旨: 追加調査範囲の明確化・情報の集まり具合の把握・不要ソースファイルの判定
+// mode: "status"=テーブル①のみ（取得状況・追加調査範囲の把握用） / "cleanup"=テーブル②③のみ（不要ファイル削除用） / それ以外=全部
+function generateSourcePrompt(firmId, firms, tabDataMap, glossaryTerms, mode) {
+  const firmName = getFirmName(firmId, tabDataMap) || "[ファーム名]";
+  const planNames = getPlanNames(firmId, firms, tabDataMap);
+  const wantStatus = mode !== "cleanup";
+  const wantCleanup = mode !== "status";
+
+  // 項目一覧: Firm項目(F01〜) → 価格 → Plan項目(P01〜)。MASTER_DEFS（正本）から構築
+  const firmItems = MASTER_DEFS.dbp01.filter(d => d.fkey).map(d => ({ no: d.fkey, name: d.term }));
+  const planItems = [];
+  MASTER_DEFS.dbp02.forEach(d => {
+    if (d.pkey) planItems.push({ no: d.pkey, name: d.term });
+    if (d.extra?.pkey) planItems.push({ no: d.extra.pkey, name: d.extra.term });
+  });
+  planItems.sort((a, b) => {
+    const an = parseInt(a.no.replace(/[Pb]/g, "")), bn = parseInt(b.no.replace(/[Pb]/g, ""));
+    return an !== bn ? an - bn : (a.no.includes("b") ? 1 : -1);
+  });
+
+  let prompt = `対象ファーム: ${firmName}\n`;
+  if (planNames && planNames.length > 0) {
+    prompt += `対象プラン: ${planNames.join(" / ")}\n`;
+  }
+
+  prompt += `
+各項目の値の根拠となる原文が、どのソースファイルに記載されているかを特定してください。
+提供されたソース（スキャンファイル等）を確認すること。
+
+【分析対象外（厳守）】出力ルールの指示書（NotebookLMソース定義／本プロンプト定義ファイル等）は本ファームのデータ原文ではない。どのテーブルにも載せない（不要候補にも挙げない）。
+`;
+
+  const tableCount = wantStatus && wantCleanup ? "3つ" : (wantStatus ? "1つ" : "2つ");
+  prompt += `\n【出力形式（厳守）】テーブルを${tableCount}出力する。\n`;
+
+  if (wantStatus) {
+    prompt += `
+━━━ テーブル①: ソース取得状況 ━━━
+Markdownテーブル（| 区切り）。下記の全項目を順序どおり、1項目=1行。
+
+| No. | 項目 | ソースファイル名 |
+|---|---|---|
+
+■ 記入ルール
+- No.: 下記の対象項目のキー（F01〜 / 価格 / P01〜）をそのまま使う
+- ソースファイル名: その項目の値の根拠となる原文が載っているファイル名。複数あればカンマ区切り
+- 根拠ソースが見つからない項目は「ソースファイル名」を空欄にする（＝未取得・追加調査対象）
+- 値を推測・補完しない。原文に記載のあるファイルのみを挙げる
+`;
+  }
+
+  if (wantCleanup) {
+    // cleanup単独時は、各項目→ソースの対応付けを内部で行った上で②③だけ出力させる
+    if (!wantStatus) {
+      prompt += `
+まず各項目（下記一覧）がどのソースファイルに根拠を持つかを内部で対応付けたうえで（その対応表自体は出力しない）、以下の2テーブルのみを出力すること。
+`;
+    }
+    prompt += `
+━━━ テーブル②: 未使用ソースファイル（不要ファイル候補） ━━━
+提供された全ソースファイルのうち、どの項目の根拠にも一度も挙がらなかったファイルを列挙する。
+これらは本ファームのデータ充填に寄与していない＝削除候補。
+
+| ソースファイル名 | 備考 |
+|---|---|
+
+■ 記入ルール
+- どの項目の根拠にもならないファイルのみを挙げる（1回でも根拠に使われたファイルは載せない）
+- 備考: 中身が空・重複・別ファームの内容・無関係 等、不要と判断できる理由があれば1行で書く（なければ空欄）
+- 該当ファイルがなければ「（なし）」と1行だけ書く
+
+━━━ テーブル③: 重複ソースファイル（内容が他ファイルと被るもの） ━━━
+根拠に使われてはいるが、内容が他のソースファイルと実質同一・包含関係にあり、片方を残せば十分なファイルを列挙する。
+
+| 削除候補ファイル | 残すファイル | 理由 |
+|---|---|---|
+
+■ 記入ルール
+- 削除候補ファイル: 重複ペアのうち消してよい側（冗長な方）のファイル名
+- 残すファイル: 同じ内容を持つ（より網羅的な）残すべき側のファイル名
+- 内容がほぼ同一、または一方が他方に完全に包含される場合のみ挙げる（一部重複は対象外）
+- 理由: なぜ削除候補側が冗長か1行で書く
+- 該当ファイルがなければ「（なし）」と1行だけ書く
+`;
+  }
+
+  prompt += `
+【対象項目一覧（No. | 項目）】
+`;
+  firmItems.forEach(it => { prompt += `${it.no} | ${it.name}\n`; });
+  prompt += `価格 | 価格テーブル（口座サイズ別価格）\n`;
+  planItems.forEach(it => { prompt += `${it.no} | ${it.name}\n`; });
+
+  return prompt;
+}
+
 function generateKoryakuPrompt(firmId, firms, tabDataMap, SLOT_DEFS, glossaryTerms) {
   const firmName = getFirmName(firmId, tabDataMap) || "[ファーム名]";
   const planNames = getPlanNames(firmId, firms, tabDataMap);
@@ -1322,6 +1419,14 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                 <CopyBtn getText={()=>generateResearchPrompt(activeId,firms,tabDataMap,glossaryTerms)}
                   label="リサーチ" color={C.purple} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
               </div>
+              <div onClick={()=>setShowPromptMenu(false)}>
+                <CopyBtn getText={()=>generateSourcePrompt(activeId,firms,tabDataMap,glossaryTerms,"status")}
+                  label="取得状況" color={C.purple} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
+              </div>
+              <div onClick={()=>setShowPromptMenu(false)}>
+                <CopyBtn getText={()=>generateSourcePrompt(activeId,firms,tabDataMap,glossaryTerms,"cleanup")}
+                  label="ファイル整理" color={C.purple} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
+              </div>
               <div onClick={()=>setShowPromptMenu(false)}><CopyBtn getText={()=>{
                 const firm=firms.find(f=>f.id===activeId);if(!firm)return"";
                 const firmName=getFirmName(activeId,tabDataMap)||firm.name||"[ファーム名]";
@@ -1347,13 +1452,13 @@ function VerticalTabs({firms,activeId,onSelect,onAddFirm,onAddPlan,onDelete,onRe
                 const _ddStr=ddTypesStr(glossaryTerms);
                 const _diffLine=diffTermLine(glossaryTerms);
                 return`${blocks}\n\n${glossaryRulesBlock(glossaryTerms)}\n\nNotebookLMソース定義のDBP_02セクションに従い、上記の各プランについて以下を出力してください:\n\n--- Plan項目 ---\n${planItems}\n\nプランごとに【1テーブル】を出力。列は必ず: 項目 | C | F | 差分 | 詳細\n\n- 先頭に「Steps」行を追加: C列=0/1/2（Instant=0 / 1-Step=1 / 2-Step=2）、F列・差分=「—」、詳細=ステップ構成を1文\n- 項目: 上記${_pCount}項目を各1行（順序維持）\n- C / F: Challenge値 / Funded値。型に従う:\n   ・利益目標のみ特例: C=Challenge合格目標(%) / F=Funded最低出金額（初期残高に対する%または固定金額。設定なしは—）。複数ステップで合格目標が分かれる場合 C列・詳細は「X% / Y% / Z%」スラッシュ区切り（例:「8% / 5%」）。「1次/2次/3次」ラベル禁止\n   ・数字型（最低取引日数(日)・日次損失%・最大損失%）= 数値+単位\n   ・Lossタイプ（日次損失タイプ・最大損失タイプ）= ${_ddStr}のみ\n   ・その他の制約 = 有 / 無 / ※有（※有=条件付き許可。条件の中身を含め、ルール全容を詳細列に書く）\n   ・C/Fが同一、またはF非該当 = F列は「—」\n- 差分: ${_diffLine}\n- 詳細: 【詳細がルールの正本】詳細を読めばそのルールについて不明な点がない状態で記述すること。補足・おまけ扱い禁止。C/F値の数字を詳細に再掲して、条件・例外・ペナルティを含む完結した本文として書くこと\n  ・最低取引日数: P02（合格）=Challenge専用 / P02b（出金）=Funded専用。各行は自分のフェーズだけ書き反対フェーズに言及しない（P02のF=ー・P02bのC=ーは構造上自明なので打ち消し文「Fundedでは…記載はない」等は書かない）。括弧書き「（合格）（出金）」も不可。P02日数あり→「Challengeでは合格に〔N日〕の取引が必要。」/ P02無→「Challengeでは合格に必要な最低取引日数について明示的に制限する記載はない。」/ P02b日数あり→「Fundedでは出金に〔N日〕の取引が必要。」/ P02b無→「Fundedでは出金に必要な最低取引日数について明示的に制限する記載はない。」\n- 「禁止行為」は上記ルール表に含めない（別シェイプ）。各プランのルール表の直後に独立した禁止行為テーブルを追加: 列は必ず 行為名 | 備考 | 行為 | 処分。1行=1行為（行為名=名称 / 行為=その行為の説明 / 処分=違反時のペナルティ / 備考=極稀なC/F差異のみ・通常空）。禁止行為が無ければ省略`;
-              }} label="プラン" color={C.yellow} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
+              }} label="プラン" color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} /></div>
               <div onClick={()=>setShowPromptMenu(false)}>
                 <CopyBtn getText={()=>generateKoryakuPrompt(activeId,firms,tabDataMap,SLOT_DEFS,glossaryTerms)}
-                  label="攻略" color={C.green} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
+                  label="攻略" color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}} />
               </div>
               <div onClick={()=>{setShowPromptMenu(false);document.dispatchEvent(new CustomEvent("pfd-reinvestigate"))}}>
-                <Btn color={C.blue} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>再調査</Btn>
+                <Btn color={C.green} style={{fontSize:"0.62rem",width:"100%",justifyContent:"flex-start"}}>再調査</Btn>
               </div>
             </div>
           )}

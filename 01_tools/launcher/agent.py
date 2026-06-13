@@ -35,6 +35,7 @@ PORT = 8765
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
 TOOLS_JSON = HERE / "tools.json"
+MEMO_FILE = HERE / "memo.txt"
 LOG_FILE = HERE / "agent.log"
 SIDEBAR_TITLE = "PFD Launcher"
 SIDEBAR_URL = f"http://localhost:{PORT}/01_tools/launcher/"
@@ -103,6 +104,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if self.path.startswith("/api/clipboard"):
             items = clipboard_store.list_items()
             self._json(200, {"items": items})
+            return
+        if self.path.startswith("/api/memo"):
+            try:
+                text = MEMO_FILE.read_text(encoding="utf-8") if MEMO_FILE.exists() else ""
+            except OSError:
+                text = ""
+            self._json(200, {"text": text})
             return
         return super().do_GET()
 
@@ -189,6 +197,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return
         if self.path == "/api/launch":
             self._handle_launch()
+            return
+        if self.path == "/api/memo":
+            try:
+                data = self._read_json()
+                MEMO_FILE.write_text(str(data.get("text", "")), encoding="utf-8")
+                self._json(200, {"ok": True})
+            except Exception as e:
+                self._json(400, {"ok": False, "error": str(e)})
             return
         if self.path == "/api/open-url":
             self._handle_open_url()
