@@ -133,3 +133,5 @@ Web2MD Chrome拡張（人間ブラウザで取得）
 > ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
 
 > ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
+
+> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
