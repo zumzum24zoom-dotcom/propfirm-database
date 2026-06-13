@@ -1,3 +1,7 @@
+# 環境変数（APIキー等を含むためコミットしない）
+.env
+.env.local
+
 # Local Netlify folder
 .netlify
 public/
@@ -38,3 +42,9 @@ __pycache__/
 
 # Playwright MCP runtime artifacts
 .playwright-mcp/
+
+# Launcher: クリップボード履歴（個人情報含む可能性あり）
+01_tools/launcher/clipboard_data/
+
+# Launcher: エージェントのログファイル
+01_tools/launcher/*.log
