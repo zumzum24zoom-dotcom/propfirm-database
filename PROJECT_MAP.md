@@ -77,7 +77,6 @@ Hugo に貼る（計算ロジックは持たせない）
 | `01_tools/launcher/` | 自作HTMLランチャー（port 8765 / ELECOMボタン起動想定） |
 | `01_tools/_archive/` | 旧バージョン保管 |
 | `02_docs/` | 全ドキュメント（HANDOFF, 分析レポート, ブリーフ）。`_proposal` 接尾辞=構想・未実装 / なし=実装済み正本 |
-| `03_intake/` | 新規ファーム取り込み用テンプレ・素材 |
 | `99_chat-tree/` | Obsidian会話ログ（自動生成） |
 | `zz_notes/` | Obsidian Base / 雑メモ |
 | `data/price-collect/` | 価格テーブル収集生データ（`{firm}_price.md`）。`wide/` に Page Maker取込用の横持ち変換結果 |
@@ -145,3 +144,4 @@ Hugo に貼る（計算ロジックは持たせない）
 - 2026-06-10: 初版作成（リポジトリ自己説明化の起点）
 - 2026-06-11: `01_tools/launcher/` 追加（自作ランチャー / port 8765 / ELECOMボタン起動想定）
 - 2026-06-12: `data/price-collect/`・`scripts/lib/` 追加（価格テーブル変換/検証パイプライン）
+- 2026-06-14: `03_intake/` 削除（v1ワークフロー遺物。v2では `data/scans/`→`data/firms-v2/` が役割を継承）。ルート重複 `preview-mockup.html` 削除（正本は `01_tools/core/`）

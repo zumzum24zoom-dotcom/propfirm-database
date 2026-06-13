@@ -5,7 +5,9 @@
 - 過去のセッションログ・旧仕様は [HANDOFF_archive.md](HANDOFF_archive.md) 参照。**通常は読まなくてよい**。
 - 起動時必読順: `CLAUDE.md` → `PROJECT_MAP.md` → `HANDOFF.md`（本ファイル） → メモリ`MEMORY.md`
 
-最終更新: 2026-06-13（セッション16）
+最終更新: 2026-06-14（セッション17・ルート整理）
+
+> セッション17: ルートフォルダ整理。`03_intake/`（v1遺物）削除、ルート重複 `preview-mockup.html` 削除。未着手の整理候補: 無題.base×2 / `.hugo_build.lock` のgitignore化 / `data/scans/` 追跡解除（設計判断#5・未実施のまま）。
 
 ---
 
@@ -79,59 +81,3 @@ Web2MD Chrome拡張（人間ブラウザで取得）
 - BLOCKEDファーム判定の訂正: 完全ブロックは **fundingpips のみ**。Web2MD Agent Bridge手動経路で突破可能と実証済
 - `data/firm-slot-urls.json` の URL は腐敗例あり（fundingpipsの `trading-rules/fp-evaluation/` `/faq` `payouts collection` は404）。定期巡回の主要動機の一つ
 - `data/firm-slot-urls.json` の `slot_urls`/`plan_urls` 件数は社により大きく異なる（3〜21件）。データ欠損ではなく実際のページ構成差
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
-
-> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
