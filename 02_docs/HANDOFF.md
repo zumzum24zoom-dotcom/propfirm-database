@@ -70,3 +70,5 @@ data/scans/ + data/help-index/ → /normalize-firm → data/firms/{slug}.pipe.md
 
 - BLOCKEDファーム5社（fundingpips, e8-markets, moneta-funded, atmos-funded, funded-trading-plus）はbot対策で自動操作不可。`firm-tour.html`では「⚠手動」表示。
 - `data/firm-slot-urls.json` の `slot_urls`/`plan_urls` 件数は社により大きく異なる（3〜21件）。データ欠損ではなく実際のページ構成差。
+
+> ⚠ SessionStop自動記録(2026-06-13): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
