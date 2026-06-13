@@ -29,9 +29,18 @@ Web2MD Chrome拡張（人間ブラウザで取得）
 
 ### Web2MD MCP（セッション16導入）
 - 設定: `.mcp.json` の `web2md` エントリ（APIキーenv直書き、`.gitignore`対象）
-- 拡張ID: `ijmgpkkfgpijifldbjafjiapehppcbcn`
+- 自宅PC拡張ID: `ijmgpkkfgpijifldbjafjiapehppcbcn`
+- APIキー: `w2m_4a5f67f52f47823b08e8a988304bcfaeb8869bbcc30817f5ef378ccf89c815fa`（アカウント単位・全PC共通）
 - ツール: `convert_url` / `agent_convert` / `bridge_convert_url` 等
 - **実運用ルート**: マスターのChromeでURL開く → 拡張ポップアップ「Download」 → `data/scans/{slug}.md` 落とす → ソートーが分割・正規化（サーバー側fetchはWAFで403、agent_convertはport12315起動条件あり）
+
+### 別PC（職場等）でのWeb2MDセットアップ手順
+`.mcp.json` は `.gitignore` 対象でPC毎に作成必要:
+1. Chrome に Web2MD 拡張インストール（[web2md.org](https://web2md.org) ログイン → 拡張インストール、**拡張IDは別IDが割当**）
+2. `npm install -g web2md-mcp-server`
+3. `npx web2md-mcp-server-install <その PC の拡張ID>` で Native Messaging Host 登録
+4. `.mcp.json` に web2md エントリ追加（上記APIキー使用）
+5. Chrome 再起動 + Claude Code 再起動 → `/mcp` で `web2md ✓ connected` 確認
 
 ---
 
@@ -57,11 +66,10 @@ Web2MD Chrome拡張（人間ブラウザで取得）
 1. **fundingpips Page Maker 取込テスト** — Firmタブ新規作成 → 貼付 → 「格納」 → 「▶Planタブ生成」 → 「全プラン」で v2 ワークフロー全体検証
 2. **v2 横展開** — 候補: 価格未収集5社（the5ers, ment-funding, qt-funded, audacity-capital, hola-prime）または取得実績ある他社
 3. **`data/scans/` の `.gitignore` 追加** — 決定済み・未実施
-4. **launcher 系の未コミット変更整理**（`agent.py` 等の untracked / `_README.md` `index.html` `start.bat` の M）— セッション16では別マシン側の launcher 履歴が16コミット先行していたため、本セッションの launcher 変更は別途master判断
-5. **URL taker → firm-tour 直送連携の設計** — `data/firm-slot-urls.json` のメンテ経路
-6. **定期巡回・差分検知システムの設計** — fundingpipsで404多発したように URL構造変更検知が必要
-7. **Discord収集システム実装** — 設計: [`discord-collector_v1_proposal.md`](discord-collector_v1_proposal.md)
-8. **`data/price-collect/wide/` の v2 ファームファイルへの統合** — 26社分の横持ち価格表を再利用
+4. **URL taker → firm-tour 直送連携の設計** — `data/firm-slot-urls.json` のメンテ経路
+5. **定期巡回・差分検知システムの設計** — fundingpipsで404多発したように URL構造変更検知が必要
+6. **Discord収集システム実装** — 設計: [`discord-collector_v1_proposal.md`](discord-collector_v1_proposal.md)
+7. **`data/price-collect/wide/` の v2 ファームファイルへの統合** — 26社分の横持ち価格表を再利用
 
 ---
 
