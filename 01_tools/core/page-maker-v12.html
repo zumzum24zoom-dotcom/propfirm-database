@@ -229,7 +229,7 @@ const MASTER_DEFS = {
     {fkey:"F08",id:"rewardProgram",  term:"リワードプログラム", section:"特色",    hint:"あれば記載",                             definition:"紹介報酬・ロイヤリティ等の還元制度。"},
     {fkey:"F09",id:"scaleUp",        term:"スケールアップ",     section:"特色",    hint:"あれば記載",                             definition:"口座サイズを段階的に拡大できる条件と上限額。"},
     {fkey:"F10",id:"broker",         term:"ブローカー",         section:"取引環境",hint:"",                                       definition:"約定を担う接続先ブローカー。"},
-    {fkey:"F11",id:"platform",       term:"プラットフォーム",   section:"取引環境",hint:"MT4/MT5/cTrader等",                      definition:"取引に使う環境。MT4／MT5／cTrader等。"},
+    {fkey:"F11",id:"platform",       term:"プラットフォーム",   section:"取引環境",hint:"MetaTrader 5 / cTrader / Match-Trader 等",     definition:"取引に使う環境。正式名称で統一（MetaTrader 4／MetaTrader 5／cTrader／Match-Trader）。略称(MT4/MT5)・表記揺れ(MatchTrader)は使わず、複数は「 / 」区切り。"},
     {fkey:"F12",id:"serverTime",     term:"Server Time",        section:"取引環境",hint:"TZ + UTC offset + 日本時間併記必須",     definition:"取引サーバーの基準時刻。タイムゾーン＋UTCオフセット＋日本時間換算を併記する。"},
     {fkey:"F13",id:"ddReset",        term:"DD Reset",           section:"取引環境",hint:"リセット時刻 + 日本時間併記必須",        definition:"ドローダウン基準値がリセットされる時刻。日本時間換算を併記する。"},
     {fkey:"F14",id:"leverage",       term:"レバレッジ",         section:"取引環境",hint:"資産×プラン テーブル",                  definition:"資産クラス×プラン別の最大レバレッジ倍率。"},
@@ -486,10 +486,21 @@ ${planLines}
 
 【出力形式（厳守）】必ず Markdown テーブル（| 区切り）で出力すること。行区切り・箇条書き・スペース区切りは禁止。
 
+【表記統一（厳守）】プラットフォーム名（F11）は正式名称に統一し、略称・表記揺れを使わない。
+・MetaTrader 4（×MT4 / ×Meta Trader 4）
+・MetaTrader 5（×MT5 / ×Meta Trader 5）
+・cTrader（そのまま）
+・Match-Trader（×MatchTrader / ×Match Trader）
+複数ある場合は半角の「 / 」（スペース+スラッシュ+スペース）で区切る。例: MetaTrader 5 / cTrader / Match-Trader
+
+【テーブル配置（厳守）】下記テーブルは必ずこの順序・この見出しで、すべて出力する。省略・移動・統合・別名見出しは禁止。
+F14・F15 は Firm基本情報テーブル内に実データを書かない（「テーブル○参照」等の曖昧な参照記述も禁止）。実データは必ず下記の専用 ■レバレッジテーブル / ■手数料テーブル に、所定の位置で記載すること。
+
 ■ Firm基本情報テーブル（${fFirst}〜${fLast}）
 | F01 | ファーム名 | 内容 |
 | F02 | 拠点国 | 内容 |
-（${fFirst}〜${fLast} を各1行。3列構成: Fキー | 項目名 | 内容）
+（${fFirst}〜${fLast} を各1行。3列構成: Fキー | 項目名 | 内容。
+　F14 レバレッジ・F15 手数料 の「内容」列は「下記レバレッジテーブル参照」「下記手数料テーブル参照」と固定記載し、実データは専用テーブルに書く）
 
 ■ 価格テーブル
 | 口座サイズ | プラン名1 | プラン名2 | … |
@@ -499,10 +510,12 @@ ${planLines}
 ■ レバレッジテーブル（F14）
 | 資産クラス | プラン名1 | プラン名2 | … |
 | FX | 1:100 | 1:50 | … |
+（プラン間で差が無い場合も必ず出力。資産クラスごとに1行）
 
 ■ 手数料テーブル（F15）
 | 資産クラス | 手数料 |
 | FX | $X/lot（往復） |
+（往復／片道の別と通貨単位を明記。無料なら「無料」と記載し空欄にしない）
 
 ■ プラン比較テーブル
 | 項目 | プラン名1 | プラン名2 | … |
