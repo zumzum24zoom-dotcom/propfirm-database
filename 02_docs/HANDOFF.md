@@ -53,6 +53,7 @@ Web2MD Chrome拡張（人間ブラウザで取得）
 
 ## 次にやること（要再確認・優先順）
 
+0. **launcher: ツールが narrow 幅で開く / Alt+数字キー無反応 を解決中** — セッション16後半で agent.py に `/api/open-url`（Chrome を `--app=URL --window-size=W,H` で別プロセス起動）追加・index.html を agent経由に切替・wincontrol.py に foreground 強奪追加。**未動作確認のまま中断**。職場側で動作確認 → 修正継続。
 1. **fundingpips Page Maker 取込テスト** — Firmタブ新規作成 → 貼付 → 「格納」 → 「▶Planタブ生成」 → 「全プラン」で v2 ワークフロー全体検証
 2. **v2 横展開** — 候補: 価格未収集5社（the5ers, ment-funding, qt-funded, audacity-capital, hola-prime）または取得実績ある他社
 3. **`data/scans/` の `.gitignore` 追加** — 決定済み・未実施

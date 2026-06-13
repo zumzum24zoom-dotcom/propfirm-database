@@ -189,6 +189,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if self.path == "/api/launch":
             self._handle_launch()
             return
+        if self.path == "/api/open-url":
+            self._handle_open_url()
+            return
         if self.path == "/api/clipboard/restore":
             self._handle_clipboard_restore()
             return
@@ -226,6 +229,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 raise ValueError("path is required")
             target = f"shell:AppsFolder\\{path}" if kind == "pwa" else path
             os.startfile(target)
+            self._json(200, {"ok": True})
+        except Exception as e:
+            self._json(400, {"ok": False, "error": str(e)})
+
+    def _handle_open_url(self):
+        try:
+            data = self._read_json()
+            url = data.get("url")
+            x = int(data.get("x", 0))
+            y = int(data.get("y", 0))
+            w = int(data.get("w", 0))
+            h = int(data.get("h", 0))
+            if not url or w <= 0 or h <= 0:
+                raise ValueError("url, w, h are required")
+            # 相対パスはサーバルートから解釈
+            if url.startswith("/"):
+                url = f"http://localhost:{PORT}{url}"
+            launch_app_window(url, x, y, w, h)
             self._json(200, {"ok": True})
         except Exception as e:
             self._json(400, {"ok": False, "error": str(e)})
@@ -316,6 +337,38 @@ def launch_sidebar() -> None:
     threading.Thread(
         target=_dock_when_ready, args=(pos_x, 0, SIDEBAR_WIDTH, height), daemon=True
     ).start()
+
+
+def launch_app_window(url: str, x: int, y: int, w: int, h: int) -> None:
+    """ツール用Chromeウィンドウを指定位置・サイズで起動。
+
+    window.open がChrome --appモード下では features を無視するため、
+    agent.py側からChromeを直接subprocessで起動する。
+    """
+    candidates = [
+        Path(os.environ.get("ProgramFiles", "")) / "Google/Chrome/Application/chrome.exe",
+        Path(os.environ.get("ProgramFiles(x86)", "")) / "Google/Chrome/Application/chrome.exe",
+        Path(os.environ.get("ProgramFiles", "")) / "Microsoft/Edge/Application/msedge.exe",
+        Path(os.environ.get("ProgramFiles(x86)", "")) / "Microsoft/Edge/Application/msedge.exe",
+    ]
+    browser = next((c for c in candidates if c.is_file()), None)
+    if not browser:
+        os.startfile(url)
+        return
+    udir = Path(os.environ["LOCALAPPDATA"]) / "PFDLauncher" / "tool-profile"
+    _ensure_profile(udir)
+    flags = [
+        str(browser),
+        f"--app={url}",
+        f"--window-size={w},{h}",
+        f"--window-position={x},{y}",
+        f"--user-data-dir={udir}",
+        "--no-first-run",
+        "--no-default-browser-check",
+        "--no-service-autorun",
+        "--disable-sync",
+    ]
+    subprocess.Popen(flags)
 
 
 def _dock_when_ready(x: int, y: int, w: int, h: int) -> None:

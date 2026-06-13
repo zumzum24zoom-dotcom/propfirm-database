@@ -119,11 +119,35 @@ def toggle_visibility(hwnd: int) -> str:
     win32gui.SetWindowPos(hwnd, 0, offscreen_x, top, w, h, win32con.SWP_NOZORDER | win32con.SWP_NOACTIVATE)
     win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
     _slide_to(hwnd, offscreen_x, docked_x, top, w, h)
-    try:
-        win32gui.SetForegroundWindow(hwnd)
-    except win32gui.error:
-        pass  # foreground-lock restrictions can reject this; window is still shown
+    _force_foreground(hwnd)
     return "shown"
+
+
+def _force_foreground(hwnd: int) -> None:
+    """Windowsのフォアグラウンドロックを回避してフォーカスを奪う。
+
+    SetForegroundWindowは別プロセス（前景アプリ）のスレッドに紐付かないと
+    拒否されることが多い。前景ウィンドウのスレッドにAttachThreadInputで
+    一時的に接続してからSetForegroundWindowすれば確実に奪える。
+    """
+    import ctypes
+    user32 = ctypes.windll.user32
+    kernel32 = ctypes.windll.kernel32
+    fg = user32.GetForegroundWindow()
+    fg_tid = user32.GetWindowThreadProcessId(fg, None) if fg else 0
+    cur_tid = kernel32.GetCurrentThreadId()
+    attached = False
+    if fg_tid and fg_tid != cur_tid:
+        attached = bool(user32.AttachThreadInput(cur_tid, fg_tid, True))
+    try:
+        try:
+            win32gui.SetForegroundWindow(hwnd)
+        except win32gui.error:
+            user32.BringWindowToTop(hwnd)
+        user32.SetFocus(hwnd)
+    finally:
+        if attached:
+            user32.AttachThreadInput(cur_tid, fg_tid, False)
 
 
 def set_rect(hwnd: int, x: int, y: int, w: int, h: int) -> None:

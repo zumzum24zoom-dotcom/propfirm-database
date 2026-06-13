@@ -412,14 +412,22 @@ const launchTool = async (t, pane = 'left') => {
     const rightOpen = paneWindows.right && !paneWindows.right.closed;
     const leftOpen = paneWindows.left && !paneWindows.left.closed;
 
+    // window.open はChrome --appモード下でfeatures無視するため、
+    // agent.py 経由で別Chromeウィンドウを正確な位置・サイズで起動する
+    const openViaAgent = (x, y, width) => {
+      return fetch('/api/open-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: t.path, x, y, w: width, h }),
+      }).catch(err => toast('起動失敗: ' + err.message));
+    };
     if (pane === 'right') {
-      paneWindows.right = window.open(t.path, '_blank', `width=${half},height=${h},left=${half},top=0`);
-      if (leftOpen) {
-        try { paneWindows.left.resizeTo(half, h); paneWindows.left.moveTo(0, 0); } catch {}
-      }
+      openViaAgent(half, 0, half);
+      paneWindows.right = { closed: false };  // 名目上開いてる状態にする
     } else {
       const w = rightOpen ? half : Math.max(avail, 600);
-      paneWindows.left = window.open(t.path, '_blank', `width=${w},height=${h},left=0,top=0`);
+      openViaAgent(0, 0, w);
+      paneWindows.left = { closed: false };
     }
   }
 };
@@ -506,10 +514,7 @@ const render = () => {
       const qn = quickList.indexOf(t);
       const badge = qn >= 0 ? `<span class="num-badge" title="数字キー${qn + 1}で起動">${qn + 1}</span>` : '';
       const inner = `<div class="name">${badge}<span class="name-text">${escapeHtml(t.name)}</span></div>${t.description ? `<div class="desc">${escapeHtml(t.description)}</div>` : ''}`;
-      const isApp = t.type === 'exe' || t.type === 'pwa';
-      const open = isApp
-        ? `<a class="open" href="#" data-launch="${idx}">${inner}</a>`
-        : `<a class="open" href="${escapeHtml(t.path)}" target="_blank" rel="noopener">${inner}</a>`;
+      const open = `<a class="open" href="#" data-launch="${idx}">${inner}</a>`;
       return `
       <div class="row">
         ${open}
@@ -761,6 +766,17 @@ $('deleteBtn').addEventListener('click', onDelete);
 $('browseBtn').addEventListener('click', onBrowse);
 $('search').addEventListener('input', e => { query = e.target.value; render(); });
 $('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+// Altキー単独はWindowsメニューバーをアクティブ化してフォーカスを奪うため抑止
+// (capture段階でpreventDefault+stopPropagationしないとAlt+数字が拾えない)
+window.addEventListener('keydown', e => {
+  if ((e.key === 'Alt' || e.altKey) && !e.ctrlKey && !e.metaKey) {
+    // Alt単独 or Alt+数字 はメニュー有効化を防ぐ
+    if (e.key === 'Alt' || (e.code && (e.code.startsWith('Digit') || e.code.startsWith('Numpad')))) {
+      e.preventDefault();
+    }
+  }
+}, true);
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModal();
@@ -771,15 +787,25 @@ document.addEventListener('keydown', e => {
   const tag = document.activeElement?.tagName;
   const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
   const isDigit = (e.code >= 'Digit1' && e.code <= 'Digit9') || (e.code >= 'Numpad1' && e.code <= 'Numpad9');
-  if (!typing && !e.ctrlKey && !e.altKey && !e.metaKey && isDigit) {
+  if (!typing && !e.ctrlKey && !e.metaKey && isDigit) {
     const n = e.code.startsWith('Numpad') ? e.code.slice(6) : e.code.slice(5);
     const t = quickList[parseInt(n, 10) - 1];
     if (t) {
       e.preventDefault();
-      // 数字キー = 左側(右側未使用なら全幅), Shift+数字キー = 右半分。順序に関わらず両方開いていれば左右に並ぶ
-      launchTool(t, e.shiftKey ? 'right' : 'left');
+      // 数字キー = 左側(右側未使用なら全幅), Alt+数字キー = 右半分。順序に関わらず両方開いていれば左右に並ぶ
+      launchTool(t, e.altKey ? 'right' : 'left');
     }
   }
+});
+
+// Insert で表示された直後にウィンドウへフォーカスを当てて数字キーを即受け取れるようにする
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    try { window.focus(); } catch {}
+  }
+});
+window.addEventListener('focus', () => {
+  try { document.body && document.body.focus({ preventScroll: true }); } catch {}
 });
 
 load();
