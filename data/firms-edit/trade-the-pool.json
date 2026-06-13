@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "trade-the-pool",
+  "firm": {
+    "id": "f60",
+    "name": "Trade The Pool",
+    "plans": []
+  },
+  "tabData": {
+    "f60": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Trade The Pool"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://tradethepool.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

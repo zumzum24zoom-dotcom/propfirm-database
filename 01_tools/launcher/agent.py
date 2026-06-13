@@ -37,6 +37,25 @@ REPO_ROOT = HERE.parents[1]
 TOOLS_JSON = HERE / "tools.json"
 MEMO_FILE = HERE / "memo.txt"
 LOG_FILE = HERE / "agent.log"
+
+# Firm Dashboard (FD-*) のデータ源。本体ロジックではなく場所の定義に留める。
+DATA_DIR = REPO_ROOT / "data"
+FIRMS_DIR = DATA_DIR / "firms"
+PLANS_DIR = DATA_DIR / "plans"
+CONTENT_FIRMS_DIR = REPO_ROOT / "content" / "firms"
+PROGRESS_FILE = DATA_DIR / "progress.json"
+# 1社1データの編集用正本（page-maker改 が読み書きする）。公開用 firms/ とは別。
+FIRMS_EDIT_DIR = DATA_DIR / "firms-edit"
+
+_SLUG_OK = set("abcdefghijklmnopqrstuvwxyz0123456789-_")
+
+
+def _safe_slug(slug: str) -> str:
+    """パストラバーサル防止: 想定文字以外を含む slug は拒否。"""
+    slug = (slug or "").strip()
+    if not slug or not set(slug) <= _SLUG_OK:
+        raise ValueError("invalid slug")
+    return slug
 SIDEBAR_TITLE = "PFD Launcher"
 SIDEBAR_URL = f"http://localhost:{PORT}/01_tools/launcher/"
 SIDEBAR_WIDTH = 360
@@ -111,6 +130,30 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             except OSError:
                 text = ""
             self._json(200, {"text": text})
+            return
+        # Firm Dashboard: ファーム一覧＋ランプ判定用の生計測値（FD-04/FD-06）
+        if self.path.startswith("/api/firms"):
+            try:
+                self._json(200, {"firms": scan_firms()})
+            except Exception as e:
+                self._json(500, {"ok": False, "error": str(e)})
+            return
+        # Firm Dashboard: 進捗の読み取り（FD-05）
+        if self.path.startswith("/api/progress"):
+            self._json(200, read_progress())
+            return
+        # page-maker改: 1社の編集用データを読む（?slug=...）
+        if self.path.startswith("/api/firm-edit"):
+            try:
+                from urllib.parse import urlparse, parse_qs
+                slug = _safe_slug(parse_qs(urlparse(self.path).query).get("slug", [""])[0])
+                fp = FIRMS_EDIT_DIR / f"{slug}.json"
+                if not fp.is_file():
+                    self._json(404, {"ok": False, "error": f"not found: {slug}"})
+                    return
+                self._json(200, {"ok": True, "data": json.loads(fp.read_text(encoding="utf-8"))})
+            except Exception as e:
+                self._json(400, {"ok": False, "error": str(e)})
             return
         return super().do_GET()
 
@@ -206,6 +249,42 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 self._json(400, {"ok": False, "error": str(e)})
             return
+        if self.path == "/api/progress":
+            # Firm Dashboard: 進捗の保存（FD-05）。1社分 {slug,status,note?} を受けてマージ。
+            try:
+                data = self._read_json()
+                slug = str(data.get("slug", "")).strip()
+                if not slug:
+                    raise ValueError("slug is required")
+                store = read_progress()
+                entry = store["firms"].get(slug, {})
+                if "status" in data:
+                    entry["status"] = str(data["status"])
+                if "note" in data:
+                    entry["note"] = str(data["note"])
+                entry["updated"] = datetime.date.today().isoformat()
+                store["firms"][slug] = entry
+                write_progress(store)
+                self._json(200, {"ok": True, "slug": slug, "entry": entry})
+            except Exception as e:
+                self._json(400, {"ok": False, "error": str(e)})
+            return
+        if self.path == "/api/firm-edit":
+            # page-maker改: 1社の編集用データを保存。{slug, data} を data/firms-edit/{slug}.json へ。
+            try:
+                payload = self._read_json()
+                slug = _safe_slug(payload.get("slug", ""))
+                data = payload.get("data")
+                if not isinstance(data, dict):
+                    raise ValueError("data must be an object")
+                FIRMS_EDIT_DIR.mkdir(parents=True, exist_ok=True)
+                (FIRMS_EDIT_DIR / f"{slug}.json").write_text(
+                    json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+                )
+                self._json(200, {"ok": True, "slug": slug})
+            except Exception as e:
+                self._json(400, {"ok": False, "error": str(e)})
+            return
         if self.path == "/api/open-url":
             self._handle_open_url()
             return
@@ -294,6 +373,65 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def log_message(self, *args, **kwargs):
         pass
+
+
+# ---------------------------------------------------------------------------
+# Firm Dashboard data (FD-04/05/06)
+# ---------------------------------------------------------------------------
+# 方針: サーバーは「生の計測値」だけ返し、点灯しきい値などの解釈はダッシュボード
+# 側の config に委ねる（しきい値のハードコードを1箇所に集約しないための分離）。
+
+def scan_firms() -> list[dict]:
+    """data/firms/*.json を走査し、各ファームのメタ＋ランプ判定用の生計測値を返す。
+    firmFilled=非空フィールド数 / planCount=対応プラン数 / stratBytes=攻略記事サイズ。"""
+    out: list[dict] = []
+    if not FIRMS_DIR.is_dir():
+        return out
+    for jp in sorted(FIRMS_DIR.glob("*.json")):
+        if jp.name.startswith("_"):
+            continue
+        try:
+            d = json.loads(jp.read_text(encoding="utf-8"))
+        except Exception:
+            d = {}
+        slug = (d.get("slug") or jp.stem).strip()
+        name = (d.get("ファーム名") or slug).strip()
+        url = (d.get("公式URL") or "").strip()
+        filled = sum(
+            1 for k, v in d.items()
+            if k != "slug" and isinstance(v, str) and v.strip()
+        )
+        plan_count = sum(1 for _ in PLANS_DIR.glob(f"{slug}--*.json")) if PLANS_DIR.is_dir() else 0
+        idx = CONTENT_FIRMS_DIR / slug / "_index.md"
+        strat_bytes = idx.stat().st_size if idx.is_file() else 0
+        out.append({
+            "slug": slug,
+            "name": name,
+            "url": url,
+            "planCount": plan_count,
+            "firmFilled": filled,
+            "stratBytes": strat_bytes,
+        })
+    return out
+
+
+def read_progress() -> dict:
+    """progress.json を読む。壊れていても落ちないよう既定形にフォールバック。"""
+    base = {"firms": {}}
+    try:
+        data = json.loads(PROGRESS_FILE.read_text(encoding="utf-8"))
+        if isinstance(data, dict) and isinstance(data.get("firms"), dict):
+            base.update(data)
+            base["firms"] = data["firms"]
+    except Exception:
+        pass
+    return base
+
+
+def write_progress(store: dict) -> None:
+    PROGRESS_FILE.write_text(
+        json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def run_server() -> None:

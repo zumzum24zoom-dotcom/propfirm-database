@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "slug": "for-traders",
+  "firm": {
+    "id": "f50",
+    "name": "For Traders",
+    "plans": []
+  },
+  "tabData": {
+    "f50": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "For Traders"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://fortraders.com/"
+          }
+        ],
+        "affiliateUrl": [
+          {
+            "text": "https://app.fortraders.com/trading/new-challenge?affiliateCode=A9GU28LVD8"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "finotive-funding",
+  "firm": {
+    "id": "f59",
+    "name": "Finotive Funding",
+    "plans": []
+  },
+  "tabData": {
+    "f59": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Finotive Funding"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://finotivefunding.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

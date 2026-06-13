@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "ment-funding",
+  "firm": {
+    "id": "f68",
+    "name": "Ment Funding",
+    "plans": []
+  },
+  "tabData": {
+    "f68": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Ment Funding"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://mentfunding.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

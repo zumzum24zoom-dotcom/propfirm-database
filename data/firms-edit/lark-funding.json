@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "lark-funding",
+  "firm": {
+    "id": "f51",
+    "name": "Lark Funding",
+    "plans": []
+  },
+  "tabData": {
+    "f51": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Lark Funding"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://www.larkfunding.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

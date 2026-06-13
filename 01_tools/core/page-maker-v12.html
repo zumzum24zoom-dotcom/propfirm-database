@@ -4546,6 +4546,9 @@ function App() {
   const [consolidateKeepId,setConsolidateKeepId]=useState(null);
   const [activeSlotId,setActiveSlotId]=useState(null); // 選択中スロット
   const [showPriceMatrix,setShowPriceMatrix]=useState(false); // SlotPanelから持ち上げ（取込エリアを断面別に切替えるため App 側で保持）
+  // 1社モード（ダッシュボードの「✏️編集」から ?firm=slug で起動）— data/firms-edit/{slug}.json だけを読み書き
+  const [singleFirm,setSingleFirm]=useState(null); // null | {slug,name}
+  const singleFirmRef=useRef(false);               // 起動時ブートストラップの二重実行防止
   const pasteAreaRef=useRef(null);
   const selectedTextRef=useRef("");
   const facetRef=useRef({key:"firm",isMain:true}); // 現在の断面（取込エリアの書込先＝targetText or facetText[key] を決める）
@@ -5905,6 +5908,50 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   const restoreData=useCallback(d=>applyData(d),[applyData]);
 
   // ═══════════════════════════════════════════════════
+  // 1社モード: ?firm=slug で data/firms-edit/{slug}.json を読み込み、その1社だけ編集
+  // ═══════════════════════════════════════════════════
+  // 保存: 現在の1社分（firm＋プランの tabData）を data/firms-edit/{slug}.json へ書き戻す
+  const saveSingleFirm=useCallback(async()=>{
+    if(!singleFirm)return;
+    const firm=firms[0];
+    if(!firm){alert("保存対象のファームがありません");return;}
+    const ids=[firm.id,...(firm.plans||[]).map(p=>p.id)];
+    const tabData={};
+    ids.forEach(id=>{if(tabDataMap[id])tabData[id]=tabDataMap[id];});
+    const data={schemaVersion:1,slug:singleFirm.slug,firm,tabData};
+    try{
+      const r=await fetch("/api/firm-edit",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({slug:singleFirm.slug,data})}).then(x=>x.json());
+      if(r&&r.ok){dirtyRef.current=false;showToast(`✓ 保存しました（${singleFirm.slug}）`);}
+      else alert("保存失敗: "+((r&&r.error)||"unknown"));
+    }catch(e){alert("保存エラー: "+e.message);}
+  },[singleFirm,firms,tabDataMap,showToast]);
+
+  // 起動時ブートストラップ: ?firm=slug があれば1社モードで読込（ドラフト復元はスキップ）
+  useEffect(()=>{
+    if(singleFirmRef.current)return;
+    let slug="";
+    try{slug=new URLSearchParams(window.location.search).get("firm")||"";}catch(e){}
+    if(!slug)return;
+    singleFirmRef.current=true;
+    draftRestoredRef.current=true; // 1社モードでは前回ドラフトを復元しない
+    (async()=>{
+      try{
+        const r=await fetch(`/api/firm-edit?slug=${encodeURIComponent(slug)}`).then(x=>x.json());
+        if(!r||!r.ok){alert("1社データの取得に失敗: "+((r&&r.error)||slug)+"\nランチャー(agent.py)が起動中か、slugが正しいか確認してください。");return;}
+        const d=r.data;
+        applyData({firms:[d.firm],tabDataMap:d.tabData});
+        setActiveTabId(d.firm.id);
+        setSingleFirm({slug:d.slug,name:d.firm.name});
+        // 左パネルは出したままにする（1社モードでは firms が1社だけ＝その社とプランだけ並ぶ。
+        // ここがプラン切替の選択肢を兼ねるため、隠すとプランが選べなくなる）
+        setPanelVis(p=>({...p,left:true}));
+        draftBaselineRef.current=null;
+      }catch(e){alert("1社モード読込エラー: "+e.message);}
+    })();
+  },[applyData]);
+
+  // ═══════════════════════════════════════════════════
   // 自動保存（ドラフト）＋ 起動時復元 ＋ 離脱警告
   // ═══════════════════════════════════════════════════
   // ① 起動時：前回ドラフトがあれば確認のうえ復元（確認方式）
@@ -5926,6 +5973,7 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
 
   // ② 編集監視：変更をデバウンス（約800ms）で localStorage ドラフトへ退避
   useEffect(()=>{
+    if(singleFirmRef.current)return; // 1社モードは通常ドラフトを汚さない（保存はfirms-editへ）
     const json=JSON.stringify({firms,sections,sessionName,tabDataMap,glossaryTerms});
     if(draftBaselineRef.current===null){draftBaselineRef.current=json;return;} // 初回はベースライン記録のみ
     if(json===draftBaselineRef.current)return; // 実変更なし
@@ -6149,6 +6197,14 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       {/* Header */}
       <div style={{background:C.surface,borderBottom:`1px solid ${C.border}`,padding:"6px 10px",display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
         <span style={{fontWeight:700,color:C.accent,fontFamily:font,fontSize:"0.85rem"}}>Page Maker</span>
+        {/* 1社モード: バッジ＋保存（data/firms-edit/{slug}.json へ書き戻し） */}
+        {singleFirm&&(
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <Btn color={C.blue} onClick={()=>{window.location.href="/01_tools/core/firm-dashboard.html";}} style={{fontSize:"0.62rem"}} title="Prop Firm Database に戻る（未保存の変更があれば警告）">← DB</Btn>
+            <span style={{background:C.purple,color:"#fff",fontSize:"0.62rem",fontWeight:700,padding:"2px 8px",borderRadius:10,whiteSpace:"nowrap"}} title={`data/firms-edit/${singleFirm.slug}.json`}>🎯 1社モード: {singleFirm.name}</span>
+            <Btn color={C.green} onClick={saveSingleFirm} style={{fontSize:"0.62rem"}} title={`この1社を data/firms-edit/${singleFirm.slug}.json に保存`}>💾 保存</Btn>
+          </div>
+        )}
         {/* スロット↔用語 トグルスイッチ */}
         <div onClick={()=>setRightMode(rightMode==="slots"?"glossary":"slots")}
           title={rightMode==="slots"?"用語辞典に切替":"スロットに切替"}

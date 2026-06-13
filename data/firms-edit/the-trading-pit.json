@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "the-trading-pit",
+  "firm": {
+    "id": "f67",
+    "name": "The Trading Pit",
+    "plans": []
+  },
+  "tabData": {
+    "f67": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "The Trading Pit"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://www.thetradingpit.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

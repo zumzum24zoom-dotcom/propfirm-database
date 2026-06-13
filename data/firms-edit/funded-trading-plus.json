@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "funded-trading-plus",
+  "firm": {
+    "id": "f64",
+    "name": "Funded Trading Plus",
+    "plans": []
+  },
+  "tabData": {
+    "f64": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Funded Trading Plus"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://www.fundedtradingplus.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

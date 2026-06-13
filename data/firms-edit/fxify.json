@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "fxify",
+  "firm": {
+    "id": "f66",
+    "name": "FXIFY",
+    "plans": []
+  },
+  "tabData": {
+    "f66": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "FXIFY"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://fxify.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

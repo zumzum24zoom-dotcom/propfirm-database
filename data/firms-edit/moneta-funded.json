@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "moneta-funded",
+  "firm": {
+    "id": "f56",
+    "name": "Moneta Funded",
+    "plans": []
+  },
+  "tabData": {
+    "f56": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Moneta Funded"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://monetafunded.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

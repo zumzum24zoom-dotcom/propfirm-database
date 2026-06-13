@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "slug": "aquafunded",
+  "firm": {
+    "id": "f48",
+    "name": "AquaFunded",
+    "plans": []
+  },
+  "tabData": {
+    "f48": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "AquaFunded"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://aquafunded.com/"
+          }
+        ],
+        "affiliateUrl": [
+          {
+            "text": "https://www.aquafunded.com/?afmc=46x"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

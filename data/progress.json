@@ -1,0 +1,9 @@
+{
+  "firms": {
+    "alpha-capital-group": {
+      "status": "todo",
+      "updated": "2026-06-14"
+    }
+  },
+  "_note": "Firm進捗の正本。firms[slug] = {status, note, updated}。未登録のslugは status='todo'(未着手) 扱い。status候補: todo|gather|input|review|done"
+}

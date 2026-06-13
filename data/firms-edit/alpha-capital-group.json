@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "slug": "alpha-capital-group",
+  "firm": {
+    "id": "f549",
+    "name": "Alpha Capital Group",
+    "plans": []
+  },
+  "tabData": {
+    "f549": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Alpha Capital Group"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

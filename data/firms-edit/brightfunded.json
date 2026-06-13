@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "slug": "brightfunded",
+  "firm": {
+    "id": "f45",
+    "name": "BrightFunded",
+    "plans": [],
+    "sectionId": "s597"
+  },
+  "tabData": {
+    "f45": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "BrightFunded"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://brightfunded.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

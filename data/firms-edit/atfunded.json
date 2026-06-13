@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "atfunded",
+  "firm": {
+    "id": "f58",
+    "name": "ATFunded",
+    "plans": []
+  },
+  "tabData": {
+    "f58": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "ATFunded"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://atfunded.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

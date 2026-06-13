@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "bem-funding",
+  "firm": {
+    "id": "f44",
+    "name": "BEM Funding",
+    "plans": []
+  },
+  "tabData": {
+    "f44": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "BEM Funding"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://bemfunding.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

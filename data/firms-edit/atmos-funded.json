@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "atmos-funded",
+  "firm": {
+    "id": "f57",
+    "name": "Atmos Funded",
+    "plans": []
+  },
+  "tabData": {
+    "f57": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Atmos Funded"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://atmosfunded.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}

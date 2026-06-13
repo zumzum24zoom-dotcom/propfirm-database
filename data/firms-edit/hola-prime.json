@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "slug": "hola-prime",
+  "firm": {
+    "id": "f69",
+    "name": "Hola Prime",
+    "plans": []
+  },
+  "tabData": {
+    "f69": {
+      "archives": [],
+      "targetText": "",
+      "slotData": {
+        "firmName": [
+          {
+            "text": "Hola Prime"
+          }
+        ],
+        "officialUrl": [
+          {
+            "text": "https://holaprime.com/"
+          }
+        ]
+      },
+      "templateMode": "dbp01"
+    }
+  }
+}
