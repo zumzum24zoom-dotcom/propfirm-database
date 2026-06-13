@@ -22,7 +22,8 @@ Web2MD Chrome拡張（人間ブラウザで取得）
 ```
 
 ### 直近の状態
-- **fundingpips v2 完了**: 13記事取得、`data/firms-v2/fundingpips.md` 生成（F01-F22中18項目埋め＋5プラン比較表＋全価格セル充填）
+- **fundingpips v2 完了**: 13記事取得、`data/firms-v2/fundingpips.md` 生成（F01-F22中18項目＋F22比較表＋全価格セル＋5プラン×21 P-スロット = 195行）
+- **`/normalize-firm-v2` スキル新設**: `.claude/skills/normalize-firm-v2/SKILL.md`（fundingpips.md を正解出力例として参照、GoogleDrive管理）
 - **v1廃止削除済**: 107ファイル + 2スキル削除（詳細はarchive）
 - **保護残置**: `data/firms/*.json` 34本 / `data/plans/*.json` 28本（v2取込で順次上書きされる設計のため。中身はv1由来で全て信頼不可）
 - **継続使用資産**: `data/firm-slot-urls.json`（URLレジストリ）、`data/price-collect/wide/`（26社価格表横持ち）、`data/glossary.json`

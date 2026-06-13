@@ -71,6 +71,125 @@ MOST POPULAR: Zero $100K / 1 Step $100K / 2 Step Standard $50K / 2 Step Pro $100
 - **Swap-Free Add-on**: 全モデル全サイズで +10%
 - **通貨切替**: US$ ドロップダウンUI あり（他通貨表示の有無は未確認・必要時調査）
 
+## FundingPips Zero
+
+| P20 | Steps | 0（即Master・評価フェーズなし） |
+| P01 | 利益目標 | C: — / F: 1% per Master Account Size（On Demand 95%サイクル時 2%） |
+| P02 | 最低取引日数 | C: — / F: なし |
+| P02b | 最低取引日数（出金） | なし（ただし Min Profitable Days 7日/30日が出金条件） |
+| P03 | 日次損失 | 3% |
+| P04 | 日次損失タイプ | balance/equity の高い方が基準、Platform Time 00:00 (UTC+3) でリセット |
+| P05 | 最大損失 | 5% Trailing |
+| P06 | 最大損失タイプ | Trailing（最高equityに追従、+5%利益到達で口座開始残高にロック・以降固定） |
+| P07 | 一貫性ルール | 15% Consistency Score（Master）。リワード後リセット |
+| P08 | 利益上限 | なし |
+| P09 | 時間制限 | なし（30日完全インアクティブで失効） |
+| P10 | ニュース取引制限 | Hard breach（高インパクト発表前後10分窓・赤フォルダのみ） |
+| P11 | 週末トレード制限 | 不可（時限措置・自動クローズ・ハードブリーチではない） |
+| P12 | オーバーナイト制限 | Master のみ時限的にクローズ強制（週末ホールド禁止に同じ） |
+| P13 | EA制限 | trade/risk manager 用途のEAのみ許可、その他は規約違反 |
+| P14 | コピートレード制限 | 禁止（第三者ベンダーによる口座管理含む） |
+| P15 | スキャルピング制約 | 明示制限なし（ただし Forbidden Trading Practices に latency arbitrage / tick scalping を列挙） |
+| P16 | ストップロス制約 | 明示義務なし（推奨） |
+| P17 | リスクルール | Max Floating Risk 1%（含み損が starting account size の1%超で即ブリーチ） |
+| P18 | 最大ポジション制約 | プラットフォーム強制で1取引最大20 lot、Crypto は1 lot per click |
+| P19 | 禁止行為 | gap trading / HFT / toxic trading flow / server spamming / latency arbitrage / hedging / long-short arbitrage / reverse arbitrage / tick scalping / server execution exploits / opposite account trading / churning and burning / copy trading / 規約外EA / news 意図的取引 / 業者社員/オーナーの取引参加 |
+
+## 1 Step Model
+
+| P20 | Steps | 1 |
+| P01 | 利益目標 | C: Phase1 10% / F: 1% per Master Account Size（On Demand 90%サイクル時 2%） |
+| P02 | 最低取引日数 | C: Phase1 3日 / F: なし |
+| P02b | 最低取引日数（出金） | サイクル依存（Weekly: 初回約定後7日 / Bi-Weekly: 14日 / Monthly: 30日 / On Demand: 即時） |
+| P03 | 日次損失 | 3% |
+| P04 | 日次損失タイプ | balance/equity の高い方が基準、Platform Time 00:00 (UTC+3) でリセット |
+| P05 | 最大損失 | 6% Static |
+| P06 | 最大損失タイプ | Static（開始残高から固定6%） |
+| P07 | 一貫性ルール | On Demand 90%選択時のみ 35% Consistency Score（1日の利益が総利益の35%超不可）。他サイクルでは適用なし |
+| P08 | 利益上限 | なし |
+| P09 | 時間制限 | なし（30日完全インアクティブで失効） |
+| P10 | ニュース取引制限 | 評価中: 制限なし / Master: ソフトブリーチ（10分窓内の利益不算入・全額差引） |
+| P11 | 週末トレード制限 | 評価中: 制限なし / Master: 不可（時限措置・自動クローズ） |
+| P12 | オーバーナイト制限 | 評価中・Master とも明示禁止なし（週末ホールド時限措置を除く） |
+| P13 | EA制限 | trade/risk manager 用途のEAのみ許可 |
+| P14 | コピートレード制限 | 禁止 |
+| P15 | スキャルピング制約 | 明示制限なし |
+| P16 | ストップロス制約 | 明示義務なし |
+| P17 | リスクルール | Risk Per Trade Idea（Master のみ）: $50K未満 3% / $50K以上 2%（同一トレードアイデア合算・10分以内同方向再エントリーも合算） |
+| P18 | 最大ポジション制約 | 1取引最大20 lot（platform強制）、Crypto は1 lot per click |
+| P19 | 禁止行為 | 同 Zero（gap trading / HFT / latency arbitrage / hedging / 規約外EA / copy trading 等） |
+
+## 2 Step Standard
+
+| P20 | Steps | 2 |
+| P01 | 利益目標 | C: Phase1 8% or 10%（選択制）/ Phase2 5% / F: 1% per Master Account Size（On Demand 90%時 2%） |
+| P02 | 最低取引日数 | C: Phase1 3日 / Phase2 3日 / F: なし |
+| P02b | 最低取引日数（出金） | サイクル依存（Weekly 7日 / Bi-Weekly 14日 / Monthly 30日 / On Demand 即時） |
+| P03 | 日次損失 | 5% |
+| P04 | 日次損失タイプ | balance/equity の高い方が基準、Platform Time 00:00 (UTC+3) でリセット |
+| P05 | 最大損失 | 10% Static |
+| P06 | 最大損失タイプ | Static（開始残高から固定10%） |
+| P07 | 一貫性ルール | On Demand 90%選択時のみ 35% Consistency Score |
+| P08 | 利益上限 | なし |
+| P09 | 時間制限 | なし（30日完全インアクティブで失効） |
+| P10 | ニュース取引制限 | 評価中: 制限なし / Master: ソフトブリーチ（10分窓内の利益不算入） |
+| P11 | 週末トレード制限 | 評価中: 制限なし / Master: 不可（時限措置・自動クローズ） |
+| P12 | オーバーナイト制限 | 明示禁止なし（週末ホールド時限措置を除く） |
+| P13 | EA制限 | trade/risk manager 用途のEAのみ許可 |
+| P14 | コピートレード制限 | 禁止 |
+| P15 | スキャルピング制約 | 明示制限なし |
+| P16 | ストップロス制約 | 明示義務なし |
+| P17 | リスクルール | Risk Per Trade Idea（Master のみ）: $50K未満 3% / $50K以上 2%（同一トレードアイデア合算） |
+| P18 | 最大ポジション制約 | 1取引最大20 lot、Crypto は1 lot per click |
+| P19 | 禁止行為 | 同 Zero |
+
+## 2 Step Pro
+
+| P20 | Steps | 2 |
+| P01 | 利益目標 | C: Phase1 6% / Phase2 6% / F: 1% per Master Account Size（Weekly 80%固定） |
+| P02 | 最低取引日数 | C: Phase1 1日 / Phase2 1日 / F: なし |
+| P02b | 最低取引日数（出金） | Weekly: 初回約定後7日 |
+| P03 | 日次損失 | 3% |
+| P04 | 日次損失タイプ | balance/equity の高い方が基準、Platform Time 00:00 (UTC+3) でリセット |
+| P05 | 最大損失 | 6% Static |
+| P06 | 最大損失タイプ | Static（開始残高から固定6%） |
+| P07 | 一貫性ルール | なし（Weekly サイクル固定のため Consistency Score 不要） |
+| P08 | 利益上限 | なし |
+| P09 | 時間制限 | なし（30日完全インアクティブで失効） |
+| P10 | ニュース取引制限 | 評価中: 制限なし / Master: ソフトブリーチ（10分窓・5時間前ルール例外あり） |
+| P11 | 週末トレード制限 | 評価中: 制限なし / Master: 不可（時限措置・自動クローズ） |
+| P12 | オーバーナイト制限 | 明示禁止なし（週末ホールド時限措置を除く） |
+| P13 | EA制限 | trade/risk manager 用途のEAのみ許可 |
+| P14 | コピートレード制限 | 禁止 |
+| P15 | スキャルピング制約 | 明示制限なし |
+| P16 | ストップロス制約 | 明示義務なし |
+| P17 | リスクルール | Risk Per Trade Idea（Master のみ）: $50K未満 3% / $50K以上 2% |
+| P18 | 最大ポジション制約 | 1取引最大20 lot、Crypto は1 lot per click |
+| P19 | 禁止行為 | 同 Zero |
+
+## 1K Instant Giveaway
+
+| P20 | Steps | 0（即Master・giveaway $1,000固定） |
+| P01 | 利益目標 | C: — / F: $50最低リワード額（On Demand 50%） |
+| P02 | 最低取引日数 | C: — / F: なし |
+| P02b | 最低取引日数（出金） | なし（On Demand 即時） |
+| P03 | 日次損失 | 5% |
+| P04 | 日次損失タイプ | balance/equity の高い方が基準 |
+| P05 | 最大損失 | 5% Static |
+| P06 | 最大損失タイプ | Static（$1,000 → 下限 $950） |
+| P07 | 一貫性ルール | なし |
+| P08 | 利益上限 | なし |
+| P09 | 時間制限 | なし |
+| P10 | ニュース取引制限 | 制限なし（giveaway は完全フリー） |
+| P11 | 週末トレード制限 | 可 |
+| P12 | オーバーナイト制限 | 可 |
+| P13 | EA制限 | 第三者EA・トレードコピー含め制限なし |
+| P14 | コピートレード制限 | 制限なし |
+| P15 | スキャルピング制約 | 制限なし |
+| P16 | ストップロス制約 | 明示義務なし |
+| P17 | リスクルール | hedging のみ明示禁止（即時口座閉鎖） |
+| P18 | 最大ポジション制約 | 1取引最大20 lot（Crypto は本プランで取扱なし） |
+| P19 | 禁止行為 | hedging（明示）。giveaway限定のためその他は制限緩和 |
+
 <!-- normalize-firm v2: fundingpips | sources: Web2MD取得 13ファイル | generated: 2026-06-13 -->
-<!-- 価格セルは別途 fundingpips.com/#pricing ページ取得時に充填 -->
 <!-- 法人住所詳細はT&C本文に明記なし（Funding Pips Corp.・準拠法 Union of the Comoros のみ確定） -->
