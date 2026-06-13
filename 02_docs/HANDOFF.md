@@ -79,3 +79,5 @@ Web2MD Chrome拡張（人間ブラウザで取得）
 - BLOCKEDファーム判定の訂正: 完全ブロックは **fundingpips のみ**。Web2MD Agent Bridge手動経路で突破可能と実証済
 - `data/firm-slot-urls.json` の URL は腐敗例あり（fundingpipsの `trading-rules/fp-evaluation/` `/faq` `payouts collection` は404）。定期巡回の主要動機の一つ
 - `data/firm-slot-urls.json` の `slot_urls`/`plan_urls` 件数は社により大きく異なる（3〜21件）。データ欠損ではなく実際のページ構成差
+
+> ⚠ SessionStop自動記録(2026-06-14): HANDOFF.md が未更新です。次回セッション開始時に /handoff を実行してください。
