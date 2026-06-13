@@ -350,11 +350,7 @@
     <button id="pinBtn" class="icon-btn" title="最前面に固定">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 3h6l1.2 6.5L19 12v2H5v-2l2.8-2.5z"/></svg>
     </button>
-    <div style="display:flex; gap:6px;">
-      <button id="addBtn" class="icon-btn" title="ツールを追加">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      </button>
-    </div>
+    <span style="font-family:'Consolas','Cascadia Mono',monospace; font-size:11px; letter-spacing:0.15em; color:var(--muted);">PFD LAUNCHER</span>
   </div>
   <input id="search" type="text" placeholder="検索">
   <div class="tabs">
@@ -368,6 +364,7 @@
 <main id="main">
   <div class="empty">読み込み中…</div>
 </main>
+<button id="addBtn" class="btn" style="flex-shrink:0; margin:0 14px 10px; padding:8px;">＋ ツールを追加</button>
 
 <main id="clipMain" style="display:none">
   <div style="display:flex; justify-content:flex-end; margin-bottom:6px;">
@@ -814,6 +811,7 @@ const activateTab = (key) => {
   $('memoMain').style.display  = key === 'memo'      ? '' : 'none';
   $('pasteMain').style.display = key === 'paste'     ? '' : 'none';
   $('search').style.display    = key === 'tools'     ? '' : 'none';
+  $('addBtn').style.display    = key === 'tools'     ? '' : 'none';  // ＋はToolsタブ専用
   if (key === 'clipboard') {
     loadClipboard();
     if (!clipPoll) clipPoll = setInterval(loadClipboard, 3000);
@@ -821,7 +819,8 @@ const activateTab = (key) => {
     clearInterval(clipPoll);
     clipPoll = null;
   }
-  if (key === 'memo') setTimeout(() => $('memoText').focus(), 0);
+  // タブ切替では入力欄を自動フォーカスしない（Home/Endのタブ移動を保つ。
+  // 入力したいときは Enter でフォーカスする）
 };
 
 document.querySelectorAll('.tab').forEach(btn => {
@@ -834,24 +833,25 @@ const cycleTab = (dir) => {
   activateTab(TAB_KEYS[(i + dir + TAB_KEYS.length) % TAB_KEYS.length]);
 };
 
-// -- Pin (always-on-top) -------------------------------------------------
-let pinned = false;
-$('pinBtn').addEventListener('click', async () => {
-  const next = !pinned;
+// -- Pin (always-on-top) — デフォルトON ----------------------------------
+let pinned = true;
+$('pinBtn').classList.add('active');  // 初期表示はON（実際の最前面状態と一致させる）
+const setPinned = async (on) => {
   try {
     const res = await fetch('/api/window/topmost', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ on: next }),
+      body: JSON.stringify({ on }),
     });
     const r = await res.json();
     if (!r.ok) { toast('失敗: ' + r.error); return; }
-    pinned = next;
+    pinned = on;
     $('pinBtn').classList.toggle('active', pinned);
   } catch (e) {
     toast('失敗: ' + e.message);
   }
-});
+};
+$('pinBtn').addEventListener('click', () => setPinned(!pinned));
 
 $('addBtn').addEventListener('click', openAddModal);
 $('cancelBtn').addEventListener('click', closeModal);
@@ -872,32 +872,41 @@ window.addEventListener('keydown', e => {
 }, true);
 
 document.addEventListener('keydown', e => {
+  const modalOpen = $('modal').classList.contains('open');
+  const tag = document.activeElement?.tagName;
+  const editing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+
   if (e.key === 'Escape') {
     closeModal();
-    document.activeElement?.blur();
+    document.activeElement?.blur();  // 編集モードを抜けてナビ状態へ
     return;
   }
-  const tag = document.activeElement?.tagName;
-  const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
-  const inTextarea = tag === 'TEXTAREA';
 
-  // Home = 前のタブ / End = 次のタブ（テキスト入力中は文字カーソル移動を優先）
-  if (!typing && (e.key === 'Home' || e.key === 'End')) {
+  // Home = 前のタブ / End = 次のタブ（ナビ状態のみ）。
+  // 編集モード(入力欄フォーカス中)では Home/End は本来の行頭/行末移動。
+  // タブ切替で入力欄を自動フォーカスしないので、通過するだけならEsc不要。
+  if (!editing && !modalOpen && (e.key === 'Home' || e.key === 'End')) {
     e.preventDefault();
     cycleTab(e.key === 'Home' ? -1 : 1);
     return;
   }
 
-  // Tools: PageUp/PageDown でカーソル上下、Enter で起動（Alt+Enter=右分割）
-  if (activeTab === 'tools' && !inTextarea) {
+  // Enter = タブ内操作に入る（ナビ状態のみ。編集中の Enter は通常の改行/入力）
+  if (e.key === 'Enter' && !editing && !modalOpen) {
+    if (activeTab === 'memo')  { e.preventDefault(); $('memoText').focus(); return; }
+    if (activeTab === 'paste') { e.preventDefault(); $('pasteText').focus(); return; }
+    if (activeTab === 'tools' && cursorIdx >= 0) { e.preventDefault(); launchCursor(e.altKey ? 'right' : 'left'); return; }
+  }
+
+  // Tools: PageUp/PageDown でカーソル上下
+  if (activeTab === 'tools' && tag !== 'TEXTAREA') {
     if (e.key === 'PageDown') { e.preventDefault(); moveCursor(1); return; }
     if (e.key === 'PageUp')   { e.preventDefault(); moveCursor(-1); return; }
-    if (e.key === 'Enter' && cursorIdx >= 0) { e.preventDefault(); launchCursor(e.altKey ? 'right' : 'left'); return; }
   }
 
   // 数字キー = 起動（入力欄にフォーカス中はそのまま入力させる）
   const isDigit = (e.code >= 'Digit1' && e.code <= 'Digit9') || (e.code >= 'Numpad1' && e.code <= 'Numpad9');
-  if (!typing && !e.ctrlKey && !e.metaKey && isDigit) {
+  if (!editing && !e.ctrlKey && !e.metaKey && isDigit) {
     const n = e.code.startsWith('Numpad') ? e.code.slice(6) : e.code.slice(5);
     const t = quickList[parseInt(n, 10) - 1];
     if (t) {
@@ -1033,6 +1042,7 @@ pasteMainEl.addEventListener('drop', (e) => {
 
 load();
 loadMemo();
+setPinned(true);  // デフォルトで最前面ON（ボタン表示と実状態を一致させる）
 </script>
 </body>
 </html>
