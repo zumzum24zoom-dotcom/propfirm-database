@@ -387,9 +387,6 @@ let query = '';
 let editingIdx = -1;
 let quickList = [];
 
-// 分割表示中のウィンドウ参照（順序に関わらず左右に並べるため）
-const paneWindows = { left: null, right: null };
-
 const launchTool = async (t, pane = 'left') => {
   if (t.type === 'exe' || t.type === 'pwa') {
     try {
@@ -404,30 +401,16 @@ const launchTool = async (t, pane = 'left') => {
       toast('起動失敗: ' + err.message);
     }
   } else {
-    // サイドバー(画面右端 360px)を除いた領域に開く。右半分が開いていれば左も半分にして並べる
-    const SIDEBAR_WIDTH = 360;
-    const avail = window.screen.availWidth - SIDEBAR_WIDTH;
-    const half = Math.floor(avail / 2);
-    const h = window.screen.availHeight;
-    const rightOpen = paneWindows.right && !paneWindows.right.closed;
-    const leftOpen = paneWindows.left && !paneWindows.left.closed;
-
-    // window.open はChrome --appモード下でfeatures無視するため、
-    // agent.py 経由で別Chromeウィンドウを正確な位置・サイズで起動する
-    const openViaAgent = (x, y, width) => {
-      return fetch('/api/open-url', {
+    // 数字キー=左ペイン / Alt+数字=右ペイン。両ペインが埋まると agent 側が
+    // 自動で左右半分にタイルする（位置・サイズ計算と再タイルは agent が担当）。
+    try {
+      await fetch('/api/open-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: t.path, x, y, w: width, h }),
-      }).catch(err => toast('起動失敗: ' + err.message));
-    };
-    if (pane === 'right') {
-      openViaAgent(half, 0, half);
-      paneWindows.right = { closed: false };  // 名目上開いてる状態にする
-    } else {
-      const w = rightOpen ? half : Math.max(avail, 600);
-      openViaAgent(0, 0, w);
-      paneWindows.left = { closed: false };
+        body: JSON.stringify({ url: t.path, pane }),
+      });
+    } catch (err) {
+      toast('起動失敗: ' + err.message);
     }
   }
 };
@@ -512,7 +495,7 @@ const render = () => {
     const label = data.categories[c]?.label || c;
     const rows = groups[c].map(({ t, idx }) => {
       const qn = quickList.indexOf(t);
-      const badge = qn >= 0 ? `<span class="num-badge" title="数字キー${qn + 1}で起動">${qn + 1}</span>` : '';
+      const badge = qn >= 0 ? `<span class="num-badge" title="${qn + 1}キー=左に起動 / Alt+${qn + 1}=右に分割">${qn + 1}</span>` : '';
       const inner = `<div class="name">${badge}<span class="name-text">${escapeHtml(t.name)}</span></div>${t.description ? `<div class="desc">${escapeHtml(t.description)}</div>` : ''}`;
       const open = `<a class="open" href="#" data-launch="${idx}">${inner}</a>`;
       return `

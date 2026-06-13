@@ -11,6 +11,7 @@ Start at logon via Task Scheduler (see register-startup.ps1).
 from __future__ import annotations
 
 import ctypes
+from ctypes import wintypes
 import datetime
 import hashlib
 import http.server
@@ -237,16 +238,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         try:
             data = self._read_json()
             url = data.get("url")
-            x = int(data.get("x", 0))
-            y = int(data.get("y", 0))
-            w = int(data.get("w", 0))
-            h = int(data.get("h", 0))
-            if not url or w <= 0 or h <= 0:
-                raise ValueError("url, w, h are required")
+            pane = data.get("pane", "left")
+            if not url:
+                raise ValueError("url is required")
             # 相対パスはサーバルートから解釈
             if url.startswith("/"):
                 url = f"http://localhost:{PORT}{url}"
-            launch_app_window(url, x, y, w, h)
+            open_tool_pane(url, pane)
             self._json(200, {"ok": True})
         except Exception as e:
             self._json(400, {"ok": False, "error": str(e)})
@@ -339,24 +337,116 @@ def launch_sidebar() -> None:
     ).start()
 
 
-def launch_app_window(url: str, x: int, y: int, w: int, h: int) -> None:
-    """ツール用Chromeウィンドウを指定位置・サイズで起動。
+# Tool windows tile into the zone left of the sidebar. We track the window
+# currently occupying each pane so that opening a second tool re-tiles both to
+# half width (clean side-by-side split) instead of overlapping.
+_pane_lock = threading.Lock()
+_pane_hwnds: dict[str, int | None] = {"left": None, "right": None}
 
-    window.open がChrome --appモード下では features を無視するため、
-    agent.py側からChromeを直接subprocessで起動する。
-    """
+
+def _work_zone() -> tuple[int, int, int, int]:
+    """The (x, y, w, h) rectangle available to tool windows: the desktop work
+    area (taskbar excluded), minus the docked sidebar on the right *only when
+    the sidebar is actually visible*. When the sidebar is hidden/closed the
+    tool windows expand to fill that freed space (auto-arrange)."""
+    rect = wintypes.RECT()
+    ctypes.windll.user32.SystemParametersInfoW(0x0030, 0, ctypes.byref(rect), 0)  # SPI_GETWORKAREA
+    x, y = rect.left, rect.top
+    reserve = SIDEBAR_WIDTH if _sidebar_visible() else 0
+    w = (rect.right - reserve) - rect.left
+    h = rect.bottom - rect.top
+    return x, y, w, h
+
+
+def _sidebar_visible() -> bool:
+    hwnd = wincontrol.find_sidebar_window(SIDEBAR_TITLE)
+    return bool(hwnd) and win32gui.IsWindowVisible(hwnd)
+
+
+def retile_panes() -> None:
+    """Reposition the live tool windows for the current zone. Called when the
+    sidebar is shown/hidden so tools shrink to leave room / expand to fill it."""
+    rects = _pane_rects()
+    with _pane_lock:
+        left_live = _alive(_pane_hwnds["left"])
+        right_live = _alive(_pane_hwnds["right"])
+        if left_live and right_live:
+            wincontrol.set_rect(_pane_hwnds["left"], *rects["left"])
+            wincontrol.set_rect(_pane_hwnds["right"], *rects["right"])
+        elif left_live:
+            wincontrol.set_rect(_pane_hwnds["left"], *rects["full"])
+        elif right_live:
+            wincontrol.set_rect(_pane_hwnds["right"], *rects["full"])
+
+
+def _sidebar_watch_loop() -> None:
+    """Poll sidebar visibility; when it changes (toggle or close), re-tile the
+    tool windows so they fill or yield the sidebar's space automatically."""
+    was = None
+    while True:
+        try:
+            vis = _sidebar_visible()
+            if was is not None and vis != was:
+                retile_panes()
+            was = vis
+        except Exception as e:
+            _log(f"sidebar watch failed: {e}")
+        time.sleep(0.4)
+
+
+def _pane_rects() -> dict[str, tuple[int, int, int, int]]:
+    zx, zy, zw, zh = _work_zone()
+    half = zw // 2
+    return {
+        "full": (zx, zy, zw, zh),
+        "left": (zx, zy, half, zh),
+        "right": (zx + half, zy, zw - half, zh),
+    }
+
+
+def _alive(hwnd: int | None) -> bool:
+    return bool(hwnd) and win32gui.IsWindow(hwnd) and win32gui.IsWindowVisible(hwnd)
+
+
+def _find_browser() -> Path | None:
     candidates = [
         Path(os.environ.get("ProgramFiles", "")) / "Google/Chrome/Application/chrome.exe",
         Path(os.environ.get("ProgramFiles(x86)", "")) / "Google/Chrome/Application/chrome.exe",
         Path(os.environ.get("ProgramFiles", "")) / "Microsoft/Edge/Application/msedge.exe",
         Path(os.environ.get("ProgramFiles(x86)", "")) / "Microsoft/Edge/Application/msedge.exe",
     ]
-    browser = next((c for c in candidates if c.is_file()), None)
+    return next((c for c in candidates if c.is_file()), None)
+
+
+def open_tool_pane(url: str, pane: str) -> None:
+    """Open a tool window in the given pane ('left'/'right'). If the opposite
+    pane already holds a live window, both are tiled to half width for a clean
+    split; otherwise the new window gets the full zone.
+
+    window.open is ignored under Chrome --app mode and Chrome ignores
+    --window-size once a profile has saved bounds, so we launch Chrome
+    directly and force the rect after the window appears.
+    """
+    pane = "right" if pane == "right" else "left"
+    other = "right" if pane == "left" else "left"
+    rects = _pane_rects()
+
+    with _pane_lock:
+        other_hwnd = _pane_hwnds[other]
+        other_live = _alive(other_hwnd)
+    if other_live:
+        target = rects[pane]
+        wincontrol.set_rect(other_hwnd, *rects[other])  # re-tile the existing one
+    else:
+        target = rects["full"]
+
+    browser = _find_browser()
     if not browser:
         os.startfile(url)
         return
     udir = Path(os.environ["LOCALAPPDATA"]) / "PFDLauncher" / "tool-profile"
     _ensure_profile(udir)
+    x, y, w, h = target
     flags = [
         str(browser),
         f"--app={url}",
@@ -368,19 +458,41 @@ def launch_app_window(url: str, x: int, y: int, w: int, h: int) -> None:
         "--no-service-autorun",
         "--disable-sync",
     ]
+    before = wincontrol.list_chrome_windows()
     subprocess.Popen(flags)
+    threading.Thread(
+        target=_adopt_new_window, args=(before, pane, target), daemon=True
+    ).start()
+
+
+def _adopt_new_window(before: set[int], pane: str, target: tuple[int, int, int, int]) -> None:
+    """Find the Chrome window that appeared after launch, record it as the
+    occupant of `pane`, and force its rect (twice - Chrome may re-apply its
+    saved bounds shortly after the window first appears)."""
+    for _ in range(60):
+        new = wincontrol.list_chrome_windows() - before
+        if new:
+            hwnd = next(iter(new))
+            with _pane_lock:
+                _pane_hwnds[pane] = hwnd
+            wincontrol.set_rect(hwnd, *target)
+            time.sleep(0.25)
+            wincontrol.set_rect(hwnd, *target)
+            return
+        time.sleep(0.1)
 
 
 def _dock_when_ready(x: int, y: int, w: int, h: int) -> None:
-    """Edge restores its last window position/size from the profile's
+    """Chrome restores its last window position/size from the profile's
     Preferences file, overriding --window-size/--window-position. Poll for
-    the new window and force it back to the docked rect once it appears."""
-    for _ in range(50):
+    the new window and slide it in to the docked rect once it appears (so the
+    first launch animates the same as a toggle instead of popping)."""
+    for _ in range(160):
         hwnd = wincontrol.find_sidebar_window(SIDEBAR_TITLE)
         if hwnd:
-            wincontrol.set_rect(hwnd, x, y, w, h)
+            wincontrol.fade_in(hwnd, x, y, w, h)
             return
-        time.sleep(0.1)
+        time.sleep(0.05)
 
 
 def toggle_sidebar() -> str:
@@ -441,8 +553,12 @@ def run_message_loop() -> None:
     wc.lpszClassName = "PFDLauncherAgentWnd"
     wc.hInstance = win32api.GetModuleHandle(None)
     class_atom = win32gui.RegisterClass(wc)
+    # Title deliberately does NOT contain "PFD Launcher" so find_sidebar_window
+    # (substring match) can never mistake this hidden control window for the
+    # Chrome sidebar. It is a non-visible message window (created with no
+    # WS_VISIBLE style) used only for the hotkey + clipboard listener.
     hwnd = win32gui.CreateWindow(
-        class_atom, "PFD Launcher Agent", 0, 0, 0, 0, 0, 0, 0, wc.hInstance, None
+        class_atom, "PFDAgentMsgWnd", 0, 0, 0, 0, 0, 0, 0, wc.hInstance, None
     )
 
     if not ctypes.windll.user32.AddClipboardFormatListener(hwnd):
@@ -456,9 +572,25 @@ def run_message_loop() -> None:
     win32gui.PumpMessages()
 
 
+def _already_running() -> bool:
+    """True if another agent already answers on PORT. Prevents duplicate
+    instances (task-scheduler launch + manual launch) from stacking up - the
+    extras can't bind the port or grab the hotkey and only cause confusion."""
+    import urllib.request
+    try:
+        with urllib.request.urlopen(f"http://127.0.0.1:{PORT}/api/ping", timeout=1) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
 def main() -> int:
+    if _already_running():
+        _log("another agent already running on port %d; exiting" % PORT)
+        return 0
     _log("agent starting")
     threading.Thread(target=run_server, daemon=True).start()
+    threading.Thread(target=_sidebar_watch_loop, daemon=True).start()
     run_message_loop()
     return 0
 

@@ -11,11 +11,13 @@ import win32con
 import win32gui
 from PIL import Image
 
-# AnimateWindow (AW_SLIDE) is ignored by DWM for top-level windows owned by
-# another process - it just shows/hides instantly with DWM's own fade.
-# Instead, slide manually by repositioning the window in small steps.
-SLIDE_STEPS = 12
-SLIDE_STEP_DELAY = 0.012  # ~144ms total
+# Show/hide is animated with an opacity fade rather than a positional slide.
+# A slide has to move the window across the right screen edge, and DWM does not
+# composite the off-screen portion per-frame for another process's window, so
+# the slide collapses into an instant pop. Fading the layered-window alpha is
+# fully on-screen and renders reliably cross-process.
+FADE_STEPS = 14
+FADE_STEP_DELAY = 0.016  # ~224ms total
 
 CF_PNG = None  # registered lazily (must run after OpenClipboard-capable thread init)
 
@@ -96,30 +98,64 @@ def find_sidebar_window(title_substr: str) -> int | None:
     return found[0] if found else None
 
 
-def _slide_to(hwnd: int, x_from: int, x_to: int, y: int, w: int, h: int) -> None:
-    for i in range(1, SLIDE_STEPS + 1):
-        x = x_from + (x_to - x_from) * i // SLIDE_STEPS
-        win32gui.SetWindowPos(hwnd, 0, x, y, w, h, win32con.SWP_NOZORDER | win32con.SWP_NOACTIVATE)
-        time.sleep(SLIDE_STEP_DELAY)
+def list_chrome_windows() -> set[int]:
+    """Visible top-level Chrome/Edge windows (class Chrome_WidgetWin_1).
+
+    Used to diff the window set before/after launching a tool so the newly
+    spawned --app window can be located and force-sized (Chrome ignores
+    --window-size/--window-position once a profile has saved bounds)."""
+    found: set[int] = set()
+
+    def cb(hwnd, _):
+        if win32gui.GetClassName(hwnd) == "Chrome_WidgetWin_1" and win32gui.IsWindowVisible(hwnd):
+            found.add(hwnd)
+
+    win32gui.EnumWindows(cb, None)
+    return found
+
+
+def _set_alpha(hwnd: int, alpha: int) -> None:
+    ex = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
+    if not (ex & win32con.WS_EX_LAYERED):
+        win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, ex | win32con.WS_EX_LAYERED)
+    win32gui.SetLayeredWindowAttributes(hwnd, 0, max(0, min(255, alpha)), win32con.LWA_ALPHA)
+
+
+def _fade(hwnd: int, a_from: int, a_to: int) -> None:
+    for i in range(1, FADE_STEPS + 1):
+        t = i / FADE_STEPS
+        a = int(round(a_from + (a_to - a_from) * t))
+        _set_alpha(hwnd, a)
+        time.sleep(FADE_STEP_DELAY)
+
+
+def fade_in(hwnd: int, x: int, y: int, w: int, h: int) -> None:
+    """Position the window at its docked rect and fade it in from transparent.
+
+    Used for the initial launch: Chrome shows the window at its remembered spot
+    the instant it is created, so we set alpha to 0 first (still hidden), then
+    show and ramp the opacity up for a clean fade-in instead of a pop."""
+    _set_alpha(hwnd, 0)
+    win32gui.SetWindowPos(hwnd, 0, x, y, w, h, win32con.SWP_NOZORDER | win32con.SWP_NOACTIVATE)
+    win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
+    _fade(hwnd, 0, 255)
+    _force_foreground(hwnd)
 
 
 def toggle_visibility(hwnd: int) -> str:
-    """Show/hide the sidebar by sliding it horizontally off/on the right screen edge."""
+    """Show/hide the sidebar with an opacity fade (stays docked in place)."""
     left, top, right, bottom = win32gui.GetWindowRect(hwnd)
     w, h = right - left, bottom - top
     screen_w = win32api.GetSystemMetrics(win32con.SM_CXSCREEN)
     docked_x = screen_w - w
-    offscreen_x = screen_w
 
     if win32gui.IsWindowVisible(hwnd):
-        _slide_to(hwnd, docked_x, offscreen_x, top, w, h)
+        _fade(hwnd, 255, 0)
         win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
+        _set_alpha(hwnd, 255)  # restore so a later non-fade show isn't invisible
         return "hidden"
 
-    win32gui.SetWindowPos(hwnd, 0, offscreen_x, top, w, h, win32con.SWP_NOZORDER | win32con.SWP_NOACTIVATE)
-    win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
-    _slide_to(hwnd, offscreen_x, docked_x, top, w, h)
-    _force_foreground(hwnd)
+    fade_in(hwnd, docked_x, top, w, h)
     return "shown"
 
 
