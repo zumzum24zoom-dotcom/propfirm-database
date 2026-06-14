@@ -1,0 +1,150 @@
+{
+  "firms": {
+    "aquafunded": {
+      "checkedAt": "2026-06-14 05:17",
+      "results": {
+        "https://aquafunded.com/": 200,
+        "https://aquafunded.com/about-us": 200,
+        "https://aquafunded.com/how-it-works": 200,
+        "https://aquafunded.com/forex-rules": 200,
+        "https://aquafunded.com/trader-plan": 200,
+        "https://aquafunded.com/rewards": 200,
+        "https://help.aquafunded.com/en/": 200
+      }
+    },
+    "alpha-capital-group": {
+      "checkedAt": "2026-06-14 06:26",
+      "results": {
+        "https://www.alphacapitalgroup.uk/about": 200,
+        "https://www.alphacapitalgroup.uk/product": 200,
+        "https://www.alphacapitalgroup.uk/platforms": 200,
+        "https://www.alphacapitalgroup.uk/": 200,
+        "https://help.alphacapitalgroup.uk/en/": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/10097421-alpha-one": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/10102634-performance-fee-on-demand": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/10192958-alpha-three": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/10570531-performance-fee-bi-weekly": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/10965278-alpha-prime": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/11325791-risk-management-group-swing": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/11378706-alpha-pro-6": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/11534243-tradelocker-guide": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/11786197-affiliate-marketing": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/12478051-risk-management-group-on-demand": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933755-how-do-i-get-paid-performance-fees": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933849-how-long-will-it-take-to-get-my-credentials": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933851-are-there-free-retakes": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933852-how-does-the-scaling-plan-work": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933882-is-there-a-legal-agreement-for-qualified-trader-accounts-with-alpha-capital-group": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933883-what-trading-platforms-are-available-for-use": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933901-what-is-classified-as-hedging-and-stacking": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933904-are-stop-loss-and-take-profit-orders-required": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933908-if-i-pass-before-the-minimum-trading-days-what-is-required-for-the-remaining-days": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933909-are-there-any-profit-targets-on-qualified-trader-accounts": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933910-is-there-a-minimum-target-required-on-a-qualified-analyst-account-before-i-can-receive-a-performance-fee": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933919-do-i-need-experience-before-i-apply": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933922-are-you-a-broker": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6933925-which-broker-do-we-use": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934203-what-is-leverage-and-what-leverage-is-offered-during-the-assessment-and-qualified-analyst-accounts": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934210-what-are-the-daily-risk-limits-and-how-do-they-work": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934220-what-is-the-maximum-total-loss": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934224-what-are-the-minimum-and-maximum-trading-days-for-the-assessment": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934229-what-is-the-total-duration-of-the-assessment-period": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934236-can-i-use-an-expert-advisor-ea": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934247-can-i-hold-trades-over-the-weekend": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934275-what-are-prohibited-trading-strategies": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934287-is-there-a-lot-size-limit-during-the-assessment": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934289-what-is-the-lot-size-limit-on-qualified-trader-accounts": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/6934293-can-i-have-a-free-retry-if-i-finish-with-a-profit": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060878-how-can-i-toggle-between-accounts-on-the-dashboard": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060892-what-features-do-we-offer-in-our-trader-s-dashboard": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060895-how-do-i-sign-up-for-a-competition": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060898-can-i-pass-using-someone-s-signals": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060901-when-does-my-assessment-start": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060904-what-happens-once-the-assessment-process-is-passed": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060906-what-happens-if-i-violate-a-rule": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060909-what-is-alpha-capital-group-s-policy-against-gambling-in-trading": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060911-how-can-i-keep-track-of-rules-and-my-trading-objectives": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060937-what-do-qualified-traders-earn-from-account-profits": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7060940-what-happens-if-a-rule-is-broken-on-a-qualified-trader-account": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/7883145-third-party-payments": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8074562-free-monthly-trading-competition-rules": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420051-how-does-trading-on-alpha-capital-group-compare-to-a-real-market-environment": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420066-are-there-commission-fees": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420070-am-i-trading-with-real-funds": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420072-who-can-i-contact-for-technical-support": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420078-how-should-i-handle-taxes-when-trading-with-alpha-capital-group": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420080-inactivity": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420429-alpha-pro-8-10": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420522-what-is-the-ip-rule-are-vpns-and-vpss-allowed": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420532-what-documentation-is-required-for-an-analyst-account": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420537-what-is-the-performance-fee-bonus": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8420592-is-it-possible-to-receive-a-refund-for-the-challenge-fees-once-i-have-successfully-completed-my-assessment": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8447268-what-is-the-2-minute-average-trade-duration-rule": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8447317-does-the-2-minute-average-trade-duration-rule-apply-to-qualified-accounts": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8671414-free-5k-account-promo-rules": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8775575-countries-with-limitations": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8782664-a-guide-to-alpha-capital-group-free-trial-account": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8782766-what-are-the-prizes-for-the-monthly-competitions": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8783017-important-trading-terms": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8786240-tradeable-assets": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8786521-merging-accounts": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8786973-is-copy-trading-allowed": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8804535-how-many-accounts-can-i-have-what-is-the-maximum-allocation-per-strategy": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8853079-liability-and-responsibility": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/8975697-ctrader-setup-guide": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/9293522-can-i-trade-news": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/9691161-risk-management-group-pro": 200,
+        "https://help.alphacapitalgroup.uk/en/articles/9789907-alpha-swing": 200
+      }
+    },
+    "ftmo": {
+      "checkedAt": "2026-06-14 06:42",
+      "results": {
+        "https://ftmo.com/en/about/": {
+          "code": 200,
+          "textLen": 16094
+        },
+        "https://ftmo.com/en/how-it-works/": {
+          "code": 200,
+          "textLen": 16974
+        },
+        "https://ftmo.com/en/reward-growth-and-scaling-plan/": {
+          "code": 200,
+          "textLen": 11560
+        },
+        "https://ftmo.com/en/trading-objectives/": {
+          "code": 200,
+          "textLen": 19613
+        },
+        "https://ftmo.com/en/trading-platforms/": {
+          "code": 200,
+          "textLen": 15993
+        },
+        "https://ftmo.com/en/symbols/": {
+          "code": 200,
+          "textLen": 10610
+        },
+        "https://ftmo.com/en/": {
+          "code": 200,
+          "textLen": 13321
+        },
+        "https://ftmo.com/en/faq/": {
+          "code": 200,
+          "textLen": 10283
+        },
+        "https://ftmo.com/en/premium-programme/": {
+          "code": 200,
+          "textLen": 17556
+        },
+        "https://ftmo.com/en/ftmo-challenge/": {
+          "code": 200,
+          "textLen": 19622
+        },
+        "https://ftmo.com/en/ftmo-free-trial/": {
+          "code": 200,
+          "textLen": 11222
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "firm": "aquafunded",
+  "help_base_url": "https://help.aquafunded.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で18記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "3 step model",
+          "url": "https://help.aquafunded.com/en/articles/10476458-3-step-model",
+          "slots": "P20,P01,P03,P04,P05,P06"
+        },
+        {
+          "title": "reward add ons",
+          "url": "https://help.aquafunded.com/en/articles/10494335-reward-add-ons",
+          "slots": "P20"
+        },
+        {
+          "title": "aquaman model",
+          "url": "https://help.aquafunded.com/en/articles/11018168-aquaman-model",
+          "slots": "P20,P01,P03,P04,P05,P06,P07"
+        },
+        {
+          "title": "welcome 50 100 cash",
+          "url": "https://help.aquafunded.com/en/articles/11140695-welcome-50-100-cash",
+          "slots": "P20"
+        },
+        {
+          "title": "buy one get one free",
+          "url": "https://help.aquafunded.com/en/articles/11140698-buy-one-get-one-free",
+          "slots": ""
+        },
+        {
+          "title": "affiliate payouts how and when you get paid",
+          "url": "https://help.aquafunded.com/en/articles/11207234-affiliate-payouts-how-and-when-you-get-paid",
+          "slots": "P02b"
+        },
+        {
+          "title": "how do i become an affiliate",
+          "url": "https://help.aquafunded.com/en/articles/11207433-how-do-i-become-an-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "rules compliance",
+          "url": "https://help.aquafunded.com/en/articles/11208099-rules-compliance",
+          "slots": ""
+        },
+        {
+          "title": "tryaqua 1 model",
+          "url": "https://help.aquafunded.com/en/articles/11786783-tryaqua-1-model",
+          "slots": "P20,P02,P02b,P03,P04,P05,P06,P07,P19"
+        },
+        {
+          "title": "are eas trade copiers allowed",
+          "url": "https://help.aquafunded.com/en/articles/11831659-are-eas-trade-copiers-allowed",
+          "slots": "P02,P13,P14,P16,P19"
+        },
+        {
+          "title": "is there a max lot limit",
+          "url": "https://help.aquafunded.com/en/articles/11831670-is-there-a-max-lot-limit",
+          "slots": "P09,P13,P14,P17,P18"
+        },
+        {
+          "title": "can i hold trades overnight and over the weekend",
+          "url": "https://help.aquafunded.com/en/articles/11831680-can-i-hold-trades-overnight-and-over-the-weekend",
+          "slots": "P02,P11,P12"
+        },
+        {
+          "title": "other rules",
+          "url": "https://help.aquafunded.com/en/articles/11831701-other-rules",
+          "slots": "P20,P15,P19"
+        },
+        {
+          "title": "do you allow hedging martingale and trading without a stop loss",
+          "url": "https://help.aquafunded.com/en/articles/11831763-do-you-allow-hedging-martingale-and-trading-without-a-stop-loss",
+          "slots": "P05,P13,P14,P16,P19"
+        },
+        {
+          "title": "is there a time limit",
+          "url": "https://help.aquafunded.com/en/articles/11875797-is-there-a-time-limit",
+          "slots": "P02,P09,P14"
+        },
+        {
+          "title": "wave stop",
+          "url": "https://help.aquafunded.com/en/articles/11875875-wave-stop",
+          "slots": "P03"
+        },
+        {
+          "title": "maximum loss per trade policy",
+          "url": "https://help.aquafunded.com/en/articles/11875895-maximum-loss-per-trade-policy",
+          "slots": "P05"
+        },
+        {
+          "title": "consistency rule",
+          "url": "https://help.aquafunded.com/en/articles/11875903-consistency-rule",
+          "slots": "P20,P07"
+        },
+        {
+          "title": "is copy trading allowed",
+          "url": "https://help.aquafunded.com/en/articles/11877755-is-copy-trading-allowed",
+          "slots": "P13,P14"
+        },
+        {
+          "title": "what are the 5 000 in total cash bonuses available for every affiliate",
+          "url": "https://help.aquafunded.com/en/articles/12655503-what-are-the-5-000-in-total-cash-bonuses-available-for-every-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "1 step model",
+          "url": "https://help.aquafunded.com/en/articles/12691551-1-step-model",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P09,P10"
+        },
+        {
+          "title": "crypto instant model",
+          "url": "https://help.aquafunded.com/en/articles/12691564-crypto-instant-model",
+          "slots": "P20,P02,P03,P04,P05,P06,P07,P10"
+        },
+        {
+          "title": "complete affiliate program tiers explained",
+          "url": "https://help.aquafunded.com/en/articles/12883804-complete-affiliate-program-tiers-explained",
+          "slots": ""
+        },
+        {
+          "title": "creators affiliate experts enterprise solution",
+          "url": "https://help.aquafunded.com/en/articles/12883812-creators-affiliate-experts-enterprise-solution",
+          "slots": ""
+        },
+        {
+          "title": "how can i receive the aqua gift box",
+          "url": "https://help.aquafunded.com/en/articles/12883818-how-can-i-receive-the-aqua-gift-box",
+          "slots": ""
+        },
+        {
+          "title": "what is the 1 000 affiliate loyalty bonus",
+          "url": "https://help.aquafunded.com/en/articles/12889915-what-is-the-1-000-affiliate-loyalty-bonus",
+          "slots": ""
+        },
+        {
+          "title": "how much can i earn as an affiliate",
+          "url": "https://help.aquafunded.com/en/articles/12891595-how-much-can-i-earn-as-an-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "why is this the best affiliate program in the industry",
+          "url": "https://help.aquafunded.com/en/articles/12891655-why-is-this-the-best-affiliate-program-in-the-industry",
+          "slots": ""
+        },
+        {
+          "title": "pay after pass model",
+          "url": "https://help.aquafunded.com/en/articles/13322298-pay-after-pass-model",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07"
+        },
+        {
+          "title": "trading instruments",
+          "url": "https://help.aquafunded.com/en/articles/13335151-trading-instruments",
+          "slots": ""
+        },
+        {
+          "title": "wave stop",
+          "url": "https://help.aquafunded.com/en/articles/13335239-wave-stop",
+          "slots": "P03"
+        },
+        {
+          "title": "leverage commission",
+          "url": "https://help.aquafunded.com/en/articles/13335246-leverage-commission",
+          "slots": "P20"
+        },
+        {
+          "title": "aqua scaling plan x aqua elite works",
+          "url": "https://help.aquafunded.com/en/articles/13439340-aqua-scaling-plan-x-aqua-elite-works",
+          "slots": ""
+        },
+        {
+          "title": "aqua elite bronze tier",
+          "url": "https://help.aquafunded.com/en/articles/13439590-aqua-elite-bronze-tier",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "aqua elite silver tier",
+          "url": "https://help.aquafunded.com/en/articles/13439628-aqua-elite-silver-tier",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "aqua elite gold tier",
+          "url": "https://help.aquafunded.com/en/articles/13439645-aqua-elite-gold-tier",
+          "slots": "P02b"
+        },
+        {
+          "title": "tryaqua 10 model",
+          "url": "https://help.aquafunded.com/en/articles/14037595-tryaqua-10-model",
+          "slots": "P20,P02,P02b,P03,P04,P05,P06,P07,P19"
+        },
+        {
+          "title": "is news trading allowed",
+          "url": "https://help.aquafunded.com/en/articles/14785740-is-news-trading-allowed",
+          "slots": "P20,P02,P08,P10,P14"
+        },
+        {
+          "title": "are there minimum trading days",
+          "url": "https://help.aquafunded.com/en/articles/15255671-are-there-minimum-trading-days",
+          "slots": "P20,P02,P07,P14"
+        },
+        {
+          "title": "instant funding standard",
+          "url": "https://help.aquafunded.com/en/articles/15281077-instant-funding-standard",
+          "slots": ""
+        },
+        {
+          "title": "instant funding pro",
+          "url": "https://help.aquafunded.com/en/articles/15281078-instant-funding-pro",
+          "slots": ""
+        },
+        {
+          "title": "1 step standard",
+          "url": "https://help.aquafunded.com/en/articles/15281183-1-step-standard",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P09"
+        },
+        {
+          "title": "1 step pro",
+          "url": "https://help.aquafunded.com/en/articles/15281185-1-step-pro",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P09"
+        },
+        {
+          "title": "2 step standard",
+          "url": "https://help.aquafunded.com/en/articles/15281226-2-step-standard",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P09"
+        },
+        {
+          "title": "2 step pro",
+          "url": "https://help.aquafunded.com/en/articles/15281229-2-step-pro",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07"
+        },
+        {
+          "title": "2 step elite",
+          "url": "https://help.aquafunded.com/en/articles/15281231-2-step-elite",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P09"
+        },
+        {
+          "title": "how do i become funded by aquafunded",
+          "url": "https://help.aquafunded.com/en/articles/9245852-how-do-i-become-funded-by-aquafunded",
+          "slots": ""
+        },
+        {
+          "title": "how do rewards work",
+          "url": "https://help.aquafunded.com/en/articles/9250906-how-do-rewards-work",
+          "slots": ""
+        },
+        {
+          "title": "what is the profit split",
+          "url": "https://help.aquafunded.com/en/articles/9250919-what-is-the-profit-split",
+          "slots": ""
+        },
+        {
+          "title": "what are your spreads and commissions",
+          "url": "https://help.aquafunded.com/en/articles/9250947-what-are-your-spreads-and-commissions",
+          "slots": ""
+        },
+        {
+          "title": "when is the daily max limit reset time",
+          "url": "https://help.aquafunded.com/en/articles/9250956-when-is-the-daily-max-limit-reset-time",
+          "slots": "P20,P03,P04"
+        },
+        {
+          "title": "what platforms are available",
+          "url": "https://help.aquafunded.com/en/articles/9250960-what-platforms-are-available",
+          "slots": ""
+        },
+        {
+          "title": "can i change platform",
+          "url": "https://help.aquafunded.com/en/articles/9250963-can-i-change-platform",
+          "slots": ""
+        },
+        {
+          "title": "how many accounts can i trade",
+          "url": "https://help.aquafunded.com/en/articles/9251037-how-many-accounts-can-i-trade",
+          "slots": ""
+        },
+        {
+          "title": "do you offer a scaling plan",
+          "url": "https://help.aquafunded.com/en/articles/9251044-do-you-offer-a-scaling-plan",
+          "slots": ""
+        },
+        {
+          "title": "is there a breach for inactivity",
+          "url": "https://help.aquafunded.com/en/articles/9251047-is-there-a-breach-for-inactivity",
+          "slots": "P09"
+        },
+        {
+          "title": "am i trading real money",
+          "url": "https://help.aquafunded.com/en/articles/9251050-am-i-trading-real-money",
+          "slots": ""
+        },
+        {
+          "title": "are there any countries we cannot trade from",
+          "url": "https://help.aquafunded.com/en/articles/9251052-are-there-any-countries-we-cannot-trade-from",
+          "slots": ""
+        },
+        {
+          "title": "when does the evaluation start",
+          "url": "https://help.aquafunded.com/en/articles/9251057-when-does-the-evaluation-start",
+          "slots": ""
+        },
+        {
+          "title": "do i have to pay for my loss",
+          "url": "https://help.aquafunded.com/en/articles/9251060-do-i-have-to-pay-for-my-loss",
+          "slots": "P20,P05,P16,P19"
+        },
+        {
+          "title": "can i leave profits in my account",
+          "url": "https://help.aquafunded.com/en/articles/9251066-can-i-leave-profits-in-my-account",
+          "slots": ""
+        },
+        {
+          "title": "is the evaluation fee refundable",
+          "url": "https://help.aquafunded.com/en/articles/9251069-is-the-evaluation-fee-refundable",
+          "slots": "P20"
+        },
+        {
+          "title": "what is the maximum capital i am allowed",
+          "url": "https://help.aquafunded.com/en/articles/9251075-what-is-the-maximum-capital-i-am-allowed",
+          "slots": ""
+        },
+        {
+          "title": "what happens if i fail my evaluation or funded account",
+          "url": "https://help.aquafunded.com/en/articles/9251079-what-happens-if-i-fail-my-evaluation-or-funded-account",
+          "slots": "P02,P14"
+        },
+        {
+          "title": "how do i become an aquafunded affiliate",
+          "url": "https://help.aquafunded.com/en/articles/9251081-how-do-i-become-an-aquafunded-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "tradelocker your comprehensive guide",
+          "url": "https://help.aquafunded.com/en/articles/9254873-tradelocker-your-comprehensive-guide",
+          "slots": ""
+        },
+        {
+          "title": "do you have a reward guarantee",
+          "url": "https://help.aquafunded.com/en/articles/9395678-do-you-have-a-reward-guarantee",
+          "slots": ""
+        },
+        {
+          "title": "match trader your comprehensive guide",
+          "url": "https://help.aquafunded.com/en/articles/9686071-match-trader-your-comprehensive-guide",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19",
+    "missing": "",
+    "note": "21/21（本文補強後）"
+  }
+}

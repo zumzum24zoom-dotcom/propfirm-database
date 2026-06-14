@@ -1,0 +1,1576 @@
+{
+  "firm": "for-traders",
+  "help_base_url": "https://help.fortraders.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で261記事は未取得＝ルール系優先） / 本文補強: 311記事取得・本文具体フレーズ照合でslot追加",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "jaka je moje partnerska provize",
+          "url": "https://help.fortraders.com/cs/articles/10006011-jaka-je-moje-partnerska-provize",
+          "slots": ""
+        },
+        {
+          "title": "jak ziskam svuj mesicni bonus",
+          "url": "https://help.fortraders.com/cs/articles/10006012-jak-ziskam-svuj-mesicni-bonus",
+          "slots": ""
+        },
+        {
+          "title": "dostanu provizi z vlastnich nakupu",
+          "url": "https://help.fortraders.com/cs/articles/10006016-dostanu-provizi-z-vlastnich-nakupu",
+          "slots": ""
+        },
+        {
+          "title": "jak se stat affiliate partnerem",
+          "url": "https://help.fortraders.com/cs/articles/10006020-jak-se-stat-affiliate-partnerem",
+          "slots": ""
+        },
+        {
+          "title": "dostanu partnersky kod nebo odkaz",
+          "url": "https://help.fortraders.com/cs/articles/10006021-dostanu-partnersky-kod-nebo-odkaz",
+          "slots": ""
+        },
+        {
+          "title": "jaka je minimalni partnerska provize kterou mohu pozadovat",
+          "url": "https://help.fortraders.com/cs/articles/10006025-jaka-je-minimalni-partnerska-provize-kterou-mohu-pozadovat",
+          "slots": ""
+        },
+        {
+          "title": "jak dlouho trva nez obdrzim svou partnerskou provizi",
+          "url": "https://help.fortraders.com/cs/articles/10006028-jak-dlouho-trva-nez-obdrzim-svou-partnerskou-provizi",
+          "slots": ""
+        },
+        {
+          "title": "co je povoleno",
+          "url": "https://help.fortraders.com/cs/articles/10006059-co-je-povoleno",
+          "slots": ""
+        },
+        {
+          "title": "co je zakazane",
+          "url": "https://help.fortraders.com/cs/articles/10006063-co-je-zakazane",
+          "slots": ""
+        },
+        {
+          "title": "turnaje for traders",
+          "url": "https://help.fortraders.com/cs/articles/10066978-turnaje-for-traders",
+          "slots": "P19"
+        },
+        {
+          "title": "classic account forex",
+          "url": "https://help.fortraders.com/cs/articles/10401739-classic-account-forex",
+          "slots": "P20,P01,P03,P05,P10,P13,P19"
+        },
+        {
+          "title": "two step challenge pro forex",
+          "url": "https://help.fortraders.com/cs/articles/10401845-two-step-challenge-pro-forex",
+          "slots": "P20,P01,P05,P08"
+        },
+        {
+          "title": "instant account forex",
+          "url": "https://help.fortraders.com/cs/articles/10429449-instant-account-forex",
+          "slots": "P03,P05,P06,P10,P13,P19"
+        },
+        {
+          "title": "jak funguje instant ucet",
+          "url": "https://help.fortraders.com/cs/articles/10429769-jak-funguje-instant-ucet",
+          "slots": "P03,P05,P13,P19"
+        },
+        {
+          "title": "jak funguje pravidlo konzistence na nasem instant uctu",
+          "url": "https://help.fortraders.com/cs/articles/10442201-jak-funguje-pravidlo-konzistence-na-nasem-instant-uctu",
+          "slots": "P07"
+        },
+        {
+          "title": "novy dashboard jak se prihlasit",
+          "url": "https://help.fortraders.com/cs/articles/10988536-novy-dashboard-jak-se-prihlasit",
+          "slots": ""
+        },
+        {
+          "title": "zadosti o opetovnou aktivaci uctu",
+          "url": "https://help.fortraders.com/cs/articles/11052608-zadosti-o-opetovnou-aktivaci-uctu",
+          "slots": ""
+        },
+        {
+          "title": "mohu pozadat o zmenu platformy",
+          "url": "https://help.fortraders.com/cs/articles/11053689-mohu-pozadat-o-zmenu-platformy",
+          "slots": ""
+        },
+        {
+          "title": "jaka je vase aktualni akce nebo slevovy kod",
+          "url": "https://help.fortraders.com/cs/articles/11053956-jaka-je-vase-aktualni-akce-nebo-slevovy-kod",
+          "slots": ""
+        },
+        {
+          "title": "ztracena kryptoplatba",
+          "url": "https://help.fortraders.com/cs/articles/11055213-ztracena-kryptoplatba",
+          "slots": ""
+        },
+        {
+          "title": "for traders nabidka",
+          "url": "https://help.fortraders.com/cs/articles/11079453-for-traders-nabidka",
+          "slots": ""
+        },
+        {
+          "title": "odmeny vyplacime kazdych 14 kalendarnich dni",
+          "url": "https://help.fortraders.com/cs/articles/11087568-odmeny-vyplacime-kazdych-14-kalendarnich-dni",
+          "slots": ""
+        },
+        {
+          "title": "strike account forex",
+          "url": "https://help.fortraders.com/cs/articles/11401568-strike-account-forex",
+          "slots": "P20,P01,P05,P09,P10,P13,P19"
+        },
+        {
+          "title": "jak funguje consistency score na nasem crypto fast pro uctu",
+          "url": "https://help.fortraders.com/cs/articles/11402218-jak-funguje-consistency-score-na-nasem-crypto-fast-pro-uctu",
+          "slots": "P07"
+        },
+        {
+          "title": "proc si nemohu zakoupit dvoufazovou vyzvu pro",
+          "url": "https://help.fortraders.com/cs/articles/11537228-proc-si-nemohu-zakoupit-dvoufazovou-vyzvu-pro",
+          "slots": "P20"
+        },
+        {
+          "title": "overovaci hovory verification calls vse co potrebujete vedet",
+          "url": "https://help.fortraders.com/cs/articles/11646134-overovaci-hovory-verification-calls-vse-co-potrebujete-vedet",
+          "slots": ""
+        },
+        {
+          "title": "fast account crypto",
+          "url": "https://help.fortraders.com/cs/articles/11737027-fast-account-crypto",
+          "slots": "P20,P06"
+        },
+        {
+          "title": "instant account crypto",
+          "url": "https://help.fortraders.com/cs/articles/11737088-instant-account-crypto",
+          "slots": "P06"
+        },
+        {
+          "title": "jake krypto nabizite k obchodovani",
+          "url": "https://help.fortraders.com/cs/articles/11737598-jake-krypto-nabizite-k-obchodovani",
+          "slots": ""
+        },
+        {
+          "title": "instant pro account forex",
+          "url": "https://help.fortraders.com/cs/articles/11830305-instant-pro-account-forex",
+          "slots": "P01,P06"
+        },
+        {
+          "title": "jak funguje nas instant pro",
+          "url": "https://help.fortraders.com/cs/articles/11830523-jak-funguje-nas-instant-pro",
+          "slots": "P01,P05"
+        },
+        {
+          "title": "for traders ai",
+          "url": "https://help.fortraders.com/cs/articles/11847979-for-traders-ai",
+          "slots": ""
+        },
+        {
+          "title": "reward policy fast challenge futures",
+          "url": "https://help.fortraders.com/cs/articles/11885684-reward-policy-fast-challenge-futures",
+          "slots": "P06"
+        },
+        {
+          "title": "obchodni hodiny futures ucty",
+          "url": "https://help.fortraders.com/cs/articles/11885742-obchodni-hodiny-futures-ucty",
+          "slots": ""
+        },
+        {
+          "title": "futures obchodni platforma futures ucty",
+          "url": "https://help.fortraders.com/cs/articles/11885778-futures-obchodni-platforma-futures-ucty",
+          "slots": ""
+        },
+        {
+          "title": "fast account futures",
+          "url": "https://help.fortraders.com/cs/articles/11927530-fast-account-futures",
+          "slots": "P20,P05,P06"
+        },
+        {
+          "title": "jak funguje pravidlo konzistence consistency score na fast futures uctu",
+          "url": "https://help.fortraders.com/cs/articles/11928004-jak-funguje-pravidlo-konzistence-consistency-score-na-fast-futures-uctu",
+          "slots": "P07"
+        },
+        {
+          "title": "co znamena max drawdown zalozeny na zustatku balance a jak se pocita",
+          "url": "https://help.fortraders.com/cs/articles/11992314-co-znamena-max-drawdown-zalozeny-na-zustatku-balance-a-jak-se-pocita",
+          "slots": "P03,P05,P06"
+        },
+        {
+          "title": "co znamena trailing max drawdown a jak se pocita forex crypto",
+          "url": "https://help.fortraders.com/cs/articles/11992361-co-znamena-trailing-max-drawdown-a-jak-se-pocita-forex-crypto",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "co znamena trailing max drawdown eod a jak se pocita",
+          "url": "https://help.fortraders.com/cs/articles/11992386-co-znamena-trailing-max-drawdown-eod-a-jak-se-pocita",
+          "slots": "P03,P05,P06"
+        },
+        {
+          "title": "fast static account forex",
+          "url": "https://help.fortraders.com/cs/articles/12009861-fast-static-account-forex",
+          "slots": "P20,P01,P05,P06"
+        },
+        {
+          "title": "instant account futures",
+          "url": "https://help.fortraders.com/cs/articles/12115321-instant-account-futures",
+          "slots": ""
+        },
+        {
+          "title": "reward policy instant futures",
+          "url": "https://help.fortraders.com/cs/articles/12116211-reward-policy-instant-futures",
+          "slots": "P06"
+        },
+        {
+          "title": "fast pro account crypto",
+          "url": "https://help.fortraders.com/cs/articles/12292638-fast-pro-account-crypto",
+          "slots": "P20,P01,P05,P06,P07"
+        },
+        {
+          "title": "jak funguje program ulohy a odmeny",
+          "url": "https://help.fortraders.com/cs/articles/12547030-jak-funguje-program-ulohy-a-odmeny",
+          "slots": "P20"
+        },
+        {
+          "title": "co je maximalni alokace",
+          "url": "https://help.fortraders.com/cs/articles/13128476-co-je-maximalni-alokace",
+          "slots": ""
+        },
+        {
+          "title": "jak vybrat kryptomeny na ucet revolut",
+          "url": "https://help.fortraders.com/cs/articles/13450511-jak-vybrat-kryptomeny-na-ucet-revolut",
+          "slots": ""
+        },
+        {
+          "title": "fast account forex",
+          "url": "https://help.fortraders.com/cs/articles/13459470-fast-account-forex",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "predictions markets",
+          "url": "https://help.fortraders.com/cs/articles/14006945-predictions-markets",
+          "slots": ""
+        },
+        {
+          "title": "mohu se registrovat nebo nakupovat jako firma",
+          "url": "https://help.fortraders.com/cs/articles/14135212-mohu-se-registrovat-nebo-nakupovat-jako-firma",
+          "slots": ""
+        },
+        {
+          "title": "fast pro account futures",
+          "url": "https://help.fortraders.com/cs/articles/14470847-fast-pro-account-futures",
+          "slots": "P20,P05,P06"
+        },
+        {
+          "title": "reward policy fast pro account futures",
+          "url": "https://help.fortraders.com/cs/articles/14470910-reward-policy-fast-pro-account-futures",
+          "slots": "P06"
+        },
+        {
+          "title": "novy instant ucet forex",
+          "url": "https://help.fortraders.com/cs/articles/14635307-novy-instant-ucet-forex",
+          "slots": "P01,P03,P05,P06,P07,P10"
+        },
+        {
+          "title": "jak funguje ochrana proti drawdownu",
+          "url": "https://help.fortraders.com/cs/articles/14652456-jak-funguje-ochrana-proti-drawdownu",
+          "slots": ""
+        },
+        {
+          "title": "predstavujeme instant account rychlejsi pristup vetsi sila chytrejsi trading",
+          "url": "https://help.fortraders.com/cs/articles/14653542-predstavujeme-instant-account-rychlejsi-pristup-vetsi-sila-chytrejsi-trading",
+          "slots": ""
+        },
+        {
+          "title": "co je loyalty program for traders",
+          "url": "https://help.fortraders.com/cs/articles/14723121-co-je-loyalty-program-for-traders",
+          "slots": ""
+        },
+        {
+          "title": "reward policy instant ucet forex",
+          "url": "https://help.fortraders.com/cs/articles/15053571-reward-policy-instant-ucet-forex",
+          "slots": ""
+        },
+        {
+          "title": "udelali jsme obrovskou chybu a kvuli ni se pripojilo vice nez 50 000 novych traderu",
+          "url": "https://help.fortraders.com/cs/articles/15053802-udelali-jsme-obrovskou-chybu-a-kvuli-ni-se-pripojilo-vice-nez-50-000-novych-traderu",
+          "slots": ""
+        },
+        {
+          "title": "jak funguje denni drawdown u fast static a jak se pocita",
+          "url": "https://help.fortraders.com/cs/articles/15068124-jak-funguje-denni-drawdown-u-fast-static-a-jak-se-pocita",
+          "slots": "P03,P05,P06"
+        },
+        {
+          "title": "srovnani typu uctu",
+          "url": "https://help.fortraders.com/cs/articles/15208251-srovnani-typu-uctu",
+          "slots": "P01"
+        },
+        {
+          "title": "odemknete vetsi obchodni silu ziskejte 25 slevu bogo",
+          "url": "https://help.fortraders.com/cs/articles/15251035-odemknete-vetsi-obchodni-silu-ziskejte-25-slevu-bogo",
+          "slots": ""
+        },
+        {
+          "title": "fast account forex",
+          "url": "https://help.fortraders.com/cs/articles/15360683-fast-account-forex",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "fast static account forex",
+          "url": "https://help.fortraders.com/cs/articles/15376206-fast-static-account-forex",
+          "slots": "P20,P01,P05,P06"
+        },
+        {
+          "title": "classic account forex",
+          "url": "https://help.fortraders.com/cs/articles/15378600-classic-account-forex",
+          "slots": "P20,P01,P03,P05,P10"
+        },
+        {
+          "title": "strike account forex",
+          "url": "https://help.fortraders.com/cs/articles/15378828-strike-account-forex",
+          "slots": "P20,P01,P05,P09,P10"
+        },
+        {
+          "title": "instant ucet forex",
+          "url": "https://help.fortraders.com/cs/articles/15379105-instant-ucet-forex",
+          "slots": "P01,P03,P05,P06,P07,P10"
+        },
+        {
+          "title": "instant pro account forex",
+          "url": "https://help.fortraders.com/cs/articles/15379390-instant-pro-account-forex",
+          "slots": "P01,P06"
+        },
+        {
+          "title": "fast account crypto",
+          "url": "https://help.fortraders.com/cs/articles/15379636-fast-account-crypto",
+          "slots": "P20,P06"
+        },
+        {
+          "title": "jake jsou financni paky",
+          "url": "https://help.fortraders.com/cs/articles/15392485-jake-jsou-financni-paky",
+          "slots": ""
+        },
+        {
+          "title": "vitejte ve for traders",
+          "url": "https://help.fortraders.com/cs/articles/8074398-vitejte-ve-for-traders",
+          "slots": ""
+        },
+        {
+          "title": "dostanu pri prvni odmene nejaky bonus",
+          "url": "https://help.fortraders.com/cs/articles/8074488-dostanu-pri-prvni-odmene-nejaky-bonus",
+          "slots": ""
+        },
+        {
+          "title": "co je denni kumulativni p l",
+          "url": "https://help.fortraders.com/cs/articles/8075152-co-je-denni-kumulativni-p-l",
+          "slots": "P01,P03,P06"
+        },
+        {
+          "title": "jaky je cas serveru",
+          "url": "https://help.fortraders.com/cs/articles/8075307-jaky-je-cas-serveru",
+          "slots": ""
+        },
+        {
+          "title": "jake jsou financni paky",
+          "url": "https://help.fortraders.com/cs/articles/8075310-jake-jsou-financni-paky",
+          "slots": ""
+        },
+        {
+          "title": "jake jsou poplatky komise u for traders",
+          "url": "https://help.fortraders.com/cs/articles/8075316-jake-jsou-poplatky-komise-u-for-traders",
+          "slots": ""
+        },
+        {
+          "title": "jake trading instrumenty nabizite",
+          "url": "https://help.fortraders.com/cs/articles/8075321-jake-trading-instrumenty-nabizite",
+          "slots": ""
+        },
+        {
+          "title": "co je to spread v tradingu",
+          "url": "https://help.fortraders.com/cs/articles/8075328-co-je-to-spread-v-tradingu",
+          "slots": ""
+        },
+        {
+          "title": "mate povinny stop loss",
+          "url": "https://help.fortraders.com/cs/articles/8075333-mate-povinny-stop-loss",
+          "slots": "P16"
+        },
+        {
+          "title": "jake platformy si mohu vybrat pro obchodovani",
+          "url": "https://help.fortraders.com/cs/articles/8075336-jake-platformy-si-mohu-vybrat-pro-obchodovani",
+          "slots": ""
+        },
+        {
+          "title": "jak dlouho trva prechod na for traders master ucet",
+          "url": "https://help.fortraders.com/cs/articles/8075366-jak-dlouho-trva-prechod-na-for-traders-master-ucet",
+          "slots": ""
+        },
+        {
+          "title": "co je to kyc a jake dokumenty budu pro kyc potrebovat",
+          "url": "https://help.fortraders.com/cs/articles/8075373-co-je-to-kyc-a-jake-dokumenty-budu-pro-kyc-potrebovat",
+          "slots": ""
+        },
+        {
+          "title": "jak se resi dane",
+          "url": "https://help.fortraders.com/cs/articles/8075393-jak-se-resi-dane",
+          "slots": ""
+        },
+        {
+          "title": "novy system vyberu v novem dashboardu",
+          "url": "https://help.fortraders.com/cs/articles/8075410-novy-system-vyberu-v-novem-dashboardu",
+          "slots": ""
+        },
+        {
+          "title": "co je slippage a jak muze ovlivnit vase obchodovani",
+          "url": "https://help.fortraders.com/cs/articles/8159905-co-je-slippage-a-jak-muze-ovlivnit-vase-obchodovani",
+          "slots": ""
+        },
+        {
+          "title": "jste regulovana firma",
+          "url": "https://help.fortraders.com/cs/articles/9259190-jste-regulovana-firma",
+          "slots": ""
+        },
+        {
+          "title": "s jakym kapitalem budu obchodovat kdyz si koupim vyzvu",
+          "url": "https://help.fortraders.com/cs/articles/9259320-s-jakym-kapitalem-budu-obchodovat-kdyz-si-koupim-vyzvu",
+          "slots": ""
+        },
+        {
+          "title": "jak si mohu zakoupit challenge",
+          "url": "https://help.fortraders.com/cs/articles/9259383-jak-si-mohu-zakoupit-challenge",
+          "slots": ""
+        },
+        {
+          "title": "co je to trading vyzva",
+          "url": "https://help.fortraders.com/cs/articles/9259414-co-je-to-trading-vyzva",
+          "slots": ""
+        },
+        {
+          "title": "zakazane zeme",
+          "url": "https://help.fortraders.com/cs/articles/9259446-zakazane-zeme",
+          "slots": ""
+        },
+        {
+          "title": "co znamena daily drawdown a jak se vypocita",
+          "url": "https://help.fortraders.com/cs/articles/9259647-co-znamena-daily-drawdown-a-jak-se-vypocita",
+          "slots": "P03,P05,P06"
+        },
+        {
+          "title": "co znamena profit target a jak je kalkulovan",
+          "url": "https://help.fortraders.com/cs/articles/9259681-co-znamena-profit-target-a-jak-je-kalkulovan",
+          "slots": "P01"
+        },
+        {
+          "title": "jaky je minimalni pocet profitabilnich dni",
+          "url": "https://help.fortraders.com/cs/articles/9259693-jaky-je-minimalni-pocet-profitabilnich-dni",
+          "slots": ""
+        },
+        {
+          "title": "co se stane kdyz porusim pravidla",
+          "url": "https://help.fortraders.com/cs/articles/9259880-co-se-stane-kdyz-porusim-pravidla",
+          "slots": ""
+        },
+        {
+          "title": "mate inactivity pravidlo",
+          "url": "https://help.fortraders.com/cs/articles/9259881-mate-inactivity-pravidlo",
+          "slots": "P09"
+        },
+        {
+          "title": "jak funguje nase oddeleni rizik",
+          "url": "https://help.fortraders.com/cs/articles/9263722-jak-funguje-nase-oddeleni-rizik",
+          "slots": ""
+        },
+        {
+          "title": "mohu sve ucty sloucit do jednoho",
+          "url": "https://help.fortraders.com/cs/articles/9263829-mohu-sve-ucty-sloucit-do-jednoho",
+          "slots": ""
+        },
+        {
+          "title": "kopirujete obchody na realny kapital",
+          "url": "https://help.fortraders.com/cs/articles/9263833-kopirujete-obchody-na-realny-kapital",
+          "slots": ""
+        },
+        {
+          "title": "jak uspesne projit vyzvou",
+          "url": "https://help.fortraders.com/cs/articles/9277915-jak-uspesne-projit-vyzvou",
+          "slots": "P01"
+        },
+        {
+          "title": "kde najdu sve prihlasovaci udaje",
+          "url": "https://help.fortraders.com/cs/articles/9319068-kde-najdu-sve-prihlasovaci-udaje",
+          "slots": "P20,P01,P03"
+        },
+        {
+          "title": "jak se prihlasit do obchodnich platforem",
+          "url": "https://help.fortraders.com/cs/articles/9324368-jak-se-prihlasit-do-obchodnich-platforem",
+          "slots": ""
+        },
+        {
+          "title": "jak funguje nase technicka infrastruktura",
+          "url": "https://help.fortraders.com/cs/articles/9330477-jak-funguje-nase-technicka-infrastruktura",
+          "slots": ""
+        },
+        {
+          "title": "jak se prihlasit do tradelocker",
+          "url": "https://help.fortraders.com/cs/articles/9819181-jak-se-prihlasit-do-tradelocker",
+          "slots": ""
+        },
+        {
+          "title": "ziskej odenu do 48 hodin nebo ziskej 100 profit split",
+          "url": "https://help.fortraders.com/cs/articles/9937161-ziskej-odenu-do-48-hodin-nebo-ziskej-100-profit-split",
+          "slots": ""
+        },
+        {
+          "title": "what s my affiliate commission",
+          "url": "https://help.fortraders.com/en/articles/10006011-what-s-my-affiliate-commission",
+          "slots": "P19"
+        },
+        {
+          "title": "how do i get my monthly bonus",
+          "url": "https://help.fortraders.com/en/articles/10006012-how-do-i-get-my-monthly-bonus",
+          "slots": ""
+        },
+        {
+          "title": "do i earn a commission on my own purchases",
+          "url": "https://help.fortraders.com/en/articles/10006016-do-i-earn-a-commission-on-my-own-purchases",
+          "slots": "P19"
+        },
+        {
+          "title": "how do i become an affiliate partner",
+          "url": "https://help.fortraders.com/en/articles/10006020-how-do-i-become-an-affiliate-partner",
+          "slots": ""
+        },
+        {
+          "title": "do i get an affiliate code or a link",
+          "url": "https://help.fortraders.com/en/articles/10006021-do-i-get-an-affiliate-code-or-a-link",
+          "slots": ""
+        },
+        {
+          "title": "what s the minimum affiliate pay i can request",
+          "url": "https://help.fortraders.com/en/articles/10006025-what-s-the-minimum-affiliate-pay-i-can-request",
+          "slots": "P19"
+        },
+        {
+          "title": "how long does it take to receive my affiliate commission",
+          "url": "https://help.fortraders.com/en/articles/10006028-how-long-does-it-take-to-receive-my-affiliate-commission",
+          "slots": "P09"
+        },
+        {
+          "title": "what s allowed",
+          "url": "https://help.fortraders.com/en/articles/10006059-what-s-allowed",
+          "slots": "P19"
+        },
+        {
+          "title": "what s forbidden",
+          "url": "https://help.fortraders.com/en/articles/10006063-what-s-forbidden",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "tournaments for traders",
+          "url": "https://help.fortraders.com/en/articles/10066978-tournaments-for-traders",
+          "slots": "P05,P10,P19"
+        },
+        {
+          "title": "classic account forex",
+          "url": "https://help.fortraders.com/en/articles/10401739-classic-account-forex",
+          "slots": "P20,P01,P03,P05,P09,P10,P13,P19"
+        },
+        {
+          "title": "not available instant account forex",
+          "url": "https://help.fortraders.com/en/articles/10429449-not-available-instant-account-forex",
+          "slots": "P01,P03,P04,P05,P06,P07,P09,P10,P11,P12"
+        },
+        {
+          "title": "how does the instant account work",
+          "url": "https://help.fortraders.com/en/articles/10429769-how-does-the-instant-account-work",
+          "slots": "P03,P05,P06,P07"
+        },
+        {
+          "title": "how does the consistency score on our instant account work",
+          "url": "https://help.fortraders.com/en/articles/10442201-how-does-the-consistency-score-on-our-instant-account-work",
+          "slots": "P07"
+        },
+        {
+          "title": "new dashboard how to log in",
+          "url": "https://help.fortraders.com/en/articles/10988536-new-dashboard-how-to-log-in",
+          "slots": "P07"
+        },
+        {
+          "title": "account reactivation requests",
+          "url": "https://help.fortraders.com/en/articles/11052608-account-reactivation-requests",
+          "slots": ""
+        },
+        {
+          "title": "can i request a platform change",
+          "url": "https://help.fortraders.com/en/articles/11053689-can-i-request-a-platform-change",
+          "slots": ""
+        },
+        {
+          "title": "what is your current promotion or discount code",
+          "url": "https://help.fortraders.com/en/articles/11053956-what-is-your-current-promotion-or-discount-code",
+          "slots": "P03"
+        },
+        {
+          "title": "lost crypto payment",
+          "url": "https://help.fortraders.com/en/articles/11055213-lost-crypto-payment",
+          "slots": ""
+        },
+        {
+          "title": "for traders offer",
+          "url": "https://help.fortraders.com/en/articles/11079453-for-traders-offer",
+          "slots": ""
+        },
+        {
+          "title": "rewards are paid out bi weekly every 14 calendar days",
+          "url": "https://help.fortraders.com/en/articles/11087568-rewards-are-paid-out-bi-weekly-every-14-calendar-days",
+          "slots": "P09"
+        },
+        {
+          "title": "strike account forex",
+          "url": "https://help.fortraders.com/en/articles/11401568-strike-account-forex",
+          "slots": "P20,P01,P03,P05,P09,P10,P13,P19"
+        },
+        {
+          "title": "how does the consistency score on our crypto fast pro account work",
+          "url": "https://help.fortraders.com/en/articles/11402218-how-does-the-consistency-score-on-our-crypto-fast-pro-account-work",
+          "slots": "P07"
+        },
+        {
+          "title": "why can t i purchase the two step challenge pro",
+          "url": "https://help.fortraders.com/en/articles/11537228-why-can-t-i-purchase-the-two-step-challenge-pro",
+          "slots": "P20"
+        },
+        {
+          "title": "verification calls all you need to know",
+          "url": "https://help.fortraders.com/en/articles/11646134-verification-calls-all-you-need-to-know",
+          "slots": ""
+        },
+        {
+          "title": "fast account crypto",
+          "url": "https://help.fortraders.com/en/articles/11737027-fast-account-crypto",
+          "slots": "P20,P01,P03,P05,P06,P07,P09,P10,P11"
+        },
+        {
+          "title": "instant account crypto",
+          "url": "https://help.fortraders.com/en/articles/11737088-instant-account-crypto",
+          "slots": "P01,P03,P04,P05,P06,P07,P09,P10,P11,P12"
+        },
+        {
+          "title": "what crypto assets do you offer for trading",
+          "url": "https://help.fortraders.com/en/articles/11737598-what-crypto-assets-do-you-offer-for-trading",
+          "slots": ""
+        },
+        {
+          "title": "instant pro account forex",
+          "url": "https://help.fortraders.com/en/articles/11830305-instant-pro-account-forex",
+          "slots": "P01,P02,P03,P04,P05,P06,P07,P09,P10,P11,P12"
+        },
+        {
+          "title": "how does our instant pro works",
+          "url": "https://help.fortraders.com/en/articles/11830523-how-does-our-instant-pro-works",
+          "slots": "P01,P02,P02b,P03,P04,P05,P06,P07,P09,P10,P11"
+        },
+        {
+          "title": "for traders ai",
+          "url": "https://help.fortraders.com/en/articles/11847979-for-traders-ai",
+          "slots": "P19"
+        },
+        {
+          "title": "reward policy fast challenge futures",
+          "url": "https://help.fortraders.com/en/articles/11885684-reward-policy-fast-challenge-futures",
+          "slots": "P04,P05,P06"
+        },
+        {
+          "title": "market hours futures accounts",
+          "url": "https://help.fortraders.com/en/articles/11885742-market-hours-futures-accounts",
+          "slots": ""
+        },
+        {
+          "title": "futures trading platform futures accounts",
+          "url": "https://help.fortraders.com/en/articles/11885778-futures-trading-platform-futures-accounts",
+          "slots": "P14"
+        },
+        {
+          "title": "fast account futures",
+          "url": "https://help.fortraders.com/en/articles/11927530-fast-account-futures",
+          "slots": "P20,P01,P03,P05,P06,P09"
+        },
+        {
+          "title": "how does the consistency score work on the fast futures account",
+          "url": "https://help.fortraders.com/en/articles/11928004-how-does-the-consistency-score-work-on-the-fast-futures-account",
+          "slots": "P07"
+        },
+        {
+          "title": "what does balance based max drawdown mean and how is it calculated",
+          "url": "https://help.fortraders.com/en/articles/11992314-what-does-balance-based-max-drawdown-mean-and-how-is-it-calculated",
+          "slots": "P03,P04,P05,P06"
+        },
+        {
+          "title": "what does trailing max drawdown mean and how is it calculated forex crypto",
+          "url": "https://help.fortraders.com/en/articles/11992361-what-does-trailing-max-drawdown-mean-and-how-is-it-calculated-forex-crypto",
+          "slots": "P03,P04,P05,P06"
+        },
+        {
+          "title": "what does trailing max drawdown eod mean and how is it calculated",
+          "url": "https://help.fortraders.com/en/articles/11992386-what-does-trailing-max-drawdown-eod-mean-and-how-is-it-calculated",
+          "slots": "P03,P04,P05,P06"
+        },
+        {
+          "title": "fast static account forex",
+          "url": "https://help.fortraders.com/en/articles/12009861-fast-static-account-forex",
+          "slots": "P20,P01,P03,P04,P05,P06,P09,P10,P11"
+        },
+        {
+          "title": "instant account futures",
+          "url": "https://help.fortraders.com/en/articles/12115321-instant-account-futures",
+          "slots": "P01,P02b,P03,P04,P05,P06,P07,P09"
+        },
+        {
+          "title": "reward policy instant futures",
+          "url": "https://help.fortraders.com/en/articles/12116211-reward-policy-instant-futures",
+          "slots": "P05,P06,P07"
+        },
+        {
+          "title": "fast pro account crypto",
+          "url": "https://help.fortraders.com/en/articles/12292638-fast-pro-account-crypto",
+          "slots": "P20,P01,P03,P05,P06,P07,P09,P10"
+        },
+        {
+          "title": "how the tasks rewards program works",
+          "url": "https://help.fortraders.com/en/articles/12547030-how-the-tasks-rewards-program-works",
+          "slots": ""
+        },
+        {
+          "title": "for traders partner program a comprehensive guide",
+          "url": "https://help.fortraders.com/en/articles/12554414-for-traders-partner-program-a-comprehensive-guide",
+          "slots": ""
+        },
+        {
+          "title": "what is the max allocation",
+          "url": "https://help.fortraders.com/en/articles/13128476-what-is-the-max-allocation",
+          "slots": ""
+        },
+        {
+          "title": "how to withdraw cryptocurrency to your revolut account",
+          "url": "https://help.fortraders.com/en/articles/13450511-how-to-withdraw-cryptocurrency-to-your-revolut-account",
+          "slots": ""
+        },
+        {
+          "title": "fast account forex",
+          "url": "https://help.fortraders.com/en/articles/13459470-fast-account-forex",
+          "slots": "P20,P01,P03,P05,P06,P09,P10,P11"
+        },
+        {
+          "title": "predictions markets competition",
+          "url": "https://help.fortraders.com/en/articles/14006945-predictions-markets-competition",
+          "slots": ""
+        },
+        {
+          "title": "can i sign up or purchase using a company",
+          "url": "https://help.fortraders.com/en/articles/14135212-can-i-sign-up-or-purchase-using-a-company",
+          "slots": "P19"
+        },
+        {
+          "title": "fast pro account futures",
+          "url": "https://help.fortraders.com/en/articles/14470847-fast-pro-account-futures",
+          "slots": "P20,P01,P03,P05,P06,P09"
+        },
+        {
+          "title": "reward policy fast pro account futures",
+          "url": "https://help.fortraders.com/en/articles/14470910-reward-policy-fast-pro-account-futures",
+          "slots": "P02b,P04,P06"
+        },
+        {
+          "title": "new instant account forex",
+          "url": "https://help.fortraders.com/en/articles/14635307-new-instant-account-forex",
+          "slots": "P20,P01,P03,P04,P05,P06,P07,P09,P10,P11,P12"
+        },
+        {
+          "title": "how the drawdown protection works",
+          "url": "https://help.fortraders.com/en/articles/14652456-how-the-drawdown-protection-works",
+          "slots": "P03,P17"
+        },
+        {
+          "title": "introducing the new instant account faster access greater power smarter trading",
+          "url": "https://help.fortraders.com/en/articles/14653542-introducing-the-new-instant-account-faster-access-greater-power-smarter-trading",
+          "slots": ""
+        },
+        {
+          "title": "what is the for traders loyalty program",
+          "url": "https://help.fortraders.com/en/articles/14723121-what-is-the-for-traders-loyalty-program",
+          "slots": "P20,P01,P09"
+        },
+        {
+          "title": "reward policy instant account forex",
+          "url": "https://help.fortraders.com/en/articles/15053571-reward-policy-instant-account-forex",
+          "slots": "P09"
+        },
+        {
+          "title": "we made a huge mistake and 50 000 new traders joined because of it",
+          "url": "https://help.fortraders.com/en/articles/15053802-we-made-a-huge-mistake-and-50-000-new-traders-joined-because-of-it",
+          "slots": "P19"
+        },
+        {
+          "title": "how does daily drawdown work on fast static and how is it calculated",
+          "url": "https://help.fortraders.com/en/articles/15068124-how-does-daily-drawdown-work-on-fast-static-and-how-is-it-calculated",
+          "slots": "P03,P04,P05,P06"
+        },
+        {
+          "title": "account types comparison",
+          "url": "https://help.fortraders.com/en/articles/15208251-account-types-comparison",
+          "slots": "P01"
+        },
+        {
+          "title": "unlock more trading power get 25 off bogo",
+          "url": "https://help.fortraders.com/en/articles/15251035-unlock-more-trading-power-get-25-off-bogo",
+          "slots": ""
+        },
+        {
+          "title": "what is allowed with us",
+          "url": "https://help.fortraders.com/en/articles/15342912-what-is-allowed-with-us",
+          "slots": "P10,P11,P13,P14,P15,P16,P19"
+        },
+        {
+          "title": "what is forbidden with us",
+          "url": "https://help.fortraders.com/en/articles/15343227-what-is-forbidden-with-us",
+          "slots": "P01,P05,P10,P13,P14,P15,P19"
+        },
+        {
+          "title": "pay after pass account forex",
+          "url": "https://help.fortraders.com/en/articles/15359294-pay-after-pass-account-forex",
+          "slots": "P20,P01,P03,P05,P06,P07,P09"
+        },
+        {
+          "title": "how does pay after pass work",
+          "url": "https://help.fortraders.com/en/articles/15359404-how-does-pay-after-pass-work",
+          "slots": "P01,P02,P05,P06,P09"
+        },
+        {
+          "title": "fast account forex",
+          "url": "https://help.fortraders.com/en/articles/15360683-fast-account-forex",
+          "slots": "P20,P01,P03,P05,P06,P09,P10,P11"
+        },
+        {
+          "title": "fast static account forex",
+          "url": "https://help.fortraders.com/en/articles/15376206-fast-static-account-forex",
+          "slots": "P20,P01,P03,P04,P05,P06,P09,P10,P11"
+        },
+        {
+          "title": "classic account forex",
+          "url": "https://help.fortraders.com/en/articles/15378600-classic-account-forex",
+          "slots": "P20,P01,P03,P05,P09,P10"
+        },
+        {
+          "title": "strike account forex",
+          "url": "https://help.fortraders.com/en/articles/15378828-strike-account-forex",
+          "slots": "P20,P01,P03,P05,P09,P10"
+        },
+        {
+          "title": "instant account forex",
+          "url": "https://help.fortraders.com/en/articles/15379105-instant-account-forex",
+          "slots": "P20,P01,P03,P04,P05,P06,P07,P09,P10,P11,P12"
+        },
+        {
+          "title": "instant pro account forex",
+          "url": "https://help.fortraders.com/en/articles/15379390-instant-pro-account-forex",
+          "slots": "P01,P02,P03,P04,P05,P06,P07,P09,P10,P11,P12"
+        },
+        {
+          "title": "fast account crypto",
+          "url": "https://help.fortraders.com/en/articles/15379636-fast-account-crypto",
+          "slots": "P20,P01,P03,P05,P06,P07,P09,P10,P11"
+        },
+        {
+          "title": "what are the leverages",
+          "url": "https://help.fortraders.com/en/articles/15392485-what-are-the-leverages",
+          "slots": ""
+        },
+        {
+          "title": "welcome to for traders",
+          "url": "https://help.fortraders.com/en/articles/8074398-welcome-to-for-traders",
+          "slots": ""
+        },
+        {
+          "title": "will i receive a bonus in the same amount as the challenge fee",
+          "url": "https://help.fortraders.com/en/articles/8074488-will-i-receive-a-bonus-in-the-same-amount-as-the-challenge-fee",
+          "slots": ""
+        },
+        {
+          "title": "what is daily net cumulative p l",
+          "url": "https://help.fortraders.com/en/articles/8075152-what-is-daily-net-cumulative-p-l",
+          "slots": "P03"
+        },
+        {
+          "title": "what is the server time",
+          "url": "https://help.fortraders.com/en/articles/8075307-what-is-the-server-time",
+          "slots": "P01"
+        },
+        {
+          "title": "what are the leverages",
+          "url": "https://help.fortraders.com/en/articles/8075310-what-are-the-leverages",
+          "slots": ""
+        },
+        {
+          "title": "what s the commission at for traders",
+          "url": "https://help.fortraders.com/en/articles/8075316-what-s-the-commission-at-for-traders",
+          "slots": "P19"
+        },
+        {
+          "title": "what instruments do you offer",
+          "url": "https://help.fortraders.com/en/articles/8075321-what-instruments-do-you-offer",
+          "slots": "P14"
+        },
+        {
+          "title": "what is the spread in trading",
+          "url": "https://help.fortraders.com/en/articles/8075328-what-is-the-spread-in-trading",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "do you have mandatory stop loss",
+          "url": "https://help.fortraders.com/en/articles/8075333-do-you-have-mandatory-stop-loss",
+          "slots": "P09,P14,P16,P19"
+        },
+        {
+          "title": "what platforms can i choose for trading",
+          "url": "https://help.fortraders.com/en/articles/8075336-what-platforms-can-i-choose-for-trading",
+          "slots": ""
+        },
+        {
+          "title": "how long does it take to move to the master account",
+          "url": "https://help.fortraders.com/en/articles/8075366-how-long-does-it-take-to-move-to-the-master-account",
+          "slots": "P09"
+        },
+        {
+          "title": "what is kyc and what documents will i need for kyc",
+          "url": "https://help.fortraders.com/en/articles/8075373-what-is-kyc-and-what-documents-will-i-need-for-kyc",
+          "slots": ""
+        },
+        {
+          "title": "how are taxes handled",
+          "url": "https://help.fortraders.com/en/articles/8075393-how-are-taxes-handled",
+          "slots": ""
+        },
+        {
+          "title": "new withdrawal system how it works",
+          "url": "https://help.fortraders.com/en/articles/8075410-new-withdrawal-system-how-it-works",
+          "slots": ""
+        },
+        {
+          "title": "what slippage is and how could impact your trading",
+          "url": "https://help.fortraders.com/en/articles/8159905-what-slippage-is-and-how-could-impact-your-trading",
+          "slots": "P19"
+        },
+        {
+          "title": "are you regulated",
+          "url": "https://help.fortraders.com/en/articles/9259190-are-you-regulated",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "what capital will i trade with if i buy a challenge",
+          "url": "https://help.fortraders.com/en/articles/9259320-what-capital-will-i-trade-with-if-i-buy-a-challenge",
+          "slots": ""
+        },
+        {
+          "title": "how do i buy a challenge",
+          "url": "https://help.fortraders.com/en/articles/9259383-how-do-i-buy-a-challenge",
+          "slots": ""
+        },
+        {
+          "title": "what is a trading challenge",
+          "url": "https://help.fortraders.com/en/articles/9259414-what-is-a-trading-challenge",
+          "slots": "P19"
+        },
+        {
+          "title": "list of restricted countries",
+          "url": "https://help.fortraders.com/en/articles/9259446-list-of-restricted-countries",
+          "slots": ""
+        },
+        {
+          "title": "what does the daily drawdown mean and how is it calculated",
+          "url": "https://help.fortraders.com/en/articles/9259647-what-does-the-daily-drawdown-mean-and-how-is-it-calculated",
+          "slots": "P03,P04,P05,P06"
+        },
+        {
+          "title": "what does the profit target mean and how is it calculated",
+          "url": "https://help.fortraders.com/en/articles/9259681-what-does-the-profit-target-mean-and-how-is-it-calculated",
+          "slots": "P01"
+        },
+        {
+          "title": "what are the minimum profitable days",
+          "url": "https://help.fortraders.com/en/articles/9259693-what-are-the-minimum-profitable-days",
+          "slots": ""
+        },
+        {
+          "title": "what happens if i break the rules",
+          "url": "https://help.fortraders.com/en/articles/9259880-what-happens-if-i-break-the-rules",
+          "slots": "P19"
+        },
+        {
+          "title": "do you have any inactivity rule",
+          "url": "https://help.fortraders.com/en/articles/9259881-do-you-have-any-inactivity-rule",
+          "slots": "P09"
+        },
+        {
+          "title": "how our risk department works",
+          "url": "https://help.fortraders.com/en/articles/9263722-how-our-risk-department-works",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "can i combine my accounts into one",
+          "url": "https://help.fortraders.com/en/articles/9263829-can-i-combine-my-accounts-into-one",
+          "slots": ""
+        },
+        {
+          "title": "do you copy trades to live funds",
+          "url": "https://help.fortraders.com/en/articles/9263833-do-you-copy-trades-to-live-funds",
+          "slots": "P09,P14,P19"
+        },
+        {
+          "title": "how to pass your challenge",
+          "url": "https://help.fortraders.com/en/articles/9277915-how-to-pass-your-challenge",
+          "slots": "P20,P01,P02,P03,P05"
+        },
+        {
+          "title": "where can i find my login credentials",
+          "url": "https://help.fortraders.com/en/articles/9319068-where-can-i-find-my-login-credentials",
+          "slots": "P01"
+        },
+        {
+          "title": "how to setup the trading platform",
+          "url": "https://help.fortraders.com/en/articles/9324368-how-to-setup-the-trading-platform",
+          "slots": "P09"
+        },
+        {
+          "title": "how does our technical infrastructure work",
+          "url": "https://help.fortraders.com/en/articles/9330477-how-does-our-technical-infrastructure-work",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "how to log in to tradelocker",
+          "url": "https://help.fortraders.com/en/articles/9819181-how-to-log-in-to-tradelocker",
+          "slots": ""
+        },
+        {
+          "title": "get your reward in 48 hours or receive 100 profit split",
+          "url": "https://help.fortraders.com/en/articles/9937161-get-your-reward-in-48-hours-or-receive-100-profit-split",
+          "slots": "P11"
+        },
+        {
+          "title": "cual es mi comision como afiliado",
+          "url": "https://help.fortraders.com/es/articles/10006011-cual-es-mi-comision-como-afiliado",
+          "slots": ""
+        },
+        {
+          "title": "como obtengo mi bono mensual",
+          "url": "https://help.fortraders.com/es/articles/10006012-como-obtengo-mi-bono-mensual",
+          "slots": ""
+        },
+        {
+          "title": "gano comision por mis propias compras",
+          "url": "https://help.fortraders.com/es/articles/10006016-gano-comision-por-mis-propias-compras",
+          "slots": ""
+        },
+        {
+          "title": "como me convierto en socio afiliado",
+          "url": "https://help.fortraders.com/es/articles/10006020-como-me-convierto-en-socio-afiliado",
+          "slots": ""
+        },
+        {
+          "title": "recibire un codigo de afiliado o un enlace",
+          "url": "https://help.fortraders.com/es/articles/10006021-recibire-un-codigo-de-afiliado-o-un-enlace",
+          "slots": ""
+        },
+        {
+          "title": "cual es el pago minimo de afiliado que puedo solicitar",
+          "url": "https://help.fortraders.com/es/articles/10006025-cual-es-el-pago-minimo-de-afiliado-que-puedo-solicitar",
+          "slots": ""
+        },
+        {
+          "title": "cuanto tiempo tarda en recibirse mi comision de afiliado",
+          "url": "https://help.fortraders.com/es/articles/10006028-cuanto-tiempo-tarda-en-recibirse-mi-comision-de-afiliado",
+          "slots": ""
+        },
+        {
+          "title": "que esta permitido",
+          "url": "https://help.fortraders.com/es/articles/10006059-que-esta-permitido",
+          "slots": ""
+        },
+        {
+          "title": "que esta prohibido",
+          "url": "https://help.fortraders.com/es/articles/10006063-que-esta-prohibido",
+          "slots": "P20"
+        },
+        {
+          "title": "torneos for traders",
+          "url": "https://help.fortraders.com/es/articles/10066978-torneos-for-traders",
+          "slots": "P19"
+        },
+        {
+          "title": "classic account forex",
+          "url": "https://help.fortraders.com/es/articles/10401739-classic-account-forex",
+          "slots": "P20,P13,P19"
+        },
+        {
+          "title": "two step challenge pro forex",
+          "url": "https://help.fortraders.com/es/articles/10401845-two-step-challenge-pro-forex",
+          "slots": "P20,P13,P19"
+        },
+        {
+          "title": "instant account forex",
+          "url": "https://help.fortraders.com/es/articles/10429449-instant-account-forex",
+          "slots": "P03,P05,P13,P19"
+        },
+        {
+          "title": "como funciona la cuenta instant",
+          "url": "https://help.fortraders.com/es/articles/10429769-como-funciona-la-cuenta-instant",
+          "slots": "P05,P13,P19"
+        },
+        {
+          "title": "como funciona la regla de consistencia en nuestra instant account",
+          "url": "https://help.fortraders.com/es/articles/10442201-como-funciona-la-regla-de-consistencia-en-nuestra-instant-account",
+          "slots": "P07"
+        },
+        {
+          "title": "solicitudes de reactivacion de cuenta",
+          "url": "https://help.fortraders.com/es/articles/11052608-solicitudes-de-reactivacion-de-cuenta",
+          "slots": ""
+        },
+        {
+          "title": "puedo solicitar un cambio de plataforma",
+          "url": "https://help.fortraders.com/es/articles/11053689-puedo-solicitar-un-cambio-de-plataforma",
+          "slots": ""
+        },
+        {
+          "title": "cual es su promocion o codigo de descuento actual",
+          "url": "https://help.fortraders.com/es/articles/11053956-cual-es-su-promocion-o-codigo-de-descuento-actual",
+          "slots": ""
+        },
+        {
+          "title": "pago en cripto perdido",
+          "url": "https://help.fortraders.com/es/articles/11055213-pago-en-cripto-perdido",
+          "slots": ""
+        },
+        {
+          "title": "for traders promocion",
+          "url": "https://help.fortraders.com/es/articles/11079453-for-traders-promocion",
+          "slots": ""
+        },
+        {
+          "title": "las recompensas se pagan cada 14 dias naturales",
+          "url": "https://help.fortraders.com/es/articles/11087568-las-recompensas-se-pagan-cada-14-dias-naturales",
+          "slots": ""
+        },
+        {
+          "title": "strike account forex",
+          "url": "https://help.fortraders.com/es/articles/11401568-strike-account-forex",
+          "slots": "P20,P01,P05,P09,P10,P13,P19"
+        },
+        {
+          "title": "como funciona el consistency score en nuestra cuenta crypto fast pro",
+          "url": "https://help.fortraders.com/es/articles/11402218-como-funciona-el-consistency-score-en-nuestra-cuenta-crypto-fast-pro",
+          "slots": "P07"
+        },
+        {
+          "title": "por que no puedo comprar el reto de dos fases pro",
+          "url": "https://help.fortraders.com/es/articles/11537228-por-que-no-puedo-comprar-el-reto-de-dos-fases-pro",
+          "slots": "P20"
+        },
+        {
+          "title": "llamadas de verificacion todo lo que necesitas saber",
+          "url": "https://help.fortraders.com/es/articles/11646134-llamadas-de-verificacion-todo-lo-que-necesitas-saber",
+          "slots": ""
+        },
+        {
+          "title": "fast account crypto",
+          "url": "https://help.fortraders.com/es/articles/11737027-fast-account-crypto",
+          "slots": "P20,P06"
+        },
+        {
+          "title": "instant account crypto",
+          "url": "https://help.fortraders.com/es/articles/11737088-instant-account-crypto",
+          "slots": "P06"
+        },
+        {
+          "title": "que criptoactivos ofrecen para operar",
+          "url": "https://help.fortraders.com/es/articles/11737598-que-criptoactivos-ofrecen-para-operar",
+          "slots": ""
+        },
+        {
+          "title": "instant pro account forex",
+          "url": "https://help.fortraders.com/es/articles/11830305-instant-pro-account-forex",
+          "slots": "P06"
+        },
+        {
+          "title": "como funciona nuestro instant pro",
+          "url": "https://help.fortraders.com/es/articles/11830523-como-funciona-nuestro-instant-pro",
+          "slots": "P05"
+        },
+        {
+          "title": "for traders ai",
+          "url": "https://help.fortraders.com/es/articles/11847979-for-traders-ai",
+          "slots": ""
+        },
+        {
+          "title": "reward policy fast challenge futures",
+          "url": "https://help.fortraders.com/es/articles/11885684-reward-policy-fast-challenge-futures",
+          "slots": "P06"
+        },
+        {
+          "title": "horario de mercado cuentas de futuros",
+          "url": "https://help.fortraders.com/es/articles/11885742-horario-de-mercado-cuentas-de-futuros",
+          "slots": ""
+        },
+        {
+          "title": "plataforma de trading de futuros cuentas de futuros",
+          "url": "https://help.fortraders.com/es/articles/11885778-plataforma-de-trading-de-futuros-cuentas-de-futuros",
+          "slots": ""
+        },
+        {
+          "title": "fast account futures",
+          "url": "https://help.fortraders.com/es/articles/11927530-fast-account-futures",
+          "slots": "P20,P05,P06"
+        },
+        {
+          "title": "como funciona la regla de consistencia consistency score en la cuenta fast futures",
+          "url": "https://help.fortraders.com/es/articles/11928004-como-funciona-la-regla-de-consistencia-consistency-score-en-la-cuenta-fast-futures",
+          "slots": "P01,P07"
+        },
+        {
+          "title": "que significa el max drawdown basado en el balance y como se calcula",
+          "url": "https://help.fortraders.com/es/articles/11992314-que-significa-el-max-drawdown-basado-en-el-balance-y-como-se-calcula",
+          "slots": "P03,P05,P06"
+        },
+        {
+          "title": "que significa trailing max drawdown y como se calcula forex crypto",
+          "url": "https://help.fortraders.com/es/articles/11992361-que-significa-trailing-max-drawdown-y-como-se-calcula-forex-crypto",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "que significa trailing max drawdown eod y como se calcula",
+          "url": "https://help.fortraders.com/es/articles/11992386-que-significa-trailing-max-drawdown-eod-y-como-se-calcula",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "fast static account forex",
+          "url": "https://help.fortraders.com/es/articles/12009861-fast-static-account-forex",
+          "slots": "P20,P05"
+        },
+        {
+          "title": "instant account futures",
+          "url": "https://help.fortraders.com/es/articles/12115321-instant-account-futures",
+          "slots": "P06"
+        },
+        {
+          "title": "reward policy instant futures",
+          "url": "https://help.fortraders.com/es/articles/12116211-reward-policy-instant-futures",
+          "slots": "P06"
+        },
+        {
+          "title": "fast pro account crypto",
+          "url": "https://help.fortraders.com/es/articles/12292638-fast-pro-account-crypto",
+          "slots": "P20,P05,P07"
+        },
+        {
+          "title": "como funciona el programa de tareas y recompensas",
+          "url": "https://help.fortraders.com/es/articles/12547030-como-funciona-el-programa-de-tareas-y-recompensas",
+          "slots": ""
+        },
+        {
+          "title": "que es la asignacion maxima",
+          "url": "https://help.fortraders.com/es/articles/13128476-que-es-la-asignacion-maxima",
+          "slots": ""
+        },
+        {
+          "title": "como retirar criptomonedas a tu cuenta de revolut",
+          "url": "https://help.fortraders.com/es/articles/13450511-como-retirar-criptomonedas-a-tu-cuenta-de-revolut",
+          "slots": ""
+        },
+        {
+          "title": "fast account forex",
+          "url": "https://help.fortraders.com/es/articles/13459470-fast-account-forex",
+          "slots": "P20,P13,P19"
+        },
+        {
+          "title": "predictions markets",
+          "url": "https://help.fortraders.com/es/articles/14006945-predictions-markets",
+          "slots": ""
+        },
+        {
+          "title": "puedo registrarme o comprar como empresa",
+          "url": "https://help.fortraders.com/es/articles/14135212-puedo-registrarme-o-comprar-como-empresa",
+          "slots": ""
+        },
+        {
+          "title": "fast pro account futures",
+          "url": "https://help.fortraders.com/es/articles/14470847-fast-pro-account-futures",
+          "slots": "P20,P06"
+        },
+        {
+          "title": "reward policy fast pro account futures",
+          "url": "https://help.fortraders.com/es/articles/14470910-reward-policy-fast-pro-account-futures",
+          "slots": "P06"
+        },
+        {
+          "title": "nuevo instant account forex",
+          "url": "https://help.fortraders.com/es/articles/14635307-nuevo-instant-account-forex",
+          "slots": "P01,P06,P07"
+        },
+        {
+          "title": "como funciona la proteccion de drawdown",
+          "url": "https://help.fortraders.com/es/articles/14652456-como-funciona-la-proteccion-de-drawdown",
+          "slots": "P03,P06"
+        },
+        {
+          "title": "presentamos la cuenta instantanea acceso mas rapido mayor potencia trading mas inteligente",
+          "url": "https://help.fortraders.com/es/articles/14653542-presentamos-la-cuenta-instantanea-acceso-mas-rapido-mayor-potencia-trading-mas-inteligente",
+          "slots": ""
+        },
+        {
+          "title": "que es el loyalty program de for traders",
+          "url": "https://help.fortraders.com/es/articles/14723121-que-es-el-loyalty-program-de-for-traders",
+          "slots": "P20"
+        },
+        {
+          "title": "reward policy cuenta instantanea forex",
+          "url": "https://help.fortraders.com/es/articles/15053571-reward-policy-cuenta-instantanea-forex",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "cometimos un enorme error y mas de 50 000 nuevos traders se unieron por ello",
+          "url": "https://help.fortraders.com/es/articles/15053802-cometimos-un-enorme-error-y-mas-de-50-000-nuevos-traders-se-unieron-por-ello",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "como funciona el daily drawdown en fast static y como se calcula",
+          "url": "https://help.fortraders.com/es/articles/15068124-como-funciona-el-daily-drawdown-en-fast-static-y-como-se-calcula",
+          "slots": "P03,P05,P06"
+        },
+        {
+          "title": "comparacion de tipos de cuenta",
+          "url": "https://help.fortraders.com/es/articles/15208251-comparacion-de-tipos-de-cuenta",
+          "slots": ""
+        },
+        {
+          "title": "desbloquea mas poder de trading obten 25 de descuento bogo",
+          "url": "https://help.fortraders.com/es/articles/15251035-desbloquea-mas-poder-de-trading-obten-25-de-descuento-bogo",
+          "slots": ""
+        },
+        {
+          "title": "fast account forex",
+          "url": "https://help.fortraders.com/es/articles/15360683-fast-account-forex",
+          "slots": "P20"
+        },
+        {
+          "title": "fast static account forex",
+          "url": "https://help.fortraders.com/es/articles/15376206-fast-static-account-forex",
+          "slots": "P20,P05"
+        },
+        {
+          "title": "classic account forex",
+          "url": "https://help.fortraders.com/es/articles/15378600-classic-account-forex",
+          "slots": "P20"
+        },
+        {
+          "title": "strike account forex",
+          "url": "https://help.fortraders.com/es/articles/15378828-strike-account-forex",
+          "slots": "P20,P01,P05,P09,P10"
+        },
+        {
+          "title": "instant account forex",
+          "url": "https://help.fortraders.com/es/articles/15379105-instant-account-forex",
+          "slots": "P01,P06,P07"
+        },
+        {
+          "title": "instant pro account forex",
+          "url": "https://help.fortraders.com/es/articles/15379390-instant-pro-account-forex",
+          "slots": "P06"
+        },
+        {
+          "title": "fast account crypto",
+          "url": "https://help.fortraders.com/es/articles/15379636-fast-account-crypto",
+          "slots": "P20,P06"
+        },
+        {
+          "title": "cuales son los apalancamientos",
+          "url": "https://help.fortraders.com/es/articles/15392485-cuales-son-los-apalancamientos",
+          "slots": ""
+        },
+        {
+          "title": "bienvenido a for traders",
+          "url": "https://help.fortraders.com/es/articles/8074398-bienvenido-a-for-traders",
+          "slots": ""
+        },
+        {
+          "title": "recibire un bono por el mismo monto que la tarifa del desafio",
+          "url": "https://help.fortraders.com/es/articles/8074488-recibire-un-bono-por-el-mismo-monto-que-la-tarifa-del-desafio",
+          "slots": ""
+        },
+        {
+          "title": "que es el p l neto acumulado diario",
+          "url": "https://help.fortraders.com/es/articles/8075152-que-es-el-p-l-neto-acumulado-diario",
+          "slots": ""
+        },
+        {
+          "title": "cual es el horario del servidor",
+          "url": "https://help.fortraders.com/es/articles/8075307-cual-es-el-horario-del-servidor",
+          "slots": ""
+        },
+        {
+          "title": "cuales son los apalancamientos",
+          "url": "https://help.fortraders.com/es/articles/8075310-cuales-son-los-apalancamientos",
+          "slots": ""
+        },
+        {
+          "title": "cual es la comision en for traders",
+          "url": "https://help.fortraders.com/es/articles/8075316-cual-es-la-comision-en-for-traders",
+          "slots": ""
+        },
+        {
+          "title": "que instrumentos ofrecemos",
+          "url": "https://help.fortraders.com/es/articles/8075321-que-instrumentos-ofrecemos",
+          "slots": ""
+        },
+        {
+          "title": "que es el spread en el trading",
+          "url": "https://help.fortraders.com/es/articles/8075328-que-es-el-spread-en-el-trading",
+          "slots": "P15"
+        },
+        {
+          "title": "tienen stop loss obligatorio",
+          "url": "https://help.fortraders.com/es/articles/8075333-tienen-stop-loss-obligatorio",
+          "slots": "P16"
+        },
+        {
+          "title": "que plataformas puedo elegir para operar",
+          "url": "https://help.fortraders.com/es/articles/8075336-que-plataformas-puedo-elegir-para-operar",
+          "slots": ""
+        },
+        {
+          "title": "cuanto tiempo se tarda en pasar a la cuenta for traders etapa de fondos",
+          "url": "https://help.fortraders.com/es/articles/8075366-cuanto-tiempo-se-tarda-en-pasar-a-la-cuenta-for-traders-etapa-de-fondos",
+          "slots": ""
+        },
+        {
+          "title": "que es kyc y que documentos necesitare para kyc",
+          "url": "https://help.fortraders.com/es/articles/8075373-que-es-kyc-y-que-documentos-necesitare-para-kyc",
+          "slots": ""
+        },
+        {
+          "title": "como se manejan los impuestos",
+          "url": "https://help.fortraders.com/es/articles/8075393-como-se-manejan-los-impuestos",
+          "slots": "P20"
+        },
+        {
+          "title": "nuevo sistema de retiros como funciona",
+          "url": "https://help.fortraders.com/es/articles/8075410-nuevo-sistema-de-retiros-como-funciona",
+          "slots": ""
+        },
+        {
+          "title": "que es el deslizamiento y como podria afectar tu trading",
+          "url": "https://help.fortraders.com/es/articles/8159905-que-es-el-deslizamiento-y-como-podria-afectar-tu-trading",
+          "slots": ""
+        },
+        {
+          "title": "estan regulados",
+          "url": "https://help.fortraders.com/es/articles/9259190-estan-regulados",
+          "slots": ""
+        },
+        {
+          "title": "con que capital operare si compro un desafio",
+          "url": "https://help.fortraders.com/es/articles/9259320-con-que-capital-operare-si-compro-un-desafio",
+          "slots": ""
+        },
+        {
+          "title": "como compro un desafio",
+          "url": "https://help.fortraders.com/es/articles/9259383-como-compro-un-desafio",
+          "slots": ""
+        },
+        {
+          "title": "que es un desafio de trading",
+          "url": "https://help.fortraders.com/es/articles/9259414-que-es-un-desafio-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "lista de paises restringidos",
+          "url": "https://help.fortraders.com/es/articles/9259446-lista-de-paises-restringidos",
+          "slots": ""
+        },
+        {
+          "title": "que es el drawdown diario y como se calcula",
+          "url": "https://help.fortraders.com/es/articles/9259647-que-es-el-drawdown-diario-y-como-se-calcula",
+          "slots": "P03,P05,P06"
+        },
+        {
+          "title": "que significa el profit target y como se calcula",
+          "url": "https://help.fortraders.com/es/articles/9259681-que-significa-el-profit-target-y-como-se-calcula",
+          "slots": "P01"
+        },
+        {
+          "title": "que son los dias rentables minimos",
+          "url": "https://help.fortraders.com/es/articles/9259693-que-son-los-dias-rentables-minimos",
+          "slots": ""
+        },
+        {
+          "title": "que sucede si rompo las reglas",
+          "url": "https://help.fortraders.com/es/articles/9259880-que-sucede-si-rompo-las-reglas",
+          "slots": ""
+        },
+        {
+          "title": "tienen alguna regla de inactividad",
+          "url": "https://help.fortraders.com/es/articles/9259881-tienen-alguna-regla-de-inactividad",
+          "slots": ""
+        },
+        {
+          "title": "como funciona nuestro departamento de riesgos",
+          "url": "https://help.fortraders.com/es/articles/9263722-como-funciona-nuestro-departamento-de-riesgos",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "puedo combinar mis cuentas en una sola",
+          "url": "https://help.fortraders.com/es/articles/9263829-puedo-combinar-mis-cuentas-en-una-sola",
+          "slots": ""
+        },
+        {
+          "title": "copian las operaciones a fondos reales",
+          "url": "https://help.fortraders.com/es/articles/9263833-copian-las-operaciones-a-fondos-reales",
+          "slots": ""
+        },
+        {
+          "title": "como pasar tu desafio",
+          "url": "https://help.fortraders.com/es/articles/9277915-como-pasar-tu-desafio",
+          "slots": ""
+        },
+        {
+          "title": "donde puedo encontrar mis credenciales de acceso",
+          "url": "https://help.fortraders.com/es/articles/9319068-donde-puedo-encontrar-mis-credenciales-de-acceso",
+          "slots": "P01"
+        },
+        {
+          "title": "como funciona nuestra infraestructura tecnica",
+          "url": "https://help.fortraders.com/es/articles/9330477-como-funciona-nuestra-infraestructura-tecnica",
+          "slots": ""
+        },
+        {
+          "title": "como iniciar sesion en tradelocker",
+          "url": "https://help.fortraders.com/es/articles/9819181-como-iniciar-sesion-en-tradelocker",
+          "slots": ""
+        },
+        {
+          "title": "recibe tu pago en 48 horas o obten el 100 del reparto de ganancias",
+          "url": "https://help.fortraders.com/es/articles/9937161-recibe-tu-pago-en-48-horas-o-obten-el-100-del-reparto-de-ganancias",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P17,P19",
+    "missing": "P18",
+    "note": "20/21（本文補強後）"
+  }
+}

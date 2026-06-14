@@ -1,0 +1,128 @@
+{
+  "firm": "fundingpips",
+  "help_base_url": "https://help.fundingpips.com/hc/en-us",
+  "platform": "zendesk",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "ok",
+  "fetch_note": "Zendesk articles API（全16記事）から実取得。P-スロットは各記事本文のキーワード検索で確定。P08(利益上限)は全記事ヒット0=利益上限ルール自体が無く早見表値は「なし」（出典=モデル記事の不記載）。",
+  "collections": [
+    {
+      "title": "Models（プラン別ルール早見表）",
+      "note": "各モデル記事に Steps/利益目標/損失/日数/タイプ/時間制限/最大ロット等の早見表が載る。P08は全社cap無し。",
+      "articles": [
+        {
+          "title": "FundingPips Zero",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34502157694865-FundingPips-Zero",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P18"
+        },
+        {
+          "title": "1 Step Model",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34501697434385-1-Step-Model",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P18"
+        },
+        {
+          "title": "2 Step Standard",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34501809112081-2-Step-Standard",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P18"
+        },
+        {
+          "title": "2 Step Pro Model",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34502027344017-2-Step-Pro-Model",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P18"
+        },
+        {
+          "title": "1K Instant Giveaway",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/46800669451153-1K-Instant-Giveaway",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P18"
+        }
+      ]
+    },
+    {
+      "title": "Policies & Rules（横断ルール）",
+      "articles": [
+        {
+          "title": "News Trading & Weekend Holding",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34504137479441-News-Trading-Weekend-Holding",
+          "slots": "P10,P11,P12",
+          "note": "ニュース/週末/オーバーナイト"
+        },
+        {
+          "title": "Trading Conduct and Security Standards",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34505029138449-Trading-Conduct-and-Security-Standards",
+          "slots": "P13,P14,P15,P19",
+          "note": "EA/コピー/スキャル/禁止行為"
+        },
+        {
+          "title": "Responsible Trading Policy",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/47328410434065-Responsible-Trading-Policy",
+          "slots": "P16,P17",
+          "note": "ストップロス/リスクルール"
+        }
+      ]
+    },
+    {
+      "title": "Rewards / Payout",
+      "articles": [
+        {
+          "title": "Your Rewards, Your Way",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34504564970385-Your-Rewards-Your-Way",
+          "slots": "P02b",
+          "note": "出金最低取引日数（F19/F20リワードも）"
+        }
+      ]
+    },
+    {
+      "title": "その他（P-スロット非該当・参考）",
+      "articles": [
+        {
+          "title": "Get Started",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/44390730743825-Get-Started",
+          "slots": ""
+        },
+        {
+          "title": "Free Trial",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/45363484760209-Free-Trial",
+          "slots": ""
+        },
+        {
+          "title": "Traders Toolkit",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/43468639481105-Traders-Toolkit",
+          "slots": ""
+        },
+        {
+          "title": "Understanding Trading Mechanics",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/44559256768529-Understanding-Trading-Mechanics",
+          "slots": ""
+        },
+        {
+          "title": "Become an Affiliate",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34447107645841-Become-an-Affiliate",
+          "slots": ""
+        },
+        {
+          "title": "Prime Account",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34447308895889-Prime-Account",
+          "slots": ""
+        },
+        {
+          "title": "Level Up Your Trading",
+          "url": "https://help.fundingpips.com/hc/en-us/articles/34447233911953-Level-Up-Your-Trading",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [
+    {
+      "title": "Terms & Conditions",
+      "url": "https://www.fundingpips.com/terms-and-conditions",
+      "slots": "",
+      "note": "最終確認用の補助"
+    }
+  ],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19",
+    "missing": "",
+    "note": "21/21。全16記事の本文検索で確定。"
+  }
+}

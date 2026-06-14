@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prop Firm Database</title>
+<!--
+  ============================================================================
+  Firm Dashboard  —  Prop Firm 制作の管制塔（1社編集は page-maker 側）
+  ----------------------------------------------------------------------------
+  設計方針（重要）:
+   1. config 駆動 … STATUS_DEFS / LAMP_DEFS / LINK_DEFS / COLUMNS / THRESHOLDS /
+      FEATURE_INDEX を編集するだけで挙動が変わる。本体ロジック(render系)は無改修。
+   2. 機能ID(FD-xx) … 各機能に固定ID。コメント・会話で「FD-06が…」と一意に指せる。
+      画面右上「📖 機能目次」は FEATURE_INDEX から自動生成（手書き二重管理しない）。
+   3. データ源 … localhost:8765 の agent.py 経由。
+      GET /api/firms  … 一覧＋生計測値
+      GET/POST /api/progress … 進捗の読み書き(_work/progress.json)
+  ============================================================================
+-->
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --border:#2a2f3a;
+    --text:#e6e8ec; --dim:#8b93a3;
+    --gray:#6b7280; --orange:#f0915a; --yellow:#f4c152; --blue:#5aa9ff;
+    --green:#3ecf8e; --purple:#a78bfa; --purpleD:#7c5cff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Segoe UI",-apple-system,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+    font-size:14px;line-height:1.5}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 24px 60px}
+  a{color:inherit}
+
+  header{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  header h1{font-size:1.25rem;margin:0;font-weight:700;letter-spacing:.02em}
+  .spacer{flex:1}
+  .btn-ghost{background:var(--panel2);border:1px solid var(--border);color:var(--dim);
+    border-radius:8px;padding:7px 12px;font-size:.76rem;cursor:pointer;font-weight:600}
+  .btn-ghost:hover{color:var(--purple);border-color:var(--purple)}
+  .sub{color:var(--dim);font-size:.78rem;margin:0 0 18px}
+
+  .summary{display:grid;gap:10px;margin-bottom:18px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;
+    padding:12px 14px;text-align:center;cursor:pointer}
+  .card:hover{border-color:var(--purpleD)}
+  .card.active{outline:2px solid var(--purpleD)}
+  .card .n{font-size:1.5rem;font-weight:700}
+  .card .l{font-size:.66rem;color:var(--dim);margin-top:2px}
+
+  .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .toolbar input[type=text]{flex:1;min-width:200px;background:var(--panel2);
+    border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-size:.85rem}
+  .toolbar input::placeholder{color:var(--dim)}
+
+  .tbl{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .row{display:grid;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)}
+  .row.head{background:var(--panel2);color:var(--dim);font-size:.66rem;
+    letter-spacing:.05em;text-transform:uppercase;font-weight:700}
+  .row:last-child{border-bottom:none}
+  .row:not(.head):hover{background:var(--panel2)}
+  .fname{font-weight:600}
+  .fslug{color:var(--dim);font-size:.7rem;font-family:Consolas,monospace}
+  .center{text-align:center}
+  .dim{color:var(--dim)}
+
+  .lamps{display:flex;gap:6px}
+  .lamp{display:flex;flex-direction:column;align-items:center;gap:3px}
+  .dot{width:13px;height:13px;border-radius:50%;background:#262b36;border:1px solid #333a47;transition:.2s}
+  .dot.on{border-color:transparent}
+  .lamp .t{font-size:.56rem;color:var(--dim)}
+
+  select.status{appearance:none;border:1px solid var(--border);border-radius:20px;
+    padding:4px 26px 4px 12px;font-size:.72rem;font-weight:700;cursor:pointer;
+    background-color:var(--panel2);
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3l4 4 4-4' stroke='%238b93a3' stroke-width='1.5' fill='none'/></svg>");
+    background-repeat:no-repeat;background-position:right 9px center}
+
+  .links{display:flex;gap:6px;flex-wrap:wrap}
+  .links a{font-size:.66rem;color:var(--dim);text-decoration:none;
+    border:1px solid var(--border);border-radius:6px;padding:2px 8px}
+  .links a:hover{color:var(--purple);border-color:var(--purple)}
+  .links a.off{opacity:.32;pointer-events:none}
+  .site{text-decoration:none;font-size:.95rem}
+  .site.off{opacity:.28;cursor:default}
+
+  .edit{background:var(--purpleD);color:#fff;border:none;border-radius:8px;
+    padding:6px 0;font-size:.72rem;font-weight:700;cursor:pointer;width:100%}
+  .edit:hover{background:var(--purple)}
+
+  .legend{display:flex;gap:18px;margin-top:10px;font-size:.72rem;color:var(--dim);flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend .d{width:11px;height:11px;border-radius:50%}
+
+  .state{padding:40px;text-align:center;color:var(--dim);font-size:.85rem}
+  .state.err{color:var(--orange)}
+
+  /* 機能目次 モーダル（FD-09） */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;
+    align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow:auto}
+  .overlay.show{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;
+    max-width:760px;width:100%;padding:22px 26px}
+  .modal h2{margin:0 0 4px;font-size:1.05rem}
+  .modal .mh{color:var(--dim);font-size:.76rem;margin-bottom:16px}
+  .modal .close{float:right;cursor:pointer;color:var(--dim);font-size:1.2rem;line-height:1}
+  .toc-group{margin-bottom:16px}
+  .toc-group h3{font-size:.78rem;color:var(--purple);margin:0 0 6px;
+    border-bottom:1px solid var(--border);padding-bottom:4px;letter-spacing:.03em}
+  .toc-item{display:grid;grid-template-columns:64px 1fr 34px;gap:10px;padding:4px 0;font-size:.8rem;align-items:start}
+  .toc-item .id{font-family:Consolas,monospace;color:var(--blue);font-weight:700}
+  .toc-item .nm b{font-weight:600}
+  .toc-item .nm span{color:var(--dim);font-size:.74rem}
+  .toc-copy{background:var(--panel2);border:1px solid var(--border);color:var(--dim);
+    border-radius:6px;padding:2px 0;font-size:.72rem;cursor:pointer;width:30px;justify-self:end}
+  .toc-copy:hover{color:var(--purple);border-color:var(--purple)}
+  .toc-copy.done{color:var(--green);border-color:var(--green)}
+  .toc-tools{display:flex;gap:8px;margin-bottom:14px}
+  .toc-tools button{background:var(--panel2);border:1px solid var(--border);color:var(--dim);
+    border-radius:7px;padding:5px 11px;font-size:.74rem;cursor:pointer;font-weight:600}
+  .toc-tools button:hover{color:var(--purple);border-color:var(--purple)}
+
+  /* 収集コックピット（FD-11〜15） */
+  .collect-btn{background:var(--panel2);border:1px solid var(--border);color:var(--dim);
+    border-radius:7px;padding:3px 8px;font-size:.7rem;cursor:pointer;font-weight:700;white-space:nowrap}
+  .collect-btn:hover{color:var(--purple);border-color:var(--purple)}
+  .collect-btn.open{color:#fff;background:var(--purpleD);border-color:var(--purpleD)}
+  .cov{font-size:.6rem;opacity:.8;margin-left:4px}
+  /* 一覧の充填バー（FD-13/16 を開かず可視化） */
+  .ccell{display:flex;flex-direction:column;gap:3px;align-items:stretch}
+  .cbar{display:flex;align-items:center;gap:5px;font-size:.56rem}
+  .cbar .lbl{width:9px;font-weight:700;text-align:center}
+  .cbar .track{flex:1;height:6px;background:#262b36;border:1px solid #333a47;border-radius:3px;overflow:hidden}
+  .cbar .fill{display:block;height:100%;border-radius:2px;transition:width .25s}
+  .cbar .num{width:32px;text-align:right;color:var(--dim);font-family:Consolas,monospace}
+  .cpanel-row{padding:0;border-bottom:1px solid var(--border);background:var(--panel2)}
+  .cpanel{padding:14px 18px}
+  .cpanel .ctitle{display:flex;align-items:center;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+  .cpanel .ctitle h4{margin:0;font-size:.84rem;color:var(--purple)}
+  .cpanel .cbtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .cbtn{background:var(--panel);border:1px solid var(--border);color:var(--dim);
+    border-radius:7px;padding:4px 10px;font-size:.72rem;cursor:pointer;font-weight:600}
+  .cbtn:hover{color:var(--purple);border-color:var(--purple)}
+  .cbtn.done{color:var(--green);border-color:var(--green)}
+  .cbtn:disabled{opacity:.5;cursor:default}
+  .cpanel-close{background:transparent;border:1px solid var(--border);color:var(--dim);
+    border-radius:7px;padding:4px 11px;font-size:.74rem;cursor:pointer;font-weight:700}
+  .cpanel-close:hover{color:var(--orange);border-color:var(--orange)}
+  .coverage{font-size:.72rem;margin-bottom:12px;line-height:1.9}
+  .coverage .ok{color:var(--green);font-weight:700} .coverage .miss{color:var(--orange);font-weight:700}
+  .slotpill{display:inline-block;font-family:Consolas,monospace;font-size:.64rem;
+    border:1px solid var(--border);border-radius:5px;padding:0 5px;margin:1px 2px}
+  .csub{font-size:.66rem;color:var(--dim);margin:12px 0 5px;font-weight:700;letter-spacing:.03em}
+  .urllist{display:flex;flex-direction:column;gap:5px}
+  .urlrow{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;
+    background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px 11px}
+  .hcol{display:flex;flex-direction:column;align-items:center;gap:3px}
+  .urlrow .h{width:11px;height:11px;border-radius:50%;background:#3a4150;transition:.2s}
+  .nlmb{font-size:.72rem;line-height:1;cursor:help}
+  .urlrow .meta{min-width:0}
+  .urlrow .meta .l{font-size:.76rem}
+  .urlrow .meta .l .s{font-size:.6rem;color:var(--blue);font-family:Consolas,monospace;margin-left:6px}
+  .urlrow .meta .u{font-size:.66rem;color:var(--dim);font-family:Consolas,monospace;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .urlrow .acts{display:flex;gap:5px}
+  .uact{background:var(--panel2);border:1px solid var(--border);color:var(--dim);
+    border-radius:6px;padding:2px 7px;font-size:.74rem;cursor:pointer;text-decoration:none;line-height:1.4}
+  .uact:hover{color:var(--purple);border-color:var(--purple)}
+  .uact.done{color:var(--green);border-color:var(--green)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📊 Prop Firm Database</h1>
+    <span style="color:var(--dim);font-size:.7rem;font-family:Consolas,monospace">PFDB</span>
+    <div class="spacer"></div>
+    <button class="btn-ghost" id="btnReload">↻ 再読込</button>
+    <button class="btn-ghost" id="btnToc">📖 機能目次</button>
+  </header>
+  <p class="sub">data/firms/*.json を俯瞰 ／ 進捗 ／ 3ランプ ／ 📡収集（公式URL・生死・網羅率・NotebookLM/Web2MD導線） ／ 1社編集への入口</p>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="🔍 ファーム名・slug で検索…">
+  </div>
+
+  <div class="tbl" id="tbl">
+    <div class="state" id="state">読み込み中…</div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+</div>
+
+<!-- 機能目次（FEATURE_INDEX から自動生成） -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <span class="close" id="tocClose">✕</span>
+    <h2>📖 機能目次</h2>
+    <div class="mh">各機能には固定ID(FD-xx)。コメントや相談で「FD-06が…」と一意に指せます。この目次は設定から自動生成。</div>
+    <div id="tocBody"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ===========================================================================
+   設定ブロック（ここだけ触れば拡張できる）
+   =========================================================================== */
+
+// 色トークン（CSS変数名と一致）
+const COLORS = {gray:"--gray",orange:"--orange",yellow:"--yellow",blue:"--blue",
+  green:"--green",purple:"--purple"};
+const cssVar = (c)=>`var(${COLORS[c]||"--dim"})`;
+
+// FD: ステータス（ライフサイクル）。増減はこの配列に1行。先頭=既定(未着手)。
+const STATUS_DEFS = [
+  {id:"todo",   label:"未着手",       color:"gray"},
+  {id:"gather", label:"データ収集",   color:"orange"},
+  {id:"input",  label:"入力中",       color:"yellow"},
+  {id:"review", label:"レビュー待ち", color:"blue"},
+  {id:"done",   label:"公開済み",     color:"green"},
+];
+const DEFAULT_STATUS = STATUS_DEFS[0].id;
+const statusById = (id)=>STATUS_DEFS.find(s=>s.id===id) || STATUS_DEFS[0];
+
+// FD-06: 点灯しきい値。判定はサーバーの生計測値をここで解釈（しきい値集約）。
+const THRESHOLDS = {firmFilled:5, planCount:1, stratBytes:500};
+
+// FD-06: ランプ定義。lit(f)=点灯条件。増設(ウィジェット/クーポン等)はここに1行。
+const LAMP_DEFS = [
+  {id:"firm",  label:"Firm", color:"purple", lit:f=>f.firmFilled >= THRESHOLDS.firmFilled,
+    desc:"data/firms/{slug}.json が十分入力済み"},
+  {id:"plan",  label:"Plan", color:"blue",   lit:f=>f.planCount  >= THRESHOLDS.planCount,
+    desc:"data/plans/ にプラン投入済み"},
+  {id:"strat", label:"攻略", color:"green",  lit:f=>f.stratBytes >= THRESHOLDS.stratBytes,
+    desc:"content/firms/{slug}/_index.md に攻略記事あり"},
+];
+
+// FD-07: ファイルリンク定義。href(slug)=リンク先 / on(f)=有効判定。
+const LINK_DEFS = [
+  {id:"json",    label:"json",    href:s=>`/data/firms/${s}.json`,        on:()=>true},
+  {id:"content", label:"content", href:s=>`/content/firms/${s}/`,          on:f=>f.stratBytes>0},
+  {id:"plans",   label:"plans",   href:s=>`/data/plans/`,                  on:f=>f.planCount>0},
+];
+
+// FD-08: 編集起動。将来 page-maker改(1社専用機) に差し替える時はここ1行。
+const EDIT_URL = (slug)=>`/01_tools/core/page-maker-v12.html?firm=${encodeURIComponent(slug)}`;
+
+// FD-14: NotebookLM（収集の主）。「📓」= URLをコピーしてここを開く → ソース追加にCtrl+V。
+const NOTEBOOKLM_URL = "https://notebooklm.google.com/";
+
+// FD-13: DBP_01 スロットの宇宙（Firm網羅率の分母）。F01〜F22。
+const ALL_SLOTS = Array.from({length:22},(_,i)=>`F${String(i+1).padStart(2,"0")}`);
+
+// FD-16: DBP_02 スロットの宇宙（Plan網羅率の分母）。MASTER_DEFS 準拠の21項目。
+const ALL_PLAN_SLOTS = ["P20","P01","P02","P02b","P03","P04","P05","P06","P07","P08","P09",
+  "P10","P11","P12","P13","P14","P15","P16","P17","P18","P19"];
+
+// FD-12: URL生死の解釈。サーバー実測コード→{色,意味}（しきい値集約・先頭一致）。
+const HEALTH_DEFS = [
+  {test:c=>c>=200&&c<400,    color:"green",  label:"生存"},
+  {test:c=>c===429||c===403, color:"yellow", label:"制限/ブロック（=サーバー生存）"},
+  {test:c=>c>=400&&c<500,    color:"orange", label:"4xx（URL要確認・404等）"},
+  {test:c=>c>=500,           color:"orange", label:"5xx サーバーエラー"},
+  {test:c=>!c,               color:"gray",   label:"未チェック / 到達不可"},
+];
+const healthOf = (code)=> HEALTH_DEFS.find(h=>h.test(code)) || HEALTH_DEFS[HEALTH_DEFS.length-1];
+
+// FD-17: NotebookLM適性。サーバー取得(JS未描画)前提で、本文テキスト量から判定。
+// NotebookLMはURL先のHTMLをそのまま取り込むため、SPAの空シェルは「中身ゼロのソース」になる。
+const NLM_TEXT_MIN = 1200;  // この文字数未満は「実質中身なし(JS描画)」とみなす（調整可）
+function nlmVerdict(code, textLen){
+  if(!(code>=200 && code<400)) return {icon:"❌", color:"orange", label:`投入不可（${code||"到達不可"}）`};
+  if((textLen||0) >= NLM_TEXT_MIN)  return {icon:"✅", color:"green",  label:`投入可（本文${textLen}字）`};
+  return {icon:"⚠️", color:"yellow", label:`JS描画?・本文${textLen||0}字＝空ソースの恐れ（記事個別URL推奨）`};
+}
+
+// FD-04: テーブル列。render(f,ctx)で各セル生成。列の増減・並べ替えはこの配列。
+const COLUMNS = [
+  {key:"idx",   label:"#",            width:"26px",  align:"center", render:(f,c)=>c.i+1},
+  {key:"name",  label:"ファーム",      width:"1fr",
+    render:f=>`<div class="fname">${esc(f.name)}</div><div class="fslug">${esc(f.slug)}</div>`},
+  {key:"plans", label:"プラン",        width:"60px",  align:"center",
+    render:f=>`<span class="dim">${f.planCount}</span>`},
+  {key:"site",  label:"公式",          width:"44px",  align:"center",  // FD-10
+    render:f=> f.url
+      ? `<a class="site" href="${esc(f.url)}" target="_blank" rel="noopener" title="${esc(f.url)}">🌐</a>`
+      : `<span class="site off" title="公式URL未登録">🌐</span>`},
+  {key:"collect",label:"📡収集（F/P充填）", width:"150px", render:f=>renderCollectCell(f)},  // FD-11
+  {key:"lamps", label:"進捗（F/P/攻）", width:"118px", render:f=>renderLamps(f)},
+  {key:"status",label:"ステータス",     width:"140px", render:f=>renderStatus(f)},
+  {key:"links", label:"ファイル",       width:"152px", render:f=>renderLinks(f)},
+  {key:"edit",  label:"操作",          width:"84px",  align:"center",
+    render:f=>`<button class="edit" data-edit="${esc(f.slug)}">✏️ 編集</button>`},
+];
+
+// FD-09: 目次の📋コピー文言。チャット/コメントに貼って機能を一意に指すための形式。
+// 文言を変えたい時はこの1関数だけ編集。
+const TOOL_TAG = "firm-database.html";
+const TOC_COPY_TEMPLATE = (it)=>`[${it.id}] ${it.name}（${TOOL_TAG}）— ${it.desc}`;
+
+// FD-09: 機能目次（共通言語）。カテゴリ→機能の構造。新機能はここに追記。
+const FEATURE_INDEX = [
+  {cat:"全体", items:[
+    {id:"FD-01", name:"サマリーカード", desc:"全件＋ステータス別件数。クリックで絞り込み"},
+    {id:"FD-02", name:"検索",          desc:"ファーム名・slug で絞り込み"},
+    {id:"FD-09", name:"機能目次",      desc:"この一覧（FEATURE_INDEXから自動生成）"},
+  ]},
+  {cat:"一覧", items:[
+    {id:"FD-04", name:"ファーム一覧",   desc:"data/firms/*.json 由来の行を表示"},
+    {id:"FD-06", name:"3ランプ進捗",    desc:"Firm/Plan/攻略 を計測値から自動点灯"},
+    {id:"FD-07", name:"ファイルリンク", desc:"json / content / plans への入口"},
+    {id:"FD-10", name:"公式サイト",     desc:"各社の公式URLをワンクリックで開く"},
+  ]},
+  {cat:"操作", items:[
+    {id:"FD-05", name:"ステータス変更", desc:"5段階。_work/progress.json へ保存"},
+    {id:"FD-08", name:"編集起動",       desc:"page-maker改 を1社ロードで起動"},
+  ]},
+  {cat:"収集", items:[
+    {id:"FD-11", name:"収集パネル",     desc:"📡で各社の公式URL一覧を展開（_work/firm-slot-urls.json由来）"},
+    {id:"FD-12", name:"URL生死",        desc:"URLの生死を実測（200/429/403/404）。展開時にキャッシュ表示＋手動再チェック"},
+    {id:"FD-13", name:"網羅率",         desc:"F01-F22のうちソースURLがあるスロット数／不足を表示"},
+    {id:"FD-14", name:"NotebookLM導線", desc:"📓でURLをコピーしNotebookLMを開く（収集の主）"},
+    {id:"FD-15", name:"Web2MD補完",     desc:"🌐でChromeに開き拡張でDownload（補完収集）"},
+    {id:"FD-16", name:"Plan網羅率",     desc:"_work/help-index/{slug}.json の記事→P-スロットからP01-P20網羅を算出"},
+    {id:"FD-17", name:"NotebookLM適性", desc:"🩺時に本文量も取得し ✅投入可/⚠️JS描画(空ソース恐れ)/❌ブロック を各URLに表示"},
+  ]},
+];
+
+const API = "";  // 同一オリジン(localhost:8765)前提。別ホスト化する時はここ。
+
+/* ===========================================================================
+   本体ロジック（基本ここは触らず、上の設定を編集する）
+   =========================================================================== */
+const $  = (s)=>document.querySelector(s);
+const esc = (s)=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+let FIRMS = [];        // /api/firms の結果
+let PROGRESS = {};     // slug -> {status,note,updated}
+let activeFilter = null;
+let searchText = "";
+
+const gridCols = ()=>COLUMNS.map(c=>c.width).join(" ");
+const statusOf = (slug)=> (PROGRESS[slug] && PROGRESS[slug].status) || DEFAULT_STATUS;
+
+async function load(){
+  setState("読み込み中…");
+  try{
+    const [fr, pr] = await Promise.all([
+      fetch(API+"/api/firms").then(r=>r.json()),
+      fetch(API+"/api/progress").then(r=>r.json()),
+    ]);
+    FIRMS = fr.firms || [];
+    PROGRESS = (pr && pr.firms) || {};
+    renderAll();
+  }catch(e){
+    setState("⚠ データ取得に失敗。ランチャー(agent.py)が起動した状態で "+
+      "http://localhost:8765/01_tools/core/firm-database.html から開いてください。\n("+e.message+")", true);
+  }
+}
+
+function setState(msg, isErr){
+  $("#tbl").innerHTML = `<div class="state${isErr?" err":""}">${esc(msg)}</div>`;
+}
+
+function visibleFirms(){
+  return FIRMS.filter(f=>{
+    if(activeFilter && statusOf(f.slug)!==activeFilter) return false;
+    if(searchText){
+      const q=searchText.toLowerCase();
+      if(!f.name.toLowerCase().includes(q) && !f.slug.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function renderAll(){ renderSummary(); renderTable(); renderLegend(); }
+
+// FD-01
+function renderSummary(){
+  const counts = {};
+  STATUS_DEFS.forEach(s=>counts[s.id]=0);
+  FIRMS.forEach(f=>{ counts[statusOf(f.slug)]=(counts[statusOf(f.slug)]||0)+1; });
+  const cards = [
+    `<div class="card ${activeFilter===null?"active":""}" data-filter="" style="grid-column:auto">
+       <div class="n">${FIRMS.length}</div><div class="l">全ファーム</div></div>`,
+    ...STATUS_DEFS.map(s=>`
+      <div class="card ${activeFilter===s.id?"active":""}" data-filter="${s.id}">
+        <div class="n" style="color:${cssVar(s.color)}">${counts[s.id]||0}</div>
+        <div class="l">${esc(s.label)}</div></div>`)
+  ].join("");
+  const el=$("#summary");
+  el.style.gridTemplateColumns=`repeat(${STATUS_DEFS.length+1},1fr)`;
+  el.innerHTML=cards;
+  el.querySelectorAll(".card").forEach(c=>c.onclick=()=>{
+    const f=c.getAttribute("data-filter");
+    activeFilter = f==="" ? null : f;
+    renderAll();
+  });
+}
+
+// FD-04
+function renderTable(){
+  const list=visibleFirms();
+  const head=`<div class="row head" style="grid-template-columns:${gridCols()}">`+
+    COLUMNS.map(c=>`<div class="${c.align==='center'?'center':''}">${esc(c.label)}</div>`).join("")+`</div>`;
+  if(!list.length){ $("#tbl").innerHTML=head+`<div class="state">該当なし</div>`; return; }
+  const rows=list.map((f,i)=>{
+    const ctx={i};
+    const main=`<div class="row" style="grid-template-columns:${gridCols()}">`+
+      COLUMNS.map(c=>`<div class="${c.align==='center'?'center':''}">${c.render(f,ctx)}</div>`).join("")+
+    `</div>`;
+    // FD-11 収集パネル（URLまたはhelp-index登録のある社のみ・既定は非表示）
+    const panel=((f.urlCount||0) || f.helpIndex)
+      ? `<div class="cpanel-row" data-panel="${esc(f.slug)}" style="display:none">${renderCollectPanel(f)}</div>`
+      : "";
+    return main+panel;
+  }).join("");
+  $("#tbl").innerHTML=head+rows;
+  bindRowEvents();
+}
+
+// FD-06
+function renderLamps(f){
+  return `<div class="lamps">`+LAMP_DEFS.map(L=>{
+    const on=L.lit(f);
+    const style=on?`background:${cssVar(L.color)};box-shadow:0 0 7px ${cssVar(L.color)}`:"";
+    return `<div class="lamp" title="${esc(L.label)}: ${esc(L.desc)}（${on?'OK':'未'}）">
+      <div class="dot ${on?'on':''}" style="${style}"></div><div class="t">${esc(L.label)}</div></div>`;
+  }).join("")+`</div>`;
+}
+
+// FD-05
+function renderStatus(f){
+  const cur=statusOf(f.slug), s=statusById(cur);
+  const opts=STATUS_DEFS.map(o=>`<option value="${o.id}" ${o.id===cur?"selected":""}>${esc(o.label)}</option>`).join("");
+  return `<select class="status" data-slug="${esc(f.slug)}"
+    style="color:${cssVar(s.color)};border-color:${cssVar(s.color)}">${opts}</select>`;
+}
+
+// FD-07
+function renderLinks(f){
+  return `<div class="links">`+LINK_DEFS.map(L=>{
+    const on=L.on(f);
+    return `<a class="${on?'':'off'}" href="${esc(L.href(f.slug))}" target="_blank" rel="noopener">${esc(L.label)}</a>`;
+  }).join("")+`</div>`;
+}
+
+/* ===========================================================================
+   収集コックピット（FD-11〜15）
+   =========================================================================== */
+const firmBySlug = (slug)=> FIRMS.find(f=>f.slug===slug);
+
+// FD-13: Firm網羅率。slot_urls の slots 文字列から F01-F22 の充足/不足を算出。
+function coverageOf(f){
+  const set=new Set();
+  (f.slotUrls||[]).forEach(e=>String(e.slots||"").split(",").forEach(t=>{
+    t=t.trim(); if(/^F\d+$/.test(t)) set.add(t);
+  }));
+  return {covered:ALL_SLOTS.filter(s=>set.has(s)), missing:ALL_SLOTS.filter(s=>!set.has(s))};
+}
+
+// FD-16: Plan網羅率。help-index の記事/利用規約の slots から P01-P20 の充足/不足を算出。
+function planCoverageOf(f){
+  const hi=f.helpIndex; const set=new Set();
+  const add=(s)=>String(s||"").split(",").forEach(t=>{t=t.trim(); if(/^P\d+b?$/.test(t)) set.add(t);});
+  if(hi){
+    (hi.collections||[]).forEach(c=>(c.articles||[]).forEach(a=>add(a.slots)));
+    (hi.terms_sources||[]).forEach(t=>add(t.slots));
+  }
+  return {covered:ALL_PLAN_SLOTS.filter(s=>set.has(s)), missing:ALL_PLAN_SLOTS.filter(s=>!set.has(s)), has:!!hi};
+}
+const allUrls = (slug)=>{
+  const f=firmBySlug(slug); if(!f) return [];
+  const out=[...(f.slotUrls||[]),...(f.planUrls||[])].map(e=>e&&e.url);
+  const hi=f.helpIndex;
+  if(hi){
+    (hi.collections||[]).forEach(c=>(c.articles||[]).forEach(a=>out.push(a.url)));
+    (hi.terms_sources||[]).forEach(t=>out.push(t.url));
+  }
+  return out.filter(Boolean);
+};
+
+// FD-11 セル: 📡(URL数) ＋ F/P 充填バー。バーで一覧のまま充填が読める（開かなくてよい）。
+function renderCollectCell(f){
+  const n=f.urlCount||0;
+  if(!n && !f.helpIndex) return `<span class="dim" title="firm-slot-urls.json / help-index 未登録">—</span>`;
+  const fc=coverageOf(f), pc=planCoverageOf(f);
+  const bar=(lbl,cov,total,has,color)=>{
+    const pct = has===false ? 0 : Math.round(cov/total*100);
+    const num = has===false ? "未" : `${cov}/${total}`;
+    return `<div class="cbar" title="${lbl}網羅 ${num}">`+
+      `<span class="lbl" style="color:${cssVar(color)}">${lbl}</span>`+
+      `<span class="track"><span class="fill" style="width:${pct}%;background:${cssVar(color)}"></span></span>`+
+      `<span class="num">${num}</span></div>`;
+  };
+  return `<div class="ccell">`+
+    `<button class="collect-btn" data-collect="${esc(f.slug)}" title="収集パネルを開閉">📡 ${n} 詳細</button>`+
+    bar("F", fc.covered.length, ALL_SLOTS.length, true, "purple")+
+    bar("P", pc.covered.length, ALL_PLAN_SLOTS.length, pc.has, "blue")+
+  `</div>`;
+}
+
+// FD-11〜16 収集パネル本体（行直下に全幅で展開）
+function renderCollectPanel(f){
+  // FD-13 Firm網羅 / FD-16 Plan網羅 の2本立て
+  const covBlock=(tag, cov, universe, has)=>{
+    if(has===false) return `<div class="coverage"><span class="dim">${tag}網羅 : help-index 未登録（収集前）</span></div>`;
+    return `<div class="coverage"><span class="ok">${tag}網羅 ${cov.covered.length}/${universe.length}</span> : `+
+      (cov.covered.map(s=>`<span class="slotpill">${s}</span>`).join("")||"<span class='dim'>なし</span>")+
+      (cov.missing.length?`<br><span class="miss">不足 ${cov.missing.length}</span> : `+
+        cov.missing.map(s=>`<span class="slotpill">${s}</span>`).join(""):"")+`</div>`;
+  };
+  const fc=coverageOf(f), pc=planCoverageOf(f);
+  // slot_urls={label,slots} / plan_urls={plan_name} / help記事={title,slots} の各スキーマを吸収
+  const urlRow=(e)=>{
+    const u=esc(e.url||"");
+    const label=esc(e.label || e.plan_name || e.title || "(no label)");
+    const slots=esc(e.slots || (e.plan_name?"plan":""));
+    return `<div class="urlrow">
+      <div class="hcol">
+        <span class="h" data-h="${u}" title="生死: 未チェック"></span>
+        <span class="nlmb" data-nlmb="${u}" title="NotebookLM適性: 未チェック">·</span>
+      </div>
+      <div class="meta"><div class="l">${label}<span class="s">${slots}</span></div>
+        <div class="u" title="${u}">${u}</div></div>
+      <div class="acts">
+        <a class="uact" href="${u}" target="_blank" rel="noopener" title="Chromeで開く（FD-15 Web2MD補完: 拡張でDownload）">🌐</a>
+        <button class="uact" data-ucopy="${u}" title="URLをコピー">📋</button>
+        <button class="uact" data-unlm="${u}" title="FD-14 URLをコピーしてNotebookLMを開く">📓</button>
+      </div></div>`;
+  };
+  const sec=(title,list)=> list&&list.length
+    ? `<div class="csub">${title}</div><div class="urllist">`+list.map(urlRow).join("")+`</div>` : "";
+  // FD-16 Help Center記事（コレクション→記事＋利用規約）を1リストに平坦化
+  const hi=f.helpIndex;
+  let helpSec="";
+  if(hi){
+    const arts=[];
+    (hi.collections||[]).forEach(c=>(c.articles||[]).forEach(a=>arts.push(a)));
+    (hi.terms_sources||[]).forEach(t=>arts.push(t));
+    const st = hi.fetch_status ? `（${esc(hi.fetch_status)}）` : "";
+    helpSec = `<div class="csub">Help Center 記事 → P-スロット${st}</div>`+
+      `<div class="urllist">`+arts.map(urlRow).join("")+`</div>`;
+  }
+  return `<div class="cpanel">
+    <div class="ctitle"><h4>📡 収集 — ${esc(f.name)}</h4>
+      <div class="cbtns">
+        <button class="cbtn" data-callhealth="${esc(f.slug)}">🩺 健全性チェック</button>
+        <button class="cbtn" data-copyall="${esc(f.slug)}">📋 全URLコピー</button>
+        <button class="cbtn" data-nlmall="${esc(f.slug)}">📓 全URL→NotebookLM</button>
+        <span class="dim" data-checkedat="${esc(f.slug)}"></span>
+      </div>
+      <div class="spacer"></div>
+      <button class="cpanel-close" data-collectclose="${esc(f.slug)}" title="パネルを閉じる">✕ 閉じる</button>
+    </div>
+    <div class="dim" style="font-size:.62rem;margin-bottom:8px">各URL左の上=生死ランプ / 下=NotebookLM適性（🩺チェック後に表示）: ✅投入可 ⚠️JS描画＝空ソースの恐れ（記事個別URL推奨） ❌ブロック/404</div>
+    ${covBlock("Firm", fc, ALL_SLOTS, true)}
+    ${covBlock("Plan", pc, ALL_PLAN_SLOTS, pc.has)}
+    ${sec("公式ページ（slot_urls）", f.slotUrls)}
+    ${sec("プランページ（plan_urls）", f.planUrls)}
+    ${helpSec}
+  </div>`;
+}
+
+// FD-11 パネル開閉。開いた時はキャッシュ済み生死を表示（FD-12 オンデマンド）。
+function toggleCollect(slug, btn){
+  const panel=$("#tbl").querySelector(`.cpanel-row[data-panel="${CSS.escape(slug)}"]`);
+  if(!panel) return;
+  const open = panel.style.display==="none";
+  panel.style.display = open ? "block" : "none";
+  if(btn) btn.classList.toggle("open", open);
+  if(open) checkHealth(slug, null, false);
+}
+
+// FD-14 NotebookLM導線: URL(複数可)をコピー＋NotebookLMを開く。
+function sendToNotebookLM(urls, btn){
+  copyText(urls.filter(Boolean).join("\n"), btn);
+  window.open(NOTEBOOKLM_URL, "_blank", "noopener");
+}
+
+// FD-12 URL生死: live=true で実測、false でキャッシュ取得。結果をパネルのドットへ反映。
+async function checkHealth(slug, btn, live){
+  let o; if(btn){ o=btn.textContent; btn.textContent="チェック中…"; btn.disabled=true; }
+  try{
+    const r=await fetch(`${API}/api/url-health?slug=${encodeURIComponent(slug)}${live?"&check=1":""}`).then(x=>x.json());
+    applyHealth(slug, r);
+    if(btn){ btn.textContent="✓ 完了"; btn.classList.add("done");
+      setTimeout(()=>{btn.textContent=o; btn.classList.remove("done"); btn.disabled=false;},1100); }
+  }catch(e){ if(btn){ btn.textContent=o; btn.disabled=false; } }
+}
+function applyHealth(slug, r){
+  const panel=$("#tbl").querySelector(`.cpanel-row[data-panel="${CSS.escape(slug)}"]`);
+  if(!panel) return;
+  const results=(r&&r.results)||{};
+  const getCT=(v)=> (v && typeof v==="object") ? {code:v.code, textLen:v.textLen} : {code:v, textLen:undefined};  // 新旧両形式
+  // 生死ドット（FD-12）
+  panel.querySelectorAll(".h[data-h]").forEach(dot=>{
+    const v=results[dot.getAttribute("data-h")];
+    if(v===undefined) return;
+    const {code}=getCT(v); const h=healthOf(code);
+    dot.style.background=cssVar(h.color);
+    if(h.color!=="gray") dot.style.boxShadow=`0 0 6px ${cssVar(h.color)}`;
+    dot.title=`生死 ${code} — ${h.label}`;
+  });
+  // NotebookLM適性バッジ（FD-17）
+  panel.querySelectorAll(".nlmb[data-nlmb]").forEach(b=>{
+    const v=results[b.getAttribute("data-nlmb")];
+    if(v===undefined) return;
+    const {code,textLen}=getCT(v);
+    if(textLen===undefined){ b.textContent="?"; b.title="NotebookLM適性: 旧キャッシュ（再チェックで判定）"; return; }
+    const nv=nlmVerdict(code,textLen);
+    b.textContent=nv.icon; b.title=`NotebookLM: ${nv.label}`;
+  });
+  const at=panel.querySelector(`[data-checkedat="${CSS.escape(slug)}"]`);
+  if(at) at.textContent = r && r.checkedAt ? `最終チェック: ${r.checkedAt}` : "未チェック";
+}
+
+function bindRowEvents(){
+  $("#tbl").querySelectorAll("select.status").forEach(sel=>{
+    sel.onchange=()=>saveStatus(sel.getAttribute("data-slug"), sel.value);
+  });
+  $("#tbl").querySelectorAll("button[data-edit]").forEach(b=>{
+    b.onclick=()=>openEditor(b.getAttribute("data-edit"));
+  });
+  // FD-11 収集パネル開閉
+  $("#tbl").querySelectorAll("button[data-collect]").forEach(b=>{
+    b.onclick=()=>toggleCollect(b.getAttribute("data-collect"), b);
+  });
+  // FD-11 パネル内の✕で閉じる
+  $("#tbl").querySelectorAll("button[data-collectclose]").forEach(b=>{
+    b.onclick=()=>{
+      const slug=b.getAttribute("data-collectclose");
+      const btn=$("#tbl").querySelector(`button[data-collect="${CSS.escape(slug)}"]`);
+      toggleCollect(slug, btn);  // 開いている前提で閉じる（📡の点灯も解除）
+    };
+  });
+  // 収集パネル内アクション
+  $("#tbl").querySelectorAll("[data-ucopy]").forEach(b=>b.onclick=()=>copyText(b.getAttribute("data-ucopy"),b));
+  $("#tbl").querySelectorAll("[data-unlm]").forEach(b=>b.onclick=()=>sendToNotebookLM([b.getAttribute("data-unlm")],b));
+  $("#tbl").querySelectorAll("[data-copyall]").forEach(b=>b.onclick=()=>copyText(allUrls(b.getAttribute("data-copyall")).join("\n"),b));
+  $("#tbl").querySelectorAll("[data-nlmall]").forEach(b=>b.onclick=()=>sendToNotebookLM(allUrls(b.getAttribute("data-nlmall")),b));
+  $("#tbl").querySelectorAll("[data-callhealth]").forEach(b=>b.onclick=()=>checkHealth(b.getAttribute("data-callhealth"),b,true));
+}
+
+// FD-05 保存
+async function saveStatus(slug, status){
+  PROGRESS[slug]={...(PROGRESS[slug]||{}), status};  // 楽観更新
+  renderSummary();
+  const sel=$("#tbl").querySelector(`select.status[data-slug="${CSS.escape(slug)}"]`);
+  if(sel){ const c=cssVar(statusById(status).color); sel.style.color=c; sel.style.borderColor=c; }
+  try{
+    const r=await fetch(API+"/api/progress",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({slug,status})}).then(x=>x.json());
+    if(r&&r.entry) PROGRESS[slug]=r.entry;
+  }catch(e){ alert("進捗の保存に失敗: "+e.message); }
+}
+
+// FD-08
+function openEditor(slug){ window.open(EDIT_URL(slug), "_blank", "noopener"); }
+
+// 凡例
+function renderLegend(){
+  $("#legend").innerHTML=LAMP_DEFS.map(L=>
+    `<span><span class="d" style="background:${cssVar(L.color)}"></span>${esc(L.label)} = ${esc(L.desc)}</span>`
+  ).join("");
+}
+
+// FD-09 機能目次（自動生成）＋ 機能ごとの📋コピー
+function renderToc(){
+  const tools=`<div class="toc-tools">
+    <button id="tocCopyAll">📋 全機能をコピー</button></div>`;
+  const body=FEATURE_INDEX.map(g=>`
+    <div class="toc-group">
+      <h3>${esc(g.cat)}</h3>
+      ${g.items.map(it=>`<div class="toc-item">
+        <div class="id">${esc(it.id)}</div>
+        <div class="nm"><b>${esc(it.name)}</b><br><span>${esc(it.desc)}</span></div>
+        <button class="toc-copy" data-copy="${esc(it.id)}" title="この機能の参照をコピー（チャットに貼れます）">📋</button>
+      </div>`).join("")}
+    </div>`).join("");
+  $("#tocBody").innerHTML=tools+body;
+  // 機能ごと
+  $("#tocBody").querySelectorAll(".toc-copy").forEach(btn=>{
+    btn.onclick=()=>{
+      const it=findFeature(btn.getAttribute("data-copy"));
+      if(it) copyText(TOC_COPY_TEMPLATE(it), btn);
+    };
+  });
+  // 全部
+  $("#tocCopyAll").onclick=(e)=>{
+    const all=FEATURE_INDEX.flatMap(g=>g.items.map(TOC_COPY_TEMPLATE)).join("\n");
+    copyText(all, e.target);
+  };
+}
+
+function findFeature(id){
+  for(const g of FEATURE_INDEX){ const it=g.items.find(x=>x.id===id); if(it) return it; }
+  return null;
+}
+
+async function copyText(text, btn){
+  try{ await navigator.clipboard.writeText(text); }
+  catch(e){ // 古い環境向けフォールバック
+    const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta);
+    ta.select(); try{document.execCommand("copy");}catch(_){} ta.remove();
+  }
+  if(btn){ const o=btn.textContent; btn.textContent="✓"; btn.classList.add("done");
+    setTimeout(()=>{btn.textContent=o; btn.classList.remove("done");},900); }
+}
+
+// イベント
+$("#search").oninput=(e)=>{ searchText=e.target.value.trim(); renderTable(); };
+$("#btnReload").onclick=load;
+$("#btnToc").onclick=()=>{ renderToc(); $("#overlay").classList.add("show"); };
+$("#tocClose").onclick=()=>$("#overlay").classList.remove("show");
+$("#overlay").onclick=(e)=>{ if(e.target.id==="overlay") $("#overlay").classList.remove("show"); };
+
+load();
+</script>
+</body>
+</html>

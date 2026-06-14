@@ -1,0 +1,326 @@
+{
+  "firm": "lark-funding",
+  "help_base_url": "https://helpdesk.larkfunding.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で11記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "instant master account details",
+          "url": "https://helpdesk.larkfunding.com/en/articles/10336809-instant-master-account-details",
+          "slots": "P03,P05,P06,P10,P18,P19"
+        },
+        {
+          "title": "how do i use dxtrade",
+          "url": "https://helpdesk.larkfunding.com/en/articles/11738922-how-do-i-use-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "how do i use ctrader",
+          "url": "https://helpdesk.larkfunding.com/en/articles/11738928-how-do-i-use-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "what trading platform does lark funding offer",
+          "url": "https://helpdesk.larkfunding.com/en/articles/11738989-what-trading-platform-does-lark-funding-offer",
+          "slots": "P15"
+        },
+        {
+          "title": "what is lark funding",
+          "url": "https://helpdesk.larkfunding.com/en/articles/11739114-what-is-lark-funding",
+          "slots": "P20"
+        },
+        {
+          "title": "how long does the evaluation process take",
+          "url": "https://helpdesk.larkfunding.com/en/articles/11750010-how-long-does-the-evaluation-process-take",
+          "slots": "P20,P02,P09"
+        },
+        {
+          "title": "how does drawdown lock work on instant accounts after a withdrawal",
+          "url": "https://helpdesk.larkfunding.com/en/articles/12029483-how-does-drawdown-lock-work-on-instant-accounts-after-a-withdrawal",
+          "slots": "P02b,P05,P06"
+        },
+        {
+          "title": "1 step career evaluation details",
+          "url": "https://helpdesk.larkfunding.com/en/articles/12853883-1-step-career-evaluation-details",
+          "slots": "P20,P01,P03,P05,P06,P10,P19"
+        },
+        {
+          "title": "what is hold over the weekend add on and how does it work",
+          "url": "https://helpdesk.larkfunding.com/en/articles/13644432-what-is-hold-over-the-weekend-add-on-and-how-does-it-work",
+          "slots": "P11,P19"
+        },
+        {
+          "title": "withdrawal rules 1 000 instant account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/13714987-withdrawal-rules-1-000-instant-account",
+          "slots": "P02b"
+        },
+        {
+          "title": "maximum capital allocation",
+          "url": "https://helpdesk.larkfunding.com/en/articles/13899816-maximum-capital-allocation",
+          "slots": "P14"
+        },
+        {
+          "title": "can i copy trades from my other prop firm accounts",
+          "url": "https://helpdesk.larkfunding.com/en/articles/13941115-can-i-copy-trades-from-my-other-prop-firm-accounts",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "can i purchase add ons after passing my account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/14043688-can-i-purchase-add-ons-after-passing-my-account",
+          "slots": ""
+        },
+        {
+          "title": "june competition rules",
+          "url": "https://helpdesk.larkfunding.com/en/articles/14625198-june-competition-rules",
+          "slots": "P02,P03,P06,P10,P11,P13,P14,P18,P19"
+        },
+        {
+          "title": "can i hold trades overnight",
+          "url": "https://helpdesk.larkfunding.com/en/articles/15157346-can-i-hold-trades-overnight",
+          "slots": "P12"
+        },
+        {
+          "title": "is there any lot size restriction",
+          "url": "https://helpdesk.larkfunding.com/en/articles/15157354-is-there-any-lot-size-restriction",
+          "slots": "P18,P19"
+        },
+        {
+          "title": "what is considered a single trade setup",
+          "url": "https://helpdesk.larkfunding.com/en/articles/15164265-what-is-considered-a-single-trade-setup",
+          "slots": ""
+        },
+        {
+          "title": "contract size units per lot",
+          "url": "https://helpdesk.larkfunding.com/en/articles/15457026-contract-size-units-per-lot",
+          "slots": ""
+        },
+        {
+          "title": "how quickly do i receive my evaluation account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7173656-how-quickly-do-i-receive-my-evaluation-account",
+          "slots": "P20"
+        },
+        {
+          "title": "how quickly will i receive my master account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7173658-how-quickly-will-i-receive-my-master-account",
+          "slots": ""
+        },
+        {
+          "title": "how do you calculate the 7 max drawdown",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7173889-how-do-you-calculate-the-7-max-drawdown",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "why do i have to place a stop loss on trades",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7173960-why-do-i-have-to-place-a-stop-loss-on-trades",
+          "slots": "P16"
+        },
+        {
+          "title": "is there a breach for inactivity",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174035-is-there-a-breach-for-inactivity",
+          "slots": "P09"
+        },
+        {
+          "title": "can i trade during news events",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174111-can-i-trade-during-news-events",
+          "slots": "P10,P19"
+        },
+        {
+          "title": "can i use an expert advisor",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174115-can-i-use-an-expert-advisor",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "what is the minimum age i must be to be part of your program",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174117-what-is-the-minimum-age-i-must-be-to-be-part-of-your-program",
+          "slots": ""
+        },
+        {
+          "title": "where do i track the progress of my account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174119-where-do-i-track-the-progress-of-my-account",
+          "slots": ""
+        },
+        {
+          "title": "what hours can i trade",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174126-what-hours-can-i-trade",
+          "slots": "P11"
+        },
+        {
+          "title": "am i trading real funds",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174129-am-i-trading-real-funds",
+          "slots": ""
+        },
+        {
+          "title": "how will i see the charge on my statement",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174135-how-will-i-see-the-charge-on-my-statement",
+          "slots": ""
+        },
+        {
+          "title": "how are taxes handled",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174136-how-are-taxes-handled",
+          "slots": ""
+        },
+        {
+          "title": "once i pass the evaluation am i provided with a demo or live account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174147-once-i-pass-the-evaluation-am-i-provided-with-a-demo-or-live-account",
+          "slots": ""
+        },
+        {
+          "title": "is the challenge fee refundable",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174156-is-the-challenge-fee-refundable",
+          "slots": ""
+        },
+        {
+          "title": "is anyone else allowed to trade my account for me",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174229-is-anyone-else-allowed-to-trade-my-account-for-me",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "can i use a vpn",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174234-can-i-use-a-vpn",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "what happens if i violate a rule of the challenge",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174251-what-happens-if-i-violate-a-rule-of-the-challenge",
+          "slots": "P05,P19"
+        },
+        {
+          "title": "margin rules",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7174260-margin-rules",
+          "slots": "P16,P19"
+        },
+        {
+          "title": "can i combine my accounts",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7176391-can-i-combine-my-accounts",
+          "slots": ""
+        },
+        {
+          "title": "is scalping permitted",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7177020-is-scalping-permitted",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "can i take multiple evaluations at once",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7182029-can-i-take-multiple-evaluations-at-once",
+          "slots": "P14"
+        },
+        {
+          "title": "what markets and symbols can i trade",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7210469-what-markets-and-symbols-can-i-trade",
+          "slots": ""
+        },
+        {
+          "title": "who can join the affiliate program",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7730736-who-can-join-the-affiliate-program",
+          "slots": "P19"
+        },
+        {
+          "title": "what is a soft breach",
+          "url": "https://helpdesk.larkfunding.com/en/articles/7897573-what-is-a-soft-breach",
+          "slots": "P16"
+        },
+        {
+          "title": "what countries are we available in",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8028220-what-countries-are-we-available-in",
+          "slots": ""
+        },
+        {
+          "title": "how are the spreads",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8049700-how-are-the-spreads",
+          "slots": ""
+        },
+        {
+          "title": "how do i request an affiliate payout",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8116411-how-do-i-request-an-affiliate-payout",
+          "slots": ""
+        },
+        {
+          "title": "how do payouts work",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8117403-how-do-payouts-work",
+          "slots": ""
+        },
+        {
+          "title": "the lark gain protector",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8124401-the-lark-gain-protector",
+          "slots": ""
+        },
+        {
+          "title": "pass assist feature",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8124611-pass-assist-feature",
+          "slots": ""
+        },
+        {
+          "title": "the lark simulated funded reset",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8164361-the-lark-simulated-funded-reset",
+          "slots": ""
+        },
+        {
+          "title": "zero pause trading",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8215607-zero-pause-trading",
+          "slots": ""
+        },
+        {
+          "title": "prohibited trading strategies",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8243502-prohibited-trading-strategies",
+          "slots": "P20,P04,P10,P14,P17,P19"
+        },
+        {
+          "title": "3 step evaluation details",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8251071-3-step-evaluation-details",
+          "slots": "P20,P03,P05,P06,P10,P19"
+        },
+        {
+          "title": "surrender account feature",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8272408-surrender-account-feature",
+          "slots": ""
+        },
+        {
+          "title": "are you regulated",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8289162-are-you-regulated",
+          "slots": ""
+        },
+        {
+          "title": "do we manipulate the pricing or executions you receive in your simulated funded account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8341922-do-we-manipulate-the-pricing-or-executions-you-receive-in-your-simulated-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "what are the rules for the simulated funded account",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8377870-what-are-the-rules-for-the-simulated-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "who is the counterparty to my trades",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8377872-who-is-the-counterparty-to-my-trades",
+          "slots": ""
+        },
+        {
+          "title": "am i subject to any position limits",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8377873-am-i-subject-to-any-position-limits",
+          "slots": ""
+        },
+        {
+          "title": "weekly payouts",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8439937-weekly-payouts",
+          "slots": ""
+        },
+        {
+          "title": "is hedging allowed",
+          "url": "https://helpdesk.larkfunding.com/en/articles/8486644-is-hedging-allowed",
+          "slots": "P19"
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P09,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19",
+    "missing": "P07,P08",
+    "note": "19/21（本文補強後）"
+  }
+}

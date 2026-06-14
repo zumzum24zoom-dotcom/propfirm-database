@@ -1,7 +1,7 @@
 /**
- * data/price-collect/{firm}_price.md（収集生データ・プラン別の個別表）を
+ * _work/price-collect/{firm}_price.md（収集生データ・プラン別の個別表）を
  * Page Maker の「表取込」が要求する横持ち形式（| 口座サイズ | プラン1 | プラン2 | … |）
- * に機械変換し、data/price-collect/wide/{firm}_price.md に出力する。
+ * に機械変換し、_work/price-collect/wide/{firm}_price.md に出力する。
  *
  * 出力は Page Maker の取込エリアに貼り付け→「格納」ボタンで priceTable スロットに格納できる。
  * 複数プランにまたがる「価格内訳」列（プロモ/定価/合計/費 等）は heading 付きの列名に展開し、
@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 import { SIZE_HEADERS, parseRow, parseTables, normalizePrice, sizeNum, isSizeCell } from './lib/price-table-parse.mjs';
 
 const ROOT    = join(dirname(fileURLToPath(import.meta.url)), '..');
-const SRC_DIR = join(ROOT, 'data', 'price-collect');
+const SRC_DIR = join(ROOT, '_work', 'price-collect');
 const OUT_DIR = join(SRC_DIR, 'wide');
 
 // >2列テーブルでこれらにマッチする列は「プラン名」ではなく「価格内訳」とみなし、見出し付き列名に展開する
@@ -71,7 +71,7 @@ function buildWideTable(tables) {
 function toMarkdown(firm, wide) {
   const { sizes, planOrder, sizeMap, warnHeadings } = wide;
   const lines = [];
-  lines.push(`<!-- source: data/price-collect/${firm}_price.md -->`);
+  lines.push(`<!-- source: _work/price-collect/${firm}_price.md -->`);
   lines.push(`<!-- Page Maker: 取込エリアに貼付 → 「格納」ボタンで priceTable に格納 -->`);
   if (warnHeadings.length) {
     lines.push(`<!-- ⚠ 要確認: 以下のセクションは価格内訳（プロモ/定価/合計等）の列をプラン列として展開しています -->`);

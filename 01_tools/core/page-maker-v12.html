@@ -4546,7 +4546,7 @@ function App() {
   const [consolidateKeepId,setConsolidateKeepId]=useState(null);
   const [activeSlotId,setActiveSlotId]=useState(null); // 選択中スロット
   const [showPriceMatrix,setShowPriceMatrix]=useState(false); // SlotPanelから持ち上げ（取込エリアを断面別に切替えるため App 側で保持）
-  // 1社モード（ダッシュボードの「✏️編集」から ?firm=slug で起動）— data/firms-edit/{slug}.json だけを読み書き
+  // 1社モード（ダッシュボードの「✏️編集」から ?firm=slug で起動）— _work/firms-edit/{slug}.json だけを読み書き
   const [singleFirm,setSingleFirm]=useState(null); // null | {slug,name}
   const singleFirmRef=useRef(false);               // 起動時ブートストラップの二重実行防止
   const pasteAreaRef=useRef(null);
@@ -5908,9 +5908,9 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
   const restoreData=useCallback(d=>applyData(d),[applyData]);
 
   // ═══════════════════════════════════════════════════
-  // 1社モード: ?firm=slug で data/firms-edit/{slug}.json を読み込み、その1社だけ編集
+  // 1社モード: ?firm=slug で _work/firms-edit/{slug}.json を読み込み、その1社だけ編集
   // ═══════════════════════════════════════════════════
-  // 保存: 現在の1社分（firm＋プランの tabData）を data/firms-edit/{slug}.json へ書き戻す
+  // 保存: 現在の1社分（firm＋プランの tabData）を _work/firms-edit/{slug}.json へ書き戻す
   const saveSingleFirm=useCallback(async()=>{
     if(!singleFirm)return;
     const firm=firms[0];
@@ -6197,12 +6197,12 @@ ${planNames.map(p=>`- ${p}`).join("\n")}
       {/* Header */}
       <div style={{background:C.surface,borderBottom:`1px solid ${C.border}`,padding:"6px 10px",display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
         <span style={{fontWeight:700,color:C.accent,fontFamily:font,fontSize:"0.85rem"}}>Page Maker</span>
-        {/* 1社モード: バッジ＋保存（data/firms-edit/{slug}.json へ書き戻し） */}
+        {/* 1社モード: バッジ＋保存（_work/firms-edit/{slug}.json へ書き戻し） */}
         {singleFirm&&(
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <Btn color={C.blue} onClick={()=>{window.location.href="/01_tools/core/firm-dashboard.html";}} style={{fontSize:"0.62rem"}} title="Prop Firm Database に戻る（未保存の変更があれば警告）">← DB</Btn>
-            <span style={{background:C.purple,color:"#fff",fontSize:"0.62rem",fontWeight:700,padding:"2px 8px",borderRadius:10,whiteSpace:"nowrap"}} title={`data/firms-edit/${singleFirm.slug}.json`}>🎯 1社モード: {singleFirm.name}</span>
-            <Btn color={C.green} onClick={saveSingleFirm} style={{fontSize:"0.62rem"}} title={`この1社を data/firms-edit/${singleFirm.slug}.json に保存`}>💾 保存</Btn>
+            <Btn color={C.blue} onClick={()=>{window.location.href="/01_tools/core/firm-database.html";}} style={{fontSize:"0.62rem"}} title="Prop Firm Database に戻る（未保存の変更があれば警告）">← DB</Btn>
+            <span style={{background:C.purple,color:"#fff",fontSize:"0.62rem",fontWeight:700,padding:"2px 8px",borderRadius:10,whiteSpace:"nowrap"}} title={`_work/firms-edit/${singleFirm.slug}.json`}>🎯 1社モード: {singleFirm.name}</span>
+            <Btn color={C.green} onClick={saveSingleFirm} style={{fontSize:"0.62rem"}} title={`この1社を _work/firms-edit/${singleFirm.slug}.json に保存`}>💾 保存</Btn>
           </div>
         )}
         {/* スロット↔用語 トグルスイッチ */}

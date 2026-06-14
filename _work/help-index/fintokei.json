@@ -1,0 +1,3326 @@
+{
+  "firm": "fintokei",
+  "help_base_url": "https://support.fintokei.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 47記事取得・本文具体フレーズ照合でslot追加（上限50超で611記事は未取得＝ルール系優先） / 本文補強: 397記事取得・本文具体フレーズ照合でslot追加（上限400超で261記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "co znamena nezodpovedne obchodovani na fintokei uctech",
+          "url": "https://support.fintokei.com/cs/articles/10166343-co-znamena-nezodpovedne-obchodovani-na-fintokei-uctech",
+          "slots": "P07,P17"
+        },
+        {
+          "title": "proc je zakazano vytvareni vicero profilu nebo registraci v myfintokei",
+          "url": "https://support.fintokei.com/cs/articles/10166369-proc-je-zakazano-vytvareni-vicero-profilu-nebo-registraci-v-myfintokei",
+          "slots": ""
+        },
+        {
+          "title": "jak funguje voucher ve fintokei",
+          "url": "https://support.fintokei.com/cs/articles/10221557-jak-funguje-voucher-ve-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "co je to dynamic performance reward",
+          "url": "https://support.fintokei.com/cs/articles/10296483-co-je-to-dynamic-performance-reward",
+          "slots": "P07"
+        },
+        {
+          "title": "jake jsou klicove faktory pro vypocet dynamic performance reward",
+          "url": "https://support.fintokei.com/cs/articles/10296554-jake-jsou-klicove-faktory-pro-vypocet-dynamic-performance-reward",
+          "slots": "P07"
+        },
+        {
+          "title": "informace o obchodnich hodinach a vyjimecnych zmenach provozni doby zakaznicke podpory",
+          "url": "https://support.fintokei.com/cs/articles/10308723-informace-o-obchodnich-hodinach-a-vyjimecnych-zmenach-provozni-doby-zakaznicke-podpory",
+          "slots": ""
+        },
+        {
+          "title": "kopirovani obchodu a pouzivani ea co je povoleno a co zakazano",
+          "url": "https://support.fintokei.com/cs/articles/10419735-kopirovani-obchodu-a-pouzivani-ea-co-je-povoleno-a-co-zakazano",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "muzete mi rict neco o tuzemskych bankovnich prevodech",
+          "url": "https://support.fintokei.com/cs/articles/10559283-muzete-mi-rict-neco-o-tuzemskych-bankovnich-prevodech",
+          "slots": ""
+        },
+        {
+          "title": "souteze co to je a jaka jsou pravidla",
+          "url": "https://support.fintokei.com/cs/articles/10566823-souteze-co-to-je-a-jaka-jsou-pravidla",
+          "slots": "P10"
+        },
+        {
+          "title": "muzete mi rict neco o bankovnich prevodech sepa",
+          "url": "https://support.fintokei.com/cs/articles/10693906-muzete-mi-rict-neco-o-bankovnich-prevodech-sepa",
+          "slots": ""
+        },
+        {
+          "title": "kde najdu podrobnosti o me affiliate spolupraci",
+          "url": "https://support.fintokei.com/cs/articles/11172078-kde-najdu-podrobnosti-o-me-affiliate-spolupraci",
+          "slots": ""
+        },
+        {
+          "title": "zasady udrzitelneho obchodovani ve fintokei",
+          "url": "https://support.fintokei.com/cs/articles/11315899-zasady-udrzitelneho-obchodovani-ve-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "obchodovani podobne nahode jak ho analyzujeme",
+          "url": "https://support.fintokei.com/cs/articles/11315916-obchodovani-podobne-nahode-jak-ho-analyzujeme",
+          "slots": "P07,P17,P19"
+        },
+        {
+          "title": "proc nekdo se 2 nebo 3 vyplatami nemusi byt ziskovy trader",
+          "url": "https://support.fintokei.com/cs/articles/11315925-proc-nekdo-se-2-nebo-3-vyplatami-nemusi-byt-ziskovy-trader",
+          "slots": ""
+        },
+        {
+          "title": "koho hledame a proc je i zisk 1 tydne vlastne spickovy vykon",
+          "url": "https://support.fintokei.com/cs/articles/11315928-koho-hledame-a-proc-je-i-zisk-1-tydne-vlastne-spickovy-vykon",
+          "slots": "P07"
+        },
+        {
+          "title": "co kdyz jsi prave zacal a nevis jestli je tvoje strategie udrzitelna",
+          "url": "https://support.fintokei.com/cs/articles/11315931-co-kdyz-jsi-prave-zacal-a-nevis-jestli-je-tvoje-strategie-udrzitelna",
+          "slots": ""
+        },
+        {
+          "title": "proc je fintokei vhodny i pro swingove obchodniky",
+          "url": "https://support.fintokei.com/cs/articles/11315943-proc-je-fintokei-vhodny-i-pro-swingove-obchodniky",
+          "slots": "P01,P15"
+        },
+        {
+          "title": "proc zavadime omezeni a jak pristupujeme k integrite obchodovani delsi cteni",
+          "url": "https://support.fintokei.com/cs/articles/11315949-proc-zavadime-omezeni-a-jak-pristupujeme-k-integrite-obchodovani-delsi-cteni",
+          "slots": "P07,P19"
+        },
+        {
+          "title": "prehled naseho risk management procesu co se stane kdyz zjistime zakazane hazardni nebo neudrzitelne chovani",
+          "url": "https://support.fintokei.com/cs/articles/11315957-prehled-naseho-risk-management-procesu-co-se-stane-kdyz-zjistime-zakazane-hazardni-nebo-neudrzitelne-chovani",
+          "slots": "P07,P14,P15,P17,P19"
+        },
+        {
+          "title": "prilis mnoho varovani",
+          "url": "https://support.fintokei.com/cs/articles/11315960-prilis-mnoho-varovani",
+          "slots": "P07,P14"
+        },
+        {
+          "title": "consistency rules resp pravidla konzistence nejcastejsi aplikace",
+          "url": "https://support.fintokei.com/cs/articles/11315966-consistency-rules-resp-pravidla-konzistence-nejcastejsi-aplikace",
+          "slots": "P07,P08,P14,P17,P19"
+        },
+        {
+          "title": "dalsi omezeni ktera mohou byt soucasti consistency rules resp pravidel konzistence",
+          "url": "https://support.fintokei.com/cs/articles/11315971-dalsi-omezeni-ktera-mohou-byt-soucasti-consistency-rules-resp-pravidel-konzistence",
+          "slots": "P07,P08,P16,P17"
+        },
+        {
+          "title": "jake je maximalni riziko na otevrenych obchodech",
+          "url": "https://support.fintokei.com/cs/articles/11315976-jake-je-maximalni-riziko-na-otevrenych-obchodech",
+          "slots": "P01,P16"
+        },
+        {
+          "title": "co znamena sdileni jednoho elektronickeho zarizeni mezi vice zakazniky",
+          "url": "https://support.fintokei.com/cs/articles/11316015-co-znamena-sdileni-jednoho-elektronickeho-zarizeni-mezi-vice-zakazniky",
+          "slots": ""
+        },
+        {
+          "title": "co znamena pouzivani vice ip adres z ruznych zemi pri pripojovani k fintokei demo uctum nebo maskovani ip adresy",
+          "url": "https://support.fintokei.com/cs/articles/11316016-co-znamena-pouzivani-vice-ip-adres-z-ruznych-zemi-pri-pripojovani-k-fintokei-demo-uctum-nebo-maskovani-ip-adresy",
+          "slots": "P14"
+        },
+        {
+          "title": "co je neopravnena platba treti strany",
+          "url": "https://support.fintokei.com/cs/articles/11316020-co-je-neopravnena-platba-treti-strany",
+          "slots": ""
+        },
+        {
+          "title": "jak si muzu stahnout potvrzeni o nakupu",
+          "url": "https://support.fintokei.com/cs/articles/11316023-jak-si-muzu-stahnout-potvrzeni-o-nakupu",
+          "slots": ""
+        },
+        {
+          "title": "simulace realnych trznich podminek skluz zpozdeni exekuce",
+          "url": "https://support.fintokei.com/cs/articles/11316031-simulace-realnych-trznich-podminek-skluz-zpozdeni-exekuce",
+          "slots": ""
+        },
+        {
+          "title": "jak a kdy fintokei prepocitava obchodni metriky",
+          "url": "https://support.fintokei.com/cs/articles/11426790-jak-a-kdy-fintokei-prepocitava-obchodni-metriky",
+          "slots": "P07,P08"
+        },
+        {
+          "title": "jak definujeme nadmerne riskovani",
+          "url": "https://support.fintokei.com/cs/articles/11468666-jak-definujeme-nadmerne-riskovani",
+          "slots": "P01"
+        },
+        {
+          "title": "fintokei a obchodovani co je dobre vedet na zacatek",
+          "url": "https://support.fintokei.com/cs/articles/11477282-fintokei-a-obchodovani-co-je-dobre-vedet-na-zacatek",
+          "slots": ""
+        },
+        {
+          "title": "opakovani vyzvy zdarma cerven 2025 podminky limitovane nabidky extralife",
+          "url": "https://support.fintokei.com/cs/articles/11507990-opakovani-vyzvy-zdarma-cerven-2025-podminky-limitovane-nabidky-extralife",
+          "slots": ""
+        },
+        {
+          "title": "summerboost letni nabidka 2025 podminky",
+          "url": "https://support.fintokei.com/cs/articles/11686076-summerboost-letni-nabidka-2025-podminky",
+          "slots": ""
+        },
+        {
+          "title": "jak si mohu stahnout certifikaty a potvrzeni o platbach",
+          "url": "https://support.fintokei.com/cs/articles/11821381-jak-si-mohu-stahnout-certifikaty-a-potvrzeni-o-platbach",
+          "slots": "P07"
+        },
+        {
+          "title": "kdy mi dorazi payout na ucet",
+          "url": "https://support.fintokei.com/cs/articles/11904545-kdy-mi-dorazi-payout-na-ucet",
+          "slots": "P07"
+        },
+        {
+          "title": "proc omezujeme riziko u otevrenych obchodu kdyz uz existuje pravidlo denniho limitu ztraty",
+          "url": "https://support.fintokei.com/cs/articles/12017527-proc-omezujeme-riziko-u-otevrenych-obchodu-kdyz-uz-existuje-pravidlo-denniho-limitu-ztraty",
+          "slots": "P07,P16"
+        },
+        {
+          "title": "jak probiha swifttrader challenge jaka jsou pravidla",
+          "url": "https://support.fintokei.com/cs/articles/12040973-jak-probiha-swifttrader-challenge-jaka-jsou-pravidla",
+          "slots": "P07"
+        },
+        {
+          "title": "jaky je rozdil mezi programy protrader a protrader swing",
+          "url": "https://support.fintokei.com/cs/articles/12058210-jaky-je-rozdil-mezi-programy-protrader-a-protrader-swing",
+          "slots": "P03,P05,P07"
+        },
+        {
+          "title": "jake krypto instrumenty mohu obchodovat",
+          "url": "https://support.fintokei.com/cs/articles/12137786-jake-krypto-instrumenty-mohu-obchodovat",
+          "slots": ""
+        },
+        {
+          "title": "jake jsou prumerne spready pro jednotlive instrumenty",
+          "url": "https://support.fintokei.com/cs/articles/12138427-jake-jsou-prumerne-spready-pro-jednotlive-instrumenty",
+          "slots": ""
+        },
+        {
+          "title": "proc pouzivame chatbota bonsai",
+          "url": "https://support.fintokei.com/cs/articles/12351822-proc-pouzivame-chatbota-bonsai",
+          "slots": ""
+        },
+        {
+          "title": "muzu se zaregistrovat nebo nakoupit na firmu pravnickou osobu",
+          "url": "https://support.fintokei.com/cs/articles/12425583-muzu-se-zaregistrovat-nebo-nakoupit-na-firmu-pravnickou-osobu",
+          "slots": ""
+        },
+        {
+          "title": "jak mohu obchodovat na tradingview s fintokei",
+          "url": "https://support.fintokei.com/cs/articles/12688210-jak-mohu-obchodovat-na-tradingview-s-fintokei",
+          "slots": "P08"
+        },
+        {
+          "title": "vitej ve vesmiru fintokei jak funguje loyalty program",
+          "url": "https://support.fintokei.com/cs/articles/13386980-vitej-ve-vesmiru-fintokei-jak-funguje-loyalty-program",
+          "slots": ""
+        },
+        {
+          "title": "od landspeederu az po starship co jsou to tridy",
+          "url": "https://support.fintokei.com/cs/articles/13387351-od-landspeederu-az-po-starship-co-jsou-to-tridy",
+          "slots": ""
+        },
+        {
+          "title": "prijmi vyzvu co jsou mise a actions",
+          "url": "https://support.fintokei.com/cs/articles/13387561-prijmi-vyzvu-co-jsou-mise-a-actions",
+          "slots": ""
+        },
+        {
+          "title": "dodej sve ceste palivo co jsou zkusenostni body xp",
+          "url": "https://support.fintokei.com/cs/articles/13387718-dodej-sve-ceste-palivo-co-jsou-zkusenostni-body-xp",
+          "slots": ""
+        },
+        {
+          "title": "nakopni svuj trading co jsou vylepseni boosts",
+          "url": "https://support.fintokei.com/cs/articles/13387866-nakopni-svuj-trading-co-jsou-vylepseni-boosts",
+          "slots": ""
+        },
+        {
+          "title": "jak funguji promo nabidky typu buy one get one bogo nebo 1 1 zdarma",
+          "url": "https://support.fintokei.com/cs/articles/13514796-jak-funguji-promo-nabidky-typu-buy-one-get-one-bogo-nebo-1-1-zdarma",
+          "slots": ""
+        },
+        {
+          "title": "technicke pozadavky a kompatibilita",
+          "url": "https://support.fintokei.com/cs/articles/13682946-technicke-pozadavky-a-kompatibilita",
+          "slots": "P13"
+        },
+        {
+          "title": "co je mise sberatel the collector",
+          "url": "https://support.fintokei.com/cs/articles/13761494-co-je-mise-sberatel-the-collector",
+          "slots": ""
+        },
+        {
+          "title": "podminky a pravidla jarni promo nabidky 2026",
+          "url": "https://support.fintokei.com/cs/articles/14299164-podminky-a-pravidla-jarni-promo-nabidky-2026",
+          "slots": "P07"
+        },
+        {
+          "title": "jak funguje program pozvi kamarada refer a friend",
+          "url": "https://support.fintokei.com/cs/articles/14652552-jak-funguje-program-pozvi-kamarada-refer-a-friend",
+          "slots": ""
+        },
+        {
+          "title": "podminky specialni promo akce swifttrader druha sance",
+          "url": "https://support.fintokei.com/cs/articles/15053548-podminky-specialni-promo-akce-swifttrader-druha-sance",
+          "slots": ""
+        },
+        {
+          "title": "fin10mega podminky promo akce",
+          "url": "https://support.fintokei.com/cs/articles/15223468-fin10mega-podminky-promo-akce",
+          "slots": ""
+        },
+        {
+          "title": "co je fintokei",
+          "url": "https://support.fintokei.com/cs/articles/6481800-co-je-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "k cemu slouzi fintokei",
+          "url": "https://support.fintokei.com/cs/articles/6538810-k-cemu-slouzi-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "jak zacit",
+          "url": "https://support.fintokei.com/cs/articles/6538815-jak-zacit",
+          "slots": ""
+        },
+        {
+          "title": "jak vas mohu kontaktovat",
+          "url": "https://support.fintokei.com/cs/articles/6538819-jak-vas-mohu-kontaktovat",
+          "slots": "P07"
+        },
+        {
+          "title": "pro koho je fintokei urcen",
+          "url": "https://support.fintokei.com/cs/articles/6538820-pro-koho-je-fintokei-urcen",
+          "slots": ""
+        },
+        {
+          "title": "jak probiha protrader challenge jaka jsou pravidla",
+          "url": "https://support.fintokei.com/cs/articles/6538822-jak-probiha-protrader-challenge-jaka-jsou-pravidla",
+          "slots": "P07"
+        },
+        {
+          "title": "jak se vypocitava denni a celkova povolena ztrata",
+          "url": "https://support.fintokei.com/cs/articles/6538826-jak-se-vypocitava-denni-a-celkova-povolena-ztrata",
+          "slots": "P07"
+        },
+        {
+          "title": "existuje nejaky casovy limit",
+          "url": "https://support.fintokei.com/cs/articles/6538829-existuje-nejaky-casovy-limit",
+          "slots": ""
+        },
+        {
+          "title": "co kdyz mi to nevyjde muzu to zkusit znovu",
+          "url": "https://support.fintokei.com/cs/articles/6538830-co-kdyz-mi-to-nevyjde-muzu-to-zkusit-znovu",
+          "slots": ""
+        },
+        {
+          "title": "jake obchodni platformy nabizite",
+          "url": "https://support.fintokei.com/cs/articles/6538834-jake-obchodni-platformy-nabizite",
+          "slots": "P13"
+        },
+        {
+          "title": "muzu obchodovat pomoci automatickych obchodnich systemu expert advisors",
+          "url": "https://support.fintokei.com/cs/articles/6538838-muzu-obchodovat-pomoci-automatickych-obchodnich-systemu-expert-advisors",
+          "slots": "P13,P15,P19"
+        },
+        {
+          "title": "mohu obchodovat kdykoli drzet pozice otevrene pres vikend a obchodovat behem vyhlasovani zprav",
+          "url": "https://support.fintokei.com/cs/articles/6538843-mohu-obchodovat-kdykoli-drzet-pozice-otevrene-pres-vikend-a-obchodovat-behem-vyhlasovani-zprav",
+          "slots": ""
+        },
+        {
+          "title": "jakou paku poskytujete",
+          "url": "https://support.fintokei.com/cs/articles/6538847-jakou-paku-poskytujete",
+          "slots": ""
+        },
+        {
+          "title": "jake instrumenty muzu obchodovat",
+          "url": "https://support.fintokei.com/cs/articles/6538848-jake-instrumenty-muzu-obchodovat",
+          "slots": ""
+        },
+        {
+          "title": "v jakych menach jsou vedeny ucty",
+          "url": "https://support.fintokei.com/cs/articles/6538849-v-jakych-menach-jsou-vedeny-ucty",
+          "slots": ""
+        },
+        {
+          "title": "co je odmena za vykon u protrader uctu",
+          "url": "https://support.fintokei.com/cs/articles/6538873-co-je-odmena-za-vykon-u-protrader-uctu",
+          "slots": ""
+        },
+        {
+          "title": "co kdyz budu ve ztrate",
+          "url": "https://support.fintokei.com/cs/articles/6538875-co-kdyz-budu-ve-ztrate",
+          "slots": ""
+        },
+        {
+          "title": "kolik to stoji",
+          "url": "https://support.fintokei.com/cs/articles/6538876-kolik-to-stoji",
+          "slots": "P07"
+        },
+        {
+          "title": "jaka pravidla musim dodrzovat abych si udrzel ucet protrader",
+          "url": "https://support.fintokei.com/cs/articles/6538878-jaka-pravidla-musim-dodrzovat-abych-si-udrzel-ucet-protrader",
+          "slots": "P04,P07"
+        },
+        {
+          "title": "mohu si jeste vybrat zbyvajici zisk pokud jsem na svem uctu neuspel",
+          "url": "https://support.fintokei.com/cs/articles/6538881-mohu-si-jeste-vybrat-zbyvajici-zisk-pokud-jsem-na-svem-uctu-neuspel",
+          "slots": "P07"
+        },
+        {
+          "title": "jak mohu vybirat sve odmeny za vykon a jak casto jaka je minimalni castka pro vyber",
+          "url": "https://support.fintokei.com/cs/articles/6538884-jak-mohu-vybirat-sve-odmeny-za-vykon-a-jak-casto-jaka-je-minimalni-castka-pro-vyber",
+          "slots": ""
+        },
+        {
+          "title": "kolik uctu si muzu poridit a maximalne kolik obchodu muzu otevrit na uctu",
+          "url": "https://support.fintokei.com/cs/articles/6538886-kolik-uctu-si-muzu-poridit-a-maximalne-kolik-obchodu-muzu-otevrit-na-uctu",
+          "slots": ""
+        },
+        {
+          "title": "mohu na poskytnutych uctech obchodovat s realnymi penezi",
+          "url": "https://support.fintokei.com/cs/articles/6538894-mohu-na-poskytnutych-uctech-obchodovat-s-realnymi-penezi",
+          "slots": ""
+        },
+        {
+          "title": "mohu si vybrat brokera",
+          "url": "https://support.fintokei.com/cs/articles/6592662-mohu-si-vybrat-brokera",
+          "slots": ""
+        },
+        {
+          "title": "mohu dostat zpet penize za svuj nakup",
+          "url": "https://support.fintokei.com/cs/articles/6921693-mohu-dostat-zpet-penize-za-svuj-nakup",
+          "slots": ""
+        },
+        {
+          "title": "co je free trial nebo zkusebni ucet zdarma",
+          "url": "https://support.fintokei.com/cs/articles/7169529-co-je-free-trial-nebo-zkusebni-ucet-zdarma",
+          "slots": ""
+        },
+        {
+          "title": "je mozne zmenit obchodni platformu",
+          "url": "https://support.fintokei.com/cs/articles/7172463-je-mozne-zmenit-obchodni-platformu",
+          "slots": ""
+        },
+        {
+          "title": "jakymi zpusoby si mohu zakoupit obchodni vyzvu a voucher",
+          "url": "https://support.fintokei.com/cs/articles/7172488-jakymi-zpusoby-si-mohu-zakoupit-obchodni-vyzvu-a-voucher",
+          "slots": ""
+        },
+        {
+          "title": "je mozne zmenit vybrany plan",
+          "url": "https://support.fintokei.com/cs/articles/7172491-je-mozne-zmenit-vybrany-plan",
+          "slots": ""
+        },
+        {
+          "title": "jak se mohu registrovat do partnerske spoluprace",
+          "url": "https://support.fintokei.com/cs/articles/7172495-jak-se-mohu-registrovat-do-partnerske-spoluprace",
+          "slots": ""
+        },
+        {
+          "title": "jak zmenim heslo pro prihlaseni do myfintokei",
+          "url": "https://support.fintokei.com/cs/articles/7338647-jak-zmenim-heslo-pro-prihlaseni-do-myfintokei",
+          "slots": ""
+        },
+        {
+          "title": "jak muzu zmenit svoji e mailovou adresu",
+          "url": "https://support.fintokei.com/cs/articles/7338679-jak-muzu-zmenit-svoji-e-mailovou-adresu",
+          "slots": ""
+        },
+        {
+          "title": "jak mohu zmenit heslo pro obchodni ucty",
+          "url": "https://support.fintokei.com/cs/articles/7338716-jak-mohu-zmenit-heslo-pro-obchodni-ucty",
+          "slots": ""
+        },
+        {
+          "title": "kde mohu stahnout obchodni platformu",
+          "url": "https://support.fintokei.com/cs/articles/7338732-kde-mohu-stahnout-obchodni-platformu",
+          "slots": ""
+        },
+        {
+          "title": "kde najdu prihlasovaci udaje do obchodni platformy",
+          "url": "https://support.fintokei.com/cs/articles/8212411-kde-najdu-prihlasovaci-udaje-do-obchodni-platformy",
+          "slots": ""
+        },
+        {
+          "title": "kod kuponu nelze pouzit",
+          "url": "https://support.fintokei.com/cs/articles/8212577-kod-kuponu-nelze-pouzit",
+          "slots": ""
+        },
+        {
+          "title": "jsou zde nejake poplatky za obchodovani",
+          "url": "https://support.fintokei.com/cs/articles/8212584-jsou-zde-nejake-poplatky-za-obchodovani",
+          "slots": ""
+        },
+        {
+          "title": "jaky je cas na serveru v jakem casovem pasmu",
+          "url": "https://support.fintokei.com/cs/articles/8212586-jaky-je-cas-na-serveru-v-jakem-casovem-pasmu",
+          "slots": ""
+        },
+        {
+          "title": "co je odmena za vykon u swifttrader uctu",
+          "url": "https://support.fintokei.com/cs/articles/8408430-co-je-odmena-za-vykon-u-swifttrader-uctu",
+          "slots": ""
+        },
+        {
+          "title": "co je protrader program",
+          "url": "https://support.fintokei.com/cs/articles/8408926-co-je-protrader-program",
+          "slots": ""
+        },
+        {
+          "title": "co je swifttrader program",
+          "url": "https://support.fintokei.com/cs/articles/8408932-co-je-swifttrader-program",
+          "slots": ""
+        },
+        {
+          "title": "jaky je rozdil mezi protrader starttrader a swifttrader",
+          "url": "https://support.fintokei.com/cs/articles/8408938-jaky-je-rozdil-mezi-protrader-starttrader-a-swifttrader",
+          "slots": ""
+        },
+        {
+          "title": "jaka pravidla musim dodrzovat abych si udrzel ucet swifttrader",
+          "url": "https://support.fintokei.com/cs/articles/8409176-jaka-pravidla-musim-dodrzovat-abych-si-udrzel-ucet-swifttrader",
+          "slots": "P07"
+        },
+        {
+          "title": "co je high water mark",
+          "url": "https://support.fintokei.com/cs/articles/8409192-co-je-high-water-mark",
+          "slots": "P07"
+        },
+        {
+          "title": "co je scaling neboli skalovani",
+          "url": "https://support.fintokei.com/cs/articles/8409193-co-je-scaling-neboli-skalovani",
+          "slots": "P01,P07"
+        },
+        {
+          "title": "co je swap",
+          "url": "https://support.fintokei.com/cs/articles/8409194-co-je-swap",
+          "slots": ""
+        },
+        {
+          "title": "jake jsou podminky pro vyber financi z partnerskeho programu",
+          "url": "https://support.fintokei.com/cs/articles/8419976-jake-jsou-podminky-pro-vyber-financi-z-partnerskeho-programu",
+          "slots": ""
+        },
+        {
+          "title": "co znamena pravidlo minimalni obchodni dny 3 nebo 5",
+          "url": "https://support.fintokei.com/cs/articles/8428030-co-znamena-pravidlo-minimalni-obchodni-dny-3-nebo-5",
+          "slots": ""
+        },
+        {
+          "title": "nemuzu se prihlasit do platformy jaka je ip adresa obchodniho serveru",
+          "url": "https://support.fintokei.com/cs/articles/8438884-nemuzu-se-prihlasit-do-platformy-jaka-je-ip-adresa-obchodniho-serveru",
+          "slots": ""
+        },
+        {
+          "title": "jak si v obchodni platforme zobrazim vsechny obchodni instrumenty",
+          "url": "https://support.fintokei.com/cs/articles/8494453-jak-si-v-obchodni-platforme-zobrazim-vsechny-obchodni-instrumenty",
+          "slots": ""
+        },
+        {
+          "title": "jak se prihlasit do obchodni platformy pc verze",
+          "url": "https://support.fintokei.com/cs/articles/8544681-jak-se-prihlasit-do-obchodni-platformy-pc-verze",
+          "slots": ""
+        },
+        {
+          "title": "jak se prihlasit do obchodni platformy webova verze",
+          "url": "https://support.fintokei.com/cs/articles/8564566-jak-se-prihlasit-do-obchodni-platformy-webova-verze",
+          "slots": ""
+        },
+        {
+          "title": "jak se prihlasit do obchodni platformy ios verze",
+          "url": "https://support.fintokei.com/cs/articles/8570554-jak-se-prihlasit-do-obchodni-platformy-ios-verze",
+          "slots": ""
+        },
+        {
+          "title": "jak se prihlasit do obchodni platformy android verze",
+          "url": "https://support.fintokei.com/cs/articles/8570555-jak-se-prihlasit-do-obchodni-platformy-android-verze",
+          "slots": ""
+        },
+        {
+          "title": "jak se prihlasit do mt5 pc verze",
+          "url": "https://support.fintokei.com/cs/articles/8586731-jak-se-prihlasit-do-mt5-pc-verze",
+          "slots": ""
+        },
+        {
+          "title": "co je to ask bid a spread",
+          "url": "https://support.fintokei.com/cs/articles/8731957-co-je-to-ask-bid-a-spread",
+          "slots": ""
+        },
+        {
+          "title": "co je to kyc proces nebo proces overeni totoznosti",
+          "url": "https://support.fintokei.com/cs/articles/8911171-co-je-to-kyc-proces-nebo-proces-overeni-totoznosti",
+          "slots": ""
+        },
+        {
+          "title": "jak zacit aneb prvni kroky u fintokei",
+          "url": "https://support.fintokei.com/cs/articles/8911222-jak-zacit-aneb-prvni-kroky-u-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "je mozne spojeni vice uctu dohromady",
+          "url": "https://support.fintokei.com/cs/articles/9112877-je-mozne-spojeni-vice-uctu-dohromady",
+          "slots": ""
+        },
+        {
+          "title": "jak se prihlasit do platformy ctrader jake je prihlasovaci heslo pro ctrader ucty",
+          "url": "https://support.fintokei.com/cs/articles/9229553-jak-se-prihlasit-do-platformy-ctrader-jake-je-prihlasovaci-heslo-pro-ctrader-ucty",
+          "slots": ""
+        },
+        {
+          "title": "jak zmenit heslo na platforme ctrader",
+          "url": "https://support.fintokei.com/cs/articles/9229627-jak-zmenit-heslo-na-platforme-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "martingale a agresivni prumerovani nyni povoleno ale nedoporucovano",
+          "url": "https://support.fintokei.com/cs/articles/9229682-martingale-a-agresivni-prumerovani-nyni-povoleno-ale-nedoporucovano",
+          "slots": "P01,P19"
+        },
+        {
+          "title": "co je to tick scalping a jak je definovan",
+          "url": "https://support.fintokei.com/cs/articles/9229686-co-je-to-tick-scalping-a-jak-je-definovan",
+          "slots": "P15"
+        },
+        {
+          "title": "co se povazuje za zakazane obchodni praktiky",
+          "url": "https://support.fintokei.com/cs/articles/9229695-co-se-povazuje-za-zakazane-obchodni-praktiky",
+          "slots": "P07,P13,P15,P19"
+        },
+        {
+          "title": "co znamena arbitrazni obchodovani s prodlevou a co ho definuje",
+          "url": "https://support.fintokei.com/cs/articles/9230062-co-znamena-arbitrazni-obchodovani-s-prodlevou-a-co-ho-definuje",
+          "slots": "P19"
+        },
+        {
+          "title": "jak se definuje opacne obchodovani nebo hedgovani napric vicero ucty nebo klienty",
+          "url": "https://support.fintokei.com/cs/articles/9230072-jak-se-definuje-opacne-obchodovani-nebo-hedgovani-napric-vicero-ucty-nebo-klienty",
+          "slots": "P19"
+        },
+        {
+          "title": "jaka je maximalni a minimalni velikost obchodu",
+          "url": "https://support.fintokei.com/cs/articles/9286450-jaka-je-maximalni-a-minimalni-velikost-obchodu",
+          "slots": ""
+        },
+        {
+          "title": "anti hazardni pravidla ve fintokei",
+          "url": "https://support.fintokei.com/cs/articles/9464355-anti-hazardni-pravidla-ve-fintokei",
+          "slots": "P01,P07"
+        },
+        {
+          "title": "zakazane hazardni praktiky",
+          "url": "https://support.fintokei.com/cs/articles/9464379-zakazane-hazardni-praktiky",
+          "slots": "P01,P07,P13"
+        },
+        {
+          "title": "co je nadmerne a nesystematicke vyuzivani paky",
+          "url": "https://support.fintokei.com/cs/articles/9464487-co-je-nadmerne-a-nesystematicke-vyuzivani-paky",
+          "slots": "P07,P15"
+        },
+        {
+          "title": "jak se definuje jednostranne sazeni bez strategie",
+          "url": "https://support.fintokei.com/cs/articles/9464494-jak-se-definuje-jednostranne-sazeni-bez-strategie",
+          "slots": "P01,P13"
+        },
+        {
+          "title": "co znamena account rolling",
+          "url": "https://support.fintokei.com/cs/articles/9464498-co-znamena-account-rolling",
+          "slots": "P07"
+        },
+        {
+          "title": "co je all in trading a proc je zakazano dosahnout profit target v jednom obchodu",
+          "url": "https://support.fintokei.com/cs/articles/9464503-co-je-all-in-trading-a-proc-je-zakazano-dosahnout-profit-target-v-jednom-obchodu",
+          "slots": "P01,P07"
+        },
+        {
+          "title": "co je starttrader program",
+          "url": "https://support.fintokei.com/cs/articles/9579989-co-je-starttrader-program",
+          "slots": ""
+        },
+        {
+          "title": "jak probiha starttrader challenge jaka jsou pravidla",
+          "url": "https://support.fintokei.com/cs/articles/9579997-jak-probiha-starttrader-challenge-jaka-jsou-pravidla",
+          "slots": "P07"
+        },
+        {
+          "title": "jaka pravidla musim dodrzovat abych si udrzel ucet starttrader",
+          "url": "https://support.fintokei.com/cs/articles/9680289-jaka-pravidla-musim-dodrzovat-abych-si-udrzel-ucet-starttrader",
+          "slots": "P07"
+        },
+        {
+          "title": "co je odmena za vykon u starttrader uctu",
+          "url": "https://support.fintokei.com/cs/articles/9680686-co-je-odmena-za-vykon-u-starttrader-uctu",
+          "slots": ""
+        },
+        {
+          "title": "mate discord kanal",
+          "url": "https://support.fintokei.com/cs/articles/9925130-mate-discord-kanal",
+          "slots": "P13"
+        },
+        {
+          "title": "what is irresponsible trading on fintokei accounts",
+          "url": "https://support.fintokei.com/en/articles/10166343-what-is-irresponsible-trading-on-fintokei-accounts",
+          "slots": "P20,P01,P03,P07,P08,P17,P19"
+        },
+        {
+          "title": "why is it prohibited to open multiple profiles or registrations at the myfintokei client zone",
+          "url": "https://support.fintokei.com/en/articles/10166369-why-is-it-prohibited-to-open-multiple-profiles-or-registrations-at-the-myfintokei-client-zone",
+          "slots": "P19"
+        },
+        {
+          "title": "how do vouchers work in fintokei",
+          "url": "https://support.fintokei.com/en/articles/10221557-how-do-vouchers-work-in-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "what is dynamic performance reward",
+          "url": "https://support.fintokei.com/en/articles/10296483-what-is-dynamic-performance-reward",
+          "slots": ""
+        },
+        {
+          "title": "what are key factors of the dynamic performance reward",
+          "url": "https://support.fintokei.com/en/articles/10296554-what-are-key-factors-of-the-dynamic-performance-reward",
+          "slots": "P04,P07"
+        },
+        {
+          "title": "information on trading hours and exceptional changes to customer support business hours",
+          "url": "https://support.fintokei.com/en/articles/10308723-information-on-trading-hours-and-exceptional-changes-to-customer-support-business-hours",
+          "slots": ""
+        },
+        {
+          "title": "copy trading and eas what is allowed and what prohibited",
+          "url": "https://support.fintokei.com/en/articles/10419735-copy-trading-and-eas-what-is-allowed-and-what-prohibited",
+          "slots": "P13,P14,P19"
+        },
+        {
+          "title": "can you tell me about domestic bank transfers",
+          "url": "https://support.fintokei.com/en/articles/10559283-can-you-tell-me-about-domestic-bank-transfers",
+          "slots": ""
+        },
+        {
+          "title": "contest overview what it is and the rules to follow",
+          "url": "https://support.fintokei.com/en/articles/10566823-contest-overview-what-it-is-and-the-rules-to-follow",
+          "slots": "P20,P10,P11,P13,P19"
+        },
+        {
+          "title": "can you tell me about sepa bank transfers",
+          "url": "https://support.fintokei.com/en/articles/10693906-can-you-tell-me-about-sepa-bank-transfers",
+          "slots": ""
+        },
+        {
+          "title": "where can i find the details of my affiliate partnership",
+          "url": "https://support.fintokei.com/en/articles/11172078-where-can-i-find-the-details-of-my-affiliate-partnership",
+          "slots": ""
+        },
+        {
+          "title": "sustainable trading policy of fintokei",
+          "url": "https://support.fintokei.com/en/articles/11315899-sustainable-trading-policy-of-fintokei",
+          "slots": "P19"
+        },
+        {
+          "title": "trading similar to randomness how do we analyse this",
+          "url": "https://support.fintokei.com/en/articles/11315916-trading-similar-to-randomness-how-do-we-analyse-this",
+          "slots": "P07,P08,P13,P17,P19"
+        },
+        {
+          "title": "why someone with 2 or 3 payouts may not be a profitable trader",
+          "url": "https://support.fintokei.com/en/articles/11315925-why-someone-with-2-or-3-payouts-may-not-be-a-profitable-trader",
+          "slots": "P07"
+        },
+        {
+          "title": "who are we looking for and why even a 1 per week is actually an impressive performance",
+          "url": "https://support.fintokei.com/en/articles/11315928-who-are-we-looking-for-and-why-even-a-1-per-week-is-actually-an-impressive-performance",
+          "slots": "P19"
+        },
+        {
+          "title": "what if you just recently started and don t think your trading strategy is sustainable",
+          "url": "https://support.fintokei.com/en/articles/11315931-what-if-you-just-recently-started-and-don-t-think-your-trading-strategy-is-sustainable",
+          "slots": ""
+        },
+        {
+          "title": "why is fintokei suitable also for the swing traders",
+          "url": "https://support.fintokei.com/en/articles/11315943-why-is-fintokei-suitable-also-for-the-swing-traders",
+          "slots": "P20,P01,P09,P15"
+        },
+        {
+          "title": "why we apply restrictions and how we approach trading integrity longer read",
+          "url": "https://support.fintokei.com/en/articles/11315949-why-we-apply-restrictions-and-how-we-approach-trading-integrity-longer-read",
+          "slots": "P03,P07,P19"
+        },
+        {
+          "title": "overview of our risk management process what will happen if we identify any of the prohibited gambling or unsustainable practices",
+          "url": "https://support.fintokei.com/en/articles/11315957-overview-of-our-risk-management-process-what-will-happen-if-we-identify-any-of-the-prohibited-gambling-or-unsustainable-practices",
+          "slots": "P03,P07,P14,P15,P16,P17,P19"
+        },
+        {
+          "title": "excessive amount of warnings",
+          "url": "https://support.fintokei.com/en/articles/11315960-excessive-amount-of-warnings",
+          "slots": "P07,P14,P17,P19"
+        },
+        {
+          "title": "consistency rules most common application",
+          "url": "https://support.fintokei.com/en/articles/11315966-consistency-rules-most-common-application",
+          "slots": "P03,P07,P08,P14,P17,P19"
+        },
+        {
+          "title": "other restrictions that may be part of consistency rules",
+          "url": "https://support.fintokei.com/en/articles/11315971-other-restrictions-that-may-be-part-of-consistency-rules",
+          "slots": "P03,P05,P07,P08,P10,P16,P17"
+        },
+        {
+          "title": "what is the maximum risk on open trades",
+          "url": "https://support.fintokei.com/en/articles/11315976-what-is-the-maximum-risk-on-open-trades",
+          "slots": "P03,P16,P17,P19"
+        },
+        {
+          "title": "what is the definition of sharing 1 electronic device used for trading between multiple customers",
+          "url": "https://support.fintokei.com/en/articles/11316015-what-is-the-definition-of-sharing-1-electronic-device-used-for-trading-between-multiple-customers",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "what is the definition of using multiple ip addresses from many countries when connecting to your fintokei demo accounts or masking the ip addresses",
+          "url": "https://support.fintokei.com/en/articles/11316016-what-is-the-definition-of-using-multiple-ip-addresses-from-many-countries-when-connecting-to-your-fintokei-demo-accounts-or-masking-the-ip-addresses",
+          "slots": "P14,P15,P19"
+        },
+        {
+          "title": "what is unauthorized third party payment",
+          "url": "https://support.fintokei.com/en/articles/11316020-what-is-unauthorized-third-party-payment",
+          "slots": "P13,P14,P19"
+        },
+        {
+          "title": "how can i download an invoice",
+          "url": "https://support.fintokei.com/en/articles/11316023-how-can-i-download-an-invoice",
+          "slots": ""
+        },
+        {
+          "title": "simulation of the real market conditions slippage execution delay",
+          "url": "https://support.fintokei.com/en/articles/11316031-simulation-of-the-real-market-conditions-slippage-execution-delay",
+          "slots": "P10,P15,P19"
+        },
+        {
+          "title": "how does metrics recalculation work",
+          "url": "https://support.fintokei.com/en/articles/11426790-how-does-metrics-recalculation-work",
+          "slots": "P03,P05,P07,P08,P12"
+        },
+        {
+          "title": "how do we define the oversized risk",
+          "url": "https://support.fintokei.com/en/articles/11468666-how-do-we-define-the-oversized-risk",
+          "slots": "P03,P17,P19"
+        },
+        {
+          "title": "fintokei trading what every new trader should know",
+          "url": "https://support.fintokei.com/en/articles/11477282-fintokei-trading-what-every-new-trader-should-know",
+          "slots": ""
+        },
+        {
+          "title": "extralife june 2025 limited offer conditions",
+          "url": "https://support.fintokei.com/en/articles/11507990-extralife-june-2025-limited-offer-conditions",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "summerboost summer 2025 limited offer conditions",
+          "url": "https://support.fintokei.com/en/articles/11686076-summerboost-summer-2025-limited-offer-conditions",
+          "slots": "P04"
+        },
+        {
+          "title": "how can i download certificates and payment confirmations",
+          "url": "https://support.fintokei.com/en/articles/11821381-how-can-i-download-certificates-and-payment-confirmations",
+          "slots": ""
+        },
+        {
+          "title": "when will i receive my payout",
+          "url": "https://support.fintokei.com/en/articles/11904545-when-will-i-receive-my-payout",
+          "slots": "P19"
+        },
+        {
+          "title": "why do we limit risk on open trades if there s already a daily loss limit rule",
+          "url": "https://support.fintokei.com/en/articles/12017527-why-do-we-limit-risk-on-open-trades-if-there-s-already-a-daily-loss-limit-rule",
+          "slots": "P03,P05,P07,P16,P17,P19"
+        },
+        {
+          "title": "how does swifttrader challenge work what are the rules",
+          "url": "https://support.fintokei.com/en/articles/12040973-how-does-swifttrader-challenge-work-what-are-the-rules",
+          "slots": "P01,P02,P02b,P03,P05,P07,P17"
+        },
+        {
+          "title": "what is the difference between protrader and protrader swing",
+          "url": "https://support.fintokei.com/en/articles/12058210-what-is-the-difference-between-protrader-and-protrader-swing",
+          "slots": "P01,P03,P05,P07"
+        },
+        {
+          "title": "what crypto instruments can i trade",
+          "url": "https://support.fintokei.com/en/articles/12137786-what-crypto-instruments-can-i-trade",
+          "slots": "P10,P11,P17"
+        },
+        {
+          "title": "what are the typical spreads on instruments",
+          "url": "https://support.fintokei.com/en/articles/12138427-what-are-the-typical-spreads-on-instruments",
+          "slots": ""
+        },
+        {
+          "title": "why do we use the chatbot bonsai",
+          "url": "https://support.fintokei.com/en/articles/12351822-why-do-we-use-the-chatbot-bonsai",
+          "slots": "P19"
+        },
+        {
+          "title": "can i register or purchase a challenge under a corporate or llc entity",
+          "url": "https://support.fintokei.com/en/articles/12425583-can-i-register-or-purchase-a-challenge-under-a-corporate-or-llc-entity",
+          "slots": "P19"
+        },
+        {
+          "title": "how can i trade on tradingview with fintokei",
+          "url": "https://support.fintokei.com/en/articles/12688210-how-can-i-trade-on-tradingview-with-fintokei",
+          "slots": "P01,P08"
+        },
+        {
+          "title": "overview of corporate entity approval",
+          "url": "https://support.fintokei.com/en/articles/13166020-overview-of-corporate-entity-approval",
+          "slots": "P07"
+        },
+        {
+          "title": "welcome to the fintokei universe how does the loyalty program work",
+          "url": "https://support.fintokei.com/en/articles/13386980-welcome-to-the-fintokei-universe-how-does-the-loyalty-program-work",
+          "slots": "P05,P19"
+        },
+        {
+          "title": "from landspeeder to starship what are tiers",
+          "url": "https://support.fintokei.com/en/articles/13387351-from-landspeeder-to-starship-what-are-tiers",
+          "slots": ""
+        },
+        {
+          "title": "accept the challenge what are missions and actions",
+          "url": "https://support.fintokei.com/en/articles/13387561-accept-the-challenge-what-are-missions-and-actions",
+          "slots": "P09"
+        },
+        {
+          "title": "fuel your journey what are experience points xp",
+          "url": "https://support.fintokei.com/en/articles/13387718-fuel-your-journey-what-are-experience-points-xp",
+          "slots": ""
+        },
+        {
+          "title": "power up your trading what are boosts",
+          "url": "https://support.fintokei.com/en/articles/13387866-power-up-your-trading-what-are-boosts",
+          "slots": "P20,P05"
+        },
+        {
+          "title": "how do buy one get one bogo promo offers work at fintokei",
+          "url": "https://support.fintokei.com/en/articles/13514796-how-do-buy-one-get-one-bogo-promo-offers-work-at-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "technical requirements and compatibility",
+          "url": "https://support.fintokei.com/en/articles/13682946-technical-requirements-and-compatibility",
+          "slots": "P19"
+        },
+        {
+          "title": "what is the collector mission",
+          "url": "https://support.fintokei.com/en/articles/13761494-what-is-the-collector-mission",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "what is protrader slim",
+          "url": "https://support.fintokei.com/en/articles/13913487-what-is-protrader-slim",
+          "slots": ""
+        },
+        {
+          "title": "special promo offer conditions spring 2026 limited offer",
+          "url": "https://support.fintokei.com/en/articles/14299164-special-promo-offer-conditions-spring-2026-limited-offer",
+          "slots": "P09"
+        },
+        {
+          "title": "how does the refer a friend program work",
+          "url": "https://support.fintokei.com/en/articles/14652552-how-does-the-refer-a-friend-program-work",
+          "slots": ""
+        },
+        {
+          "title": "special promo offer conditions swifttrader second chance",
+          "url": "https://support.fintokei.com/en/articles/15053548-special-promo-offer-conditions-swifttrader-second-chance",
+          "slots": ""
+        },
+        {
+          "title": "fin10mega promo offer conditions",
+          "url": "https://support.fintokei.com/en/articles/15223468-fin10mega-promo-offer-conditions",
+          "slots": ""
+        },
+        {
+          "title": "how can i delete my fintokei academy account",
+          "url": "https://support.fintokei.com/en/articles/15260496-how-can-i-delete-my-fintokei-academy-account",
+          "slots": ""
+        },
+        {
+          "title": "what is fintokei",
+          "url": "https://support.fintokei.com/en/articles/6481800-what-is-fintokei",
+          "slots": "P01,P09"
+        },
+        {
+          "title": "what is the purpose of fintokei",
+          "url": "https://support.fintokei.com/en/articles/6538810-what-is-the-purpose-of-fintokei",
+          "slots": "P17"
+        },
+        {
+          "title": "how should i start",
+          "url": "https://support.fintokei.com/en/articles/6538815-how-should-i-start",
+          "slots": "P03,P05"
+        },
+        {
+          "title": "how can i get in touch with you",
+          "url": "https://support.fintokei.com/en/articles/6538819-how-can-i-get-in-touch-with-you",
+          "slots": ""
+        },
+        {
+          "title": "who can join fintokei",
+          "url": "https://support.fintokei.com/en/articles/6538820-who-can-join-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "how does the protrader challenge work what are the rules",
+          "url": "https://support.fintokei.com/en/articles/6538822-how-does-the-protrader-challenge-work-what-are-the-rules",
+          "slots": "P01,P02,P03,P05,P07,P17"
+        },
+        {
+          "title": "how are the daily loss limit and maximum loss limit calculated",
+          "url": "https://support.fintokei.com/en/articles/6538826-how-are-the-daily-loss-limit-and-maximum-loss-limit-calculated",
+          "slots": "P03,P04,P05,P07,P09"
+        },
+        {
+          "title": "is there any time limit",
+          "url": "https://support.fintokei.com/en/articles/6538829-is-there-any-time-limit",
+          "slots": "P20,P02,P03,P05,P09"
+        },
+        {
+          "title": "what if i fail can i try again",
+          "url": "https://support.fintokei.com/en/articles/6538830-what-if-i-fail-can-i-try-again",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "what trading platforms do you offer",
+          "url": "https://support.fintokei.com/en/articles/6538834-what-trading-platforms-do-you-offer",
+          "slots": "P13"
+        },
+        {
+          "title": "can i use automated trading through eas",
+          "url": "https://support.fintokei.com/en/articles/6538838-can-i-use-automated-trading-through-eas",
+          "slots": "P13,P14,P15,P19"
+        },
+        {
+          "title": "can trade any time hold positions over weekends and trade during news",
+          "url": "https://support.fintokei.com/en/articles/6538843-can-trade-any-time-hold-positions-over-weekends-and-trade-during-news",
+          "slots": "P09,P10,P11,P19"
+        },
+        {
+          "title": "what leverage do you offer",
+          "url": "https://support.fintokei.com/en/articles/6538847-what-leverage-do-you-offer",
+          "slots": "P09"
+        },
+        {
+          "title": "what instruments can i trade",
+          "url": "https://support.fintokei.com/en/articles/6538848-what-instruments-can-i-trade",
+          "slots": ""
+        },
+        {
+          "title": "what account currencies do you offer",
+          "url": "https://support.fintokei.com/en/articles/6538849-what-account-currencies-do-you-offer",
+          "slots": ""
+        },
+        {
+          "title": "what is the performance reward ratio on protrader accounts",
+          "url": "https://support.fintokei.com/en/articles/6538873-what-is-the-performance-reward-ratio-on-protrader-accounts",
+          "slots": ""
+        },
+        {
+          "title": "what if i make a loss",
+          "url": "https://support.fintokei.com/en/articles/6538875-what-if-i-make-a-loss",
+          "slots": "P03,P05"
+        },
+        {
+          "title": "how much does it cost",
+          "url": "https://support.fintokei.com/en/articles/6538876-how-much-does-it-cost",
+          "slots": ""
+        },
+        {
+          "title": "what rules do i have to follow to keep my protrader account",
+          "url": "https://support.fintokei.com/en/articles/6538878-what-rules-do-i-have-to-follow-to-keep-my-protrader-account",
+          "slots": "P01,P03,P04,P05,P07,P17"
+        },
+        {
+          "title": "i have failed on my account can i still withdraw the performance reward",
+          "url": "https://support.fintokei.com/en/articles/6538881-i-have-failed-on-my-account-can-i-still-withdraw-the-performance-reward",
+          "slots": "P03,P05,P09"
+        },
+        {
+          "title": "how and how often can i withdraw my performance rewards and what is the minimum amount",
+          "url": "https://support.fintokei.com/en/articles/6538884-how-and-how-often-can-i-withdraw-my-performance-rewards-and-what-is-the-minimum-amount",
+          "slots": "P02,P02b"
+        },
+        {
+          "title": "how many accounts and open positions can i have",
+          "url": "https://support.fintokei.com/en/articles/6538886-how-many-accounts-and-open-positions-can-i-have",
+          "slots": "P03,P05,P09"
+        },
+        {
+          "title": "do i trade real money on provided accounts",
+          "url": "https://support.fintokei.com/en/articles/6538894-do-i-trade-real-money-on-provided-accounts",
+          "slots": ""
+        },
+        {
+          "title": "can i choose a brokerage",
+          "url": "https://support.fintokei.com/en/articles/6592662-can-i-choose-a-brokerage",
+          "slots": ""
+        },
+        {
+          "title": "can i get a refund for my purchase",
+          "url": "https://support.fintokei.com/en/articles/6921693-can-i-get-a-refund-for-my-purchase",
+          "slots": ""
+        },
+        {
+          "title": "what is free trial",
+          "url": "https://support.fintokei.com/en/articles/7169529-what-is-free-trial",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "can i change the trading platform type",
+          "url": "https://support.fintokei.com/en/articles/7172463-can-i-change-the-trading-platform-type",
+          "slots": ""
+        },
+        {
+          "title": "how can i purchase the challenge plans and vouchers",
+          "url": "https://support.fintokei.com/en/articles/7172488-how-can-i-purchase-the-challenge-plans-and-vouchers",
+          "slots": ""
+        },
+        {
+          "title": "can i change the challenge plan",
+          "url": "https://support.fintokei.com/en/articles/7172491-can-i-change-the-challenge-plan",
+          "slots": "P20"
+        },
+        {
+          "title": "how can i register as an affiliate",
+          "url": "https://support.fintokei.com/en/articles/7172495-how-can-i-register-as-an-affiliate",
+          "slots": "P03,P05"
+        },
+        {
+          "title": "how can i change my password for myfintokei",
+          "url": "https://support.fintokei.com/en/articles/7338647-how-can-i-change-my-password-for-myfintokei",
+          "slots": ""
+        },
+        {
+          "title": "how can i change my email address",
+          "url": "https://support.fintokei.com/en/articles/7338679-how-can-i-change-my-email-address",
+          "slots": ""
+        },
+        {
+          "title": "how can i change my password for trading accounts",
+          "url": "https://support.fintokei.com/en/articles/7338716-how-can-i-change-my-password-for-trading-accounts",
+          "slots": ""
+        },
+        {
+          "title": "where can i download the trading platform",
+          "url": "https://support.fintokei.com/en/articles/7338732-where-can-i-download-the-trading-platform",
+          "slots": ""
+        },
+        {
+          "title": "where can i find my platform login information",
+          "url": "https://support.fintokei.com/en/articles/8212411-where-can-i-find-my-platform-login-information",
+          "slots": ""
+        },
+        {
+          "title": "coupon code cannot be used",
+          "url": "https://support.fintokei.com/en/articles/8212577-coupon-code-cannot-be-used",
+          "slots": ""
+        },
+        {
+          "title": "are there any transaction fees",
+          "url": "https://support.fintokei.com/en/articles/8212584-are-there-any-transaction-fees",
+          "slots": ""
+        },
+        {
+          "title": "what time is the server time based on",
+          "url": "https://support.fintokei.com/en/articles/8212586-what-time-is-the-server-time-based-on",
+          "slots": "P02"
+        },
+        {
+          "title": "what is the performance reward ratio on swifttrader accounts",
+          "url": "https://support.fintokei.com/en/articles/8408430-what-is-the-performance-reward-ratio-on-swifttrader-accounts",
+          "slots": "P02b"
+        },
+        {
+          "title": "what is protrader program",
+          "url": "https://support.fintokei.com/en/articles/8408926-what-is-protrader-program",
+          "slots": ""
+        },
+        {
+          "title": "what is swifttrader program",
+          "url": "https://support.fintokei.com/en/articles/8408932-what-is-swifttrader-program",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "what is the difference between protrader starttrader and swifttrader",
+          "url": "https://support.fintokei.com/en/articles/8408938-what-is-the-difference-between-protrader-starttrader-and-swifttrader",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "what rules do i have to follow to keep my swifttrader account",
+          "url": "https://support.fintokei.com/en/articles/8409176-what-rules-do-i-have-to-follow-to-keep-my-swifttrader-account",
+          "slots": "P20,P02,P02b,P03,P07,P09,P17"
+        },
+        {
+          "title": "what is high water mark",
+          "url": "https://support.fintokei.com/en/articles/8409192-what-is-high-water-mark",
+          "slots": "P07,P08"
+        },
+        {
+          "title": "what is scaling",
+          "url": "https://support.fintokei.com/en/articles/8409193-what-is-scaling",
+          "slots": "P01,P07,P09"
+        },
+        {
+          "title": "what is swap",
+          "url": "https://support.fintokei.com/en/articles/8409194-what-is-swap",
+          "slots": "P03,P05,P07"
+        },
+        {
+          "title": "what are the conditions for withdrawing funds from the affiliate program",
+          "url": "https://support.fintokei.com/en/articles/8419976-what-are-the-conditions-for-withdrawing-funds-from-the-affiliate-program",
+          "slots": ""
+        },
+        {
+          "title": "what does the rule minimum trading days mean 3 or 5 days",
+          "url": "https://support.fintokei.com/en/articles/8428030-what-does-the-rule-minimum-trading-days-mean-3-or-5-days",
+          "slots": "P20,P02,P07,P09"
+        },
+        {
+          "title": "i cannot login to the platform what is the ip address of the server",
+          "url": "https://support.fintokei.com/en/articles/8438884-i-cannot-login-to-the-platform-what-is-the-ip-address-of-the-server",
+          "slots": ""
+        },
+        {
+          "title": "how do i display all trading instruments on a trading platform",
+          "url": "https://support.fintokei.com/en/articles/8494453-how-do-i-display-all-trading-instruments-on-a-trading-platform",
+          "slots": ""
+        },
+        {
+          "title": "please tell me how to log in to trading platform desktop version",
+          "url": "https://support.fintokei.com/en/articles/8544681-please-tell-me-how-to-log-in-to-trading-platform-desktop-version",
+          "slots": ""
+        },
+        {
+          "title": "please tell me how to log in to trading platform web version",
+          "url": "https://support.fintokei.com/en/articles/8564566-please-tell-me-how-to-log-in-to-trading-platform-web-version",
+          "slots": ""
+        },
+        {
+          "title": "please tell me how to log in to a trading platform ios version",
+          "url": "https://support.fintokei.com/en/articles/8570554-please-tell-me-how-to-log-in-to-a-trading-platform-ios-version",
+          "slots": ""
+        },
+        {
+          "title": "please tell me how to log in to a trading platform android version",
+          "url": "https://support.fintokei.com/en/articles/8570555-please-tell-me-how-to-log-in-to-a-trading-platform-android-version",
+          "slots": ""
+        },
+        {
+          "title": "please tell me how to log in to mt5 desktop version",
+          "url": "https://support.fintokei.com/en/articles/8586731-please-tell-me-how-to-log-in-to-mt5-desktop-version",
+          "slots": ""
+        },
+        {
+          "title": "what is the ask bid price and spread",
+          "url": "https://support.fintokei.com/en/articles/8731957-what-is-the-ask-bid-price-and-spread",
+          "slots": ""
+        },
+        {
+          "title": "what is kyc process",
+          "url": "https://support.fintokei.com/en/articles/8911171-what-is-kyc-process",
+          "slots": "P20"
+        },
+        {
+          "title": "first steps with fintokei how to start right",
+          "url": "https://support.fintokei.com/en/articles/8911222-first-steps-with-fintokei-how-to-start-right",
+          "slots": "P20,P03,P05,P19"
+        },
+        {
+          "title": "is it possible to merge accounts",
+          "url": "https://support.fintokei.com/en/articles/9112877-is-it-possible-to-merge-accounts",
+          "slots": "P03"
+        },
+        {
+          "title": "how to log in to the ctrader platform what is the login password for ctrader account",
+          "url": "https://support.fintokei.com/en/articles/9229553-how-to-log-in-to-the-ctrader-platform-what-is-the-login-password-for-ctrader-account",
+          "slots": ""
+        },
+        {
+          "title": "how to change password in ctrader platform",
+          "url": "https://support.fintokei.com/en/articles/9229627-how-to-change-password-in-ctrader-platform",
+          "slots": ""
+        },
+        {
+          "title": "martingale and aggressive averaging now allowed but not recommended",
+          "url": "https://support.fintokei.com/en/articles/9229682-martingale-and-aggressive-averaging-now-allowed-but-not-recommended",
+          "slots": "P03,P17,P19"
+        },
+        {
+          "title": "what is the definition of tick scalping",
+          "url": "https://support.fintokei.com/en/articles/9229686-what-is-the-definition-of-tick-scalping",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "what is considered as a prohibited trading practice",
+          "url": "https://support.fintokei.com/en/articles/9229695-what-is-considered-as-a-prohibited-trading-practice",
+          "slots": "P07,P13,P14,P15,P19"
+        },
+        {
+          "title": "what is the definition of latency arbitrage trading",
+          "url": "https://support.fintokei.com/en/articles/9230062-what-is-the-definition-of-latency-arbitrage-trading",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "what is the definition of opposite trading or hedging across multiple accounts or traders",
+          "url": "https://support.fintokei.com/en/articles/9230072-what-is-the-definition-of-opposite-trading-or-hedging-across-multiple-accounts-or-traders",
+          "slots": "P13,P17,P19"
+        },
+        {
+          "title": "what is the maximum and minimum order size",
+          "url": "https://support.fintokei.com/en/articles/9286450-what-is-the-maximum-and-minimum-order-size",
+          "slots": ""
+        },
+        {
+          "title": "anti gambling policy of fintokei",
+          "url": "https://support.fintokei.com/en/articles/9464355-anti-gambling-policy-of-fintokei",
+          "slots": "P01,P07,P08,P10,P17,P19"
+        },
+        {
+          "title": "prohibited gambling practices",
+          "url": "https://support.fintokei.com/en/articles/9464379-prohibited-gambling-practices",
+          "slots": "P03,P07,P19"
+        },
+        {
+          "title": "what is overleveraging without a strategy",
+          "url": "https://support.fintokei.com/en/articles/9464487-what-is-overleveraging-without-a-strategy",
+          "slots": "P07,P15,P19"
+        },
+        {
+          "title": "what is the definition of one sided betting without a strategy",
+          "url": "https://support.fintokei.com/en/articles/9464494-what-is-the-definition-of-one-sided-betting-without-a-strategy",
+          "slots": "P01,P19"
+        },
+        {
+          "title": "what is account rolling",
+          "url": "https://support.fintokei.com/en/articles/9464498-what-is-account-rolling",
+          "slots": "P01,P19"
+        },
+        {
+          "title": "what is all in trading and why is it forbidden to achieve profit target in one trade",
+          "url": "https://support.fintokei.com/en/articles/9464503-what-is-all-in-trading-and-why-is-it-forbidden-to-achieve-profit-target-in-one-trade",
+          "slots": "P20,P01,P03,P19"
+        },
+        {
+          "title": "what is starttrader program",
+          "url": "https://support.fintokei.com/en/articles/9579989-what-is-starttrader-program",
+          "slots": ""
+        },
+        {
+          "title": "how does starttrader challenge work what are the rules",
+          "url": "https://support.fintokei.com/en/articles/9579997-how-does-starttrader-challenge-work-what-are-the-rules",
+          "slots": "P20,P01,P02,P03,P05,P07,P09,P17"
+        },
+        {
+          "title": "what rules do i have to follow to keep my starttrader account",
+          "url": "https://support.fintokei.com/en/articles/9680289-what-rules-do-i-have-to-follow-to-keep-my-starttrader-account",
+          "slots": "P01,P03,P04,P05,P07,P17"
+        },
+        {
+          "title": "what is the performance reward ratio on starttrader accounts",
+          "url": "https://support.fintokei.com/en/articles/9680686-what-is-the-performance-reward-ratio-on-starttrader-accounts",
+          "slots": ""
+        },
+        {
+          "title": "do you have discord channel",
+          "url": "https://support.fintokei.com/en/articles/9925130-do-you-have-discord-channel",
+          "slots": "P19"
+        },
+        {
+          "title": "cosa significa trading irresponsabile sugli account fintokei",
+          "url": "https://support.fintokei.com/it/articles/10166343-cosa-significa-trading-irresponsabile-sugli-account-fintokei",
+          "slots": "P07"
+        },
+        {
+          "title": "perche e vietato creare piu profili su myfintokei",
+          "url": "https://support.fintokei.com/it/articles/10166369-perche-e-vietato-creare-piu-profili-su-myfintokei",
+          "slots": "P19"
+        },
+        {
+          "title": "come funziona il voucher su fintokei",
+          "url": "https://support.fintokei.com/it/articles/10221557-come-funziona-il-voucher-su-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "cos e la ricompensa dinamica per le prestazioni dpr",
+          "url": "https://support.fintokei.com/it/articles/10296483-cos-e-la-ricompensa-dinamica-per-le-prestazioni-dpr",
+          "slots": "P01"
+        },
+        {
+          "title": "quali sono i fattori chiave per il calcolo della dpr",
+          "url": "https://support.fintokei.com/it/articles/10296554-quali-sono-i-fattori-chiave-per-il-calcolo-della-dpr",
+          "slots": "P01"
+        },
+        {
+          "title": "info su orari di trading e variazioni del supporto",
+          "url": "https://support.fintokei.com/it/articles/10308723-info-su-orari-di-trading-e-variazioni-del-supporto",
+          "slots": ""
+        },
+        {
+          "title": "copy trading e uso di ea cosa e permesso e cosa no",
+          "url": "https://support.fintokei.com/it/articles/10419735-copy-trading-e-uso-di-ea-cosa-e-permesso-e-cosa-no",
+          "slots": "P13,P14,P19"
+        },
+        {
+          "title": "mi dite qualcosa sui bonifici bancari locali",
+          "url": "https://support.fintokei.com/it/articles/10559283-mi-dite-qualcosa-sui-bonifici-bancari-locali",
+          "slots": ""
+        },
+        {
+          "title": "gare cosa sono e quali sono le regole",
+          "url": "https://support.fintokei.com/it/articles/10566823-gare-cosa-sono-e-quali-sono-le-regole",
+          "slots": "P10,P13"
+        },
+        {
+          "title": "mi dite qualcosa sui bonifici sepa",
+          "url": "https://support.fintokei.com/it/articles/10693906-mi-dite-qualcosa-sui-bonifici-sepa",
+          "slots": ""
+        },
+        {
+          "title": "dove trovo i dettagli della mia collaborazione affiliate",
+          "url": "https://support.fintokei.com/it/articles/11172078-dove-trovo-i-dettagli-della-mia-collaborazione-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "principi di trading sostenibile su fintokei",
+          "url": "https://support.fintokei.com/it/articles/11315899-principi-di-trading-sostenibile-su-fintokei",
+          "slots": "P19"
+        },
+        {
+          "title": "trading basato sulla fortuna come lo analizziamo",
+          "url": "https://support.fintokei.com/it/articles/11315916-trading-basato-sulla-fortuna-come-lo-analizziamo",
+          "slots": "P07,P19"
+        },
+        {
+          "title": "perche ricevere 2 o 3 payout non fa di te un trader profittevole",
+          "url": "https://support.fintokei.com/it/articles/11315925-perche-ricevere-2-o-3-payout-non-fa-di-te-un-trader-profittevole",
+          "slots": ""
+        },
+        {
+          "title": "chi cerchiamo e perche anche l 1 a settimana e una performance top",
+          "url": "https://support.fintokei.com/it/articles/11315928-chi-cerchiamo-e-perche-anche-l-1-a-settimana-e-una-performance-top",
+          "slots": "P08,P19"
+        },
+        {
+          "title": "e se hai appena iniziato e non sai se la tua strategia e sostenibile",
+          "url": "https://support.fintokei.com/it/articles/11315931-e-se-hai-appena-iniziato-e-non-sai-se-la-tua-strategia-e-sostenibile",
+          "slots": ""
+        },
+        {
+          "title": "perche organizziamo gare di trading brevi se sosteniamo il trading sostenibile",
+          "url": "https://support.fintokei.com/it/articles/11315937-perche-organizziamo-gare-di-trading-brevi-se-sosteniamo-il-trading-sostenibile",
+          "slots": "P07,P19"
+        },
+        {
+          "title": "perche fintokei e perfetto anche per gli swing trader",
+          "url": "https://support.fintokei.com/it/articles/11315943-perche-fintokei-e-perfetto-anche-per-gli-swing-trader",
+          "slots": "P01,P15"
+        },
+        {
+          "title": "perche mettiamo restrizioni e come gestiamo l integrita del trading lettura lunga",
+          "url": "https://support.fintokei.com/it/articles/11315949-perche-mettiamo-restrizioni-e-come-gestiamo-l-integrita-del-trading-lettura-lunga",
+          "slots": "P07,P19"
+        },
+        {
+          "title": "panoramica del risk management cosa succede se rileviamo comportamenti proibiti",
+          "url": "https://support.fintokei.com/it/articles/11315957-panoramica-del-risk-management-cosa-succede-se-rileviamo-comportamenti-proibiti",
+          "slots": "P07,P13,P14,P15,P17,P19"
+        },
+        {
+          "title": "troppi avvisi",
+          "url": "https://support.fintokei.com/it/articles/11315960-troppi-avvisi",
+          "slots": "P07,P14"
+        },
+        {
+          "title": "regole di consistenza le applicazioni piu comuni",
+          "url": "https://support.fintokei.com/it/articles/11315966-regole-di-consistenza-le-applicazioni-piu-comuni",
+          "slots": "P07,P08,P14,P19"
+        },
+        {
+          "title": "altre restrizioni che possono far parte delle regole di consistenza",
+          "url": "https://support.fintokei.com/it/articles/11315971-altre-restrizioni-che-possono-far-parte-delle-regole-di-consistenza",
+          "slots": "P07,P08,P16"
+        },
+        {
+          "title": "qual e il rischio massimo sui trade aperti",
+          "url": "https://support.fintokei.com/it/articles/11315976-qual-e-il-rischio-massimo-sui-trade-aperti",
+          "slots": "P16"
+        },
+        {
+          "title": "cosa significa condividere un dispositivo tra piu clienti",
+          "url": "https://support.fintokei.com/it/articles/11316015-cosa-significa-condividere-un-dispositivo-tra-piu-clienti",
+          "slots": "P14"
+        },
+        {
+          "title": "cosa significa usare piu indirizzi ip o mascherare l ip collegandosi agli account fintokei",
+          "url": "https://support.fintokei.com/it/articles/11316016-cosa-significa-usare-piu-indirizzi-ip-o-mascherare-l-ip-collegandosi-agli-account-fintokei",
+          "slots": "P14"
+        },
+        {
+          "title": "cos e un pagamento non autorizzato di terze parti",
+          "url": "https://support.fintokei.com/it/articles/11316020-cos-e-un-pagamento-non-autorizzato-di-terze-parti",
+          "slots": ""
+        },
+        {
+          "title": "come posso scaricare la conferma d acquisto",
+          "url": "https://support.fintokei.com/it/articles/11316023-come-posso-scaricare-la-conferma-d-acquisto",
+          "slots": ""
+        },
+        {
+          "title": "simulazione delle condizioni reali slippage e ritardi",
+          "url": "https://support.fintokei.com/it/articles/11316031-simulazione-delle-condizioni-reali-slippage-e-ritardi",
+          "slots": "P15"
+        },
+        {
+          "title": "come e quando fintokei ricalcola le metriche di trading",
+          "url": "https://support.fintokei.com/it/articles/11426790-come-e-quando-fintokei-ricalcola-le-metriche-di-trading",
+          "slots": ""
+        },
+        {
+          "title": "cos e il rischio eccessivo oversized risk",
+          "url": "https://support.fintokei.com/it/articles/11468666-cos-e-il-rischio-eccessivo-oversized-risk",
+          "slots": "P01"
+        },
+        {
+          "title": "fintokei e trading cosa c e da sapere all inizio",
+          "url": "https://support.fintokei.com/it/articles/11477282-fintokei-e-trading-cosa-c-e-da-sapere-all-inizio",
+          "slots": ""
+        },
+        {
+          "title": "come scarico certificati e conferme di pagamento",
+          "url": "https://support.fintokei.com/it/articles/11821381-come-scarico-certificati-e-conferme-di-pagamento",
+          "slots": ""
+        },
+        {
+          "title": "quando arriva il payout sul conto",
+          "url": "https://support.fintokei.com/it/articles/11904545-quando-arriva-il-payout-sul-conto",
+          "slots": ""
+        },
+        {
+          "title": "perche limitiamo il rischio sui trade aperti se c e gia il limite di perdita giornaliera",
+          "url": "https://support.fintokei.com/it/articles/12017527-perche-limitiamo-il-rischio-sui-trade-aperti-se-c-e-gia-il-limite-di-perdita-giornaliera",
+          "slots": "P07,P16,P19"
+        },
+        {
+          "title": "come funziona la sfida swifttrader quali sono le regole",
+          "url": "https://support.fintokei.com/it/articles/12040973-come-funziona-la-sfida-swifttrader-quali-sono-le-regole",
+          "slots": "P07"
+        },
+        {
+          "title": "qual e la differenza tra protrader e protrader swing",
+          "url": "https://support.fintokei.com/it/articles/12058210-qual-e-la-differenza-tra-protrader-e-protrader-swing",
+          "slots": "P03,P04,P05"
+        },
+        {
+          "title": "quali strumenti crypto posso tradare",
+          "url": "https://support.fintokei.com/it/articles/12137786-quali-strumenti-crypto-posso-tradare",
+          "slots": ""
+        },
+        {
+          "title": "quali sono gli spread medi per i singoli strumenti",
+          "url": "https://support.fintokei.com/it/articles/12138427-quali-sono-gli-spread-medi-per-i-singoli-strumenti",
+          "slots": ""
+        },
+        {
+          "title": "perche usiamo il chatbot bonsai",
+          "url": "https://support.fintokei.com/it/articles/12351822-perche-usiamo-il-chatbot-bonsai",
+          "slots": ""
+        },
+        {
+          "title": "posso registrarmi o acquistare come azienda",
+          "url": "https://support.fintokei.com/it/articles/12425583-posso-registrarmi-o-acquistare-come-azienda",
+          "slots": ""
+        },
+        {
+          "title": "come posso fare trading su tradingview con fintokei",
+          "url": "https://support.fintokei.com/it/articles/12688210-come-posso-fare-trading-su-tradingview-con-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "benvenuto nell universo fintokei come funziona il loyalty program",
+          "url": "https://support.fintokei.com/it/articles/13386980-benvenuto-nell-universo-fintokei-come-funziona-il-loyalty-program",
+          "slots": ""
+        },
+        {
+          "title": "dal landspeeder alla starship cosa sono i livelli",
+          "url": "https://support.fintokei.com/it/articles/13387351-dal-landspeeder-alla-starship-cosa-sono-i-livelli",
+          "slots": ""
+        },
+        {
+          "title": "accetta la sfida cosa sono missioni e azioni",
+          "url": "https://support.fintokei.com/it/articles/13387561-accetta-la-sfida-cosa-sono-missioni-e-azioni",
+          "slots": ""
+        },
+        {
+          "title": "fai il pieno al tuo viaggio cosa sono i punti esperienza xp",
+          "url": "https://support.fintokei.com/it/articles/13387718-fai-il-pieno-al-tuo-viaggio-cosa-sono-i-punti-esperienza-xp",
+          "slots": ""
+        },
+        {
+          "title": "metti il turbo al tuo trading cosa sono i booster",
+          "url": "https://support.fintokei.com/it/articles/13387866-metti-il-turbo-al-tuo-trading-cosa-sono-i-booster",
+          "slots": ""
+        },
+        {
+          "title": "requisiti tecnici e compatibilita",
+          "url": "https://support.fintokei.com/it/articles/13682946-requisiti-tecnici-e-compatibilita",
+          "slots": "P13,P14"
+        },
+        {
+          "title": "cos e la missione the collector",
+          "url": "https://support.fintokei.com/it/articles/13761494-cos-e-la-missione-the-collector",
+          "slots": ""
+        },
+        {
+          "title": "condizioni dell offerta promo speciale spring limited offer",
+          "url": "https://support.fintokei.com/it/articles/14299164-condizioni-dell-offerta-promo-speciale-spring-limited-offer",
+          "slots": ""
+        },
+        {
+          "title": "come funziona il programma invita un amico refer a friend",
+          "url": "https://support.fintokei.com/it/articles/14652552-come-funziona-il-programma-invita-un-amico-refer-a-friend",
+          "slots": ""
+        },
+        {
+          "title": "condizioni della promozione speciale swifttrader second chance",
+          "url": "https://support.fintokei.com/it/articles/15053548-condizioni-della-promozione-speciale-swifttrader-second-chance",
+          "slots": ""
+        },
+        {
+          "title": "fin10mega condizioni dell offerta promo",
+          "url": "https://support.fintokei.com/it/articles/15223468-fin10mega-condizioni-dell-offerta-promo",
+          "slots": ""
+        },
+        {
+          "title": "cos e fintokei",
+          "url": "https://support.fintokei.com/it/articles/6481800-cos-e-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "qual e l obiettivo di fintokei",
+          "url": "https://support.fintokei.com/it/articles/6538810-qual-e-l-obiettivo-di-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "come iniziare",
+          "url": "https://support.fintokei.com/it/articles/6538815-come-iniziare",
+          "slots": ""
+        },
+        {
+          "title": "come posso contattarvi",
+          "url": "https://support.fintokei.com/it/articles/6538819-come-posso-contattarvi",
+          "slots": ""
+        },
+        {
+          "title": "chi puo unirsi a fintokei",
+          "url": "https://support.fintokei.com/it/articles/6538820-chi-puo-unirsi-a-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "come funziona la sfida protrader quali sono le regole",
+          "url": "https://support.fintokei.com/it/articles/6538822-come-funziona-la-sfida-protrader-quali-sono-le-regole",
+          "slots": "P07"
+        },
+        {
+          "title": "come si calcola la perdita giornaliera e massima",
+          "url": "https://support.fintokei.com/it/articles/6538826-come-si-calcola-la-perdita-giornaliera-e-massima",
+          "slots": ""
+        },
+        {
+          "title": "c e un limite di tempo",
+          "url": "https://support.fintokei.com/it/articles/6538829-c-e-un-limite-di-tempo",
+          "slots": ""
+        },
+        {
+          "title": "e se non ce la faccio posso riprovare",
+          "url": "https://support.fintokei.com/it/articles/6538830-e-se-non-ce-la-faccio-posso-riprovare",
+          "slots": ""
+        },
+        {
+          "title": "quali piattaforme di trading offrite",
+          "url": "https://support.fintokei.com/it/articles/6538834-quali-piattaforme-di-trading-offrite",
+          "slots": "P13"
+        },
+        {
+          "title": "posso fare trading con sistemi automatici expert advisors",
+          "url": "https://support.fintokei.com/it/articles/6538838-posso-fare-trading-con-sistemi-automatici-expert-advisors",
+          "slots": "P13,P14,P15,P19"
+        },
+        {
+          "title": "posso fare trading sempre tenere posizioni nel weekend e durante le news",
+          "url": "https://support.fintokei.com/it/articles/6538843-posso-fare-trading-sempre-tenere-posizioni-nel-weekend-e-durante-le-news",
+          "slots": "P10,P11"
+        },
+        {
+          "title": "che leva offrite",
+          "url": "https://support.fintokei.com/it/articles/6538847-che-leva-offrite",
+          "slots": ""
+        },
+        {
+          "title": "quali strumenti posso tradare",
+          "url": "https://support.fintokei.com/it/articles/6538848-quali-strumenti-posso-tradare",
+          "slots": ""
+        },
+        {
+          "title": "in quali valute sono denominati gli account",
+          "url": "https://support.fintokei.com/it/articles/6538849-in-quali-valute-sono-denominati-gli-account",
+          "slots": ""
+        },
+        {
+          "title": "cos e il premio per le performance negli account protrader",
+          "url": "https://support.fintokei.com/it/articles/6538873-cos-e-il-premio-per-le-performance-negli-account-protrader",
+          "slots": ""
+        },
+        {
+          "title": "e se vado in perdita",
+          "url": "https://support.fintokei.com/it/articles/6538875-e-se-vado-in-perdita",
+          "slots": ""
+        },
+        {
+          "title": "quanto costa",
+          "url": "https://support.fintokei.com/it/articles/6538876-quanto-costa",
+          "slots": ""
+        },
+        {
+          "title": "quali regole devo seguire per mantenere l account protrader",
+          "url": "https://support.fintokei.com/it/articles/6538878-quali-regole-devo-seguire-per-mantenere-l-account-protrader",
+          "slots": "P04,P07"
+        },
+        {
+          "title": "posso prelevare il profitto residuo se ho fallito l account",
+          "url": "https://support.fintokei.com/it/articles/6538881-posso-prelevare-il-profitto-residuo-se-ho-fallito-l-account",
+          "slots": ""
+        },
+        {
+          "title": "come posso prelevare i premi per le performance",
+          "url": "https://support.fintokei.com/it/articles/6538884-come-posso-prelevare-i-premi-per-le-performance",
+          "slots": ""
+        },
+        {
+          "title": "quanti account posso avere e quanti trade posso aprire",
+          "url": "https://support.fintokei.com/it/articles/6538886-quanti-account-posso-avere-e-quanti-trade-posso-aprire",
+          "slots": ""
+        },
+        {
+          "title": "posso tradare denaro reale sugli account forniti",
+          "url": "https://support.fintokei.com/it/articles/6538894-posso-tradare-denaro-reale-sugli-account-forniti",
+          "slots": "P13"
+        },
+        {
+          "title": "posso scegliere il broker",
+          "url": "https://support.fintokei.com/it/articles/6592662-posso-scegliere-il-broker",
+          "slots": ""
+        },
+        {
+          "title": "posso ottenere un rimborso per il mio acquisto",
+          "url": "https://support.fintokei.com/it/articles/6921693-posso-ottenere-un-rimborso-per-il-mio-acquisto",
+          "slots": ""
+        },
+        {
+          "title": "cos e la prova gratuita free trial",
+          "url": "https://support.fintokei.com/it/articles/7169529-cos-e-la-prova-gratuita-free-trial",
+          "slots": ""
+        },
+        {
+          "title": "e possibile cambiare piattaforma di trading",
+          "url": "https://support.fintokei.com/it/articles/7172463-e-possibile-cambiare-piattaforma-di-trading",
+          "slots": ""
+        },
+        {
+          "title": "come posso acquistare una sfida o un voucher",
+          "url": "https://support.fintokei.com/it/articles/7172488-come-posso-acquistare-una-sfida-o-un-voucher",
+          "slots": ""
+        },
+        {
+          "title": "e possibile cambiare il piano scelto",
+          "url": "https://support.fintokei.com/it/articles/7172491-e-possibile-cambiare-il-piano-scelto",
+          "slots": "P01"
+        },
+        {
+          "title": "come posso registrarmi al programma partner",
+          "url": "https://support.fintokei.com/it/articles/7172495-come-posso-registrarmi-al-programma-partner",
+          "slots": ""
+        },
+        {
+          "title": "come cambio la password di myfintokei",
+          "url": "https://support.fintokei.com/it/articles/7338647-come-cambio-la-password-di-myfintokei",
+          "slots": ""
+        },
+        {
+          "title": "come posso cambiare il mio indirizzo email",
+          "url": "https://support.fintokei.com/it/articles/7338679-come-posso-cambiare-il-mio-indirizzo-email",
+          "slots": ""
+        },
+        {
+          "title": "come cambio la password degli account di trading",
+          "url": "https://support.fintokei.com/it/articles/7338716-come-cambio-la-password-degli-account-di-trading",
+          "slots": ""
+        },
+        {
+          "title": "dove posso scaricare la piattaforma",
+          "url": "https://support.fintokei.com/it/articles/7338732-dove-posso-scaricare-la-piattaforma",
+          "slots": ""
+        },
+        {
+          "title": "dove trovo le credenziali per la piattaforma",
+          "url": "https://support.fintokei.com/it/articles/8212411-dove-trovo-le-credenziali-per-la-piattaforma",
+          "slots": ""
+        },
+        {
+          "title": "il codice coupon non funziona",
+          "url": "https://support.fintokei.com/it/articles/8212577-il-codice-coupon-non-funziona",
+          "slots": ""
+        },
+        {
+          "title": "ci sono commissioni per il trading",
+          "url": "https://support.fintokei.com/it/articles/8212584-ci-sono-commissioni-per-il-trading",
+          "slots": ""
+        },
+        {
+          "title": "qual e l orario del server qual e il fuso orario",
+          "url": "https://support.fintokei.com/it/articles/8212586-qual-e-l-orario-del-server-qual-e-il-fuso-orario",
+          "slots": ""
+        },
+        {
+          "title": "cos e il premio per le performance negli account swifttrader",
+          "url": "https://support.fintokei.com/it/articles/8408430-cos-e-il-premio-per-le-performance-negli-account-swifttrader",
+          "slots": ""
+        },
+        {
+          "title": "cos e il programma protrader",
+          "url": "https://support.fintokei.com/it/articles/8408926-cos-e-il-programma-protrader",
+          "slots": ""
+        },
+        {
+          "title": "cos e il programma swifttrader",
+          "url": "https://support.fintokei.com/it/articles/8408932-cos-e-il-programma-swifttrader",
+          "slots": ""
+        },
+        {
+          "title": "qual e la differenza tra protrader starttrader e swifttrader",
+          "url": "https://support.fintokei.com/it/articles/8408938-qual-e-la-differenza-tra-protrader-starttrader-e-swifttrader",
+          "slots": ""
+        },
+        {
+          "title": "quali regole devo seguire per mantenere l account swifttrader",
+          "url": "https://support.fintokei.com/it/articles/8409176-quali-regole-devo-seguire-per-mantenere-l-account-swifttrader",
+          "slots": "P07"
+        },
+        {
+          "title": "cos e l high water mark",
+          "url": "https://support.fintokei.com/it/articles/8409192-cos-e-l-high-water-mark",
+          "slots": ""
+        },
+        {
+          "title": "cos e lo swap",
+          "url": "https://support.fintokei.com/it/articles/8409194-cos-e-lo-swap",
+          "slots": ""
+        },
+        {
+          "title": "quali sono le condizioni per prelevare dal programma partner",
+          "url": "https://support.fintokei.com/it/articles/8419976-quali-sono-le-condizioni-per-prelevare-dal-programma-partner",
+          "slots": ""
+        },
+        {
+          "title": "cosa significa la regola dei giorni minimi di trading 3 o 5 giorni",
+          "url": "https://support.fintokei.com/it/articles/8428030-cosa-significa-la-regola-dei-giorni-minimi-di-trading-3-o-5-giorni",
+          "slots": ""
+        },
+        {
+          "title": "non riesco ad accedere qual e l indirizzo ip del server",
+          "url": "https://support.fintokei.com/it/articles/8438884-non-riesco-ad-accedere-qual-e-l-indirizzo-ip-del-server",
+          "slots": ""
+        },
+        {
+          "title": "come visualizzo tutti gli strumenti nella piattaforma",
+          "url": "https://support.fintokei.com/it/articles/8494453-come-visualizzo-tutti-gli-strumenti-nella-piattaforma",
+          "slots": ""
+        },
+        {
+          "title": "come accedere alla piattaforma di trading versione pc",
+          "url": "https://support.fintokei.com/it/articles/8544681-come-accedere-alla-piattaforma-di-trading-versione-pc",
+          "slots": ""
+        },
+        {
+          "title": "come accedere alla piattaforma di trading versione web",
+          "url": "https://support.fintokei.com/it/articles/8564566-come-accedere-alla-piattaforma-di-trading-versione-web",
+          "slots": ""
+        },
+        {
+          "title": "come accedere alla piattaforma di trading versione ios",
+          "url": "https://support.fintokei.com/it/articles/8570554-come-accedere-alla-piattaforma-di-trading-versione-ios",
+          "slots": ""
+        },
+        {
+          "title": "come accedere alla piattaforma di trading versione android",
+          "url": "https://support.fintokei.com/it/articles/8570555-come-accedere-alla-piattaforma-di-trading-versione-android",
+          "slots": ""
+        },
+        {
+          "title": "come accedere a mt5 versione pc",
+          "url": "https://support.fintokei.com/it/articles/8586731-come-accedere-a-mt5-versione-pc",
+          "slots": ""
+        },
+        {
+          "title": "cosa sono ask bid e spread",
+          "url": "https://support.fintokei.com/it/articles/8731957-cosa-sono-ask-bid-e-spread",
+          "slots": "P19"
+        },
+        {
+          "title": "cos e il processo kyc o verifica dell identita",
+          "url": "https://support.fintokei.com/it/articles/8911171-cos-e-il-processo-kyc-o-verifica-dell-identita",
+          "slots": ""
+        },
+        {
+          "title": "come iniziare i primi passi con fintokei",
+          "url": "https://support.fintokei.com/it/articles/8911222-come-iniziare-i-primi-passi-con-fintokei",
+          "slots": ""
+        },
+        {
+          "title": "e possibile unire piu account",
+          "url": "https://support.fintokei.com/it/articles/9112877-e-possibile-unire-piu-account",
+          "slots": ""
+        },
+        {
+          "title": "come accedere a ctrader qual e la password per gli account ctrader",
+          "url": "https://support.fintokei.com/it/articles/9229553-come-accedere-a-ctrader-qual-e-la-password-per-gli-account-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "come cambiare la password su ctrader",
+          "url": "https://support.fintokei.com/it/articles/9229627-come-cambiare-la-password-su-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "martingala e mediazione aggressiva ora permessi ma sconsigliati",
+          "url": "https://support.fintokei.com/it/articles/9229682-martingala-e-mediazione-aggressiva-ora-permessi-ma-sconsigliati",
+          "slots": "P13,P14"
+        },
+        {
+          "title": "cos e il tick scalping e come e definito",
+          "url": "https://support.fintokei.com/it/articles/9229686-cos-e-il-tick-scalping-e-come-e-definito",
+          "slots": "P15"
+        },
+        {
+          "title": "cosa e considerato pratica di trading proibita",
+          "url": "https://support.fintokei.com/it/articles/9229695-cosa-e-considerato-pratica-di-trading-proibita",
+          "slots": "P07,P13,P14,P15,P19"
+        },
+        {
+          "title": "cosa significa arbitraggio di latenza e come e definito",
+          "url": "https://support.fintokei.com/it/articles/9230062-cosa-significa-arbitraggio-di-latenza-e-come-e-definito",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "come si definisce l opposite trading o l hedging tra piu account o clienti",
+          "url": "https://support.fintokei.com/it/articles/9230072-come-si-definisce-l-opposite-trading-o-l-hedging-tra-piu-account-o-clienti",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "qual e la dimensione massima e minima del trade",
+          "url": "https://support.fintokei.com/it/articles/9286450-qual-e-la-dimensione-massima-e-minima-del-trade",
+          "slots": ""
+        },
+        {
+          "title": "regole anti gioco d azzardo su fintokei",
+          "url": "https://support.fintokei.com/it/articles/9464355-regole-anti-gioco-d-azzardo-su-fintokei",
+          "slots": "P01,P07,P19"
+        },
+        {
+          "title": "pratiche di gioco d azzardo proibite",
+          "url": "https://support.fintokei.com/it/articles/9464379-pratiche-di-gioco-d-azzardo-proibite",
+          "slots": "P01,P07"
+        },
+        {
+          "title": "cos e l overleveraging senza strategia",
+          "url": "https://support.fintokei.com/it/articles/9464487-cos-e-l-overleveraging-senza-strategia",
+          "slots": "P07,P15"
+        },
+        {
+          "title": "cos e il one sided betting senza strategia",
+          "url": "https://support.fintokei.com/it/articles/9464494-cos-e-il-one-sided-betting-senza-strategia",
+          "slots": "P01"
+        },
+        {
+          "title": "cos e l account rolling",
+          "url": "https://support.fintokei.com/it/articles/9464498-cos-e-l-account-rolling",
+          "slots": ""
+        },
+        {
+          "title": "cos e l all in trading e perche e vietato raggiungere il profit target con un solo trade",
+          "url": "https://support.fintokei.com/it/articles/9464503-cos-e-l-all-in-trading-e-perche-e-vietato-raggiungere-il-profit-target-con-un-solo-trade",
+          "slots": "P01,P19"
+        },
+        {
+          "title": "cos e il programma starttrader",
+          "url": "https://support.fintokei.com/it/articles/9579989-cos-e-il-programma-starttrader",
+          "slots": ""
+        },
+        {
+          "title": "come funziona la sfida starttrader quali sono le regole",
+          "url": "https://support.fintokei.com/it/articles/9579997-come-funziona-la-sfida-starttrader-quali-sono-le-regole",
+          "slots": "P07"
+        },
+        {
+          "title": "quali regole devo seguire per mantenere l account starttrader",
+          "url": "https://support.fintokei.com/it/articles/9680289-quali-regole-devo-seguire-per-mantenere-l-account-starttrader",
+          "slots": "P07"
+        },
+        {
+          "title": "cos e il premio per le performance negli account starttrader",
+          "url": "https://support.fintokei.com/it/articles/9680686-cos-e-il-premio-per-le-performance-negli-account-starttrader",
+          "slots": ""
+        },
+        {
+          "title": "avete un canale discord",
+          "url": "https://support.fintokei.com/it/articles/9925130-avete-un-canale-discord",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiにおける 無責任な取引 とは",
+          "url": "https://support.fintokei.com/ja/articles/10166343-fintokeiにおける-無責任な取引-とは",
+          "slots": ""
+        },
+        {
+          "title": "myfintokeiで複数のプロフィールアカウントを作成することが禁止されている理由は",
+          "url": "https://support.fintokei.com/ja/articles/10166369-myfintokeiで複数のプロフィールアカウントを作成することが禁止されている理由は",
+          "slots": ""
+        },
+        {
+          "title": "プランギフト券とは",
+          "url": "https://support.fintokei.com/ja/articles/10221557-プランギフト券とは",
+          "slots": ""
+        },
+        {
+          "title": "ダイナミックな報酬システム dpr とは",
+          "url": "https://support.fintokei.com/ja/articles/10296483-ダイナミックな報酬システム-dpr-とは",
+          "slots": ""
+        },
+        {
+          "title": "ダイナミックな報酬システム dpr の判断要素は何ですか",
+          "url": "https://support.fintokei.com/ja/articles/10296554-ダイナミックな報酬システム-dpr-の判断要素は何ですか",
+          "slots": ""
+        },
+        {
+          "title": "取引時間およびカスタマーサポート営業時間の特別変更に関するお知らせ",
+          "url": "https://support.fintokei.com/ja/articles/10308723-取引時間およびカスタマーサポート営業時間の特別変更に関するお知らせ",
+          "slots": ""
+        },
+        {
+          "title": "コピー取引およびeaの使用について 許可されていること 禁止されていること",
+          "url": "https://support.fintokei.com/ja/articles/10419735-コピー取引およびeaの使用について-許可されていること-禁止されていること",
+          "slots": ""
+        },
+        {
+          "title": "国内銀行振込について教えてください",
+          "url": "https://support.fintokei.com/ja/articles/10559283-国内銀行振込について教えてください",
+          "slots": ""
+        },
+        {
+          "title": "デモトレードコンテストとは",
+          "url": "https://support.fintokei.com/ja/articles/10566823-デモトレードコンテストとは",
+          "slots": ""
+        },
+        {
+          "title": "sepa銀行振込について教えてください",
+          "url": "https://support.fintokei.com/ja/articles/10693906-sepa銀行振込について教えてください",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイト活動に必要な情報はどこで確認できますか",
+          "url": "https://support.fintokei.com/ja/articles/11172078-アフィリエイト活動に必要な情報はどこで確認できますか",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiの持続性のある取引に関する規定",
+          "url": "https://support.fintokei.com/ja/articles/11315899-fintokeiの持続性のある取引に関する規定",
+          "slots": ""
+        },
+        {
+          "title": "ランダム性に近い取引とは どのように分析しているのか",
+          "url": "https://support.fintokei.com/ja/articles/11315916-ランダム性に近い取引とは-どのように分析しているのか",
+          "slots": ""
+        },
+        {
+          "title": "なぜ報酬を2 3回受け取った人が 利益を出せるトレーダー とは限らないのか",
+          "url": "https://support.fintokei.com/ja/articles/11315925-なぜ報酬を2-3回受け取った人が-利益を出せるトレーダー-とは限らないのか",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiが求めているのはどんなトレーダーか そして 週1 の利益 がなぜ優れた実績なのか",
+          "url": "https://support.fintokei.com/ja/articles/11315928-fintokeiが求めているのはどんなトレーダーか-そして-週1-の利益-がなぜ優れた実績なのか",
+          "slots": ""
+        },
+        {
+          "title": "自身のトレード戦略がまだ持続性のあるものとは思えない場合は",
+          "url": "https://support.fintokei.com/ja/articles/11315931-自身のトレード戦略がまだ持続性のあるものとは思えない場合は",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiはスイングトレーダーにも適している理由は",
+          "url": "https://support.fintokei.com/ja/articles/11315943-fintokeiはスイングトレーダーにも適している理由は",
+          "slots": ""
+        },
+        {
+          "title": "なぜfintokeiは制限を設けるのか そして 誠実なトレード姿勢 をどう考えるか 長文記事",
+          "url": "https://support.fintokei.com/ja/articles/11315949-なぜfintokeiは制限を設けるのか-そして-誠実なトレード姿勢-をどう考えるか-長文記事",
+          "slots": ""
+        },
+        {
+          "title": "リスク管理プロセスの概要 禁止行為 ギャンブル的取引 持続不可能な行為が確認された場合 何が起こるのか",
+          "url": "https://support.fintokei.com/ja/articles/11315957-リスク管理プロセスの概要-禁止行為-ギャンブル的取引-持続不可能な行為が確認された場合-何が起こるのか",
+          "slots": ""
+        },
+        {
+          "title": "度重なる警告ついて",
+          "url": "https://support.fintokei.com/ja/articles/11315960-度重なる警告ついて",
+          "slots": ""
+        },
+        {
+          "title": "制限ルール よくある適用ケース",
+          "url": "https://support.fintokei.com/ja/articles/11315966-制限ルール-よくある適用ケース",
+          "slots": ""
+        },
+        {
+          "title": "制限ルールに含まれる可能性のあるその他の制限措置",
+          "url": "https://support.fintokei.com/ja/articles/11315971-制限ルールに含まれる可能性のあるその他の制限措置",
+          "slots": ""
+        },
+        {
+          "title": "オープンポジションにおける最大リスクとは",
+          "url": "https://support.fintokei.com/ja/articles/11315976-オープンポジションにおける最大リスクとは",
+          "slots": ""
+        },
+        {
+          "title": "複数の顧客間で 同じ取引端末を共有して取引する行為とは",
+          "url": "https://support.fintokei.com/ja/articles/11316015-複数の顧客間で-同じ取引端末を共有して取引する行為とは",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiのデモ口座への接続時に 複数の国のipアドレスを使用したり ipアドレスをマスクする行為とは",
+          "url": "https://support.fintokei.com/ja/articles/11316016-fintokeiのデモ口座への接続時に-複数の国のipアドレスを使用したり-ipアドレスをマスクする行為とは",
+          "slots": ""
+        },
+        {
+          "title": "第三者による不正決済とは",
+          "url": "https://support.fintokei.com/ja/articles/11316020-第三者による不正決済とは",
+          "slots": ""
+        },
+        {
+          "title": "どのように請求書は発行できますか",
+          "url": "https://support.fintokei.com/ja/articles/11316023-どのように請求書は発行できますか",
+          "slots": ""
+        },
+        {
+          "title": "実際の市場環境のシミュレーション スリッページ 約定遅延について",
+          "url": "https://support.fintokei.com/ja/articles/11316031-実際の市場環境のシミュレーション-スリッページ-約定遅延について",
+          "slots": ""
+        },
+        {
+          "title": "指標の再計算はどのように機能しますか",
+          "url": "https://support.fintokei.com/ja/articles/11426790-指標の再計算はどのように機能しますか",
+          "slots": ""
+        },
+        {
+          "title": "過度なリスク設定とは",
+          "url": "https://support.fintokei.com/ja/articles/11468666-過度なリスク設定とは",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiと取引 すべての新規トレーダーが知っておくべきこと",
+          "url": "https://support.fintokei.com/ja/articles/11477282-fintokeiと取引-すべての新規トレーダーが知っておくべきこと",
+          "slots": ""
+        },
+        {
+          "title": "どのように認定証 支払い証明書のダウンロードができますか",
+          "url": "https://support.fintokei.com/ja/articles/11821381-どのように認定証-支払い証明書のダウンロードができますか",
+          "slots": ""
+        },
+        {
+          "title": "報酬はいつ受け取れますか",
+          "url": "https://support.fintokei.com/ja/articles/11904545-報酬はいつ受け取れますか",
+          "slots": ""
+        },
+        {
+          "title": "1日の損失率のルールが既にあるのに なぜオープントレードのリスクを制限するのですか",
+          "url": "https://support.fintokei.com/ja/articles/12017527-1日の損失率のルールが既にあるのに-なぜオープントレードのリスクを制限するのですか",
+          "slots": ""
+        },
+        {
+          "title": "速攻プロプランの各ステップにはどのようなルールがありますか",
+          "url": "https://support.fintokei.com/ja/articles/12040973-速攻プロプランの各ステップにはどのようなルールがありますか",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジプランとチャレンジプラン ルビー スイング の違いは何ですか",
+          "url": "https://support.fintokei.com/ja/articles/12058210-チャレンジプランとチャレンジプラン-ルビー-スイング-の違いは何ですか",
+          "slots": ""
+        },
+        {
+          "title": "どの仮想通貨cfd商品を取引できますか",
+          "url": "https://support.fintokei.com/ja/articles/12137786-どの仮想通貨cfd商品を取引できますか",
+          "slots": ""
+        },
+        {
+          "title": "取引商品の一般的なスプレッドはどのくらいですか",
+          "url": "https://support.fintokei.com/ja/articles/12138427-取引商品の一般的なスプレッドはどのくらいですか",
+          "slots": ""
+        },
+        {
+          "title": "なぜチャットボット bonsai を使用しているのですか",
+          "url": "https://support.fintokei.com/ja/articles/12351822-なぜチャットボット-bonsai-を使用しているのですか",
+          "slots": ""
+        },
+        {
+          "title": "法人 株式会社 合同会社 有限会社など としてfintokeiに登録またはプランの購入はできますか",
+          "url": "https://support.fintokei.com/ja/articles/12425583-法人-株式会社-合同会社-有限会社など-としてfintokeiに登録またはプランの購入はできますか",
+          "slots": ""
+        },
+        {
+          "title": "どうやってfintokeiでtradingviewを使って取引できますか",
+          "url": "https://support.fintokei.com/ja/articles/12688210-どうやってfintokeiでtradingviewを使って取引できますか",
+          "slots": ""
+        },
+        {
+          "title": "法人銀行口座への報酬支払いの概要",
+          "url": "https://support.fintokei.com/ja/articles/13166020-法人銀行口座への報酬支払いの概要",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiのポイントステージについて ポイントステージとは どうやって使うの",
+          "url": "https://support.fintokei.com/ja/articles/13386980-fintokeiのポイントステージについて-ポイントステージとは-どうやって使うの",
+          "slots": ""
+        },
+        {
+          "title": "ポイントステージにおけるランクとは",
+          "url": "https://support.fintokei.com/ja/articles/13387351-ポイントステージにおけるランクとは",
+          "slots": ""
+        },
+        {
+          "title": "xpを獲得しよう スペシャル と デイリー とは",
+          "url": "https://support.fintokei.com/ja/articles/13387561-xpを獲得しよう-スペシャル-と-デイリー-とは",
+          "slots": ""
+        },
+        {
+          "title": "ポイント xp とは",
+          "url": "https://support.fintokei.com/ja/articles/13387718-ポイント-xp-とは",
+          "slots": ""
+        },
+        {
+          "title": "トレードをパワーアップさせるブースト特典とは",
+          "url": "https://support.fintokei.com/ja/articles/13387866-トレードをパワーアップさせるブースト特典とは",
+          "slots": ""
+        },
+        {
+          "title": "推奨環境および互換性について",
+          "url": "https://support.fintokei.com/ja/articles/13682946-推奨環境および互換性について",
+          "slots": ""
+        },
+        {
+          "title": "マスタ コレクターとは何ですか",
+          "url": "https://support.fintokei.com/ja/articles/13761494-マスタ-コレクターとは何ですか",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジプラン スリムとは何ですか",
+          "url": "https://support.fintokei.com/ja/articles/13913487-チャレンジプラン-スリムとは何ですか",
+          "slots": ""
+        },
+        {
+          "title": "gw 10 off 初回報酬で同プラン1つ無料 キャンペーン開催",
+          "url": "https://support.fintokei.com/ja/articles/14809728-gw-10-off-初回報酬で同プラン1つ無料-キャンペーン開催",
+          "slots": ""
+        },
+        {
+          "title": "トレード ワールドチャレンジ in japan",
+          "url": "https://support.fintokei.com/ja/articles/15126035-トレード-ワールドチャレンジ-in-japan",
+          "slots": ""
+        },
+        {
+          "title": "fintokei アカデミーのアカウントを削除するにはどうすればよいですか",
+          "url": "https://support.fintokei.com/ja/articles/15260496-fintokei-アカデミーのアカウントを削除するにはどうすればよいですか",
+          "slots": ""
+        },
+        {
+          "title": "ポイントステージとスケーリング道場の違いは",
+          "url": "https://support.fintokei.com/ja/articles/15298007-ポイントステージとスケーリング道場の違いは",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiとは何ですか",
+          "url": "https://support.fintokei.com/ja/articles/6481800-fintokeiとは何ですか",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiの目的は何ですか",
+          "url": "https://support.fintokei.com/ja/articles/6538810-fintokeiの目的は何ですか",
+          "slots": ""
+        },
+        {
+          "title": "プランの始め方を教えてください",
+          "url": "https://support.fintokei.com/ja/articles/6538815-プランの始め方を教えてください",
+          "slots": ""
+        },
+        {
+          "title": "お問い合わせ方法を教えてください",
+          "url": "https://support.fintokei.com/ja/articles/6538819-お問い合わせ方法を教えてください",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiに参加できる条件はありますか",
+          "url": "https://support.fintokei.com/ja/articles/6538820-fintokeiに参加できる条件はありますか",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジプランの各ステップにはどのようなルールがありますか",
+          "url": "https://support.fintokei.com/ja/articles/6538822-チャレンジプランの各ステップにはどのようなルールがありますか",
+          "slots": ""
+        },
+        {
+          "title": "損失率はどのように計算されますか",
+          "url": "https://support.fintokei.com/ja/articles/6538826-損失率はどのように計算されますか",
+          "slots": ""
+        },
+        {
+          "title": "取引期間に期限はありますか",
+          "url": "https://support.fintokei.com/ja/articles/6538829-取引期間に期限はありますか",
+          "slots": ""
+        },
+        {
+          "title": "失敗しても再度挑戦できますか",
+          "url": "https://support.fintokei.com/ja/articles/6538830-失敗しても再度挑戦できますか",
+          "slots": ""
+        },
+        {
+          "title": "どのような取引プラットフォームがありますか",
+          "url": "https://support.fintokei.com/ja/articles/6538834-どのような取引プラットフォームがありますか",
+          "slots": ""
+        },
+        {
+          "title": "eaによる自動売買を利用できますか",
+          "url": "https://support.fintokei.com/ja/articles/6538838-eaによる自動売買を利用できますか",
+          "slots": ""
+        },
+        {
+          "title": "いつでも取引可能ですか 週末を跨いだポジションの保有や 指標発表時の取引はできますか",
+          "url": "https://support.fintokei.com/ja/articles/6538843-いつでも取引可能ですか-週末を跨いだポジションの保有や-指標発表時の取引はできますか",
+          "slots": ""
+        },
+        {
+          "title": "どのようなレバレッジがありますか",
+          "url": "https://support.fintokei.com/ja/articles/6538847-どのようなレバレッジがありますか",
+          "slots": ""
+        },
+        {
+          "title": "取引できる商品は何ですか",
+          "url": "https://support.fintokei.com/ja/articles/6538848-取引できる商品は何ですか",
+          "slots": ""
+        },
+        {
+          "title": "取扱いのある口座通貨は何ですか",
+          "url": "https://support.fintokei.com/ja/articles/6538849-取扱いのある口座通貨は何ですか",
+          "slots": ""
+        },
+        {
+          "title": "プロトレーダー口座でのデータ提供料はどのように計算されますか",
+          "url": "https://support.fintokei.com/ja/articles/6538873-プロトレーダー口座でのデータ提供料はどのように計算されますか",
+          "slots": ""
+        },
+        {
+          "title": "損失が出たらどうすればいいですか",
+          "url": "https://support.fintokei.com/ja/articles/6538875-損失が出たらどうすればいいですか",
+          "slots": ""
+        },
+        {
+          "title": "参加に必要な費用はいくらですか",
+          "url": "https://support.fintokei.com/ja/articles/6538876-参加に必要な費用はいくらですか",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジプランの口座を維持する為にはどのようなルールがありますか",
+          "url": "https://support.fintokei.com/ja/articles/6538878-チャレンジプランの口座を維持する為にはどのようなルールがありますか",
+          "slots": ""
+        },
+        {
+          "title": "口座が失格となりました 残りの利益額はデータ提供料として支払い申請できますか",
+          "url": "https://support.fintokei.com/ja/articles/6538881-口座が失格となりました-残りの利益額はデータ提供料として支払い申請できますか",
+          "slots": ""
+        },
+        {
+          "title": "報酬の支払い申請について 申請条件 頻度 申請手順 送金方法など",
+          "url": "https://support.fintokei.com/ja/articles/6538884-報酬の支払い申請について-申請条件-頻度-申請手順-送金方法など",
+          "slots": ""
+        },
+        {
+          "title": "取引口座は複数作成できますか",
+          "url": "https://support.fintokei.com/ja/articles/6538886-取引口座は複数作成できますか",
+          "slots": ""
+        },
+        {
+          "title": "取引はリアルマネーで行われますか",
+          "url": "https://support.fintokei.com/ja/articles/6538894-取引はリアルマネーで行われますか",
+          "slots": ""
+        },
+        {
+          "title": "ブローカーは選択できますか",
+          "url": "https://support.fintokei.com/ja/articles/6592662-ブローカーは選択できますか",
+          "slots": ""
+        },
+        {
+          "title": "プラン購入後の返金制度はありますか",
+          "url": "https://support.fintokei.com/ja/articles/6921693-プラン購入後の返金制度はありますか",
+          "slots": ""
+        },
+        {
+          "title": "無料トライアル口座について教えてください",
+          "url": "https://support.fintokei.com/ja/articles/7169529-無料トライアル口座について教えてください",
+          "slots": ""
+        },
+        {
+          "title": "選択した取引プラットフォームを変更したいです",
+          "url": "https://support.fintokei.com/ja/articles/7172463-選択した取引プラットフォームを変更したいです",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiではどのような方法でプランを購入できますか",
+          "url": "https://support.fintokei.com/ja/articles/7172488-fintokeiではどのような方法でプランを購入できますか",
+          "slots": ""
+        },
+        {
+          "title": "プランを変更することはできますか",
+          "url": "https://support.fintokei.com/ja/articles/7172491-プランを変更することはできますか",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイトの登録方法を教えてください",
+          "url": "https://support.fintokei.com/ja/articles/7172495-アフィリエイトの登録方法を教えてください",
+          "slots": ""
+        },
+        {
+          "title": "学習コンテンツや取引ツールはどこからアクセスできますか",
+          "url": "https://support.fintokei.com/ja/articles/7172500-学習コンテンツや取引ツールはどこからアクセスできますか",
+          "slots": ""
+        },
+        {
+          "title": "myfintokeiのログインパスワードを変更したいです",
+          "url": "https://support.fintokei.com/ja/articles/7338647-myfintokeiのログインパスワードを変更したいです",
+          "slots": ""
+        },
+        {
+          "title": "登録メールアドレスを変更したいです",
+          "url": "https://support.fintokei.com/ja/articles/7338679-登録メールアドレスを変更したいです",
+          "slots": ""
+        },
+        {
+          "title": "プラットフォームのログインパスワードを変更したいです",
+          "url": "https://support.fintokei.com/ja/articles/7338716-プラットフォームのログインパスワードを変更したいです",
+          "slots": ""
+        },
+        {
+          "title": "取引プラットフォームはどこからダウンロードできますか",
+          "url": "https://support.fintokei.com/ja/articles/7338732-取引プラットフォームはどこからダウンロードできますか",
+          "slots": ""
+        },
+        {
+          "title": "プラットフォームのログイン情報はどこで確認できますか",
+          "url": "https://support.fintokei.com/ja/articles/8212411-プラットフォームのログイン情報はどこで確認できますか",
+          "slots": ""
+        },
+        {
+          "title": "クーポンコードが使えません",
+          "url": "https://support.fintokei.com/ja/articles/8212577-クーポンコードが使えません",
+          "slots": ""
+        },
+        {
+          "title": "取引手数料は掛かりますか",
+          "url": "https://support.fintokei.com/ja/articles/8212584-取引手数料は掛かりますか",
+          "slots": ""
+        },
+        {
+          "title": "サーバー時間は 何処の時間を基準としていますか",
+          "url": "https://support.fintokei.com/ja/articles/8212586-サーバー時間は-何処の時間を基準としていますか",
+          "slots": ""
+        },
+        {
+          "title": "速攻プロプランでのデータ提供料はどのように計算されますか",
+          "url": "https://support.fintokei.com/ja/articles/8408430-速攻プロプランでのデータ提供料はどのように計算されますか",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジプランとは",
+          "url": "https://support.fintokei.com/ja/articles/8408926-チャレンジプランとは",
+          "slots": ""
+        },
+        {
+          "title": "速攻プロプラン swifttrader とは",
+          "url": "https://support.fintokei.com/ja/articles/8408932-速攻プロプラン-swifttrader-とは",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジプラン 入門プラン 速攻プロプランの違いは",
+          "url": "https://support.fintokei.com/ja/articles/8408938-チャレンジプラン-入門プラン-速攻プロプランの違いは",
+          "slots": ""
+        },
+        {
+          "title": "速攻プロプラン swifttrader で口座を維持する為にはどうすればいいですか",
+          "url": "https://support.fintokei.com/ja/articles/8409176-速攻プロプラン-swifttrader-で口座を維持する為にはどうすればいいですか",
+          "slots": ""
+        },
+        {
+          "title": "最高水準 hwm high water mark とは",
+          "url": "https://support.fintokei.com/ja/articles/8409192-最高水準-hwm-high-water-mark-とは",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiスケーリング道場とは",
+          "url": "https://support.fintokei.com/ja/articles/8409193-fintokeiスケーリング道場とは",
+          "slots": ""
+        },
+        {
+          "title": "スワップとは",
+          "url": "https://support.fintokei.com/ja/articles/8409194-スワップとは",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイト報酬の支払い申請には条件がありますか",
+          "url": "https://support.fintokei.com/ja/articles/8419976-アフィリエイト報酬の支払い申請には条件がありますか",
+          "slots": ""
+        },
+        {
+          "title": "最低取引日 の条件とは 3日もしくは5日",
+          "url": "https://support.fintokei.com/ja/articles/8428030-最低取引日-の条件とは-3日もしくは5日",
+          "slots": ""
+        },
+        {
+          "title": "プラットフォームにログインできません サーバーのipアドレスは",
+          "url": "https://support.fintokei.com/ja/articles/8438884-プラットフォームにログインできません-サーバーのipアドレスは",
+          "slots": ""
+        },
+        {
+          "title": "獲得報酬の確定申告はどのように申告すれば良いですか",
+          "url": "https://support.fintokei.com/ja/articles/8460112-獲得報酬の確定申告はどのように申告すれば良いですか",
+          "slots": ""
+        },
+        {
+          "title": "プラットフォーム上に通貨ペアを表示させるには",
+          "url": "https://support.fintokei.com/ja/articles/8494453-プラットフォーム上に通貨ペアを表示させるには",
+          "slots": ""
+        },
+        {
+          "title": "読み取り専用パスワードの発行方法を教えてください",
+          "url": "https://support.fintokei.com/ja/articles/8544678-読み取り専用パスワードの発行方法を教えてください",
+          "slots": ""
+        },
+        {
+          "title": "mt4へのログイン方法を教えてください",
+          "url": "https://support.fintokei.com/ja/articles/8544681-mt4へのログイン方法を教えてください",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイト報酬の申請手順を教えてください",
+          "url": "https://support.fintokei.com/ja/articles/8544688-アフィリエイト報酬の申請手順を教えてください",
+          "slots": ""
+        },
+        {
+          "title": "mt5へのログイン方法を教えてください",
+          "url": "https://support.fintokei.com/ja/articles/8586731-mt5へのログイン方法を教えてください",
+          "slots": ""
+        },
+        {
+          "title": "ask価格 bid価格とは何ですか また スプレッドとは",
+          "url": "https://support.fintokei.com/ja/articles/8731957-ask価格-bid価格とは何ですか-また-スプレッドとは",
+          "slots": ""
+        },
+        {
+          "title": "本人認証のお手続きについて",
+          "url": "https://support.fintokei.com/ja/articles/8911171-本人認証のお手続きについて",
+          "slots": ""
+        },
+        {
+          "title": "fintokei での最初のステップ 始め方",
+          "url": "https://support.fintokei.com/ja/articles/8911222-fintokei-での最初のステップ-始め方",
+          "slots": ""
+        },
+        {
+          "title": "複数の取引口座を1つにまとめたいです",
+          "url": "https://support.fintokei.com/ja/articles/9112877-複数の取引口座を1つにまとめたいです",
+          "slots": ""
+        },
+        {
+          "title": "ctraderにログインする方法は ctraderアカウントのログインパスワードとは何ですか",
+          "url": "https://support.fintokei.com/ja/articles/9229553-ctraderにログインする方法は-ctraderアカウントのログインパスワードとは何ですか",
+          "slots": ""
+        },
+        {
+          "title": "ctraderのパスワードを変更する方法は",
+          "url": "https://support.fintokei.com/ja/articles/9229627-ctraderのパスワードを変更する方法は",
+          "slots": ""
+        },
+        {
+          "title": "マーチンゲール法および 積極的な価格の平均化 現在は許可されていますが 推奨はしておりません",
+          "url": "https://support.fintokei.com/ja/articles/9229682-マーチンゲール法および-積極的な価格の平均化-現在は許可されていますが-推奨はしておりません",
+          "slots": ""
+        },
+        {
+          "title": "ティックスキャルピングの定義とは",
+          "url": "https://support.fintokei.com/ja/articles/9229686-ティックスキャルピングの定義とは",
+          "slots": ""
+        },
+        {
+          "title": "禁止されている取引はありますか",
+          "url": "https://support.fintokei.com/ja/articles/9229695-禁止されている取引はありますか",
+          "slots": ""
+        },
+        {
+          "title": "レイテンシー アービトラージ取引の定義とは",
+          "url": "https://support.fintokei.com/ja/articles/9230062-レイテンシー-アービトラージ取引の定義とは",
+          "slots": ""
+        },
+        {
+          "title": "複数の口座や顧客間での両建て取引の定義とは",
+          "url": "https://support.fintokei.com/ja/articles/9230072-複数の口座や顧客間での両建て取引の定義とは",
+          "slots": ""
+        },
+        {
+          "title": "同時に保有できるポジション数 1度に注文できる最大 最小ロット数は",
+          "url": "https://support.fintokei.com/ja/articles/9286450-同時に保有できるポジション数-1度に注文できる最大-最小ロット数は",
+          "slots": ""
+        },
+        {
+          "title": "fintokeiのギャンブル行為における規定",
+          "url": "https://support.fintokei.com/ja/articles/9464355-fintokeiのギャンブル行為における規定",
+          "slots": ""
+        },
+        {
+          "title": "禁止されているギャンブル行為",
+          "url": "https://support.fintokei.com/ja/articles/9464379-禁止されているギャンブル行為",
+          "slots": ""
+        },
+        {
+          "title": "無計画な高レバレッジ取引とは",
+          "url": "https://support.fintokei.com/ja/articles/9464487-無計画な高レバレッジ取引とは",
+          "slots": ""
+        },
+        {
+          "title": "戦略のない一方的な賭け取引とは",
+          "url": "https://support.fintokei.com/ja/articles/9464494-戦略のない一方的な賭け取引とは",
+          "slots": ""
+        },
+        {
+          "title": "アカウント ローリングとは",
+          "url": "https://support.fintokei.com/ja/articles/9464498-アカウント-ローリングとは",
+          "slots": ""
+        },
+        {
+          "title": "1回の取引 または同日中に同じ銘柄に対する類似した複数の取引 で利益目標を達成することとは",
+          "url": "https://support.fintokei.com/ja/articles/9464503-1回の取引-または同日中に同じ銘柄に対する類似した複数の取引-で利益目標を達成することとは",
+          "slots": ""
+        },
+        {
+          "title": "入門プランとは",
+          "url": "https://support.fintokei.com/ja/articles/9579989-入門プランとは",
+          "slots": ""
+        },
+        {
+          "title": "入門プランの各ステップにはどのようなルールがありますか",
+          "url": "https://support.fintokei.com/ja/articles/9579997-入門プランの各ステップにはどのようなルールがありますか",
+          "slots": ""
+        },
+        {
+          "title": "入門プランの口座を維持する為にはどのようなルールがありますか",
+          "url": "https://support.fintokei.com/ja/articles/9680289-入門プランの口座を維持する為にはどのようなルールがありますか",
+          "slots": ""
+        },
+        {
+          "title": "入門プラン口座でのデータ提供料はどのように計算されますか",
+          "url": "https://support.fintokei.com/ja/articles/9680686-入門プラン口座でのデータ提供料はどのように計算されますか",
+          "slots": ""
+        },
+        {
+          "title": "discordのアカウントはありますか",
+          "url": "https://support.fintokei.com/ja/articles/9925130-discordのアカウントはありますか",
+          "slots": ""
+        },
+        {
+          "title": "fintokei 계좌에서의 무책임한 트레이딩 이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/10166343-fintokei-계좌에서의-무책임한-트레이딩-이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "myfintokei에서 여러 프로필 등록을 만드는 것이 왜 금지되나요",
+          "url": "https://support.fintokei.com/ko/articles/10166369-myfintokei에서-여러-프로필-등록을-만드는-것이-왜-금지되나요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei 바우처 voucher 는 어떻게 작동하나요",
+          "url": "https://support.fintokei.com/ko/articles/10221557-fintokei-바우처-voucher-는-어떻게-작동하나요",
+          "slots": ""
+        },
+        {
+          "title": "dynamic performance reward dpr 란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/10296483-dynamic-performance-reward-dpr-란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "dynamic performance reward dpr 의 핵심 요소는 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/10296554-dynamic-performance-reward-dpr-의-핵심-요소는-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "거래 시간 안내 및 고객지원 운영 시간 변경 사항",
+          "url": "https://support.fintokei.com/ko/articles/10308723-거래-시간-안내-및-고객지원-운영-시간-변경-사항",
+          "slots": ""
+        },
+        {
+          "title": "카피 트레이딩과 ea 허용되는 것과 금지되는 것은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/10419735-카피-트레이딩과-ea-허용되는-것과-금지되는-것은-무엇인가요",
+          "slots": "P13"
+        },
+        {
+          "title": "국내 은행 송금에 대해 알려주세요",
+          "url": "https://support.fintokei.com/ko/articles/10559283-국내-은행-송금에-대해-알려주세요",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩 콘테스트 안내 개요와 규칙",
+          "url": "https://support.fintokei.com/ko/articles/10566823-트레이딩-콘테스트-안내-개요와-규칙",
+          "slots": ""
+        },
+        {
+          "title": "sepa 은행 송금에 대해 알려주세요",
+          "url": "https://support.fintokei.com/ko/articles/10693906-sepa-은행-송금에-대해-알려주세요",
+          "slots": ""
+        },
+        {
+          "title": "제휴 파트너십 상세 정보는 어디에서 확인할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/11172078-제휴-파트너십-상세-정보는-어디에서-확인할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei의 지속가능한 트레이딩 정책",
+          "url": "https://support.fintokei.com/ko/articles/11315899-fintokei의-지속가능한-트레이딩-정책",
+          "slots": ""
+        },
+        {
+          "title": "무작위에 가까운 트레이딩 우리는 어떻게 분석하나요",
+          "url": "https://support.fintokei.com/ko/articles/11315916-무작위에-가까운-트레이딩-우리는-어떻게-분석하나요",
+          "slots": ""
+        },
+        {
+          "title": "2 3번의 지급을 받았다고 해서 수익성 있는 트레이더 가 아닐 수 있는 이유",
+          "url": "https://support.fintokei.com/ko/articles/11315925-2-3번의-지급을-받았다고-해서-수익성-있는-트레이더-가-아닐-수-있는-이유",
+          "slots": ""
+        },
+        {
+          "title": "우리는 어떤 트레이더를 찾나요 그리고 주 1 수익이 왜 대단한 성과인가요",
+          "url": "https://support.fintokei.com/ko/articles/11315928-우리는-어떤-트레이더를-찾나요-그리고-주-1-수익이-왜-대단한-성과인가요",
+          "slots": ""
+        },
+        {
+          "title": "최근에 시작해서 내 트레이딩 전략이 지속가능한지 확신이 없다면 어떻게 해야 하나요",
+          "url": "https://support.fintokei.com/ko/articles/11315931-최근에-시작해서-내-트레이딩-전략이-지속가능한지-확신이-없다면-어떻게-해야-하나요",
+          "slots": ""
+        },
+        {
+          "title": "왜 fintokei는 스윙 트레이더에게도 적합한가요",
+          "url": "https://support.fintokei.com/ko/articles/11315943-왜-fintokei는-스윙-트레이더에게도-적합한가요",
+          "slots": ""
+        },
+        {
+          "title": "왜 제한을 적용하나요 트레이딩 무결성에 대한 fintokei의 접근 긴 글",
+          "url": "https://support.fintokei.com/ko/articles/11315949-왜-제한을-적용하나요-트레이딩-무결성에-대한-fintokei의-접근-긴-글",
+          "slots": ""
+        },
+        {
+          "title": "리스크 관리 프로세스 개요 금지 도박성 지속 불가능한 행동이 확인되면 어떻게 되나요",
+          "url": "https://support.fintokei.com/ko/articles/11315957-리스크-관리-프로세스-개요-금지-도박성-지속-불가능한-행동이-확인되면-어떻게-되나요",
+          "slots": ""
+        },
+        {
+          "title": "경고가 과도하게 누적된 경우",
+          "url": "https://support.fintokei.com/ko/articles/11315960-경고가-과도하게-누적된-경우",
+          "slots": ""
+        },
+        {
+          "title": "일관성 규칙 consistency rules 가장 흔한 적용 사례",
+          "url": "https://support.fintokei.com/ko/articles/11315966-일관성-규칙-consistency-rules-가장-흔한-적용-사례",
+          "slots": "P07"
+        },
+        {
+          "title": "일관성 규칙에 포함될 수 있는 기타 제한 조치",
+          "url": "https://support.fintokei.com/ko/articles/11315971-일관성-규칙에-포함될-수-있는-기타-제한-조치",
+          "slots": ""
+        },
+        {
+          "title": "오픈 포지션에서 허용되는 최대 리스크는 얼마인가요",
+          "url": "https://support.fintokei.com/ko/articles/11315976-오픈-포지션에서-허용되는-최대-리스크는-얼마인가요",
+          "slots": ""
+        },
+        {
+          "title": "여러 고객이 하나의 거래 기기를 공유하는 것은 무엇을 의미하나요",
+          "url": "https://support.fintokei.com/ko/articles/11316015-여러-고객이-하나의-거래-기기를-공유하는-것은-무엇을-의미하나요",
+          "slots": ""
+        },
+        {
+          "title": "여러 국가의 ip 주소를 사용하거나 ip를 마스킹하는 것은 무엇을 의미하나요",
+          "url": "https://support.fintokei.com/ko/articles/11316016-여러-국가의-ip-주소를-사용하거나-ip를-마스킹하는-것은-무엇을-의미하나요",
+          "slots": ""
+        },
+        {
+          "title": "무단 제3자 결제 unauthorized third party payment 란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/11316020-무단-제3자-결제-unauthorized-third-party-payment-란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "인보이스 영수증 는 어떻게 다운로드하나요",
+          "url": "https://support.fintokei.com/ko/articles/11316023-인보이스-영수증-는-어떻게-다운로드하나요",
+          "slots": ""
+        },
+        {
+          "title": "실제 시장 환경 시뮬레이션 슬리피지 체결 지연 등",
+          "url": "https://support.fintokei.com/ko/articles/11316031-실제-시장-환경-시뮬레이션-슬리피지-체결-지연-등",
+          "slots": ""
+        },
+        {
+          "title": "지표 재계산 메트릭 재산정 은 어떻게 진행되나요",
+          "url": "https://support.fintokei.com/ko/articles/11426790-지표-재계산-메트릭-재산정-은-어떻게-진행되나요",
+          "slots": ""
+        },
+        {
+          "title": "과도한 리스크 oversized risk 는 어떻게 정의하나요",
+          "url": "https://support.fintokei.com/ko/articles/11468666-과도한-리스크-oversized-risk-는-어떻게-정의하나요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei와 트레이딩 초보 트레이더가 꼭 알아야 할 것",
+          "url": "https://support.fintokei.com/ko/articles/11477282-fintokei와-트레이딩-초보-트레이더가-꼭-알아야-할-것",
+          "slots": ""
+        },
+        {
+          "title": "인증서와 결제 확인서는 어떻게 다운로드하나요",
+          "url": "https://support.fintokei.com/ko/articles/11821381-인증서와-결제-확인서는-어떻게-다운로드하나요",
+          "slots": ""
+        },
+        {
+          "title": "성과 보상 지급 은 언제 받을 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/11904545-성과-보상-지급-은-언제-받을-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "일일 손실 한도 규칙이 있는데도 왜 오픈 포지션 리스크를 제한하나요",
+          "url": "https://support.fintokei.com/ko/articles/12017527-일일-손실-한도-규칙이-있는데도-왜-오픈-포지션-리스크를-제한하나요",
+          "slots": ""
+        },
+        {
+          "title": "swifttrader 챌린지는 어떻게 진행되나요 규칙은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/12040973-swifttrader-챌린지는-어떻게-진행되나요-규칙은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "protrader와 protrader swing의 차이점은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/12058210-protrader와-protrader-swing의-차이점은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "어떤 암호화폐 종목을 거래할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/12137786-어떤-암호화폐-종목을-거래할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "종목별 평균 스프레드는 어느 정도인가요",
+          "url": "https://support.fintokei.com/ko/articles/12138427-종목별-평균-스프레드는-어느-정도인가요",
+          "slots": ""
+        },
+        {
+          "title": "왜 bonsai 챗봇을 사용하나요",
+          "url": "https://support.fintokei.com/ko/articles/12351822-왜-bonsai-챗봇을-사용하나요",
+          "slots": ""
+        },
+        {
+          "title": "법인 llc 명의로 등록하거나 챌린지를 구매할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/12425583-법인-llc-명의로-등록하거나-챌린지를-구매할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei에서 tradingview로 거래하려면 어떻게 하나요",
+          "url": "https://support.fintokei.com/ko/articles/12688210-fintokei에서-tradingview로-거래하려면-어떻게-하나요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei 유니버스에 오신 것을 환영합니다 로열티 프로그램은 어떻게 작동하나요",
+          "url": "https://support.fintokei.com/ko/articles/13386980-fintokei-유니버스에-오신-것을-환영합니다-로열티-프로그램은-어떻게-작동하나요",
+          "slots": ""
+        },
+        {
+          "title": "랜드스피더에서 스타십까지 티어 tier 란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/13387351-랜드스피더에서-스타십까지-티어-tier-란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "챌린지를 받아들여 보세요 미션과 액션은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/13387561-챌린지를-받아들여-보세요-미션과-액션은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "여정에 연료를 경험치 xp 란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/13387718-여정에-연료를-경험치-xp-란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩을 업그레이드하세요 부스트 boosts 란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/13387866-트레이딩을-업그레이드하세요-부스트-boosts-란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "bogo 1 1 프로모 오퍼는 어떻게 작동하나요",
+          "url": "https://support.fintokei.com/ko/articles/13514796-bogo-1-1-프로모-오퍼는-어떻게-작동하나요",
+          "slots": ""
+        },
+        {
+          "title": "기술 요구사항 및 호환성",
+          "url": "https://support.fintokei.com/ko/articles/13682946-기술-요구사항-및-호환성",
+          "slots": ""
+        },
+        {
+          "title": "the collector 미션이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/13761494-the-collector-미션이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "친구 추천 refer a friend 프로그램은 어떻게 작동하나요",
+          "url": "https://support.fintokei.com/ko/articles/14652552-친구-추천-refer-a-friend-프로그램은-어떻게-작동하나요",
+          "slots": ""
+        },
+        {
+          "title": "특별 프로모션 조건 swifttrader second chance 두 번째 기회",
+          "url": "https://support.fintokei.com/ko/articles/15053548-특별-프로모션-조건-swifttrader-second-chance-두-번째-기회",
+          "slots": ""
+        },
+        {
+          "title": "fin10mega 프로모션 오퍼 이용약관을 꼼꼼히 읽어 주세요",
+          "url": "https://support.fintokei.com/ko/articles/15223468-fin10mega-프로모션-오퍼-이용약관을-꼼꼼히-읽어-주세요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/6481800-fintokei란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei의 목적은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/6538810-fintokei의-목적은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "어떻게 시작하면 좋을까요",
+          "url": "https://support.fintokei.com/ko/articles/6538815-어떻게-시작하면-좋을까요",
+          "slots": ""
+        },
+        {
+          "title": "문의는 어떻게 하면 되나요",
+          "url": "https://support.fintokei.com/ko/articles/6538819-문의는-어떻게-하면-되나요",
+          "slots": ""
+        },
+        {
+          "title": "누가 fintokei에 참여할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6538820-누가-fintokei에-참여할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "protrader 챌린지는 어떻게 진행되나요 규칙은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/6538822-protrader-챌린지는-어떻게-진행되나요-규칙은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "일일 손실 한도와 최대 손실 한도는 어떻게 계산되나요",
+          "url": "https://support.fintokei.com/ko/articles/6538826-일일-손실-한도와-최대-손실-한도는-어떻게-계산되나요",
+          "slots": ""
+        },
+        {
+          "title": "시간 제한이 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6538829-시간-제한이-있나요",
+          "slots": ""
+        },
+        {
+          "title": "실패하면 어떻게 되나요 다시 도전할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6538830-실패하면-어떻게-되나요-다시-도전할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "어떤 트레이딩 플랫폼을 제공하나요",
+          "url": "https://support.fintokei.com/ko/articles/6538834-어떤-트레이딩-플랫폼을-제공하나요",
+          "slots": ""
+        },
+        {
+          "title": "ea 자동매매 를 사용할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6538838-ea-자동매매-를-사용할-수-있나요",
+          "slots": "P13"
+        },
+        {
+          "title": "언제든 거래할 수 있나요 주말 포지션 보유 및 뉴스 시간대 거래도 가능한가요",
+          "url": "https://support.fintokei.com/ko/articles/6538843-언제든-거래할-수-있나요-주말-포지션-보유-및-뉴스-시간대-거래도-가능한가요",
+          "slots": ""
+        },
+        {
+          "title": "레버리지는 어느 정도까지 제공하나요",
+          "url": "https://support.fintokei.com/ko/articles/6538847-레버리지는-어느-정도까지-제공하나요",
+          "slots": ""
+        },
+        {
+          "title": "어떤 종목을 거래할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6538848-어떤-종목을-거래할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "계좌 통화는 어떤 종류가 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6538849-계좌-통화는-어떤-종류가-있나요",
+          "slots": ""
+        },
+        {
+          "title": "protrader 계좌의 성과 보상 비율은 어떻게 되나요",
+          "url": "https://support.fintokei.com/ko/articles/6538873-protrader-계좌의-성과-보상-비율은-어떻게-되나요",
+          "slots": ""
+        },
+        {
+          "title": "손실이 나면 어떻게 되나요",
+          "url": "https://support.fintokei.com/ko/articles/6538875-손실이-나면-어떻게-되나요",
+          "slots": ""
+        },
+        {
+          "title": "비용은 얼마인가요",
+          "url": "https://support.fintokei.com/ko/articles/6538876-비용은-얼마인가요",
+          "slots": ""
+        },
+        {
+          "title": "protrader 계좌를 유지하려면 어떤 규칙을 따라야 하나요",
+          "url": "https://support.fintokei.com/ko/articles/6538878-protrader-계좌를-유지하려면-어떤-규칙을-따라야-하나요",
+          "slots": ""
+        },
+        {
+          "title": "계좌에서 실패했어요 그래도 성과 보상을 출금할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6538881-계좌에서-실패했어요-그래도-성과-보상을-출금할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "성과 보상은 어떻게 얼마나 자주 출금할 수 있나요 최소 금액은 얼마인가요",
+          "url": "https://support.fintokei.com/ko/articles/6538884-성과-보상은-어떻게-얼마나-자주-출금할-수-있나요-최소-금액은-얼마인가요",
+          "slots": ""
+        },
+        {
+          "title": "계좌는 몇 개까지 만들 수 있고 오픈 포지션은 최대 몇 개까지 가능한가요",
+          "url": "https://support.fintokei.com/ko/articles/6538886-계좌는-몇-개까지-만들-수-있고-오픈-포지션은-최대-몇-개까지-가능한가요",
+          "slots": ""
+        },
+        {
+          "title": "제공된 계좌에서 실제 자금으로 거래하나요",
+          "url": "https://support.fintokei.com/ko/articles/6538894-제공된-계좌에서-실제-자금으로-거래하나요",
+          "slots": ""
+        },
+        {
+          "title": "브로커를 선택할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6592662-브로커를-선택할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "구매한 플랜을 환불받을 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/6921693-구매한-플랜을-환불받을-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "무료 체험 free trial 이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/7169529-무료-체험-free-trial-이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "선택한 트레이딩 플랫폼 종류를 변경할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/7172463-선택한-트레이딩-플랫폼-종류를-변경할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "챌린지 플랜과 바우처는 어떻게 구매하나요",
+          "url": "https://support.fintokei.com/ko/articles/7172488-챌린지-플랜과-바우처는-어떻게-구매하나요",
+          "slots": ""
+        },
+        {
+          "title": "챌린지 플랜을 변경할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/7172491-챌린지-플랜을-변경할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "제휴 affiliate 파트너로 등록하려면 어떻게 하나요",
+          "url": "https://support.fintokei.com/ko/articles/7172495-제휴-affiliate-파트너로-등록하려면-어떻게-하나요",
+          "slots": ""
+        },
+        {
+          "title": "myfintokei 비밀번호는 어떻게 변경하나요",
+          "url": "https://support.fintokei.com/ko/articles/7338647-myfintokei-비밀번호는-어떻게-변경하나요",
+          "slots": ""
+        },
+        {
+          "title": "이메일 주소를 변경하려면 어떻게 해야 하나요",
+          "url": "https://support.fintokei.com/ko/articles/7338679-이메일-주소를-변경하려면-어떻게-해야-하나요",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩 계좌 비밀번호는 어떻게 변경하나요",
+          "url": "https://support.fintokei.com/ko/articles/7338716-트레이딩-계좌-비밀번호는-어떻게-변경하나요",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩 플랫폼은 어디서 다운로드할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/7338732-트레이딩-플랫폼은-어디서-다운로드할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "플랫폼 로그인 정보는 어디에서 확인할 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/8212411-플랫폼-로그인-정보는-어디에서-확인할-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "쿠폰 코드를 사용할 수 없어요",
+          "url": "https://support.fintokei.com/ko/articles/8212577-쿠폰-코드를-사용할-수-없어요",
+          "slots": ""
+        },
+        {
+          "title": "거래 수수료가 있나요",
+          "url": "https://support.fintokei.com/ko/articles/8212584-거래-수수료가-있나요",
+          "slots": ""
+        },
+        {
+          "title": "서버 시간은 어떤 시간대를 기준으로 하나요",
+          "url": "https://support.fintokei.com/ko/articles/8212586-서버-시간은-어떤-시간대를-기준으로-하나요",
+          "slots": ""
+        },
+        {
+          "title": "swifttrader 계좌의 성과 보상 비율은 어떻게 되나요",
+          "url": "https://support.fintokei.com/ko/articles/8408430-swifttrader-계좌의-성과-보상-비율은-어떻게-되나요",
+          "slots": ""
+        },
+        {
+          "title": "protrader 프로그램이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8408926-protrader-프로그램이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "swifttrader 프로그램이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8408932-swifttrader-프로그램이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "protrader starttrader swifttrader의 차이점은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8408938-protrader-starttrader-swifttrader의-차이점은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "swifttrader 계좌를 유지하려면 어떤 규칙을 따라야 하나요",
+          "url": "https://support.fintokei.com/ko/articles/8409176-swifttrader-계좌를-유지하려면-어떤-규칙을-따라야-하나요",
+          "slots": ""
+        },
+        {
+          "title": "하이 워터 마크 high water mark 란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8409192-하이-워터-마크-high-water-mark-란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "스왑 swap 이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8409194-스왑-swap-이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "제휴 프로그램 수익 출금 조건은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8419976-제휴-프로그램-수익-출금-조건은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "최소 거래일 규칙은 무엇을 의미하나요 3일 또는 5일",
+          "url": "https://support.fintokei.com/ko/articles/8428030-최소-거래일-규칙은-무엇을-의미하나요-3일-또는-5일",
+          "slots": ""
+        },
+        {
+          "title": "플랫폼에 로그인할 수 없어요 서버 ip 주소는 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8438884-플랫폼에-로그인할-수-없어요-서버-ip-주소는-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "거래 플랫폼에서 모든 종목을 표시하려면 어떻게 하나요",
+          "url": "https://support.fintokei.com/ko/articles/8494453-거래-플랫폼에서-모든-종목을-표시하려면-어떻게-하나요",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩 플랫폼 로그인 방법을 알려주세요 데스크톱 버전",
+          "url": "https://support.fintokei.com/ko/articles/8544681-트레이딩-플랫폼-로그인-방법을-알려주세요-데스크톱-버전",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩 플랫폼 로그인 방법을 알려주세요 웹 버전",
+          "url": "https://support.fintokei.com/ko/articles/8564566-트레이딩-플랫폼-로그인-방법을-알려주세요-웹-버전",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩 플랫폼 로그인 방법을 알려주세요 ios 버전",
+          "url": "https://support.fintokei.com/ko/articles/8570554-트레이딩-플랫폼-로그인-방법을-알려주세요-ios-버전",
+          "slots": ""
+        },
+        {
+          "title": "트레이딩 플랫폼 로그인 방법을 알려주세요 android 버전",
+          "url": "https://support.fintokei.com/ko/articles/8570555-트레이딩-플랫폼-로그인-방법을-알려주세요-android-버전",
+          "slots": ""
+        },
+        {
+          "title": "mt5 로그인 방법을 알려주세요 데스크톱 버전",
+          "url": "https://support.fintokei.com/ko/articles/8586731-mt5-로그인-방법을-알려주세요-데스크톱-버전",
+          "slots": ""
+        },
+        {
+          "title": "ask bid 가격과 스프레드 spread 는 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8731957-ask-bid-가격과-스프레드-spread-는-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "kyc 신원 인증 절차란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/8911171-kyc-신원-인증-절차란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei 시작 가이드 첫 단계 제대로 시작하기",
+          "url": "https://support.fintokei.com/ko/articles/8911222-fintokei-시작-가이드-첫-단계-제대로-시작하기",
+          "slots": ""
+        },
+        {
+          "title": "여러 계좌를 합칠 수 있나요",
+          "url": "https://support.fintokei.com/ko/articles/9112877-여러-계좌를-합칠-수-있나요",
+          "slots": ""
+        },
+        {
+          "title": "ctrader에 로그인하는 방법은 ctrader 계좌 로그인 비밀번호는 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/9229553-ctrader에-로그인하는-방법은-ctrader-계좌-로그인-비밀번호는-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "ctrader 비밀번호는 어떻게 변경하나요",
+          "url": "https://support.fintokei.com/ko/articles/9229627-ctrader-비밀번호는-어떻게-변경하나요",
+          "slots": ""
+        },
+        {
+          "title": "마틴게일 공격적 평균단가 현재 허용되지만 권장하지 않아요",
+          "url": "https://support.fintokei.com/ko/articles/9229682-마틴게일-공격적-평균단가-현재-허용되지만-권장하지-않아요",
+          "slots": ""
+        },
+        {
+          "title": "틱 스캘핑 tick scalping 은 무엇이며 어떻게 정의되나요",
+          "url": "https://support.fintokei.com/ko/articles/9229686-틱-스캘핑-tick-scalping-은-무엇이며-어떻게-정의되나요",
+          "slots": "P15"
+        },
+        {
+          "title": "금지된 트레이딩 관행으로 간주되는 것은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/9229695-금지된-트레이딩-관행으로-간주되는-것은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "레이턴시 아비트라지 지연 차익거래 란 무엇이며 어떻게 정의되나요",
+          "url": "https://support.fintokei.com/ko/articles/9230062-레이턴시-아비트라지-지연-차익거래-란-무엇이며-어떻게-정의되나요",
+          "slots": ""
+        },
+        {
+          "title": "여러 계좌 트레이더 간 반대매매 또는 헤징은 무엇이며 어떻게 정의되나요",
+          "url": "https://support.fintokei.com/ko/articles/9230072-여러-계좌-트레이더-간-반대매매-또는-헤징은-무엇이며-어떻게-정의되나요",
+          "slots": ""
+        },
+        {
+          "title": "주문 거래 최소 최대 수량은 어떻게 되나요",
+          "url": "https://support.fintokei.com/ko/articles/9286450-주문-거래-최소-최대-수량은-어떻게-되나요",
+          "slots": ""
+        },
+        {
+          "title": "fintokei의 안티 갬블링 도박 방지 정책",
+          "url": "https://support.fintokei.com/ko/articles/9464355-fintokei의-안티-갬블링-도박-방지-정책",
+          "slots": ""
+        },
+        {
+          "title": "금지된 도박성 거래 갬블링 관행",
+          "url": "https://support.fintokei.com/ko/articles/9464379-금지된-도박성-거래-갬블링-관행",
+          "slots": ""
+        },
+        {
+          "title": "전략 없는 과도한 레버리지 사용 overleveraging 이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/9464487-전략-없는-과도한-레버리지-사용-overleveraging-이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "전략 없는 일방향 베팅 one sided betting 은 무엇이며 어떻게 정의되나요",
+          "url": "https://support.fintokei.com/ko/articles/9464494-전략-없는-일방향-베팅-one-sided-betting-은-무엇이며-어떻게-정의되나요",
+          "slots": ""
+        },
+        {
+          "title": "계좌 롤링 account rolling 이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/9464498-계좌-롤링-account-rolling-이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "all in 트레이딩이란 무엇이며 한 번의 거래로 수익 목표 달성이 왜 금지되나요",
+          "url": "https://support.fintokei.com/ko/articles/9464503-all-in-트레이딩이란-무엇이며-한-번의-거래로-수익-목표-달성이-왜-금지되나요",
+          "slots": ""
+        },
+        {
+          "title": "starttrader 프로그램이란 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/9579989-starttrader-프로그램이란-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "starttrader 챌린지는 어떻게 진행되나요 규칙은 무엇인가요",
+          "url": "https://support.fintokei.com/ko/articles/9579997-starttrader-챌린지는-어떻게-진행되나요-규칙은-무엇인가요",
+          "slots": ""
+        },
+        {
+          "title": "starttrader 계좌를 유지하려면 어떤 규칙을 따라야 하나요",
+          "url": "https://support.fintokei.com/ko/articles/9680289-starttrader-계좌를-유지하려면-어떤-규칙을-따라야-하나요",
+          "slots": ""
+        },
+        {
+          "title": "starttrader 계좌의 성과 보상 비율은 어떻게 되나요",
+          "url": "https://support.fintokei.com/ko/articles/9680686-starttrader-계좌의-성과-보상-비율은-어떻게-되나요",
+          "slots": ""
+        },
+        {
+          "title": "discord 채널이 있나요",
+          "url": "https://support.fintokei.com/ko/articles/9925130-discord-채널이-있나요",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P17,P19",
+    "missing": "P06,P18",
+    "note": "19/21（本文補強後）"
+  }
+}

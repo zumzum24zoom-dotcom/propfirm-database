@@ -1,0 +1,276 @@
+{
+  "firm": "atmos-funded",
+  "help_base_url": "https://help.atmosfunded.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で1記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "anti gambling policy",
+          "url": "https://help.atmosfunded.com/en/articles/10109079-anti-gambling-policy",
+          "slots": "P20,P13,P15,P19"
+        },
+        {
+          "title": "how can i become an affiliate",
+          "url": "https://help.atmosfunded.com/en/articles/10109128-how-can-i-become-an-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "where can i track my performance as an affiliate",
+          "url": "https://help.atmosfunded.com/en/articles/10109129-where-can-i-track-my-performance-as-an-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "how frequently will i receive my affiliate commission",
+          "url": "https://help.atmosfunded.com/en/articles/10109130-how-frequently-will-i-receive-my-affiliate-commission",
+          "slots": ""
+        },
+        {
+          "title": "what is your policy on affiliate withdrawals",
+          "url": "https://help.atmosfunded.com/en/articles/10109131-what-is-your-policy-on-affiliate-withdrawals",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "inactivity time limit",
+          "url": "https://help.atmosfunded.com/en/articles/10476245-inactivity-time-limit",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "discount codes",
+          "url": "https://help.atmosfunded.com/en/articles/11720853-discount-codes",
+          "slots": ""
+        },
+        {
+          "title": "1 step standard challenge",
+          "url": "https://help.atmosfunded.com/en/articles/12380551-1-step-standard-challenge",
+          "slots": "P20,P01,P02,P03,P05,P06,P07,P10,P13,P15,P19"
+        },
+        {
+          "title": "1 step plus challenge",
+          "url": "https://help.atmosfunded.com/en/articles/12380556-1-step-plus-challenge",
+          "slots": "P20,P01,P02,P03,P05,P06,P07,P10,P13,P14,P15,P19"
+        },
+        {
+          "title": "2 step standard challenge",
+          "url": "https://help.atmosfunded.com/en/articles/12380559-2-step-standard-challenge",
+          "slots": "P20,P01,P02,P03,P05,P06,P07,P10,P13,P15,P19"
+        },
+        {
+          "title": "2 step plus challenge",
+          "url": "https://help.atmosfunded.com/en/articles/12380560-2-step-plus-challenge",
+          "slots": "P20,P01,P02,P03,P05,P06,P07,P10,P13,P15,P19"
+        },
+        {
+          "title": "instant funding",
+          "url": "https://help.atmosfunded.com/en/articles/12380563-instant-funding",
+          "slots": "P20,P01,P02,P03,P05,P06,P07,P10,P13,P15,P19"
+        },
+        {
+          "title": "compare challenges which one is right for me",
+          "url": "https://help.atmosfunded.com/en/articles/12380567-compare-challenges-which-one-is-right-for-me",
+          "slots": "P20,P01,P03,P05,P06,P07"
+        },
+        {
+          "title": "how to pass a prop firm challenge",
+          "url": "https://help.atmosfunded.com/en/articles/12380596-how-to-pass-a-prop-firm-challenge",
+          "slots": "P20,P01,P02,P03,P19"
+        },
+        {
+          "title": "how funding works",
+          "url": "https://help.atmosfunded.com/en/articles/12380597-how-funding-works",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "how payouts work",
+          "url": "https://help.atmosfunded.com/en/articles/12380605-how-payouts-work",
+          "slots": "P20"
+        },
+        {
+          "title": "first payout on demand 2 step plus challenges",
+          "url": "https://help.atmosfunded.com/en/articles/12380608-first-payout-on-demand-2-step-plus-challenges",
+          "slots": "P20"
+        },
+        {
+          "title": "profit split explained",
+          "url": "https://help.atmosfunded.com/en/articles/12380612-profit-split-explained",
+          "slots": "P20,P07"
+        },
+        {
+          "title": "how to request a payout",
+          "url": "https://help.atmosfunded.com/en/articles/12380614-how-to-request-a-payout",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "taxes compliance notes",
+          "url": "https://help.atmosfunded.com/en/articles/12380615-taxes-compliance-notes",
+          "slots": ""
+        },
+        {
+          "title": "how to log in to mt5",
+          "url": "https://help.atmosfunded.com/en/articles/12380619-how-to-log-in-to-mt5",
+          "slots": "P13"
+        },
+        {
+          "title": "how to use the atmos funded dashboard",
+          "url": "https://help.atmosfunded.com/en/articles/12380620-how-to-use-the-atmos-funded-dashboard",
+          "slots": "P20"
+        },
+        {
+          "title": "how to install mt5 on desktop mobile",
+          "url": "https://help.atmosfunded.com/en/articles/12380622-how-to-install-mt5-on-desktop-mobile",
+          "slots": ""
+        },
+        {
+          "title": "why can t i log in to my account",
+          "url": "https://help.atmosfunded.com/en/articles/12380626-why-can-t-i-log-in-to-my-account",
+          "slots": "P12"
+        },
+        {
+          "title": "spreads commissions slippage explained",
+          "url": "https://help.atmosfunded.com/en/articles/12380630-spreads-commissions-slippage-explained",
+          "slots": "P10,P12,P19"
+        },
+        {
+          "title": "welcome to atmos funded",
+          "url": "https://help.atmosfunded.com/en/articles/12380804-welcome-to-atmos-funded",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "how to sign up get your first challenge",
+          "url": "https://help.atmosfunded.com/en/articles/12380811-how-to-sign-up-get-your-first-challenge",
+          "slots": "P20"
+        },
+        {
+          "title": "which platforms do you support",
+          "url": "https://help.atmosfunded.com/en/articles/12380818-which-platforms-do-you-support",
+          "slots": "P13"
+        },
+        {
+          "title": "which payment methods do you support",
+          "url": "https://help.atmosfunded.com/en/articles/12380823-which-payment-methods-do-you-support",
+          "slots": ""
+        },
+        {
+          "title": "refund policy explained",
+          "url": "https://help.atmosfunded.com/en/articles/12380826-refund-policy-explained",
+          "slots": "P20,P12,P13"
+        },
+        {
+          "title": "how to use promo codes discounts",
+          "url": "https://help.atmosfunded.com/en/articles/12380827-how-to-use-promo-codes-discounts",
+          "slots": "P20"
+        },
+        {
+          "title": "troubleshooting failed payments",
+          "url": "https://help.atmosfunded.com/en/articles/12380828-troubleshooting-failed-payments",
+          "slots": ""
+        },
+        {
+          "title": "what trading strategies are allowed",
+          "url": "https://help.atmosfunded.com/en/articles/12381191-what-trading-strategies-are-allowed",
+          "slots": "P20,P10,P13,P15,P19"
+        },
+        {
+          "title": "drawdowns loss limits how they work",
+          "url": "https://help.atmosfunded.com/en/articles/12381211-drawdowns-loss-limits-how-they-work",
+          "slots": "P20,P03,P05,P06"
+        },
+        {
+          "title": "what are the rules for news trading",
+          "url": "https://help.atmosfunded.com/en/articles/12381237-what-are-the-rules-for-news-trading",
+          "slots": "P10,P12,P13,P19"
+        },
+        {
+          "title": "can i hold trades overnight and over weekends",
+          "url": "https://help.atmosfunded.com/en/articles/12381252-can-i-hold-trades-overnight-and-over-weekends",
+          "slots": "P11,P12,P13,P19"
+        },
+        {
+          "title": "are hedging strategies allowed",
+          "url": "https://help.atmosfunded.com/en/articles/12381256-are-hedging-strategies-allowed",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "can i use expert advisors ea",
+          "url": "https://help.atmosfunded.com/en/articles/12381265-can-i-use-expert-advisors-ea",
+          "slots": "P20,P13,P14,P15,P19"
+        },
+        {
+          "title": "what actions lead to an account breach",
+          "url": "https://help.atmosfunded.com/en/articles/12381272-what-actions-lead-to-an-account-breach",
+          "slots": "P20,P03,P05,P06,P19"
+        },
+        {
+          "title": "what are prohibited strategies",
+          "url": "https://help.atmosfunded.com/en/articles/12381281-what-are-prohibited-strategies",
+          "slots": "P01,P10,P13,P14,P15,P16,P19"
+        },
+        {
+          "title": "what happens if i breach my account",
+          "url": "https://help.atmosfunded.com/en/articles/12381289-what-happens-if-i-breach-my-account",
+          "slots": "P20,P03,P19"
+        },
+        {
+          "title": "what is the daily loss limit",
+          "url": "https://help.atmosfunded.com/en/articles/12381307-what-is-the-daily-loss-limit",
+          "slots": "P20,P03,P04,P05,P07"
+        },
+        {
+          "title": "what is the maximum total drawdown",
+          "url": "https://help.atmosfunded.com/en/articles/12381315-what-is-the-maximum-total-drawdown",
+          "slots": "P20,P05,P06,P07"
+        },
+        {
+          "title": "static vs trailing drawdown what s the difference",
+          "url": "https://help.atmosfunded.com/en/articles/12381324-static-vs-trailing-drawdown-what-s-the-difference",
+          "slots": "P20,P05,P06,P07"
+        },
+        {
+          "title": "what is the drawdown lock on payout",
+          "url": "https://help.atmosfunded.com/en/articles/12381332-what-is-the-drawdown-lock-on-payout",
+          "slots": "P20,P05,P06,P07"
+        },
+        {
+          "title": "what is the minimum trading days rule",
+          "url": "https://help.atmosfunded.com/en/articles/12381351-what-is-the-minimum-trading-days-rule",
+          "slots": "P20,P02,P03,P07"
+        },
+        {
+          "title": "what is the consistency rule",
+          "url": "https://help.atmosfunded.com/en/articles/12381353-what-is-the-consistency-rule",
+          "slots": "P20,P02,P07"
+        },
+        {
+          "title": "do i need to trade every day",
+          "url": "https://help.atmosfunded.com/en/articles/12381366-do-i-need-to-trade-every-day",
+          "slots": "P20,P01,P02,P07,P15"
+        },
+        {
+          "title": "leverage",
+          "url": "https://help.atmosfunded.com/en/articles/12394478-leverage",
+          "slots": "P20"
+        },
+        {
+          "title": "what is the copy trading rule",
+          "url": "https://help.atmosfunded.com/en/articles/12607162-what-is-the-copy-trading-rule",
+          "slots": "P02,P10,P13,P14,P19"
+        },
+        {
+          "title": "nova challenge",
+          "url": "https://help.atmosfunded.com/en/articles/13959447-nova-challenge",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P09,P10,P11,P12,P13,P14,P15,P16,P19",
+    "missing": "P08,P17,P18",
+    "note": "18/21（本文補強後）"
+  }
+}

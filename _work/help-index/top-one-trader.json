@@ -1,0 +1,971 @@
+{
+  "firm": "top-one-trader",
+  "help_base_url": "https://help.toponetrader.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で140記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "consistency rule explained 2 step pro accounts old version",
+          "url": "https://help.toponetrader.com/en/articles/10860801-consistency-rule-explained-2-step-pro-accounts-old-version",
+          "slots": "P20,P01,P07"
+        },
+        {
+          "title": "understanding the 15 consistency rule for instant funded accounts",
+          "url": "https://help.toponetrader.com/en/articles/10911570-understanding-the-15-consistency-rule-for-instant-funded-accounts",
+          "slots": "P20,P02,P07"
+        },
+        {
+          "title": "comparison of account types",
+          "url": "https://help.toponetrader.com/en/articles/10912482-comparison-of-account-types",
+          "slots": ""
+        },
+        {
+          "title": "help logging in to metatrader 5",
+          "url": "https://help.toponetrader.com/en/articles/11074263-help-logging-in-to-metatrader-5",
+          "slots": ""
+        },
+        {
+          "title": "prime accounts overview",
+          "url": "https://help.toponetrader.com/en/articles/12132613-prime-accounts-overview",
+          "slots": ""
+        },
+        {
+          "title": "understanding the 20 equity stability score ess instant prime accounts",
+          "url": "https://help.toponetrader.com/en/articles/12276972-understanding-the-20-equity-stability-score-ess-instant-prime-accounts",
+          "slots": ""
+        },
+        {
+          "title": "minimum hold time rule for trades",
+          "url": "https://help.toponetrader.com/en/articles/12458632-minimum-hold-time-rule-for-trades",
+          "slots": "P20,P10,P15,P16"
+        },
+        {
+          "title": "what are the rules for the instant funding account",
+          "url": "https://help.toponetrader.com/en/articles/12575317-what-are-the-rules-for-the-instant-funding-account",
+          "slots": "P20,P03,P05,P06,P07,P09,P11,P13,P14,P16,P18,P19"
+        },
+        {
+          "title": "understanding the max trailing drawdown instant prime funding",
+          "url": "https://help.toponetrader.com/en/articles/12606920-understanding-the-max-trailing-drawdown-instant-prime-funding",
+          "slots": "P20,P05,P06"
+        },
+        {
+          "title": "understanding the profit split instant prime funded account",
+          "url": "https://help.toponetrader.com/en/articles/12606991-understanding-the-profit-split-instant-prime-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "lock upon payout instant prime funding",
+          "url": "https://help.toponetrader.com/en/articles/12607028-lock-upon-payout-instant-prime-funding",
+          "slots": ""
+        },
+        {
+          "title": "can i trade during news events instant prime funding",
+          "url": "https://help.toponetrader.com/en/articles/12607105-can-i-trade-during-news-events-instant-prime-funding",
+          "slots": "P20,P10,P16,P19"
+        },
+        {
+          "title": "understanding the daily pause instant prime funded",
+          "url": "https://help.toponetrader.com/en/articles/12607897-understanding-the-daily-pause-instant-prime-funded",
+          "slots": "P20,P03,P04,P11"
+        },
+        {
+          "title": "when can i request a payout instant prime funding",
+          "url": "https://help.toponetrader.com/en/articles/12619496-when-can-i-request-a-payout-instant-prime-funding",
+          "slots": ""
+        },
+        {
+          "title": "how to calculate your max daily loss prime instant funded accounts",
+          "url": "https://help.toponetrader.com/en/articles/12663471-how-to-calculate-your-max-daily-loss-prime-instant-funded-accounts",
+          "slots": "P20,P03,P04,P06"
+        },
+        {
+          "title": "what happens if my ess or consistency score was met due to partial closes",
+          "url": "https://help.toponetrader.com/en/articles/12959958-what-happens-if-my-ess-or-consistency-score-was-met-due-to-partial-closes",
+          "slots": "P07"
+        },
+        {
+          "title": "understanding the difference between consistency and ess requirements",
+          "url": "https://help.toponetrader.com/en/articles/13021467-understanding-the-difference-between-consistency-and-ess-requirements",
+          "slots": "P20,P07"
+        },
+        {
+          "title": "weekend trading rules for instant prime funded",
+          "url": "https://help.toponetrader.com/en/articles/13021792-weekend-trading-rules-for-instant-prime-funded",
+          "slots": "P10,P11,P14,P19"
+        },
+        {
+          "title": "top one crypto platforms overview",
+          "url": "https://help.toponetrader.com/en/articles/13309101-top-one-crypto-platforms-overview",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto crypto pairs available to trade",
+          "url": "https://help.toponetrader.com/en/articles/13309174-top-one-crypto-crypto-pairs-available-to-trade",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto general overview",
+          "url": "https://help.toponetrader.com/en/articles/13309252-top-one-crypto-general-overview",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto profit target overview",
+          "url": "https://help.toponetrader.com/en/articles/13309368-top-one-crypto-profit-target-overview",
+          "slots": "P20,P01,P02,P02b"
+        },
+        {
+          "title": "top one crypto maximum trailing drawdown overview",
+          "url": "https://help.toponetrader.com/en/articles/13309506-top-one-crypto-maximum-trailing-drawdown-overview",
+          "slots": "P20,P03,P05,P06"
+        },
+        {
+          "title": "top one crypto daily drawdown overview",
+          "url": "https://help.toponetrader.com/en/articles/13309696-top-one-crypto-daily-drawdown-overview",
+          "slots": "P20,P03,P04"
+        },
+        {
+          "title": "top one crypto profit split overview",
+          "url": "https://help.toponetrader.com/en/articles/13309784-top-one-crypto-profit-split-overview",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto minimum profitable trading days overview",
+          "url": "https://help.toponetrader.com/en/articles/13309947-top-one-crypto-minimum-profitable-trading-days-overview",
+          "slots": "P20,P01,P02,P08"
+        },
+        {
+          "title": "top one crypto payout frequency overview",
+          "url": "https://help.toponetrader.com/en/articles/13309986-top-one-crypto-payout-frequency-overview",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto max open risk and consistency overview",
+          "url": "https://help.toponetrader.com/en/articles/13310039-top-one-crypto-max-open-risk-and-consistency-overview",
+          "slots": "P20,P01,P07"
+        },
+        {
+          "title": "top one crypto news trading rules",
+          "url": "https://help.toponetrader.com/en/articles/13310080-top-one-crypto-news-trading-rules",
+          "slots": "P20,P10,P16,P19"
+        },
+        {
+          "title": "top one crypto commissions overview",
+          "url": "https://help.toponetrader.com/en/articles/13314136-top-one-crypto-commissions-overview",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto max capital overview",
+          "url": "https://help.toponetrader.com/en/articles/13314178-top-one-crypto-max-capital-overview",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto payout cap overview",
+          "url": "https://help.toponetrader.com/en/articles/13314271-top-one-crypto-payout-cap-overview",
+          "slots": ""
+        },
+        {
+          "title": "top one crypto leverage overview",
+          "url": "https://help.toponetrader.com/en/articles/13314346-top-one-crypto-leverage-overview",
+          "slots": "P20,P12"
+        },
+        {
+          "title": "top one crypto expert advisors overview",
+          "url": "https://help.toponetrader.com/en/articles/13314380-top-one-crypto-expert-advisors-overview",
+          "slots": "P20,P01,P12,P13,P14,P19"
+        },
+        {
+          "title": "top one crypto overnight holding overview",
+          "url": "https://help.toponetrader.com/en/articles/13314475-top-one-crypto-overnight-holding-overview",
+          "slots": "P20,P11,P12,P13"
+        },
+        {
+          "title": "top one crypto inactivity overview",
+          "url": "https://help.toponetrader.com/en/articles/13314492-top-one-crypto-inactivity-overview",
+          "slots": "P09"
+        },
+        {
+          "title": "2 step plus overview",
+          "url": "https://help.toponetrader.com/en/articles/13391994-2-step-plus-overview",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P09,P10,P11,P13,P19"
+        },
+        {
+          "title": "2 step plus profit target rule",
+          "url": "https://help.toponetrader.com/en/articles/13392054-2-step-plus-profit-target-rule",
+          "slots": "P20,P01,P03"
+        },
+        {
+          "title": "2 step plus max static drawdown rule",
+          "url": "https://help.toponetrader.com/en/articles/13392059-2-step-plus-max-static-drawdown-rule",
+          "slots": "P20,P03,P04,P05,P06"
+        },
+        {
+          "title": "2 step plus daily drawdown rule",
+          "url": "https://help.toponetrader.com/en/articles/13392081-2-step-plus-daily-drawdown-rule",
+          "slots": "P20,P03,P04,P05,P06"
+        },
+        {
+          "title": "2 step plus profit split",
+          "url": "https://help.toponetrader.com/en/articles/13392085-2-step-plus-profit-split",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step plus minimum profitable trading days rule",
+          "url": "https://help.toponetrader.com/en/articles/13392094-2-step-plus-minimum-profitable-trading-days-rule",
+          "slots": "P20,P01,P02,P04"
+        },
+        {
+          "title": "2 step plus payout cycle",
+          "url": "https://help.toponetrader.com/en/articles/13392104-2-step-plus-payout-cycle",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "2 step plus max open risk rule equity shield",
+          "url": "https://help.toponetrader.com/en/articles/13392108-2-step-plus-max-open-risk-rule-equity-shield",
+          "slots": "P20,P03,P06"
+        },
+        {
+          "title": "2 step plus soft breach limit",
+          "url": "https://help.toponetrader.com/en/articles/13392115-2-step-plus-soft-breach-limit",
+          "slots": "P20,P05,P08,P16,P18"
+        },
+        {
+          "title": "2 step plus no consistency rule",
+          "url": "https://help.toponetrader.com/en/articles/13392139-2-step-plus-no-consistency-rule",
+          "slots": "P20,P01,P07,P08,P17"
+        },
+        {
+          "title": "2 step plus news trading rules",
+          "url": "https://help.toponetrader.com/en/articles/13392203-2-step-plus-news-trading-rules",
+          "slots": "P20,P10,P16,P19"
+        },
+        {
+          "title": "2 step plus maximum profit per day for funded accounts",
+          "url": "https://help.toponetrader.com/en/articles/13392212-2-step-plus-maximum-profit-per-day-for-funded-accounts",
+          "slots": "P20,P08"
+        },
+        {
+          "title": "2 step plus maximum payout per cycle",
+          "url": "https://help.toponetrader.com/en/articles/13392224-2-step-plus-maximum-payout-per-cycle",
+          "slots": "P20,P02b,P08"
+        },
+        {
+          "title": "2 step plus leverage levels",
+          "url": "https://help.toponetrader.com/en/articles/13392228-2-step-plus-leverage-levels",
+          "slots": "P20,P18"
+        },
+        {
+          "title": "nova account overview",
+          "url": "https://help.toponetrader.com/en/articles/13832165-nova-account-overview",
+          "slots": ""
+        },
+        {
+          "title": "nova pay after you pass explained",
+          "url": "https://help.toponetrader.com/en/articles/13832561-nova-pay-after-you-pass-explained",
+          "slots": ""
+        },
+        {
+          "title": "nova max drawdown rule",
+          "url": "https://help.toponetrader.com/en/articles/13833305-nova-max-drawdown-rule",
+          "slots": "P20,P04,P05,P06"
+        },
+        {
+          "title": "nova daily loss limit rule",
+          "url": "https://help.toponetrader.com/en/articles/13833346-nova-daily-loss-limit-rule",
+          "slots": "P20,P03,P04,P05"
+        },
+        {
+          "title": "nova accounts understanding the equity stability score ess",
+          "url": "https://help.toponetrader.com/en/articles/13833371-nova-accounts-understanding-the-equity-stability-score-ess",
+          "slots": ""
+        },
+        {
+          "title": "nova payout rules",
+          "url": "https://help.toponetrader.com/en/articles/13833385-nova-payout-rules",
+          "slots": "P20,P02b,P03,P05,P07"
+        },
+        {
+          "title": "nova reset policy",
+          "url": "https://help.toponetrader.com/en/articles/13833398-nova-reset-policy",
+          "slots": ""
+        },
+        {
+          "title": "nova lock upon payout lup",
+          "url": "https://help.toponetrader.com/en/articles/13834749-nova-lock-upon-payout-lup",
+          "slots": ""
+        },
+        {
+          "title": "how to reset my nova account",
+          "url": "https://help.toponetrader.com/en/articles/13879619-how-to-reset-my-nova-account",
+          "slots": ""
+        },
+        {
+          "title": "how to activate my nova funded account",
+          "url": "https://help.toponetrader.com/en/articles/13879861-how-to-activate-my-nova-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "nova leverage levels",
+          "url": "https://help.toponetrader.com/en/articles/13886677-nova-leverage-levels",
+          "slots": "P20,P01,P03,P05,P18"
+        },
+        {
+          "title": "nova news trading rules",
+          "url": "https://help.toponetrader.com/en/articles/13886692-nova-news-trading-rules",
+          "slots": "P20,P03,P05,P10,P16,P19"
+        },
+        {
+          "title": "1 step flash maximum daily profit rule funded accounts only",
+          "url": "https://help.toponetrader.com/en/articles/14051937-1-step-flash-maximum-daily-profit-rule-funded-accounts-only",
+          "slots": "P20,P03,P08"
+        },
+        {
+          "title": "understanding soft breaches in instant prime accounts",
+          "url": "https://help.toponetrader.com/en/articles/14053509-understanding-soft-breaches-in-instant-prime-accounts",
+          "slots": "P20,P11,P16,P17,P18,P19"
+        },
+        {
+          "title": "1 step flash resets how they work",
+          "url": "https://help.toponetrader.com/en/articles/14053616-1-step-flash-resets-how-they-work",
+          "slots": "P20,P03,P05"
+        },
+        {
+          "title": "2 step plus account resets how they work",
+          "url": "https://help.toponetrader.com/en/articles/14053654-2-step-plus-account-resets-how-they-work",
+          "slots": "P20,P03,P05,P08"
+        },
+        {
+          "title": "payment method ownership verification policy",
+          "url": "https://help.toponetrader.com/en/articles/14304533-payment-method-ownership-verification-policy",
+          "slots": ""
+        },
+        {
+          "title": "2 step amped overview",
+          "url": "https://help.toponetrader.com/en/articles/14432028-2-step-amped-overview",
+          "slots": "P20,P01,P02,P02b,P03,P05,P06,P07,P09,P10,P11,P13,P17,P19"
+        },
+        {
+          "title": "2 step amped profit target",
+          "url": "https://help.toponetrader.com/en/articles/14432039-2-step-amped-profit-target",
+          "slots": "P20,P01,P02"
+        },
+        {
+          "title": "2 step amped max trailing drawdown",
+          "url": "https://help.toponetrader.com/en/articles/14432046-2-step-amped-max-trailing-drawdown",
+          "slots": "P20,P03,P05,P06,P17"
+        },
+        {
+          "title": "2 step amped daily drawdown",
+          "url": "https://help.toponetrader.com/en/articles/14432056-2-step-amped-daily-drawdown",
+          "slots": "P20,P03,P04,P06,P17"
+        },
+        {
+          "title": "amped profitable trading days",
+          "url": "https://help.toponetrader.com/en/articles/14432059-amped-profitable-trading-days",
+          "slots": "P20,P01,P02"
+        },
+        {
+          "title": "amped payout frequency profit split",
+          "url": "https://help.toponetrader.com/en/articles/14432075-amped-payout-frequency-profit-split",
+          "slots": ""
+        },
+        {
+          "title": "amped max open risk equity shield",
+          "url": "https://help.toponetrader.com/en/articles/14432084-amped-max-open-risk-equity-shield",
+          "slots": "P20,P17"
+        },
+        {
+          "title": "amped news trading",
+          "url": "https://help.toponetrader.com/en/articles/14432095-amped-news-trading",
+          "slots": "P20,P10,P11,P19"
+        },
+        {
+          "title": "amped weekend holding",
+          "url": "https://help.toponetrader.com/en/articles/14432096-amped-weekend-holding",
+          "slots": "P11"
+        },
+        {
+          "title": "amped leverage",
+          "url": "https://help.toponetrader.com/en/articles/14432097-amped-leverage",
+          "slots": ""
+        },
+        {
+          "title": "1 step amped overview",
+          "url": "https://help.toponetrader.com/en/articles/14594437-1-step-amped-overview",
+          "slots": "P20"
+        },
+        {
+          "title": "1 step amped profit target",
+          "url": "https://help.toponetrader.com/en/articles/14595296-1-step-amped-profit-target",
+          "slots": "P01,P20"
+        },
+        {
+          "title": "1 step amped max trailing drawdown",
+          "url": "https://help.toponetrader.com/en/articles/14595300-1-step-amped-max-trailing-drawdown",
+          "slots": "P06,P20"
+        },
+        {
+          "title": "1 step amped daily drawdown",
+          "url": "https://help.toponetrader.com/en/articles/14595302-1-step-amped-daily-drawdown",
+          "slots": "P03,P20"
+        },
+        {
+          "title": "amped account resets how they work",
+          "url": "https://help.toponetrader.com/en/articles/14659557-amped-account-resets-how-they-work",
+          "slots": ""
+        },
+        {
+          "title": "1 step flash daily drawdown rule",
+          "url": "https://help.toponetrader.com/en/articles/15146575-1-step-flash-daily-drawdown-rule",
+          "slots": "P03,P20"
+        },
+        {
+          "title": "daily drawdown rule instant funding",
+          "url": "https://help.toponetrader.com/en/articles/15146613-daily-drawdown-rule-instant-funding",
+          "slots": "P03"
+        },
+        {
+          "title": "when can i request a payout 1 step flash",
+          "url": "https://help.toponetrader.com/en/articles/15146735-when-can-i-request-a-payout-1-step-flash",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step pro v2 overview",
+          "url": "https://help.toponetrader.com/en/articles/15164777-2-step-pro-v2-overview",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step pro v2 profit targets",
+          "url": "https://help.toponetrader.com/en/articles/15164842-2-step-pro-v2-profit-targets",
+          "slots": "P01,P20"
+        },
+        {
+          "title": "2 step pro v2 maximum loss limit",
+          "url": "https://help.toponetrader.com/en/articles/15164877-2-step-pro-v2-maximum-loss-limit",
+          "slots": "P05,P20"
+        },
+        {
+          "title": "2 step pro v2 daily loss limit",
+          "url": "https://help.toponetrader.com/en/articles/15164904-2-step-pro-v2-daily-loss-limit",
+          "slots": "P03,P20"
+        },
+        {
+          "title": "2 step pro v2 equity shield",
+          "url": "https://help.toponetrader.com/en/articles/15164923-2-step-pro-v2-equity-shield",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step pro v2 when can i request a payout",
+          "url": "https://help.toponetrader.com/en/articles/15164961-2-step-pro-v2-when-can-i-request-a-payout",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step pro v2 profitable trading days",
+          "url": "https://help.toponetrader.com/en/articles/15164975-2-step-pro-v2-profitable-trading-days",
+          "slots": "P02,P20"
+        },
+        {
+          "title": "2 step pro v2 soft breach limit",
+          "url": "https://help.toponetrader.com/en/articles/15164983-2-step-pro-v2-soft-breach-limit",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step pro v2 news trading rule",
+          "url": "https://help.toponetrader.com/en/articles/15165001-2-step-pro-v2-news-trading-rule",
+          "slots": "P10,P20"
+        },
+        {
+          "title": "2 step pro v2 maximum allocation and scaling",
+          "url": "https://help.toponetrader.com/en/articles/15165029-2-step-pro-v2-maximum-allocation-and-scaling",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step pro v2 leverage levels",
+          "url": "https://help.toponetrader.com/en/articles/15165054-2-step-pro-v2-leverage-levels",
+          "slots": "P20"
+        },
+        {
+          "title": "2 step pro v2 account resets how they work",
+          "url": "https://help.toponetrader.com/en/articles/15176974-2-step-pro-v2-account-resets-how-they-work",
+          "slots": "P20"
+        },
+        {
+          "title": "top one crypto spreads account",
+          "url": "https://help.toponetrader.com/en/articles/15251879-top-one-crypto-spreads-account",
+          "slots": ""
+        },
+        {
+          "title": "2 step plus lock upon payout lup",
+          "url": "https://help.toponetrader.com/en/articles/15303179-2-step-plus-lock-upon-payout-lup",
+          "slots": "P20"
+        },
+        {
+          "title": "how does the payday account work",
+          "url": "https://help.toponetrader.com/en/articles/15325110-how-does-the-payday-account-work",
+          "slots": ""
+        },
+        {
+          "title": "payday account stake and multiplier options",
+          "url": "https://help.toponetrader.com/en/articles/15325166-payday-account-stake-and-multiplier-options",
+          "slots": ""
+        },
+        {
+          "title": "payday account rule overview",
+          "url": "https://help.toponetrader.com/en/articles/15325318-payday-account-rule-overview",
+          "slots": ""
+        },
+        {
+          "title": "how the payday account trailing drawdown works",
+          "url": "https://help.toponetrader.com/en/articles/15325390-how-the-payday-account-trailing-drawdown-works",
+          "slots": "P06"
+        },
+        {
+          "title": "payday account 8 hour timeframe",
+          "url": "https://help.toponetrader.com/en/articles/15325429-payday-account-8-hour-timeframe",
+          "slots": ""
+        },
+        {
+          "title": "payday account profitable trade requirement",
+          "url": "https://help.toponetrader.com/en/articles/15325446-payday-account-profitable-trade-requirement",
+          "slots": ""
+        },
+        {
+          "title": "payday account leverage",
+          "url": "https://help.toponetrader.com/en/articles/15325460-payday-account-leverage",
+          "slots": ""
+        },
+        {
+          "title": "payday account weekend and overnight trading",
+          "url": "https://help.toponetrader.com/en/articles/15325616-payday-account-weekend-and-overnight-trading",
+          "slots": "P11,P12"
+        },
+        {
+          "title": "payday account news trading",
+          "url": "https://help.toponetrader.com/en/articles/15325637-payday-account-news-trading",
+          "slots": "P10"
+        },
+        {
+          "title": "payday account ea bot and trade manager policy",
+          "url": "https://help.toponetrader.com/en/articles/15325653-payday-account-ea-bot-and-trade-manager-policy",
+          "slots": "P13"
+        },
+        {
+          "title": "how payday account payouts work",
+          "url": "https://help.toponetrader.com/en/articles/15325716-how-payday-account-payouts-work",
+          "slots": ""
+        },
+        {
+          "title": "payday stop loss and minimum trade time rules",
+          "url": "https://help.toponetrader.com/en/articles/15325762-payday-stop-loss-and-minimum-trade-time-rules",
+          "slots": "P16"
+        },
+        {
+          "title": "payday account copy trading policy",
+          "url": "https://help.toponetrader.com/en/articles/15347814-payday-account-copy-trading-policy",
+          "slots": "P14"
+        },
+        {
+          "title": "payday account maximum open trades",
+          "url": "https://help.toponetrader.com/en/articles/15349510-payday-account-maximum-open-trades",
+          "slots": ""
+        },
+        {
+          "title": "how long does it take to receive my funded stage account details",
+          "url": "https://help.toponetrader.com/en/articles/8318169-how-long-does-it-take-to-receive-my-funded-stage-account-details",
+          "slots": "P09"
+        },
+        {
+          "title": "what are the rules for the 1 step flash challenge account",
+          "url": "https://help.toponetrader.com/en/articles/8318230-what-are-the-rules-for-the-1-step-flash-challenge-account",
+          "slots": "P20"
+        },
+        {
+          "title": "are there any lot size restrictions",
+          "url": "https://help.toponetrader.com/en/articles/8318242-are-there-any-lot-size-restrictions",
+          "slots": "P18"
+        },
+        {
+          "title": "understanding the max trailing drawdown 1 step flash",
+          "url": "https://help.toponetrader.com/en/articles/8318251-understanding-the-max-trailing-drawdown-1-step-flash",
+          "slots": "P06,P20"
+        },
+        {
+          "title": "what is the stop loss rule",
+          "url": "https://help.toponetrader.com/en/articles/8318256-what-is-the-stop-loss-rule",
+          "slots": "P16"
+        },
+        {
+          "title": "can i hold positions over the weekend",
+          "url": "https://help.toponetrader.com/en/articles/8318257-can-i-hold-positions-over-the-weekend",
+          "slots": "P11"
+        },
+        {
+          "title": "what are the soft breach and hard breach rules",
+          "url": "https://help.toponetrader.com/en/articles/8318258-what-are-the-soft-breach-and-hard-breach-rules",
+          "slots": ""
+        },
+        {
+          "title": "when can i request a payout 2 step pro old version",
+          "url": "https://help.toponetrader.com/en/articles/8318287-when-can-i-request-a-payout-2-step-pro-old-version",
+          "slots": "P20"
+        },
+        {
+          "title": "do i have to use one of your accounts or can i use my own",
+          "url": "https://help.toponetrader.com/en/articles/8318293-do-i-have-to-use-one-of-your-accounts-or-can-i-use-my-own",
+          "slots": ""
+        },
+        {
+          "title": "which instruments can i trade",
+          "url": "https://help.toponetrader.com/en/articles/8318925-which-instruments-can-i-trade",
+          "slots": ""
+        },
+        {
+          "title": "what are the leverage ratios and calculations for top one trader accounts",
+          "url": "https://help.toponetrader.com/en/articles/8318931-what-are-the-leverage-ratios-and-calculations-for-top-one-trader-accounts",
+          "slots": ""
+        },
+        {
+          "title": "can i use an expert advisor api or hft",
+          "url": "https://help.toponetrader.com/en/articles/8318937-can-i-use-an-expert-advisor-api-or-hft",
+          "slots": "P13"
+        },
+        {
+          "title": "can i trade during the news",
+          "url": "https://help.toponetrader.com/en/articles/8318943-can-i-trade-during-the-news",
+          "slots": "P10"
+        },
+        {
+          "title": "how will i see the charge on my credit card statement",
+          "url": "https://help.toponetrader.com/en/articles/8318947-how-will-i-see-the-charge-on-my-credit-card-statement",
+          "slots": ""
+        },
+        {
+          "title": "what are the payout methods",
+          "url": "https://help.toponetrader.com/en/articles/8466922-what-are-the-payout-methods",
+          "slots": ""
+        },
+        {
+          "title": "countries with limitations and restrictions",
+          "url": "https://help.toponetrader.com/en/articles/8477370-countries-with-limitations-and-restrictions",
+          "slots": ""
+        },
+        {
+          "title": "what is the max allocation",
+          "url": "https://help.toponetrader.com/en/articles/8478668-what-is-the-max-allocation",
+          "slots": ""
+        },
+        {
+          "title": "is copy trading allowed at top one trader",
+          "url": "https://help.toponetrader.com/en/articles/8487707-is-copy-trading-allowed-at-top-one-trader",
+          "slots": "P14"
+        },
+        {
+          "title": "how does the scaling plan work",
+          "url": "https://help.toponetrader.com/en/articles/8491578-how-does-the-scaling-plan-work",
+          "slots": ""
+        },
+        {
+          "title": "what are the trading commissions",
+          "url": "https://help.toponetrader.com/en/articles/8495817-what-are-the-trading-commissions",
+          "slots": ""
+        },
+        {
+          "title": "what are the spreads in the trading account",
+          "url": "https://help.toponetrader.com/en/articles/8502135-what-are-the-spreads-in-the-trading-account",
+          "slots": ""
+        },
+        {
+          "title": "how to find your trading account login credentials view the password",
+          "url": "https://help.toponetrader.com/en/articles/8506410-how-to-find-your-trading-account-login-credentials-view-the-password",
+          "slots": ""
+        },
+        {
+          "title": "how do i get my refund after passing a challenge",
+          "url": "https://help.toponetrader.com/en/articles/8519504-how-do-i-get-my-refund-after-passing-a-challenge",
+          "slots": ""
+        },
+        {
+          "title": "what are the rules for the 2 step pro challenge account old version",
+          "url": "https://help.toponetrader.com/en/articles/8568650-what-are-the-rules-for-the-2-step-pro-challenge-account-old-version",
+          "slots": "P20"
+        },
+        {
+          "title": "troubleshooting issues with copiers ea s and sl not being placed on trades",
+          "url": "https://help.toponetrader.com/en/articles/8620399-troubleshooting-issues-with-copiers-ea-s-and-sl-not-being-placed-on-trades",
+          "slots": "P13,P14"
+        },
+        {
+          "title": "weekly discord competitions games",
+          "url": "https://help.toponetrader.com/en/articles/8687031-weekly-discord-competitions-games",
+          "slots": ""
+        },
+        {
+          "title": "top one trader career opportunities",
+          "url": "https://help.toponetrader.com/en/articles/8696501-top-one-trader-career-opportunities",
+          "slots": ""
+        },
+        {
+          "title": "brand ambassador program overview",
+          "url": "https://help.toponetrader.com/en/articles/8713928-brand-ambassador-program-overview",
+          "slots": ""
+        },
+        {
+          "title": "are there ip address restrictions",
+          "url": "https://help.toponetrader.com/en/articles/8733438-are-there-ip-address-restrictions",
+          "slots": ""
+        },
+        {
+          "title": "understanding slippage",
+          "url": "https://help.toponetrader.com/en/articles/8792992-understanding-slippage",
+          "slots": ""
+        },
+        {
+          "title": "how do i get started as a brand ambassador",
+          "url": "https://help.toponetrader.com/en/articles/8795503-how-do-i-get-started-as-a-brand-ambassador",
+          "slots": ""
+        },
+        {
+          "title": "how much does a brand ambassador earn when a referral sale is made",
+          "url": "https://help.toponetrader.com/en/articles/8795505-how-much-does-a-brand-ambassador-earn-when-a-referral-sale-is-made",
+          "slots": ""
+        },
+        {
+          "title": "how much can i earn as a brand ambassador",
+          "url": "https://help.toponetrader.com/en/articles/8795508-how-much-can-i-earn-as-a-brand-ambassador",
+          "slots": ""
+        },
+        {
+          "title": "do i have to be a top one trader customer to qualify",
+          "url": "https://help.toponetrader.com/en/articles/8795509-do-i-have-to-be-a-top-one-trader-customer-to-qualify",
+          "slots": ""
+        },
+        {
+          "title": "when will i receive my brand ambassador commissions",
+          "url": "https://help.toponetrader.com/en/articles/8795513-when-will-i-receive-my-brand-ambassador-commissions",
+          "slots": ""
+        },
+        {
+          "title": "how will i receive my brand ambassador commissions",
+          "url": "https://help.toponetrader.com/en/articles/8795515-how-will-i-receive-my-brand-ambassador-commissions",
+          "slots": ""
+        },
+        {
+          "title": "can i receive a brand ambassador commission on my own account",
+          "url": "https://help.toponetrader.com/en/articles/8795517-can-i-receive-a-brand-ambassador-commission-on-my-own-account",
+          "slots": ""
+        },
+        {
+          "title": "do i receive commission on recurring orders",
+          "url": "https://help.toponetrader.com/en/articles/8795518-do-i-receive-commission-on-recurring-orders",
+          "slots": ""
+        },
+        {
+          "title": "do you have coupon codes",
+          "url": "https://help.toponetrader.com/en/articles/8795521-do-you-have-coupon-codes",
+          "slots": ""
+        },
+        {
+          "title": "what information is available in my private brand ambassador dashboard",
+          "url": "https://help.toponetrader.com/en/articles/8795523-what-information-is-available-in-my-private-brand-ambassador-dashboard",
+          "slots": ""
+        },
+        {
+          "title": "can i bid on ppc keywords in my marketing strategy",
+          "url": "https://help.toponetrader.com/en/articles/8795525-can-i-bid-on-ppc-keywords-in-my-marketing-strategy",
+          "slots": ""
+        },
+        {
+          "title": "understanding kyc verification contract",
+          "url": "https://help.toponetrader.com/en/articles/8813882-understanding-kyc-verification-contract",
+          "slots": ""
+        },
+        {
+          "title": "30 day inactivity rule",
+          "url": "https://help.toponetrader.com/en/articles/8862549-30-day-inactivity-rule",
+          "slots": "P09"
+        },
+        {
+          "title": "what are the restricted prohibited trading strategies at top one trader",
+          "url": "https://help.toponetrader.com/en/articles/9047696-what-are-the-restricted-prohibited-trading-strategies-at-top-one-trader",
+          "slots": "P19"
+        },
+        {
+          "title": "why do cryptocurrencies have higher spreads",
+          "url": "https://help.toponetrader.com/en/articles/9048823-why-do-cryptocurrencies-have-higher-spreads",
+          "slots": ""
+        },
+        {
+          "title": "why do spreads widen at certain times",
+          "url": "https://help.toponetrader.com/en/articles/9071404-why-do-spreads-widen-at-certain-times",
+          "slots": ""
+        },
+        {
+          "title": "what is a vps and why is it recommended",
+          "url": "https://help.toponetrader.com/en/articles/9080994-what-is-a-vps-and-why-is-it-recommended",
+          "slots": ""
+        },
+        {
+          "title": "what trading platforms are available at top one trader",
+          "url": "https://help.toponetrader.com/en/articles/9081039-what-trading-platforms-are-available-at-top-one-trader",
+          "slots": ""
+        },
+        {
+          "title": "help logging in to ctrader",
+          "url": "https://help.toponetrader.com/en/articles/9091733-help-logging-in-to-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "help logging in to match trader",
+          "url": "https://help.toponetrader.com/en/articles/9113032-help-logging-in-to-match-trader",
+          "slots": ""
+        },
+        {
+          "title": "how payouts impact drawdown on 1 step flash accounts",
+          "url": "https://help.toponetrader.com/en/articles/9117415-how-payouts-impact-drawdown-on-1-step-flash-accounts",
+          "slots": "P20"
+        },
+        {
+          "title": "daily drawdown rule 2 step pro old version",
+          "url": "https://help.toponetrader.com/en/articles/9136879-daily-drawdown-rule-2-step-pro-old-version",
+          "slots": "P03,P20"
+        },
+        {
+          "title": "what is the max trailing and static drawdown",
+          "url": "https://help.toponetrader.com/en/articles/9136900-what-is-the-max-trailing-and-static-drawdown",
+          "slots": "P06"
+        },
+        {
+          "title": "what is the equityshield",
+          "url": "https://help.toponetrader.com/en/articles/9181278-what-is-the-equityshield",
+          "slots": ""
+        },
+        {
+          "title": "understanding swap fees",
+          "url": "https://help.toponetrader.com/en/articles/9264511-understanding-swap-fees",
+          "slots": ""
+        },
+        {
+          "title": "help logging in to tradelocker",
+          "url": "https://help.toponetrader.com/en/articles/9493181-help-logging-in-to-tradelocker",
+          "slots": ""
+        },
+        {
+          "title": "1 step flash or 2 step pro v2",
+          "url": "https://help.toponetrader.com/en/articles/9636212-1-step-flash-or-2-step-pro-v2",
+          "slots": "P20"
+        },
+        {
+          "title": "minimum 3 profitable trading days 1 step flash",
+          "url": "https://help.toponetrader.com/en/articles/9636241-minimum-3-profitable-trading-days-1-step-flash",
+          "slots": "P02,P20"
+        },
+        {
+          "title": "transitioning from challenge phase to simulated funded phase",
+          "url": "https://help.toponetrader.com/en/articles/9905508-transitioning-from-challenge-phase-to-simulated-funded-phase",
+          "slots": "P20"
+        },
+        {
+          "title": "understanding the max trailing drawdown instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929458-understanding-the-max-trailing-drawdown-instant-funding",
+          "slots": "P06"
+        },
+        {
+          "title": "understanding the profit split instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929494-understanding-the-profit-split-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "can i trade during news events instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929517-can-i-trade-during-news-events-instant-funding",
+          "slots": "P10"
+        },
+        {
+          "title": "weekend trading rules for top one trader accounts instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929640-weekend-trading-rules-for-top-one-trader-accounts-instant-funding",
+          "slots": "P11"
+        },
+        {
+          "title": "copy trading rules instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929665-copy-trading-rules-instant-funding",
+          "slots": "P14"
+        },
+        {
+          "title": "max lot size rule instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929678-max-lot-size-rule-instant-funding",
+          "slots": "P18"
+        },
+        {
+          "title": "leverage levels instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929730-leverage-levels-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "lock upon payout instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929762-lock-upon-payout-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "refund fee instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929780-refund-fee-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "when can i request a payout instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929793-when-can-i-request-a-payout-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "expert advisor rules instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929861-expert-advisor-rules-instant-funding",
+          "slots": "P13"
+        },
+        {
+          "title": "stop loss requirement instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929879-stop-loss-requirement-instant-funding",
+          "slots": "P16"
+        },
+        {
+          "title": "soft breach rules instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929939-soft-breach-rules-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "30 day inactivity rule instant funding",
+          "url": "https://help.toponetrader.com/en/articles/9929957-30-day-inactivity-rule-instant-funding",
+          "slots": "P09"
+        },
+        {
+          "title": "can i hold positions overnight",
+          "url": "https://help.toponetrader.com/en/articles/9941815-can-i-hold-positions-overnight",
+          "slots": "P12"
+        },
+        {
+          "title": "existen restricciones en la cantidad de lotes que puedo usar",
+          "url": "https://help.toponetrader.com/es/articles/8318242-existen-restricciones-en-la-cantidad-de-lotes-que-puedo-usar",
+          "slots": ""
+        },
+        {
+          "title": "existen restricciones de direccion ip",
+          "url": "https://help.toponetrader.com/es/articles/8733438-existen-restricciones-de-direccion-ip",
+          "slots": ""
+        },
+        {
+          "title": "regla de inactividad de 30 dias",
+          "url": "https://help.toponetrader.com/es/articles/8862549-regla-de-inactividad-de-30-dias",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19",
+    "missing": "",
+    "note": "21/21（本文補強後）"
+  }
+}

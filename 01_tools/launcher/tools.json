@@ -27,33 +27,20 @@
   },
   "tools": [
     {
-      "name": "Page Maker v12",
-      "path": "/01_tools/core/page-maker-v12.html",
-      "category": "core",
-      "description": "データ入力・MASTER_DEFS正本・Hugoエクスポート"
-    },
-    {
-      "name": "Widget Maker",
-      "path": "/01_tools/core/widget-maker.html",
-      "category": "core",
-      "description": "data/*.json → SVG/HTML 生成"
-    },
-    {
-      "name": "firm-tour",
-      "path": "/01_tools/core/firm-tour.html",
-      "category": "core",
-      "description": "ファーム別スロットURL一覧ビューア"
-    },
-    {
-      "name": "firm-urls",
-      "path": "/01_tools/core/firm-urls.html",
-      "category": "core"
-    },
-    {
       "name": "NotebookLM",
       "path": "https://notebooklm.google.com/",
       "category": "analysis",
       "description": "ファーム資料のソース化・要約・Q&A"
+    },
+    {
+      "name": "firm-database",
+      "path": "/01_tools/core/firm-database.html",
+      "category": "core"
+    },
+    {
+      "name": "sitemap-designer",
+      "path": "/01_tools/core/sitemap-designer.html",
+      "category": "core"
     }
   ]
 }

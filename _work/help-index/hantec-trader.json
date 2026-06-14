@@ -1,0 +1,371 @@
+{
+  "firm": "hantec-trader",
+  "help_base_url": "https://htrader.hmarkets.com/jp/company/faqs/",
+  "platform": "inline_accordion",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto",
+  "fetch_note": "日本語インラインFAQ（Playwright抽出）。質問文を日本語キーワードで機械タグ付け（要レビュー）。URLは全質問でFAQページ共通。",
+  "collections": [
+    {
+      "title": "FAQ（質問文・自動タグ）",
+      "articles": [
+        {
+          "title": "Hantec Traderとは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "Hantec Traderになれるのは？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "無料体験とは？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "なぜHantec Traderを利用するべきか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "ハードブリーチとは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "最大取引期間とは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P09"
+        },
+        {
+          "title": "最大日次損失はどのように計算しますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P03,P04"
+        },
+        {
+          "title": "利益目標とは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P01"
+        },
+        {
+          "title": "チャレンジをクリアするにはどれくらいの時間がかかりますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P09,P20"
+        },
+        {
+          "title": "ニュースを取引できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P10"
+        },
+        {
+          "title": "トレードでストップロスは必要ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P16"
+        },
+        {
+          "title": "週末にポジションを保有できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P11,P12,P18"
+        },
+        {
+          "title": "最大総損失とは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P05"
+        },
+        {
+          "title": "口座のレバレッジは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジ開始後にプラットフォームを変更できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P19,P20"
+        },
+        {
+          "title": "どのような戦略を使用できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P19"
+        },
+        {
+          "title": "チャレンジに失敗しました。次はどうすればいいですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "同時に複数のチャレンジアカウントを保有できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "アカウントを統合できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "Hantec Traderアカウントを取得した後、 どのようなルールに従う必要がありますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "資金提供後、私と貴社との法的関係はどのようになりますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "KYCとは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "利益に関する税金はどのように処理すればよいですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "Hantec Traderアカウントはどのように取得できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "24시간 지급 보장이란 무엇인가요?",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "報酬はどのように受け取れますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "Hantec Traderアカウント取得時のシミュレート資本はいくらになりますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "口座の規模を拡大するにはどうすればよいですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "出金をリクエストした後、なぜ取引を行えないのですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P02b"
+        },
+        {
+          "title": "リスク管理グループとは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P17"
+        },
+        {
+          "title": "同時に複数のInstant Fundingアカウントを持つことはできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "Instant FundingでEAを使用できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P13"
+        },
+        {
+          "title": "獲得できる利益に上限はありますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P08"
+        },
+        {
+          "title": "最初の利益分配はいつ受け取れますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P02b"
+        },
+        {
+          "title": "報酬分配率は何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "ニュース取引はできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P10"
+        },
+        {
+          "title": "Instant Liteの一貫性要件は何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P07"
+        },
+        {
+          "title": "Instant Funding と Instant Lite プログラムはすべてのユーザーが利用できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "24時間時計は正確にどう機能しますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P09"
+        },
+        {
+          "title": "もし24時間ウィンドウ中に週末が含まれた場合はどうなりますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P09,P11"
+        },
+        {
+          "title": "ニュースをトレードできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P10"
+        },
+        {
+          "title": "「Trailing drawdown」とは実際に何を意味しますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P06"
+        },
+        {
+          "title": "トレード一貫性ルールとは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P07"
+        },
+        {
+          "title": "開いている取引を閉じて、同じ商品で即座に新たに取引を開始することはできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "いつ報酬をリクエストできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P02b"
+        },
+        {
+          "title": "最小引き出し額は何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P02b"
+        },
+        {
+          "title": "Instant24プログラムはすべてのユーザーに提供されていますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "どのような支払い方法が利用できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "隠れた費用や定期的な手数料はありますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "なぜHantec Traderのチャレンジに料金を設定しているのですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "アドオンとは何ですか?",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジにはどのように申し込めばよいですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "チャレンジの支払いを完了しましたが、アカウントはいつ取得できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "何口座まで保有できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "誰を紹介できますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "どのようにしてお客様をHantec Traderに紹介すればよいですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "コミッションはどのように受け取れますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイトダッシュボードで利用できるデータは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "階層を上げるにはどうすればよいですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "自身のアカウントから発生した取引に対してコミッション を受け取ることはできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "クリック課金キーワードへの入札はできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイトになるにはチャレンジアカウントを保有す る必要がありますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "最大仮想割当額とは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P18"
+        },
+        {
+          "title": "スプレッドはどのくらいですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "スタンダードロットあたりの手数料はいくらですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P18"
+        },
+        {
+          "title": "Hantec Traderアカウントでハードブリーチが発生した場合、 仮想利益はどうなりますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P20"
+        },
+        {
+          "title": "スワップとは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "Hantec Traderアカウントに到達した後も、 取引はシミュレート環境で行われますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "スリッページとは何ですか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": ""
+        },
+        {
+          "title": "週末に暗号資産の取引はできますか？",
+          "url": "https://htrader.hmarkets.com/jp/company/faqs/",
+          "slots": "P11"
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P16,P17,P18,P19",
+    "missing": "P02,P14,P15",
+    "note": "18/21（日本語質問文照合）"
+  }
+}

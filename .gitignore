@@ -48,3 +48,6 @@ __pycache__/
 
 # Launcher: エージェントのログファイル
 01_tools/launcher/*.log
+
+# 作業層: Web2MD生ダンプ（再取得可能・巨大化するため追跡しない）
+_work/scans/

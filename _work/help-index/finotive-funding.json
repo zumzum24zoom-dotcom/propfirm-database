@@ -1,0 +1,586 @@
+{
+  "firm": "finotive-funding",
+  "help_base_url": "https://help.finotivefunding.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で63記事は未取得＝ルール系優先） / 本文補強: 113記事取得・本文具体フレーズ照合でslot追加",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "start here what the new dashboard means",
+          "url": "https://help.finotivefunding.com/en/articles/563-start-here-what-the-new-dashboard-means",
+          "slots": "P02b"
+        },
+        {
+          "title": "why was the transparency dashboard created",
+          "url": "https://help.finotivefunding.com/en/articles/564-why-was-the-transparency-dashboard-created",
+          "slots": "P02b"
+        },
+        {
+          "title": "are these new rules",
+          "url": "https://help.finotivefunding.com/en/articles/565-are-these-new-rules",
+          "slots": "P02b,P19"
+        },
+        {
+          "title": "will the dashboard change my payout if i was fine before",
+          "url": "https://help.finotivefunding.com/en/articles/566-will-the-dashboard-change-my-payout-if-i-was-fine-before",
+          "slots": ""
+        },
+        {
+          "title": "challenge vs funded vs instant when do dashboard metrics have consequences",
+          "url": "https://help.finotivefunding.com/en/articles/567-challenge-vs-funded-vs-instant-when-do-dashboard-metrics-have-consequences",
+          "slots": "P03,P05"
+        },
+        {
+          "title": "what does a red or warning metric mean",
+          "url": "https://help.finotivefunding.com/en/articles/568-what-does-a-red-or-warning-metric-mean",
+          "slots": "P02b"
+        },
+        {
+          "title": "what the dashboard does not mean",
+          "url": "https://help.finotivefunding.com/en/articles/569-what-the-dashboard-does-not-mean",
+          "slots": "P16"
+        },
+        {
+          "title": "what should i do if a metric is red before payout",
+          "url": "https://help.finotivefunding.com/en/articles/570-what-should-i-do-if-a-metric-is-red-before-payout",
+          "slots": "P02b"
+        },
+        {
+          "title": "should i request payout if i am confused about a warning",
+          "url": "https://help.finotivefunding.com/en/articles/571-should-i-request-payout-if-i-am-confused-about-a-warning",
+          "slots": "P02b,P15"
+        },
+        {
+          "title": "what is a recoverable or conditional strike rule",
+          "url": "https://help.finotivefunding.com/en/articles/572-what-is-a-recoverable-or-conditional-strike-rule",
+          "slots": "P02b,P15"
+        },
+        {
+          "title": "do dashboard checks reset after each payout cycle",
+          "url": "https://help.finotivefunding.com/en/articles/573-do-dashboard-checks-reset-after-each-payout-cycle",
+          "slots": "P15"
+        },
+        {
+          "title": "what feedback is finotive reviewing now",
+          "url": "https://help.finotivefunding.com/en/articles/574-what-feedback-is-finotive-reviewing-now",
+          "slots": "P19"
+        },
+        {
+          "title": "what is finotive funding",
+          "url": "https://help.finotivefunding.com/en/articles/575-what-is-finotive-funding",
+          "slots": ""
+        },
+        {
+          "title": "are finotive accounts live market accounts",
+          "url": "https://help.finotivefunding.com/en/articles/576-are-finotive-accounts-live-market-accounts",
+          "slots": ""
+        },
+        {
+          "title": "which account programmes are available",
+          "url": "https://help.finotivefunding.com/en/articles/577-which-account-programmes-are-available",
+          "slots": "P20"
+        },
+        {
+          "title": "how do i start after purchase",
+          "url": "https://help.finotivefunding.com/en/articles/578-how-do-i-start-after-purchase",
+          "slots": ""
+        },
+        {
+          "title": "when do i need to complete kyc",
+          "url": "https://help.finotivefunding.com/en/articles/579-when-do-i-need-to-complete-kyc",
+          "slots": ""
+        },
+        {
+          "title": "what is the finotive dashboard used for",
+          "url": "https://help.finotivefunding.com/en/articles/580-what-is-the-finotive-dashboard-used-for",
+          "slots": ""
+        },
+        {
+          "title": "can i have more than one trading account",
+          "url": "https://help.finotivefunding.com/en/articles/581-can-i-have-more-than-one-trading-account",
+          "slots": "P19"
+        },
+        {
+          "title": "refreshes resets and add ons",
+          "url": "https://help.finotivefunding.com/en/articles/582-refreshes-resets-and-add-ons",
+          "slots": "P11"
+        },
+        {
+          "title": "what is a payout",
+          "url": "https://help.finotivefunding.com/en/articles/583-what-is-a-payout",
+          "slots": ""
+        },
+        {
+          "title": "when can i request my first payout",
+          "url": "https://help.finotivefunding.com/en/articles/584-when-can-i-request-my-first-payout",
+          "slots": "P02b"
+        },
+        {
+          "title": "how long is the payout cooldown after the first payout",
+          "url": "https://help.finotivefunding.com/en/articles/585-how-long-is-the-payout-cooldown-after-the-first-payout",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "what is the minimum withdrawal amount",
+          "url": "https://help.finotivefunding.com/en/articles/586-what-is-the-minimum-withdrawal-amount",
+          "slots": "P02b"
+        },
+        {
+          "title": "what profit split applies to my account",
+          "url": "https://help.finotivefunding.com/en/articles/587-what-profit-split-applies-to-my-account",
+          "slots": "P20,P08"
+        },
+        {
+          "title": "can my payout be reduced to 10percent",
+          "url": "https://help.finotivefunding.com/en/articles/588-can-my-payout-be-reduced-to-10percent",
+          "slots": ""
+        },
+        {
+          "title": "what happens if i request payout while a conditional strike condition is active",
+          "url": "https://help.finotivefunding.com/en/articles/589-what-happens-if-i-request-payout-while-a-conditional-strike-condition-is-active",
+          "slots": "P02b"
+        },
+        {
+          "title": "what is finotive pay",
+          "url": "https://help.finotivefunding.com/en/articles/590-what-is-finotive-pay",
+          "slots": ""
+        },
+        {
+          "title": "do minimum profitable days mean i can request payout immediately",
+          "url": "https://help.finotivefunding.com/en/articles/591-do-minimum-profitable-days-mean-i-can-request-payout-immediately",
+          "slots": "P02b"
+        },
+        {
+          "title": "are account fees refundable",
+          "url": "https://help.finotivefunding.com/en/articles/592-are-account-fees-refundable",
+          "slots": ""
+        },
+        {
+          "title": "what should i check before contacting support about a payout",
+          "url": "https://help.finotivefunding.com/en/articles/593-what-should-i-check-before-contacting-support-about-a-payout",
+          "slots": "P02b"
+        },
+        {
+          "title": "am i responsible for taxes on payouts",
+          "url": "https://help.finotivefunding.com/en/articles/594-am-i-responsible-for-taxes-on-payouts",
+          "slots": ""
+        },
+        {
+          "title": "what is a hard breach",
+          "url": "https://help.finotivefunding.com/en/articles/595-what-is-a-hard-breach",
+          "slots": "P03,P05"
+        },
+        {
+          "title": "what are the three strike types",
+          "url": "https://help.finotivefunding.com/en/articles/596-what-are-the-three-strike-types",
+          "slots": "P15"
+        },
+        {
+          "title": "do recoverable rules cause strikes during the challenge phase",
+          "url": "https://help.finotivefunding.com/en/articles/597-do-recoverable-rules-cause-strikes-during-the-challenge-phase",
+          "slots": "P20,P03,P05"
+        },
+        {
+          "title": "do strikes reset after each payout",
+          "url": "https://help.finotivefunding.com/en/articles/598-do-strikes-reset-after-each-payout",
+          "slots": ""
+        },
+        {
+          "title": "what happens if i reach five strikes",
+          "url": "https://help.finotivefunding.com/en/articles/599-what-happens-if-i-reach-five-strikes",
+          "slots": ""
+        },
+        {
+          "title": "what happens during a manual review",
+          "url": "https://help.finotivefunding.com/en/articles/600-what-happens-during-a-manual-review",
+          "slots": "P19"
+        },
+        {
+          "title": "can i appeal an enforcement decision",
+          "url": "https://help.finotivefunding.com/en/articles/601-can-i-appeal-an-enforcement-decision",
+          "slots": ""
+        },
+        {
+          "title": "daily drawdown rule",
+          "url": "https://help.finotivefunding.com/en/articles/602-daily-drawdown-rule",
+          "slots": "P20,P03"
+        },
+        {
+          "title": "maximum drawdown rule",
+          "url": "https://help.finotivefunding.com/en/articles/603-maximum-drawdown-rule",
+          "slots": "P20,P05"
+        },
+        {
+          "title": "what is floating drawdown",
+          "url": "https://help.finotivefunding.com/en/articles/604-what-is-floating-drawdown",
+          "slots": ""
+        },
+        {
+          "title": "floating drawdown during challenge or pro challenge",
+          "url": "https://help.finotivefunding.com/en/articles/605-floating-drawdown-during-challenge-or-pro-challenge",
+          "slots": ""
+        },
+        {
+          "title": "floating drawdown after funded status",
+          "url": "https://help.finotivefunding.com/en/articles/606-floating-drawdown-after-funded-status",
+          "slots": ""
+        },
+        {
+          "title": "floating drawdown on instant funding accounts",
+          "url": "https://help.finotivefunding.com/en/articles/607-floating-drawdown-on-instant-funding-accounts",
+          "slots": ""
+        },
+        {
+          "title": "notional volume limit",
+          "url": "https://help.finotivefunding.com/en/articles/608-notional-volume-limit",
+          "slots": "P17"
+        },
+        {
+          "title": "what happens if i breach notional volume",
+          "url": "https://help.finotivefunding.com/en/articles/609-what-happens-if-i-breach-notional-volume",
+          "slots": ""
+        },
+        {
+          "title": "leverage vs notional volume",
+          "url": "https://help.finotivefunding.com/en/articles/610-leverage-vs-notional-volume",
+          "slots": ""
+        },
+        {
+          "title": "minimum profitable days",
+          "url": "https://help.finotivefunding.com/en/articles/611-minimum-profitable-days",
+          "slots": "P20"
+        },
+        {
+          "title": "what is a trading day",
+          "url": "https://help.finotivefunding.com/en/articles/612-what-is-a-trading-day",
+          "slots": "P03"
+        },
+        {
+          "title": "inactivity rule",
+          "url": "https://help.finotivefunding.com/en/articles/613-inactivity-rule",
+          "slots": "P09"
+        },
+        {
+          "title": "weekend holding rule",
+          "url": "https://help.finotivefunding.com/en/articles/614-weekend-holding-rule",
+          "slots": "P11"
+        },
+        {
+          "title": "excessive one sided symbol concentration",
+          "url": "https://help.finotivefunding.com/en/articles/615-excessive-one-sided-symbol-concentration",
+          "slots": ""
+        },
+        {
+          "title": "what is top pair exposure",
+          "url": "https://help.finotivefunding.com/en/articles/616-what-is-top-pair-exposure",
+          "slots": "P17"
+        },
+        {
+          "title": "can i trade only gold xauusd",
+          "url": "https://help.finotivefunding.com/en/articles/617-can-i-trade-only-gold-xauusd",
+          "slots": "P19"
+        },
+        {
+          "title": "do i need to take opposite direction trades",
+          "url": "https://help.finotivefunding.com/en/articles/618-do-i-need-to-take-opposite-direction-trades",
+          "slots": ""
+        },
+        {
+          "title": "how do i recover one sided symbol concentration or top pair exposure",
+          "url": "https://help.finotivefunding.com/en/articles/619-how-do-i-recover-one-sided-symbol-concentration-or-top-pair-exposure",
+          "slots": "P17,P19"
+        },
+        {
+          "title": "one sided symbol concentration examples",
+          "url": "https://help.finotivefunding.com/en/articles/620-one-sided-symbol-concentration-examples",
+          "slots": ""
+        },
+        {
+          "title": "martingale realised loss recovery rule",
+          "url": "https://help.finotivefunding.com/en/articles/621-martingale-realised-loss-recovery-rule",
+          "slots": "P19"
+        },
+        {
+          "title": "martingale rule and fixed risk swing traders",
+          "url": "https://help.finotivefunding.com/en/articles/622-martingale-rule-and-fixed-risk-swing-traders",
+          "slots": "P16,P19"
+        },
+        {
+          "title": "what happens if the martingale realised loss recovery rule is breached",
+          "url": "https://help.finotivefunding.com/en/articles/623-what-happens-if-the-martingale-realised-loss-recovery-rule-is-breached",
+          "slots": "P19"
+        },
+        {
+          "title": "is scalping allowed",
+          "url": "https://help.finotivefunding.com/en/articles/624-is-scalping-allowed",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "high frequency trading on instant accounts",
+          "url": "https://help.finotivefunding.com/en/articles/625-high-frequency-trading-on-instant-accounts",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "single trade profit dependency",
+          "url": "https://help.finotivefunding.com/en/articles/626-single-trade-profit-dependency",
+          "slots": ""
+        },
+        {
+          "title": "liquidity abuse rule",
+          "url": "https://help.finotivefunding.com/en/articles/627-liquidity-abuse-rule",
+          "slots": ""
+        },
+        {
+          "title": "low liquidity windows and timezone examples",
+          "url": "https://help.finotivefunding.com/en/articles/628-low-liquidity-windows-and-timezone-examples",
+          "slots": ""
+        },
+        {
+          "title": "is asian session trading banned",
+          "url": "https://help.finotivefunding.com/en/articles/629-is-asian-session-trading-banned",
+          "slots": "P19"
+        },
+        {
+          "title": "can i create multiple finotive profiles",
+          "url": "https://help.finotivefunding.com/en/articles/630-can-i-create-multiple-finotive-profiles",
+          "slots": "P19"
+        },
+        {
+          "title": "can i copy trades between my own accounts",
+          "url": "https://help.finotivefunding.com/en/articles/631-can-i-copy-trades-between-my-own-accounts",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "can i copy trades from another person or signal service",
+          "url": "https://help.finotivefunding.com/en/articles/632-can-i-copy-trades-from-another-person-or-signal-service",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "can i hedge or offset positions across accounts",
+          "url": "https://help.finotivefunding.com/en/articles/633-can-i-hedge-or-offset-positions-across-accounts",
+          "slots": "P19"
+        },
+        {
+          "title": "can i coordinate or mirror trades with another trader",
+          "url": "https://help.finotivefunding.com/en/articles/634-can-i-coordinate-or-mirror-trades-with-another-trader",
+          "slots": "P19"
+        },
+        {
+          "title": "news trading vs news straddling",
+          "url": "https://help.finotivefunding.com/en/articles/635-news-trading-vs-news-straddling",
+          "slots": "P10,P19"
+        },
+        {
+          "title": "latency arbitrage and execution abuse",
+          "url": "https://help.finotivefunding.com/en/articles/636-latency-arbitrage-and-execution-abuse",
+          "slots": "P19"
+        },
+        {
+          "title": "can i use expert advisors",
+          "url": "https://help.finotivefunding.com/en/articles/637-can-i-use-expert-advisors",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "swap free account misuse",
+          "url": "https://help.finotivefunding.com/en/articles/638-swap-free-account-misuse",
+          "slots": "P19"
+        },
+        {
+          "title": "vpn ip address devices and location monitoring",
+          "url": "https://help.finotivefunding.com/en/articles/639-vpn-ip-address-devices-and-location-monitoring",
+          "slots": "P19"
+        },
+        {
+          "title": "enhanced kyc and compliance risk verification calls",
+          "url": "https://help.finotivefunding.com/en/articles/640-enhanced-kyc-and-compliance-risk-verification-calls",
+          "slots": "P19"
+        },
+        {
+          "title": "1 step and 2 step challenge overview",
+          "url": "https://help.finotivefunding.com/en/articles/641-1-step-and-2-step-challenge-overview",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "challenge targets and minimum profitable days",
+          "url": "https://help.finotivefunding.com/en/articles/642-challenge-targets-and-minimum-profitable-days",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "challenge risk limits",
+          "url": "https://help.finotivefunding.com/en/articles/643-challenge-risk-limits",
+          "slots": "P20,P03,P05"
+        },
+        {
+          "title": "challenge warnings vs consequences",
+          "url": "https://help.finotivefunding.com/en/articles/644-challenge-warnings-vs-consequences",
+          "slots": "P20,P03,P05,P15"
+        },
+        {
+          "title": "challenge progression and final profitable day fast track",
+          "url": "https://help.finotivefunding.com/en/articles/645-challenge-progression-and-final-profitable-day-fast-track",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "funded challenge payouts",
+          "url": "https://help.finotivefunding.com/en/articles/646-funded-challenge-payouts",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "challenge refunds and scaling",
+          "url": "https://help.finotivefunding.com/en/articles/647-challenge-refunds-and-scaling",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "common challenge mistakes to avoid",
+          "url": "https://help.finotivefunding.com/en/articles/648-common-challenge-mistakes-to-avoid",
+          "slots": "P20,P03,P05"
+        },
+        {
+          "title": "pro account overview",
+          "url": "https://help.finotivefunding.com/en/articles/649-pro-account-overview",
+          "slots": "P20"
+        },
+        {
+          "title": "pro targets and risk limits",
+          "url": "https://help.finotivefunding.com/en/articles/650-pro-targets-and-risk-limits",
+          "slots": "P20"
+        },
+        {
+          "title": "pro profit split and monthly salary",
+          "url": "https://help.finotivefunding.com/en/articles/651-pro-profit-split-and-monthly-salary",
+          "slots": "P20"
+        },
+        {
+          "title": "pro consistency rules",
+          "url": "https://help.finotivefunding.com/en/articles/652-pro-consistency-rules",
+          "slots": "P20,P07"
+        },
+        {
+          "title": "pro quarterly profitability rule",
+          "url": "https://help.finotivefunding.com/en/articles/653-pro-quarterly-profitability-rule",
+          "slots": "P20"
+        },
+        {
+          "title": "trading breaks on pro accounts",
+          "url": "https://help.finotivefunding.com/en/articles/654-trading-breaks-on-pro-accounts",
+          "slots": "P20,P07"
+        },
+        {
+          "title": "pro scaling and downgrade",
+          "url": "https://help.finotivefunding.com/en/articles/655-pro-scaling-and-downgrade",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "instant funding overview",
+          "url": "https://help.finotivefunding.com/en/articles/656-instant-funding-overview",
+          "slots": ""
+        },
+        {
+          "title": "instant standard vs instant lite quick comparison",
+          "url": "https://help.finotivefunding.com/en/articles/657-instant-standard-vs-instant-lite-quick-comparison",
+          "slots": "P03,P05,P08"
+        },
+        {
+          "title": "instant funding payouts",
+          "url": "https://help.finotivefunding.com/en/articles/658-instant-funding-payouts",
+          "slots": "P01,P02b"
+        },
+        {
+          "title": "instant floating drawdown",
+          "url": "https://help.finotivefunding.com/en/articles/659-instant-floating-drawdown",
+          "slots": ""
+        },
+        {
+          "title": "instant weekend holding",
+          "url": "https://help.finotivefunding.com/en/articles/660-instant-weekend-holding",
+          "slots": "P11"
+        },
+        {
+          "title": "instant scalping hft dependency and concentration checks",
+          "url": "https://help.finotivefunding.com/en/articles/661-instant-scalping-hft-dependency-and-concentration-checks",
+          "slots": "P15"
+        },
+        {
+          "title": "instant scaling",
+          "url": "https://help.finotivefunding.com/en/articles/662-instant-scaling",
+          "slots": ""
+        },
+        {
+          "title": "common instant funding mistakes to avoid",
+          "url": "https://help.finotivefunding.com/en/articles/663-common-instant-funding-mistakes-to-avoid",
+          "slots": "P03,P05,P11,P13,P15"
+        },
+        {
+          "title": "who should i contact for help",
+          "url": "https://help.finotivefunding.com/en/articles/664-who-should-i-contact-for-help",
+          "slots": ""
+        },
+        {
+          "title": "my trading account is disabled after purchase",
+          "url": "https://help.finotivefunding.com/en/articles/665-my-trading-account-is-disabled-after-purchase",
+          "slots": ""
+        },
+        {
+          "title": "why is my payout pending",
+          "url": "https://help.finotivefunding.com/en/articles/666-why-is-my-payout-pending",
+          "slots": "P02b"
+        },
+        {
+          "title": "technical issues slippage spreads and execution delays",
+          "url": "https://help.finotivefunding.com/en/articles/667-technical-issues-slippage-spreads-and-execution-delays",
+          "slots": ""
+        },
+        {
+          "title": "can i open new trades while under manual review",
+          "url": "https://help.finotivefunding.com/en/articles/668-can-i-open-new-trades-while-under-manual-review",
+          "slots": ""
+        },
+        {
+          "title": "can i trade while travelling or from another ip address",
+          "url": "https://help.finotivefunding.com/en/articles/669-can-i-trade-while-travelling-or-from-another-ip-address",
+          "slots": "P19"
+        },
+        {
+          "title": "promo codes and affiliates",
+          "url": "https://help.finotivefunding.com/en/articles/670-promo-codes-and-affiliates",
+          "slots": ""
+        },
+        {
+          "title": "chargebacks and payment disputes",
+          "url": "https://help.finotivefunding.com/en/articles/671-chargebacks-and-payment-disputes",
+          "slots": "P19"
+        },
+        {
+          "title": "account risk limits quick reference",
+          "url": "https://help.finotivefunding.com/en/articles/672-account-risk-limits-quick-reference",
+          "slots": "P20,P03,P05"
+        },
+        {
+          "title": "payout timing and profit split quick reference",
+          "url": "https://help.finotivefunding.com/en/articles/673-payout-timing-and-profit-split-quick-reference",
+          "slots": "P20,P02b"
+        },
+        {
+          "title": "strike consequence quick reference",
+          "url": "https://help.finotivefunding.com/en/articles/674-strike-consequence-quick-reference",
+          "slots": ""
+        },
+        {
+          "title": "scaling quick reference",
+          "url": "https://help.finotivefunding.com/en/articles/675-scaling-quick-reference",
+          "slots": "P20"
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02b,P03,P05,P07,P08,P09,P10,P11,P13,P14,P15,P16,P17,P19",
+    "missing": "P02,P04,P06,P12,P18",
+    "note": "16/21（本文補強後）"
+  }
+}

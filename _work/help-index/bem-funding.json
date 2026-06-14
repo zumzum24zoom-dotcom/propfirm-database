@@ -1,0 +1,332 @@
+{
+  "firm": "bem-funding",
+  "help_base_url": "https://bemfunding.com/en/faq",
+  "platform": "custom_faq",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "独自FAQ（/en/faq/{plan|cat}-{question}）。マスター提供URLを機械タグ付け（要レビュー）。プラン別(bem-one/classic-normal/classic-swing/extended)に質問が分かれる。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で2記事は未取得＝ルール系優先） / 本文補強: 52記事取得・本文具体フレーズ照合でslot追加",
+  "collections": [
+    {
+      "title": "rewards",
+      "articles": [
+        {
+          "title": "are there any fees or limits on rewards",
+          "url": "https://bemfunding.com/en/faq/rewards-are-there-any-fees-or-limits-on-rewards",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "do i have to pay taxes on my rewards",
+          "url": "https://bemfunding.com/en/faq/rewards-do-i-have-to-pay-taxes-on-my-rewards",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how do cryptocurrency rewards work",
+          "url": "https://bemfunding.com/en/faq/rewards-how-do-cryptocurrency-rewards-work",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how do i get my rewards",
+          "url": "https://bemfunding.com/en/faq/rewards-how-do-i-get-my-rewards",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how do rewards work",
+          "url": "https://bemfunding.com/en/faq/rewards-how-do-rewards-work",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how do rise works rewards work",
+          "url": "https://bemfunding.com/en/faq/rewards-how-do-rise-works-rewards-work",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how long does it take to get my reward",
+          "url": "https://bemfunding.com/en/faq/rewards-how-long-does-it-take-to-get-my-reward",
+          "slots": "P20,P09,P19"
+        },
+        {
+          "title": "what payout methods are available",
+          "url": "https://bemfunding.com/en/faq/rewards-what-payout-methods-are-available",
+          "slots": "P20,P02b,P19"
+        },
+        {
+          "title": "when and how often can i request my reward",
+          "url": "https://bemfunding.com/en/faq/rewards-when-and-how-often-can-i-request-my-reward",
+          "slots": "P20,P02b,P19"
+        }
+      ]
+    },
+    {
+      "title": "bem-one",
+      "articles": [
+        {
+          "title": "available instruments leverage",
+          "url": "https://bemfunding.com/en/faq/bem-one-available-instruments-leverage",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i hold positions over the weekend",
+          "url": "https://bemfunding.com/en/faq/bem-one-can-i-hold-positions-over-the-weekend",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i trade news",
+          "url": "https://bemfunding.com/en/faq/bem-one-can-i-trade-news",
+          "slots": "P20,P10,P11,P16,P19"
+        },
+        {
+          "title": "what are the rules for the bem one",
+          "url": "https://bemfunding.com/en/faq/bem-one-what-are-the-rules-for-the-bem-one",
+          "slots": "P20,P01,P03,P06,P11,P19"
+        },
+        {
+          "title": "what is bem one",
+          "url": "https://bemfunding.com/en/faq/bem-one-what-is-bem-one",
+          "slots": "P20,P01,P11,P19"
+        },
+        {
+          "title": "what is reward on demand",
+          "url": "https://bemfunding.com/en/faq/bem-one-what-is-reward-on-demand",
+          "slots": "P20,P03,P06,P11,P19"
+        },
+        {
+          "title": "what is the maximum simulated daily loss",
+          "url": "https://bemfunding.com/en/faq/bem-one-what-is-the-maximum-simulated-daily-loss",
+          "slots": "P20,P03,P04,P11,P19"
+        },
+        {
+          "title": "what is the maximum simulated drawdown",
+          "url": "https://bemfunding.com/en/faq/bem-one-what-is-the-maximum-simulated-drawdown",
+          "slots": "P20,P05,P06,P11,P19"
+        }
+      ]
+    },
+    {
+      "title": "bem-classic-normal",
+      "articles": [
+        {
+          "title": "available instruments leverage",
+          "url": "https://bemfunding.com/en/faq/bem-classic-normal-available-instruments-leverage",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i hold my trades over the weekend",
+          "url": "https://bemfunding.com/en/faq/bem-classic-normal-can-i-hold-my-trades-over-the-weekend",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i trade news",
+          "url": "https://bemfunding.com/en/faq/bem-classic-normal-can-i-trade-news",
+          "slots": "P20,P10,P11,P16,P19"
+        },
+        {
+          "title": "what are the rules for the bem classic normal",
+          "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-are-the-rules-for-the-bem-classic-normal",
+          "slots": "P20,P01,P02,P03,P05,P11,P19"
+        },
+        {
+          "title": "what is bem classic normal",
+          "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-is-bem-classic-normal",
+          "slots": "P20,P11,P12,P19"
+        },
+        {
+          "title": "what is the maximum simulated daily loss",
+          "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-is-the-maximum-simulated-daily-loss",
+          "slots": "P20,P03,P04,P11,P19"
+        },
+        {
+          "title": "what is the maximum simulated drawdown",
+          "url": "https://bemfunding.com/en/faq/bem-classic-normal-what-is-the-maximum-simulated-drawdown",
+          "slots": "P20,P04,P05,P11,P19"
+        }
+      ]
+    },
+    {
+      "title": "bem-classic-swing",
+      "articles": [
+        {
+          "title": "available instruments leverage",
+          "url": "https://bemfunding.com/en/faq/bem-classic-swing-available-instruments-leverage",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i hold my trades over the weekend",
+          "url": "https://bemfunding.com/en/faq/bem-classic-swing-can-i-hold-my-trades-over-the-weekend",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i trade news",
+          "url": "https://bemfunding.com/en/faq/bem-classic-swing-can-i-trade-news",
+          "slots": "P20,P10,P11,P16,P19"
+        },
+        {
+          "title": "how does the bem classic swing evaluation work",
+          "url": "https://bemfunding.com/en/faq/bem-classic-swing-how-does-the-bem-classic-swing-evaluation-work",
+          "slots": "P20,P01,P02,P03,P05,P11,P19"
+        },
+        {
+          "title": "what are the rules for bem classic swing",
+          "url": "https://bemfunding.com/en/faq/bem-classic-swing-what-are-the-rules-for-bem-classic-swing",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "what is the maximum simulated daily loss",
+          "url": "https://bemfunding.com/en/faq/bem-classic-swing-what-is-the-maximum-simulated-daily-loss",
+          "slots": "P20,P03,P11,P19"
+        },
+        {
+          "title": "what is the maximum simulated drawdown",
+          "url": "https://bemfunding.com/en/faq/bem-classic-swing-what-is-the-maximum-simulated-drawdown",
+          "slots": "P20,P04,P05,P11,P19"
+        }
+      ]
+    },
+    {
+      "title": "bem-extended",
+      "articles": [
+        {
+          "title": "available instruments leverages",
+          "url": "https://bemfunding.com/en/faq/bem-extended-available-instruments-leverages",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i hold my trades over the weekend",
+          "url": "https://bemfunding.com/en/faq/bem-extended-can-i-hold-my-trades-over-the-weekend",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "can i trade news",
+          "url": "https://bemfunding.com/en/faq/bem-extended-can-i-trade-news",
+          "slots": "P20,P10,P11,P16,P19"
+        },
+        {
+          "title": "what are the rules for the bem extended",
+          "url": "https://bemfunding.com/en/faq/bem-extended-what-are-the-rules-for-the-bem-extended",
+          "slots": "P20,P01,P02,P03,P11,P19"
+        },
+        {
+          "title": "what is bem extended",
+          "url": "https://bemfunding.com/en/faq/bem-extended-what-is-bem-extended",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "what is the maximum simulated daily loss",
+          "url": "https://bemfunding.com/en/faq/bem-extended-what-is-the-maximum-simulated-daily-loss",
+          "slots": "P20,P03,P04,P11,P19"
+        },
+        {
+          "title": "what is the maximum simulated drawdown",
+          "url": "https://bemfunding.com/en/faq/bem-extended-what-is-the-maximum-simulated-drawdown",
+          "slots": "P20,P03,P05,P06,P11,P19"
+        }
+      ]
+    },
+    {
+      "title": "common-questions",
+      "articles": [
+        {
+          "title": "can i change my platform",
+          "url": "https://bemfunding.com/en/faq/common-questions-can-i-change-my-platform",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "can i merge multiple accounts",
+          "url": "https://bemfunding.com/en/faq/common-questions-can-i-merge-multiple-accounts",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "do i need to complete identity verification kyc",
+          "url": "https://bemfunding.com/en/faq/common-questions-do-i-need-to-complete-identity-verification-kyc",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "do you offer an evaluation fee refund",
+          "url": "https://bemfunding.com/en/faq/common-questions-do-you-offer-an-evaluation-fee-refund",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how to check contract sizes and swap rates",
+          "url": "https://bemfunding.com/en/faq/common-questions-how-to-check-contract-sizes-and-swap-rates",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "what are the spreads and commissions",
+          "url": "https://bemfunding.com/en/faq/common-questions-what-are-the-spreads-and-commissions",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "what happens if i breach an objective",
+          "url": "https://bemfunding.com/en/faq/common-questions-what-happens-if-i-breach-an-objective",
+          "slots": "P20,P05,P19"
+        },
+        {
+          "title": "which broker do we trade with",
+          "url": "https://bemfunding.com/en/faq/common-questions-which-broker-do-we-trade-with",
+          "slots": "P20,P19"
+        }
+      ]
+    },
+    {
+      "title": "orders-billings",
+      "articles": [
+        {
+          "title": "do you change any additional or recurring fees",
+          "url": "https://bemfunding.com/en/faq/orders-billings-do-you-change-any-additional-or-recurring-fees",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how many accounts can i have",
+          "url": "https://bemfunding.com/en/faq/orders-billings-how-many-accounts-can-i-have",
+          "slots": "P20,P19"
+        }
+      ]
+    },
+    {
+      "title": "page",
+      "articles": [
+        {
+          "title": "prohibited trading practices",
+          "url": "https://bemfunding.com/en/prohibited-trading-practices",
+          "slots": "P20,P10,P13,P14,P15,P19"
+        }
+      ]
+    },
+    {
+      "title": "general",
+      "articles": [
+        {
+          "title": "what are the bem funding evaluation programs",
+          "url": "https://bemfunding.com/en/faq/general-what-are-the-bem-funding-evaluation-programs",
+          "slots": "P20,P01,P19"
+        },
+        {
+          "title": "what is bem funding",
+          "url": "https://bemfunding.com/en/faq/general-what-is-bem-funding",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "who can join bem funding",
+          "url": "https://bemfunding.com/en/faq/general-who-can-join-bem-funding",
+          "slots": "P20,P19"
+        }
+      ]
+    }
+  ],
+  "terms_sources": [
+    {
+      "title": "Terms and Conditions",
+      "url": "https://bemfunding.com/en/terms-and-conditions",
+      "slots": ""
+    },
+    {
+      "title": "Prohibited Trading Practices",
+      "url": "https://bemfunding.com/en/prohibited-trading-practices",
+      "slots": "P19"
+    }
+  ],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P09,P10,P11,P12,P13,P14,P15,P16,P19",
+    "missing": "P07,P08,P17,P18",
+    "note": "17/21（本文補強後）"
+  }
+}

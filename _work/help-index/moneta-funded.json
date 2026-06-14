@@ -1,0 +1,321 @@
+{
+  "firm": "moneta-funded",
+  "help_base_url": "https://help.monetafunded.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で10記事は未取得＝ルール系優先） / 本文補強: 60記事取得・本文具体フレーズ照合でslot追加",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "which trading methods aren t allowed",
+          "url": "https://help.monetafunded.com/en/articles/12146808-which-trading-methods-aren-t-allowed",
+          "slots": "P03,P10,P13,P14,P15,P16,P19"
+        },
+        {
+          "title": "what makes moneta funded the best choice for prop firm traders",
+          "url": "https://help.monetafunded.com/en/articles/12178552-what-makes-moneta-funded-the-best-choice-for-prop-firm-traders",
+          "slots": ""
+        },
+        {
+          "title": "how does my daily permitted loss work",
+          "url": "https://help.monetafunded.com/en/articles/12178562-how-does-my-daily-permitted-loss-work",
+          "slots": "P03,P04"
+        },
+        {
+          "title": "moneta funded help center overview",
+          "url": "https://help.monetafunded.com/en/articles/12178564-moneta-funded-help-center-overview",
+          "slots": "P10"
+        },
+        {
+          "title": "how does one become a funded trader",
+          "url": "https://help.monetafunded.com/en/articles/12178568-how-does-one-become-a-funded-trader",
+          "slots": "P20,P09,P19"
+        },
+        {
+          "title": "trading platforms offered at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/12178595-trading-platforms-offered-at-moneta-funded",
+          "slots": "P10,P13"
+        },
+        {
+          "title": "moneta funded chargeback policy",
+          "url": "https://help.monetafunded.com/en/articles/12511281-moneta-funded-chargeback-policy",
+          "slots": "P19"
+        },
+        {
+          "title": "moneta funded product offerings",
+          "url": "https://help.monetafunded.com/en/articles/12532267-moneta-funded-product-offerings",
+          "slots": "P20,P01,P02b,P03,P05,P07,P09,P10"
+        },
+        {
+          "title": "leverage and commission structure across all trading programs",
+          "url": "https://help.monetafunded.com/en/articles/12532973-leverage-and-commission-structure-across-all-trading-programs",
+          "slots": "P20"
+        },
+        {
+          "title": "the phoenix scaling program",
+          "url": "https://help.monetafunded.com/en/articles/12533211-the-phoenix-scaling-program",
+          "slots": "P20,P01,P02b,P03,P04,P05,P06,P07,P09"
+        },
+        {
+          "title": "how are prop traders taxed",
+          "url": "https://help.monetafunded.com/en/articles/12533369-how-are-prop-traders-taxed",
+          "slots": ""
+        },
+        {
+          "title": "moneta funded refund policy",
+          "url": "https://help.monetafunded.com/en/articles/12542419-moneta-funded-refund-policy",
+          "slots": "P09"
+        },
+        {
+          "title": "news trading at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/12542447-news-trading-at-moneta-funded",
+          "slots": "P10,P16,P19"
+        },
+        {
+          "title": "what occurs after passing my challenge",
+          "url": "https://help.monetafunded.com/en/articles/12587913-what-occurs-after-passing-my-challenge",
+          "slots": "P19"
+        },
+        {
+          "title": "prohibited countries",
+          "url": "https://help.monetafunded.com/en/articles/12607025-prohibited-countries",
+          "slots": "P10,P19"
+        },
+        {
+          "title": "account management at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/12639082-account-management-at-moneta-funded",
+          "slots": "P01,P02,P10,P19"
+        },
+        {
+          "title": "securing your moneta funded account",
+          "url": "https://help.monetafunded.com/en/articles/12692754-securing-your-moneta-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "completing kyc at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/12692772-completing-kyc-at-moneta-funded",
+          "slots": "P19"
+        },
+        {
+          "title": "instant funding account",
+          "url": "https://help.monetafunded.com/en/articles/12834005-instant-funding-account",
+          "slots": "P20,P01,P03,P04,P05,P06,P07,P09"
+        },
+        {
+          "title": "why moneta funded is the safest and best firm available",
+          "url": "https://help.monetafunded.com/en/articles/12834205-why-moneta-funded-is-the-safest-and-best-firm-available",
+          "slots": ""
+        },
+        {
+          "title": "affiliate program at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/13117507-affiliate-program-at-moneta-funded",
+          "slots": ""
+        },
+        {
+          "title": "how to contact the moneta funded support team",
+          "url": "https://help.monetafunded.com/en/articles/13163411-how-to-contact-the-moneta-funded-support-team",
+          "slots": ""
+        },
+        {
+          "title": "what are moneta funded s ip rules",
+          "url": "https://help.monetafunded.com/en/articles/13177559-what-are-moneta-funded-s-ip-rules",
+          "slots": "P10,P19"
+        },
+        {
+          "title": "what happens if i cannot pass kyc",
+          "url": "https://help.monetafunded.com/en/articles/13177586-what-happens-if-i-cannot-pass-kyc",
+          "slots": ""
+        },
+        {
+          "title": "what are swap fees",
+          "url": "https://help.monetafunded.com/en/articles/13232597-what-are-swap-fees",
+          "slots": ""
+        },
+        {
+          "title": "what is copy trading is it allowed",
+          "url": "https://help.monetafunded.com/en/articles/13232644-what-is-copy-trading-is-it-allowed",
+          "slots": "P14"
+        },
+        {
+          "title": "should i use a stop loss",
+          "url": "https://help.monetafunded.com/en/articles/13232649-should-i-use-a-stop-loss",
+          "slots": "P16"
+        },
+        {
+          "title": "setting up your account on metatrader mt5",
+          "url": "https://help.monetafunded.com/en/articles/13232654-setting-up-your-account-on-metatrader-mt5",
+          "slots": ""
+        },
+        {
+          "title": "how big can the capital be that i manage maximum capital allocation",
+          "url": "https://help.monetafunded.com/en/articles/13240975-how-big-can-the-capital-be-that-i-manage-maximum-capital-allocation",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "what can i trade on moneta funded list of allowed instruments symbols assets",
+          "url": "https://help.monetafunded.com/en/articles/13269403-what-can-i-trade-on-moneta-funded-list-of-allowed-instruments-symbols-assets",
+          "slots": ""
+        },
+        {
+          "title": "how a profitable day is calculated",
+          "url": "https://help.monetafunded.com/en/articles/13345418-how-a-profitable-day-is-calculated",
+          "slots": "P20,P01,P07"
+        },
+        {
+          "title": "how does the consistency rule work at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/13345521-how-does-the-consistency-rule-work-at-moneta-funded",
+          "slots": "P01,P07"
+        },
+        {
+          "title": "trailing drawdown instant funding",
+          "url": "https://help.monetafunded.com/en/articles/13345565-trailing-drawdown-instant-funding",
+          "slots": "P04,P05,P06"
+        },
+        {
+          "title": "how drawdown works at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/13345586-how-drawdown-works-at-moneta-funded",
+          "slots": "P20,P05,P06"
+        },
+        {
+          "title": "getting started with moneta funded from purchase to payout",
+          "url": "https://help.monetafunded.com/en/articles/13471796-getting-started-with-moneta-funded-from-purchase-to-payout",
+          "slots": "P01,P03,P05,P19"
+        },
+        {
+          "title": "temporary risk limits on funded accounts",
+          "url": "https://help.monetafunded.com/en/articles/13793046-temporary-risk-limits-on-funded-accounts",
+          "slots": "P20,P17,P19"
+        },
+        {
+          "title": "am i allowed to merge my accounts at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/13803158-am-i-allowed-to-merge-my-accounts-at-moneta-funded",
+          "slots": ""
+        },
+        {
+          "title": "payout methods and how to request payouts at moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/13803356-payout-methods-and-how-to-request-payouts-at-moneta-funded",
+          "slots": "P02b,P09"
+        },
+        {
+          "title": "requesting payout to a moneta markets account",
+          "url": "https://help.monetafunded.com/en/articles/13804122-requesting-payout-to-a-moneta-markets-account",
+          "slots": ""
+        },
+        {
+          "title": "choose your payment method",
+          "url": "https://help.monetafunded.com/en/articles/13835503-choose-your-payment-method",
+          "slots": ""
+        },
+        {
+          "title": "1 step challenge",
+          "url": "https://help.monetafunded.com/en/articles/13904591-1-step-challenge",
+          "slots": "P20,P01,P02,P03,P04,P05,P09"
+        },
+        {
+          "title": "2 step challenge",
+          "url": "https://help.monetafunded.com/en/articles/13904608-2-step-challenge",
+          "slots": "P20,P01,P02,P03,P04,P05,P09"
+        },
+        {
+          "title": "get to know moneta funded",
+          "url": "https://help.monetafunded.com/en/articles/14058476-get-to-know-moneta-funded",
+          "slots": "P10"
+        },
+        {
+          "title": "what is the sprint challenge",
+          "url": "https://help.monetafunded.com/en/articles/14060005-what-is-the-sprint-challenge",
+          "slots": "P01,P05,P09,P13,P19"
+        },
+        {
+          "title": "payout rules for the sprint challenge",
+          "url": "https://help.monetafunded.com/en/articles/14060008-payout-rules-for-the-sprint-challenge",
+          "slots": "P01,P09,P10"
+        },
+        {
+          "title": "sprint challenge rules",
+          "url": "https://help.monetafunded.com/en/articles/14060017-sprint-challenge-rules",
+          "slots": "P01,P05,P09,P10,P13,P19"
+        },
+        {
+          "title": "how does the time limit work for the sprint challenge",
+          "url": "https://help.monetafunded.com/en/articles/14060026-how-does-the-time-limit-work-for-the-sprint-challenge",
+          "slots": "P01,P09"
+        },
+        {
+          "title": "how does the multiplier work",
+          "url": "https://help.monetafunded.com/en/articles/14060030-how-does-the-multiplier-work",
+          "slots": "P01,P05,P09"
+        },
+        {
+          "title": "when does my sprint challenge start",
+          "url": "https://help.monetafunded.com/en/articles/14060035-when-does-my-sprint-challenge-start",
+          "slots": "P09"
+        },
+        {
+          "title": "how many sprint challenges can i have",
+          "url": "https://help.monetafunded.com/en/articles/14060043-how-many-sprint-challenges-can-i-have",
+          "slots": "P09"
+        },
+        {
+          "title": "what is the moneta funded free trial account",
+          "url": "https://help.monetafunded.com/en/articles/14181294-what-is-the-moneta-funded-free-trial-account",
+          "slots": "P20,P07"
+        },
+        {
+          "title": "can i register multiple moneta funded accounts under different emails",
+          "url": "https://help.monetafunded.com/en/articles/14276237-can-i-register-multiple-moneta-funded-accounts-under-different-emails",
+          "slots": "P13,P14,P19"
+        },
+        {
+          "title": "what is the payout cap on free affiliate and giveaway accounts",
+          "url": "https://help.monetafunded.com/en/articles/14301571-what-is-the-payout-cap-on-free-affiliate-and-giveaway-accounts",
+          "slots": ""
+        },
+        {
+          "title": "how to set up your match trader account",
+          "url": "https://help.monetafunded.com/en/articles/14323218-how-to-set-up-your-match-trader-account",
+          "slots": ""
+        },
+        {
+          "title": "1 step challenge what you get vs what you don t get",
+          "url": "https://help.monetafunded.com/en/articles/14626960-1-step-challenge-what-you-get-vs-what-you-don-t-get",
+          "slots": "P20,P01,P03,P05,P06,P07,P09"
+        },
+        {
+          "title": "instant funding account what you get vs what you don t get",
+          "url": "https://help.monetafunded.com/en/articles/14627200-instant-funding-account-what-you-get-vs-what-you-don-t-get",
+          "slots": "P20,P01,P02b,P03,P05,P06,P07,P09"
+        },
+        {
+          "title": "2 step challenge what you get vs what you don t get",
+          "url": "https://help.monetafunded.com/en/articles/14627417-2-step-challenge-what-you-get-vs-what-you-don-t-get",
+          "slots": "P20,P01,P03,P05,P06,P07,P09"
+        },
+        {
+          "title": "max floating loss allowed on funded accounts",
+          "url": "https://help.monetafunded.com/en/articles/15246073-max-floating-loss-allowed-on-funded-accounts",
+          "slots": "P20,P03,P10,P16"
+        },
+        {
+          "title": "instant funding pro account",
+          "url": "https://help.monetafunded.com/en/articles/15259383-instant-funding-pro-account",
+          "slots": "P20,P01,P02b,P03,P04,P05,P06,P08,P09,P10"
+        },
+        {
+          "title": "moneta funded launches payout to broker feature to unlock 2x trading advantage",
+          "url": "https://help.monetafunded.com/en/articles/15341818-moneta-funded-launches-payout-to-broker-feature-to-unlock-2x-trading-advantage",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P13,P14,P15,P16,P17,P19",
+    "missing": "P11,P12,P18",
+    "note": "18/21（本文補強後）"
+  }
+}

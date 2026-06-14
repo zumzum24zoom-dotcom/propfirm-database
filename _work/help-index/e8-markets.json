@@ -1,0 +1,441 @@
+{
+  "firm": "e8-markets",
+  "help_base_url": "https://help.e8markets.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で34記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "how do i get started",
+          "url": "https://help.e8markets.com/en/articles/10158309-how-do-i-get-started",
+          "slots": ""
+        },
+        {
+          "title": "can i purchase an account with someone else s card",
+          "url": "https://help.e8markets.com/en/articles/10206811-can-i-purchase-an-account-with-someone-else-s-card",
+          "slots": ""
+        },
+        {
+          "title": "server time",
+          "url": "https://help.e8markets.com/en/articles/10305202-server-time",
+          "slots": ""
+        },
+        {
+          "title": "40 best day rule",
+          "url": "https://help.e8markets.com/en/articles/10450125-40-best-day-rule",
+          "slots": "P19"
+        },
+        {
+          "title": "how do you log in to your tradelocker account",
+          "url": "https://help.e8markets.com/en/articles/10751503-how-do-you-log-in-to-your-tradelocker-account",
+          "slots": ""
+        },
+        {
+          "title": "account reset",
+          "url": "https://help.e8markets.com/en/articles/11640147-account-reset",
+          "slots": ""
+        },
+        {
+          "title": "e8 signature forex",
+          "url": "https://help.e8markets.com/en/articles/11755943-e8-signature-forex",
+          "slots": "P20,P01,P02b,P04,P09,P10,P14,P19"
+        },
+        {
+          "title": "daily drawdown",
+          "url": "https://help.e8markets.com/en/articles/11769446-daily-drawdown",
+          "slots": "P03,P04,P05"
+        },
+        {
+          "title": "e8 one",
+          "url": "https://help.e8markets.com/en/articles/11775980-e8-one",
+          "slots": "P20,P01,P02,P03,P04,P07,P09,P10,P14,P19"
+        },
+        {
+          "title": "dynamic drawdown",
+          "url": "https://help.e8markets.com/en/articles/11782996-dynamic-drawdown",
+          "slots": "P06"
+        },
+        {
+          "title": "e8 signature crypto",
+          "url": "https://help.e8markets.com/en/articles/11864571-e8-signature-crypto",
+          "slots": "P20,P01,P02b,P04,P09,P10,P14,P19"
+        },
+        {
+          "title": "eod dynamic drawdown",
+          "url": "https://help.e8markets.com/en/articles/11864596-eod-dynamic-drawdown",
+          "slots": ""
+        },
+        {
+          "title": "daily pause",
+          "url": "https://help.e8markets.com/en/articles/11864638-daily-pause",
+          "slots": "P04,P16"
+        },
+        {
+          "title": "35 best day rule",
+          "url": "https://help.e8markets.com/en/articles/11865587-35-best-day-rule",
+          "slots": "P19"
+        },
+        {
+          "title": "payout caps and buffers for e8 signature explained",
+          "url": "https://help.e8markets.com/en/articles/11940573-payout-caps-and-buffers-for-e8-signature-explained",
+          "slots": "P02b"
+        },
+        {
+          "title": "what is e8 markets why us",
+          "url": "https://help.e8markets.com/en/articles/12105810-what-is-e8-markets-why-us",
+          "slots": ""
+        },
+        {
+          "title": "how to log in to your mt5 account",
+          "url": "https://help.e8markets.com/en/articles/12414114-how-to-log-in-to-your-mt5-account",
+          "slots": ""
+        },
+        {
+          "title": "e8 signature vs e8 one vs e8 pro",
+          "url": "https://help.e8markets.com/en/articles/13106558-e8-signature-vs-e8-one-vs-e8-pro",
+          "slots": "P03,P06,P08,P10,P11,P12,P13,P14"
+        },
+        {
+          "title": "e8 one crypto",
+          "url": "https://help.e8markets.com/en/articles/13429922-e8-one-crypto",
+          "slots": "P20,P01,P02,P03,P04,P07,P09,P10,P14,P19"
+        },
+        {
+          "title": "static drawdown",
+          "url": "https://help.e8markets.com/en/articles/13653031-static-drawdown",
+          "slots": "P05,P06"
+        },
+        {
+          "title": "payout share request from e8 pro forex and e8 pro crypto",
+          "url": "https://help.e8markets.com/en/articles/13653464-payout-share-request-from-e8-pro-forex-and-e8-pro-crypto",
+          "slots": "P06,P07"
+        },
+        {
+          "title": "tax information",
+          "url": "https://help.e8markets.com/en/articles/13941837-tax-information",
+          "slots": ""
+        },
+        {
+          "title": "about e8 markets",
+          "url": "https://help.e8markets.com/en/articles/14124293-about-e8-markets",
+          "slots": ""
+        },
+        {
+          "title": "thomas gibbs promotion",
+          "url": "https://help.e8markets.com/en/articles/14352481-thomas-gibbs-promotion",
+          "slots": "P20"
+        },
+        {
+          "title": "how can i change my trading platform",
+          "url": "https://help.e8markets.com/en/articles/14497820-how-can-i-change-my-trading-platform",
+          "slots": ""
+        },
+        {
+          "title": "do you offer certificates for passing",
+          "url": "https://help.e8markets.com/en/articles/14595232-do-you-offer-certificates-for-passing",
+          "slots": "P01"
+        },
+        {
+          "title": "what is margin",
+          "url": "https://help.e8markets.com/en/articles/14722843-what-is-margin",
+          "slots": ""
+        },
+        {
+          "title": "what is slippage",
+          "url": "https://help.e8markets.com/en/articles/14781682-what-is-slippage",
+          "slots": "P10,P18"
+        },
+        {
+          "title": "the first bell tournament",
+          "url": "https://help.e8markets.com/en/articles/14893933-the-first-bell-tournament",
+          "slots": "P03,P05"
+        },
+        {
+          "title": "what is the stop out level",
+          "url": "https://help.e8markets.com/en/articles/14964234-what-is-the-stop-out-level",
+          "slots": "P16,P18"
+        },
+        {
+          "title": "friends program",
+          "url": "https://help.e8markets.com/en/articles/15030237-friends-program",
+          "slots": ""
+        },
+        {
+          "title": "why are my sls and tps not working",
+          "url": "https://help.e8markets.com/en/articles/15121279-why-are-my-sls-and-tps-not-working",
+          "slots": "P10,P16"
+        },
+        {
+          "title": "everything about payouts when how how fast",
+          "url": "https://help.e8markets.com/en/articles/15272556-everything-about-payouts-when-how-how-fast",
+          "slots": "P02b,P03,P04,P06"
+        },
+        {
+          "title": "e8 pro forex",
+          "url": "https://help.e8markets.com/en/articles/15274219-e8-pro-forex",
+          "slots": "P20,P01,P02,P02b,P03,P06,P07,P08,P09,P10,P14,P19"
+        },
+        {
+          "title": "daily profit cap",
+          "url": "https://help.e8markets.com/en/articles/15319043-daily-profit-cap",
+          "slots": "P08,P19"
+        },
+        {
+          "title": "e8 pro crypto",
+          "url": "https://help.e8markets.com/en/articles/15323777-e8-pro-crypto",
+          "slots": "P20,P01,P02,P02b,P03,P06,P07,P08,P09,P10,P14,P19"
+        },
+        {
+          "title": "e8 discord event fifa world cup 2026",
+          "url": "https://help.e8markets.com/en/articles/15431464-e8-discord-event-fifa-world-cup-2026",
+          "slots": ""
+        },
+        {
+          "title": "can i try e8 markets for free",
+          "url": "https://help.e8markets.com/en/articles/5514275-can-i-try-e8-markets-for-free",
+          "slots": ""
+        },
+        {
+          "title": "accepted countries",
+          "url": "https://help.e8markets.com/en/articles/5514278-accepted-countries",
+          "slots": ""
+        },
+        {
+          "title": "what is the simfi performance account",
+          "url": "https://help.e8markets.com/en/articles/5514891-what-is-the-simfi-performance-account",
+          "slots": ""
+        },
+        {
+          "title": "how do i become a performance trader at e8 the process",
+          "url": "https://help.e8markets.com/en/articles/5514892-how-do-i-become-a-performance-trader-at-e8-the-process",
+          "slots": ""
+        },
+        {
+          "title": "is my account live or demo",
+          "url": "https://help.e8markets.com/en/articles/5514957-is-my-account-live-or-demo",
+          "slots": ""
+        },
+        {
+          "title": "can i hold positions overnight and trade over the weekend",
+          "url": "https://help.e8markets.com/en/articles/5514966-can-i-hold-positions-overnight-and-trade-over-the-weekend",
+          "slots": "P11,P12"
+        },
+        {
+          "title": "what instruments are allowed to be traded spreads",
+          "url": "https://help.e8markets.com/en/articles/5514977-what-instruments-are-allowed-to-be-traded-spreads",
+          "slots": ""
+        },
+        {
+          "title": "how much leverage do you offer",
+          "url": "https://help.e8markets.com/en/articles/5514982-how-much-leverage-do-you-offer",
+          "slots": ""
+        },
+        {
+          "title": "how to pay for our challenge accounts",
+          "url": "https://help.e8markets.com/en/articles/5515027-how-to-pay-for-our-challenge-accounts",
+          "slots": ""
+        },
+        {
+          "title": "how many accounts can i apply for at once",
+          "url": "https://help.e8markets.com/en/articles/5515039-how-many-accounts-can-i-apply-for-at-once",
+          "slots": ""
+        },
+        {
+          "title": "can i use indicators or expert advisors when trading the e8 account",
+          "url": "https://help.e8markets.com/en/articles/5515409-can-i-use-indicators-or-expert-advisors-when-trading-the-e8-account",
+          "slots": "P13"
+        },
+        {
+          "title": "what broker do i trade with",
+          "url": "https://help.e8markets.com/en/articles/5515412-what-broker-do-i-trade-with",
+          "slots": ""
+        },
+        {
+          "title": "are fees your main source of income",
+          "url": "https://help.e8markets.com/en/articles/5730575-are-fees-your-main-source-of-income",
+          "slots": ""
+        },
+        {
+          "title": "how to properly secure my account",
+          "url": "https://help.e8markets.com/en/articles/6075730-how-to-properly-secure-my-account",
+          "slots": ""
+        },
+        {
+          "title": "how can i change the password of the trading platform",
+          "url": "https://help.e8markets.com/en/articles/6118631-how-can-i-change-the-password-of-the-trading-platform",
+          "slots": ""
+        },
+        {
+          "title": "is verification required",
+          "url": "https://help.e8markets.com/en/articles/6463833-is-verification-required",
+          "slots": ""
+        },
+        {
+          "title": "trading policies and prohibited trading strategies",
+          "url": "https://help.e8markets.com/en/articles/6929927-trading-policies-and-prohibited-trading-strategies",
+          "slots": "P03,P13,P14,P19"
+        },
+        {
+          "title": "refund policy",
+          "url": "https://help.e8markets.com/en/articles/8811411-refund-policy",
+          "slots": ""
+        },
+        {
+          "title": "what is the custom account",
+          "url": "https://help.e8markets.com/en/articles/8880316-what-is-the-custom-account",
+          "slots": ""
+        },
+        {
+          "title": "how to log in to your matchtrader account",
+          "url": "https://help.e8markets.com/en/articles/9005203-how-to-log-in-to-your-matchtrader-account",
+          "slots": ""
+        },
+        {
+          "title": "how to use matchtrader on your phone",
+          "url": "https://help.e8markets.com/en/articles/9008333-how-to-use-matchtrader-on-your-phone",
+          "slots": ""
+        },
+        {
+          "title": "how to pay with cryptocurrency",
+          "url": "https://help.e8markets.com/en/articles/9167296-how-to-pay-with-cryptocurrency",
+          "slots": ""
+        },
+        {
+          "title": "can i trade news",
+          "url": "https://help.e8markets.com/en/articles/9185497-can-i-trade-news",
+          "slots": "P10,P19"
+        },
+        {
+          "title": "payout share request on e8 one and e8 one crypto",
+          "url": "https://help.e8markets.com/en/articles/9323884-payout-share-request-on-e8-one-and-e8-one-crypto",
+          "slots": ""
+        },
+        {
+          "title": "what is the payout on demand",
+          "url": "https://help.e8markets.com/en/articles/9448349-what-is-the-payout-on-demand",
+          "slots": ""
+        },
+        {
+          "title": "how much money can i earn via the affiliate program",
+          "url": "https://help.e8markets.com/en/articles/9448420-how-much-money-can-i-earn-via-the-affiliate-program",
+          "slots": ""
+        },
+        {
+          "title": "how can i register for the affiliate program",
+          "url": "https://help.e8markets.com/en/articles/9448422-how-can-i-register-for-the-affiliate-program",
+          "slots": ""
+        },
+        {
+          "title": "can i get a custom discount code for my community",
+          "url": "https://help.e8markets.com/en/articles/9448427-can-i-get-a-custom-discount-code-for-my-community",
+          "slots": ""
+        },
+        {
+          "title": "can i advertise e8markets via google ads",
+          "url": "https://help.e8markets.com/en/articles/9448430-can-i-advertise-e8markets-via-google-ads",
+          "slots": ""
+        },
+        {
+          "title": "how can i request my affiliate commissions",
+          "url": "https://help.e8markets.com/en/articles/9448600-how-can-i-request-my-affiliate-commissions",
+          "slots": ""
+        },
+        {
+          "title": "are there lot order size restrictions",
+          "url": "https://help.e8markets.com/en/articles/9453396-are-there-lot-order-size-restrictions",
+          "slots": "P18"
+        },
+        {
+          "title": "is there any stop loss rule",
+          "url": "https://help.e8markets.com/en/articles/9453409-is-there-any-stop-loss-rule",
+          "slots": "P16"
+        },
+        {
+          "title": "is there any maximum risk rule",
+          "url": "https://help.e8markets.com/en/articles/9453413-is-there-any-maximum-risk-rule",
+          "slots": "P03,P17"
+        },
+        {
+          "title": "is there any consistency rule",
+          "url": "https://help.e8markets.com/en/articles/9453418-is-there-any-consistency-rule",
+          "slots": "P07"
+        },
+        {
+          "title": "is there any inactivity rule",
+          "url": "https://help.e8markets.com/en/articles/9453425-is-there-any-inactivity-rule",
+          "slots": "P09"
+        },
+        {
+          "title": "can i set up an account under my company name",
+          "url": "https://help.e8markets.com/en/articles/9453449-can-i-set-up-an-account-under-my-company-name",
+          "slots": ""
+        },
+        {
+          "title": "are there currently any discounts competition",
+          "url": "https://help.e8markets.com/en/articles/9453455-are-there-currently-any-discounts-competition",
+          "slots": ""
+        },
+        {
+          "title": "can i copy trades or trade as a team",
+          "url": "https://help.e8markets.com/en/articles/9453469-can-i-copy-trades-or-trade-as-a-team",
+          "slots": "P14"
+        },
+        {
+          "title": "what are the contract sizes",
+          "url": "https://help.e8markets.com/en/articles/9453488-what-are-the-contract-sizes",
+          "slots": ""
+        },
+        {
+          "title": "does e8 markets have discord",
+          "url": "https://help.e8markets.com/en/articles/9453612-does-e8-markets-have-discord",
+          "slots": ""
+        },
+        {
+          "title": "how e8 markets protects your data",
+          "url": "https://help.e8markets.com/en/articles/9459792-how-e8-markets-protects-your-data",
+          "slots": ""
+        },
+        {
+          "title": "does e8 markets have its own technology",
+          "url": "https://help.e8markets.com/en/articles/9464872-does-e8-markets-have-its-own-technology",
+          "slots": ""
+        },
+        {
+          "title": "may holiday trading schedule",
+          "url": "https://help.e8markets.com/en/articles/9497231-may-holiday-trading-schedule",
+          "slots": ""
+        },
+        {
+          "title": "can i merge multiple accounts",
+          "url": "https://help.e8markets.com/en/articles/9796097-can-i-merge-multiple-accounts",
+          "slots": ""
+        },
+        {
+          "title": "is the martingale strategy allowed",
+          "url": "https://help.e8markets.com/en/articles/9796251-is-the-martingale-strategy-allowed",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "available trading platforms",
+          "url": "https://help.e8markets.com/en/articles/9799834-available-trading-platforms",
+          "slots": ""
+        },
+        {
+          "title": "how do you log in to your ctrader account",
+          "url": "https://help.e8markets.com/en/articles/9952284-how-do-you-log-in-to-your-ctrader-account",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P16,P17,P18,P19",
+    "missing": "P15",
+    "note": "20/21（本文補強後）"
+  }
+}

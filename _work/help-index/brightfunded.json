@@ -1,0 +1,2596 @@
+{
+  "firm": "brightfunded",
+  "help_base_url": "https://help.brightfunded.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で465記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "wie aktiviert man die ask price linie in dxtrade",
+          "url": "https://help.brightfunded.com/de/articles/10037430-wie-aktiviert-man-die-ask-price-linie-in-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "spreads und slippage verstehen schlusselfaktoren im trading",
+          "url": "https://help.brightfunded.com/de/articles/10709194-spreads-und-slippage-verstehen-schlusselfaktoren-im-trading",
+          "slots": ""
+        },
+        {
+          "title": "ruckbuchungsrichtlinie und durchsetzung",
+          "url": "https://help.brightfunded.com/de/articles/10717651-ruckbuchungsrichtlinie-und-durchsetzung",
+          "slots": ""
+        },
+        {
+          "title": "vertraulichkeitsrichtlinie",
+          "url": "https://help.brightfunded.com/de/articles/10717719-vertraulichkeitsrichtlinie",
+          "slots": ""
+        },
+        {
+          "title": "wie high impact news wahrungs und krypto paare beeinflussen",
+          "url": "https://help.brightfunded.com/de/articles/10773763-wie-high-impact-news-wahrungs-und-krypto-paare-beeinflussen",
+          "slots": "P10"
+        },
+        {
+          "title": "welche trading plattformen bietet brightfunded an",
+          "url": "https://help.brightfunded.com/de/articles/10855521-welche-trading-plattformen-bietet-brightfunded-an",
+          "slots": ""
+        },
+        {
+          "title": "wie wechsle ich zwischen meinen challenges und funded konten auf ctrader",
+          "url": "https://help.brightfunded.com/de/articles/10856644-wie-wechsle-ich-zwischen-meinen-challenges-und-funded-konten-auf-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "wie uberprufe ich die swap gebuhren auf dxtrade",
+          "url": "https://help.brightfunded.com/de/articles/10856792-wie-uberprufe-ich-die-swap-gebuhren-auf-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "wie uberpruft man seine brightfunded zugangsdaten in ctrader",
+          "url": "https://help.brightfunded.com/de/articles/10865649-wie-uberpruft-man-seine-brightfunded-zugangsdaten-in-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "wie melde ich mich nach dem kauf eines kontos bei ctrader an",
+          "url": "https://help.brightfunded.com/de/articles/10866181-wie-melde-ich-mich-nach-dem-kauf-eines-kontos-bei-ctrader-an",
+          "slots": ""
+        },
+        {
+          "title": "wie uberprufe ich die swap gebuhren auf ctrader",
+          "url": "https://help.brightfunded.com/de/articles/10915704-wie-uberprufe-ich-die-swap-gebuhren-auf-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "margin calls verstehen",
+          "url": "https://help.brightfunded.com/de/articles/11058603-margin-calls-verstehen",
+          "slots": ""
+        },
+        {
+          "title": "einzelkonto richtlinie wichtig fur all unsere nutzer",
+          "url": "https://help.brightfunded.com/de/articles/11079360-einzelkonto-richtlinie-wichtig-fur-all-unsere-nutzer",
+          "slots": ""
+        },
+        {
+          "title": "trading glossar",
+          "url": "https://help.brightfunded.com/de/articles/11106540-trading-glossar",
+          "slots": "P02,P03,P05,P07,P10,P13,P14,P15,P16,P19"
+        },
+        {
+          "title": "wie kann ich meine auszahlung beantragen",
+          "url": "https://help.brightfunded.com/de/articles/11468668-wie-kann-ich-meine-auszahlung-beantragen",
+          "slots": ""
+        },
+        {
+          "title": "wie fangt man mit brightfunded an",
+          "url": "https://help.brightfunded.com/de/articles/11484605-wie-fangt-man-mit-brightfunded-an",
+          "slots": ""
+        },
+        {
+          "title": "wie wechsle ich die plattform",
+          "url": "https://help.brightfunded.com/de/articles/11484652-wie-wechsle-ich-die-plattform",
+          "slots": ""
+        },
+        {
+          "title": "was ist eine prop firm und wie funktioniert sie",
+          "url": "https://help.brightfunded.com/de/articles/11536942-was-ist-eine-prop-firm-und-wie-funktioniert-sie",
+          "slots": ""
+        },
+        {
+          "title": "richtlinie zur inaktivitat",
+          "url": "https://help.brightfunded.com/de/articles/11774572-richtlinie-zur-inaktivitat",
+          "slots": ""
+        },
+        {
+          "title": "sollte brightfunded reguliert sein",
+          "url": "https://help.brightfunded.com/de/articles/11790762-sollte-brightfunded-reguliert-sein",
+          "slots": ""
+        },
+        {
+          "title": "neuigkeiten im brightfunded partnerprogramm",
+          "url": "https://help.brightfunded.com/de/articles/11809042-neuigkeiten-im-brightfunded-partnerprogramm",
+          "slots": ""
+        },
+        {
+          "title": "die am haufigsten gestellten allgemeinen fragen",
+          "url": "https://help.brightfunded.com/de/articles/12000749-die-am-haufigsten-gestellten-allgemeinen-fragen",
+          "slots": ""
+        },
+        {
+          "title": "wie wird man affiliate bei brightfunded",
+          "url": "https://help.brightfunded.com/de/articles/12041719-wie-wird-man-affiliate-bei-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "ist es moglich tradingview mit brightfunded zu verbinden",
+          "url": "https://help.brightfunded.com/de/articles/12051588-ist-es-moglich-tradingview-mit-brightfunded-zu-verbinden",
+          "slots": ""
+        },
+        {
+          "title": "leitfaden zu den promotionsfunktionen",
+          "url": "https://help.brightfunded.com/de/articles/12158444-leitfaden-zu-den-promotionsfunktionen",
+          "slots": ""
+        },
+        {
+          "title": "wie funktioniert mein taglicher zulassiger verlust",
+          "url": "https://help.brightfunded.com/de/articles/12291765-wie-funktioniert-mein-taglicher-zulassiger-verlust",
+          "slots": ""
+        },
+        {
+          "title": "wie uberprufe ich die swap gebuhren auf mt5",
+          "url": "https://help.brightfunded.com/de/articles/12320307-wie-uberprufe-ich-die-swap-gebuhren-auf-mt5",
+          "slots": ""
+        },
+        {
+          "title": "wie verbinde ich meine konten in mt5",
+          "url": "https://help.brightfunded.com/de/articles/12320527-wie-verbinde-ich-meine-konten-in-mt5",
+          "slots": ""
+        },
+        {
+          "title": "wie wechsle ich zwischen meinen challenges und funded konten auf mt5",
+          "url": "https://help.brightfunded.com/de/articles/12320715-wie-wechsle-ich-zwischen-meinen-challenges-und-funded-konten-auf-mt5",
+          "slots": ""
+        },
+        {
+          "title": "wie uberpruft man seine brightfunded zugangsdaten in mt5",
+          "url": "https://help.brightfunded.com/de/articles/12333004-wie-uberpruft-man-seine-brightfunded-zugangsdaten-in-mt5",
+          "slots": ""
+        },
+        {
+          "title": "hat brightfunded eine consistency regel",
+          "url": "https://help.brightfunded.com/de/articles/12577176-hat-brightfunded-eine-consistency-regel",
+          "slots": "P07"
+        },
+        {
+          "title": "wie kann man seinen giveaway gewinn beanspruchen",
+          "url": "https://help.brightfunded.com/de/articles/12656752-wie-kann-man-seinen-giveaway-gewinn-beanspruchen",
+          "slots": ""
+        },
+        {
+          "title": "wie melde ich mich bei meinem mt5 konto an",
+          "url": "https://help.brightfunded.com/de/articles/12929320-wie-melde-ich-mich-bei-meinem-mt5-konto-an",
+          "slots": ""
+        },
+        {
+          "title": "wie melde ich mich bei meinem dxtrade konto an",
+          "url": "https://help.brightfunded.com/de/articles/12929353-wie-melde-ich-mich-bei-meinem-dxtrade-konto-an",
+          "slots": ""
+        },
+        {
+          "title": "kriterien fur bf token feedback",
+          "url": "https://help.brightfunded.com/de/articles/13011391-kriterien-fur-bf-token-feedback",
+          "slots": ""
+        },
+        {
+          "title": "kann ich am wochenende traden",
+          "url": "https://help.brightfunded.com/de/articles/13213315-kann-ich-am-wochenende-traden",
+          "slots": ""
+        },
+        {
+          "title": "15 gewinnbeteiligung auf evaluierungsgewinne",
+          "url": "https://help.brightfunded.com/de/articles/13367202-15-gewinnbeteiligung-auf-evaluierungsgewinne",
+          "slots": ""
+        },
+        {
+          "title": "wie macht man teilgewinnmitnahmen in ctrader",
+          "url": "https://help.brightfunded.com/de/articles/13701522-wie-macht-man-teilgewinnmitnahmen-in-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "wie schliesst man teilpositionen in metatrader 5",
+          "url": "https://help.brightfunded.com/de/articles/13701531-wie-schliesst-man-teilpositionen-in-metatrader-5",
+          "slots": ""
+        },
+        {
+          "title": "wie lost man brightfunded tokens ein",
+          "url": "https://help.brightfunded.com/de/articles/13834223-wie-lost-man-brightfunded-tokens-ein",
+          "slots": ""
+        },
+        {
+          "title": "wie wendet man einen rabattcode an",
+          "url": "https://help.brightfunded.com/de/articles/13939461-wie-wendet-man-einen-rabattcode-an",
+          "slots": ""
+        },
+        {
+          "title": "brightfunded 1 step",
+          "url": "https://help.brightfunded.com/de/articles/14284743-brightfunded-1-step",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step bright",
+          "url": "https://help.brightfunded.com/de/articles/14284817-brightfunded-2-step-bright",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step classic",
+          "url": "https://help.brightfunded.com/de/articles/14284844-brightfunded-2-step-classic",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded original accounts",
+          "url": "https://help.brightfunded.com/de/articles/14285762-brightfunded-original-accounts",
+          "slots": ""
+        },
+        {
+          "title": "was ist market depth",
+          "url": "https://help.brightfunded.com/de/articles/14853393-was-ist-market-depth",
+          "slots": ""
+        },
+        {
+          "title": "wie fangt man an",
+          "url": "https://help.brightfunded.com/de/articles/8204620-wie-fangt-man-an",
+          "slots": ""
+        },
+        {
+          "title": "warum sollte ich brightfunded beitreten",
+          "url": "https://help.brightfunded.com/de/articles/8204986-warum-sollte-ich-brightfunded-beitreten",
+          "slots": ""
+        },
+        {
+          "title": "was ist brightfunded",
+          "url": "https://help.brightfunded.com/de/articles/8205788-was-ist-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "wer kann brightfunded beitreten",
+          "url": "https://help.brightfunded.com/de/articles/8205805-wer-kann-brightfunded-beitreten",
+          "slots": ""
+        },
+        {
+          "title": "ist brightfunded ein serioses unternehmen",
+          "url": "https://help.brightfunded.com/de/articles/8205812-ist-brightfunded-ein-serioses-unternehmen",
+          "slots": ""
+        },
+        {
+          "title": "wie werde ich ein funded trader",
+          "url": "https://help.brightfunded.com/de/articles/9241590-wie-werde-ich-ein-funded-trader",
+          "slots": ""
+        },
+        {
+          "title": "wie lange dauert der evaluierungsprozess",
+          "url": "https://help.brightfunded.com/de/articles/9241600-wie-lange-dauert-der-evaluierungsprozess",
+          "slots": ""
+        },
+        {
+          "title": "was sind die aktuellen regeln fur den evaluierungsprozess",
+          "url": "https://help.brightfunded.com/de/articles/9241611-was-sind-die-aktuellen-regeln-fur-den-evaluierungsprozess",
+          "slots": ""
+        },
+        {
+          "title": "was passiert wenn ich gegen die regeln verstosse",
+          "url": "https://help.brightfunded.com/de/articles/9241613-was-passiert-wenn-ich-gegen-die-regeln-verstosse",
+          "slots": ""
+        },
+        {
+          "title": "mit welchem kapital werde ich bei brightfunded handeln",
+          "url": "https://help.brightfunded.com/de/articles/9241621-mit-welchem-kapital-werde-ich-bei-brightfunded-handeln",
+          "slots": ""
+        },
+        {
+          "title": "was ist trade2earn",
+          "url": "https://help.brightfunded.com/de/articles/9241628-was-ist-trade2earn",
+          "slots": ""
+        },
+        {
+          "title": "verdiene ich token mit jedem trade",
+          "url": "https://help.brightfunded.com/de/articles/9241631-verdiene-ich-token-mit-jedem-trade",
+          "slots": ""
+        },
+        {
+          "title": "wie viele brightfunded token erhalte ich pro lot",
+          "url": "https://help.brightfunded.com/de/articles/9241634-wie-viele-brightfunded-token-erhalte-ich-pro-lot",
+          "slots": ""
+        },
+        {
+          "title": "was sind die trading vorteile von brightfunded",
+          "url": "https://help.brightfunded.com/de/articles/9241666-was-sind-die-trading-vorteile-von-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "wie erhalte ich trading vorteile",
+          "url": "https://help.brightfunded.com/de/articles/9241668-wie-erhalte-ich-trading-vorteile",
+          "slots": ""
+        },
+        {
+          "title": "welche trading vorteile sind verfugbar",
+          "url": "https://help.brightfunded.com/de/articles/9241672-welche-trading-vorteile-sind-verfugbar",
+          "slots": ""
+        },
+        {
+          "title": "kann ich mehrere trading vorteile in einer challenge nutzen",
+          "url": "https://help.brightfunded.com/de/articles/9241675-kann-ich-mehrere-trading-vorteile-in-einer-challenge-nutzen",
+          "slots": ""
+        },
+        {
+          "title": "wie kann ich bezahlt werden",
+          "url": "https://help.brightfunded.com/de/articles/9241681-wie-kann-ich-bezahlt-werden",
+          "slots": ""
+        },
+        {
+          "title": "muss ich steuern auf meine auszahlungen zahlen",
+          "url": "https://help.brightfunded.com/de/articles/9241682-muss-ich-steuern-auf-meine-auszahlungen-zahlen",
+          "slots": ""
+        },
+        {
+          "title": "fallen bei meinen auszahlungen gebuhren an",
+          "url": "https://help.brightfunded.com/de/articles/9241684-fallen-bei-meinen-auszahlungen-gebuhren-an",
+          "slots": ""
+        },
+        {
+          "title": "welche weiteren gebuhren muss ich zahlen ist die gebuhr wiederkehrend",
+          "url": "https://help.brightfunded.com/de/articles/9241687-welche-weiteren-gebuhren-muss-ich-zahlen-ist-die-gebuhr-wiederkehrend",
+          "slots": ""
+        },
+        {
+          "title": "darf ich news traden",
+          "url": "https://help.brightfunded.com/de/articles/9241694-darf-ich-news-traden",
+          "slots": "P20,P10,P16"
+        },
+        {
+          "title": "kann ich ea verwenden",
+          "url": "https://help.brightfunded.com/de/articles/9241699-kann-ich-ea-verwenden",
+          "slots": "P13"
+        },
+        {
+          "title": "welche strategien sind bei brightfunded verboten",
+          "url": "https://help.brightfunded.com/de/articles/9241704-welche-strategien-sind-bei-brightfunded-verboten",
+          "slots": ""
+        },
+        {
+          "title": "ist copy trading erlaubt",
+          "url": "https://help.brightfunded.com/de/articles/9241709-ist-copy-trading-erlaubt",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "wie kann ich mich mit der trading community vernetzen",
+          "url": "https://help.brightfunded.com/de/articles/9241718-wie-kann-ich-mich-mit-der-trading-community-vernetzen",
+          "slots": ""
+        },
+        {
+          "title": "ist brightfunded die beste trading losung die ich finden kann",
+          "url": "https://help.brightfunded.com/de/articles/9241724-ist-brightfunded-die-beste-trading-losung-die-ich-finden-kann",
+          "slots": ""
+        },
+        {
+          "title": "welche kommissionen gelten in der simulierten umgebung von brightfunded",
+          "url": "https://help.brightfunded.com/de/articles/9268221-welche-kommissionen-gelten-in-der-simulierten-umgebung-von-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "welche krypto instrumente konnen sie bei brightfunded handeln",
+          "url": "https://help.brightfunded.com/de/articles/9268229-welche-krypto-instrumente-konnen-sie-bei-brightfunded-handeln",
+          "slots": ""
+        },
+        {
+          "title": "woher stammt der datenfeed von brightfunded",
+          "url": "https://help.brightfunded.com/de/articles/9268283-woher-stammt-der-datenfeed-von-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "wie erhalte ich mein funded account",
+          "url": "https://help.brightfunded.com/de/articles/9268287-wie-erhalte-ich-mein-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "ist es erlaubt positionen uber das wochenende zu halten",
+          "url": "https://help.brightfunded.com/de/articles/9268323-ist-es-erlaubt-positionen-uber-das-wochenende-zu-halten",
+          "slots": "P16"
+        },
+        {
+          "title": "wie wechsle ich zwischen meinen challenges und funded konten auf dxtrade",
+          "url": "https://help.brightfunded.com/de/articles/9268370-wie-wechsle-ich-zwischen-meinen-challenges-und-funded-konten-auf-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "wie hoch ist der hebel in der simulierten trading umgebung von brightfunded",
+          "url": "https://help.brightfunded.com/de/articles/9268380-wie-hoch-ist-der-hebel-in-der-simulierten-trading-umgebung-von-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "muss ich meine positionen uber nacht schliessen",
+          "url": "https://help.brightfunded.com/de/articles/9268424-muss-ich-meine-positionen-uber-nacht-schliessen",
+          "slots": "P13"
+        },
+        {
+          "title": "wie funktioniert meine gewinnaufteilung auf meinem funded konto",
+          "url": "https://help.brightfunded.com/de/articles/9268736-wie-funktioniert-meine-gewinnaufteilung-auf-meinem-funded-konto",
+          "slots": ""
+        },
+        {
+          "title": "nicht autorisierte praktiken bei brightfunded",
+          "url": "https://help.brightfunded.com/de/articles/9268742-nicht-autorisierte-praktiken-bei-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "welche handelbaren vermogenswerte instrumente bietet brightfunded an",
+          "url": "https://help.brightfunded.com/de/articles/9268749-welche-handelbaren-vermogenswerte-instrumente-bietet-brightfunded-an",
+          "slots": ""
+        },
+        {
+          "title": "wie skaliere ich mein funded konto unbegrenzt",
+          "url": "https://help.brightfunded.com/de/articles/9268774-wie-skaliere-ich-mein-funded-konto-unbegrenzt",
+          "slots": ""
+        },
+        {
+          "title": "so beantragen sie ihre brightfunded affiliate auszahlung",
+          "url": "https://help.brightfunded.com/de/articles/9286609-so-beantragen-sie-ihre-brightfunded-affiliate-auszahlung",
+          "slots": ""
+        },
+        {
+          "title": "ist brightfunded ein broker",
+          "url": "https://help.brightfunded.com/de/articles/9286616-ist-brightfunded-ein-broker",
+          "slots": ""
+        },
+        {
+          "title": "kann ich meine challenge mit kryptowahrung bezahlen",
+          "url": "https://help.brightfunded.com/de/articles/9286623-kann-ich-meine-challenge-mit-kryptowahrung-bezahlen",
+          "slots": ""
+        },
+        {
+          "title": "welche lander sind bei brightfunded eingeschrankt",
+          "url": "https://help.brightfunded.com/de/articles/9286630-welche-lander-sind-bei-brightfunded-eingeschrankt",
+          "slots": ""
+        },
+        {
+          "title": "was sind swap gebuhren",
+          "url": "https://help.brightfunded.com/de/articles/9286673-was-sind-swap-gebuhren",
+          "slots": ""
+        },
+        {
+          "title": "wie entferne ich inaktive gesperrte konten von der trading plattform",
+          "url": "https://help.brightfunded.com/de/articles/9286692-wie-entferne-ich-inaktive-gesperrte-konten-von-der-trading-plattform",
+          "slots": ""
+        },
+        {
+          "title": "wie ladt man seine pnl karten herunter",
+          "url": "https://help.brightfunded.com/de/articles/9286708-wie-ladt-man-seine-pnl-karten-herunter",
+          "slots": ""
+        },
+        {
+          "title": "welche charts sind tradingview am ahnlichsten",
+          "url": "https://help.brightfunded.com/de/articles/9286725-welche-charts-sind-tradingview-am-ahnlichsten",
+          "slots": ""
+        },
+        {
+          "title": "wie uberpruft man seine brightfunded zugangsdaten in dxtrade",
+          "url": "https://help.brightfunded.com/de/articles/9286733-wie-uberpruft-man-seine-brightfunded-zugangsdaten-in-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "ist die nutzung eines vpn vps bei brightfunded erlaubt",
+          "url": "https://help.brightfunded.com/de/articles/9436443-ist-die-nutzung-eines-vpn-vps-bei-brightfunded-erlaubt",
+          "slots": ""
+        },
+        {
+          "title": "wie funktioniert das zusammenfuhren von konten",
+          "url": "https://help.brightfunded.com/de/articles/9436456-wie-funktioniert-das-zusammenfuhren-von-konten",
+          "slots": ""
+        },
+        {
+          "title": "kann ich meine wallet adresse fur auszahlungen andern",
+          "url": "https://help.brightfunded.com/de/articles/9459980-kann-ich-meine-wallet-adresse-fur-auszahlungen-andern",
+          "slots": ""
+        },
+        {
+          "title": "kann ich eine ruckerstattung fur meine brightfunded challenge erhalten",
+          "url": "https://help.brightfunded.com/de/articles/9460023-kann-ich-eine-ruckerstattung-fur-meine-brightfunded-challenge-erhalten",
+          "slots": ""
+        },
+        {
+          "title": "wer kann brightfunded partner werden",
+          "url": "https://help.brightfunded.com/de/articles/9662025-wer-kann-brightfunded-partner-werden",
+          "slots": ""
+        },
+        {
+          "title": "affiliate werberichtlinie",
+          "url": "https://help.brightfunded.com/de/articles/9662070-affiliate-werberichtlinie",
+          "slots": ""
+        },
+        {
+          "title": "affiliate auszahlungsmethoden",
+          "url": "https://help.brightfunded.com/de/articles/9662092-affiliate-auszahlungsmethoden",
+          "slots": ""
+        },
+        {
+          "title": "wie funktioniert die hedging regel",
+          "url": "https://help.brightfunded.com/de/articles/9680850-wie-funktioniert-die-hedging-regel",
+          "slots": "P20,P13,P14,P19"
+        },
+        {
+          "title": "wie funktioniert der kyc prozess",
+          "url": "https://help.brightfunded.com/de/articles/9973224-wie-funktioniert-der-kyc-prozess",
+          "slots": ""
+        },
+        {
+          "title": "how to activate the ask price line in dxtrade",
+          "url": "https://help.brightfunded.com/en/articles/10037430-how-to-activate-the-ask-price-line-in-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "understanding spreads and slippage key factors in trading",
+          "url": "https://help.brightfunded.com/en/articles/10709194-understanding-spreads-and-slippage-key-factors-in-trading",
+          "slots": ""
+        },
+        {
+          "title": "chargeback policy enforcement",
+          "url": "https://help.brightfunded.com/en/articles/10717651-chargeback-policy-enforcement",
+          "slots": ""
+        },
+        {
+          "title": "confidentiality policy",
+          "url": "https://help.brightfunded.com/en/articles/10717719-confidentiality-policy",
+          "slots": ""
+        },
+        {
+          "title": "how high impact news affects currency and crypto pairs",
+          "url": "https://help.brightfunded.com/en/articles/10773763-how-high-impact-news-affects-currency-and-crypto-pairs",
+          "slots": "P10"
+        },
+        {
+          "title": "what trading platform does brightfunded offer",
+          "url": "https://help.brightfunded.com/en/articles/10855521-what-trading-platform-does-brightfunded-offer",
+          "slots": ""
+        },
+        {
+          "title": "how to switch between your challenges and funded accounts on ctrader",
+          "url": "https://help.brightfunded.com/en/articles/10856644-how-to-switch-between-your-challenges-and-funded-accounts-on-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "how to check the swap fees on dxtrade",
+          "url": "https://help.brightfunded.com/en/articles/10856792-how-to-check-the-swap-fees-on-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "how to check your brightfunded credentials in ctrader",
+          "url": "https://help.brightfunded.com/en/articles/10865649-how-to-check-your-brightfunded-credentials-in-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "how do i log in to ctrader after purchasing an account",
+          "url": "https://help.brightfunded.com/en/articles/10866181-how-do-i-log-in-to-ctrader-after-purchasing-an-account",
+          "slots": ""
+        },
+        {
+          "title": "how to check the swap fees on ctrader",
+          "url": "https://help.brightfunded.com/en/articles/10915704-how-to-check-the-swap-fees-on-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "understanding margin calls",
+          "url": "https://help.brightfunded.com/en/articles/11058603-understanding-margin-calls",
+          "slots": ""
+        },
+        {
+          "title": "single account policy important for all our users",
+          "url": "https://help.brightfunded.com/en/articles/11079360-single-account-policy-important-for-all-our-users",
+          "slots": ""
+        },
+        {
+          "title": "trading glossary",
+          "url": "https://help.brightfunded.com/en/articles/11106540-trading-glossary",
+          "slots": "P20,P02,P03,P04,P05,P07,P10,P13,P14,P15,P16,P19"
+        },
+        {
+          "title": "how can i request my payout",
+          "url": "https://help.brightfunded.com/en/articles/11468668-how-can-i-request-my-payout",
+          "slots": ""
+        },
+        {
+          "title": "how to get started with brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/11484605-how-to-get-started-with-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "how do i switch platforms",
+          "url": "https://help.brightfunded.com/en/articles/11484652-how-do-i-switch-platforms",
+          "slots": ""
+        },
+        {
+          "title": "what is a prop firm and how does it work",
+          "url": "https://help.brightfunded.com/en/articles/11536942-what-is-a-prop-firm-and-how-does-it-work",
+          "slots": ""
+        },
+        {
+          "title": "inactivity rule policy",
+          "url": "https://help.brightfunded.com/en/articles/11774572-inactivity-rule-policy",
+          "slots": "P20,P09,P19"
+        },
+        {
+          "title": "should brightfunded be regulated",
+          "url": "https://help.brightfunded.com/en/articles/11790762-should-brightfunded-be-regulated",
+          "slots": ""
+        },
+        {
+          "title": "what s new in the brightfunded affiliate program",
+          "url": "https://help.brightfunded.com/en/articles/11809042-what-s-new-in-the-brightfunded-affiliate-program",
+          "slots": ""
+        },
+        {
+          "title": "the most frequently asked general questions",
+          "url": "https://help.brightfunded.com/en/articles/12000749-the-most-frequently-asked-general-questions",
+          "slots": ""
+        },
+        {
+          "title": "how to become an affiliate at brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/12041719-how-to-become-an-affiliate-at-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "is it possible to connect tradingview to brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/12051588-is-it-possible-to-connect-tradingview-to-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "promotion feature guide",
+          "url": "https://help.brightfunded.com/en/articles/12158444-promotion-feature-guide",
+          "slots": ""
+        },
+        {
+          "title": "how does my daily permitted loss work",
+          "url": "https://help.brightfunded.com/en/articles/12291765-how-does-my-daily-permitted-loss-work",
+          "slots": "P20,P03,P04"
+        },
+        {
+          "title": "how to check the swap fees on mt5",
+          "url": "https://help.brightfunded.com/en/articles/12320307-how-to-check-the-swap-fees-on-mt5",
+          "slots": ""
+        },
+        {
+          "title": "how to connect your accounts in mt5",
+          "url": "https://help.brightfunded.com/en/articles/12320527-how-to-connect-your-accounts-in-mt5",
+          "slots": ""
+        },
+        {
+          "title": "how to switch between your challenges and funded accounts on mt5",
+          "url": "https://help.brightfunded.com/en/articles/12320715-how-to-switch-between-your-challenges-and-funded-accounts-on-mt5",
+          "slots": ""
+        },
+        {
+          "title": "how to check your brightfunded credentials in mt5",
+          "url": "https://help.brightfunded.com/en/articles/12333004-how-to-check-your-brightfunded-credentials-in-mt5",
+          "slots": ""
+        },
+        {
+          "title": "does brightfunded have a consistency rule",
+          "url": "https://help.brightfunded.com/en/articles/12577176-does-brightfunded-have-a-consistency-rule",
+          "slots": "P07,P19"
+        },
+        {
+          "title": "how to claim your giveaway",
+          "url": "https://help.brightfunded.com/en/articles/12656752-how-to-claim-your-giveaway",
+          "slots": ""
+        },
+        {
+          "title": "how do i log in to my mt5 account",
+          "url": "https://help.brightfunded.com/en/articles/12929320-how-do-i-log-in-to-my-mt5-account",
+          "slots": ""
+        },
+        {
+          "title": "how do i log in to my dxtrade account",
+          "url": "https://help.brightfunded.com/en/articles/12929353-how-do-i-log-in-to-my-dxtrade-account",
+          "slots": ""
+        },
+        {
+          "title": "bf token feedback criteria",
+          "url": "https://help.brightfunded.com/en/articles/13011391-bf-token-feedback-criteria",
+          "slots": ""
+        },
+        {
+          "title": "can i trade on weekends",
+          "url": "https://help.brightfunded.com/en/articles/13213315-can-i-trade-on-weekends",
+          "slots": "P11"
+        },
+        {
+          "title": "15 evaluation profit reward",
+          "url": "https://help.brightfunded.com/en/articles/13367202-15-evaluation-profit-reward",
+          "slots": "P20"
+        },
+        {
+          "title": "how to take partials in ctrader",
+          "url": "https://help.brightfunded.com/en/articles/13701522-how-to-take-partials-in-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "how to take partials in metatrader 5",
+          "url": "https://help.brightfunded.com/en/articles/13701531-how-to-take-partials-in-metatrader-5",
+          "slots": ""
+        },
+        {
+          "title": "how to redeem brightfunded tokens",
+          "url": "https://help.brightfunded.com/en/articles/13834223-how-to-redeem-brightfunded-tokens",
+          "slots": ""
+        },
+        {
+          "title": "how to apply a discount code",
+          "url": "https://help.brightfunded.com/en/articles/13939461-how-to-apply-a-discount-code",
+          "slots": ""
+        },
+        {
+          "title": "brightfunded 1 step",
+          "url": "https://help.brightfunded.com/en/articles/14284743-brightfunded-1-step",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step bright",
+          "url": "https://help.brightfunded.com/en/articles/14284817-brightfunded-2-step-bright",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step classic",
+          "url": "https://help.brightfunded.com/en/articles/14284844-brightfunded-2-step-classic",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded original accounts",
+          "url": "https://help.brightfunded.com/en/articles/14285762-brightfunded-original-accounts",
+          "slots": ""
+        },
+        {
+          "title": "what is market depth",
+          "url": "https://help.brightfunded.com/en/articles/14853393-what-is-market-depth",
+          "slots": ""
+        },
+        {
+          "title": "how to start",
+          "url": "https://help.brightfunded.com/en/articles/8204620-how-to-start",
+          "slots": ""
+        },
+        {
+          "title": "why should i join brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/8204986-why-should-i-join-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "what is brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/8205788-what-is-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "who can join brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/8205805-who-can-join-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "is brightfunded a serious company",
+          "url": "https://help.brightfunded.com/en/articles/8205812-is-brightfunded-a-serious-company",
+          "slots": ""
+        },
+        {
+          "title": "how do i get funded",
+          "url": "https://help.brightfunded.com/en/articles/9241590-how-do-i-get-funded",
+          "slots": ""
+        },
+        {
+          "title": "how long does the evaluation process take",
+          "url": "https://help.brightfunded.com/en/articles/9241600-how-long-does-the-evaluation-process-take",
+          "slots": "P20,P01,P02,P09,P17"
+        },
+        {
+          "title": "what are the current rules for the evaluation process",
+          "url": "https://help.brightfunded.com/en/articles/9241611-what-are-the-current-rules-for-the-evaluation-process",
+          "slots": "P20,P01,P02,P03,P04,P05,P06"
+        },
+        {
+          "title": "what happens if i breach the rules",
+          "url": "https://help.brightfunded.com/en/articles/9241613-what-happens-if-i-breach-the-rules",
+          "slots": "P19"
+        },
+        {
+          "title": "what capital will i trade at brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9241621-what-capital-will-i-trade-at-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "what is trade2earn",
+          "url": "https://help.brightfunded.com/en/articles/9241628-what-is-trade2earn",
+          "slots": ""
+        },
+        {
+          "title": "do i earn tokens with every trade i make",
+          "url": "https://help.brightfunded.com/en/articles/9241631-do-i-earn-tokens-with-every-trade-i-make",
+          "slots": ""
+        },
+        {
+          "title": "how many brightfunded tokens do i receive per lot",
+          "url": "https://help.brightfunded.com/en/articles/9241634-how-many-brightfunded-tokens-do-i-receive-per-lot",
+          "slots": ""
+        },
+        {
+          "title": "what are the trading benefits of brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9241666-what-are-the-trading-benefits-of-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "how do i obtain trading perks",
+          "url": "https://help.brightfunded.com/en/articles/9241668-how-do-i-obtain-trading-perks",
+          "slots": ""
+        },
+        {
+          "title": "what trading perks are available",
+          "url": "https://help.brightfunded.com/en/articles/9241672-what-trading-perks-are-available",
+          "slots": ""
+        },
+        {
+          "title": "can i use multiple trading perks at one challenge",
+          "url": "https://help.brightfunded.com/en/articles/9241675-can-i-use-multiple-trading-perks-at-one-challenge",
+          "slots": ""
+        },
+        {
+          "title": "how can i get paid",
+          "url": "https://help.brightfunded.com/en/articles/9241681-how-can-i-get-paid",
+          "slots": ""
+        },
+        {
+          "title": "do i need to pay taxes on my payouts",
+          "url": "https://help.brightfunded.com/en/articles/9241682-do-i-need-to-pay-taxes-on-my-payouts",
+          "slots": ""
+        },
+        {
+          "title": "do i need to pay charges with the payouts",
+          "url": "https://help.brightfunded.com/en/articles/9241684-do-i-need-to-pay-charges-with-the-payouts",
+          "slots": ""
+        },
+        {
+          "title": "what other fees do i need to pay is the fee recurrent",
+          "url": "https://help.brightfunded.com/en/articles/9241687-what-other-fees-do-i-need-to-pay-is-the-fee-recurrent",
+          "slots": ""
+        },
+        {
+          "title": "can i trade news",
+          "url": "https://help.brightfunded.com/en/articles/9241694-can-i-trade-news",
+          "slots": "P20,P10,P16,P19"
+        },
+        {
+          "title": "can i use ea",
+          "url": "https://help.brightfunded.com/en/articles/9241699-can-i-use-ea",
+          "slots": "P13"
+        },
+        {
+          "title": "which strategies are prohibited at brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9241704-which-strategies-are-prohibited-at-brightfunded",
+          "slots": "P10,P13,P15,P19"
+        },
+        {
+          "title": "is copy trading allowed",
+          "url": "https://help.brightfunded.com/en/articles/9241709-is-copy-trading-allowed",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "how can i connect with the trading community",
+          "url": "https://help.brightfunded.com/en/articles/9241718-how-can-i-connect-with-the-trading-community",
+          "slots": ""
+        },
+        {
+          "title": "is brightfunded the best trading solution that i can find",
+          "url": "https://help.brightfunded.com/en/articles/9241724-is-brightfunded-the-best-trading-solution-that-i-can-find",
+          "slots": ""
+        },
+        {
+          "title": "what are the commissions in the simulated environment of brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9268221-what-are-the-commissions-in-the-simulated-environment-of-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "which crypto instruments can you trade at brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9268229-which-crypto-instruments-can-you-trade-at-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "where does brightfunded s data feed come from",
+          "url": "https://help.brightfunded.com/en/articles/9268283-where-does-brightfunded-s-data-feed-come-from",
+          "slots": ""
+        },
+        {
+          "title": "how do i obtain my funded account",
+          "url": "https://help.brightfunded.com/en/articles/9268287-how-do-i-obtain-my-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "is it allowed to hold positions over the weekend",
+          "url": "https://help.brightfunded.com/en/articles/9268323-is-it-allowed-to-hold-positions-over-the-weekend",
+          "slots": "P11,P16"
+        },
+        {
+          "title": "how to switch between your challenges and funded accounts on dxtrade",
+          "url": "https://help.brightfunded.com/en/articles/9268370-how-to-switch-between-your-challenges-and-funded-accounts-on-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "what is the leverage in brightfunded s simulated trading environment",
+          "url": "https://help.brightfunded.com/en/articles/9268380-what-is-the-leverage-in-brightfunded-s-simulated-trading-environment",
+          "slots": ""
+        },
+        {
+          "title": "do i need to close my positions overnight",
+          "url": "https://help.brightfunded.com/en/articles/9268424-do-i-need-to-close-my-positions-overnight",
+          "slots": "P11,P12,P13,P19"
+        },
+        {
+          "title": "how does my reward split work on my funded account",
+          "url": "https://help.brightfunded.com/en/articles/9268736-how-does-my-reward-split-work-on-my-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "non authorized practices at brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9268742-non-authorized-practices-at-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "what trading assets instruments offers brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9268749-what-trading-assets-instruments-offers-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "how to scale up my funded account infinitely",
+          "url": "https://help.brightfunded.com/en/articles/9268774-how-to-scale-up-my-funded-account-infinitely",
+          "slots": ""
+        },
+        {
+          "title": "how to request your brightfunded affiliate payout",
+          "url": "https://help.brightfunded.com/en/articles/9286609-how-to-request-your-brightfunded-affiliate-payout",
+          "slots": ""
+        },
+        {
+          "title": "is brightfunded a broker",
+          "url": "https://help.brightfunded.com/en/articles/9286616-is-brightfunded-a-broker",
+          "slots": ""
+        },
+        {
+          "title": "can i pay for my challenge with crypto",
+          "url": "https://help.brightfunded.com/en/articles/9286623-can-i-pay-for-my-challenge-with-crypto",
+          "slots": ""
+        },
+        {
+          "title": "what countries are restricted at brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9286630-what-countries-are-restricted-at-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "what are the swap fees",
+          "url": "https://help.brightfunded.com/en/articles/9286673-what-are-the-swap-fees",
+          "slots": ""
+        },
+        {
+          "title": "how do i remove inactive breached accounts from the trading platform",
+          "url": "https://help.brightfunded.com/en/articles/9286692-how-do-i-remove-inactive-breached-accounts-from-the-trading-platform",
+          "slots": ""
+        },
+        {
+          "title": "how to download your pnl cards",
+          "url": "https://help.brightfunded.com/en/articles/9286708-how-to-download-your-pnl-cards",
+          "slots": ""
+        },
+        {
+          "title": "which charts are most similar to tradingview",
+          "url": "https://help.brightfunded.com/en/articles/9286725-which-charts-are-most-similar-to-tradingview",
+          "slots": ""
+        },
+        {
+          "title": "how to check your brightfunded credentials in dxtrade",
+          "url": "https://help.brightfunded.com/en/articles/9286733-how-to-check-your-brightfunded-credentials-in-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "is it permitted to use a vpn vps at brightfunded",
+          "url": "https://help.brightfunded.com/en/articles/9436443-is-it-permitted-to-use-a-vpn-vps-at-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "how the account merge works",
+          "url": "https://help.brightfunded.com/en/articles/9436456-how-the-account-merge-works",
+          "slots": ""
+        },
+        {
+          "title": "can i change my wallet address for payouts",
+          "url": "https://help.brightfunded.com/en/articles/9459980-can-i-change-my-wallet-address-for-payouts",
+          "slots": ""
+        },
+        {
+          "title": "can i get a refund for my brightfunded challenge",
+          "url": "https://help.brightfunded.com/en/articles/9460023-can-i-get-a-refund-for-my-brightfunded-challenge",
+          "slots": ""
+        },
+        {
+          "title": "who can become a brightfunded affiliate",
+          "url": "https://help.brightfunded.com/en/articles/9662025-who-can-become-a-brightfunded-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "affiliate promotion policy",
+          "url": "https://help.brightfunded.com/en/articles/9662070-affiliate-promotion-policy",
+          "slots": ""
+        },
+        {
+          "title": "affiliate payout methods",
+          "url": "https://help.brightfunded.com/en/articles/9662092-affiliate-payout-methods",
+          "slots": ""
+        },
+        {
+          "title": "how does the hedging rule work",
+          "url": "https://help.brightfunded.com/en/articles/9680850-how-does-the-hedging-rule-work",
+          "slots": "P20,P13,P14,P19"
+        },
+        {
+          "title": "how does the kyc process work",
+          "url": "https://help.brightfunded.com/en/articles/9973224-how-does-the-kyc-process-work",
+          "slots": ""
+        },
+        {
+          "title": "como activar la linea de precio de ask price en dxtrade",
+          "url": "https://help.brightfunded.com/es/articles/10037430-como-activar-la-linea-de-precio-de-ask-price-en-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "comprendiendo los spreads y el slippage factores clave en el trading",
+          "url": "https://help.brightfunded.com/es/articles/10709194-comprendiendo-los-spreads-y-el-slippage-factores-clave-en-el-trading",
+          "slots": ""
+        },
+        {
+          "title": "politica de devolucion de cargo y cumplimiento",
+          "url": "https://help.brightfunded.com/es/articles/10717651-politica-de-devolucion-de-cargo-y-cumplimiento",
+          "slots": ""
+        },
+        {
+          "title": "politica de confidencialidad",
+          "url": "https://help.brightfunded.com/es/articles/10717719-politica-de-confidencialidad",
+          "slots": ""
+        },
+        {
+          "title": "como las noticias de alto impacto afectan a los pares de divisas y criptomonedas",
+          "url": "https://help.brightfunded.com/es/articles/10773763-como-las-noticias-de-alto-impacto-afectan-a-los-pares-de-divisas-y-criptomonedas",
+          "slots": ""
+        },
+        {
+          "title": "que plataforma de trading ofrece brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/10855521-que-plataforma-de-trading-ofrece-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como cambiar entre tus cuentas de challenge y funded en ctrader",
+          "url": "https://help.brightfunded.com/es/articles/10856644-como-cambiar-entre-tus-cuentas-de-challenge-y-funded-en-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "como verificar las tarifas de swap en dxtrade",
+          "url": "https://help.brightfunded.com/es/articles/10856792-como-verificar-las-tarifas-de-swap-en-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "como verificar tus credenciales de brightfunded en ctrader",
+          "url": "https://help.brightfunded.com/es/articles/10865649-como-verificar-tus-credenciales-de-brightfunded-en-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "como iniciar sesion en ctrader despues de comprar una cuenta",
+          "url": "https://help.brightfunded.com/es/articles/10866181-como-iniciar-sesion-en-ctrader-despues-de-comprar-una-cuenta",
+          "slots": ""
+        },
+        {
+          "title": "como verificar las tarifas de swap en ctrader",
+          "url": "https://help.brightfunded.com/es/articles/10915704-como-verificar-las-tarifas-de-swap-en-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "entendiendo las margin calls",
+          "url": "https://help.brightfunded.com/es/articles/11058603-entendiendo-las-margin-calls",
+          "slots": ""
+        },
+        {
+          "title": "politica de cuenta unica importante para todos nuestros usuarios",
+          "url": "https://help.brightfunded.com/es/articles/11079360-politica-de-cuenta-unica-importante-para-todos-nuestros-usuarios",
+          "slots": ""
+        },
+        {
+          "title": "glosario de terminos",
+          "url": "https://help.brightfunded.com/es/articles/11106540-glosario-de-terminos",
+          "slots": ""
+        },
+        {
+          "title": "como puedo solicitar mi pago",
+          "url": "https://help.brightfunded.com/es/articles/11468668-como-puedo-solicitar-mi-pago",
+          "slots": ""
+        },
+        {
+          "title": "como empezar con brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/11484605-como-empezar-con-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como cambiar de plataforma",
+          "url": "https://help.brightfunded.com/es/articles/11484652-como-cambiar-de-plataforma",
+          "slots": ""
+        },
+        {
+          "title": "que es una prop firm y como funciona",
+          "url": "https://help.brightfunded.com/es/articles/11536942-que-es-una-prop-firm-y-como-funciona",
+          "slots": ""
+        },
+        {
+          "title": "politica de regla de inactividad",
+          "url": "https://help.brightfunded.com/es/articles/11774572-politica-de-regla-de-inactividad",
+          "slots": ""
+        },
+        {
+          "title": "debe estar regulado brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/11790762-debe-estar-regulado-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que hay de nuevo en el programa de afiliados de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/11809042-que-hay-de-nuevo-en-el-programa-de-afiliados-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "las preguntas generales mas frecuentes",
+          "url": "https://help.brightfunded.com/es/articles/12000749-las-preguntas-generales-mas-frecuentes",
+          "slots": ""
+        },
+        {
+          "title": "como convertirse en afiliado de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/12041719-como-convertirse-en-afiliado-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "es posible conectar tradingview a brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/12051588-es-posible-conectar-tradingview-a-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "guia de caracteristicas de la promocion",
+          "url": "https://help.brightfunded.com/es/articles/12158444-guia-de-caracteristicas-de-la-promocion",
+          "slots": ""
+        },
+        {
+          "title": "como funciona mi perdida diaria permitida",
+          "url": "https://help.brightfunded.com/es/articles/12291765-como-funciona-mi-perdida-diaria-permitida",
+          "slots": ""
+        },
+        {
+          "title": "como verificar las tarifas de swap en mt5",
+          "url": "https://help.brightfunded.com/es/articles/12320307-como-verificar-las-tarifas-de-swap-en-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como conectar tus cuentas en mt5",
+          "url": "https://help.brightfunded.com/es/articles/12320527-como-conectar-tus-cuentas-en-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como cambiar entre tus challenges y tus cuentas funded en mt5",
+          "url": "https://help.brightfunded.com/es/articles/12320715-como-cambiar-entre-tus-challenges-y-tus-cuentas-funded-en-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como verificar tus credenciales de brightfunded para mt5",
+          "url": "https://help.brightfunded.com/es/articles/12333004-como-verificar-tus-credenciales-de-brightfunded-para-mt5",
+          "slots": ""
+        },
+        {
+          "title": "brightfunded tiene una regla de consistencia",
+          "url": "https://help.brightfunded.com/es/articles/12577176-brightfunded-tiene-una-regla-de-consistencia",
+          "slots": ""
+        },
+        {
+          "title": "como reclamar tu premio del giveaway",
+          "url": "https://help.brightfunded.com/es/articles/12656752-como-reclamar-tu-premio-del-giveaway",
+          "slots": ""
+        },
+        {
+          "title": "como inicio sesion en mi cuenta de mt5",
+          "url": "https://help.brightfunded.com/es/articles/12929320-como-inicio-sesion-en-mi-cuenta-de-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como inicio sesion en mi cuenta de dxtrade",
+          "url": "https://help.brightfunded.com/es/articles/12929353-como-inicio-sesion-en-mi-cuenta-de-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "criterios de feedback para bf tokens",
+          "url": "https://help.brightfunded.com/es/articles/13011391-criterios-de-feedback-para-bf-tokens",
+          "slots": ""
+        },
+        {
+          "title": "puedo operar los fines de semana",
+          "url": "https://help.brightfunded.com/es/articles/13213315-puedo-operar-los-fines-de-semana",
+          "slots": ""
+        },
+        {
+          "title": "recompensa del 15 sobre las ganancias de la evaluacion",
+          "url": "https://help.brightfunded.com/es/articles/13367202-recompensa-del-15-sobre-las-ganancias-de-la-evaluacion",
+          "slots": ""
+        },
+        {
+          "title": "como tomar parciales en ctrader",
+          "url": "https://help.brightfunded.com/es/articles/13701522-como-tomar-parciales-en-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "como tomar parciales en metatrader 5",
+          "url": "https://help.brightfunded.com/es/articles/13701531-como-tomar-parciales-en-metatrader-5",
+          "slots": ""
+        },
+        {
+          "title": "como canjear tokens brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/13834223-como-canjear-tokens-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como aplicar un codigo de descuento",
+          "url": "https://help.brightfunded.com/es/articles/13939461-como-aplicar-un-codigo-de-descuento",
+          "slots": ""
+        },
+        {
+          "title": "brightfunded 1 step",
+          "url": "https://help.brightfunded.com/es/articles/14284743-brightfunded-1-step",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step bright",
+          "url": "https://help.brightfunded.com/es/articles/14284817-brightfunded-2-step-bright",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step classic",
+          "url": "https://help.brightfunded.com/es/articles/14284844-brightfunded-2-step-classic",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded original accounts",
+          "url": "https://help.brightfunded.com/es/articles/14285762-brightfunded-original-accounts",
+          "slots": ""
+        },
+        {
+          "title": "que es la profundidad de mercado market depth",
+          "url": "https://help.brightfunded.com/es/articles/14853393-que-es-la-profundidad-de-mercado-market-depth",
+          "slots": ""
+        },
+        {
+          "title": "como empezar",
+          "url": "https://help.brightfunded.com/es/articles/8204620-como-empezar",
+          "slots": ""
+        },
+        {
+          "title": "por que deberia unirme a brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/8204986-por-que-deberia-unirme-a-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que es brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/8205788-que-es-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "quien puede unirse a brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/8205805-quien-puede-unirse-a-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "es brightfunded una empresa seria",
+          "url": "https://help.brightfunded.com/es/articles/8205812-es-brightfunded-una-empresa-seria",
+          "slots": ""
+        },
+        {
+          "title": "como me fondeo",
+          "url": "https://help.brightfunded.com/es/articles/9241590-como-me-fondeo",
+          "slots": ""
+        },
+        {
+          "title": "cuanto dura el proceso de evaluacion",
+          "url": "https://help.brightfunded.com/es/articles/9241600-cuanto-dura-el-proceso-de-evaluacion",
+          "slots": ""
+        },
+        {
+          "title": "cuales son las reglas actuales para el proceso de evaluacion",
+          "url": "https://help.brightfunded.com/es/articles/9241611-cuales-son-las-reglas-actuales-para-el-proceso-de-evaluacion",
+          "slots": ""
+        },
+        {
+          "title": "que pasa si incumplo las reglas",
+          "url": "https://help.brightfunded.com/es/articles/9241613-que-pasa-si-incumplo-las-reglas",
+          "slots": ""
+        },
+        {
+          "title": "que capital operare en brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9241621-que-capital-operare-en-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que es trade2earn",
+          "url": "https://help.brightfunded.com/es/articles/9241628-que-es-trade2earn",
+          "slots": ""
+        },
+        {
+          "title": "gano tokens con cada operacion que realizo",
+          "url": "https://help.brightfunded.com/es/articles/9241631-gano-tokens-con-cada-operacion-que-realizo",
+          "slots": ""
+        },
+        {
+          "title": "cuantos brightfunded tokens recibo por lote",
+          "url": "https://help.brightfunded.com/es/articles/9241634-cuantos-brightfunded-tokens-recibo-por-lote",
+          "slots": ""
+        },
+        {
+          "title": "cuales son los beneficios de trading de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9241666-cuales-son-los-beneficios-de-trading-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como obtengo trading perks",
+          "url": "https://help.brightfunded.com/es/articles/9241668-como-obtengo-trading-perks",
+          "slots": ""
+        },
+        {
+          "title": "que trading perks estan disponibles",
+          "url": "https://help.brightfunded.com/es/articles/9241672-que-trading-perks-estan-disponibles",
+          "slots": ""
+        },
+        {
+          "title": "puedo usar varias trading perks en un mismo challenge",
+          "url": "https://help.brightfunded.com/es/articles/9241675-puedo-usar-varias-trading-perks-en-un-mismo-challenge",
+          "slots": ""
+        },
+        {
+          "title": "como puedo recibir pagos",
+          "url": "https://help.brightfunded.com/es/articles/9241681-como-puedo-recibir-pagos",
+          "slots": ""
+        },
+        {
+          "title": "necesito pagar impuestos sobre mis pagos",
+          "url": "https://help.brightfunded.com/es/articles/9241682-necesito-pagar-impuestos-sobre-mis-pagos",
+          "slots": ""
+        },
+        {
+          "title": "necesito pagar comisiones en mis pagos",
+          "url": "https://help.brightfunded.com/es/articles/9241684-necesito-pagar-comisiones-en-mis-pagos",
+          "slots": ""
+        },
+        {
+          "title": "que otras tarifas necesito pagar la tarifa es recurrente",
+          "url": "https://help.brightfunded.com/es/articles/9241687-que-otras-tarifas-necesito-pagar-la-tarifa-es-recurrente",
+          "slots": ""
+        },
+        {
+          "title": "puedo operar con noticias",
+          "url": "https://help.brightfunded.com/es/articles/9241694-puedo-operar-con-noticias",
+          "slots": ""
+        },
+        {
+          "title": "puedo usar ea",
+          "url": "https://help.brightfunded.com/es/articles/9241699-puedo-usar-ea",
+          "slots": "P13"
+        },
+        {
+          "title": "que estrategias estan prohibidas en brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9241704-que-estrategias-estan-prohibidas-en-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "se permite el copy trading",
+          "url": "https://help.brightfunded.com/es/articles/9241709-se-permite-el-copy-trading",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "como puedo conectarme con la comunidad de trading",
+          "url": "https://help.brightfunded.com/es/articles/9241718-como-puedo-conectarme-con-la-comunidad-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "es brightfunded la mejor solucion de trading que puedo encontrar",
+          "url": "https://help.brightfunded.com/es/articles/9241724-es-brightfunded-la-mejor-solucion-de-trading-que-puedo-encontrar",
+          "slots": ""
+        },
+        {
+          "title": "cuales son las comisiones en el entorno simulado de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9268221-cuales-son-las-comisiones-en-el-entorno-simulado-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que instrumentos de criptomonedas puedes negociar en brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9268229-que-instrumentos-de-criptomonedas-puedes-negociar-en-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "de donde proviene el data feed de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9268283-de-donde-proviene-el-data-feed-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como obtengo mi funded account",
+          "url": "https://help.brightfunded.com/es/articles/9268287-como-obtengo-mi-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "esta permitido mantener posiciones durante el fin de semana",
+          "url": "https://help.brightfunded.com/es/articles/9268323-esta-permitido-mantener-posiciones-durante-el-fin-de-semana",
+          "slots": ""
+        },
+        {
+          "title": "como cambiar entre tus cuentas challenge y funded en dxtrade",
+          "url": "https://help.brightfunded.com/es/articles/9268370-como-cambiar-entre-tus-cuentas-challenge-y-funded-en-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "cual es el apalancamiento en el entorno de trading simulado de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9268380-cual-es-el-apalancamiento-en-el-entorno-de-trading-simulado-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "necesito cerrar mis posiciones durante la noche",
+          "url": "https://help.brightfunded.com/es/articles/9268424-necesito-cerrar-mis-posiciones-durante-la-noche",
+          "slots": ""
+        },
+        {
+          "title": "como funciona mi reparto de ganancias en mi cuenta funded",
+          "url": "https://help.brightfunded.com/es/articles/9268736-como-funciona-mi-reparto-de-ganancias-en-mi-cuenta-funded",
+          "slots": ""
+        },
+        {
+          "title": "practicas no autorizadas en brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9268742-practicas-no-autorizadas-en-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que activos instrumentos de trading ofrece brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9268749-que-activos-instrumentos-de-trading-ofrece-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como escalar mi cuenta funded infinitamente",
+          "url": "https://help.brightfunded.com/es/articles/9268774-como-escalar-mi-cuenta-funded-infinitamente",
+          "slots": ""
+        },
+        {
+          "title": "como solicitar tu pago de afiliado en brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9286609-como-solicitar-tu-pago-de-afiliado-en-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "es brightfunded un broker",
+          "url": "https://help.brightfunded.com/es/articles/9286616-es-brightfunded-un-broker",
+          "slots": ""
+        },
+        {
+          "title": "puedo pagar mi challenge con cripto",
+          "url": "https://help.brightfunded.com/es/articles/9286623-puedo-pagar-mi-challenge-con-cripto",
+          "slots": ""
+        },
+        {
+          "title": "que paises estan restringidos en brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9286630-que-paises-estan-restringidos-en-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que son las tarifas de swap",
+          "url": "https://help.brightfunded.com/es/articles/9286673-que-son-las-tarifas-de-swap",
+          "slots": ""
+        },
+        {
+          "title": "como elimino cuentas inactivas bloqueadas de la plataforma de trading",
+          "url": "https://help.brightfunded.com/es/articles/9286692-como-elimino-cuentas-inactivas-bloqueadas-de-la-plataforma-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "como descargar tus tarjetas de pnl",
+          "url": "https://help.brightfunded.com/es/articles/9286708-como-descargar-tus-tarjetas-de-pnl",
+          "slots": ""
+        },
+        {
+          "title": "que graficos son mas similares a tradingview",
+          "url": "https://help.brightfunded.com/es/articles/9286725-que-graficos-son-mas-similares-a-tradingview",
+          "slots": ""
+        },
+        {
+          "title": "como verificar tus credenciales de brightfunded en dxtrade",
+          "url": "https://help.brightfunded.com/es/articles/9286733-como-verificar-tus-credenciales-de-brightfunded-en-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "esta permitido usar una vpn vps en brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9436443-esta-permitido-usar-una-vpn-vps-en-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como funciona la fusion de cuentas",
+          "url": "https://help.brightfunded.com/es/articles/9436456-como-funciona-la-fusion-de-cuentas",
+          "slots": ""
+        },
+        {
+          "title": "puedo cambiar mi wallet address para los pagos",
+          "url": "https://help.brightfunded.com/es/articles/9459980-puedo-cambiar-mi-wallet-address-para-los-pagos",
+          "slots": ""
+        },
+        {
+          "title": "puedo obtener un reembolso por mi challenge de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9460023-puedo-obtener-un-reembolso-por-mi-challenge-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "quien puede convertirse en afiliado de brightfunded",
+          "url": "https://help.brightfunded.com/es/articles/9662025-quien-puede-convertirse-en-afiliado-de-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "politica de promocion de afiliados",
+          "url": "https://help.brightfunded.com/es/articles/9662070-politica-de-promocion-de-afiliados",
+          "slots": ""
+        },
+        {
+          "title": "metodos de pago para afiliados",
+          "url": "https://help.brightfunded.com/es/articles/9662092-metodos-de-pago-para-afiliados",
+          "slots": ""
+        },
+        {
+          "title": "como funciona la regla de cobertura hedging",
+          "url": "https://help.brightfunded.com/es/articles/9680850-como-funciona-la-regla-de-cobertura-hedging",
+          "slots": "P13,P14,P19"
+        },
+        {
+          "title": "como funciona el proceso de kyc",
+          "url": "https://help.brightfunded.com/es/articles/9973224-como-funciona-el-proceso-de-kyc",
+          "slots": ""
+        },
+        {
+          "title": "jak aktywowac linie ask price w dxtrade",
+          "url": "https://help.brightfunded.com/pl/articles/10037430-jak-aktywowac-linie-ask-price-w-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "zrozumienie spreadow i slippage kluczowe czynniki w tradingu",
+          "url": "https://help.brightfunded.com/pl/articles/10709194-zrozumienie-spreadow-i-slippage-kluczowe-czynniki-w-tradingu",
+          "slots": ""
+        },
+        {
+          "title": "polityka obciazen zwrotnych i egzekwowanie",
+          "url": "https://help.brightfunded.com/pl/articles/10717651-polityka-obciazen-zwrotnych-i-egzekwowanie",
+          "slots": ""
+        },
+        {
+          "title": "polityka poufnosci",
+          "url": "https://help.brightfunded.com/pl/articles/10717719-polityka-poufnosci",
+          "slots": ""
+        },
+        {
+          "title": "jak wiadomosci high impact wplywaja na pary walutowe i kryptowalutowe",
+          "url": "https://help.brightfunded.com/pl/articles/10773763-jak-wiadomosci-high-impact-wplywaja-na-pary-walutowe-i-kryptowalutowe",
+          "slots": ""
+        },
+        {
+          "title": "jakie platformy tradingowe oferuje brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/10855521-jakie-platformy-tradingowe-oferuje-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jak przelaczac sie miedzy wyzwaniami a kontami funded na ctrader",
+          "url": "https://help.brightfunded.com/pl/articles/10856644-jak-przelaczac-sie-miedzy-wyzwaniami-a-kontami-funded-na-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "jak sprawdzic oplaty swap na dxtrade",
+          "url": "https://help.brightfunded.com/pl/articles/10856792-jak-sprawdzic-oplaty-swap-na-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "jak sprawdzic swoje dane logowania brightfunded w ctrader",
+          "url": "https://help.brightfunded.com/pl/articles/10865649-jak-sprawdzic-swoje-dane-logowania-brightfunded-w-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "jak zalogowac sie do ctrader po zakupie konta",
+          "url": "https://help.brightfunded.com/pl/articles/10866181-jak-zalogowac-sie-do-ctrader-po-zakupie-konta",
+          "slots": ""
+        },
+        {
+          "title": "jak sprawdzic oplaty swap na ctrader",
+          "url": "https://help.brightfunded.com/pl/articles/10915704-jak-sprawdzic-oplaty-swap-na-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "zrozumienie margin call",
+          "url": "https://help.brightfunded.com/pl/articles/11058603-zrozumienie-margin-call",
+          "slots": ""
+        },
+        {
+          "title": "polityka jednego konta wazna informacja dla wszystkich naszych uzytkownikow",
+          "url": "https://help.brightfunded.com/pl/articles/11079360-polityka-jednego-konta-wazna-informacja-dla-wszystkich-naszych-uzytkownikow",
+          "slots": ""
+        },
+        {
+          "title": "slownik tradingowy",
+          "url": "https://help.brightfunded.com/pl/articles/11106540-slownik-tradingowy",
+          "slots": ""
+        },
+        {
+          "title": "jak moge zlozyc wniosek o wyplate",
+          "url": "https://help.brightfunded.com/pl/articles/11468668-jak-moge-zlozyc-wniosek-o-wyplate",
+          "slots": ""
+        },
+        {
+          "title": "jak zaczac z brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/11484605-jak-zaczac-z-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jak zmienic platforme",
+          "url": "https://help.brightfunded.com/pl/articles/11484652-jak-zmienic-platforme",
+          "slots": ""
+        },
+        {
+          "title": "czym jest prop firm i jak dziala",
+          "url": "https://help.brightfunded.com/pl/articles/11536942-czym-jest-prop-firm-i-jak-dziala",
+          "slots": ""
+        },
+        {
+          "title": "polityka dotyczaca braku aktywnosci",
+          "url": "https://help.brightfunded.com/pl/articles/11774572-polityka-dotyczaca-braku-aktywnosci",
+          "slots": ""
+        },
+        {
+          "title": "czy brightfunded powinno podlegac regulacjom",
+          "url": "https://help.brightfunded.com/pl/articles/11790762-czy-brightfunded-powinno-podlegac-regulacjom",
+          "slots": ""
+        },
+        {
+          "title": "co nowego w programie partnerskim brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/11809042-co-nowego-w-programie-partnerskim-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "najczesciej zadawane pytania ogolne",
+          "url": "https://help.brightfunded.com/pl/articles/12000749-najczesciej-zadawane-pytania-ogolne",
+          "slots": ""
+        },
+        {
+          "title": "jak zostac partnerem afiliacyjnym w brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/12041719-jak-zostac-partnerem-afiliacyjnym-w-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "czy mozna polaczyc tradingview z brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/12051588-czy-mozna-polaczyc-tradingview-z-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "przewodnik po funkcjach promocji",
+          "url": "https://help.brightfunded.com/pl/articles/12158444-przewodnik-po-funkcjach-promocji",
+          "slots": ""
+        },
+        {
+          "title": "jak dziala moj dzienny dozwolony limit strat",
+          "url": "https://help.brightfunded.com/pl/articles/12291765-jak-dziala-moj-dzienny-dozwolony-limit-strat",
+          "slots": ""
+        },
+        {
+          "title": "jak sprawdzic oplaty swap na mt5",
+          "url": "https://help.brightfunded.com/pl/articles/12320307-jak-sprawdzic-oplaty-swap-na-mt5",
+          "slots": ""
+        },
+        {
+          "title": "jak polaczyc swoje konta w mt5",
+          "url": "https://help.brightfunded.com/pl/articles/12320527-jak-polaczyc-swoje-konta-w-mt5",
+          "slots": ""
+        },
+        {
+          "title": "jak przelaczac sie miedzy wyzwaniami a kontami funded na mt5",
+          "url": "https://help.brightfunded.com/pl/articles/12320715-jak-przelaczac-sie-miedzy-wyzwaniami-a-kontami-funded-na-mt5",
+          "slots": ""
+        },
+        {
+          "title": "jak sprawdzic swoje dane logowania brightfunded w mt5",
+          "url": "https://help.brightfunded.com/pl/articles/12333004-jak-sprawdzic-swoje-dane-logowania-brightfunded-w-mt5",
+          "slots": ""
+        },
+        {
+          "title": "czy brightfunded ma zasade consistency",
+          "url": "https://help.brightfunded.com/pl/articles/12577176-czy-brightfunded-ma-zasade-consistency",
+          "slots": "P07,P14"
+        },
+        {
+          "title": "jak odebrac swoja nagrode z giveawayu",
+          "url": "https://help.brightfunded.com/pl/articles/12656752-jak-odebrac-swoja-nagrode-z-giveawayu",
+          "slots": ""
+        },
+        {
+          "title": "jak zalogowac sie na swoje konto mt5",
+          "url": "https://help.brightfunded.com/pl/articles/12929320-jak-zalogowac-sie-na-swoje-konto-mt5",
+          "slots": ""
+        },
+        {
+          "title": "jak zalogowac sie na swoje konto dxtrade",
+          "url": "https://help.brightfunded.com/pl/articles/12929353-jak-zalogowac-sie-na-swoje-konto-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "kryteria opinii dotyczace bf token",
+          "url": "https://help.brightfunded.com/pl/articles/13011391-kryteria-opinii-dotyczace-bf-token",
+          "slots": ""
+        },
+        {
+          "title": "czy moge handlowac w weekendy",
+          "url": "https://help.brightfunded.com/pl/articles/13213315-czy-moge-handlowac-w-weekendy",
+          "slots": "P11"
+        },
+        {
+          "title": "15 nagrody za zysk w fazie ewaluacji",
+          "url": "https://help.brightfunded.com/pl/articles/13367202-15-nagrody-za-zysk-w-fazie-ewaluacji",
+          "slots": ""
+        },
+        {
+          "title": "jak czesciowo zamykac pozycje w ctrader",
+          "url": "https://help.brightfunded.com/pl/articles/13701522-jak-czesciowo-zamykac-pozycje-w-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "jak czesciowo zamykac pozycje w metatrader 5",
+          "url": "https://help.brightfunded.com/pl/articles/13701531-jak-czesciowo-zamykac-pozycje-w-metatrader-5",
+          "slots": ""
+        },
+        {
+          "title": "jak zrealizowac brightfunded tokens",
+          "url": "https://help.brightfunded.com/pl/articles/13834223-jak-zrealizowac-brightfunded-tokens",
+          "slots": ""
+        },
+        {
+          "title": "jak zastosowac kod rabatowy",
+          "url": "https://help.brightfunded.com/pl/articles/13939461-jak-zastosowac-kod-rabatowy",
+          "slots": ""
+        },
+        {
+          "title": "brightfunded 1 step",
+          "url": "https://help.brightfunded.com/pl/articles/14284743-brightfunded-1-step",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step bright",
+          "url": "https://help.brightfunded.com/pl/articles/14284817-brightfunded-2-step-bright",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded 2 step classic",
+          "url": "https://help.brightfunded.com/pl/articles/14284844-brightfunded-2-step-classic",
+          "slots": "P20,P01,P03,P05,P06"
+        },
+        {
+          "title": "brightfunded original accounts",
+          "url": "https://help.brightfunded.com/pl/articles/14285762-brightfunded-original-accounts",
+          "slots": ""
+        },
+        {
+          "title": "czym jest market depth",
+          "url": "https://help.brightfunded.com/pl/articles/14853393-czym-jest-market-depth",
+          "slots": ""
+        },
+        {
+          "title": "jak zaczac",
+          "url": "https://help.brightfunded.com/pl/articles/8204620-jak-zaczac",
+          "slots": ""
+        },
+        {
+          "title": "dlaczego warto dolaczyc do brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/8204986-dlaczego-warto-dolaczyc-do-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "czym jest brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/8205788-czym-jest-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "kto moze dolaczyc do brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/8205805-kto-moze-dolaczyc-do-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "czy brightfunded to powazna firma",
+          "url": "https://help.brightfunded.com/pl/articles/8205812-czy-brightfunded-to-powazna-firma",
+          "slots": ""
+        },
+        {
+          "title": "jak moge zostac funded traderem",
+          "url": "https://help.brightfunded.com/pl/articles/9241590-jak-moge-zostac-funded-traderem",
+          "slots": ""
+        },
+        {
+          "title": "jak dlugo trwa proces ewaluacyjny",
+          "url": "https://help.brightfunded.com/pl/articles/9241600-jak-dlugo-trwa-proces-ewaluacyjny",
+          "slots": ""
+        },
+        {
+          "title": "jakie sa obecne zasady procesu ewaluacyjnego",
+          "url": "https://help.brightfunded.com/pl/articles/9241611-jakie-sa-obecne-zasady-procesu-ewaluacyjnego",
+          "slots": ""
+        },
+        {
+          "title": "co sie stanie jesli narusze zasady",
+          "url": "https://help.brightfunded.com/pl/articles/9241613-co-sie-stanie-jesli-narusze-zasady",
+          "slots": ""
+        },
+        {
+          "title": "jakim kapitalem bede handlowac w brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9241621-jakim-kapitalem-bede-handlowac-w-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "czym jest trade2earn",
+          "url": "https://help.brightfunded.com/pl/articles/9241628-czym-jest-trade2earn",
+          "slots": ""
+        },
+        {
+          "title": "czy zarabiam tokeny za kazda transakcje",
+          "url": "https://help.brightfunded.com/pl/articles/9241631-czy-zarabiam-tokeny-za-kazda-transakcje",
+          "slots": ""
+        },
+        {
+          "title": "ile tokenow brightfunded otrzymuje za kazdy lot",
+          "url": "https://help.brightfunded.com/pl/articles/9241634-ile-tokenow-brightfunded-otrzymuje-za-kazdy-lot",
+          "slots": ""
+        },
+        {
+          "title": "jakie sa korzysci tradingowe brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9241666-jakie-sa-korzysci-tradingowe-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jak zdobyc przywileje tradingowe",
+          "url": "https://help.brightfunded.com/pl/articles/9241668-jak-zdobyc-przywileje-tradingowe",
+          "slots": ""
+        },
+        {
+          "title": "jakie przywileje tradingowe sa dostepne",
+          "url": "https://help.brightfunded.com/pl/articles/9241672-jakie-przywileje-tradingowe-sa-dostepne",
+          "slots": "P20"
+        },
+        {
+          "title": "czy moge korzystac z wielu przywilejow tradingowych w jednym wyzwaniu",
+          "url": "https://help.brightfunded.com/pl/articles/9241675-czy-moge-korzystac-z-wielu-przywilejow-tradingowych-w-jednym-wyzwaniu",
+          "slots": ""
+        },
+        {
+          "title": "jak moge otrzymac platnosc",
+          "url": "https://help.brightfunded.com/pl/articles/9241681-jak-moge-otrzymac-platnosc",
+          "slots": ""
+        },
+        {
+          "title": "czy musze placic podatki od swoich wyplat",
+          "url": "https://help.brightfunded.com/pl/articles/9241682-czy-musze-placic-podatki-od-swoich-wyplat",
+          "slots": ""
+        },
+        {
+          "title": "czy od moich wyplat pobierane sa oplaty",
+          "url": "https://help.brightfunded.com/pl/articles/9241684-czy-od-moich-wyplat-pobierane-sa-oplaty",
+          "slots": ""
+        },
+        {
+          "title": "jakie inne oplaty musze ponosic czy oplata jest cykliczna",
+          "url": "https://help.brightfunded.com/pl/articles/9241687-jakie-inne-oplaty-musze-ponosic-czy-oplata-jest-cykliczna",
+          "slots": ""
+        },
+        {
+          "title": "czy moge handlowac podczas publikacji newsow",
+          "url": "https://help.brightfunded.com/pl/articles/9241694-czy-moge-handlowac-podczas-publikacji-newsow",
+          "slots": "P20,P10,P16"
+        },
+        {
+          "title": "czy moge uzywac ea",
+          "url": "https://help.brightfunded.com/pl/articles/9241699-czy-moge-uzywac-ea",
+          "slots": "P13"
+        },
+        {
+          "title": "jakie strategie sa zabronione w brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9241704-jakie-strategie-sa-zabronione-w-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "czy copy trading jest dozwolony",
+          "url": "https://help.brightfunded.com/pl/articles/9241709-czy-copy-trading-jest-dozwolony",
+          "slots": "P14,P19"
+        },
+        {
+          "title": "jak moge polaczyc sie ze spolecznoscia tradingowa",
+          "url": "https://help.brightfunded.com/pl/articles/9241718-jak-moge-polaczyc-sie-ze-spolecznoscia-tradingowa",
+          "slots": ""
+        },
+        {
+          "title": "czy brightfunded to najlepsze rozwiazanie tradingowe jakie moge znalezc",
+          "url": "https://help.brightfunded.com/pl/articles/9241724-czy-brightfunded-to-najlepsze-rozwiazanie-tradingowe-jakie-moge-znalezc",
+          "slots": ""
+        },
+        {
+          "title": "jakie prowizje obowiazuja w symulowanym srodowisku brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9268221-jakie-prowizje-obowiazuja-w-symulowanym-srodowisku-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jakimi instrumentami kryptowalutowymi mozna handlowac w brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9268229-jakimi-instrumentami-kryptowalutowymi-mozna-handlowac-w-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "skad pochodzi feed danych brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9268283-skad-pochodzi-feed-danych-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jak uzyskac konto funded account",
+          "url": "https://help.brightfunded.com/pl/articles/9268287-jak-uzyskac-konto-funded-account",
+          "slots": ""
+        },
+        {
+          "title": "czy dozwolone jest utrzymywanie pozycji przez weekend",
+          "url": "https://help.brightfunded.com/pl/articles/9268323-czy-dozwolone-jest-utrzymywanie-pozycji-przez-weekend",
+          "slots": "P11"
+        },
+        {
+          "title": "jak przelaczac sie miedzy wyzwaniami a kontami funded na dxtrade",
+          "url": "https://help.brightfunded.com/pl/articles/9268370-jak-przelaczac-sie-miedzy-wyzwaniami-a-kontami-funded-na-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "jaka jest dzwignia w symulowanym srodowisku tradingowym brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9268380-jaka-jest-dzwignia-w-symulowanym-srodowisku-tradingowym-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "czy musze zamykac swoje pozycje na noc",
+          "url": "https://help.brightfunded.com/pl/articles/9268424-czy-musze-zamykac-swoje-pozycje-na-noc",
+          "slots": ""
+        },
+        {
+          "title": "jak dziala podzial wynagrodzenia na moim koncie funded",
+          "url": "https://help.brightfunded.com/pl/articles/9268736-jak-dziala-podzial-wynagrodzenia-na-moim-koncie-funded",
+          "slots": ""
+        },
+        {
+          "title": "niedozwolone praktyki w brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9268742-niedozwolone-praktyki-w-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jakie aktywa instrumenty tradingowe oferuje brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9268749-jakie-aktywa-instrumenty-tradingowe-oferuje-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jak nieskonczenie skalowac swoje konto funded",
+          "url": "https://help.brightfunded.com/pl/articles/9268774-jak-nieskonczenie-skalowac-swoje-konto-funded",
+          "slots": ""
+        },
+        {
+          "title": "jak zlozyc wniosek o wyplate partnerska brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9286609-jak-zlozyc-wniosek-o-wyplate-partnerska-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "czy brightfunded jest brokerem",
+          "url": "https://help.brightfunded.com/pl/articles/9286616-czy-brightfunded-jest-brokerem",
+          "slots": ""
+        },
+        {
+          "title": "czy moge zaplacic za swoje wyzwanie kryptowaluta",
+          "url": "https://help.brightfunded.com/pl/articles/9286623-czy-moge-zaplacic-za-swoje-wyzwanie-kryptowaluta",
+          "slots": ""
+        },
+        {
+          "title": "jakie kraje sa objete ograniczeniami w brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9286630-jakie-kraje-sa-objete-ograniczeniami-w-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "jakie sa oplaty swap",
+          "url": "https://help.brightfunded.com/pl/articles/9286673-jakie-sa-oplaty-swap",
+          "slots": ""
+        },
+        {
+          "title": "jak usunac nieaktywne naruszone konta z platformy tradingowej",
+          "url": "https://help.brightfunded.com/pl/articles/9286692-jak-usunac-nieaktywne-naruszone-konta-z-platformy-tradingowej",
+          "slots": ""
+        },
+        {
+          "title": "jak pobrac swoje karty pnl",
+          "url": "https://help.brightfunded.com/pl/articles/9286708-jak-pobrac-swoje-karty-pnl",
+          "slots": ""
+        },
+        {
+          "title": "ktore wykresy sa najbardziej zblizone do tradingview",
+          "url": "https://help.brightfunded.com/pl/articles/9286725-ktore-wykresy-sa-najbardziej-zblizone-do-tradingview",
+          "slots": ""
+        },
+        {
+          "title": "jak sprawdzic swoje dane logowania brightfunded w dxtrade",
+          "url": "https://help.brightfunded.com/pl/articles/9286733-jak-sprawdzic-swoje-dane-logowania-brightfunded-w-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "czy korzystanie z vpn vps w brightfunded jest dozwolone",
+          "url": "https://help.brightfunded.com/pl/articles/9436443-czy-korzystanie-z-vpn-vps-w-brightfunded-jest-dozwolone",
+          "slots": ""
+        },
+        {
+          "title": "jak dziala laczenie kont",
+          "url": "https://help.brightfunded.com/pl/articles/9436456-jak-dziala-laczenie-kont",
+          "slots": ""
+        },
+        {
+          "title": "czy moge zmienic adres portfela do wyplat",
+          "url": "https://help.brightfunded.com/pl/articles/9459980-czy-moge-zmienic-adres-portfela-do-wyplat",
+          "slots": ""
+        },
+        {
+          "title": "czy moge otrzymac zwrot srodkow za moje wyzwanie brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9460023-czy-moge-otrzymac-zwrot-srodkow-za-moje-wyzwanie-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "kto moze zostac partnerem brightfunded",
+          "url": "https://help.brightfunded.com/pl/articles/9662025-kto-moze-zostac-partnerem-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "polityka promocji partnerskiej",
+          "url": "https://help.brightfunded.com/pl/articles/9662070-polityka-promocji-partnerskiej",
+          "slots": ""
+        },
+        {
+          "title": "metody wyplat partnerskich",
+          "url": "https://help.brightfunded.com/pl/articles/9662092-metody-wyplat-partnerskich",
+          "slots": ""
+        },
+        {
+          "title": "jak dziala zasada hedgingu",
+          "url": "https://help.brightfunded.com/pl/articles/9680850-jak-dziala-zasada-hedgingu",
+          "slots": "P19"
+        },
+        {
+          "title": "jak dziala proces kyc",
+          "url": "https://help.brightfunded.com/pl/articles/9973224-jak-dziala-proces-kyc",
+          "slots": ""
+        },
+        {
+          "title": "como ativar a linha de preco ask no dxtrade",
+          "url": "https://help.brightfunded.com/pt/articles/10037430-como-ativar-a-linha-de-preco-ask-no-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "compreender spreads e slippage fatores importantes no trading",
+          "url": "https://help.brightfunded.com/pt/articles/10709194-compreender-spreads-e-slippage-fatores-importantes-no-trading",
+          "slots": ""
+        },
+        {
+          "title": "politica de chargeback aplicacao",
+          "url": "https://help.brightfunded.com/pt/articles/10717651-politica-de-chargeback-aplicacao",
+          "slots": ""
+        },
+        {
+          "title": "politica de confidencialidade",
+          "url": "https://help.brightfunded.com/pt/articles/10717719-politica-de-confidencialidade",
+          "slots": ""
+        },
+        {
+          "title": "como noticias de alto impacto afetam pares de moedas e criptomoedas",
+          "url": "https://help.brightfunded.com/pt/articles/10773763-como-noticias-de-alto-impacto-afetam-pares-de-moedas-e-criptomoedas",
+          "slots": ""
+        },
+        {
+          "title": "que plataforma de trading a brightfunded oferece",
+          "url": "https://help.brightfunded.com/pt/articles/10855521-que-plataforma-de-trading-a-brightfunded-oferece",
+          "slots": ""
+        },
+        {
+          "title": "como alternar entre os seus challenges e contas financiadas no ctrader",
+          "url": "https://help.brightfunded.com/pt/articles/10856644-como-alternar-entre-os-seus-challenges-e-contas-financiadas-no-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "como verificar as taxas de swap no dxtrade",
+          "url": "https://help.brightfunded.com/pt/articles/10856792-como-verificar-as-taxas-de-swap-no-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "como verificar as suas credenciais da brightfunded no ctrader",
+          "url": "https://help.brightfunded.com/pt/articles/10865649-como-verificar-as-suas-credenciais-da-brightfunded-no-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "como faco login no ctrader depois de comprar uma conta",
+          "url": "https://help.brightfunded.com/pt/articles/10866181-como-faco-login-no-ctrader-depois-de-comprar-uma-conta",
+          "slots": ""
+        },
+        {
+          "title": "como verificar as taxas de swap no ctrader",
+          "url": "https://help.brightfunded.com/pt/articles/10915704-como-verificar-as-taxas-de-swap-no-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "compreender margin calls",
+          "url": "https://help.brightfunded.com/pt/articles/11058603-compreender-margin-calls",
+          "slots": ""
+        },
+        {
+          "title": "politica de conta unica importante para todos os nossos usuarios",
+          "url": "https://help.brightfunded.com/pt/articles/11079360-politica-de-conta-unica-importante-para-todos-os-nossos-usuarios",
+          "slots": ""
+        },
+        {
+          "title": "glossario de trading",
+          "url": "https://help.brightfunded.com/pt/articles/11106540-glossario-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "como posso solicitar o meu pagamento",
+          "url": "https://help.brightfunded.com/pt/articles/11468668-como-posso-solicitar-o-meu-pagamento",
+          "slots": ""
+        },
+        {
+          "title": "como comecar com a brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/11484605-como-comecar-com-a-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como posso mudar de plataforma",
+          "url": "https://help.brightfunded.com/pt/articles/11484652-como-posso-mudar-de-plataforma",
+          "slots": ""
+        },
+        {
+          "title": "o que e uma prop firm e como funciona",
+          "url": "https://help.brightfunded.com/pt/articles/11536942-o-que-e-uma-prop-firm-e-como-funciona",
+          "slots": ""
+        },
+        {
+          "title": "politica de regra de inatividade",
+          "url": "https://help.brightfunded.com/pt/articles/11774572-politica-de-regra-de-inatividade",
+          "slots": ""
+        },
+        {
+          "title": "a brightfunded deveria ser regulamentada",
+          "url": "https://help.brightfunded.com/pt/articles/11790762-a-brightfunded-deveria-ser-regulamentada",
+          "slots": ""
+        },
+        {
+          "title": "novidades no programa de afiliados da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/11809042-novidades-no-programa-de-afiliados-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "perguntas gerais mais frequentes",
+          "url": "https://help.brightfunded.com/pt/articles/12000749-perguntas-gerais-mais-frequentes",
+          "slots": ""
+        },
+        {
+          "title": "como se tornar um afiliado na brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/12041719-como-se-tornar-um-afiliado-na-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "e possivel conectar o tradingview a brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/12051588-e-possivel-conectar-o-tradingview-a-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "guia de funcionalidades da promocao",
+          "url": "https://help.brightfunded.com/pt/articles/12158444-guia-de-funcionalidades-da-promocao",
+          "slots": ""
+        },
+        {
+          "title": "como funciona a minha perda diaria permitida",
+          "url": "https://help.brightfunded.com/pt/articles/12291765-como-funciona-a-minha-perda-diaria-permitida",
+          "slots": ""
+        },
+        {
+          "title": "como verificar as taxas de swap no mt5",
+          "url": "https://help.brightfunded.com/pt/articles/12320307-como-verificar-as-taxas-de-swap-no-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como conectar as suas contas no mt5",
+          "url": "https://help.brightfunded.com/pt/articles/12320527-como-conectar-as-suas-contas-no-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como alternar entre os seus challenges e contas financiadas no mt5",
+          "url": "https://help.brightfunded.com/pt/articles/12320715-como-alternar-entre-os-seus-challenges-e-contas-financiadas-no-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como verificar as suas credenciais da brightfunded no mt5",
+          "url": "https://help.brightfunded.com/pt/articles/12333004-como-verificar-as-suas-credenciais-da-brightfunded-no-mt5",
+          "slots": ""
+        },
+        {
+          "title": "a brightfunded tem uma regra de consistencia",
+          "url": "https://help.brightfunded.com/pt/articles/12577176-a-brightfunded-tem-uma-regra-de-consistencia",
+          "slots": ""
+        },
+        {
+          "title": "como reivindicar o seu giveaway",
+          "url": "https://help.brightfunded.com/pt/articles/12656752-como-reivindicar-o-seu-giveaway",
+          "slots": ""
+        },
+        {
+          "title": "como faco login na minha conta mt5",
+          "url": "https://help.brightfunded.com/pt/articles/12929320-como-faco-login-na-minha-conta-mt5",
+          "slots": ""
+        },
+        {
+          "title": "como faco login na minha conta dxtrade",
+          "url": "https://help.brightfunded.com/pt/articles/12929353-como-faco-login-na-minha-conta-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "criterios de feedback do token bf",
+          "url": "https://help.brightfunded.com/pt/articles/13011391-criterios-de-feedback-do-token-bf",
+          "slots": ""
+        },
+        {
+          "title": "posso negociar ao fim de semana",
+          "url": "https://help.brightfunded.com/pt/articles/13213315-posso-negociar-ao-fim-de-semana",
+          "slots": ""
+        },
+        {
+          "title": "recompensa de 15 dos lucros da avaliacao",
+          "url": "https://help.brightfunded.com/pt/articles/13367202-recompensa-de-15-dos-lucros-da-avaliacao",
+          "slots": ""
+        },
+        {
+          "title": "como fazer parciais no ctrader",
+          "url": "https://help.brightfunded.com/pt/articles/13701522-como-fazer-parciais-no-ctrader",
+          "slots": ""
+        },
+        {
+          "title": "como fazer parciais no metatrader 5",
+          "url": "https://help.brightfunded.com/pt/articles/13701531-como-fazer-parciais-no-metatrader-5",
+          "slots": ""
+        },
+        {
+          "title": "como resgatar tokens da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/13834223-como-resgatar-tokens-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como aplicar um codigo de desconto",
+          "url": "https://help.brightfunded.com/pt/articles/13939461-como-aplicar-um-codigo-de-desconto",
+          "slots": ""
+        },
+        {
+          "title": "brightfunded 1 step",
+          "url": "https://help.brightfunded.com/pt/articles/14284743-brightfunded-1-step",
+          "slots": "P20"
+        },
+        {
+          "title": "brightfunded 2 step bright",
+          "url": "https://help.brightfunded.com/pt/articles/14284817-brightfunded-2-step-bright",
+          "slots": "P20"
+        },
+        {
+          "title": "brightfunded 2 step classic",
+          "url": "https://help.brightfunded.com/pt/articles/14284844-brightfunded-2-step-classic",
+          "slots": "P20"
+        },
+        {
+          "title": "brightfunded original accounts",
+          "url": "https://help.brightfunded.com/pt/articles/14285762-brightfunded-original-accounts",
+          "slots": ""
+        },
+        {
+          "title": "o que e market depth",
+          "url": "https://help.brightfunded.com/pt/articles/14853393-o-que-e-market-depth",
+          "slots": ""
+        },
+        {
+          "title": "como comecar",
+          "url": "https://help.brightfunded.com/pt/articles/8204620-como-comecar",
+          "slots": ""
+        },
+        {
+          "title": "por que devo me juntar a brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/8204986-por-que-devo-me-juntar-a-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que e brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/8205788-que-e-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "quem pode se juntar a brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/8205805-quem-pode-se-juntar-a-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "a brightfunded e uma empresa seria",
+          "url": "https://help.brightfunded.com/pt/articles/8205812-a-brightfunded-e-uma-empresa-seria",
+          "slots": ""
+        },
+        {
+          "title": "como posso obter financiamento",
+          "url": "https://help.brightfunded.com/pt/articles/9241590-como-posso-obter-financiamento",
+          "slots": ""
+        },
+        {
+          "title": "quanto tempo demora o processo de avaliacao",
+          "url": "https://help.brightfunded.com/pt/articles/9241600-quanto-tempo-demora-o-processo-de-avaliacao",
+          "slots": ""
+        },
+        {
+          "title": "quais sao as regras atuais para o processo de avaliacao",
+          "url": "https://help.brightfunded.com/pt/articles/9241611-quais-sao-as-regras-atuais-para-o-processo-de-avaliacao",
+          "slots": ""
+        },
+        {
+          "title": "o que acontece se eu violar as regras",
+          "url": "https://help.brightfunded.com/pt/articles/9241613-o-que-acontece-se-eu-violar-as-regras",
+          "slots": ""
+        },
+        {
+          "title": "com que capital vou negociar na brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9241621-com-que-capital-vou-negociar-na-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "o que e o trade2earn",
+          "url": "https://help.brightfunded.com/pt/articles/9241628-o-que-e-o-trade2earn",
+          "slots": ""
+        },
+        {
+          "title": "ganho tokens com cada operacao que faco",
+          "url": "https://help.brightfunded.com/pt/articles/9241631-ganho-tokens-com-cada-operacao-que-faco",
+          "slots": ""
+        },
+        {
+          "title": "quantos brightfunded tokens recebo por lote",
+          "url": "https://help.brightfunded.com/pt/articles/9241634-quantos-brightfunded-tokens-recebo-por-lote",
+          "slots": ""
+        },
+        {
+          "title": "quais sao os beneficios de trading da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9241666-quais-sao-os-beneficios-de-trading-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como obter beneficios de trading",
+          "url": "https://help.brightfunded.com/pt/articles/9241668-como-obter-beneficios-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "quais beneficios de trading estao disponiveis",
+          "url": "https://help.brightfunded.com/pt/articles/9241672-quais-beneficios-de-trading-estao-disponiveis",
+          "slots": ""
+        },
+        {
+          "title": "posso usar varios beneficios de trading num unico challenge",
+          "url": "https://help.brightfunded.com/pt/articles/9241675-posso-usar-varios-beneficios-de-trading-num-unico-challenge",
+          "slots": ""
+        },
+        {
+          "title": "como posso receber pagamentos",
+          "url": "https://help.brightfunded.com/pt/articles/9241681-como-posso-receber-pagamentos",
+          "slots": ""
+        },
+        {
+          "title": "preciso pagar impostos sobre os meus pagamentos",
+          "url": "https://help.brightfunded.com/pt/articles/9241682-preciso-pagar-impostos-sobre-os-meus-pagamentos",
+          "slots": ""
+        },
+        {
+          "title": "preciso pagar taxas nos levantamentos",
+          "url": "https://help.brightfunded.com/pt/articles/9241684-preciso-pagar-taxas-nos-levantamentos",
+          "slots": ""
+        },
+        {
+          "title": "que outras taxas preciso pagar a taxa e recorrente",
+          "url": "https://help.brightfunded.com/pt/articles/9241687-que-outras-taxas-preciso-pagar-a-taxa-e-recorrente",
+          "slots": ""
+        },
+        {
+          "title": "posso negociar durante noticias",
+          "url": "https://help.brightfunded.com/pt/articles/9241694-posso-negociar-durante-noticias",
+          "slots": ""
+        },
+        {
+          "title": "posso usar ea",
+          "url": "https://help.brightfunded.com/pt/articles/9241699-posso-usar-ea",
+          "slots": "P13"
+        },
+        {
+          "title": "quais estrategias sao proibidas na brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9241704-quais-estrategias-sao-proibidas-na-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "o copy trading e permitido",
+          "url": "https://help.brightfunded.com/pt/articles/9241709-o-copy-trading-e-permitido",
+          "slots": "P14"
+        },
+        {
+          "title": "como posso conectar me com a comunidade de trading",
+          "url": "https://help.brightfunded.com/pt/articles/9241718-como-posso-conectar-me-com-a-comunidade-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "a brightfunded e a melhor solucao de trading que posso encontrar",
+          "url": "https://help.brightfunded.com/pt/articles/9241724-a-brightfunded-e-a-melhor-solucao-de-trading-que-posso-encontrar",
+          "slots": ""
+        },
+        {
+          "title": "quais sao as comissoes no ambiente simulado da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9268221-quais-sao-as-comissoes-no-ambiente-simulado-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "quais instrumentos de criptomoedas podem ser negociados na brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9268229-quais-instrumentos-de-criptomoedas-podem-ser-negociados-na-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "de onde vem o data feed da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9268283-de-onde-vem-o-data-feed-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como posso obter a minha conta funded",
+          "url": "https://help.brightfunded.com/pt/articles/9268287-como-posso-obter-a-minha-conta-funded",
+          "slots": ""
+        },
+        {
+          "title": "e permitido manter posicoes abertas durante o fim de semana",
+          "url": "https://help.brightfunded.com/pt/articles/9268323-e-permitido-manter-posicoes-abertas-durante-o-fim-de-semana",
+          "slots": ""
+        },
+        {
+          "title": "como alternar entre os seus challenges e contas financiadas no dxtrade",
+          "url": "https://help.brightfunded.com/pt/articles/9268370-como-alternar-entre-os-seus-challenges-e-contas-financiadas-no-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "qual e a alavancagem no ambiente de trading simulado da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9268380-qual-e-a-alavancagem-no-ambiente-de-trading-simulado-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "preciso fechar as minhas posicoes durante a noite",
+          "url": "https://help.brightfunded.com/pt/articles/9268424-preciso-fechar-as-minhas-posicoes-durante-a-noite",
+          "slots": ""
+        },
+        {
+          "title": "como funciona a minha divisao de recompensas na minha conta financiada",
+          "url": "https://help.brightfunded.com/pt/articles/9268736-como-funciona-a-minha-divisao-de-recompensas-na-minha-conta-financiada",
+          "slots": ""
+        },
+        {
+          "title": "praticas nao autorizadas na brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9268742-praticas-nao-autorizadas-na-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "que ativos instrumentos de trading a brightfunded oferece",
+          "url": "https://help.brightfunded.com/pt/articles/9268749-que-ativos-instrumentos-de-trading-a-brightfunded-oferece",
+          "slots": ""
+        },
+        {
+          "title": "como aumentar a minha conta financiada infinitamente",
+          "url": "https://help.brightfunded.com/pt/articles/9268774-como-aumentar-a-minha-conta-financiada-infinitamente",
+          "slots": ""
+        },
+        {
+          "title": "como solicitar o seu pagamento de afiliado da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9286609-como-solicitar-o-seu-pagamento-de-afiliado-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "a brightfunded e um broker",
+          "url": "https://help.brightfunded.com/pt/articles/9286616-a-brightfunded-e-um-broker",
+          "slots": ""
+        },
+        {
+          "title": "posso pagar o meu challenge com cripto",
+          "url": "https://help.brightfunded.com/pt/articles/9286623-posso-pagar-o-meu-challenge-com-cripto",
+          "slots": ""
+        },
+        {
+          "title": "quais paises estao restritos na brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9286630-quais-paises-estao-restritos-na-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "quais sao as taxas de swap",
+          "url": "https://help.brightfunded.com/pt/articles/9286673-quais-sao-as-taxas-de-swap",
+          "slots": ""
+        },
+        {
+          "title": "como remover contas inativas violadas da plataforma de trading",
+          "url": "https://help.brightfunded.com/pt/articles/9286692-como-remover-contas-inativas-violadas-da-plataforma-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "como baixar seus cartoes de pnl",
+          "url": "https://help.brightfunded.com/pt/articles/9286708-como-baixar-seus-cartoes-de-pnl",
+          "slots": ""
+        },
+        {
+          "title": "quais graficos sao mais semelhantes ao tradingview",
+          "url": "https://help.brightfunded.com/pt/articles/9286725-quais-graficos-sao-mais-semelhantes-ao-tradingview",
+          "slots": ""
+        },
+        {
+          "title": "como verificar as suas credenciais da brightfunded no dxtrade",
+          "url": "https://help.brightfunded.com/pt/articles/9286733-como-verificar-as-suas-credenciais-da-brightfunded-no-dxtrade",
+          "slots": ""
+        },
+        {
+          "title": "e permitido usar uma vpn vps na brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9436443-e-permitido-usar-uma-vpn-vps-na-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "como funciona a fusao de contas",
+          "url": "https://help.brightfunded.com/pt/articles/9436456-como-funciona-a-fusao-de-contas",
+          "slots": ""
+        },
+        {
+          "title": "posso alterar o meu endereco de carteira para pagamentos",
+          "url": "https://help.brightfunded.com/pt/articles/9459980-posso-alterar-o-meu-endereco-de-carteira-para-pagamentos",
+          "slots": ""
+        },
+        {
+          "title": "posso obter um reembolso do meu brightfunded challenge",
+          "url": "https://help.brightfunded.com/pt/articles/9460023-posso-obter-um-reembolso-do-meu-brightfunded-challenge",
+          "slots": ""
+        },
+        {
+          "title": "quem pode tornar se afiliado da brightfunded",
+          "url": "https://help.brightfunded.com/pt/articles/9662025-quem-pode-tornar-se-afiliado-da-brightfunded",
+          "slots": ""
+        },
+        {
+          "title": "politica de promocao de afiliados",
+          "url": "https://help.brightfunded.com/pt/articles/9662070-politica-de-promocao-de-afiliados",
+          "slots": ""
+        },
+        {
+          "title": "metodos de pagamento de afiliados",
+          "url": "https://help.brightfunded.com/pt/articles/9662092-metodos-de-pagamento-de-afiliados",
+          "slots": ""
+        },
+        {
+          "title": "como funciona a regra de hedging",
+          "url": "https://help.brightfunded.com/pt/articles/9680850-como-funciona-a-regra-de-hedging",
+          "slots": "P19"
+        },
+        {
+          "title": "como funciona o processo de kyc",
+          "url": "https://help.brightfunded.com/pt/articles/9973224-como-funciona-o-processo-de-kyc",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P03,P04,P05,P06,P07,P09,P10,P11,P12,P13,P14,P15,P16,P17,P19",
+    "missing": "P02b,P08,P18",
+    "note": "18/21（本文補強後）"
+  }
+}

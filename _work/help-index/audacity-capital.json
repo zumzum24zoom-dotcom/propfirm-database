@@ -1,0 +1,371 @@
+{
+  "firm": "audacity-capital",
+  "help_base_url": "https://audacity.capital/knowledge-center/",
+  "platform": "wordpress_kb",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "カテゴリ別Knowledge Center。質問アンカーを機械タグ付け（要レビュー）。 / 本文補強: 12記事取得・本文具体フレーズ照合でslot追加",
+  "collections": [
+    {
+      "title": "Knowledge Center Q&A（自動タグ）",
+      "articles": [
+        {
+          "title": "how do i scale up to $2 million?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/#how-do-i-scale-up-to-$2-million?",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "are there monthly fees?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/#are-there-monthly-fees?",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "what is the profit target on the ability challenge?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/#what-is-the-profit-target-on-the-ability-challenge?",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "what is the minimum trading days?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/#what-is-the-minimum-trading-days?",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "what is the consistency rule?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/#what-is-the-consistency-rule?",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "what are the account sizes i can purchase?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/#what-are-the-account-sizes-i-can-purchase?",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How can I install MT5?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What steps do I need to follow to complete the KYC verification process?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Do you have an affiliate program?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What is the max account allocation I’m allowed to have with Audacity Capital?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P17,P18,P19"
+        },
+        {
+          "title": "What are the restricted countries that cannot participate?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What payment methods are available?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What are the withdrawal options available?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "I paid for the challenge, when will I get the account?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Can I trade on my mobile?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Which Broker do you use?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Which trading platform do you use?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How can I install MT5 or DX Trade on my device?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Why do we charge fees?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What are the terms of your refund policy?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "When is KYC required?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Why do we require it?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What if I have questions?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Why the fee?",
+          "url": "https://audacity.capital/knowledge-center/getting-started/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Can I trade while waiting for account doubling and payout?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Do you trade through spot markets or CFDs?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Can I register as a company with Audacity Capital?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What are the guidelines regarding account inactivity?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How do the spreads compare across different assets?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What happens if I violate the rules?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Do you have a web terminal?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "At what point is the fully refundable fee returned?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Who will pay tax on my profit?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Am I eligible for a payout if my account breach a rule?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Will I Receive Any Certificates?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How long does the payout process take?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Will I get a free funded account once I passed a free trial account?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Am I trading with live funds?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How long will it take to review my account?",
+          "url": "https://audacity.capital/knowledge-center/general/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Is scalping allowed?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "What is the maximum lot size I can use?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Is it mandatory to use a stop loss?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Is there a time limit in Audacity Capital?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Is copy trading allowed?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Is News Trading Allowed?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Can I trade on the FTP(instant funding), Ability One and Ability Challenge at the same time?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Are Expert Advisors (EAs) permitted on your platform?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "What are the minimum trading days?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "How does the drawdown work for all the programs in Audacity Capital?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Can I hold trades over the weekend?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Can I hold trades overnight?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "What are the prohibited strategies?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Are there any time limits in Audacity Capital?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "What is the available leverage?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Are VPN and VPS permitted?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Which events are classified as major news?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Do you have any recommendations for a news calendar?",
+          "url": "https://audacity.capital/knowledge-center/trading-guidelines/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P18,P19"
+        },
+        {
+          "title": "Is the registration fee refundable for the Ability One Program?",
+          "url": "https://audacity.capital/knowledge-center/ability-one/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What is the payout process and profit split for the Ability One?",
+          "url": "https://audacity.capital/knowledge-center/ability-one/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What is the profit target for the Ability One?",
+          "url": "https://audacity.capital/knowledge-center/ability-one/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How does the daily drawdown and max drawdown work for the ability one?",
+          "url": "https://audacity.capital/knowledge-center/ability-one/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "When do I receive the refund for the Ability Challenge?",
+          "url": "https://audacity.capital/knowledge-center/ability-challenge/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How does the daily drawdown and max drawdown work for the ability challenge?",
+          "url": "https://audacity.capital/knowledge-center/ability-challenge/",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What is the payout process and profit split for the Ability Challenge?",
+          "url": "https://audacity.capital/knowledge-center/ability-challenge/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Can I purchase an additional Funded Trader account if I already have one on the Funded Trader Program?",
+          "url": "https://audacity.capital/knowledge-center/ftp/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "When will my account be doubled or scaled up and the profit be paid in the Funded Trading Program(Instant Funding)?",
+          "url": "https://audacity.capital/knowledge-center/ftp/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What is the minimum trading days for the Funded Trader Program (Instant Funding)?",
+          "url": "https://audacity.capital/knowledge-center/ftp/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "What is the payout process and profit split for the Funded Trader Program (Instant Funding)?",
+          "url": "https://audacity.capital/knowledge-center/ftp/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "Is the FTP (Instant Funding) account swap-free?",
+          "url": "https://audacity.capital/knowledge-center/ftp/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        },
+        {
+          "title": "How much is the trading commission for FTP (Instant Funding)?",
+          "url": "https://audacity.capital/knowledge-center/ftp/",
+          "slots": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P18,P19"
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19",
+    "missing": "",
+    "note": "21/21（本文補強後）"
+  }
+}

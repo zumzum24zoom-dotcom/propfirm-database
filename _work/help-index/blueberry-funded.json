@@ -1,0 +1,1441 @@
+{
+  "firm": "blueberry-funded",
+  "help_base_url": "https://help.blueberryfunded.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で234記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "trading competitions rules",
+          "url": "https://help.blueberryfunded.com/en/articles/10043237-trading-competitions-rules",
+          "slots": "P20,P02,P03,P05,P13,P19"
+        },
+        {
+          "title": "how do you calculate drawdown rapid challenge",
+          "url": "https://help.blueberryfunded.com/en/articles/10070362-how-do-you-calculate-drawdown-rapid-challenge",
+          "slots": "P20,P03,P05,P06"
+        },
+        {
+          "title": "how to make payment using upi",
+          "url": "https://help.blueberryfunded.com/en/articles/10378963-how-to-make-payment-using-upi",
+          "slots": ""
+        },
+        {
+          "title": "how to make payment using crypto",
+          "url": "https://help.blueberryfunded.com/en/articles/10527841-how-to-make-payment-using-crypto",
+          "slots": ""
+        },
+        {
+          "title": "the 7 day payout add on",
+          "url": "https://help.blueberryfunded.com/en/articles/10537925-the-7-day-payout-add-on",
+          "slots": ""
+        },
+        {
+          "title": "how do i complete kyc verification on my dashboard",
+          "url": "https://help.blueberryfunded.com/en/articles/10622787-how-do-i-complete-kyc-verification-on-my-dashboard",
+          "slots": ""
+        },
+        {
+          "title": "challenge accounts processing time",
+          "url": "https://help.blueberryfunded.com/en/articles/10622823-challenge-accounts-processing-time",
+          "slots": "P19"
+        },
+        {
+          "title": "how to request a payout from my earnings accounts",
+          "url": "https://help.blueberryfunded.com/en/articles/10622848-how-to-request-a-payout-from-my-earnings-accounts",
+          "slots": ""
+        },
+        {
+          "title": "platform downloads",
+          "url": "https://help.blueberryfunded.com/en/articles/10741972-platform-downloads",
+          "slots": ""
+        },
+        {
+          "title": "3 step daily max drawdown",
+          "url": "https://help.blueberryfunded.com/en/articles/10886443-3-step-daily-max-drawdown",
+          "slots": "P20,P03,P05,P06"
+        },
+        {
+          "title": "what are synthetic indices",
+          "url": "https://help.blueberryfunded.com/en/articles/11274665-what-are-synthetic-indices",
+          "slots": ""
+        },
+        {
+          "title": "what challenges does blueberry offer for synthetic indices",
+          "url": "https://help.blueberryfunded.com/en/articles/11274666-what-challenges-does-blueberry-offer-for-synthetic-indices",
+          "slots": ""
+        },
+        {
+          "title": "what synthetic indices are offered by blueberry funded",
+          "url": "https://help.blueberryfunded.com/en/articles/11329554-what-synthetic-indices-are-offered-by-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "how do you price synthetic indices",
+          "url": "https://help.blueberryfunded.com/en/articles/11329564-how-do-you-price-synthetic-indices",
+          "slots": ""
+        },
+        {
+          "title": "what are the advantages to trading synthetic indices",
+          "url": "https://help.blueberryfunded.com/en/articles/11329566-what-are-the-advantages-to-trading-synthetic-indices",
+          "slots": ""
+        },
+        {
+          "title": "synthetic instruments contracts",
+          "url": "https://help.blueberryfunded.com/en/articles/11329682-synthetic-instruments-contracts",
+          "slots": ""
+        },
+        {
+          "title": "what are broker payouts on blueberry funded",
+          "url": "https://help.blueberryfunded.com/en/articles/11404662-what-are-broker-payouts-on-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "who is eligible to use broker payouts",
+          "url": "https://help.blueberryfunded.com/en/articles/11404670-who-is-eligible-to-use-broker-payouts",
+          "slots": ""
+        },
+        {
+          "title": "how do i set up my blueberry account for broker payouts",
+          "url": "https://help.blueberryfunded.com/en/articles/11404675-how-do-i-set-up-my-blueberry-account-for-broker-payouts",
+          "slots": ""
+        },
+        {
+          "title": "can i withdraw my funds directly from my blueberry trading account",
+          "url": "https://help.blueberryfunded.com/en/articles/11404676-can-i-withdraw-my-funds-directly-from-my-blueberry-trading-account",
+          "slots": ""
+        },
+        {
+          "title": "is there any bonus or incentive for using broker payouts",
+          "url": "https://help.blueberryfunded.com/en/articles/11404677-is-there-any-bonus-or-incentive-for-using-broker-payouts",
+          "slots": ""
+        },
+        {
+          "title": "what are the benefits of broker payouts",
+          "url": "https://help.blueberryfunded.com/en/articles/11404678-what-are-the-benefits-of-broker-payouts",
+          "slots": ""
+        },
+        {
+          "title": "what if my blueberry account details don t match my blueberry funded profile",
+          "url": "https://help.blueberryfunded.com/en/articles/11404679-what-if-my-blueberry-account-details-don-t-match-my-blueberry-funded-profile",
+          "slots": ""
+        },
+        {
+          "title": "how long do broker payouts take to process",
+          "url": "https://help.blueberryfunded.com/en/articles/11404681-how-long-do-broker-payouts-take-to-process",
+          "slots": "P09"
+        },
+        {
+          "title": "is the 30 bonus credit withdrawable",
+          "url": "https://help.blueberryfunded.com/en/articles/11404684-is-the-30-bonus-credit-withdrawable",
+          "slots": ""
+        },
+        {
+          "title": "why am i seeing an invalid account error when trying to log in to mt5",
+          "url": "https://help.blueberryfunded.com/en/articles/11461588-why-am-i-seeing-an-invalid-account-error-when-trying-to-log-in-to-mt5",
+          "slots": ""
+        },
+        {
+          "title": "how do you calculate drawdown instant access sim account",
+          "url": "https://help.blueberryfunded.com/en/articles/11873884-how-do-you-calculate-drawdown-instant-access-sim-account",
+          "slots": "P20,P03,P05,P06"
+        },
+        {
+          "title": "instant access sim account complete guide",
+          "url": "https://help.blueberryfunded.com/en/articles/11874076-instant-access-sim-account-complete-guide",
+          "slots": ""
+        },
+        {
+          "title": "what account sizes are available for instant access sim accounts",
+          "url": "https://help.blueberryfunded.com/en/articles/11879872-what-account-sizes-are-available-for-instant-access-sim-accounts",
+          "slots": ""
+        },
+        {
+          "title": "what trading platforms are available for blueberry s instant access sim accounts",
+          "url": "https://help.blueberryfunded.com/en/articles/11879918-what-trading-platforms-are-available-for-blueberry-s-instant-access-sim-accounts",
+          "slots": ""
+        },
+        {
+          "title": "what are the profit split percentages",
+          "url": "https://help.blueberryfunded.com/en/articles/11879956-what-are-the-profit-split-percentages",
+          "slots": ""
+        },
+        {
+          "title": "instant lot size restriction rule pre march 12th 2026",
+          "url": "https://help.blueberryfunded.com/en/articles/11888897-instant-lot-size-restriction-rule-pre-march-12th-2026",
+          "slots": "P20,P02,P17,P18"
+        },
+        {
+          "title": "2 step lot size restriction rule pre march 12th 2026",
+          "url": "https://help.blueberryfunded.com/en/articles/12075913-2-step-lot-size-restriction-rule-pre-march-12th-2026",
+          "slots": "P20,P17,P18"
+        },
+        {
+          "title": "synthetic lot size restriction rule",
+          "url": "https://help.blueberryfunded.com/en/articles/12075925-synthetic-lot-size-restriction-rule",
+          "slots": "P20,P18"
+        },
+        {
+          "title": "2 step challenge complete guide",
+          "url": "https://help.blueberryfunded.com/en/articles/12076385-2-step-challenge-complete-guide",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P09,P10,P11,P13,P14,P16,P17,P18,P19"
+        },
+        {
+          "title": "how to apply a discount code",
+          "url": "https://help.blueberryfunded.com/en/articles/12076542-how-to-apply-a-discount-code",
+          "slots": ""
+        },
+        {
+          "title": "overview of the synthetic plan",
+          "url": "https://help.blueberryfunded.com/en/articles/12076564-overview-of-the-synthetic-plan",
+          "slots": ""
+        },
+        {
+          "title": "synthetic challenge daily max drawdown",
+          "url": "https://help.blueberryfunded.com/en/articles/12076581-synthetic-challenge-daily-max-drawdown",
+          "slots": "P20,P03,P05,P06"
+        },
+        {
+          "title": "overview of the 3 step plan",
+          "url": "https://help.blueberryfunded.com/en/articles/12076934-overview-of-the-3-step-plan",
+          "slots": "P20,P01,P03,P05,P06,P07,P09,P14,P19"
+        },
+        {
+          "title": "3 step lot size restriction rule",
+          "url": "https://help.blueberryfunded.com/en/articles/12076952-3-step-lot-size-restriction-rule",
+          "slots": "P20,P18"
+        },
+        {
+          "title": "what trading platforms are available for blueberry s 3 step evaluation",
+          "url": "https://help.blueberryfunded.com/en/articles/12076954-what-trading-platforms-are-available-for-blueberry-s-3-step-evaluation",
+          "slots": "P20"
+        },
+        {
+          "title": "what performance based rewards do 3 step earnings accounts offer",
+          "url": "https://help.blueberryfunded.com/en/articles/12076959-what-performance-based-rewards-do-3-step-earnings-accounts-offer",
+          "slots": "P20,P02"
+        },
+        {
+          "title": "are there consistency rules on blueberry 3 step challenges earnings accounts",
+          "url": "https://help.blueberryfunded.com/en/articles/12076961-are-there-consistency-rules-on-blueberry-3-step-challenges-earnings-accounts",
+          "slots": "P20,P07,P18,P19"
+        },
+        {
+          "title": "lot size restriction rule for all accounts",
+          "url": "https://help.blueberryfunded.com/en/articles/12087202-lot-size-restriction-rule-for-all-accounts",
+          "slots": "P20,P17,P18"
+        },
+        {
+          "title": "what is the prime challenge",
+          "url": "https://help.blueberryfunded.com/en/articles/12136509-what-is-the-prime-challenge",
+          "slots": ""
+        },
+        {
+          "title": "what are the drawdown limits on a prime account",
+          "url": "https://help.blueberryfunded.com/en/articles/12136586-what-are-the-drawdown-limits-on-a-prime-account",
+          "slots": "P20,P03,P04,P05"
+        },
+        {
+          "title": "payout structure",
+          "url": "https://help.blueberryfunded.com/en/articles/12136624-payout-structure",
+          "slots": ""
+        },
+        {
+          "title": "how many active trading days",
+          "url": "https://help.blueberryfunded.com/en/articles/12136639-how-many-active-trading-days",
+          "slots": "P20,P02"
+        },
+        {
+          "title": "trading style risk rules",
+          "url": "https://help.blueberryfunded.com/en/articles/12137041-trading-style-risk-rules",
+          "slots": "P20,P10,P14,P15,P17,P19"
+        },
+        {
+          "title": "news trading policy for prime challenge",
+          "url": "https://help.blueberryfunded.com/en/articles/12140938-news-trading-policy-for-prime-challenge",
+          "slots": "P20,P10,P11,P13,P16,P19"
+        },
+        {
+          "title": "what happens if you breach the rules in the prime challenge",
+          "url": "https://help.blueberryfunded.com/en/articles/12140976-what-happens-if-you-breach-the-rules-in-the-prime-challenge",
+          "slots": "P20,P10,P15,P19"
+        },
+        {
+          "title": "how fast can i withdraw my profits",
+          "url": "https://help.blueberryfunded.com/en/articles/13756854-how-fast-can-i-withdraw-my-profits",
+          "slots": ""
+        },
+        {
+          "title": "risk limiter",
+          "url": "https://help.blueberryfunded.com/en/articles/14051055-risk-limiter",
+          "slots": "P20,P16,P17,P19"
+        },
+        {
+          "title": "prime lot size restriction rule",
+          "url": "https://help.blueberryfunded.com/en/articles/14051815-prime-lot-size-restriction-rule",
+          "slots": "P20,P18"
+        },
+        {
+          "title": "1 step challenge complete guide",
+          "url": "https://help.blueberryfunded.com/en/articles/14070623-1-step-challenge-complete-guide",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P07,P09,P10,P11,P13,P14,P16,P17,P18,P19"
+        },
+        {
+          "title": "prohibited strategies pre march 12th 2026",
+          "url": "https://help.blueberryfunded.com/en/articles/14072414-prohibited-strategies-pre-march-12th-2026",
+          "slots": "P20,P15,P16,P17,P19"
+        },
+        {
+          "title": "1 5 risk per trade idea rule",
+          "url": "https://help.blueberryfunded.com/en/articles/14072474-1-5-risk-per-trade-idea-rule",
+          "slots": "P20,P05,P17,P19"
+        },
+        {
+          "title": "faq migration of mt4 and dxtrade accounts to mt5",
+          "url": "https://help.blueberryfunded.com/en/articles/14734054-faq-migration-of-mt4-and-dxtrade-accounts-to-mt5",
+          "slots": ""
+        },
+        {
+          "title": "understanding your affiliate dashboard",
+          "url": "https://help.blueberryfunded.com/en/articles/15006680-understanding-your-affiliate-dashboard",
+          "slots": ""
+        },
+        {
+          "title": "when do i need to complete kyc verification",
+          "url": "https://help.blueberryfunded.com/en/articles/15051703-when-do-i-need-to-complete-kyc-verification",
+          "slots": ""
+        },
+        {
+          "title": "account resets",
+          "url": "https://help.blueberryfunded.com/en/articles/15285827-account-resets",
+          "slots": ""
+        },
+        {
+          "title": "buy one get one free",
+          "url": "https://help.blueberryfunded.com/en/articles/15286337-buy-one-get-one-free",
+          "slots": ""
+        },
+        {
+          "title": "why is trading disabled on my blueberry funded account and how do i fix it",
+          "url": "https://help.blueberryfunded.com/en/articles/15309436-why-is-trading-disabled-on-my-blueberry-funded-account-and-how-do-i-fix-it",
+          "slots": ""
+        },
+        {
+          "title": "what rules can breach my account and where do i find the limits",
+          "url": "https://help.blueberryfunded.com/en/articles/15310153-what-rules-can-breach-my-account-and-where-do-i-find-the-limits",
+          "slots": "P20,P03,P04,P05,P06,P15,P17,P19"
+        },
+        {
+          "title": "how do i set up two factor authentication 2fa on my account",
+          "url": "https://help.blueberryfunded.com/en/articles/15311528-how-do-i-set-up-two-factor-authentication-2fa-on-my-account",
+          "slots": ""
+        },
+        {
+          "title": "how do i sign my simulated funded trader contract",
+          "url": "https://help.blueberryfunded.com/en/articles/15311556-how-do-i-sign-my-simulated-funded-trader-contract",
+          "slots": ""
+        },
+        {
+          "title": "why did my order execute at a different price or after a short delay",
+          "url": "https://help.blueberryfunded.com/en/articles/15427508-why-did-my-order-execute-at-a-different-price-or-after-a-short-delay",
+          "slots": ""
+        },
+        {
+          "title": "what are sanctioned exchanges and why do they affect my account",
+          "url": "https://help.blueberryfunded.com/en/articles/15471668-what-are-sanctioned-exchanges-and-why-do-they-affect-my-account",
+          "slots": ""
+        },
+        {
+          "title": "what are blueberry funded trading evaluations",
+          "url": "https://help.blueberryfunded.com/en/articles/9550567-what-are-blueberry-funded-trading-evaluations",
+          "slots": "P07,P19"
+        },
+        {
+          "title": "when does my evaluation begin",
+          "url": "https://help.blueberryfunded.com/en/articles/9550571-when-does-my-evaluation-begin",
+          "slots": "P10"
+        },
+        {
+          "title": "are any countries restricted from purchasing an evaluation",
+          "url": "https://help.blueberryfunded.com/en/articles/9550574-are-any-countries-restricted-from-purchasing-an-evaluation",
+          "slots": ""
+        },
+        {
+          "title": "do you have minimum trading days",
+          "url": "https://help.blueberryfunded.com/en/articles/9550580-do-you-have-minimum-trading-days",
+          "slots": "P20,P01,P02,P10"
+        },
+        {
+          "title": "can i hold positions over the weekend and overnight",
+          "url": "https://help.blueberryfunded.com/en/articles/9550589-can-i-hold-positions-over-the-weekend-and-overnight",
+          "slots": "P20,P10,P11,P12,P16,P19"
+        },
+        {
+          "title": "am i allowed to copy trade",
+          "url": "https://help.blueberryfunded.com/en/articles/9550602-am-i-allowed-to-copy-trade",
+          "slots": "P20,P13,P14,P19"
+        },
+        {
+          "title": "when will i receive my trading account after making a purchase",
+          "url": "https://help.blueberryfunded.com/en/articles/9550606-when-will-i-receive-my-trading-account-after-making-a-purchase",
+          "slots": ""
+        },
+        {
+          "title": "when was blueberry funded founded",
+          "url": "https://help.blueberryfunded.com/en/articles/9550867-when-was-blueberry-funded-founded",
+          "slots": ""
+        },
+        {
+          "title": "where is blueberry funded located",
+          "url": "https://help.blueberryfunded.com/en/articles/9550869-where-is-blueberry-funded-located",
+          "slots": ""
+        },
+        {
+          "title": "is blueberry funded a broker",
+          "url": "https://help.blueberryfunded.com/en/articles/9550871-is-blueberry-funded-a-broker",
+          "slots": ""
+        },
+        {
+          "title": "how do i log in to the blueberry funded dashboard",
+          "url": "https://help.blueberryfunded.com/en/articles/9550873-how-do-i-log-in-to-the-blueberry-funded-dashboard",
+          "slots": ""
+        },
+        {
+          "title": "do you allow bots and ea expert advisor trading",
+          "url": "https://help.blueberryfunded.com/en/articles/9550892-do-you-allow-bots-and-ea-expert-advisor-trading",
+          "slots": "P13,P14,P15,P19"
+        },
+        {
+          "title": "anti gambling policy pre march 12th 2026",
+          "url": "https://help.blueberryfunded.com/en/articles/9550899-anti-gambling-policy-pre-march-12th-2026",
+          "slots": "P19"
+        },
+        {
+          "title": "processing time for performance fee payouts",
+          "url": "https://help.blueberryfunded.com/en/articles/9550905-processing-time-for-performance-fee-payouts",
+          "slots": ""
+        },
+        {
+          "title": "what payment methods do you offer for payouts",
+          "url": "https://help.blueberryfunded.com/en/articles/9550906-what-payment-methods-do-you-offer-for-payouts",
+          "slots": ""
+        },
+        {
+          "title": "do i need to pay tax on my earnings",
+          "url": "https://help.blueberryfunded.com/en/articles/9550909-do-i-need-to-pay-tax-on-my-earnings",
+          "slots": ""
+        },
+        {
+          "title": "frequency of performance fee payments",
+          "url": "https://help.blueberryfunded.com/en/articles/9550911-frequency-of-performance-fee-payments",
+          "slots": ""
+        },
+        {
+          "title": "what verification requirements do you require for payouts",
+          "url": "https://help.blueberryfunded.com/en/articles/9550914-what-verification-requirements-do-you-require-for-payouts",
+          "slots": ""
+        },
+        {
+          "title": "how often can i withdraw my affiliate commissions",
+          "url": "https://help.blueberryfunded.com/en/articles/9563855-how-often-can-i-withdraw-my-affiliate-commissions",
+          "slots": ""
+        },
+        {
+          "title": "what can i get paid as a blueberry funded affiliate",
+          "url": "https://help.blueberryfunded.com/en/articles/9563907-what-can-i-get-paid-as-a-blueberry-funded-affiliate",
+          "slots": ""
+        },
+        {
+          "title": "does your affiliate link track cookies",
+          "url": "https://help.blueberryfunded.com/en/articles/9563960-does-your-affiliate-link-track-cookies",
+          "slots": ""
+        },
+        {
+          "title": "can i earn on repeat purchases",
+          "url": "https://help.blueberryfunded.com/en/articles/9563964-can-i-earn-on-repeat-purchases",
+          "slots": ""
+        },
+        {
+          "title": "what makes blueberry funded different",
+          "url": "https://help.blueberryfunded.com/en/articles/9563972-what-makes-blueberry-funded-different",
+          "slots": ""
+        },
+        {
+          "title": "what is blueberry funded",
+          "url": "https://help.blueberryfunded.com/en/articles/9563981-what-is-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "can i register my trading account under an llc",
+          "url": "https://help.blueberryfunded.com/en/articles/9661748-can-i-register-my-trading-account-under-an-llc",
+          "slots": ""
+        },
+        {
+          "title": "do you have an affiliate program",
+          "url": "https://help.blueberryfunded.com/en/articles/9714099-do-you-have-an-affiliate-program",
+          "slots": ""
+        },
+        {
+          "title": "prohibited strategies after march 12th 2026",
+          "url": "https://help.blueberryfunded.com/en/articles/9714626-prohibited-strategies-after-march-12th-2026",
+          "slots": "P20,P10,P13,P14,P15,P17,P19"
+        },
+        {
+          "title": "trading commissions",
+          "url": "https://help.blueberryfunded.com/en/articles/9715159-trading-commissions",
+          "slots": ""
+        },
+        {
+          "title": "do you allow news trading",
+          "url": "https://help.blueberryfunded.com/en/articles/9715375-do-you-allow-news-trading",
+          "slots": "P02,P10,P16,P19"
+        },
+        {
+          "title": "blueberry funded account scaling",
+          "url": "https://help.blueberryfunded.com/en/articles/9762548-blueberry-funded-account-scaling",
+          "slots": ""
+        },
+        {
+          "title": "what happens after i pass an evaluation",
+          "url": "https://help.blueberryfunded.com/en/articles/9773746-what-happens-after-i-pass-an-evaluation",
+          "slots": "P20,P17,P19"
+        },
+        {
+          "title": "refund policy",
+          "url": "https://help.blueberryfunded.com/en/articles/9773783-refund-policy",
+          "slots": ""
+        },
+        {
+          "title": "what is your ip rule regarding multiple accounts",
+          "url": "https://help.blueberryfunded.com/en/articles/9774387-what-is-your-ip-rule-regarding-multiple-accounts",
+          "slots": "P20,P19"
+        },
+        {
+          "title": "how do i withdraw my affiliate commissions",
+          "url": "https://help.blueberryfunded.com/en/articles/9789435-how-do-i-withdraw-my-affiliate-commissions",
+          "slots": ""
+        },
+        {
+          "title": "does blueberry funded allow hedging",
+          "url": "https://help.blueberryfunded.com/en/articles/9812241-does-blueberry-funded-allow-hedging",
+          "slots": "P20,P07,P13,P19"
+        },
+        {
+          "title": "does blueberry funded enforce a consistency rule in trading",
+          "url": "https://help.blueberryfunded.com/en/articles/9812246-does-blueberry-funded-enforce-a-consistency-rule-in-trading",
+          "slots": "P07,P19"
+        },
+        {
+          "title": "what is the hyperactivity rule at blueberry funded",
+          "url": "https://help.blueberryfunded.com/en/articles/9812247-what-is-the-hyperactivity-rule-at-blueberry-funded",
+          "slots": "P20,P07,P13,P19"
+        },
+        {
+          "title": "1 step lot size restriction rule pre march 12th 2026",
+          "url": "https://help.blueberryfunded.com/en/articles/9849249-1-step-lot-size-restriction-rule-pre-march-12th-2026",
+          "slots": "P20,P17,P18"
+        },
+        {
+          "title": "is there an inactivity period",
+          "url": "https://help.blueberryfunded.com/en/articles/9859296-is-there-an-inactivity-period",
+          "slots": "P09"
+        },
+        {
+          "title": "is vpn or vps allowed",
+          "url": "https://help.blueberryfunded.com/en/articles/9859313-is-vpn-or-vps-allowed",
+          "slots": ""
+        },
+        {
+          "title": "is a stop loss mandatory",
+          "url": "https://help.blueberryfunded.com/en/articles/9859335-is-a-stop-loss-mandatory",
+          "slots": "P20,P10,P11,P16,P19"
+        },
+        {
+          "title": "our approach to affiliations with other firms",
+          "url": "https://help.blueberryfunded.com/en/articles/9987297-our-approach-to-affiliations-with-other-firms",
+          "slots": ""
+        },
+        {
+          "title": "reglas de la competencia de trading",
+          "url": "https://help.blueberryfunded.com/es/articles/10043237-reglas-de-la-competencia-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "como se calcula la perdida desafio rapid",
+          "url": "https://help.blueberryfunded.com/es/articles/10070362-como-se-calcula-la-perdida-desafio-rapid",
+          "slots": ""
+        },
+        {
+          "title": "como realizar un pago usando upi",
+          "url": "https://help.blueberryfunded.com/es/articles/10378963-como-realizar-un-pago-usando-upi",
+          "slots": ""
+        },
+        {
+          "title": "como realizar un pago usando criptomonedas",
+          "url": "https://help.blueberryfunded.com/es/articles/10527841-como-realizar-un-pago-usando-criptomonedas",
+          "slots": ""
+        },
+        {
+          "title": "complemento pago cada 7 dias 7 day payout add on",
+          "url": "https://help.blueberryfunded.com/es/articles/10537925-complemento-pago-cada-7-dias-7-day-payout-add-on",
+          "slots": ""
+        },
+        {
+          "title": "como completo la verificacion kyc en mi panel",
+          "url": "https://help.blueberryfunded.com/es/articles/10622787-como-completo-la-verificacion-kyc-en-mi-panel",
+          "slots": ""
+        },
+        {
+          "title": "tiempo de procesamiento de las cuentas challenge",
+          "url": "https://help.blueberryfunded.com/es/articles/10622823-tiempo-de-procesamiento-de-las-cuentas-challenge",
+          "slots": ""
+        },
+        {
+          "title": "como solicitar un retiro desde tu cuenta de ganancias earnings account",
+          "url": "https://help.blueberryfunded.com/es/articles/10622848-como-solicitar-un-retiro-desde-tu-cuenta-de-ganancias-earnings-account",
+          "slots": ""
+        },
+        {
+          "title": "descargas de plataformas",
+          "url": "https://help.blueberryfunded.com/es/articles/10741972-descargas-de-plataformas",
+          "slots": ""
+        },
+        {
+          "title": "3 step reduccion diaria maxima",
+          "url": "https://help.blueberryfunded.com/es/articles/10886443-3-step-reduccion-diaria-maxima",
+          "slots": "P20"
+        },
+        {
+          "title": "puedo operar acciones con blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/11032714-puedo-operar-acciones-con-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "reglas de consistencia en el trading de acciones",
+          "url": "https://help.blueberryfunded.com/es/articles/11032733-reglas-de-consistencia-en-el-trading-de-acciones",
+          "slots": ""
+        },
+        {
+          "title": "reglas de estilo de trading apuestas",
+          "url": "https://help.blueberryfunded.com/es/articles/11032745-reglas-de-estilo-de-trading-apuestas",
+          "slots": ""
+        },
+        {
+          "title": "otras reglas de apuestas en el trading",
+          "url": "https://help.blueberryfunded.com/es/articles/11032756-otras-reglas-de-apuestas-en-el-trading",
+          "slots": ""
+        },
+        {
+          "title": "estructura de pagos progresiva",
+          "url": "https://help.blueberryfunded.com/es/articles/11032760-estructura-de-pagos-progresiva",
+          "slots": ""
+        },
+        {
+          "title": "otras reglas de trading de acciones",
+          "url": "https://help.blueberryfunded.com/es/articles/11049955-otras-reglas-de-trading-de-acciones",
+          "slots": ""
+        },
+        {
+          "title": "mantenimiento programado",
+          "url": "https://help.blueberryfunded.com/es/articles/11274270-mantenimiento-programado",
+          "slots": ""
+        },
+        {
+          "title": "que son los indices sinteticos",
+          "url": "https://help.blueberryfunded.com/es/articles/11274665-que-son-los-indices-sinteticos",
+          "slots": ""
+        },
+        {
+          "title": "que desafios ofrece blueberry para los indices sinteticos",
+          "url": "https://help.blueberryfunded.com/es/articles/11274666-que-desafios-ofrece-blueberry-para-los-indices-sinteticos",
+          "slots": ""
+        },
+        {
+          "title": "cuales indices sinteticos ofrece blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/11329554-cuales-indices-sinteticos-ofrece-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "como se valoran los indices sinteticos",
+          "url": "https://help.blueberryfunded.com/es/articles/11329564-como-se-valoran-los-indices-sinteticos",
+          "slots": ""
+        },
+        {
+          "title": "cuales son las ventajas de operar con indices sinteticos",
+          "url": "https://help.blueberryfunded.com/es/articles/11329566-cuales-son-las-ventajas-de-operar-con-indices-sinteticos",
+          "slots": ""
+        },
+        {
+          "title": "contratos de instrumentos sinteticos",
+          "url": "https://help.blueberryfunded.com/es/articles/11329682-contratos-de-instrumentos-sinteticos",
+          "slots": ""
+        },
+        {
+          "title": "que son los pagos del broker en blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/11404662-que-son-los-pagos-del-broker-en-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "quienes son elegibles para utilizar los pagos del broker",
+          "url": "https://help.blueberryfunded.com/es/articles/11404670-quienes-son-elegibles-para-utilizar-los-pagos-del-broker",
+          "slots": ""
+        },
+        {
+          "title": "como configuro mi cuenta de blueberry para recibir pagos del broker",
+          "url": "https://help.blueberryfunded.com/es/articles/11404675-como-configuro-mi-cuenta-de-blueberry-para-recibir-pagos-del-broker",
+          "slots": ""
+        },
+        {
+          "title": "puedo retirar mis fondos directamente desde mi cuenta de trading de blueberry",
+          "url": "https://help.blueberryfunded.com/es/articles/11404676-puedo-retirar-mis-fondos-directamente-desde-mi-cuenta-de-trading-de-blueberry",
+          "slots": ""
+        },
+        {
+          "title": "existe algun bono o incentivo por utilizar los pagos del broker",
+          "url": "https://help.blueberryfunded.com/es/articles/11404677-existe-algun-bono-o-incentivo-por-utilizar-los-pagos-del-broker",
+          "slots": ""
+        },
+        {
+          "title": "cuales son los beneficios de los pagos del broker",
+          "url": "https://help.blueberryfunded.com/es/articles/11404678-cuales-son-los-beneficios-de-los-pagos-del-broker",
+          "slots": ""
+        },
+        {
+          "title": "que sucede si los datos de mi cuenta de blueberry no coinciden con mi perfil de blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/11404679-que-sucede-si-los-datos-de-mi-cuenta-de-blueberry-no-coinciden-con-mi-perfil-de-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "cuanto tiempo tardan en procesarse los pagos del broker",
+          "url": "https://help.blueberryfunded.com/es/articles/11404681-cuanto-tiempo-tardan-en-procesarse-los-pagos-del-broker",
+          "slots": ""
+        },
+        {
+          "title": "se puede retirar el bono del 10 en credito",
+          "url": "https://help.blueberryfunded.com/es/articles/11404684-se-puede-retirar-el-bono-del-10-en-credito",
+          "slots": ""
+        },
+        {
+          "title": "por que veo el error invalid account al intentar iniciar sesion en mt5",
+          "url": "https://help.blueberryfunded.com/es/articles/11461588-por-que-veo-el-error-invalid-account-al-intentar-iniciar-sesion-en-mt5",
+          "slots": ""
+        },
+        {
+          "title": "existen reglas de consistencia en las cuentas instant funded",
+          "url": "https://help.blueberryfunded.com/es/articles/11873962-existen-reglas-de-consistencia-en-las-cuentas-instant-funded",
+          "slots": ""
+        },
+        {
+          "title": "resumen del plan instant funding",
+          "url": "https://help.blueberryfunded.com/es/articles/11874076-resumen-del-plan-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "que tamanos de cuenta estan disponibles para instant funding",
+          "url": "https://help.blueberryfunded.com/es/articles/11879872-que-tamanos-de-cuenta-estan-disponibles-para-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "que plataformas de trading estan disponibles para el programa instant funding",
+          "url": "https://help.blueberryfunded.com/es/articles/11879918-que-plataformas-de-trading-estan-disponibles-para-el-programa-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "que recompensas basadas en rendimiento ofrecen las cuentas instant",
+          "url": "https://help.blueberryfunded.com/es/articles/11879956-que-recompensas-basadas-en-rendimiento-ofrecen-las-cuentas-instant",
+          "slots": ""
+        },
+        {
+          "title": "cuales son los limites de perdida diaria y maxima para las cuentas instant funding",
+          "url": "https://help.blueberryfunded.com/es/articles/11880026-cuales-son-los-limites-de-perdida-diaria-y-maxima-para-las-cuentas-instant-funding",
+          "slots": ""
+        },
+        {
+          "title": "instant funding regla de restriccion de tamano de lote",
+          "url": "https://help.blueberryfunded.com/es/articles/11888897-instant-funding-regla-de-restriccion-de-tamano-de-lote",
+          "slots": "P18"
+        },
+        {
+          "title": "1 fase reduccion diaria maxima",
+          "url": "https://help.blueberryfunded.com/es/articles/12075830-1-fase-reduccion-diaria-maxima",
+          "slots": ""
+        },
+        {
+          "title": "2 pasos regla de restriccion de tamano de lote",
+          "url": "https://help.blueberryfunded.com/es/articles/12075913-2-pasos-regla-de-restriccion-de-tamano-de-lote",
+          "slots": ""
+        },
+        {
+          "title": "desafio de sinteticos regla de restriccion de tamano de lote",
+          "url": "https://help.blueberryfunded.com/es/articles/12075925-desafio-de-sinteticos-regla-de-restriccion-de-tamano-de-lote",
+          "slots": ""
+        },
+        {
+          "title": "2 pasos reduccion diaria maxima",
+          "url": "https://help.blueberryfunded.com/es/articles/12076157-2-pasos-reduccion-diaria-maxima",
+          "slots": ""
+        },
+        {
+          "title": "descripcion general del plan de 1 paso",
+          "url": "https://help.blueberryfunded.com/es/articles/12076313-descripcion-general-del-plan-de-1-paso",
+          "slots": ""
+        },
+        {
+          "title": "descripcion general del plan de 2 pasos",
+          "url": "https://help.blueberryfunded.com/es/articles/12076385-descripcion-general-del-plan-de-2-pasos",
+          "slots": ""
+        },
+        {
+          "title": "que plataformas de negociacion estan disponibles para la evaluacion de 1 paso de blueberry",
+          "url": "https://help.blueberryfunded.com/es/articles/12076417-que-plataformas-de-negociacion-estan-disponibles-para-la-evaluacion-de-1-paso-de-blueberry",
+          "slots": ""
+        },
+        {
+          "title": "que plataformas de trading estan disponibles para la evaluacion de 2 pasos de blueberry",
+          "url": "https://help.blueberryfunded.com/es/articles/12076421-que-plataformas-de-trading-estan-disponibles-para-la-evaluacion-de-2-pasos-de-blueberry",
+          "slots": ""
+        },
+        {
+          "title": "que recompensas basadas en el rendimiento ofrecen las cuentas de ganancias de 1 paso",
+          "url": "https://help.blueberryfunded.com/es/articles/12076427-que-recompensas-basadas-en-el-rendimiento-ofrecen-las-cuentas-de-ganancias-de-1-paso",
+          "slots": ""
+        },
+        {
+          "title": "que recompensas basadas en el rendimiento ofrecen las cuentas de ganancias de 2 pasos",
+          "url": "https://help.blueberryfunded.com/es/articles/12076435-que-recompensas-basadas-en-el-rendimiento-ofrecen-las-cuentas-de-ganancias-de-2-pasos",
+          "slots": ""
+        },
+        {
+          "title": "existen reglas de consistencia en los desafios de 1 paso cuentas de ganancias de blueberry",
+          "url": "https://help.blueberryfunded.com/es/articles/12076437-existen-reglas-de-consistencia-en-los-desafios-de-1-paso-cuentas-de-ganancias-de-blueberry",
+          "slots": ""
+        },
+        {
+          "title": "existen reglas de consistencia en los desafios de 2 pasos cuentas de ganancias de blueberry",
+          "url": "https://help.blueberryfunded.com/es/articles/12076438-existen-reglas-de-consistencia-en-los-desafios-de-2-pasos-cuentas-de-ganancias-de-blueberry",
+          "slots": ""
+        },
+        {
+          "title": "como aplicar un codigo de descuento",
+          "url": "https://help.blueberryfunded.com/es/articles/12076542-como-aplicar-un-codigo-de-descuento",
+          "slots": ""
+        },
+        {
+          "title": "descripcion general del desafio de sinteticos",
+          "url": "https://help.blueberryfunded.com/es/articles/12076564-descripcion-general-del-desafio-de-sinteticos",
+          "slots": ""
+        },
+        {
+          "title": "desafio de sinteticos perdidas diaria maxima",
+          "url": "https://help.blueberryfunded.com/es/articles/12076581-desafio-de-sinteticos-perdidas-diaria-maxima",
+          "slots": ""
+        },
+        {
+          "title": "descripcion general del desafio 3 step",
+          "url": "https://help.blueberryfunded.com/es/articles/12076934-descripcion-general-del-desafio-3-step",
+          "slots": "P20,P14"
+        },
+        {
+          "title": "3 pasos regla de restriccion de tamano de lote",
+          "url": "https://help.blueberryfunded.com/es/articles/12076952-3-pasos-regla-de-restriccion-de-tamano-de-lote",
+          "slots": "P20"
+        },
+        {
+          "title": "que plataformas de trading estan disponibles para la evaluacion 3 step de blueberry",
+          "url": "https://help.blueberryfunded.com/es/articles/12076954-que-plataformas-de-trading-estan-disponibles-para-la-evaluacion-3-step-de-blueberry",
+          "slots": "P20"
+        },
+        {
+          "title": "que recompensas ofrecen las cuentas de 3 step fondeadas",
+          "url": "https://help.blueberryfunded.com/es/articles/12076959-que-recompensas-ofrecen-las-cuentas-de-3-step-fondeadas",
+          "slots": "P20"
+        },
+        {
+          "title": "existen reglas de consistencia en los desafios de blueberry 3 step cuentas fondeadas",
+          "url": "https://help.blueberryfunded.com/es/articles/12076961-existen-reglas-de-consistencia-en-los-desafios-de-blueberry-3-step-cuentas-fondeadas",
+          "slots": "P20"
+        },
+        {
+          "title": "desafio rapid regla de restriccion de tamano de lote",
+          "url": "https://help.blueberryfunded.com/es/articles/12086952-desafio-rapid-regla-de-restriccion-de-tamano-de-lote",
+          "slots": ""
+        },
+        {
+          "title": "regla de restriccion de tamano de lote para todas las cuentas",
+          "url": "https://help.blueberryfunded.com/es/articles/12087202-regla-de-restriccion-de-tamano-de-lote-para-todas-las-cuentas",
+          "slots": ""
+        },
+        {
+          "title": "que es el desafio prime",
+          "url": "https://help.blueberryfunded.com/es/articles/12136509-que-es-el-desafio-prime",
+          "slots": ""
+        },
+        {
+          "title": "cuales son los limites de drawdown en una cuenta prime",
+          "url": "https://help.blueberryfunded.com/es/articles/12136586-cuales-son-los-limites-de-drawdown-en-una-cuenta-prime",
+          "slots": ""
+        },
+        {
+          "title": "estructura de pagos",
+          "url": "https://help.blueberryfunded.com/es/articles/12136624-estructura-de-pagos",
+          "slots": ""
+        },
+        {
+          "title": "requisito de dias de trading activos",
+          "url": "https://help.blueberryfunded.com/es/articles/12136639-requisito-de-dias-de-trading-activos",
+          "slots": ""
+        },
+        {
+          "title": "estilo de trading y reglas de riesgo",
+          "url": "https://help.blueberryfunded.com/es/articles/12137041-estilo-de-trading-y-reglas-de-riesgo",
+          "slots": ""
+        },
+        {
+          "title": "politica de trading durante noticias para el desafio prime",
+          "url": "https://help.blueberryfunded.com/es/articles/12140938-politica-de-trading-durante-noticias-para-el-desafio-prime",
+          "slots": ""
+        },
+        {
+          "title": "que sucede si infrinjo las reglas en el desafio prime",
+          "url": "https://help.blueberryfunded.com/es/articles/12140976-que-sucede-si-infrinjo-las-reglas-en-el-desafio-prime",
+          "slots": ""
+        },
+        {
+          "title": "que son las evaluaciones de trading de blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9550567-que-son-las-evaluaciones-de-trading-de-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "cuando comienza mi evaluacion",
+          "url": "https://help.blueberryfunded.com/es/articles/9550571-cuando-comienza-mi-evaluacion",
+          "slots": ""
+        },
+        {
+          "title": "hay paises restringidos para comprar una evaluacion",
+          "url": "https://help.blueberryfunded.com/es/articles/9550574-hay-paises-restringidos-para-comprar-una-evaluacion",
+          "slots": ""
+        },
+        {
+          "title": "requisito de dias minimos de trading",
+          "url": "https://help.blueberryfunded.com/es/articles/9550580-requisito-de-dias-minimos-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "puedo mantener posiciones durante el fin de semana y durante la noche",
+          "url": "https://help.blueberryfunded.com/es/articles/9550589-puedo-mantener-posiciones-durante-el-fin-de-semana-y-durante-la-noche",
+          "slots": ""
+        },
+        {
+          "title": "puedo realizar copy trading",
+          "url": "https://help.blueberryfunded.com/es/articles/9550602-puedo-realizar-copy-trading",
+          "slots": "P14"
+        },
+        {
+          "title": "cuando recibire mi cuenta de trading despues de realizar la compra",
+          "url": "https://help.blueberryfunded.com/es/articles/9550606-cuando-recibire-mi-cuenta-de-trading-despues-de-realizar-la-compra",
+          "slots": ""
+        },
+        {
+          "title": "cuando se fundo blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9550867-cuando-se-fundo-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "donde se encuentra ubicada blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9550869-donde-se-encuentra-ubicada-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "blueberry funded es un broker",
+          "url": "https://help.blueberryfunded.com/es/articles/9550871-blueberry-funded-es-un-broker",
+          "slots": ""
+        },
+        {
+          "title": "como inicio sesion en el panel de control de blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9550873-como-inicio-sesion-en-el-panel-de-control-de-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "permiten el uso de bots y asesores expertos eas",
+          "url": "https://help.blueberryfunded.com/es/articles/9550892-permiten-el-uso-de-bots-y-asesores-expertos-eas",
+          "slots": "P13"
+        },
+        {
+          "title": "tienen una regla sobre apuestas gambling rule",
+          "url": "https://help.blueberryfunded.com/es/articles/9550899-tienen-una-regla-sobre-apuestas-gambling-rule",
+          "slots": "P19"
+        },
+        {
+          "title": "tiempo de procesamiento de los pagos por rendimiento",
+          "url": "https://help.blueberryfunded.com/es/articles/9550905-tiempo-de-procesamiento-de-los-pagos-por-rendimiento",
+          "slots": ""
+        },
+        {
+          "title": "que metodos de pago ofrecen para los retiros",
+          "url": "https://help.blueberryfunded.com/es/articles/9550906-que-metodos-de-pago-ofrecen-para-los-retiros",
+          "slots": ""
+        },
+        {
+          "title": "debo pagar impuestos sobre mis ganancias",
+          "url": "https://help.blueberryfunded.com/es/articles/9550909-debo-pagar-impuestos-sobre-mis-ganancias",
+          "slots": ""
+        },
+        {
+          "title": "frecuencia de los pagos por rendimiento",
+          "url": "https://help.blueberryfunded.com/es/articles/9550911-frecuencia-de-los-pagos-por-rendimiento",
+          "slots": ""
+        },
+        {
+          "title": "que requisitos de verificacion se necesitan para los retiros",
+          "url": "https://help.blueberryfunded.com/es/articles/9550914-que-requisitos-de-verificacion-se-necesitan-para-los-retiros",
+          "slots": ""
+        },
+        {
+          "title": "con que frecuencia puedo retirar mis comisiones de afiliado",
+          "url": "https://help.blueberryfunded.com/es/articles/9563855-con-que-frecuencia-puedo-retirar-mis-comisiones-de-afiliado",
+          "slots": ""
+        },
+        {
+          "title": "cuanto puedo ganar como afiliado de blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9563907-cuanto-puedo-ganar-como-afiliado-de-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "mi enlace de afiliado rastrea cookies",
+          "url": "https://help.blueberryfunded.com/es/articles/9563960-mi-enlace-de-afiliado-rastrea-cookies",
+          "slots": ""
+        },
+        {
+          "title": "puedo ganar comisiones por compras repetidas",
+          "url": "https://help.blueberryfunded.com/es/articles/9563964-puedo-ganar-comisiones-por-compras-repetidas",
+          "slots": ""
+        },
+        {
+          "title": "que hace diferente a blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9563972-que-hace-diferente-a-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "que es blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9563981-que-es-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "puedo registrar mi cuenta de trading a nombre de una llc",
+          "url": "https://help.blueberryfunded.com/es/articles/9661748-puedo-registrar-mi-cuenta-de-trading-a-nombre-de-una-llc",
+          "slots": ""
+        },
+        {
+          "title": "que es el balance protector en las evaluaciones rapid",
+          "url": "https://help.blueberryfunded.com/es/articles/9661789-que-es-el-balance-protector-en-las-evaluaciones-rapid",
+          "slots": ""
+        },
+        {
+          "title": "tienen un programa de afiliados",
+          "url": "https://help.blueberryfunded.com/es/articles/9714099-tienen-un-programa-de-afiliados",
+          "slots": ""
+        },
+        {
+          "title": "estrategias prohibidas",
+          "url": "https://help.blueberryfunded.com/es/articles/9714626-estrategias-prohibidas",
+          "slots": ""
+        },
+        {
+          "title": "comisiones de trading",
+          "url": "https://help.blueberryfunded.com/es/articles/9715159-comisiones-de-trading",
+          "slots": ""
+        },
+        {
+          "title": "permiten operar durante noticias",
+          "url": "https://help.blueberryfunded.com/es/articles/9715375-permiten-operar-durante-noticias",
+          "slots": ""
+        },
+        {
+          "title": "escalamiento de cuentas blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9762548-escalamiento-de-cuentas-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "cuando recibire mi cuenta de fase 2 o de ganancias despues de aprobar el desafio",
+          "url": "https://help.blueberryfunded.com/es/articles/9773746-cuando-recibire-mi-cuenta-de-fase-2-o-de-ganancias-despues-de-aprobar-el-desafio",
+          "slots": ""
+        },
+        {
+          "title": "politica de reembolsos",
+          "url": "https://help.blueberryfunded.com/es/articles/9773783-politica-de-reembolsos",
+          "slots": ""
+        },
+        {
+          "title": "cual es su regla de ip con respecto a multiples cuentas",
+          "url": "https://help.blueberryfunded.com/es/articles/9774387-cual-es-su-regla-de-ip-con-respecto-a-multiples-cuentas",
+          "slots": ""
+        },
+        {
+          "title": "como puedo retirar mis comisiones de afiliado",
+          "url": "https://help.blueberryfunded.com/es/articles/9789435-como-puedo-retirar-mis-comisiones-de-afiliado",
+          "slots": ""
+        },
+        {
+          "title": "blueberry funded permite el hedging cobertura",
+          "url": "https://help.blueberryfunded.com/es/articles/9812241-blueberry-funded-permite-el-hedging-cobertura",
+          "slots": "P19"
+        },
+        {
+          "title": "blueberry funded aplica una regla de consistencia en el trading",
+          "url": "https://help.blueberryfunded.com/es/articles/9812246-blueberry-funded-aplica-una-regla-de-consistencia-en-el-trading",
+          "slots": ""
+        },
+        {
+          "title": "cual es la regla de hiperactividad en blueberry funded",
+          "url": "https://help.blueberryfunded.com/es/articles/9812247-cual-es-la-regla-de-hiperactividad-en-blueberry-funded",
+          "slots": ""
+        },
+        {
+          "title": "1 paso regla de restriccion de tamano de lote",
+          "url": "https://help.blueberryfunded.com/es/articles/9849249-1-paso-regla-de-restriccion-de-tamano-de-lote",
+          "slots": ""
+        },
+        {
+          "title": "existe un periodo de inactividad",
+          "url": "https://help.blueberryfunded.com/es/articles/9859296-existe-un-periodo-de-inactividad",
+          "slots": ""
+        },
+        {
+          "title": "esta permitido el uso de vpn o vps",
+          "url": "https://help.blueberryfunded.com/es/articles/9859313-esta-permitido-el-uso-de-vpn-o-vps",
+          "slots": ""
+        },
+        {
+          "title": "es obligatorio usar stop loss",
+          "url": "https://help.blueberryfunded.com/es/articles/9859335-es-obligatorio-usar-stop-loss",
+          "slots": "P16"
+        },
+        {
+          "title": "nuestro enfoque frente a las afiliaciones con otras firmas",
+          "url": "https://help.blueberryfunded.com/es/articles/9987297-nuestro-enfoque-frente-a-las-afiliaciones-con-otras-firmas",
+          "slots": ""
+        },
+        {
+          "title": "rapidチャレンジのドローダウンはどのように計算されますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/10070362-rapidチャレンジのドローダウンはどのように計算されますか",
+          "slots": ""
+        },
+        {
+          "title": "7日間ペイアウト アドオン",
+          "url": "https://help.blueberryfunded.com/ja/articles/10537925-7日間ペイアウト-アドオン",
+          "slots": ""
+        },
+        {
+          "title": "実運用アカウントからのペイアウト申請方法",
+          "url": "https://help.blueberryfunded.com/ja/articles/10622848-実運用アカウントからのペイアウト申請方法",
+          "slots": ""
+        },
+        {
+          "title": "mt5 にログインしようとした際に invalid account エラーが表示されるのはなぜですか",
+          "url": "https://help.blueberryfunded.com/ja/articles/11461588-mt5-にログインしようとした際に-invalid-account-エラーが表示されるのはなぜですか",
+          "slots": ""
+        },
+        {
+          "title": "blueberry のインスタントファンディングアカウントには 一貫性ルール consistency rule はありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/11873962-blueberry-のインスタントファンディングアカウントには-一貫性ルール-consistency-rule-はありますか",
+          "slots": "P07"
+        },
+        {
+          "title": "インスタントチャレンジの概要",
+          "url": "https://help.blueberryfunded.com/ja/articles/11874076-インスタントチャレンジの概要",
+          "slots": ""
+        },
+        {
+          "title": "インスタントファンディングでは どの口座サイズが利用できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/11879872-インスタントファンディングでは-どの口座サイズが利用できますか",
+          "slots": ""
+        },
+        {
+          "title": "blueberryのインスタントファンディングでは どの取引プラットフォームが利用できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/11879918-blueberryのインスタントファンディングでは-どの取引プラットフォームが利用できますか",
+          "slots": ""
+        },
+        {
+          "title": "インスタントアカウントではどのような成果報酬 パフォーマンス報酬 が得られますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/11879956-インスタントアカウントではどのような成果報酬-パフォーマンス報酬-が得られますか",
+          "slots": ""
+        },
+        {
+          "title": "インスタントファンディングアカウントのデイリー損失上限と最大損失上限について",
+          "url": "https://help.blueberryfunded.com/ja/articles/11880026-インスタントファンディングアカウントのデイリー損失上限と最大損失上限について",
+          "slots": ""
+        },
+        {
+          "title": "インスタント ロットサイズ制限ルール 2026年3月12日以前",
+          "url": "https://help.blueberryfunded.com/ja/articles/11888897-インスタント-ロットサイズ制限ルール-2026年3月12日以前",
+          "slots": ""
+        },
+        {
+          "title": "1ステップ デイリー 最大ドローダウン",
+          "url": "https://help.blueberryfunded.com/ja/articles/12075830-1ステップ-デイリー-最大ドローダウン",
+          "slots": ""
+        },
+        {
+          "title": "2ステップ ロットサイズ制限ルール 2026年3月12日以前",
+          "url": "https://help.blueberryfunded.com/ja/articles/12075913-2ステップ-ロットサイズ制限ルール-2026年3月12日以前",
+          "slots": ""
+        },
+        {
+          "title": "2 ステップチャレンジ デイリー 最大ドローダウン",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076157-2-ステップチャレンジ-デイリー-最大ドローダウン",
+          "slots": ""
+        },
+        {
+          "title": "1ステッププランの概要",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076313-1ステッププランの概要",
+          "slots": ""
+        },
+        {
+          "title": "2ステップ チャレンジ 完全ガイド",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076385-2ステップ-チャレンジ-完全ガイド",
+          "slots": ""
+        },
+        {
+          "title": "blueberry の 1 ステップチャレンジでは どの取引プラットフォームが利用できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076417-blueberry-の-1-ステップチャレンジでは-どの取引プラットフォームが利用できますか",
+          "slots": ""
+        },
+        {
+          "title": "blueberry の 2ステップチャレンジでは どの取引プラットフォームが利用できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076421-blueberry-の-2ステップチャレンジでは-どの取引プラットフォームが利用できますか",
+          "slots": ""
+        },
+        {
+          "title": "1 ステッププロ アカウントでは どのような成果報酬 パフォーマンス報酬 が得られますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076427-1-ステッププロ-アカウントでは-どのような成果報酬-パフォーマンス報酬-が得られますか",
+          "slots": ""
+        },
+        {
+          "title": "2ステップ プロ アカウントでは どのような成果報酬 パフォーマンス報酬 が得られますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076435-2ステップ-プロ-アカウントでは-どのような成果報酬-パフォーマンス報酬-が得られますか",
+          "slots": ""
+        },
+        {
+          "title": "blueberry の 1ステップチャレンジ プロ アカウントに一貫性ルールはありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076437-blueberry-の-1ステップチャレンジ-プロ-アカウントに一貫性ルールはありますか",
+          "slots": ""
+        },
+        {
+          "title": "blueberry の 2ステップ チャレンジ プロ アカウントに一貫性ルールはありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12076438-blueberry-の-2ステップ-チャレンジ-プロ-アカウントに一貫性ルールはありますか",
+          "slots": ""
+        },
+        {
+          "title": "rapid ロットサイズ制限ルール",
+          "url": "https://help.blueberryfunded.com/ja/articles/12086952-rapid-ロットサイズ制限ルール",
+          "slots": ""
+        },
+        {
+          "title": "全アカウント対象 ロットサイズ制限ルール",
+          "url": "https://help.blueberryfunded.com/ja/articles/12087202-全アカウント対象-ロットサイズ制限ルール",
+          "slots": ""
+        },
+        {
+          "title": "prime challengeとは何ですか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12136509-prime-challengeとは何ですか",
+          "slots": ""
+        },
+        {
+          "title": "primeアカウントのドローダウン制限とは",
+          "url": "https://help.blueberryfunded.com/ja/articles/12136586-primeアカウントのドローダウン制限とは",
+          "slots": ""
+        },
+        {
+          "title": "ペイアウト 利益受け取り 構造",
+          "url": "https://help.blueberryfunded.com/ja/articles/12136624-ペイアウト-利益受け取り-構造",
+          "slots": ""
+        },
+        {
+          "title": "アクティブトレード日は何日必要ですか",
+          "url": "https://help.blueberryfunded.com/ja/articles/12136639-アクティブトレード日は何日必要ですか",
+          "slots": ""
+        },
+        {
+          "title": "取引スタイルおよびリスクに関するルール",
+          "url": "https://help.blueberryfunded.com/ja/articles/12137041-取引スタイルおよびリスクに関するルール",
+          "slots": ""
+        },
+        {
+          "title": "prime challenge におけるニュース取引ポリシー",
+          "url": "https://help.blueberryfunded.com/ja/articles/12140938-prime-challenge-におけるニュース取引ポリシー",
+          "slots": ""
+        },
+        {
+          "title": "prime challengeでルール違反をした場合",
+          "url": "https://help.blueberryfunded.com/ja/articles/12140976-prime-challengeでルール違反をした場合",
+          "slots": ""
+        },
+        {
+          "title": "利益はどれくらい早く出金できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/13756854-利益はどれくらい早く出金できますか",
+          "slots": ""
+        },
+        {
+          "title": "リスク リミッター risk limiter",
+          "url": "https://help.blueberryfunded.com/ja/articles/14051055-リスク-リミッター-risk-limiter",
+          "slots": ""
+        },
+        {
+          "title": "prime ロットサイズ制限ルール",
+          "url": "https://help.blueberryfunded.com/ja/articles/14051815-prime-ロットサイズ制限ルール",
+          "slots": ""
+        },
+        {
+          "title": "1ステップ チャレンジ 完全ガイド",
+          "url": "https://help.blueberryfunded.com/ja/articles/14070623-1ステップ-チャレンジ-完全ガイド",
+          "slots": ""
+        },
+        {
+          "title": "禁止されている戦略 2026年3月12日以前",
+          "url": "https://help.blueberryfunded.com/ja/articles/14072414-禁止されている戦略-2026年3月12日以前",
+          "slots": ""
+        },
+        {
+          "title": "トレードアイデアごとのリスク1 5 制限ルール",
+          "url": "https://help.blueberryfunded.com/ja/articles/14072474-トレードアイデアごとのリスク1-5-制限ルール",
+          "slots": ""
+        },
+        {
+          "title": "評価はいつ開始されますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550571-評価はいつ開始されますか",
+          "slots": ""
+        },
+        {
+          "title": "評価 evaluation を購入できない国はありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550574-評価-evaluation-を購入できない国はありますか",
+          "slots": ""
+        },
+        {
+          "title": "最低トレード日数 minimum trading days はありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550580-最低トレード日数-minimum-trading-days-はありますか",
+          "slots": "P02"
+        },
+        {
+          "title": "週末およびオーバーナイトでポジションを保有できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550589-週末およびオーバーナイトでポジションを保有できますか",
+          "slots": ""
+        },
+        {
+          "title": "コピー取引 copy trading は利用できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550602-コピー取引-copy-trading-は利用できますか",
+          "slots": "P14"
+        },
+        {
+          "title": "ea 自動売買 は利用できますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550892-ea-自動売買-は利用できますか",
+          "slots": "P13"
+        },
+        {
+          "title": "アンチ ギャンブル ポリシー 2026年3月12日以前",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550899-アンチ-ギャンブル-ポリシー-2026年3月12日以前",
+          "slots": ""
+        },
+        {
+          "title": "パフォーマンス報酬の支払い処理時間",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550905-パフォーマンス報酬の支払い処理時間",
+          "slots": ""
+        },
+        {
+          "title": "ペイアウト 出金 にはどのような支払い方法がありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550906-ペイアウト-出金-にはどのような支払い方法がありますか",
+          "slots": ""
+        },
+        {
+          "title": "収益に対して税金を支払う必要はありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550909-収益に対して税金を支払う必要はありますか",
+          "slots": ""
+        },
+        {
+          "title": "パフォーマンス報酬の支払い頻度",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550911-パフォーマンス報酬の支払い頻度",
+          "slots": ""
+        },
+        {
+          "title": "ペイアウト 出金 にはどのような認証が必要ですか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9550914-ペイアウト-出金-にはどのような認証が必要ですか",
+          "slots": ""
+        },
+        {
+          "title": "rapid evaluations における balance protector 残高保護機能 とは",
+          "url": "https://help.blueberryfunded.com/ja/articles/9661789-rapid-evaluations-における-balance-protector-残高保護機能-とは",
+          "slots": ""
+        },
+        {
+          "title": "禁止されている戦略 2026年3月12日以降",
+          "url": "https://help.blueberryfunded.com/ja/articles/9714626-禁止されている戦略-2026年3月12日以降",
+          "slots": ""
+        },
+        {
+          "title": "取引手数料 trading commissions",
+          "url": "https://help.blueberryfunded.com/ja/articles/9715159-取引手数料-trading-commissions",
+          "slots": ""
+        },
+        {
+          "title": "ニューストレード news trading は許可されていますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9715375-ニューストレード-news-trading-は許可されていますか",
+          "slots": "P10"
+        },
+        {
+          "title": "blueberry funded アカウントのスケーリング account scaling",
+          "url": "https://help.blueberryfunded.com/ja/articles/9762548-blueberry-funded-アカウントのスケーリング-account-scaling",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジ合格後 いつフェーズ2または実運用アカウントを受け取れますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9773746-チャレンジ合格後-いつフェーズ2または実運用アカウントを受け取れますか",
+          "slots": ""
+        },
+        {
+          "title": "複数アカウントに関するipルールについて",
+          "url": "https://help.blueberryfunded.com/ja/articles/9774387-複数アカウントに関するipルールについて",
+          "slots": ""
+        },
+        {
+          "title": "blueberry funded ではヘッジングを許可していますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9812241-blueberry-funded-ではヘッジングを許可していますか",
+          "slots": ""
+        },
+        {
+          "title": "blueberry funded には一貫性ルールはありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9812246-blueberry-funded-には一貫性ルールはありますか",
+          "slots": ""
+        },
+        {
+          "title": "blueberry fundedにおけるハイパーアクティビティ ルールとは",
+          "url": "https://help.blueberryfunded.com/ja/articles/9812247-blueberry-fundedにおけるハイパーアクティビティ-ルールとは",
+          "slots": ""
+        },
+        {
+          "title": "1ステップ ロットサイズ制限ルール 2026年3月12日以前",
+          "url": "https://help.blueberryfunded.com/ja/articles/9849249-1ステップ-ロットサイズ制限ルール-2026年3月12日以前",
+          "slots": ""
+        },
+        {
+          "title": "非アクティブ期間 inactivity period はありますか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9859296-非アクティブ期間-inactivity-period-はありますか",
+          "slots": "P09"
+        },
+        {
+          "title": "ストップロス 損切り の設定は必須ですか",
+          "url": "https://help.blueberryfunded.com/ja/articles/9859335-ストップロス-損切り-の設定は必須ですか",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P03,P04,P05,P06,P07,P09,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19",
+    "missing": "P02b,P08",
+    "note": "19/21（本文補強後）"
+  }
+}

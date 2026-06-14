@@ -1,5 +1,20 @@
 {
     "recommendations": [
-        "anthropic.claude-code"
+        "anthropic.claude-code",
+        "budparr.language-hugo-vscode",
+        "editorconfig.editorconfig",
+        "yzhang.markdown-all-in-one",
+        "davidanson.vscode-markdownlint",
+        "bierner.markdown-preview-github-styles",
+        "mechatroner.rainbow-csv",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "esbenp.prettier-vscode",
+        "ritwickdey.liveserver",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker",
+        "christian-kohler.path-intellisense",
+        "gruntfuggly.todo-tree"
     ]
 }

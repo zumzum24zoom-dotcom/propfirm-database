@@ -1,0 +1,396 @@
+{
+  "firm": "alpha-capital-group",
+  "help_base_url": "https://help.alphacapitalgroup.uk/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で25記事は未取得＝ルール系優先）",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "alpha one",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/10097421-alpha-one",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P10,P11,P18,P19"
+        },
+        {
+          "title": "performance fee on demand",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/10102634-performance-fee-on-demand",
+          "slots": "P07"
+        },
+        {
+          "title": "alpha three",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/10192958-alpha-three",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P10,P11,P18,P19"
+        },
+        {
+          "title": "performance fee bi weekly",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/10570531-performance-fee-bi-weekly",
+          "slots": "P02,P19"
+        },
+        {
+          "title": "alpha prime",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/10965278-alpha-prime",
+          "slots": "P03,P06,P07,P08,P10"
+        },
+        {
+          "title": "risk management group swing",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/11325791-risk-management-group-swing",
+          "slots": "P05,P06,P09,P10,P15,P17,P18,P19"
+        },
+        {
+          "title": "alpha pro 6",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/11378706-alpha-pro-6",
+          "slots": "P20,P01,P02,P03,P04,P05,P06,P10,P11,P18,P19"
+        },
+        {
+          "title": "tradelocker guide",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/11534243-tradelocker-guide",
+          "slots": ""
+        },
+        {
+          "title": "affiliate marketing",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/11786197-affiliate-marketing",
+          "slots": ""
+        },
+        {
+          "title": "risk management group on demand",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/12478051-risk-management-group-on-demand",
+          "slots": "P05,P06,P09,P10,P15,P17,P18,P19"
+        },
+        {
+          "title": "how do i get paid performance fees",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933755-how-do-i-get-paid-performance-fees",
+          "slots": ""
+        },
+        {
+          "title": "how long will it take to get my credentials",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933849-how-long-will-it-take-to-get-my-credentials",
+          "slots": "P09"
+        },
+        {
+          "title": "are there free retakes",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933851-are-there-free-retakes",
+          "slots": "P09"
+        },
+        {
+          "title": "how does the scaling plan work",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933852-how-does-the-scaling-plan-work",
+          "slots": "P02,P05,P18"
+        },
+        {
+          "title": "is there a legal agreement for qualified trader accounts with alpha capital group",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933882-is-there-a-legal-agreement-for-qualified-trader-accounts-with-alpha-capital-group",
+          "slots": ""
+        },
+        {
+          "title": "what trading platforms are available for use",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933883-what-trading-platforms-are-available-for-use",
+          "slots": ""
+        },
+        {
+          "title": "what is classified as hedging and stacking",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933901-what-is-classified-as-hedging-and-stacking",
+          "slots": "P19"
+        },
+        {
+          "title": "are stop loss and take profit orders required",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933904-are-stop-loss-and-take-profit-orders-required",
+          "slots": "P13,P16"
+        },
+        {
+          "title": "if i pass before the minimum trading days what is required for the remaining days",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933908-if-i-pass-before-the-minimum-trading-days-what-is-required-for-the-remaining-days",
+          "slots": "P02"
+        },
+        {
+          "title": "are there any profit targets on qualified trader accounts",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933909-are-there-any-profit-targets-on-qualified-trader-accounts",
+          "slots": "P01"
+        },
+        {
+          "title": "is there a minimum target required on a qualified analyst account before i can receive a performance fee",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933910-is-there-a-minimum-target-required-on-a-qualified-analyst-account-before-i-can-receive-a-performance-fee",
+          "slots": "P01"
+        },
+        {
+          "title": "do i need experience before i apply",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933919-do-i-need-experience-before-i-apply",
+          "slots": ""
+        },
+        {
+          "title": "are you a broker",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933922-are-you-a-broker",
+          "slots": ""
+        },
+        {
+          "title": "which broker do we use",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6933925-which-broker-do-we-use",
+          "slots": ""
+        },
+        {
+          "title": "what is leverage and what leverage is offered during the assessment and qualified analyst accounts",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934203-what-is-leverage-and-what-leverage-is-offered-during-the-assessment-and-qualified-analyst-accounts",
+          "slots": "P08"
+        },
+        {
+          "title": "what are the daily risk limits and how do they work",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934210-what-are-the-daily-risk-limits-and-how-do-they-work",
+          "slots": "P03,P04"
+        },
+        {
+          "title": "what is the maximum total loss",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934220-what-is-the-maximum-total-loss",
+          "slots": "P04,P05,P06"
+        },
+        {
+          "title": "what are the minimum and maximum trading days for the assessment",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934224-what-are-the-minimum-and-maximum-trading-days-for-the-assessment",
+          "slots": "P02,P09"
+        },
+        {
+          "title": "what is the total duration of the assessment period",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934229-what-is-the-total-duration-of-the-assessment-period",
+          "slots": "P09"
+        },
+        {
+          "title": "can i use an expert advisor ea",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934236-can-i-use-an-expert-advisor-ea",
+          "slots": "P13,P16,P19"
+        },
+        {
+          "title": "can i hold trades over the weekend",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934247-can-i-hold-trades-over-the-weekend",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "what are prohibited trading strategies",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934275-what-are-prohibited-trading-strategies",
+          "slots": "P13,P19"
+        },
+        {
+          "title": "is there a lot size limit during the assessment",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934287-is-there-a-lot-size-limit-during-the-assessment",
+          "slots": "P18"
+        },
+        {
+          "title": "what is the lot size limit on qualified trader accounts",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934289-what-is-the-lot-size-limit-on-qualified-trader-accounts",
+          "slots": "P17,P18"
+        },
+        {
+          "title": "can i have a free retry if i finish with a profit",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/6934293-can-i-have-a-free-retry-if-i-finish-with-a-profit",
+          "slots": "P09"
+        },
+        {
+          "title": "how can i toggle between accounts on the dashboard",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060878-how-can-i-toggle-between-accounts-on-the-dashboard",
+          "slots": ""
+        },
+        {
+          "title": "what features do we offer in our trader s dashboard",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060892-what-features-do-we-offer-in-our-trader-s-dashboard",
+          "slots": ""
+        },
+        {
+          "title": "how do i sign up for a competition",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060895-how-do-i-sign-up-for-a-competition",
+          "slots": ""
+        },
+        {
+          "title": "can i pass using someone s signals",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060898-can-i-pass-using-someone-s-signals",
+          "slots": "P19"
+        },
+        {
+          "title": "when does my assessment start",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060901-when-does-my-assessment-start",
+          "slots": ""
+        },
+        {
+          "title": "what happens once the assessment process is passed",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060904-what-happens-once-the-assessment-process-is-passed",
+          "slots": ""
+        },
+        {
+          "title": "what happens if i violate a rule",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060906-what-happens-if-i-violate-a-rule",
+          "slots": ""
+        },
+        {
+          "title": "what is alpha capital group s policy against gambling in trading",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060909-what-is-alpha-capital-group-s-policy-against-gambling-in-trading",
+          "slots": "P19"
+        },
+        {
+          "title": "how can i keep track of rules and my trading objectives",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060911-how-can-i-keep-track-of-rules-and-my-trading-objectives",
+          "slots": ""
+        },
+        {
+          "title": "what do qualified traders earn from account profits",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060937-what-do-qualified-traders-earn-from-account-profits",
+          "slots": ""
+        },
+        {
+          "title": "what happens if a rule is broken on a qualified trader account",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7060940-what-happens-if-a-rule-is-broken-on-a-qualified-trader-account",
+          "slots": "P05,P19"
+        },
+        {
+          "title": "third party payments",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/7883145-third-party-payments",
+          "slots": ""
+        },
+        {
+          "title": "free monthly trading competition rules",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8074562-free-monthly-trading-competition-rules",
+          "slots": "P05,P10,P13,P17,P18"
+        },
+        {
+          "title": "how does trading on alpha capital group compare to a real market environment",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420051-how-does-trading-on-alpha-capital-group-compare-to-a-real-market-environment",
+          "slots": ""
+        },
+        {
+          "title": "are there commission fees",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420066-are-there-commission-fees",
+          "slots": ""
+        },
+        {
+          "title": "am i trading with real funds",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420070-am-i-trading-with-real-funds",
+          "slots": ""
+        },
+        {
+          "title": "who can i contact for technical support",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420072-who-can-i-contact-for-technical-support",
+          "slots": ""
+        },
+        {
+          "title": "how should i handle taxes when trading with alpha capital group",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420078-how-should-i-handle-taxes-when-trading-with-alpha-capital-group",
+          "slots": ""
+        },
+        {
+          "title": "inactivity",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420080-inactivity",
+          "slots": "P09"
+        },
+        {
+          "title": "alpha pro 8 10",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420429-alpha-pro-8-10",
+          "slots": ""
+        },
+        {
+          "title": "what is the ip rule are vpns and vpss allowed",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420522-what-is-the-ip-rule-are-vpns-and-vpss-allowed",
+          "slots": "P19"
+        },
+        {
+          "title": "what documentation is required for an analyst account",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420532-what-documentation-is-required-for-an-analyst-account",
+          "slots": ""
+        },
+        {
+          "title": "what is the performance fee bonus",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420537-what-is-the-performance-fee-bonus",
+          "slots": ""
+        },
+        {
+          "title": "is it possible to receive a refund for the challenge fees once i have successfully completed my assessment",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8420592-is-it-possible-to-receive-a-refund-for-the-challenge-fees-once-i-have-successfully-completed-my-assessment",
+          "slots": ""
+        },
+        {
+          "title": "what is the 2 minute average trade duration rule",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8447268-what-is-the-2-minute-average-trade-duration-rule",
+          "slots": "P20,P09,P15"
+        },
+        {
+          "title": "does the 2 minute average trade duration rule apply to qualified accounts",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8447317-does-the-2-minute-average-trade-duration-rule-apply-to-qualified-accounts",
+          "slots": "P09,P15"
+        },
+        {
+          "title": "free 5k account promo rules",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8671414-free-5k-account-promo-rules",
+          "slots": "P20,P03,P05,P09,P13,P18"
+        },
+        {
+          "title": "countries with limitations",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8775575-countries-with-limitations",
+          "slots": ""
+        },
+        {
+          "title": "a guide to alpha capital group free trial account",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8782664-a-guide-to-alpha-capital-group-free-trial-account",
+          "slots": ""
+        },
+        {
+          "title": "what are the prizes for the monthly competitions",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8782766-what-are-the-prizes-for-the-monthly-competitions",
+          "slots": ""
+        },
+        {
+          "title": "important trading terms",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8783017-important-trading-terms",
+          "slots": ""
+        },
+        {
+          "title": "tradeable assets",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8786240-tradeable-assets",
+          "slots": ""
+        },
+        {
+          "title": "merging accounts",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8786521-merging-accounts",
+          "slots": ""
+        },
+        {
+          "title": "is copy trading allowed",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8786973-is-copy-trading-allowed",
+          "slots": "P09,P14,P19"
+        },
+        {
+          "title": "how many accounts can i have what is the maximum allocation per strategy",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8804535-how-many-accounts-can-i-have-what-is-the-maximum-allocation-per-strategy",
+          "slots": ""
+        },
+        {
+          "title": "liability and responsibility",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8853079-liability-and-responsibility",
+          "slots": ""
+        },
+        {
+          "title": "ctrader setup guide",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/8975697-ctrader-setup-guide",
+          "slots": ""
+        },
+        {
+          "title": "can i trade news",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/9293522-can-i-trade-news",
+          "slots": "P10,P16,P19"
+        },
+        {
+          "title": "risk management group pro",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/9691161-risk-management-group-pro",
+          "slots": "P05,P06,P09,P10,P15,P17,P18,P19"
+        },
+        {
+          "title": "alpha swing",
+          "url": "https://help.alphacapitalgroup.uk/en/articles/9789907-alpha-swing",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P03,P04,P05,P06,P07,P08,P09,P10,P11,P13,P14,P15,P16,P17,P18,P19",
+    "missing": "P02b,P12",
+    "note": "19/21（本文補強後）"
+  }
+}

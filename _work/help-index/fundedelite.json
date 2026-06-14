@@ -1,0 +1,716 @@
+{
+  "firm": "fundedelite",
+  "help_base_url": "https://faq.fundedelite.com/",
+  "platform": "intercom",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto+body",
+  "fetch_note": "sitemap→記事スラッグの機械タグ付け（第一次パス・要レビュー）。本文未取得。誤タグ/不足は手修正。 / 本文補強: 50記事取得・本文具体フレーズ照合でslot追加（上限50超で89記事は未取得＝ルール系優先） / 本文補強: 73記事取得・本文具体フレーズ照合でslot追加",
+  "collections": [
+    {
+      "title": "All articles（sitemap・自動タグ）",
+      "articles": [
+        {
+          "title": "is funded elite a broker",
+          "url": "https://faq.fundedelite.com/en/articles/10526004-is-funded-elite-a-broker",
+          "slots": "P14"
+        },
+        {
+          "title": "are there any promotional materials available for affiliates",
+          "url": "https://faq.fundedelite.com/en/articles/10531680-are-there-any-promotional-materials-available-for-affiliates",
+          "slots": ""
+        },
+        {
+          "title": "what happens if i encounter technical issues during the trading challenge",
+          "url": "https://faq.fundedelite.com/en/articles/10533233-what-happens-if-i-encounter-technical-issues-during-the-trading-challenge",
+          "slots": ""
+        },
+        {
+          "title": "what measures are taken if a challenge completion appears irregular",
+          "url": "https://faq.fundedelite.com/en/articles/10533809-what-measures-are-taken-if-a-challenge-completion-appears-irregular",
+          "slots": "P13,P15,P19"
+        },
+        {
+          "title": "trading credentials",
+          "url": "https://faq.fundedelite.com/en/articles/12658785-trading-credentials",
+          "slots": "P11"
+        },
+        {
+          "title": "what documentation is required for live simulated accounts verification",
+          "url": "https://faq.fundedelite.com/en/articles/12658867-what-documentation-is-required-for-live-simulated-accounts-verification",
+          "slots": ""
+        },
+        {
+          "title": "contract signing",
+          "url": "https://faq.fundedelite.com/en/articles/12658924-contract-signing",
+          "slots": "P20"
+        },
+        {
+          "title": "can i create multiple profiles under my name",
+          "url": "https://faq.fundedelite.com/en/articles/12659483-can-i-create-multiple-profiles-under-my-name",
+          "slots": "P19"
+        },
+        {
+          "title": "how many accounts can i have with fundedelite",
+          "url": "https://faq.fundedelite.com/en/articles/12659756-how-many-accounts-can-i-have-with-fundedelite",
+          "slots": ""
+        },
+        {
+          "title": "does fundedelite operate under regulation",
+          "url": "https://faq.fundedelite.com/en/articles/12659952-does-fundedelite-operate-under-regulation",
+          "slots": "P14"
+        },
+        {
+          "title": "what is a trading challenge or evaluation",
+          "url": "https://faq.fundedelite.com/en/articles/12660006-what-is-a-trading-challenge-or-evaluation",
+          "slots": "P20,P04"
+        },
+        {
+          "title": "what is the leverage of the challenges we offer",
+          "url": "https://faq.fundedelite.com/en/articles/12660032-what-is-the-leverage-of-the-challenges-we-offer",
+          "slots": "P20"
+        },
+        {
+          "title": "am i being funded with real money",
+          "url": "https://faq.fundedelite.com/en/articles/12673622-am-i-being-funded-with-real-money",
+          "slots": "P14"
+        },
+        {
+          "title": "are the accounts swap free",
+          "url": "https://faq.fundedelite.com/en/articles/12673626-are-the-accounts-swap-free",
+          "slots": "P20"
+        },
+        {
+          "title": "are there any hidden rules",
+          "url": "https://faq.fundedelite.com/en/articles/12673629-are-there-any-hidden-rules",
+          "slots": ""
+        },
+        {
+          "title": "are there any payout limitations on different types of accounts",
+          "url": "https://faq.fundedelite.com/en/articles/12673656-are-there-any-payout-limitations-on-different-types-of-accounts",
+          "slots": "P08"
+        },
+        {
+          "title": "can i access a free trial of funded elite",
+          "url": "https://faq.fundedelite.com/en/articles/12673681-can-i-access-a-free-trial-of-funded-elite",
+          "slots": "P14"
+        },
+        {
+          "title": "can i make payments using a credit card that belongs to someone else",
+          "url": "https://faq.fundedelite.com/en/articles/12673696-can-i-make-payments-using-a-credit-card-that-belongs-to-someone-else",
+          "slots": "P19"
+        },
+        {
+          "title": "can i merge my accounts",
+          "url": "https://faq.fundedelite.com/en/articles/12673704-can-i-merge-my-accounts",
+          "slots": "P20,P11,P14,P17"
+        },
+        {
+          "title": "what happens if i break the rules",
+          "url": "https://faq.fundedelite.com/en/articles/12673730-what-happens-if-i-break-the-rules",
+          "slots": ""
+        },
+        {
+          "title": "restricted countries",
+          "url": "https://faq.fundedelite.com/en/articles/12674977-restricted-countries",
+          "slots": "P19"
+        },
+        {
+          "title": "do i get my fee back",
+          "url": "https://faq.fundedelite.com/en/articles/12675009-do-i-get-my-fee-back",
+          "slots": "P20"
+        },
+        {
+          "title": "do you have any inactivity rule",
+          "url": "https://faq.fundedelite.com/en/articles/12675024-do-you-have-any-inactivity-rule",
+          "slots": "P09,P13,P14"
+        },
+        {
+          "title": "do you copy trades to live funds",
+          "url": "https://faq.fundedelite.com/en/articles/12675036-do-you-copy-trades-to-live-funds",
+          "slots": "P10,P13,P14"
+        },
+        {
+          "title": "payouts process and profit split",
+          "url": "https://faq.fundedelite.com/en/articles/12675058-payouts-process-and-profit-split",
+          "slots": "P20"
+        },
+        {
+          "title": "how can i pay for the challenge",
+          "url": "https://faq.fundedelite.com/en/articles/12675091-how-can-i-pay-for-the-challenge",
+          "slots": ""
+        },
+        {
+          "title": "how do i handle my taxes",
+          "url": "https://faq.fundedelite.com/en/articles/12675097-how-do-i-handle-my-taxes",
+          "slots": ""
+        },
+        {
+          "title": "how does funded elite ensure the security of my personal and financial information",
+          "url": "https://faq.fundedelite.com/en/articles/12675104-how-does-funded-elite-ensure-the-security-of-my-personal-and-financial-information",
+          "slots": ""
+        },
+        {
+          "title": "how does our risk department work",
+          "url": "https://faq.fundedelite.com/en/articles/12675108-how-does-our-risk-department-work",
+          "slots": "P19"
+        },
+        {
+          "title": "how does the challenge evaluation work",
+          "url": "https://faq.fundedelite.com/en/articles/12675113-how-does-the-challenge-evaluation-work",
+          "slots": "P20,P01,P02,P03"
+        },
+        {
+          "title": "how long does it take to receive the next account after passing a trading phase",
+          "url": "https://faq.fundedelite.com/en/articles/12675122-how-long-does-it-take-to-receive-the-next-account-after-passing-a-trading-phase",
+          "slots": "P20,P09"
+        },
+        {
+          "title": "minimum holding time for the trades",
+          "url": "https://faq.fundedelite.com/en/articles/12675184-minimum-holding-time-for-the-trades",
+          "slots": "P20,P15,P19"
+        },
+        {
+          "title": "tradable instruments and commissions",
+          "url": "https://faq.fundedelite.com/en/articles/12675454-tradable-instruments-and-commissions",
+          "slots": ""
+        },
+        {
+          "title": "what is the refund policy",
+          "url": "https://faq.fundedelite.com/en/articles/12675522-what-is-the-refund-policy",
+          "slots": ""
+        },
+        {
+          "title": "what time is the dashboard clock based on",
+          "url": "https://faq.fundedelite.com/en/articles/12675567-what-time-is-the-dashboard-clock-based-on",
+          "slots": ""
+        },
+        {
+          "title": "where is your company based",
+          "url": "https://faq.fundedelite.com/en/articles/12675773-where-is-your-company-based",
+          "slots": ""
+        },
+        {
+          "title": "the affiliate s rules",
+          "url": "https://faq.fundedelite.com/en/articles/12680884-the-affiliate-s-rules",
+          "slots": "P19"
+        },
+        {
+          "title": "how can i join the funded elite affiliate program",
+          "url": "https://faq.fundedelite.com/en/articles/12681382-how-can-i-join-the-funded-elite-affiliate-program",
+          "slots": ""
+        },
+        {
+          "title": "when and how are affiliate commissions paid",
+          "url": "https://faq.fundedelite.com/en/articles/12681403-when-and-how-are-affiliate-commissions-paid",
+          "slots": ""
+        },
+        {
+          "title": "affiliate challenge",
+          "url": "https://faq.fundedelite.com/en/articles/12681708-affiliate-challenge",
+          "slots": ""
+        },
+        {
+          "title": "copy trading",
+          "url": "https://faq.fundedelite.com/en/articles/12681744-copy-trading",
+          "slots": "P10,P13,P14"
+        },
+        {
+          "title": "weekend holding",
+          "url": "https://faq.fundedelite.com/en/articles/12681763-weekend-holding",
+          "slots": "P20,P11,P13"
+        },
+        {
+          "title": "eas expert advisors",
+          "url": "https://faq.fundedelite.com/en/articles/12681766-eas-expert-advisors",
+          "slots": "P13,P15,P19"
+        },
+        {
+          "title": "martingale",
+          "url": "https://faq.fundedelite.com/en/articles/12681843-martingale",
+          "slots": "P13,P14,P19"
+        },
+        {
+          "title": "grid trading",
+          "url": "https://faq.fundedelite.com/en/articles/12681849-grid-trading",
+          "slots": "P10,P19"
+        },
+        {
+          "title": "news trading",
+          "url": "https://faq.fundedelite.com/en/articles/12681858-news-trading",
+          "slots": "P10,P11,P19"
+        },
+        {
+          "title": "vpn vps usage ip variations",
+          "url": "https://faq.fundedelite.com/en/articles/12681871-vpn-vps-usage-ip-variations",
+          "slots": ""
+        },
+        {
+          "title": "ip sharing",
+          "url": "https://faq.fundedelite.com/en/articles/12681903-ip-sharing",
+          "slots": "P11,P19"
+        },
+        {
+          "title": "account rolling",
+          "url": "https://faq.fundedelite.com/en/articles/12681981-account-rolling",
+          "slots": "P19"
+        },
+        {
+          "title": "hft and high frequency scalping",
+          "url": "https://faq.fundedelite.com/en/articles/12682000-hft-and-high-frequency-scalping",
+          "slots": "P09,P15,P19"
+        },
+        {
+          "title": "account sharing any passing service",
+          "url": "https://faq.fundedelite.com/en/articles/12682015-account-sharing-any-passing-service",
+          "slots": "P20,P11,P19"
+        },
+        {
+          "title": "hedging",
+          "url": "https://faq.fundedelite.com/en/articles/12682040-hedging",
+          "slots": "P10,P19"
+        },
+        {
+          "title": "latency arbitrage",
+          "url": "https://faq.fundedelite.com/en/articles/12682048-latency-arbitrage",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "server spamming",
+          "url": "https://faq.fundedelite.com/en/articles/12682056-server-spamming",
+          "slots": "P19"
+        },
+        {
+          "title": "weekend trading",
+          "url": "https://faq.fundedelite.com/en/articles/12682068-weekend-trading",
+          "slots": "P20,P10,P11,P19"
+        },
+        {
+          "title": "strategy risk limits",
+          "url": "https://faq.fundedelite.com/en/articles/12682106-strategy-risk-limits",
+          "slots": "P03,P11,P16,P19"
+        },
+        {
+          "title": "how are daily and total drawdown calculated",
+          "url": "https://faq.fundedelite.com/en/articles/12682963-how-are-daily-and-total-drawdown-calculated",
+          "slots": "P20,P03,P04,P05,P06"
+        },
+        {
+          "title": "2 step challenge free retry",
+          "url": "https://faq.fundedelite.com/en/articles/12683226-2-step-challenge-free-retry",
+          "slots": "P20,P01,P02,P03,P05,P06,P11,P15"
+        },
+        {
+          "title": "1 step challenge free retry",
+          "url": "https://faq.fundedelite.com/en/articles/12683556-1-step-challenge-free-retry",
+          "slots": "P20,P01,P02,P03,P05,P06,P11,P15"
+        },
+        {
+          "title": "lite 2 step challenge",
+          "url": "https://faq.fundedelite.com/en/articles/12683646-lite-2-step-challenge",
+          "slots": "P20,P01,P02,P03,P05,P06,P11,P15"
+        },
+        {
+          "title": "lite 1 step challenge",
+          "url": "https://faq.fundedelite.com/en/articles/12683734-lite-1-step-challenge",
+          "slots": "P20,P01,P02,P03,P05,P06,P11,P15"
+        },
+        {
+          "title": "instant challenge",
+          "url": "https://faq.fundedelite.com/en/articles/12683783-instant-challenge",
+          "slots": "P20,P03,P05,P06,P07,P11,P15"
+        },
+        {
+          "title": "flash activation challenge",
+          "url": "https://faq.fundedelite.com/en/articles/12683940-flash-activation-challenge",
+          "slots": "P20,P01,P02,P02b,P03,P05,P06,P07"
+        },
+        {
+          "title": "additional info for 300k accounts",
+          "url": "https://faq.fundedelite.com/en/articles/12688062-additional-info-for-300k-accounts",
+          "slots": "P20,P02,P17"
+        },
+        {
+          "title": "how do i transition to live trading",
+          "url": "https://faq.fundedelite.com/en/articles/12688214-how-do-i-transition-to-live-trading",
+          "slots": "P03,P11"
+        },
+        {
+          "title": "second chance and how it works",
+          "url": "https://faq.fundedelite.com/en/articles/12832085-second-chance-and-how-it-works",
+          "slots": "P20,P15"
+        },
+        {
+          "title": "what is considered a soft breach",
+          "url": "https://faq.fundedelite.com/en/articles/13868489-what-is-considered-a-soft-breach",
+          "slots": "P15,P19"
+        },
+        {
+          "title": "gambling",
+          "url": "https://faq.fundedelite.com/en/articles/14495342-gambling",
+          "slots": "P01,P10,P14,P19"
+        },
+        {
+          "title": "what is the catalyst",
+          "url": "https://faq.fundedelite.com/en/articles/15178274-what-is-the-catalyst",
+          "slots": "P20,P01"
+        },
+        {
+          "title": "starting sizes",
+          "url": "https://faq.fundedelite.com/en/articles/15179842-starting-sizes",
+          "slots": "P01"
+        },
+        {
+          "title": "catalyst challenge profit targets",
+          "url": "https://faq.fundedelite.com/en/articles/15179844-catalyst-challenge-profit-targets",
+          "slots": "P01,P09"
+        },
+        {
+          "title": "catalyst challenge loss limits",
+          "url": "https://faq.fundedelite.com/en/articles/15179846-catalyst-challenge-loss-limits",
+          "slots": "P20,P03,P05"
+        },
+        {
+          "title": "catalyst challenge payout policy",
+          "url": "https://faq.fundedelite.com/en/articles/15179854-catalyst-challenge-payout-policy",
+          "slots": "P01,P03,P05,P07"
+        },
+        {
+          "title": "チャレンジ 評価の仕組みとは",
+          "url": "https://faq.fundedelite.com/ja/articles/13638913-チャレンジ-評価の仕組みとは",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジの支払い方法とは",
+          "url": "https://faq.fundedelite.com/ja/articles/13638937-チャレンジの支払い方法とは",
+          "slots": ""
+        },
+        {
+          "title": "ライブシミュレーション口座 本人確認に必要な書類は何ですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13638945-ライブシミュレーション口座-本人確認に必要な書類は何ですか",
+          "slots": ""
+        },
+        {
+          "title": "御社はどこに拠点がありますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13638963-御社はどこに拠点がありますか",
+          "slots": ""
+        },
+        {
+          "title": "返金ポリシーとは",
+          "url": "https://faq.fundedelite.com/ja/articles/13638969-返金ポリシーとは",
+          "slots": ""
+        },
+        {
+          "title": "fundedeliteは 私の個人情報や財務情報の安全性をどのように確保していますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13638976-fundedeliteは-私の個人情報や財務情報の安全性をどのように確保していますか",
+          "slots": ""
+        },
+        {
+          "title": "fundedeliteの無料お試し版は利用できますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13638985-fundedeliteの無料お試し版は利用できますか",
+          "slots": ""
+        },
+        {
+          "title": "税金の扱いはどうすればいいですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13638991-税金の扱いはどうすればいいですか",
+          "slots": ""
+        },
+        {
+          "title": "fundedeliteは規制下で運営されていますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13638994-fundedeliteは規制下で運営されていますか",
+          "slots": ""
+        },
+        {
+          "title": "支払いプロセスと利益分配",
+          "url": "https://faq.fundedelite.com/ja/articles/13639098-支払いプロセスと利益分配",
+          "slots": ""
+        },
+        {
+          "title": "口座タイプによる支払い制限はありますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13639112-口座タイプによる支払い制限はありますか",
+          "slots": ""
+        },
+        {
+          "title": "トレードは実際の資金にコピーしますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645229-トレードは実際の資金にコピーしますか",
+          "slots": ""
+        },
+        {
+          "title": "取引チャレンジや評価とは",
+          "url": "https://faq.fundedelite.com/ja/articles/13645236-取引チャレンジや評価とは",
+          "slots": ""
+        },
+        {
+          "title": "隠れたルールはありますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645242-隠れたルールはありますか",
+          "slots": ""
+        },
+        {
+          "title": "取引サービスを提供できない地域はありますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645252-取引サービスを提供できない地域はありますか",
+          "slots": ""
+        },
+        {
+          "title": "ダッシュボードの時計は何時を基準にしていますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645262-ダッシュボードの時計は何時を基準にしていますか",
+          "slots": ""
+        },
+        {
+          "title": "リスク管理部門はどのように機能していますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645293-リスク管理部門はどのように機能していますか",
+          "slots": ""
+        },
+        {
+          "title": "日次ドローダウンと総ドローダウンの計算方法とは",
+          "url": "https://faq.fundedelite.com/ja/articles/13645306-日次ドローダウンと総ドローダウンの計算方法とは",
+          "slots": ""
+        },
+        {
+          "title": "手数料は返金されますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645325-手数料は返金されますか",
+          "slots": ""
+        },
+        {
+          "title": "非アクティブ時のルールはありますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645330-非アクティブ時のルールはありますか",
+          "slots": ""
+        },
+        {
+          "title": "fundedeliteで保有できる口座数はいくつですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645334-fundedeliteで保有できる口座数はいくつですか",
+          "slots": ""
+        },
+        {
+          "title": "トレードフェーズを通過後 次の口座を受け取るまでの期間はどれくらいですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645340-トレードフェーズを通過後-次の口座を受け取るまでの期間はどれくらいですか",
+          "slots": ""
+        },
+        {
+          "title": "契約締結",
+          "url": "https://faq.fundedelite.com/ja/articles/13645347-契約締結",
+          "slots": ""
+        },
+        {
+          "title": "ライブ取引へ移行するにはどうすればいいですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645350-ライブ取引へ移行するにはどうすればいいですか",
+          "slots": ""
+        },
+        {
+          "title": "実際の資金で提供されますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645365-実際の資金で提供されますか",
+          "slots": ""
+        },
+        {
+          "title": "口座はスワップフリーですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645372-口座はスワップフリーですか",
+          "slots": ""
+        },
+        {
+          "title": "取引可能な銘柄とコミッション",
+          "url": "https://faq.fundedelite.com/ja/articles/13645382-取引可能な銘柄とコミッション",
+          "slots": ""
+        },
+        {
+          "title": "トレードの最低保有期間",
+          "url": "https://faq.fundedelite.com/ja/articles/13645456-トレードの最低保有期間",
+          "slots": ""
+        },
+        {
+          "title": "口座を統合できますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645465-口座を統合できますか",
+          "slots": ""
+        },
+        {
+          "title": "ルール違反した場合の対応とは",
+          "url": "https://faq.fundedelite.com/ja/articles/13645470-ルール違反した場合の対応とは",
+          "slots": ""
+        },
+        {
+          "title": "フラッシュアクティベーションチャレンジ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645496-フラッシュアクティベーションチャレンジ",
+          "slots": ""
+        },
+        {
+          "title": "即時チャレンジ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645500-即時チャレンジ",
+          "slots": ""
+        },
+        {
+          "title": "ライト 1ステップチャレンジ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645507-ライト-1ステップチャレンジ",
+          "slots": ""
+        },
+        {
+          "title": "ライト 2ステップチャレンジ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645516-ライト-2ステップチャレンジ",
+          "slots": ""
+        },
+        {
+          "title": "1 ステップチャレンジ 無料リトライ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645521-1-ステップチャレンジ-無料リトライ",
+          "slots": ""
+        },
+        {
+          "title": "2 ステップチャレンジ 無料リトライ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645537-2-ステップチャレンジ-無料リトライ",
+          "slots": ""
+        },
+        {
+          "title": "30万ドル口座向け追加情報",
+          "url": "https://faq.fundedelite.com/ja/articles/13645541-30万ドル口座向け追加情報",
+          "slots": ""
+        },
+        {
+          "title": "セカンドチャンス制度とその仕組みについて",
+          "url": "https://faq.fundedelite.com/ja/articles/13645544-セカンドチャンス制度とその仕組みについて",
+          "slots": ""
+        },
+        {
+          "title": "ip共有",
+          "url": "https://faq.fundedelite.com/ja/articles/13645559-ip共有",
+          "slots": ""
+        },
+        {
+          "title": "自分の名義で複数のプロフィールを作成できますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645567-自分の名義で複数のプロフィールを作成できますか",
+          "slots": ""
+        },
+        {
+          "title": "週末トレード",
+          "url": "https://faq.fundedelite.com/ja/articles/13645588-週末トレード",
+          "slots": ""
+        },
+        {
+          "title": "他人のクレジットカードでの支払いは可能ですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645593-他人のクレジットカードでの支払いは可能ですか",
+          "slots": ""
+        },
+        {
+          "title": "口座共有 任意の代行サービス",
+          "url": "https://faq.fundedelite.com/ja/articles/13645599-口座共有-任意の代行サービス",
+          "slots": ""
+        },
+        {
+          "title": "ヘッジング",
+          "url": "https://faq.fundedelite.com/ja/articles/13645601-ヘッジング",
+          "slots": ""
+        },
+        {
+          "title": "サーバースパム",
+          "url": "https://faq.fundedelite.com/ja/articles/13645607-サーバースパム",
+          "slots": ""
+        },
+        {
+          "title": "口座ローリング",
+          "url": "https://faq.fundedelite.com/ja/articles/13645610-口座ローリング",
+          "slots": ""
+        },
+        {
+          "title": "レイテンシーアービトラージ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645616-レイテンシーアービトラージ",
+          "slots": ""
+        },
+        {
+          "title": "hftと高頻度スキャルピング",
+          "url": "https://faq.fundedelite.com/ja/articles/13645618-hftと高頻度スキャルピング",
+          "slots": ""
+        },
+        {
+          "title": "グリッドトレード",
+          "url": "https://faq.fundedelite.com/ja/articles/13645648-グリッドトレード",
+          "slots": ""
+        },
+        {
+          "title": "vpn vps の使用 ip の変更",
+          "url": "https://faq.fundedelite.com/ja/articles/13645671-vpn-vps-の使用-ip-の変更",
+          "slots": ""
+        },
+        {
+          "title": "ea エキスパートアドバイザー",
+          "url": "https://faq.fundedelite.com/ja/articles/13645673-ea-エキスパートアドバイザー",
+          "slots": "P13"
+        },
+        {
+          "title": "週末持ち越し",
+          "url": "https://faq.fundedelite.com/ja/articles/13645685-週末持ち越し",
+          "slots": ""
+        },
+        {
+          "title": "コピートレード",
+          "url": "https://faq.fundedelite.com/ja/articles/13645688-コピートレード",
+          "slots": ""
+        },
+        {
+          "title": "ニューストレード",
+          "url": "https://faq.fundedelite.com/ja/articles/13645697-ニューストレード",
+          "slots": ""
+        },
+        {
+          "title": "マーチンゲール法",
+          "url": "https://faq.fundedelite.com/ja/articles/13645701-マーチンゲール法",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイトのルール",
+          "url": "https://faq.fundedelite.com/ja/articles/13645710-アフィリエイトのルール",
+          "slots": ""
+        },
+        {
+          "title": "fundedeliteアフィリエイトプログラムに参加するには",
+          "url": "https://faq.fundedelite.com/ja/articles/13645717-fundedeliteアフィリエイトプログラムに参加するには",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイト報酬はいつ どのように支払われますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13645721-アフィリエイト報酬はいつ-どのように支払われますか",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイトチャレンジ",
+          "url": "https://faq.fundedelite.com/ja/articles/13645727-アフィリエイトチャレンジ",
+          "slots": ""
+        },
+        {
+          "title": "funded eliteはブローカーですか",
+          "url": "https://faq.fundedelite.com/ja/articles/13750939-funded-eliteはブローカーですか",
+          "slots": ""
+        },
+        {
+          "title": "制限対象国",
+          "url": "https://faq.fundedelite.com/ja/articles/13750944-制限対象国",
+          "slots": ""
+        },
+        {
+          "title": "取引チャレンジ中に技術的な問題が発生した場合はどうなりますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13750948-取引チャレンジ中に技術的な問題が発生した場合はどうなりますか",
+          "slots": ""
+        },
+        {
+          "title": "当社の提供チャレンジにおけるレバレッジとは",
+          "url": "https://faq.fundedelite.com/ja/articles/13750956-当社の提供チャレンジにおけるレバレッジとは",
+          "slots": ""
+        },
+        {
+          "title": "チャレンジ完了に不審な点があった場合 どのような措置が講じられますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13750961-チャレンジ完了に不審な点があった場合-どのような措置が講じられますか",
+          "slots": ""
+        },
+        {
+          "title": "戦略リスク制限",
+          "url": "https://faq.fundedelite.com/ja/articles/13750971-戦略リスク制限",
+          "slots": ""
+        },
+        {
+          "title": "アフィリエイト向けのプロモーション素材はありますか",
+          "url": "https://faq.fundedelite.com/ja/articles/13750975-アフィリエイト向けのプロモーション素材はありますか",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P04,P05,P06,P07,P08,P09,P10,P11,P13,P14,P15,P16,P17,P19",
+    "missing": "P12,P18",
+    "note": "19/21（本文補強後）"
+  }
+}

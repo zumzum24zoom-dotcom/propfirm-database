@@ -1,5 +1,5 @@
 /**
- * data/price-collect/*_price.md と data/price-collect/wide/*_price.md で共通の
+ * _work/price-collect/*_price.md と _work/price-collect/wide/*_price.md で共通の
  * マークダウンテーブル解析プリミティブ。convert-price-tables.mjs と
  * verify-price-tables.mjs で同一の解析セマンティクスを保証するために共有する。
  */

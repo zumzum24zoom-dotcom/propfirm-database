@@ -1,6 +1,6 @@
 /**
- * data/price-collect/{firm}_price.md（収集生データ）と
- * data/price-collect/wide/{firm}_price.md（変換後）を突き合わせ、
+ * _work/price-collect/{firm}_price.md（収集生データ）と
+ * _work/price-collect/wide/{firm}_price.md（変換後）を突き合わせ、
  * 「値の数」「口座サイズ集合」が一致するかを機械的に検証する。
  * 不一致があれば convert-price-tables.mjs での欠落・分裂を意味する。
  */
@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 import { SIZE_HEADERS, parseTables, normalizePrice, isSizeCell } from './lib/price-table-parse.mjs';
 
 const ROOT     = join(dirname(fileURLToPath(import.meta.url)), '..');
-const SRC_DIR  = join(ROOT, 'data', 'price-collect');
+const SRC_DIR  = join(ROOT, '_work', 'price-collect');
 const WIDE_DIR = join(SRC_DIR, 'wide');
 
 // 元データ: 全価格テーブルから「値あり（≠—）」セル数と口座サイズ集合を集計

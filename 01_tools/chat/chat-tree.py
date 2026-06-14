@@ -98,6 +98,112 @@ def sanitize(text, limit=40):
     return text
 
 
+def strip_injected(text):
+    """ハーネスが注入する ide_opened_file / system-reminder ブロックを除去。"""
+    text = re.sub(r"<ide_opened_file>.*?</ide_opened_file>", " ", text, flags=re.DOTALL)
+    text = re.sub(r"<system-reminder>.*?</system-reminder>", " ", text, flags=re.DOTALL)
+    text = re.sub(r"<[^>]+>", " ", text)  # 残りの簡易タグ
+    return text
+
+
+def topic_slug(text, limit=24):
+    """発言テキストから Windows ファイル名に使える話題スラッグを作る。"""
+    text = strip_injected(text)
+    text = re.sub(r"\s+", " ", text).strip()
+    # Windows 禁止文字 + パス区切りを除去/置換
+    text = re.sub(r'[\\/:*?"<>|]', "", text)
+    text = text.replace(" ", "_")
+    text = text.strip("._")
+    if not text:
+        text = "無題"
+    if len(text) > limit:
+        text = text[:limit]
+    return text
+
+
+def touched_files(recs, order):
+    """セッション内の Write/Edit/NotebookEdit が触ったファイルを
+    VAULT_ROOT 相対パスの集合で返す（順序保持）。"""
+    seen = []
+    for u in order:
+        m = recs[u].get("message", {})
+        c = m.get("content")
+        if not isinstance(c, list):
+            continue
+        for x in c:
+            if isinstance(x, dict) and x.get("type") == "tool_use" \
+                    and x.get("name") in ("Write", "Edit", "NotebookEdit"):
+                fp = x.get("input", {}).get("file_path") or x.get("input", {}).get("notebook_path")
+                if not fp:
+                    continue
+                p = fp.replace("\\", "/")
+                root = str(VAULT_ROOT).replace("\\", "/")
+                if p.lower().startswith(root.lower()):
+                    p = p[len(root):].lstrip("/")
+                if p not in seen:
+                    seen.append(p)
+    return seen
+
+
+def human_fingerprint(recs, order):
+    """セッションの人間発言テキスト列（正規化）を返す。fork判定の指紋。"""
+    fp = []
+    for u in order:
+        if is_human(recs[u]):
+            t = re.sub(r"\s+", " ", extract_text(recs[u]["message"]["content"])).strip()
+            fp.append(t)
+    return fp
+
+
+def dedup_files(files):
+    """resume で複製された fork セッションを畳み込む。
+    発言列が完全一致 or 一方が他方の先頭一致(prefix)なら、発言数が多い方
+    （= 最新の復元/継続版）だけ残す。残す jsonl パスのリストを返す。"""
+    sessions = []
+    for f in files:
+        recs, order = load_session(f)
+        fp = human_fingerprint(recs, order)
+        if fp:
+            sessions.append((f, fp))
+    # 発言数が多い順 → 既存keeperと7割以上重なる短い枝(resume fork)は捨てる
+    sessions.sort(key=lambda s: len(s[1]), reverse=True)
+    kept = []
+    for f, fp in sessions:
+        superseded = False
+        for _, kfp in kept:
+            if len(fp) > len(kfp):
+                continue
+            # 共通先頭長を測る
+            common = 0
+            for x, y in zip(fp, kfp):
+                if x == y:
+                    common += 1
+                else:
+                    break
+            # 完全な先頭一致、または短い側の7割以上が本線と一致 = 同一/fork
+            if common == len(fp) or (common >= 2 and common >= 0.7 * len(fp)):
+                superseded = True
+                break
+        if not superseded:
+            kept.append((f, fp))
+    return [f for f, _ in kept]
+
+
+def out_filename(session_id, recs, order):
+    """日付__話題__短縮UUID.md のファイル名を生成。"""
+    humans = [u for u in order if is_human(recs[u])]
+    first = humans[0] if humans else None
+    date = ""
+    topic = "無題"
+    if first:
+        ts = recs[first].get("timestamp", "")
+        date = ts[:10] if len(ts) >= 10 else ""
+        topic = topic_slug(extract_text(recs[first]["message"]["content"]))
+    short = session_id[:8]
+    prefix = f"{date}__" if date else ""
+    return f"{prefix}{topic}__{short}.md"
+
+
 def build_markdown(session_id, recs, order):
     # 人間発言ノードを出現順に収集
     humans = [u for u in order if is_human(recs[u])]
@@ -136,21 +242,29 @@ def build_markdown(session_id, recs, order):
     lines.append("```")
     mermaid = "\n".join(lines)
 
-    # 発言一覧(全文・再開メモ付き)
+    # 発言一覧(見出しに発言冒頭・本文に全文)
     detail = []
     for i, u in enumerate(humans):
-        txt = extract_text(recs[u]["message"]["content"]).strip()
-        ts = recs[u].get("timestamp", "")
-        flag = " 🔀分岐" if u in branch_points else ""
-        detail.append(f"### {i+1}.{flag}\n\n"
-                      f"- 時刻: `{ts}`\n"
-                      f"- 再開: `claude --resume {session_id}` → 開いたら #{i+1} まで巻き戻す\n\n"
-                      f"> {txt[:400]}")
+        raw = strip_injected(extract_text(recs[u]["message"]["content"])).strip()
+        head = sanitize(raw, 60) or "（空）"
+        ts = recs[u].get("timestamp", "")[:19].replace("T", " ")
+        flag = " 🔀" if u in branch_points else ""
+        body = "\n".join("> " + ln for ln in raw[:600].splitlines()) or "> （本文なし）"
+        detail.append(f"### {i+1}. {head}{flag}\n\n"
+                      f"`{ts}`\n\n"
+                      f"{body}")
+
+    files = touched_files(recs, order)
+    if files:
+        files_section = "\n".join(f"- [{p}]({p})" for p in files)
+    else:
+        files_section = "_（Write/Edit による変更なし）_"
 
     md = f"""---
 sessionId: {session_id}
 checkpoints: {len(humans)}
 branches: {len(branch_points)}
+files: {len(files)}
 tags: [chat-tree, claude-code]
 ---
 
@@ -159,15 +273,19 @@ tags: [chat-tree, claude-code]
 再開方法: `claude --resume {session_id}` で開き、巻き戻しボタンで目的の番号まで戻る。
 🔀 = 分岐点(同じ親から複数の枝)。
 
+## 変更ファイル
+
+{files_section}
+
 ## ツリー
 
 {mermaid}
 
 ## 発言一覧
 
-{chr(10).join(detail)}
+{(chr(10)+chr(10)).join(detail)}
 """
-    return md, len(humans), len(branch_points)
+    return md, len(humans), len(branch_points), files
 
 
 def resolve_path(arg):
@@ -202,8 +320,24 @@ def main():
         recs, order = load_session(path)
         result = build_markdown(sid, recs, order)
         if result:
-            md, n, b = result
-            (OUT_DIR / f"{sid}.md").write_text(md, encoding="utf-8")
+            md, n, b, _files = result
+            # 旧名（{uuid}.md や別話題の同セッション）を掃除してから書く
+            for old in OUT_DIR.glob(f"*{sid[:8]}*.md"):
+                old.unlink()
+            stale = OUT_DIR / f"{sid}.md"
+            if stale.exists():
+                stale.unlink()
+            # resume 元（このセッションの発言列の先頭一致になる旧 fork）の生成物を除去
+            cur_fp = human_fingerprint(recs, order)
+            for other in PROJECT_DIR.glob("*.jsonl"):
+                osid = other.stem
+                if osid[:8] == sid[:8]:
+                    continue
+                ofp = human_fingerprint(*load_session(other))
+                if ofp and len(ofp) <= len(cur_fp) and cur_fp[:len(ofp)] == ofp:
+                    for dup in OUT_DIR.glob(f"*{osid[:8]}*.md"):
+                        dup.unlink()
+            (OUT_DIR / out_filename(sid, recs, order)).write_text(md, encoding="utf-8")
         return
     if len(sys.argv) > 1:
         path = resolve_path(sys.argv[1])
@@ -213,22 +347,42 @@ def main():
         files = [path]
     else:
         files = sorted(PROJECT_DIR.glob("*.jsonl"))
+        files = dedup_files(files)   # resume 複製を畳み込む
+
+    # 全再生成時は既存の生成物を一掃（_index.md は残す）してから作り直す
+    for old in OUT_DIR.glob("*.md"):
+        if old.name != "_index.md":
+            old.unlink()
 
     index = ["# Chat Tree 一覧\n"]
+    file_map = {}   # ファイルパス -> [(セッション名, 発言数)]
     for f in files:
         sid = f.stem
         recs, order = load_session(f)
         result = build_markdown(sid, recs, order)
         if not result:
             continue
-        md, n, b = result
-        out = OUT_DIR / f"{sid}.md"
+        md, n, b, touched = result
+        out = OUT_DIR / out_filename(sid, recs, order)
         out.write_text(md, encoding="utf-8")
         bp = f" / 分岐{b}" if b else ""
-        index.append(f"- [[{sid}]] — 発言{n}件{bp}")
-        print(f"出力: {out.name}  (発言{n}件, 分岐{b})")
+        fc = f" / 📄{len(touched)}" if touched else ""
+        index.append(f"- [[{out.stem}]] — 発言{n}件{bp}{fc}")
+        print(f"出力: {out.name}  (発言{n}件, 分岐{b}, ファイル{len(touched)})")
+        for p in touched:
+            file_map.setdefault(p, []).append(out.stem)
 
     (OUT_DIR / "_index.md").write_text("\n".join(index) + "\n", encoding="utf-8")
+
+    # 逆引き索引: ファイル → 触ったセッション
+    rev = ["# ファイル → 編集したチャット（逆引き）\n",
+           "各ファイルを Write/Edit したセッションの一覧。\n"]
+    for p in sorted(file_map):
+        rev.append(f"## [{p}]({p})")
+        for stem in file_map[p]:
+            rev.append(f"- [[{stem}]]")
+        rev.append("")
+    (OUT_DIR / "_files-index.md").write_text("\n".join(rev) + "\n", encoding="utf-8")
     print(f"\n完了 → {OUT_DIR}")
 
 

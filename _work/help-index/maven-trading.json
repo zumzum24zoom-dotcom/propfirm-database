@@ -1,0 +1,381 @@
+{
+  "firm": "maven-trading",
+  "help_base_url": "https://maventrading.com/faqs",
+  "platform": "inline_accordion",
+  "fetched_at": "2026-06-14",
+  "fetch_status": "auto",
+  "fetch_note": "インラインFAQ（単一ページ）。質問文を機械タグ付け（要レビュー）。URLは全質問でFAQページ共通。",
+  "collections": [
+    {
+      "title": "FAQ（質問文・自動タグ）",
+      "articles": [
+        {
+          "title": "What is considered Red Folder news?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P10"
+        },
+        {
+          "title": "Why should I become a funded trader?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is Maven?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is a simulated funded account?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Is Maven an established prop firm?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the IP address policy?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the legal agreement between Maven and the customer?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What does Maven classify as cheating?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P19"
+        },
+        {
+          "title": "What are your trading style rules?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P19"
+        },
+        {
+          "title": "Can I trade during the news?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P10"
+        },
+        {
+          "title": "What is a minimum profitable day?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02"
+        },
+        {
+          "title": "What's next after I pass?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What are the profit targets?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P01"
+        },
+        {
+          "title": "What are the drawdown types?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What are the drawdown limits?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "How do I get started?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Which withdrawal options do you have?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02b"
+        },
+        {
+          "title": "What is my profit split?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "How many accounts can I have?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Do you have a withdrawal cap?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02b"
+        },
+        {
+          "title": "Do you allow scaling?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is our leverage?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What instruments can I trade?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the withdrawal frequency?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02b"
+        },
+        {
+          "title": "How does the buyback feature works?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Do I have any time restrictions?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "How far can I scale up my account?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Can I merge funded accounts?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is a consistency score?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P07"
+        },
+        {
+          "title": "What is Instant Funding?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "How many trades can you take at one time?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "How many payouts can I get?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02b"
+        },
+        {
+          "title": "What’s the minimum to withdraw?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02b"
+        },
+        {
+          "title": "What is the consistency rule?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P07"
+        },
+        {
+          "title": "What are the drawdown rules?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Is this a recurring account?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "When do I get paid?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "How long do I have to trade?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P09"
+        },
+        {
+          "title": "How fast do I get funded?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is a mini?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the Prediction Markets challenge?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What makes a Maven Prediction Markets challenge different from a Forex challenge?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What's the difference between One-Step Essential and One-Step Elite?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P20"
+        },
+        {
+          "title": "What is the maximum amount of profit I can generate in one question?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "How do I withdraw?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02b"
+        },
+        {
+          "title": "What trading style rules apply?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P19"
+        },
+        {
+          "title": "Where does the data feed come from?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What are some examples of instances I can trade, and how does it work?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the Two Step Omo challenge?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What are the Profit Targets for the Omo challenge?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P01"
+        },
+        {
+          "title": "Why is the Phase 2 profit target higher than Phase 1?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P01"
+        },
+        {
+          "title": "How does the maximum drawdown work?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P05"
+        },
+        {
+          "title": "What is the daily EOD drawdown limit?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What are the minimum profitable day requirements?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02"
+        },
+        {
+          "title": "What does the 150-second minimum hold time mean?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Can I trade the news?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P10"
+        },
+        {
+          "title": "What is the M2 Account Saver and how does it work?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Is there a withdrawal cap?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P02b"
+        },
+        {
+          "title": "Is there a time limit on the Two Step Omo?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P09"
+        },
+        {
+          "title": "Are there any prohibited trading practices?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P19"
+        },
+        {
+          "title": "What is the Buy Now Pay Later challenge?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Why does it only cost $5?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Is there a daily drawdown limit in the evaluation?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P03"
+        },
+        {
+          "title": "How does the 10% maximum drawdown work in the evaluation phase?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P05,P20"
+        },
+        {
+          "title": "Can I trade news events in the evaluation phase?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P10,P20"
+        },
+        {
+          "title": "What are the funded stage rules?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the daily drawdown limit on the funded account?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P03"
+        },
+        {
+          "title": "What is the Profit Rebuild?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the funded consistency score and how does it work?",
+          "url": "https://maventrading.com/faqs",
+          "slots": "P07"
+        },
+        {
+          "title": "What is the M2 Account Saver?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "What is the profit split?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        },
+        {
+          "title": "Are you ready to start trading?",
+          "url": "https://maventrading.com/faqs",
+          "slots": ""
+        }
+      ]
+    }
+  ],
+  "terms_sources": [],
+  "coverage_observed": {
+    "covered": "P20,P01,P02,P02b,P03,P05,P07,P09,P10,P19",
+    "missing": "P04,P06,P08,P11,P12,P13,P14,P15,P16,P17,P18",
+    "note": "10/21（質問文照合）"
+  }
+}

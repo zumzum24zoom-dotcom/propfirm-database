@@ -18,8 +18,13 @@
 ## 2. データフロー（1本道）
 
 ```
+Firm Database (01_tools/core/firm-database.html) ← 全作業の【起点・管制塔】
+    │ 全社一覧・進捗ランプ・ステータス・公式URL・各ファイル入口を集約
+    │ localhost:8765 agent.py 経由（/api/firms, /api/progress）
+    │ 1社を選んで「編集起動」(FD-08) →
+    ▼
 Page Maker (01_tools/core/page-maker-v12.html)
-    │ 入力・収集（MASTER_DEFS が唯一の正本）
+    │ 1社の入力・収集（MASTER_DEFS が唯一の正本）
     ▼
 data/firms/*.json  +  data/plans/*.json  +  data/glossary.json
     │ Hugo build
@@ -34,6 +39,7 @@ Hugo に貼る（計算ロジックは持たせない）
 ```
 
 **絶対ルール**
+- **全作業の起点は Firm Database。閲覧系ツールは今後ここに集約する**（旧 firm-dashboard / firm-urls / firm-tour は廃止・吸収済み）
 - データの正本は `data/firms/`, `data/plans/`, `data/glossary.json`
 - スロット定義の正本は Page Maker 内 `MASTER_DEFS`
 - Hugoテンプレは表示のみ。計算しない
@@ -55,9 +61,9 @@ Hugo に貼る（計算ロジックは持たせない）
 | `data/firms/*.json` | Firm本体データ（DBP_01の22スロット） | `_README.md`参照 |
 | `data/plans/*.json` | Plan本体データ（DBP_02の22スロット） | ファイル名 `{firm}--{plan}.json` |
 | `data/glossary.json` | 用語辞典（GLOSSARY_SEED + BASE） | Page Maker出力 |
-| `data/pfdb.json` | 統合DB（書き出し用） | |
 | `data/coupon-config.json` | クーポンセレクター設定 | DOM Scanner出力 |
-| `data/firm-urls.json` | ファームURL一覧 | |
+
+> **`data/` は公開層のみ（Hugoが `Data.firms`/`Data.plans` で読む正本＋ビルド入力）。** 上記4種以外を `data/` に置かない（[data/_README.md](data/_README.md)）。ドラフト・収集生・状態・レジストリは `_work/` へ。
 | `themes/pfd/layouts/` | Hugoテンプレート | `_README.md`参照 |
 | `themes/pfd/static/css/style.css` | スタイル本体 | |
 | `static/` | 直接配信される静的ファイル | |
@@ -69,7 +75,7 @@ Hugo に貼る（計算ロジックは持たせない）
 
 | パス | 役割 |
 |------|------|
-| `01_tools/core/` | Page Maker / Widget Maker 等 中核ツール |
+| `01_tools/core/` | **firm-database.html（起点・管制塔）** / Page Maker / Widget Maker 等 中核ツール |
 | `01_tools/coupon/` | クーポン関連（DOM Scanner等） |
 | `01_tools/analysis/` | 分析系ツール |
 | `01_tools/chat/` | チャット系 |
@@ -79,7 +85,12 @@ Hugo に貼る（計算ロジックは持たせない）
 | `02_docs/` | 全ドキュメント（HANDOFF, 分析レポート, ブリーフ）。`_proposal` 接尾辞=構想・未実装 / なし=実装済み正本 |
 | `99_chat-tree/` | Obsidian会話ログ（自動生成） |
 | `zz_notes/` | Obsidian Base / 雑メモ |
-| `data/price-collect/` | 価格テーブル収集生データ（`{firm}_price.md`）。`wide/` に Page Maker取込用の横持ち変換結果 |
+| `_work/` | **作業層（Hugo対象外）**。ドラフト/収集生/統合DB/状態/レジストリ。詳細は [_work/_README.md](_work/_README.md) |
+| `_work/firms-edit/` | page-maker改「1社モード」の編集ドラフト（agent.py `/api/firm-edit`） |
+| `_work/firms-v2/` | v2正規化ソース（`{slug}.md`・1社1file全プラン内包） |
+| `_work/scans/` | Web2MD生ダンプ（**gitignore対象**） |
+| `_work/price-collect/` | 価格テーブル収集生データ（`{firm}_price.md`）。`wide/` に Page Maker取込用の横持ち変換結果 |
+| `_work/progress.json` / `firm-slot-urls.json` | 制作ステータス / URLレジストリ（32社） |
 | `scripts/` | Node.js スクリプト（クーポン抽出・価格テーブル変換/検証等）。共通処理は `scripts/lib/` |
 | `PROJECT_HUB.canvas` / `PROJECT_HUB_v2.canvas` | Obsidian Canvas プロジェクトハブ |
 | `start-server.bat` | 加工ツール用ローカルサーバー起動（port 8080）。Canvas の🚀ボタンから起動 |
@@ -115,7 +126,8 @@ Hugo に貼る（計算ロジックは持たせない）
 | `02_docs/page-maker-v11-analysis.md` | Page Maker詳細仕様 |
 | `02_docs/用語辞典キー設計_v1.md` | glossary構造 |
 | `02_docs/計算定義_v1.md` | Widget Maker計算式定義 |
-| `01_tools/core/page-maker-v12.html` | MASTER_DEFS（スロット正本） |
+| `01_tools/core/firm-database.html` | **全作業の起点・管制塔**（全社一覧/進捗/ステータス/公式URL/ファイル入口）。機能ID=FD-xx、config駆動（STATUS_DEFS/LAMP_DEFS/LINK_DEFS/COLUMNS/FEATURE_INDEX） |
+| `01_tools/core/page-maker-v12.html` | MASTER_DEFS（スロット正本）。1社編集機。Firm Database から起動 |
 
 ---
 
@@ -145,3 +157,5 @@ Hugo に貼る（計算ロジックは持たせない）
 - 2026-06-11: `01_tools/launcher/` 追加（自作ランチャー / port 8765 / ELECOMボタン起動想定）
 - 2026-06-12: `data/price-collect/`・`scripts/lib/` 追加（価格テーブル変換/検証パイプライン）
 - 2026-06-14: `03_intake/` 削除（v1ワークフロー遺物。v2では `data/scans/`→`data/firms-v2/` が役割を継承）。ルート重複 `preview-mockup.html` 削除（正本は `01_tools/core/`）
+- 2026-06-14: **`firm-database.html`（Firm Dashboard）を全作業の起点・管制塔に確定**。閲覧系を集約する運用へ。旧 `firm-dashboard.html` / `firm-urls.html` / `firm-tour.html` / `preview-mockup.html` を core から削除（urls/mockup は `_archive/` 退避）
+- 2026-06-14: **`data/` を公開層に純化・作業層を `_work/` へ分離**（設計判断#12）。`firms-edit`/`firms-v2`/`scans`/`price-collect`/`help-index`/`pfdb.json`/`progress.json`/`firm-slot-urls.json` を `data/`→`_work/` へ git mv。`firm-urls.json`(旧) は `_work/_legacy/` へ。`_work/scans/` を gitignore＋追跡解除（設計判断#5を実施）。パス書換: agent.py / split-pfdb-to-edit.mjs / convert・verify-price-tables.mjs / normalize-firm-v2スキル

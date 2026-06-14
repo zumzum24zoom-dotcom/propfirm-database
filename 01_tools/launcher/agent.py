@@ -17,11 +17,14 @@ import hashlib
 import http.server
 import json
 import os
+import re
 import socketserver
 import subprocess
 import sys
 import threading
 import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 import win32api
@@ -39,13 +42,20 @@ MEMO_FILE = HERE / "memo.txt"
 LOG_FILE = HERE / "agent.log"
 
 # Firm Dashboard (FD-*) のデータ源。本体ロジックではなく場所の定義に留める。
+# data/ = 公開層（Hugoが描画に使う正本）。_work/ = 作業層（Hugo対象外・ドラフト/状態/収集物）。
 DATA_DIR = REPO_ROOT / "data"
+WORK_DIR = REPO_ROOT / "_work"
 FIRMS_DIR = DATA_DIR / "firms"
 PLANS_DIR = DATA_DIR / "plans"
 CONTENT_FIRMS_DIR = REPO_ROOT / "content" / "firms"
-PROGRESS_FILE = DATA_DIR / "progress.json"
+PROGRESS_FILE = WORK_DIR / "progress.json"
 # 1社1データの編集用正本（page-maker改 が読み書きする）。公開用 firms/ とは別。
-FIRMS_EDIT_DIR = DATA_DIR / "firms-edit"
+FIRMS_EDIT_DIR = WORK_DIR / "firms-edit"
+# 収集コックピット（FD-11〜15）: URL↔スロット対応マップ と URL生死キャッシュ。
+SLOT_URLS_FILE = WORK_DIR / "firm-slot-urls.json"
+URL_HEALTH_FILE = WORK_DIR / "url-health.json"
+# Help Center 記事 → P-スロット地図（DBP_02 / Plan網羅率の供給元・FD-16）。
+HELP_INDEX_DIR = WORK_DIR / "help-index"
 
 _SLUG_OK = set("abcdefghijklmnopqrstuvwxyz0123456789-_")
 
@@ -152,6 +162,32 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     self._json(404, {"ok": False, "error": f"not found: {slug}"})
                     return
                 self._json(200, {"ok": True, "data": json.loads(fp.read_text(encoding="utf-8"))})
+            except Exception as e:
+                self._json(400, {"ok": False, "error": str(e)})
+            return
+        # Firm Dashboard: URL生死チェック（FD-12）。?slug=...&check=1 で実測、無印はキャッシュ返却。
+        if self.path.startswith("/api/url-health"):
+            try:
+                from urllib.parse import urlparse, parse_qs
+                q = parse_qs(urlparse(self.path).query)
+                slug = _safe_slug(q.get("slug", [""])[0])
+                do_check = q.get("check", ["0"])[0] in ("1", "true")
+                store = read_url_health()
+                if do_check:
+                    su = read_slot_urls().get(slug, {})
+                    urls = [e.get("url") for e in ((su.get("slot_urls") or []) + (su.get("plan_urls") or []))
+                            if isinstance(e, dict) and e.get("url")]
+                    urls += _help_index_urls(read_help_index(slug))  # FD-16 記事URLも生死対象
+                    urls = list(dict.fromkeys(urls))                 # 重複除去・順序保持
+                    entry = {
+                        "checkedAt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                        "results": check_urls(urls),
+                    }
+                    store.setdefault("firms", {})[slug] = entry
+                    write_url_health(store)
+                else:
+                    entry = store.get("firms", {}).get(slug, {"checkedAt": None, "results": {}})
+                self._json(200, {"ok": True, **entry})
             except Exception as e:
                 self._json(400, {"ok": False, "error": str(e)})
             return
@@ -270,7 +306,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self._json(400, {"ok": False, "error": str(e)})
             return
         if self.path == "/api/firm-edit":
-            # page-maker改: 1社の編集用データを保存。{slug, data} を data/firms-edit/{slug}.json へ。
+            # page-maker改: 1社の編集用データを保存。{slug, data} を _work/firms-edit/{slug}.json へ。
             try:
                 payload = self._read_json()
                 slug = _safe_slug(payload.get("slug", ""))
@@ -387,6 +423,7 @@ def scan_firms() -> list[dict]:
     out: list[dict] = []
     if not FIRMS_DIR.is_dir():
         return out
+    slot_map = read_slot_urls()  # slug -> {"slot_urls":[...], "plan_urls":[...]}（FD-11）
     for jp in sorted(FIRMS_DIR.glob("*.json")):
         if jp.name.startswith("_"):
             continue
@@ -404,6 +441,9 @@ def scan_firms() -> list[dict]:
         plan_count = sum(1 for _ in PLANS_DIR.glob(f"{slug}--*.json")) if PLANS_DIR.is_dir() else 0
         idx = CONTENT_FIRMS_DIR / slug / "_index.md"
         strat_bytes = idx.stat().st_size if idx.is_file() else 0
+        su = slot_map.get(slug, {})
+        slot_urls = su.get("slot_urls") or []
+        plan_urls = su.get("plan_urls") or []
         out.append({
             "slug": slug,
             "name": name,
@@ -411,8 +451,40 @@ def scan_firms() -> list[dict]:
             "planCount": plan_count,
             "firmFilled": filled,
             "stratBytes": strat_bytes,
+            "slotUrls": slot_urls,
+            "planUrls": plan_urls,
+            "urlCount": len(slot_urls) + len(plan_urls),
+            "helpIndex": read_help_index(slug),  # FD-16: P-スロット供給元（無ければ None）
         })
     return out
+
+
+def read_help_index(slug: str) -> dict | None:
+    """_work/help-index/{slug}.json を読む（FD-16 Plan網羅率の供給元）。無ければ None。"""
+    fp = HELP_INDEX_DIR / f"{slug}.json"
+    if not fp.is_file():
+        return None
+    try:
+        return json.loads(fp.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _help_index_urls(hi: dict) -> list[str]:
+    """help-index から記事URL＋terms URLを抽出（生死チェック対象に含めるため）。"""
+    if not isinstance(hi, dict):
+        return []
+    urls: list[str] = []
+    for col in hi.get("collections") or []:
+        for art in col.get("articles") or []:
+            u = art.get("url")
+            if u:
+                urls.append(u)
+    for t in hi.get("terms_sources") or []:
+        u = t.get("url")
+        if u:
+            urls.append(u)
+    return urls
 
 
 def read_progress() -> dict:
@@ -430,6 +502,65 @@ def read_progress() -> dict:
 
 def write_progress(store: dict) -> None:
     PROGRESS_FILE.write_text(
+        json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+# ---------------------------------------------------------------------------
+# 収集コックピット（FD-11〜15）
+# ---------------------------------------------------------------------------
+
+def read_slot_urls() -> dict:
+    """_work/firm-slot-urls.json の firms マップ（slug -> {slot_urls, plan_urls}）を返す。"""
+    try:
+        d = json.loads(SLOT_URLS_FILE.read_text(encoding="utf-8"))
+        firms = d.get("firms")
+        if isinstance(firms, dict):
+            return firms
+    except Exception:
+        pass
+    return {}
+
+
+def check_urls(urls: list[str]) -> dict:
+    """各URLの {code, textLen} を返す（FD-12 生死＋FD-17 NotebookLM適性）。
+    code=最終HTTPステータス(0=到達不可)。textLen=静的HTMLの可視テキスト長
+    （SPAの空シェル判定用。NotebookLMはサーバー取得＝JS未描画のため、本文が
+    薄いページは『空ソース』になる）。逐次実行で自前429を避ける。"""
+    ua = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+          "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+    results: dict = {}
+    for u in urls:
+        code, text_len = 0, 0
+        try:
+            req = urllib.request.Request(u, headers={"User-Agent": ua}, method="GET")
+            with urllib.request.urlopen(req, timeout=8) as resp:
+                code = resp.status
+                raw = resp.read(300000).decode("utf-8", "replace")
+                t = re.sub(r"<(script|style|noscript)[^>]*>.*?</\1>", " ", raw, flags=re.S | re.I)
+                t = re.sub(r"<[^>]+>", " ", t)
+                text_len = len(re.sub(r"\s+", " ", t).strip())
+        except urllib.error.HTTPError as e:
+            code = e.code                # 404/403/429 等（=サーバー応答）
+        except Exception:
+            code = 0                     # タイムアウト・名前解決失敗・接続不可
+        results[u] = {"code": code, "textLen": text_len}
+    return results
+
+
+def read_url_health() -> dict:
+    base = {"firms": {}}
+    try:
+        d = json.loads(URL_HEALTH_FILE.read_text(encoding="utf-8"))
+        if isinstance(d, dict) and isinstance(d.get("firms"), dict):
+            base = d
+    except Exception:
+        pass
+    return base
+
+
+def write_url_health(store: dict) -> None:
+    URL_HEALTH_FILE.write_text(
         json.dumps(store, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 
